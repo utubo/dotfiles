@@ -8,6 +8,8 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set nf=
 set hlsearch
 set re=1
+set virtualedit=block
+
 augroup s:MyAu
 	au!
 augroup End
@@ -26,6 +28,8 @@ endif
 filetype plugin indent on     " required!
 " -----------------------------------------------------------------------------
 
+" ↓ここからしばらくコピペ
+
 " -----------------------------------------------------------------------------
 " https://github.com/joshtch/dotfiles/blob/ea0013074862b8b12d064b15d71a63471846b35b/vimrc
 if !has('gui_running')
@@ -38,6 +42,16 @@ if !has('gui_running')
 		au InsertLeave * set timeoutlen=1000
 	augroup END
 endif
+" -----------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc
+" Movement in insert mode
+inoremap <C-h> <C-o>h
+inoremap <C-l> <C-o>a
+inoremap <C-j> <C-o>j
+inoremap <C-k> <C-o>k
+inoremap <C-^> <C-o><C-^>
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -58,7 +72,7 @@ function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
 endfunction
 function! s:MySyntax()
-	syntax match ZenkakuSpace /\%u3000\|\%uA1A1/ containedin=ALL
+	syntax match ZenkakuSpace /\%u3000\|\%uA1A1\|\%u8140/ containedin=ALL
 	syntax region String start=/「/ end=/」/
 endfunction
 augroup s:MySyntaxGrp
@@ -129,12 +143,16 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" その他細々したの
-noremap! <C-r><C-r> <C-r>"
+" 同じインデントの行まで移動
 noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]').'G^'
 noremap  <expr> <Space>kk search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]', 'b').'G^'
 noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]').'G^'
 noremap  <expr> <Space>kv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]', 'b').'G^'
+" -----------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" その他細々したの
+noremap! <C-r><C-r> <C-r>"
 inoremap 「 「」<Left>
 inoremap <S-Tab> <Right>
 " -----------------------------------------------------------------------------
