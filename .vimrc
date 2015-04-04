@@ -63,7 +63,7 @@ function! s:MySyntax()
 endfunction
 augroup s:MySyntaxGrp
 	au!
-	au VimEnter,syntax * :call <SID>MySyntax()
+	au BufWinEnter,syntax * :call <SID>MySyntax()
 	au colorscheme * :call <SID>MyColorScheme()
 augroup END
 set t_Co=256
@@ -105,7 +105,7 @@ function! s:ReformatDate(...)
 		endif
 	endfor
 	" カーソル位置を元に戻して終わり
-	call cursor(line('.'), l:col_org)
+	call cursor(line('.'), l:col_org) " ('.')ﾉｼ < bye.
 endfunction
 " 「%Y/%m/%d」の文字列を加算減算
 nnoremap <silent> <C-a> <C-a>:call <SID>ReformatDate()<CR>
