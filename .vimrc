@@ -31,20 +31,6 @@ filetype plugin indent on     " required!
 " ↓ここからしばらくコピペ
 
 " -----------------------------------------------------------------------------
-" https://github.com/joshtch/dotfiles/blob/ea0013074862b8b12d064b15d71a63471846b35b/vimrc
-if !has('gui_running')
-	"Terminal
-	" Remove small delay between pressing Esc and entering Normal mode.
-	set timeout ttimeout ttimeoutlen=-1
-	augroup FastEscape
-		autocmd!
-		au InsertEnter * set timeoutlen=0
-		au InsertLeave * set timeoutlen=1000
-	augroup END
-endif
-" -----------------------------------------------------------------------------
-
-" -----------------------------------------------------------------------------
 " https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc
 " Movement in insert mode
 inoremap <C-h> <C-o>h
