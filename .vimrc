@@ -1,5 +1,5 @@
 set encoding=utf-8
-scriptencoding=utf-8
+scriptencoding utf-8
 set fileencodings=utf-8,sjis,euc-jp,iso-2022-jp
 set tabstop=4
 set shiftwidth=4
