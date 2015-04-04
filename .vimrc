@@ -92,20 +92,20 @@ function! s:ReformatDate(...)
 	let l:dt = a:0 != 0 ? a:1 : s:YmdToSec(str2nr(l:ymd[1]), str2nr(l:ymd[2]), str2nr(l:ymd[3]))
 	" 再フォーマットして置き換え
 	let l:col_org = col('.')
-	call cursor(v:lnum, l:start)
+	call cursor(line('.'), l:start)
 	execute 'normal "_'.s:Mlen(l:ymd[0]).'xi'.strftime('%Y/%m/%d', l:dt)."\<ESC>"
 	" 近くに曜日があったらそれも更新する
 	for l:i in range(0,6)
 		let l:a = strftime('%a', l:i * 86400)
 		let l:a_pos = match(getline('.'), l:a, col('.')) + 1
 		if 0 < l:a_pos && l:a_pos < col('.') + 3
-			call cursor(v:lnum, l:a_pos)
+			call cursor(line('.'), l:a_pos)
 			execute 'normal "_'.s:Mlen(l:a).'s'.strftime('%a', l:dt)."\<ESC>"
 			break
 		endif
 	endfor
 	" カーソル位置を元に戻して終わり
-	call cursor(v:lnum, l:col_org)
+	call cursor(line('.'), l:col_org)
 endfunction
 " 「%Y/%m/%d」の文字列を加算減算
 nnoremap <silent> <C-a> <C-a>:call <SID>ReformatDate()<CR>
