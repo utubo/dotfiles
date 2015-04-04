@@ -57,14 +57,18 @@ function! s:MyColorScheme()
 	hi ZenkakuSpace cterm=reverse ctermfg=red gui=underline guifg=red
 	hi String ctermfg=blue ctermbg=lightblue
 endfunction
-function! s:MySyntax()
-	syntax match ZenkakuSpace /\%u3000\|\%uA1A1\|\%u8140/ containedin=ALL
-	syntax region String start=/「/ end=/」/
+function! s:MyMatches()
+	if exists('w:my_matches')
+		return
+	endif
+	let w:my_matches = 1
+	call matchadd('ZenkakuSpace', '　\|¥')
+	call matchadd('String', '「[^「]\{-}」')
 endfunction
 augroup s:MySyntaxGrp
 	au!
-	au BufWinEnter,syntax * :call <SID>MySyntax()
-	au colorscheme * :call <SID>MyColorScheme()
+	au VimEnter,BufWinEnter * call <SID>MyMatches()
+	au colorscheme * call <SID>MyColorScheme()
 augroup END
 set t_Co=256
 syntax on
