@@ -7,7 +7,6 @@ set list
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set nf=
 set hlsearch
-set re=1
 set virtualedit=block
 
 augroup s:MyAu
