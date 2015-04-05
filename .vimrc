@@ -126,7 +126,7 @@ nnoremap <Space>zz :q!<CR>
 nnoremap <Space>n /
 nnoremap <Space>m ?
 " スタックトレースからyankしてソースの該当箇所を探す
-nnoremap e <S-G>?Err\\|Exception
+nnoremap <Space>e <S-G>?Err\\|Exception<CR>
 noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " -----------------------------------------------------------------------------
