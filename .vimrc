@@ -123,10 +123,10 @@ nnoremap <silent> <F6> :call <SID>ReformatDate(localtime())<CR>
 " ・スマホでのコーディングは基本的にバグ取り
 nnoremap ; :
 nnoremap <Space>zz :q!<CR>
-nnoremap <Space><Space> /<CR>
-nnoremap <Space><Up> ?<CR>
+nnoremap <Space>n /
+nnoremap <Space>m ?
 " スタックトレースからyankしてソースの該当箇所を探す
-nnoremap <Space>e <S-G>?Err\\|Exception<CR>
+nnoremap e <S-G>?Err\\|Exception
 noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " -----------------------------------------------------------------------------
