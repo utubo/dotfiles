@@ -142,7 +142,8 @@ noremap  <expr> <Space>kv '<S-v>'.cursor(0, 1).search('^'.matchstr(getline('.'),
 " -----------------------------------------------------------------------------
 " その他細々したの
 noremap! <C-r><C-r> <C-r>"
+nnoremap <expr> j matchend(getline('.'), '^[\t ]\{-}\zs[^\t ]') == col('.') ? 'j^' : 'j'
+nnoremap <expr> k matchend(getline('.'), '^[\t ]\{-}\zs[^\t ]') == col('.') ? 'k^' : 'k'
 inoremap 「 「」<Left>
-inoremap <S-Tab> <Right>
 " -----------------------------------------------------------------------------
 
