@@ -64,11 +64,8 @@ function! s:MyMatches()
 	call matchadd('ZenkakuSpace', '　\|¥')
 	call matchadd('String', '「[^「]\{-}」')
 endfunction
-augroup s:MySyntaxGrp
-	au!
-	au VimEnter,BufWinEnter * call <SID>MyMatches()
-	au colorscheme * call <SID>MyColorScheme()
-augroup END
+au s:MyAu VimEnter,BufWinEnter * call <SID>MyMatches()
+au s:MyAu colorscheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
