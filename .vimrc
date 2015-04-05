@@ -130,17 +130,17 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 
 " -----------------------------------------------------------------------------
 " 同じインデントの行まで移動
-noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]').'G^'
-noremap  <expr> <Space>kk cursor(0, 1).search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]', 'b').'G^'
-noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]').'G^'
-noremap  <expr> <Space>kv '<S-v>'.cursor(0, 1).search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]', 'b').'G^'
+noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^\s\+').'\S').'G^'
+noremap  <expr> <Space>kk cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'b').'G^'
+noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^\s\+').'\S').'G^'
+noremap  <expr> <Space>kv '<S-v>'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'b').'G^'
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " その他細々したの
 noremap! <C-r><C-r> <C-r>"
-nnoremap <expr> j matchend(getline('.'), '^[\t ]\{-}\ze[^\t ]') == col('.') - 1 ? 'j^' : 'j'
-nnoremap <expr> k matchend(getline('.'), '^[\t ]\{-}\ze[^\t ]') == col('.') - 1 ? 'k^' : 'k'
+nnoremap <expr> j matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'j^' : 'j'
+nnoremap <expr> k matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'k^' : 'k'
 inoremap 「 「」<Left>
 " -----------------------------------------------------------------------------
 
