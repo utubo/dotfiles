@@ -133,9 +133,9 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 
 " -----------------------------------------------------------------------------
 " 同じインデントの行まで移動
-noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]').'G^'
+noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]').'G^'
 noremap  <expr> <Space>kk search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]', 'b').'G^'
-noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]').'G^'
+noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'[^\t ]').'G^'
 noremap  <expr> <Space>kv '<S-v>'.search('^'.matchstr(getline('.'), '^[\t ]\+').'\zs[^\t ]', 'b').'G^'
 " -----------------------------------------------------------------------------
 
