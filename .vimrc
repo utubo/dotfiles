@@ -123,7 +123,7 @@ nnoremap <Space>zz :q!<CR>
 nnoremap <Space>n /
 nnoremap <Space>m ?
 " スタックトレースからyankしてソースの該当箇所を探す
-nnoremap <Space>e <S-G>?Err\\|Exception<CR>
+nnoremap <Space>e G?Err\\|Exception<CR>
 noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " -----------------------------------------------------------------------------
@@ -132,8 +132,8 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " 同じインデントの行まで移動
 noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^\s\+').'\S').'G^'
 noremap  <expr> <Space>kk cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'b').'G^'
-noremap  <expr> <Space>jv '<S-v>'.search('^'.matchstr(getline('.'), '^\s\+').'\S').'G^'
-noremap  <expr> <Space>kv '<S-v>'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'b').'G^'
+noremap  <expr> <Space>jv 'V'.search('^'.matchstr(getline('.'), '^\s\+').'\S').'G^'
+noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'b').'G^'
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
