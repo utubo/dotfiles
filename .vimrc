@@ -137,6 +137,17 @@ noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
+" テンプレート
+function! s:ReadTemplate()
+	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
+	if filereadable(l:filename)
+		execute '0r '.l:filename
+	endif
+endfunction
+au s:MyAu BufNewFile * :call <SID>ReadTemplate()
+" -----------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
 " その他細々したの
 noremap! <C-r><C-r> <C-r>"
 nnoremap <expr> j matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'j^' : 'j'
