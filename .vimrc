@@ -13,20 +13,6 @@ augroup s:MyAu
 	au!
 augroup End
 
-" -----------------------------------------------------------------------------
-" ↓なんか初めから書いてあった
-if has('vim_starting')
-	set nocompatible               " be iMproved
-	set runtimepath+=~/.vim/bundle/neobundle.vim
-endif
-
-if exists('*neobundle#rc')
-	call neobundle#rc(expand('~/.vim/bundle/'))
-endif
-
-filetype plugin indent on     " required!
-" -----------------------------------------------------------------------------
-
 " ↓ここからしばらくコピペ
 
 " -----------------------------------------------------------------------------
