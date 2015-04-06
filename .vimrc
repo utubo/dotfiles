@@ -142,5 +142,6 @@ noremap! <C-r><C-r> <C-r>"
 nnoremap <expr> j matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'j^' : 'j'
 nnoremap <expr> k matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'k^' : 'k'
 inoremap 「 「」<Left>
+inoremap （ ()<Left>
 " -----------------------------------------------------------------------------
 
