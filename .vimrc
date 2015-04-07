@@ -1,6 +1,7 @@
 set encoding=utf-8
 scriptencoding utf-8
-set fileencodings=utf-8,sjis,euc-jp,iso-2022-jp
+set fileencoding=utf-8 encoding=utf-8
+set fileencodings=ucs-bom,utf-8,sjis,euc-jp,iso-2022-jp
 set tabstop=4
 set shiftwidth=4
 set list
@@ -29,6 +30,7 @@ inoremap <C-^> <C-o><C-^>
 " その他パクリ
 au s:MyAu InsertLeave * set nopaste
 nnoremap Y y$
+nnoremap <silent> <C-c> o<ESC>
 xnoremap . :normal .<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " -----------------------------------------------------------------------------
@@ -102,7 +104,7 @@ nnoremap <silent> <F6> :call <SID>ReformatDate(localtime())<CR>
 
 " -----------------------------------------------------------------------------
 " Android の Hacker's-Keybord用キーバインド
-" ・キーちっちゃい宇宙大きい
+" ・キーちっちゃいので宇宙へマッピング
 " ・スマホでのコーディングは基本的にバグ取り
 nnoremap ; :
 nnoremap <Space>zz :q!<CR>
@@ -135,7 +137,8 @@ au s:MyAu BufNewFile * :call <SID>ReadTemplate()
 
 " -----------------------------------------------------------------------------
 " その他細々したの
-noremap! <C-r><C-r> <C-r>"
+inoremap <C-r><Space> <C-r>"
+cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <expr> j matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'j^' : 'j'
 nnoremap <expr> k matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'k^' : 'k'
 inoremap 「 「」<Left>
