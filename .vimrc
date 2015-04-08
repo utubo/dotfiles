@@ -106,7 +106,6 @@ nnoremap <silent> <F6> :call <SID>ReformatDate(localtime())<CR>
 " Android の Hacker's-Keybord用キーバインド
 " ・キーちっちゃいので宇宙へマッピング
 " ・スマホでのコーディングは基本的にバグ取り
-nnoremap ; :
 nnoremap <Space>zz :q!<CR>
 nnoremap <Space>n /
 nnoremap <Space>m ?
@@ -114,6 +113,12 @@ nnoremap <Space>m ?
 nnoremap <Space>e G?Err\\|Exception<CR>
 noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
+" <Shift>→<;>の2ストロークがわずらわしいので<;>でOKにする
+" (でも<:>と入れ替えるのは癖つきそうなのでやめとく）
+if $MOBILE_NOW
+	nnoremap ; :
+	nnoremap <Space>; ;
+endif
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
