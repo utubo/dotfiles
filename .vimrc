@@ -9,6 +9,7 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set nf=
 set hlsearch
 set virtualedit=block
+filetype indent on
 
 augroup s:MyAu
 	au!
@@ -138,6 +139,26 @@ function! s:ReadTemplate()
 	endif
 endfunction
 au s:MyAu BufNewFile * :call <SID>ReadTemplate()
+" -----------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+function! s:ShowEditingTime()
+	if exists('g:edit_start_time')
+		let l:t = localtime() - g:edit_start_time
+		let l:h = l:t / 3600
+		let l:m = (l:t % 3600) / 60
+		if 1 < h
+			let l:sufix = '(^q^)'
+		elseif 0 < h
+			let l:sufix = '(><)'
+		else
+			let l:sufix = ''
+		endif
+		echo h.'時間'.m.'分過'.l:sufix
+	endif
+endfunction
+au s:MyAu VimEnter * :let g:edit_start_time = localtime()
+nnoremap <silent> <ESC> :call <SID>ShowEditingTime()<ESC>
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
