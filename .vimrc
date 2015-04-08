@@ -130,13 +130,13 @@ noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\
 
 " -----------------------------------------------------------------------------
 " 文頭に合わせて行移動
-let b:my_hat = ''
+let w:my_hat = ''
 function! s:PutMyHat()
 	if 1 < len(getline('.'))
 		let l:x = match(getline('.'), '\S') + 1
-		let b:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
+		let w:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
 	endif
-	return b:my_hat
+	return w:my_hat
 endfunction
 nnoremap <expr> j 'j'.<SID>PutMyHat()
 nnoremap <expr> k 'k'.<SID>PutMyHat()
@@ -170,7 +170,7 @@ function! s:ShowEditingTime()
 	endif
 endfunction
 au s:MyAu VimEnter * :let g:edit_start_time = localtime()
-nnoremap <silent> <ESC> :call <SID>ShowEditingTime()<ESC>
+nnoremap <silent> <ESC><ESC> :call <SID>ShowEditingTime()<CR>
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
