@@ -129,6 +129,20 @@ noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
+" 文頭に合わせて行移動
+let b:my_hat = ''
+function! s:PutMyHat()
+	if 1 < len(getline('.'))
+		let l:x = match(getline('.'), '\S') + 1
+		let b:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
+	endif
+	return b:my_hat
+endfunction
+nnoremap <expr> j 'j'.<SID>PutMyHat()
+nnoremap <expr> k 'k'.<SID>PutMyHat()
+" -----------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
 " テンプレート
 function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
@@ -163,8 +177,6 @@ nnoremap <silent> <ESC> :call <SID>ShowEditingTime()<ESC>
 " その他細々したの
 inoremap <C-r><Space> <C-r>"
 cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
-nnoremap <expr> j matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'j^' : 'j'
-nnoremap <expr> k matchend(getline('.'), '^\s\{-}\ze\S') == col('.') - 1 ? 'k^' : 'k'
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 " -----------------------------------------------------------------------------
