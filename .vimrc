@@ -130,11 +130,12 @@ noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\
 
 " -----------------------------------------------------------------------------
 " 文頭に合わせて行移動
-let w:my_hat = ''
 function! s:PutMyHat()
 	if 1 < len(getline('.'))
 		let l:x = match(getline('.'), '\S') + 1
 		let w:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
+	elseif !exists('w:my_hat')
+		let w:my_hat = ''
 	endif
 	return w:my_hat
 endfunction
