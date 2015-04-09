@@ -144,9 +144,9 @@ function! s:ReadTemplate()
 	if filereadable(l:filename)
 		execute '0r '.l:filename
 		if search('{Cursor}')
-			normal 8xa
+			normal 8x
 		endif
-		if getline('.') !~ '\S'
+		if col('.') == col('$') - 1
 			startinsert!
 		else
 			startinsert
