@@ -43,18 +43,8 @@ inoremap kk <ESC>
 " -----------------------------------------------------------------------------
 " 色
 function! s:MyColorScheme()
-	hi link ZenkakuSpace SpellBad
 	hi String ctermfg=blue ctermbg=lightblue
 endfunction
-function! s:MyMatches()
-	if exists('w:my_matches')
-		return
-	endif
-	let w:my_matches = 1
-	call matchadd('ZenkakuSpace', '　\|¥')
-	call matchadd('String', '「[^「]\{-}」')
-endfunction
-au s:MyAu VimEnter,BufWinEnter * call <SID>MyMatches()
 au s:MyAu colorscheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
@@ -181,5 +171,6 @@ inoremap <C-r><Space> <C-r>"
 cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
+au s:MyAu VimEnter,WinEnter * let w:match_badchars = !exists('w:match_badchars') ? matchadd('SpellBad', '　\|¥') : w:match_badchars
 " -----------------------------------------------------------------------------
 
