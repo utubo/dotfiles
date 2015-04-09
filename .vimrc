@@ -142,7 +142,7 @@ function! s:ReadTemplate()
 		execute '0r '.l:filename
 	endif
 endfunction
-au s:MyAu BufNewFile * :call <SID>ReadTemplate()
+au s:MyAu BufNewFile * call <SID>ReadTemplate()
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -161,8 +161,8 @@ function! s:ShowEditingTime()
 		echo h.'時間'.m.'分過'.l:sufix
 	endif
 endfunction
-au s:MyAu VimEnter * :let g:edit_start_time = localtime()
-nnoremap <silent> <ESC><ESC> :call <SID>ShowEditingTime()<CR>
+au s:MyAu VimEnter * let g:edit_start_time = localtime()
+nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -171,6 +171,6 @@ inoremap <C-r><Space> <C-r>"
 cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-au s:MyAu VimEnter,WinEnter * if !exists('w:match_badchars') | let w:match_badchars = matchadd('SpellBad', '　\|¥') | endif
+au s:MyAu VimEnter,WinEnter * if !exists('w:match_badchars') | let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$') | endif
 " -----------------------------------------------------------------------------
 
