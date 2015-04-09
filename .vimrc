@@ -144,8 +144,8 @@ function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
 	if filereadable(l:filename)
 		execute '0r '.l:filename
-		if search('{Cursor}')
-			normal 8x
+		if search('<+CURSOR+>')
+			silent! normal! "_da>
 		endif
 		if col('.') == col('$') - 1
 			startinsert!
@@ -183,6 +183,9 @@ inoremap <C-r><Space> <C-r>"
 cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-au s:MyAu VimEnter,WinEnter * if !exists('w:match_badchars') | let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$') | endif
+au s:MyAu VimEnter,WinEnter *
+	\   if !exists('w:match_badchars')
+	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
+	\ | endif
 " -----------------------------------------------------------------------------
 
