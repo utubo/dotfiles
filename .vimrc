@@ -171,6 +171,6 @@ inoremap <C-r><Space> <C-r>"
 cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-au s:MyAu VimEnter,WinEnter * let w:match_badchars = !exists('w:match_badchars') ? matchadd('SpellBad', '　\|¥') : w:match_badchars
+au s:MyAu VimEnter,WinEnter * if !exists('w:match_badchars') | let w:match_badchars = matchadd('SpellBad', '　\|¥') | endif
 " -----------------------------------------------------------------------------
 
