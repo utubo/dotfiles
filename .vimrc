@@ -11,6 +11,7 @@ set hlsearch
 set autoindent
 set smartindent
 set virtualedit=block
+set ruler
 filetype indent on
 
 augroup s:MyAu
