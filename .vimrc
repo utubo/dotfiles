@@ -8,6 +8,8 @@ set list
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set nf=
 set hlsearch
+set autoindent
+set smartindent
 set virtualedit=block
 filetype indent on
 
@@ -31,6 +33,7 @@ inoremap <C-^> <C-o><C-^>
 " その他パクリ
 au s:MyAu InsertLeave * set nopaste
 nnoremap Y y$
+nnoremap d\ d$
 nnoremap <silent> <C-c> o<ESC>
 xnoremap . :normal .<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
@@ -140,6 +143,14 @@ function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
 	if filereadable(l:filename)
 		execute '0r '.l:filename
+		if search('{Cursor}')
+			normal 8xa
+		endif
+	endif
+	if getline('.') !~ '\S'
+		startinsert!
+	else
+		startinsert
 	endif
 endfunction
 au s:MyAu BufNewFile * call <SID>ReadTemplate()
