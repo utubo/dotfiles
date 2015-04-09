@@ -34,6 +34,7 @@ nnoremap Y y$
 nnoremap <silent> <C-c> o<ESC>
 xnoremap . :normal .<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+inoremap kk <ESC>
 " -----------------------------------------------------------------------------
 
 " ↑ここまでコピペ(頭のいい人が書いたのでメンテ不要)
@@ -42,7 +43,7 @@ inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " -----------------------------------------------------------------------------
 " 色
 function! s:MyColorScheme()
-	hi ZenkakuSpace cterm=reverse ctermfg=red gui=underline guifg=red
+	hi link ZenkakuSpace SpellBad
 	hi String ctermfg=blue ctermbg=lightblue
 endfunction
 function! s:MyMatches()
