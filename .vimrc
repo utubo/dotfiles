@@ -146,11 +146,11 @@ function! s:ReadTemplate()
 		if search('{Cursor}')
 			normal 8xa
 		endif
-	endif
-	if getline('.') !~ '\S'
-		startinsert!
-	else
-		startinsert
+		if getline('.') !~ '\S'
+			startinsert!
+		else
+			startinsert
+		endif
 	endif
 endfunction
 au s:MyAu BufNewFile * call <SID>ReadTemplate()
