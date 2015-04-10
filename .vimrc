@@ -38,6 +38,7 @@ nnoremap d\ d$
 nnoremap <silent> <C-c> o<ESC>
 xnoremap . :normal .<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+inoremap jj <ESC>
 inoremap kk <ESC>
 " -----------------------------------------------------------------------------
 
@@ -179,13 +180,16 @@ nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
 
 " -----------------------------------------------------------------------------
 " その他細々したの
-inoremap <C-r><Space> <C-r>"
-cnoremap <expr> <C-r><Space> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
-inoremap 「 「」<Left>
-inoremap （ ()<Left>
 au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
+nnoremap <expr> y: ':'.substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
+nnoremap <expr> Y: ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
+inoremap <C-r><C-r> <C-r>"
+cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
+nnoremap <Space>p $p
+inoremap 「 「」<Left>
+inoremap （ ()<Left>
 " -----------------------------------------------------------------------------
 
