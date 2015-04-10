@@ -21,17 +21,17 @@ augroup End
 " ↓ここからしばらくコピペ
 
 " -----------------------------------------------------------------------------
-" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc
-" Movement in insert mode
+" Movement in insert mode {{{
 inoremap <C-h> <C-o>h
 inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
-" -----------------------------------------------------------------------------
+" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" その他パクリ
+" その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
 nnoremap Y y$
 nnoremap d\ d$
@@ -40,33 +40,34 @@ xnoremap . :normal .<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 inoremap jj <ESC>
 inoremap kk <ESC>
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " ↑ここまでコピペ(頭のいい人が書いたのでメンテ不要)
 " ↓ここから自作(頭の悪い人が書いたので要メンテ)
 
 " -----------------------------------------------------------------------------
-" 色
+" 色 {{{
 function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
+	hi! link Folded Comment
 endfunction
 au s:MyAu colorscheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" 日付関係
+" 日付関係 {{{
 " 「%Y/%m/%d」の文字列を加算減算
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
 " 「%Y/%m/%d」の文字列を今日の日付に置換
 nnoremap <silent> <F6> :call reformatdate#reformat(localtime())<CR>
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" Android の Hacker's-Keybord用キーバインド
+" Android の Hacker's-Keybord用キーバインド {{{
 " ・キーちっちゃいので宇宙へマッピング
 " ・スマホでのコーディングは基本的にバグ取り
 if $MOBILE_NOW
@@ -80,18 +81,18 @@ nnoremap <Space>m ?
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" 同じインデントの行まで移動
+" 同じインデントの行まで移動 {{{
 noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
 noremap  <expr> <Space>kk cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
 noremap  <expr> <Space>jv 'V'.search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
 noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" 文頭に合わせて行移動
+" 文頭に合わせて行移動 {{{
 function! s:PutMyHat()
 	if 1 < len(getline('.'))
 		let l:x = match(getline('.'), '\S') + 1
@@ -103,10 +104,10 @@ function! s:PutMyHat()
 endfunction
 nnoremap <expr> j 'j'.<SID>PutMyHat()
 nnoremap <expr> k 'k'.<SID>PutMyHat()
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" テンプレート
+" テンプレート {{{
 function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
 	if filereadable(l:filename)
@@ -122,9 +123,10 @@ function! s:ReadTemplate()
 	endif
 endfunction
 au s:MyAu BufNewFile * call <SID>ReadTemplate()
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
+" やりすぎ注意 {{{
 function! s:ShowEditingTime()
 	if exists('g:edit_start_time')
 		let l:t = localtime() - g:edit_start_time
@@ -144,10 +146,24 @@ function! s:ShowEditingTime()
 endfunction
 au s:MyAu VimEnter * call <SID>ShowEditingTime()
 nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" その他細々したの
+" 折りたたみ {{{
+function! MyFoldText()
+	if &foldmethod == 'indent'
+		return repeat(' ', v:foldlevel * &shiftwidth).'>...'
+	else
+		return repeat(' ', (v:foldlevel - 1) * &shiftwidth).'+>'.substitute(getline(v:foldstart), '{'.'{{', '', '')
+	endif
+endfunction
+set foldtext=MyFoldText()
+set fillchars=fold:\ ,
+set foldmethod=marker
+" }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" その他細々したの {{{
 au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
@@ -159,5 +175,5 @@ cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-" -----------------------------------------------------------------------------
+" }}} -------------------------------------------------------------------------
 
