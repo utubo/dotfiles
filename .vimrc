@@ -151,15 +151,19 @@ nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
 " -----------------------------------------------------------------------------
 " 折りたたみ {{{
 function! MyFoldText()
+	let l:indent = repeat(' ', matchend(getline(v:foldstart), '^\s\+') * &shiftwidth)
 	if &foldmethod == 'indent'
-		return repeat(' ', v:foldlevel * &shiftwidth).'>...'
+		return l:indent.'>...'
+	elseif &foldmethod == 'marker'
+		return l:indent.'+>'.substitute(getline(v:foldstart), '{'.'{{', '', '')
 	else
-		return repeat(' ', (v:foldlevel - 1) * &shiftwidth).'+>'.substitute(getline(v:foldstart), '{'.'{{', '', '')
+		return l:indent.'+>'.getline(v:foldstart)
 	endif
 endfunction
 set foldtext=MyFoldText()
-set fillchars=fold:\ ,
+set fillchars=fold:\ " 折りたたみの「-」を非表示
 set foldmethod=marker
+nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
