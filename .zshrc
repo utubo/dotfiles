@@ -37,7 +37,9 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-# My Config
+# ^^^ Default ^^^
+# vvv My Config vvv
+
 alias ls="ls --color=auto"
 alias grep="grep --color=auto"
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
@@ -48,6 +50,7 @@ alias c='clear'
 alias g='grep'
 alias v='vi'
 alias vw='view'
+alias gd='git diff'
 export EDITOR=vi
 export PATH=$PATH:~/sbin/log_tool:~/sbin/yakui_doll/tools
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
