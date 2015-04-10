@@ -137,7 +137,7 @@ function! s:ShowEditingTime()
 		else
 			let l:sufix = ''
 		endif
-		echo h.'時間'.m.'分過'.l:sufix
+		echo h.'時間'.m.'分経過'.l:sufix
 	else
 		let g:edit_start_time = localtime()
 	endif
