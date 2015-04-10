@@ -138,9 +138,11 @@ function! s:ShowEditingTime()
 			let l:sufix = ''
 		endif
 		echo h.'時間'.m.'分過'.l:sufix
+	else
+		let g:edit_start_time = localtime()
 	endif
 endfunction
-au s:MyAu VimEnter * let g:edit_start_time = localtime()
+au s:MyAu VimEnter * call <SID>ShowEditingTime()
 nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
 " -----------------------------------------------------------------------------
 
