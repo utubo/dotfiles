@@ -143,6 +143,7 @@ set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
 nnoremap z<TAB> :set foldmethod=indent<CR>
 nnoremap z{ :set foldmethod=marker<CR>
+nnoremap zy :set foldmethod=syntax<CR>
 " }}} ------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
