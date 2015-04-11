@@ -141,9 +141,9 @@ set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
-nnoremap z<TAB> :set fdm=indent<CR>
-nnoremap z{ :set fdm=marker<CR>
-" }}} -------------------------------------------------------------------------
+nnoremap z<TAB> :set foldmethod=indent<CR>
+nnoremap z{ :set foldmethod=marker<CR>
+" }}} ------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " やりすぎ注意 {{{
