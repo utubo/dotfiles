@@ -155,9 +155,9 @@ function! s:Arround()
 	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
 	let l:cur = getpos("'>")
 	call setpos('.', getpos("'<"))
-	execute 'normal i'.l:start
-	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - 2]))
-	execute 'normal la'.l:end
+	execute 'normal! i'.l:start
+	call cursor(l:cur[1], min([l:cur[2] + len(l:start), col([l:cur[1], '$']) - 1]))
+	execute 'normal! a'.l:end
 endfunction
 vnoremap <silent> <space>2 :<C-u>call <SID>Arround()<CR>
 nnoremap <silent> <space>2 viw:<C-u>call <SID>Arround()<CR>
