@@ -153,11 +153,11 @@ function! s:Arround()
 	let l:start = input('括る文字: ')
 	let l:dic = {'(':')', '{':'}', '[':']', '<':'>', '「':'」', '（':'）'}
 	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
-	let l:tmp = @@
-	normal gvy
-	call setpos('.',getpos("'<"))
-	execute 'normal i'.l:start."\<ESC>".len(substitute(@@, '.', 'x', 'g')).'la'.l:end."\<ESC>"
-	let @@ = l:tmp
+	let l:cur = getpos("'>")
+	call setpos('.', getpos("'<"))
+	execute 'normal i'.l:start
+	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - 2]))
+	execute 'normal la'.l:end
 endfunction
 vnoremap <silent> <space>2 :<C-u>call <SID>Arround()<CR>
 nnoremap <silent> <space>2 viw:<C-u>call <SID>Arround()<CR>
