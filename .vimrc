@@ -151,12 +151,12 @@ nnoremap zy :set foldmethod=syntax<CR>
 " これでいいや。不便に感じたらプラグインを入れる。
 function! s:Arround()
 	let l:start = input('括る文字: ')
-	let l:dic = {'(':')', '{':'}', '[':']', '<':'>', '「':'」', '（':'）'}
+	let l:dic = {'(':')', '{':'}', '[':']', '<':'>', '「':'」'}
 	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
 	let l:cur = getpos("'>")
 	call setpos('.', getpos("'<"))
 	execute 'normal! i'.l:start
-	call cursor(l:cur[1], min([l:cur[2] + len(l:start), col([l:cur[1], '$']) - 1]))
+	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:start)]) + len(l:start))
 	execute 'normal! a'.l:end
 endfunction
 vnoremap <silent> <space>2 :<C-u>call <SID>Arround()<CR>
