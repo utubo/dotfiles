@@ -194,7 +194,7 @@ au s:MyAu VimEnter,WinEnter *
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
 nnoremap <expr> y: ':'.substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
-nnoremap <expr> Y: ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
+nnoremap <expr> y; ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
 inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
