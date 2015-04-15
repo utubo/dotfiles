@@ -12,6 +12,7 @@ set autoindent
 set smartindent
 set virtualedit=block
 set ruler
+set breakindent
 filetype indent on
 
 augroup s:MyAu
