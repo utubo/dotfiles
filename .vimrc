@@ -23,6 +23,7 @@ augroup End
 " -----------------------------------------------------------------------------
 " プラグイン {{{
 if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
+	" ばんどる {{{
 	if has('vim_starting')
 		if &compatible
 			set nocompatible " Be iMproved
@@ -40,6 +41,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundle 'utubo/vim-reformatdate.git'
 	NeoBundle 'yegappan/mru'
 	call neobundle#end()
+	" }}}
 
 	" neosnippet {{{
 	imap <S-TAB> <Plug>(neosnippet_expand_or_jump)
@@ -50,7 +52,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	" }}}
 
 	" ruby {{{
-	" https://gist.github.com/haya14busa/20dad79e0531640a08e8
+	" https://gist.github.com/haya14busa/20dad79e0531640a08e8 からコピペ
 	let g:neocomplete#sources#omni#input_patterns = {
 				\ 'ruby' : '[^. *\t]\.\w*\|\h\w*::',
 				\}
@@ -60,6 +62,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	" }}}
 
 	" easymotion {{{
+	" READMEのまま
 	let g:EasyMotion_do_mapping = 0 " Disable default mappings
 	nmap s <Plug>(easymotion-s)
 	nmap s <Plug>(easymotion-s2)
@@ -77,12 +80,12 @@ filetype plugin indent on " required
 
 " -----------------------------------------------------------------------------
 " Movement in insert mode {{{
+" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc からコピペ
 inoremap <C-h> <C-o>h
 inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
-" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
