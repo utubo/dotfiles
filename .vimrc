@@ -13,13 +13,67 @@ set smartindent
 set virtualedit=block
 set ruler
 set breakindent
-filetype indent on
 
 augroup s:MyAu
 	au!
 augroup End
 
 " ↓ここからしばらくコピペ
+
+" -----------------------------------------------------------------------------
+" プラグイン {{{
+if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
+	if has('vim_starting')
+		if &compatible
+			set nocompatible " Be iMproved
+		endif
+		set runtimepath+=~/.vim/bundle/neobundle.vim
+	endif
+	let g:neocomplcache_enable_at_startup = 1
+	call neobundle#begin(expand('~/.vim/bundle'))
+	NeoBundleFetch 'Shougo/neobundle.vim'
+	NeoBundle 'Shougo/neocompletecache'
+	NeoBundle 'Shougo/neosnippet'
+	NeoBundle 'Shougo/neosnippet-snippets'
+	NeoBundle 'Lokaltog/vim-easymotion'
+	NeoBundle 'tyru/caw.vim.git'
+	NeoBundle 'utubo/vim-reformatdate.git'
+	NeoBundle 'yegappan/mru'
+	call neobundle#end()
+
+	" neosnippet {{{
+	imap <S-TAB> <Plug>(neosnippet_expand_or_jump)
+	smap <S-TAB> <Plug>(neosnippet_expand_or_jump)
+	xmap <S-TAB> <Plug>(neosnippet_expand_target)
+	imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+	smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+	" }}}
+
+	" ruby {{{
+	" https://gist.github.com/haya14busa/20dad79e0531640a08e8
+	let g:neocomplete#sources#omni#input_patterns = {
+				\ 'ruby' : '[^. *\t]\.\w*\|\h\w*::',
+				\}
+	NeoBundleLazy 'osyo-manga/vim-monster', {
+				\   'autoload' : {'filetypes' : 'ruby'}
+				\ }
+	" }}}
+
+	" easymotion {{{
+	let g:EasyMotion_do_mapping = 0 " Disable default mappings
+	nmap s <Plug>(easymotion-s)
+	nmap s <Plug>(easymotion-s2)
+	let g:EasyMotion_smartcase = 1
+	map <Leader>j <Plug>(easymotion-j)
+	map <Leader>k <Plug>(easymotion-k)
+	" }}}
+
+	" ---------------------------------
+	" その他
+	map <C-_> <Plug>(caw:i:toggle)
+endif
+filetype plugin indent on " required
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " Movement in insert mode {{{
@@ -34,13 +88,14 @@ inoremap <C-^> <C-o><C-^>
 " -----------------------------------------------------------------------------
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
+noremap  <F1> <NOP>
 nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<ESC>
-xnoremap . :normal .<CR>
-inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+xnoremap . :normal! .<CR>
 inoremap jj <ESC>
 inoremap kk <ESC>
+inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
 " ↑ここまでコピペ(頭のいい人が書いたのでメンテ不要)
@@ -152,7 +207,7 @@ nnoremap zy :set foldmethod=syntax<CR>
 " これでいいや。不便に感じたらプラグインを入れる。
 function! s:Arround()
 	let l:start = input('括る文字: ')
-	let l:dic = {'(':')', '{':'}', '[':']', '<':'>', '「':'」'}
+	let l:dic = {'(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>', '「':'」'}
 	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
 	let l:cur = getpos("'>")
 	call setpos('.', getpos("'<"))
@@ -198,6 +253,7 @@ nnoremap <expr> y; ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '
 inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
+nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 " }}} -------------------------------------------------------------------------
