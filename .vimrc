@@ -208,7 +208,7 @@ nnoremap zy :set foldmethod=syntax<CR>
 " -----------------------------------------------------------------------------
 " 括弧でくくる {{{
 " これでいいや。不便に感じたらプラグインを入れる。
-function! s:Arround()
+function! s:PutQuotation()
 	let l:start = input('括る文字: ')
 	let l:dic = {'(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>', '「':'」'}
 	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
@@ -218,8 +218,8 @@ function! s:Arround()
 	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:start)]) + len(l:start))
 	execute 'normal! a'.l:end
 endfunction
-vnoremap <silent> <space>2 :<C-u>call <SID>Arround()<CR>
-nnoremap <silent> <space>2 viw:<C-u>call <SID>Arround()<CR>
+vnoremap <silent> <space>2 :<C-u>call <SID>PutQuotation()<CR>
+nnoremap <silent> <space>2 viw:<C-u>call <SID>PutQuotation()<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
