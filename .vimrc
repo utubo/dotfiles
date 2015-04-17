@@ -259,6 +259,7 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-inoremap kj <ESC>
+inoremap kj <ESC><Right>
+vnoremap <Space>kj <ESC>
 " }}} -------------------------------------------------------------------------
 
