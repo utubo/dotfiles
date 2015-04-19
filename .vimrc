@@ -218,8 +218,8 @@ function! s:PutQuotation()
 	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:start)]) + len(l:start))
 	execute 'normal! a'.l:end
 endfunction
-vnoremap <silent> <space>2 :<C-u>call <SID>PutQuotation()<CR>
-nnoremap <silent> <space>2 viw:<C-u>call <SID>PutQuotation()<CR>
+vnoremap <silent> <space>q :<C-u>call <SID>PutQuotation()<CR>
+nnoremap <silent> <space>q viw:<C-u>call <SID>PutQuotation()<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
