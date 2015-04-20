@@ -10,9 +10,9 @@ set nf=
 set hlsearch
 set autoindent
 set smartindent
+set breakindent
 set virtualedit=block
 set ruler
-set breakindent
 
 augroup s:MyAu
 	au!
@@ -47,8 +47,15 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	imap <S-TAB> <Plug>(neosnippet_expand_or_jump)
 	smap <S-TAB> <Plug>(neosnippet_expand_or_jump)
 	xmap <S-TAB> <Plug>(neosnippet_expand_target)
-	imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-	smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+	imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
+	smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
+	" }}}
+
+	" easymotion {{{
+	let g:EasyMotion_do_mapping = 0
+	let g:EasyMotion_smartcase = 1
+	let g:EasyMotion_use_migemo = 1
+	nmap s <Plug>(easymotion-s)
 	" }}}
 
 	" ruby {{{
@@ -61,19 +68,9 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 				\ }
 	" }}}
 
-	" easymotion {{{
-	" READMEのまま
-	let g:EasyMotion_do_mapping = 0 " Disable default mappings
-	nmap s <Plug>(easymotion-s)
-	nmap s <Plug>(easymotion-s2)
-	let g:EasyMotion_smartcase = 1
-	map <Leader>j <Plug>(easymotion-j)
-	map <Leader>k <Plug>(easymotion-k)
-	" }}}
-
 	" ---------------------------------
 	" その他
-	map <C-_> <Plug>(caw:i:toggle)
+	map <Leader>c <Plug>(caw:i:toggle)
 endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
@@ -91,13 +88,13 @@ inoremap <C-^> <C-o><C-^>
 " -----------------------------------------------------------------------------
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
-noremap  <F1> <NOP>
+noremap  <F1> <Nop>
 nnoremap Y y$
 nnoremap d\ d$
-nnoremap <silent> <C-c> o<ESC>
+nnoremap <silent> <C-c> o<Esc>
 xnoremap . :normal! .<CR>
-inoremap jj <ESC>
-inoremap kk <ESC>
+inoremap jj <Esc>
+inoremap kk <Esc>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
@@ -144,10 +141,10 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 
 " -----------------------------------------------------------------------------
 " 同じインデントの行まで移動 {{{
-noremap  <expr> <Space>jj search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
-noremap  <expr> <Space>kk cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
-noremap  <expr> <Space>jv 'V'.search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
-noremap  <expr> <Space>kv 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
+noremap  <expr> <Tab>j search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
+noremap  <expr> <Tab>k cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
+noremap  <expr> <Tab><Space>j 'V'.search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
+noremap  <expr> <Tab><Space>k 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -200,7 +197,7 @@ set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
-nnoremap z<TAB> :set foldmethod=indent<CR>
+nnoremap z<Tab> :set foldmethod=indent<CR>
 nnoremap z{ :set foldmethod=marker<CR>
 nnoremap zy :set foldmethod=syntax<CR>
 " }}} -------------------------------------------------------------------------
@@ -209,17 +206,17 @@ nnoremap zy :set foldmethod=syntax<CR>
 " 括弧でくくる {{{
 " これでいいや。不便に感じたらプラグインを入れる。
 function! s:PutQuotation()
-	let l:start = input('括る文字: ')
 	let l:dic = {'(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>', '「':'」'}
-	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : l:start
+	let l:start = input('括る文字: ')
+	let l:end = has_key(l:dic, l:start) ? l:dic[l:start] : substitute(l:start, '^<', '</', '')
 	let l:cur = getpos("'>")
 	call setpos('.', getpos("'<"))
 	execute 'normal! i'.l:start
 	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:start)]) + len(l:start))
 	execute 'normal! a'.l:end
 endfunction
-vnoremap <silent> <space>q :<C-u>call <SID>PutQuotation()<CR>
-nnoremap <silent> <space>q viw:<C-u>call <SID>PutQuotation()<CR>
+vnoremap <silent> <Space>q :call <SID>PutQuotation()<CR>
+nnoremap <silent> <Space>q viw:call <SID>PutQuotation()<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -242,7 +239,7 @@ function! s:ShowEditingTime()
 	endif
 endfunction
 au s:MyAu VimEnter * call <SID>ShowEditingTime()
-nnoremap <silent> <ESC><ESC> :noh \| :call <SID>ShowEditingTime()<CR>
+nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -259,7 +256,6 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-inoremap kj <ESC><Right>
-vnoremap <Space>kj <ESC>
+inoremap kj <Esc><Right>
 " }}} -------------------------------------------------------------------------
 
