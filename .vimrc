@@ -96,6 +96,9 @@ nnoremap <Tab>j :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . li
 nnoremap <Tab>k :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be')<CR>
 xnoremap . :normal! .<CR>
 inoremap <silent> <Esc> <C-o>:stopinsert<CR>
+imap jj <Esc>
+imap kk <Esc>
+imap kj <Esc>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
@@ -253,9 +256,6 @@ inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-inoremap <silent> kk <C-o>:stopinsert<CR>
-inoremap <silent> jj <C-o>:stopinsert<CR>
-inoremap <silent> kj <C-o>:stopinsert<CR>
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 " }}} -------------------------------------------------------------------------
