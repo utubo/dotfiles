@@ -92,6 +92,8 @@ noremap  <F1> <Nop>
 nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
+nnoremap <Tab>j :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e')<CR>
+nnoremap <Tab>k :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be')<CR>
 xnoremap . :normal! .<CR>
 inoremap <silent> <Esc> <C-o>:stopinsert<CR>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
@@ -139,11 +141,9 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" 同じインデントの行まで移動 {{{
-noremap  <expr> <Tab>j search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
-noremap  <expr> <Tab>k cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
-noremap  <expr> <Tab><Space>j 'V'.search('^'.matchstr(getline('.'), '^\s\+').'\S', 'W').'G^'
-noremap  <expr> <Tab><Space>k 'V'.cursor(0, 1).search('^'.matchstr(getline('.'), '^\s\+').'\S', 'bW').'G^'
+" 同じインデントの行まで選択 {{{
+nmap <Tab><Space>j V<Tab>j
+nmap <Tab><Space>k V<Tab>k
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
