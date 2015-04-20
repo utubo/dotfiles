@@ -4,15 +4,17 @@ set fileencoding=utf-8 encoding=utf-8
 set fileencodings=iso-2022-jp,ucs-bom,utf-8,cp932,sjis,euc-jp
 set tabstop=4
 set shiftwidth=4
-set list
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
-set nf=
-set hlsearch
 set autoindent
 set smartindent
 set breakindent
+set nf=
 set virtualedit=block
+set hlsearch
+set list
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set ruler
+set visualbell
+set t_vb=
 
 augroup s:MyAu
 	au!
@@ -44,9 +46,9 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	" }}}
 
 	" neosnippet {{{
-	imap <S-TAB> <Plug>(neosnippet_expand_or_jump)
-	smap <S-TAB> <Plug>(neosnippet_expand_or_jump)
-	xmap <S-TAB> <Plug>(neosnippet_expand_target)
+	imap <S-Tab> <Plug>(neosnippet_expand_or_jump)
+	smap <S-Tab> <Plug>(neosnippet_expand_or_jump)
+	xmap <S-Tab> <Plug>(neosnippet_expand_target)
 	imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
 	smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
 	" }}}
