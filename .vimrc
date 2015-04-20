@@ -92,8 +92,6 @@ noremap  <F1> <Nop>
 nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
-nnoremap <Tab>j :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e')<CR>
-nnoremap <Tab>k :call search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be')<CR>
 xnoremap . :normal! .<CR>
 inoremap <silent> <Esc> <C-o>:stopinsert<CR>
 imap jj <Esc>
@@ -144,7 +142,9 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" 同じインデントの行まで選択 {{{
+" 同じインデントの行まで移動 {{{
+xnoremap <expr> <Tab>j search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
+xnoremap <expr> <Tab>k search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
 nmap <Tab><Space>j V<Tab>j
 nmap <Tab><Space>k V<Tab>k
 " }}} -------------------------------------------------------------------------
@@ -171,7 +171,7 @@ function! s:ReadTemplate()
 	if filereadable(l:filename)
 		execute '0r '.l:filename
 		if search('<+CURSOR+>')
-			silent! normal! "_da>
+			normal! "_da>
 		endif
 		if col('.') == col('$') - 1
 			startinsert!
