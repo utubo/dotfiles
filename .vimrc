@@ -137,21 +137,21 @@ nnoremap <Space>n /
 nnoremap <Space>m ?
 " スタックトレースからyankしてソースの該当箇所を探す
 nnoremap <Space>e G?\cErr\\|Exception<CR>
-noremap  <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
+nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " 同じインデントの行まで移動 {{{
-xnoremap <expr> <Tab>j search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
-xnoremap <expr> <Tab>k search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
+noremap <expr> <Tab>j search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
+noremap <expr> <Tab>k search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
 nmap <Tab><Space>j V<Tab>j
 nmap <Tab><Space>k V<Tab>k
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " 文頭に合わせて行移動 {{{
-function! s:PutMyHat()
+function! s:PutHat()
 	if 1 < len(getline('.'))
 		let l:x = match(getline('.'), '\S') + 1
 		let w:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
@@ -160,8 +160,8 @@ function! s:PutMyHat()
 	endif
 	return w:my_hat
 endfunction
-nnoremap <expr> j 'j'.<SID>PutMyHat()
-nnoremap <expr> k 'k'.<SID>PutMyHat()
+nnoremap <expr> j 'j'.<SID>PutHat()
+nnoremap <expr> k 'k'.<SID>PutHat()
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -218,7 +218,7 @@ function! s:PutQuotation()
 	execute 'normal! a'.l:end
 endfunction
 vnoremap <silent> <Space>q :call <SID>PutQuotation()<CR>
-nnoremap <silent> <Space>q viw:call <SID>PutQuotation()<CR>
+nmap <Space>q viw q
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -228,14 +228,7 @@ function! s:ShowEditingTime()
 		let l:t = localtime() - g:edit_start_time
 		let l:h = l:t / 3600
 		let l:m = (l:t % 3600) / 60
-		if 1 < h
-			let l:sufix = '(^q^)'
-		elseif 0 < h
-			let l:sufix = '(><)'
-		else
-			let l:sufix = ''
-		endif
-		echo h.'時間'.m.'分経過'.l:sufix
+		echo l:h.'時間'.l:m.'分経過'.(1 < l:h ? '(^q^)' : l:h ? '(><)' : '')
 	else
 		let g:edit_start_time = localtime()
 	endif
