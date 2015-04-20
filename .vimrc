@@ -93,8 +93,6 @@ nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
 xnoremap . :normal! .<CR>
-inoremap jj <Esc>
-inoremap kk <Esc>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
@@ -243,6 +241,28 @@ nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
+" <i>→<ESC>でカーソルが左にずれるのやめたいけどそういうオプションとかあるのかな？ {{{
+function! s:StayCursor(...)
+	if a:0
+		let w:stay_cursor = len(getline('.')) - col('.')
+		return a:1
+	elseif exists('w:stay_cursor')
+		let l:c = w:stay_cursor
+		unlet w:stay_cursor
+		if col('.') != 1 || len(getline('.')) - col('.') != l:c
+			return "\<Right>"
+		endif
+	endif
+	return ''
+endfunction
+nnoremap <expr> i <SID>StayCursor('i')
+nnoremap <expr> I <SID>StayCursor('I')
+inoremap <expr> jj "\<ESC>".<SID>StayCursor()
+inoremap <expr> kk "\<ESC>".<SID>StayCursor()
+inoremap <expr> kj "\<ESC>".<SID>StayCursor()
+" }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
 " その他細々したの {{{
 au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
@@ -256,6 +276,5 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-inoremap kj <Esc><Right>
 " }}} -------------------------------------------------------------------------
 
