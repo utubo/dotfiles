@@ -97,7 +97,6 @@ nnoremap <silent> <C-c> o<Esc>
 xnoremap . :normal! .<CR>
 inoremap <silent> <Esc> <Esc>`^
 imap jj <Esc>
-imap kk <Esc>
 imap kj <Esc>
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
