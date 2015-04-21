@@ -12,6 +12,7 @@ set virtualedit=block
 set hlsearch
 set list
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
+set laststatus=2
 set ruler
 set visualbell
 set t_vb=
@@ -38,6 +39,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundle 'Shougo/neocompletecache'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
+	NeoBundle 'itchyny/lightline.vim'
 	NeoBundle 'Lokaltog/vim-easymotion'
 	NeoBundle 'tyru/caw.vim.git'
 	NeoBundle 'utubo/vim-reformatdate.git'
