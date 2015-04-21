@@ -95,7 +95,7 @@ nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
 xnoremap . :normal! .<CR>
-inoremap <silent> <Esc> <C-o>:stopinsert<CR>
+inoremap <silent> <Esc> <Esc>`^
 imap jj <Esc>
 imap kk <Esc>
 imap kj <Esc>
