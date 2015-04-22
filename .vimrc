@@ -41,6 +41,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundle 'Shougo/neosnippet-snippets'
 	NeoBundle 'itchyny/lightline.vim'
 	NeoBundle 'Lokaltog/vim-easymotion'
+	NeoBundle 'mbbill/undotree'
 	NeoBundle 'tyru/caw.vim.git'
 	NeoBundle 'utubo/vim-reformatdate.git'
 	NeoBundle 'yegappan/mru'
@@ -70,6 +71,17 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundleLazy 'osyo-manga/vim-monster', {
 				\   'autoload' : {'filetypes' : 'ruby'}
 				\ }
+	" }}}
+
+	" undotree {{{
+	if has("persistent_undo")
+		set undodir='~/.undodir/'
+		set undofile
+		let g:undotree_TreeNodeShape = 'o'
+		let g:undotree_SetFocusWhenToggle = 1
+		let g:undotree_DiffAutoOpen = 0
+		nnoremap <silent> <F5> :silent! UndotreeToggle<cr>
+	endif
 	" }}}
 
 	" ---------------------------------
