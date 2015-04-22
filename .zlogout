@@ -1,0 +1,1 @@
+pwd > ~/.last_pwd
