@@ -50,17 +50,17 @@ case "${OSTYPE}" in
 		AUTO_COLOR=--color=auto
 		;;
 esac
+zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 alias ls=ls\ $AUTO_COLOR
 alias ll=ls\ -lFh $AUTO_COLOR
 alias la=ls\ -alFh $AUTO_COLOR
 alias g=grep\ $AUTO_COLOR
-zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-alias rm='rm -i'
-alias c='clear'
-alias v='vim'
-alias vw='view'
-alias :q='exit'
-alias gd='git diff'
+alias rm=rm\ -i
+alias c=clear
+alias v=vim
+alias vw=view
+alias :q=exit
+alias gd=git\ diff
 export EDITOR=vim
 export MAILCHECK=0
 export PATH=~/local/bin:$PATH
