@@ -55,12 +55,12 @@ alias g=grep\ $AUTO_COLOR
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 alias rm='rm -i'
 alias c='clear'
-alias v='vi'
+alias v='vim'
 alias vw='view'
 alias gd='git diff'
 alias :q='exit'
 export EDITOR=vi
 export MAILCHECK=0
-export PATH=$PATH:~/bin
+export PATH=~/local/bin:$PATH
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
 
