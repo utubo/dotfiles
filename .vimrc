@@ -41,12 +41,11 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
 	NeoBundle 'itchyny/lightline.vim'
-	NeoBundle 'tyru/caw.vim'
 	NeoBundle 'mbbill/undotree'
-	NeoBundle 'osyo-manga/vim-monster'
+	NeoBundle 'tyru/caw.vim'
 	" filetypesで読み込み
 	NeoBundleLazy 'mattn/jscomplete-vim',   {'autoload' : {'filetypes' : 'javascript'}}
-	"NeoBundleLazy 'osyo-manga/vim-monster', {'autoload' : {'filetypes' : 'ruby'}}
+	NeoBundleLazy 'osyo-manga/vim-monster', {'autoload' : {'filetypes' : 'ruby'}}
 	" commandsで読み込み
 	NeoBundleLazy 'utubo/vim-reformatdate', {'autoload' : {'commands' : 'reformatdate#reformat'}}
 	NeoBundleLazy 'yegappan/mru',           {'autoload' : {'commands' : 'MRU'}}
