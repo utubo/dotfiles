@@ -1,3 +1,5 @@
+# vvv Default vvv
+
 # Set up the prompt
 
 autoload -Uz promptinit
