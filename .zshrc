@@ -40,19 +40,28 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # ^^^ Default ^^^
 # vvv My Config vvv
 
-alias ls="ls --color=auto"
-alias grep="grep --color=auto"
+case "${OSTYPE}" in
+	freebsd*|darwin*)
+		AUTO_COLOR=-G
+		;;
+	linux*)
+		AUTO_COLOR=--color=auto
+		;;
+esac
+echo $AUTO_COLOR
+alias ls=ls\ $AUTO_COLOR
+alias ll=ls\ -lFh $AUTO_COLOR
+alias la=ls\ -alFh $AUTO_COLOR
+alias g=grep\ $AUTO_COLOR
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 alias rm='rm -i'
-alias ll='ls -GFlh'
-alias la='ls -aGFlh'
 alias c='clear'
-alias g='grep'
 alias v='vi'
 alias vw='view'
 alias gd='git diff'
 alias :q='exit'
 export EDITOR=vi
-export PATH=$PATH:~/sbin/log_tool:~/sbin/yakui_doll/tools
+export MAILCHECK=0
+export PATH=$PATH:~/bin
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
 
