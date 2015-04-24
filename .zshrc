@@ -48,7 +48,6 @@ case "${OSTYPE}" in
 		AUTO_COLOR=--color=auto
 		;;
 esac
-echo $AUTO_COLOR
 alias ls=ls\ $AUTO_COLOR
 alias ll=ls\ -lFh $AUTO_COLOR
 alias la=ls\ -alFh $AUTO_COLOR
