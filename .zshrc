@@ -51,6 +51,7 @@ alias g='grep'
 alias v='vi'
 alias vw='view'
 alias gd='git diff'
+alias :q='exit'
 export EDITOR=vi
 export PATH=$PATH:~/sbin/log_tool:~/sbin/yakui_doll/tools
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
