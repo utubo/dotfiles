@@ -36,15 +36,20 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	let g:neocomplcache_enable_at_startup = 1
 	call neobundle#begin(expand('~/.vim/bundle'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
+	NeoBundle 'Lokaltog/vim-easymotion'
 	NeoBundle 'Shougo/neocompletecache'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
 	NeoBundle 'itchyny/lightline.vim'
-	NeoBundle 'Lokaltog/vim-easymotion'
+	NeoBundle 'tyru/caw.vim'
 	NeoBundle 'mbbill/undotree'
-	NeoBundle 'tyru/caw.vim.git'
-	NeoBundle 'utubo/vim-reformatdate.git'
-	NeoBundle 'yegappan/mru'
+	NeoBundle 'osyo-manga/vim-monster'
+	" filetypesで読み込み
+	NeoBundleLazy 'mattn/jscomplete-vim',   {'autoload' : {'filetypes' : 'javascript'}}
+	"NeoBundleLazy 'osyo-manga/vim-monster', {'autoload' : {'filetypes' : 'ruby'}}
+	" commandsで読み込み
+	NeoBundleLazy 'utubo/vim-reformatdate', {'autoload' : {'commands' : 'reformatdate#reformat'}}
+	NeoBundleLazy 'yegappan/mru',           {'autoload' : {'commands' : 'MRU'}}
 	call neobundle#end()
 	" }}}
 
@@ -63,16 +68,6 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	nmap s <Plug>(easymotion-s)
 	" }}}
 
-	" ruby {{{
-	" https://gist.github.com/haya14busa/20dad79e0531640a08e8 からコピペ
-	let g:neocomplete#sources#omni#input_patterns = {
-				\ 'ruby' : '[^. *\t]\.\w*\|\h\w*::',
-				\}
-	NeoBundleLazy 'osyo-manga/vim-monster', {
-				\   'autoload' : {'filetypes' : 'ruby'}
-				\ }
-	" }}}
-
 	" undotree {{{
 	if has("persistent_undo")
 		set undodir='~/.undodir/'
@@ -84,9 +79,11 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	endif
 	" }}}
 
-	" ---------------------------------
-	" その他
+	" その他 {{{
 	map <Leader>c <Plug>(caw:i:toggle)
+	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
+	" }}}
 endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
@@ -109,9 +106,8 @@ nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
 xnoremap . :normal! .<CR>
-inoremap <silent> <Esc> <Esc>`^
-imap jj <Esc>
-imap kj <Esc>
+inoremap jj <Esc>`^
+inoremap kj <Esc>`^
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
@@ -128,6 +124,9 @@ au s:MyAu colorscheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
+if !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
+	au s:MyAu BufEnter * if 500 < line('$') | setlocal syntax=off | endif
+endif
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -266,5 +265,11 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
+
+if strftime('%d') == '01'
+	imapclear
+	mapclear
+	au s:MyAu VimEnter * echo "+*+* It's no-mapping-day ! *+*+"
+endif
 " }}} -------------------------------------------------------------------------
 
