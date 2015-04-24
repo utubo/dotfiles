@@ -265,11 +265,14 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
+" }}} -------------------------------------------------------------------------
 
+" -----------------------------------------------------------------------------
+" ノーマッピングデー {{{
 if strftime('%d') == '01'
+	au s:MyAu VimEnter * echo "+*+* It's no-mapping-day ! *+*+"
 	imapclear
 	mapclear
-	au s:MyAu VimEnter * echo "+*+* It's no-mapping-day ! *+*+"
 endif
 " }}} -------------------------------------------------------------------------
 
