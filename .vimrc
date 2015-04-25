@@ -36,12 +36,13 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	let g:neocomplcache_enable_at_startup = 1
 	call neobundle#begin(expand('~/.vim/bundle'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
-	NeoBundle 'Lokaltog/vim-easymotion'
 	NeoBundle 'Shougo/neocomplcache.vim'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
+	NeoBundle 'Lokaltog/vim-easymotion'
 	NeoBundle 'itchyny/lightline.vim'
 	NeoBundle 'mbbill/undotree'
+	NeoBundle 't9md/vim-quickhl'
 	NeoBundle 'tyru/caw.vim'
 	" filetypesで読み込み
 	NeoBundleLazy 'mattn/jscomplete-vim',   {'autoload' : {'filetypes' : 'javascript'}}
@@ -79,10 +80,12 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	" }}}
 
 	" その他 {{{
-	map <Leader>c <Plug>(caw:i:toggle)
 	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
 	" }}}
+	map <Leader>c <Plug>(caw:i:toggle)
+	nmap <Space>m <Plug>(quickhl-manual-this)
+	nmap <Space>M <Plug>(quickhl-manual-reset)
 endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
