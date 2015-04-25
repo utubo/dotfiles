@@ -150,7 +150,7 @@ if $MOBILE_NOW
 endif
 nnoremap <Space>zz :q!<CR>
 nnoremap <Space>n /
-nnoremap <Space>m ?
+nnoremap <Space>b ?
 " スタックトレースからyankしてソースの該当箇所を探す
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
