@@ -37,7 +37,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	call neobundle#begin(expand('~/.vim/bundle'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
 	NeoBundle 'Lokaltog/vim-easymotion'
-	NeoBundle 'Shougo/neocompletecache'
+	NeoBundle 'Shougo/neocomplcache.vim'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
 	NeoBundle 'itchyny/lightline.vim'
