@@ -21,6 +21,10 @@ augroup s:MyAu
 	au!
 augroup End
 
+function! s:isRaspi()
+	return !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
+endfunction
+
 " ↓ここからしばらくコピペ
 
 " -----------------------------------------------------------------------------
@@ -36,9 +40,13 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	let g:neocomplcache_enable_at_startup = 1
 	call neobundle#begin(expand('~/.vim/bundle'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
-	NeoBundle 'Shougo/neocomplcache.vim'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
+	if s:isRaspi()
+		NeoBundleFetch 'Shougo/neocomplcache.vim'
+	else
+		NeoBundle 'Shougo/neocomplcache.vim'
+	end
 	NeoBundle 'Lokaltog/vim-easymotion'
 	NeoBundle 'itchyny/lightline.vim'
 	NeoBundle 'mbbill/undotree'
@@ -104,6 +112,8 @@ inoremap <C-^> <C-o><C-^>
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
 noremap  <F1> <Nop>
+noremap  <Space>h ^
+noremap  <Space>l $
 nnoremap Y y$
 nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
@@ -126,7 +136,7 @@ au s:MyAu colorscheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
-if !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
+if s:isRaspi()
 	au s:MyAu BufEnter * if 500 < line('$') | setlocal syntax=off | endif
 endif
 " }}} -------------------------------------------------------------------------
