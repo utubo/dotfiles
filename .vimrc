@@ -211,13 +211,14 @@ au s:MyAu BufNewFile * call <SID>ReadTemplate()
 " -----------------------------------------------------------------------------
 " 折りたたみ {{{
 function! MyFoldText()
-	let l:indent = repeat(' ', match(getline(v:foldstart), '\S') * &shiftwidth)
+	let l:text = getline(v:foldstart)
+	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
 	if &foldmethod == 'indent'
 		return l:indent.'>...'
 	elseif &foldmethod == 'marker'
-		return l:indent.'+>'.substitute(getline(v:foldstart), '{'.'{{', '', '')
+		return l:indent.'+>'.substitute(l:text, '{'.'{{', '', '')
 	else
-		return l:indent.'+>'.getline(v:foldstart)
+		return l:indent.'+>'.l:text
 	endif
 endfunction
 set foldtext=MyFoldText()
@@ -268,6 +269,7 @@ au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
+nnoremap <Space><Space> <C-w>
 nnoremap <expr> y: ':'.substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 nnoremap <expr> y; ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
 inoremap <C-r><C-r> <C-r>"
