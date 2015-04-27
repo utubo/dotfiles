@@ -179,11 +179,9 @@ nmap <Tab><Space>k V<Tab>k
 " -----------------------------------------------------------------------------
 " 文頭に合わせて行移動 {{{
 function! s:PutHat()
-	if 1 < len(getline('.'))
+	if 1 < len(getline('.')) || !exists('w:my_hat')
 		let l:x = match(getline('.'), '\S') + 1
 		let w:my_hat = (l:x ? l:x : len(getline('.'))) == col('.') ? '^' : ''
-	elseif !exists('w:my_hat')
-		let w:my_hat = ''
 	endif
 	return w:my_hat
 endfunction
