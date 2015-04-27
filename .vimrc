@@ -211,7 +211,7 @@ au s:MyAu BufNewFile * call <SID>ReadTemplate()
 " -----------------------------------------------------------------------------
 " 折りたたみ {{{
 function! MyFoldText()
-	let l:indent = repeat(' ', matchend(getline(v:foldstart), '^\s\+') * &shiftwidth)
+	let l:indent = repeat(' ', match(getline(v:foldstart), '\S') * &shiftwidth)
 	if &foldmethod == 'indent'
 		return l:indent.'>...'
 	elseif &foldmethod == 'marker'
