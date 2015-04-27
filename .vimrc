@@ -25,8 +25,6 @@ function! s:isRaspi()
 	return !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
 endfunction
 
-" ↓ここからしばらくコピペ
-
 " -----------------------------------------------------------------------------
 " プラグイン {{{
 if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
@@ -98,6 +96,8 @@ endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
 
+" ↓ここからしばらくコピペ
+
 " -----------------------------------------------------------------------------
 " Movement in insert mode {{{
 " https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc からコピペ
@@ -111,6 +111,7 @@ inoremap <C-^> <C-o><C-^>
 " -----------------------------------------------------------------------------
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
+au s:MyAu BufReadPost *.log* normal G
 noremap  <F1> <Nop>
 noremap  <Space>h ^
 noremap  <Space>l $
