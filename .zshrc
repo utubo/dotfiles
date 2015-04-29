@@ -65,6 +65,6 @@ alias fuck='eval $(thefuck $(fc -ln -1))'
 alias f=fuck
 export EDITOR=vim
 export MAILCHECK=0
-export PATH=~/local/bin:$PATH
+export PATH=~/local/bin:~/.local/bin:$PATH
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
 
