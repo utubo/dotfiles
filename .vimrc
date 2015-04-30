@@ -276,7 +276,7 @@ inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-inoremap ｊｊ <ESC>`^
+inoremap っｊ <ESC>`^
 inoremap ｋｊ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
@@ -285,7 +285,7 @@ inoremap （ ()<Left>
 " -----------------------------------------------------------------------------
 " ノーマッピングデー {{{
 if strftime('%d') == '01'
-	au s:MyAu VimEnter * echo "+*+* It's no-mapping-day ! *+*+"
+	au s:MyAu VimEnter * echo "* * * It's no-mapping-day ! * * *"
 	imapclear
 	mapclear
 endif
