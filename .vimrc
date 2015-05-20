@@ -1,7 +1,7 @@
 set encoding=utf-8
 scriptencoding utf-8
 set fileencoding=utf-8 encoding=utf-8
-set fileencodings=iso-2022-jp,ucs-bom,utf-8,cp932,sjis,euc-jp
+set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
 set tabstop=4
 set shiftwidth=4
 set autoindent
