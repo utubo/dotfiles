@@ -277,8 +277,10 @@ inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
+inoremap vv <Esc>`^
 inoremap っｊ <ESC>`^
 inoremap ｋｊ <ESC>`^
+inoremap ｖｖ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 " }}} -------------------------------------------------------------------------
