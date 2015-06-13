@@ -10,6 +10,7 @@ set breakindent
 set nf=
 set virtualedit=block
 set hlsearch
+nohlsearch
 set list
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
 set laststatus=2
