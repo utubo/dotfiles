@@ -173,9 +173,9 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " 同じインデントの行まで移動 {{{
 noremap <expr> <Space>] search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
 noremap <expr> <Space>[ search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
-nmap <Space>v] V<Space>]
-nmap <Space>v[ V<Space>[
-nmap <Space>} V<Space>]k
+nmap <Space>v] V ]
+nmap <Space>v[ V [
+nmap <Space>} V ]k
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
