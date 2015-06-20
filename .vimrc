@@ -134,7 +134,7 @@ function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
 	hi! link Folded Comment
 endfunction
-au s:MyAu colorscheme * call <SID>MyColorScheme()
+au s:MyAu ColorScheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
