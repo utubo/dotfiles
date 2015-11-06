@@ -54,7 +54,7 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 alias ls=ls\ $AUTO_COLOR
 alias ll=ls\ -lFh $AUTO_COLOR
 alias la=ls\ -alFh $AUTO_COLOR
-alias g=grep\ $AUTO_COLOR
+alias g=grep\ -n $AUTO_COLOR
 alias rm=rm\ -i
 alias c=clear
 alias v=vim
