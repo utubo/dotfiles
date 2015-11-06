@@ -276,19 +276,23 @@ au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
-nnoremap <Space><Space> <C-w>
 nnoremap <expr> y: ':'.substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 nnoremap <expr> y; ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
-inoremap <C-r><C-r> <C-r>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-inoremap vv <Esc>`^
 inoremap っｊ <ESC>`^
 inoremap ｋｊ <ESC>`^
-inoremap ｖｖ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
+" }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" 設定したのを忘れるくらい使って無いので削除しようかな {{{
+nnoremap <Space><Space> <C-w>
+inoremap vv <Esc>`^
+inoremap ｖｖ <ESC>`^
+inoremap <C-r><C-r> <C-r>"
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
