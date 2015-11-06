@@ -134,7 +134,7 @@ function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
 	hi! link Folded Comment
 endfunction
-au s:MyAu colorscheme * call <SID>MyColorScheme()
+au s:MyAu ColorScheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
@@ -173,9 +173,9 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " 同じインデントの行まで移動 {{{
 noremap <expr> <Space>] search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
 noremap <expr> <Space>[ search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
-nmap <Space>v] V<Space>]
-nmap <Space>v[ V<Space>[
-nmap <Space>} V<Space>]k
+nmap <Space>v] V ]
+nmap <Space>v[ V [
+nmap <Space>} V ]k
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -267,6 +267,11 @@ nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 
 " -----------------------------------------------------------------------------
 " その他細々したの {{{
+au s:MyAu BufNew * set noexpandtab
+au s:MyAu FileType *
+	\   if !search('^\t', 'n', 100) && search('^  ', 'n', 100)
+	\ | 	set expandtab
+	\ | endif
 au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
