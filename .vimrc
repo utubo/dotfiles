@@ -267,6 +267,11 @@ nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 
 " -----------------------------------------------------------------------------
 " その他細々したの {{{
+au s:MyAu BufNew * set noexpandtab
+au s:MyAu FileType *
+	\   if !search('^\t', 'n', 100) && search('^  ', 'n', 100)
+	\ | 	set expandtab
+	\ | endif
 au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
