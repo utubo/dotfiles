@@ -268,7 +268,7 @@ nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 " -----------------------------------------------------------------------------
 " その他細々したの {{{
 au s:MyAu BufNew * set noexpandtab
-au s:MyAu FileType *
+au s:MyAu BufRead *
 	\   if !search('^\t', 'n', 100) && search('^  ', 'n', 100)
 	\ | 	set expandtab
 	\ | endif
