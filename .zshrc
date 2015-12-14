@@ -42,6 +42,9 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # ^^^ Default ^^^
 # vvv My Config vvv
 
+DIRSTACKSIZE=9
+setopt AUTO_PUSHD
+
 case "${OSTYPE}" in
 	freebsd*|darwin*)
 		AUTO_COLOR=-G
@@ -55,7 +58,7 @@ alias ls=ls\ $AUTO_COLOR
 alias ll=ls\ -lFh $AUTO_COLOR
 alias la=ls\ -alFh $AUTO_COLOR
 alias pu=pushd
-alias po=pupd
+alias po=popd
 alias c=clear
 alias g=grep\ -n $AUTO_COLOR
 alias rm=rm\ -i
