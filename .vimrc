@@ -160,7 +160,7 @@ if $MOBILE_NOW
 	nnoremap ; :
 	nnoremap <Space>; ;
 endif
-nnoremap <Space>zz :q!<CR>
+nnoremap <Space>zz :<C-u>q!<CR>
 nnoremap <Space>n /
 nnoremap <Space>b ?
 " スタックトレースからyankしてソースの該当箇所を探すのを補助
@@ -227,9 +227,9 @@ set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
-nnoremap z<Tab> :set foldmethod=indent<CR>
-nnoremap z{ :set foldmethod=marker<CR>
-nnoremap zy :set foldmethod=syntax<CR>
+nnoremap z<Tab> :<C-u>set foldmethod=indent<CR>
+nnoremap z{ :<C-u>set foldmethod=marker<CR>
+nnoremap zy :<C-u>set foldmethod=syntax<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -276,8 +276,8 @@ au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
-nnoremap <expr> y: ':'.substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
-nnoremap <expr> y; ':'.substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
+nnoremap <expr> y: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
+nnoremap <expr> y; ":\<C-u>".substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
