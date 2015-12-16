@@ -154,9 +154,9 @@ nnoremap <silent> <F6> :call reformatdate#reformat(localtime())<CR>
 
 " -----------------------------------------------------------------------------
 " Android の Hacker's-Keybord用キーバインド {{{
-" ・キーちっちゃいので宇宙へマッピング
+" ・キーが小さいので押しにくいものはSpaceへマッピング
 " ・スマホでのコーディングは基本的にバグ取り
-if $MOBILE_NOW
+if $IS_MOBILE
 	nnoremap ; :
 	nnoremap <Space>; ;
 endif
