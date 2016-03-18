@@ -17,6 +17,7 @@ set laststatus=2
 set ruler
 set visualbell
 set t_vb=
+set backupskip=/var/tmp/*
 
 augroup s:MyAu
 	au!
