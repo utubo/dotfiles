@@ -1,5 +1,8 @@
 set encoding=utf-8
 scriptencoding utf-8
+
+" -----------------------------------------------------------------------------
+" 基本設定 {{{
 set fileencoding=utf-8 encoding=utf-8
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
 set tabstop=4
@@ -26,6 +29,7 @@ augroup End
 function! s:isRaspi()
 	return !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
 endfunction
+" }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
 " プラグイン {{{
