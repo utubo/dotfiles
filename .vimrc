@@ -20,6 +20,7 @@ set laststatus=2
 set ruler
 set visualbell
 set t_vb=
+set autochdir
 set backupskip=/var/tmp/*
 
 augroup s:MyAu
@@ -56,6 +57,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundle 'mbbill/undotree'
 	NeoBundle 't9md/vim-quickhl'
 	NeoBundle 'tyru/caw.vim'
+	NeoBundle 'scrooloose/nerdtree'
 	" filetypesで読み込み
 	NeoBundleLazy 'mattn/jscomplete-vim',   {'autoload' : {'filetypes' : 'javascript'}}
 	NeoBundleLazy 'osyo-manga/vim-monster', {'autoload' : {'filetypes' : 'ruby'}}
@@ -98,6 +100,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	map <Leader>c <Plug>(caw:i:toggle)
 	nmap <Space>m <Plug>(quickhl-manual-this)
 	nmap <Space>M <Plug>(quickhl-manual-reset)
+	nnoremap <silent> <F1> :NERDTreeToggle<CR>
 endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
@@ -118,7 +121,6 @@ inoremap <C-^> <C-o><C-^>
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
 au s:MyAu BufReadPost *.log* normal G
-noremap  <F1> <Nop>
 noremap  <Space>h ^
 noremap  <Space>l $
 nnoremap Y y$
