@@ -15,7 +15,7 @@ set virtualedit=block
 set hlsearch
 nohlsearch
 set list
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:%
+set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set laststatus=2
 set ruler
 set visualbell
