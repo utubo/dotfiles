@@ -126,7 +126,6 @@ noremap  <Space>l $
 nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
-inoremap jj <Esc>`^
 inoremap kj <Esc>`^
 inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
@@ -304,6 +303,7 @@ inoremap <C-S-l> →
 " -----------------------------------------------------------------------------
 " 設定したのを忘れるくらい使って無いので削除しようかな {{{
 nnoremap <Space><Space> <C-w>
+inoremap jj <Esc>`^
 inoremap vv <Esc>`^
 inoremap ｖｖ <ESC>`^
 inoremap <C-r><C-r> <C-r>"
