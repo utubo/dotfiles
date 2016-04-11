@@ -123,9 +123,8 @@ au s:MyAu InsertLeave * set nopaste
 au s:MyAu BufReadPost *.log* normal G
 noremap  <Space>h ^
 noremap  <Space>l $
-nnoremap Y y$
-nnoremap d\ d$
 nnoremap <silent> <C-c> o<Esc>
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
 inoremap jj <Esc>`^
 inoremap kj <Esc>`^
@@ -285,9 +284,11 @@ au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
-nnoremap <expr> y: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
-nnoremap <expr> y; ":\<C-u>".substitute(getline('.')[col('.')-1:], '^[\t ":]\+', '', '')."\<CR>"
+nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
+vnoremap g: "vy:<C-r>=@v<CR><CR>
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
+nnoremap <Space>y y$
+nnoremap <Space>d d$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap っｊ <ESC>`^
