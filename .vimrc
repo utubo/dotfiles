@@ -180,10 +180,8 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " 同じインデントの行まで移動 {{{
 noremap <expr> <Space>] search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e').'G'
 noremap <expr> <Space>[ search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be').'G'
-map <Space>} <Space>]k
-map <Space>{ <Space>[j
-ounmap <Space>} <Space>]k
-ounmap <Space>{ <Space>[j
+noremap <expr> <Space>} (search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%>' . line('.') . 'l\S', 'e') - 1).'G'
+noremap <expr> <Space>{ (search('^'. matchstr(getline('.'), '\(^\s*\)') .'\%<' . line('.') . 'l\S', 'be') + 1).'G'
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
