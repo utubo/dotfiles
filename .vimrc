@@ -23,13 +23,11 @@ set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
 
+let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
+
 augroup s:MyAu
 	au!
 augroup End
-
-function! s:isRaspi()
-	return !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
-endfunction
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
@@ -47,7 +45,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
 	NeoBundle 'Shougo/neosnippet'
 	NeoBundle 'Shougo/neosnippet-snippets'
-	if s:isRaspi()
+	if s:is_raspi
 		NeoBundleFetch 'Shougo/neocomplcache.vim'
 	else
 		NeoBundle 'Shougo/neocomplcache.vim'
@@ -143,7 +141,7 @@ au s:MyAu ColorScheme * call <SID>MyColorScheme()
 set t_Co=256
 syntax on
 colorscheme elflord
-if s:isRaspi()
+if s:is_raspi
 	au s:MyAu BufEnter * if 500 < line('$') | setlocal syntax=off | endif
 endif
 " }}} -------------------------------------------------------------------------
