@@ -288,7 +288,6 @@ nnoremap <Space>y y$
 nnoremap <Space>d d$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-inoremap っｊ <ESC>`^
 inoremap ｋｊ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
@@ -301,9 +300,6 @@ inoremap <C-S-l> →
 " -----------------------------------------------------------------------------
 " 設定したのを忘れるくらい使って無いので削除しようかな {{{
 nnoremap <Space><Space> <C-w>
-inoremap jj <Esc>`^
-inoremap vv <Esc>`^
-inoremap ｖｖ <ESC>`^
 inoremap <C-r><C-r> <C-r>"
 " }}} -------------------------------------------------------------------------
 
