@@ -22,6 +22,7 @@ set visualbell
 set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
+set diffopt=vertical
 
 let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
 
@@ -113,6 +114,12 @@ inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
+" }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" DIFFモードを自動でOFF {{{
+" https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+au s:MyAu WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
