@@ -300,6 +300,7 @@ au s:MyAu VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
+nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
@@ -329,4 +330,19 @@ if strftime('%d') == '01'
 	mapclear
 endif
 " }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" メモ {{{
+" <F1> NERDTree
+" <F2> DiffOrig
+" <F3>
+" <F4>
+" <F5> UndoTree
+" <F6> 日付関係
+" <F8>
+" <F9>
+" <F10>
+" <F11>
+" <F12> 折り返し切替
+" }}}
 
