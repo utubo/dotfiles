@@ -22,7 +22,6 @@ set visualbell
 set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
-set diffopt=vertical
 
 let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
 
@@ -117,8 +116,12 @@ inoremap <C-^> <C-o><C-^>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" DIFFモードを自動でOFF {{{
-" https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+" DIFF関係 {{{
+set splitright
+set diffopt=vertical
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+nnoremap <F2> :DiffOrig<CR>
+" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au s:MyAu WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 " }}} -------------------------------------------------------------------------
 
@@ -262,6 +265,15 @@ nmap <Space>q viw q
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
+" ウィンドウ {{{
+nnoremap <Space><Space> <C-w>
+nnoremap <silent> <Space><Space>H <C-w>h:q<CR>
+nnoremap <silent> <Space><Space>J <C-w>j:q<CR>
+nnoremap <silent> <Space><Space>K <C-w>k:q<CR>
+nnoremap <silent> <Space><Space>L <C-w>l:q<CR>
+" }}} -------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
 " やりすぎ注意 {{{
 function! s:ShowEditingTime()
 	if exists('g:edit_start_time')
@@ -306,7 +318,6 @@ inoremap <C-S-l> →
 
 " -----------------------------------------------------------------------------
 " 設定したのを忘れるくらい使って無いので削除しようかな {{{
-nnoremap <Space><Space> <C-w>
 inoremap <C-r><C-r> <C-r>"
 " }}} -------------------------------------------------------------------------
 
