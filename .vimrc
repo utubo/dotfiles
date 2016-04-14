@@ -94,11 +94,11 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	" その他 {{{
 	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
-	" }}}
 	map <Leader>c <Plug>(caw:i:toggle)
 	nmap <Space>m <Plug>(quickhl-manual-this)
 	nmap <Space>M <Plug>(quickhl-manual-reset)
 	nnoremap <silent> <F1> :NERDTreeToggle<CR>
+	" }}}
 endif
 filetype plugin indent on " required
 " }}} -------------------------------------------------------------------------
