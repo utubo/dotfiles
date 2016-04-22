@@ -77,6 +77,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	let g:EasyMotion_do_mapping = 0
 	let g:EasyMotion_smartcase = 1
 	let g:EasyMotion_use_migemo = 1
+	let g:EasyMotion_enter_jump_first = 1
 	map s <Plug>(easymotion-s)
 	" }}}
 
@@ -307,10 +308,10 @@ nnoremap <Space>P ^P
 inoremap ｋｊ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-inoremap <C-S-h> ←
-inoremap <C-S-j> ↓
-inoremap <C-S-k> ↑
-inoremap <C-S-l> →
+inoremap <C-H> ←
+inoremap <C-J> ↓
+inoremap <C-K> ↑
+inoremap <C-L> →
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
