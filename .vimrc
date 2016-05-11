@@ -32,37 +32,29 @@ augroup End
 
 " -----------------------------------------------------------------------------
 " プラグイン {{{
-if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
-	" ばんどる {{{
-	if has('vim_starting')
-		if &compatible
-			set nocompatible " Be iMproved
-		endif
-		set runtimepath+=~/.vim/bundle/neobundle.vim
+if isdirectory(expand('~/.vim/dein/repos/github.com/Shougo/dein.vim'))
+	" dein {{{
+	if &compatible
+		set nocompatible
 	endif
+	set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 	let g:neocomplcache_enable_at_startup = 1
-	call neobundle#begin(expand('~/.vim/bundle'))
-	NeoBundleFetch 'Shougo/neobundle.vim'
-	NeoBundle 'Shougo/neosnippet'
-	NeoBundle 'Shougo/neosnippet-snippets'
-	if s:is_raspi
-		NeoBundleFetch 'Shougo/neocomplcache.vim'
-	else
-		NeoBundle 'Shougo/neocomplcache.vim'
-	end
-	NeoBundle 'Lokaltog/vim-easymotion'
-	NeoBundle 'itchyny/lightline.vim'
-	NeoBundle 'mbbill/undotree'
-	NeoBundle 't9md/vim-quickhl'
-	NeoBundle 'tyru/caw.vim'
-	NeoBundle 'scrooloose/nerdtree'
-	" filetypesで読み込み
-	NeoBundleLazy 'mattn/jscomplete-vim',   {'autoload' : {'filetypes' : 'javascript'}}
-	NeoBundleLazy 'osyo-manga/vim-monster', {'autoload' : {'filetypes' : 'ruby'}}
-	" commandsで読み込み
-	NeoBundleLazy 'utubo/vim-reformatdate', {'autoload' : {'commands' : 'reformatdate#reformat'}}
-	NeoBundleLazy 'yegappan/mru',           {'autoload' : {'commands' : 'MRU'}}
-	call neobundle#end()
+	call dein#begin(expand('~/.vim/dein'))
+	call dein#add('Lokaltog/vim-easymotion')
+	call dein#add('Shougo/dein.vim')
+	call dein#add('Shougo/neocomplcache.vim', (s:is_raspi ? {'rtp': ''} : { }))
+	call dein#add('Shougo/neosnippet')
+	call dein#add('Shougo/neosnippet-snippets')
+	call dein#add('itchyny/lightline.vim')
+	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
+	call dein#add('mbbill/undotree')
+	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
+	call dein#add('scrooloose/nerdtree')
+	call dein#add('t9md/vim-quickhl')
+	call dein#add('tyru/caw.vim')
+	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
+	call dein#add('yegappan/mru', {'lazy':1, 'on_cmd':'MRU'})
+	call dein#end()
 	" }}}
 
 	" neosnippet {{{
@@ -101,7 +93,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 	nnoremap <silent> <F1> :NERDTreeToggle<CR>
 	" }}}
 endif
-filetype plugin indent on " required
+filetype plugin indent on
 " }}} -------------------------------------------------------------------------
 
 " ↓ここからしばらくコピペ
