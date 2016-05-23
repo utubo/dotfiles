@@ -128,7 +128,6 @@ nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
 inoremap kj <Esc>`^
-inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
 " }}} -------------------------------------------------------------------------
 
 " ↑ここまでコピペ(頭のいい人が書いたのでメンテ不要)
@@ -152,10 +151,11 @@ endif
 " -----------------------------------------------------------------------------
 " 日付関係 {{{
 " 「%Y/%m/%d」の文字列を加算減算
+inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+cnoremap <F6> <C-r>=strftime('%Y%m%d')<CR>
+nnoremap <silent> <F6> :call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
-" 「%Y/%m/%d」の文字列を今日の日付に置換
-nnoremap <silent> <F6> :call reformatdate#reformat(localtime())<CR>
 " }}} -------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
