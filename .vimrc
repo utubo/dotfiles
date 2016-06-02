@@ -239,7 +239,7 @@ au s:MyAu BufNewFile * call <SID>ReadTemplate()
 " 折りたたみ {{{
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
-	let l:fold = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g'). '[+]'
+	let l:fold = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g') . '[+]'
 	return &foldmethod == 'indent' ? l:fold : l:fold . substitute(l:text, '{'.'{{', '', '')
 endfunction
 set foldtext=MyFoldText()
