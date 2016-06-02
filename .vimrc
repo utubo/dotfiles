@@ -42,14 +42,6 @@ if isdirectory(s:dein_vim)
 	let &runtimepath = s:dein_vim . ',' . &runtimepath
 	let g:neocomplcache_enable_at_startup = 1
 	call dein#begin(s:dein_dir)
-	if has('win32')
-		let g:vimproc#download_windows_dll = 1
-		call dein#add('Shougo/vimproc')
-	elseif has('unix')
-		call dein#add('Shougo/vimproc', {'build': 'gmake'})
-	else
-		call dein#add('Shougo/vimproc', {'build': 'make'})
-	endif
 	call dein#add('Lokaltog/vim-easymotion')
 	call dein#add('Shougo/dein.vim')
 	call dein#add('Shougo/neocomplcache.vim', (s:is_raspi ? {'rtp': ''} : { }))
@@ -68,6 +60,15 @@ if isdirectory(s:dein_vim)
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('yegappan/mru', {'lazy':1, 'on_cmd':'MRU'})
+	" vimproc
+	if has('win32')
+		let g:vimproc#download_windows_dll = 1
+		call dein#add('Shougo/vimproc')
+	elseif has('unix')
+		call dein#add('Shougo/vimproc', {'build': 'gmake'})
+	else
+		call dein#add('Shougo/vimproc', {'build': 'make'})
+	endif
 	call dein#end()
 	" }}}
 
