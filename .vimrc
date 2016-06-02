@@ -32,25 +32,39 @@ augroup End
 
 " -----------------------------------------------------------------------------
 " プラグイン {{{
-if isdirectory(expand('~/.vim/dein/repos/github.com/Shougo/dein.vim'))
+let s:dein_dir = expand('~/.vim/dein')
+let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if isdirectory(s:dein_vim)
 	" dein {{{
 	if &compatible
 		set nocompatible
 	endif
-	set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+	let &runtimepath = s:dein_vim . ',' . &runtimepath
 	let g:neocomplcache_enable_at_startup = 1
-	call dein#begin(expand('~/.vim/dein'))
+	call dein#begin(s:dein_dir)
+	if has('win32')
+		let g:vimproc#download_windows_dll = 1
+		call dein#add('Shougo/vimproc')
+	elseif has('unix')
+		call dein#add('Shougo/vimproc', {'build': 'gmake'})
+	else
+		call dein#add('Shougo/vimproc', {'build': 'make'})
+	endif
 	call dein#add('Lokaltog/vim-easymotion')
 	call dein#add('Shougo/dein.vim')
 	call dein#add('Shougo/neocomplcache.vim', (s:is_raspi ? {'rtp': ''} : { }))
 	call dein#add('Shougo/neosnippet')
 	call dein#add('Shougo/neosnippet-snippets')
 	call dein#add('itchyny/lightline.vim')
+	call dein#add('jceb/vim-hier')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
 	call dein#add('mbbill/undotree')
+	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
+	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('t9md/vim-quickhl')
+	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('yegappan/mru', {'lazy':1, 'on_cmd':'MRU'})
@@ -82,6 +96,11 @@ if isdirectory(expand('~/.vim/dein/repos/github.com/Shougo/dein.vim'))
 		let g:undotree_DiffAutoOpen = 0
 		nnoremap <silent> <F5> :silent! UndotreeToggle<cr>
 	endif
+	" }}}
+
+	" watchdogs {{{
+	let g:watchdogs_check_BufWritePost_enable = 1
+	let g:watchdogs_check_CursorHold_enable = 1
 	" }}}
 
 	" その他 {{{
