@@ -239,14 +239,8 @@ au s:MyAu BufNewFile * call <SID>ReadTemplate()
 " 折りたたみ {{{
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
-	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
-	if &foldmethod == 'indent'
-		return l:indent.'>...'
-	elseif &foldmethod == 'marker'
-		return l:indent.'+>'.substitute(l:text, '{'.'{{', '', '')
-	else
-		return l:indent.'+>'.l:text
-	endif
+	let l:fold = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g'). '[+]'
+	return &foldmethod == 'indent' ? l:fold : l:fold . substitute(l:text, '{'.'{{', '', '')
 endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
