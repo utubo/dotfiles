@@ -36,9 +36,6 @@ let s:dein_dir = expand('~/.vim/dein')
 let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if isdirectory(s:dein_vim)
 	" dein {{{
-	if &compatible
-		set nocompatible
-	endif
 	let &runtimepath = s:dein_vim . ',' . &runtimepath
 	let g:neocomplcache_enable_at_startup = 1
 	call dein#begin(s:dein_dir)
