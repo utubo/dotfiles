@@ -1,7 +1,7 @@
 set encoding=utf-8
 scriptencoding utf-8
 
-" -----------------------------------------------------------------------------
+" ----------------------------------------------------------
 " 基本設定 {{{
 set fileencoding=utf-8 encoding=utf-8
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
@@ -18,6 +18,7 @@ set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set laststatus=2
 set ruler
+set display=lastline
 set visualbell
 set t_vb=
 set autochdir
@@ -28,9 +29,9 @@ let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberr
 augroup s:MyAu
 	au!
 augroup End
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ----------------------------------------------------------
 " プラグイン {{{
 let s:dein_dir = expand('~/.vim/dein')
 let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -92,7 +93,7 @@ if isdirectory(s:dein_vim)
 		let g:undotree_TreeNodeShape = 'o'
 		let g:undotree_SetFocusWhenToggle = 1
 		let g:undotree_DiffAutoOpen = 0
-		nnoremap <silent> <F5> :silent! UndotreeToggle<cr>
+		nnoremap <silent> <F2> :silent! UndotreeToggle<cr>
 	endif
 	" }}}
 
@@ -111,11 +112,11 @@ if isdirectory(s:dein_vim)
 	" }}}
 endif
 filetype plugin indent on
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
 " ↓ここからしばらくコピペ
 
-" -----------------------------------------------------------------------------
+" ----------------------------------------------------------
 " Movement in insert mode {{{
 " https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc からコピペ
 inoremap <C-h> <C-o>h
@@ -123,34 +124,35 @@ inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ----------------------------------------------------------
 " DIFF関係 {{{
 set splitright
 set diffopt=vertical
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F2> :DiffOrig<CR>
+nnoremap <F3> :DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au s:MyAu WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " その他パクリ {{{
 au s:MyAu InsertLeave * set nopaste
 au s:MyAu BufReadPost *.log* normal G
-noremap  <Space>h ^
-noremap  <Space>l $
 nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
 inoremap kj <Esc>`^
-" }}} -------------------------------------------------------------------------
+" http://deris.hatenablog.jp/entry/2014/05/20/235807
+nnoremap gs :<C-u>%s///g<Left><Left><Left>
+vnoremap gs :%s///g<Left><Left><Left>
+" }}} -----------------------------------------------------
 
 " ↑ここまでコピペ(頭のいい人が書いたのでメンテ不要)
 " ↓ここから自作(頭の悪い人が書いたので要メンテ)
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 色 {{{
 function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
@@ -163,26 +165,22 @@ colorscheme elflord
 if s:is_raspi
 	au s:MyAu BufEnter * if 500 < line('$') | setlocal syntax=off | endif
 endif
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 日付関係 {{{
 " 「%Y/%m/%d」の文字列を加算減算
-inoremap <F6> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
-cnoremap <F6> <C-r>=strftime('%Y%m%d')<CR>
-nnoremap <silent> <F6> :call reformatdate#reformat(localtime())<CR>
+inoremap <F5> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
+nnoremap <silent> <F5> :call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " Android の Hacker's-Keybord用キーバインド {{{
 " ・キーが小さいので押しにくいものはSpaceへマッピング
 " ・スマホでのコーディングは基本的にバグ取り
-if $IS_MOBILE
-	nnoremap ; :
-	nnoremap <Space>; ;
-endif
 nnoremap <Space>zz :<C-u>q!<CR>
 nnoremap <Space>n /
 nnoremap <Space>b ?
@@ -190,17 +188,17 @@ nnoremap <Space>b ?
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 同じインデントの行まで移動 {{{
 noremap <expr> <Space>] search('^' . matchstr(getline('.'), '^\s*') . '\%>' . line('.') . 'l\S', 'e').'G'
 noremap <expr> <Space>[ search('^' . matchstr(getline('.'), '^\s*') . '\%<' . line('.') . 'l\S', 'be').'G'
 noremap <expr> <Space>} (search('^' . matchstr(getline('.'), '^\s*') . '\%>' . line('.') . 'l\S', 'e') - 1).'G'
 noremap <expr> <Space>{ (search('^' . matchstr(getline('.'), '^\s*') . '\%<' . line('.') . 'l\S', 'be') + 1).'G'
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 文頭に合わせて行移動 {{{
 function! s:PutHat()
 	let l:x = match(getline('.'), '\S.') + 1
@@ -211,9 +209,9 @@ function! s:PutHat()
 endfunction
 nnoremap <expr> j 'j'.<SID>PutHat()
 nnoremap <expr> k 'k'.<SID>PutHat()
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " テンプレート {{{
 function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
@@ -230,9 +228,9 @@ function! s:ReadTemplate()
 	endif
 endfunction
 au s:MyAu BufNewFile * call <SID>ReadTemplate()
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 折りたたみ {{{
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
@@ -246,9 +244,9 @@ nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
 nnoremap z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap z{ :<C-u>set foldmethod=marker<CR>
 nnoremap zy :<C-u>set foldmethod=syntax<CR>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 括弧でくくる {{{
 " これでいいや。不便に感じたらプラグインを入れる。
 let g:put_quotation_dic = {'「':'」', '(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>' }
@@ -266,18 +264,18 @@ function! s:PutQuotation()
 endfunction
 vnoremap <silent> <Space>q :call <SID>PutQuotation()<CR>
 nmap <Space>q viw q
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " ウィンドウ {{{
 nnoremap <Space><Space> <C-w>
 nnoremap <silent> <Space><Space>H <C-w>h:q<CR>
 nnoremap <silent> <Space><Space>J <C-w>j:q<CR>
 nnoremap <silent> <Space><Space>K <C-w>k:q<CR>
 nnoremap <silent> <Space><Space>L <C-w>l:q<CR>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " やりすぎ注意 {{{
 function! s:ShowEditingTime()
 	if exists('g:edit_start_time')
@@ -291,9 +289,9 @@ function! s:ShowEditingTime()
 endfunction
 au s:MyAu VimEnter * call <SID>ShowEditingTime()
 nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " その他細々したの {{{
 au s:MyAu BufRead * let &expandtab=(!search('^\t', 'cn', 100) && search('^  ', 'cn', 100))
 au s:MyAu VimEnter,WinEnter *
@@ -311,30 +309,32 @@ nnoremap <Space>P ^P
 inoremap ｋｊ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " 設定したのを忘れるくらい使って無いので削除しようかな {{{
+noremap  <Space>h ^
+noremap  <Space>l $
 inoremap <C-r><C-r> <C-r>"
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " ノーマッピングデー {{{
 if strftime('%d') == '01'
 	au s:MyAu VimEnter * echo "* * * It's no-mapping-day ! * * *"
 	imapclear
 	mapclear
 endif
-" }}} -------------------------------------------------------------------------
+" }}} -----------------------------------------------------
 
-" -----------------------------------------------------------------------------
+" ---------------------------------------------------------
 " メモ {{{
 " <F1> NERDTree
-" <F2> DiffOrig
-" <F3>
+" <F2> UndoTree
+" <F3> DiffOrig
 " <F4>
-" <F5> UndoTree
-" <F6> 日付関係
+" <F5> 日付関係
+" <F6>
 " <F8>
 " <F9>
 " <F10>
