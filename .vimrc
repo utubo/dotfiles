@@ -178,7 +178,7 @@ nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
-" Android の Hacker's-Keybord用キーバインド {{{
+" スマホ用キーバインド {{{
 " ・キーが小さいので押しにくいものはSpaceへマッピング
 " ・スマホでのコーディングは基本的にバグ取り
 nnoremap <Space>zz :<C-u>q!<CR>
@@ -232,6 +232,7 @@ au s:MyAu BufNewFile * call <SID>ReadTemplate()
 
 " ---------------------------------------------------------
 " 折りたたみ {{{
+" [+]こんな感じ(インデントに合わせて表示)
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:fold = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g') . '[+]'
@@ -282,7 +283,7 @@ function! s:ShowEditingTime()
 		let l:t = localtime() - g:edit_start_time
 		let l:h = l:t / 3600
 		let l:m = (l:t % 3600) / 60
-		echo l:h.'時間'.l:m.'分経過'.(1 < l:h ? '(^q^)' : l:h ? '(><)' : '')
+		echo l:h.'時間'.l:m.'分経過'.(2 < l:h ? '(^q^)休憩しろ' : l:h ? '(>_<)' : '')
 	else
 		let g:edit_start_time = localtime()
 	endif
