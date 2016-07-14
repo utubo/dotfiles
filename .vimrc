@@ -93,7 +93,7 @@ if isdirectory(s:dein_vim)
 		let g:undotree_TreeNodeShape = 'o'
 		let g:undotree_SetFocusWhenToggle = 1
 		let g:undotree_DiffAutoOpen = 0
-		nnoremap <silent> <F2> :silent! UndotreeToggle<cr>
+		nnoremap <silent> <F3> :silent! UndotreeToggle<cr>
 	endif
 	" }}}
 
@@ -109,6 +109,7 @@ if isdirectory(s:dein_vim)
 	nmap <Space>m <Plug>(quickhl-manual-this)
 	nmap <Space>M <Plug>(quickhl-manual-reset)
 	nnoremap <silent> <F1> :NERDTreeToggle<CR>
+	nnoremap <silent> <F2> :MRU<CR>
 	" }}}
 endif
 filetype plugin indent on
@@ -131,7 +132,7 @@ inoremap <C-^> <C-o><C-^>
 set splitright
 set diffopt=vertical
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F3> :DiffOrig<CR>
+nnoremap <F4> :DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au s:MyAu WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 " }}} -----------------------------------------------------
@@ -331,9 +332,9 @@ endif
 " ---------------------------------------------------------
 " メモ {{{
 " <F1> NERDTree
-" <F2> UndoTree
-" <F3> DiffOrig
-" <F4>
+" <F2> MRU
+" <F3> UndoTree
+" <F4> DiffOrig
 " <F5> 日付関係
 " <F6>
 " <F8>
