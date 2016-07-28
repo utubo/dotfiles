@@ -170,8 +170,7 @@ endif
 
 " ---------------------------------------------------------
 " 日付関係 {{{
-" 「%Y/%m/%d」の文字列を加算減算
-inoremap <F5> <C-r>=strftime('%Y/%m/%d(%a)')<CR>
+inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
 nnoremap <silent> <F5> :call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
