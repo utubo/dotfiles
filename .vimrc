@@ -269,11 +269,11 @@ nmap <Space>q viw q
 
 " ---------------------------------------------------------
 " ウィンドウ {{{
-nnoremap <Space><Space> <C-w>
-nnoremap <silent> <Space><Space>H <C-w>h:q<CR>
-nnoremap <silent> <Space><Space>J <C-w>j:q<CR>
-nnoremap <silent> <Space><Space>K <C-w>k:q<CR>
-nnoremap <silent> <Space><Space>L <C-w>l:q<CR>
+nmap <Space><Space> <C-w>
+nnoremap <silent> <C-w>qh <C-w>h:q<CR>
+nnoremap <silent> <C-w>qj <C-w>j:q<CR>
+nnoremap <silent> <C-w>qk <C-w>k:q<CR>
+nnoremap <silent> <C-w>ql <C-w>l:q<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
