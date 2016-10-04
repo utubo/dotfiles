@@ -270,10 +270,10 @@ nmap <Space>q viw q
 " ---------------------------------------------------------
 " ウィンドウ {{{
 nmap <Space><Space> <C-w>
-nnoremap <silent> <C-w>qh <C-w>h:q<CR>
-nnoremap <silent> <C-w>qj <C-w>j:q<CR>
-nnoremap <silent> <C-w>qk <C-w>k:q<CR>
-nnoremap <silent> <C-w>ql <C-w>l:q<CR>
+nnoremap <C-w>qh <C-w>h:q<CR>
+nnoremap <C-w>qj <C-w>j:q<CR>
+nnoremap <C-w>qk <C-w>k:q<CR>
+nnoremap <C-w>ql <C-w>l:q<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
