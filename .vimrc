@@ -25,7 +25,7 @@ set backupskip=/var/tmp/*
 
 let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
 
-augroup s:MyAu
+augroup vimrc
 	au!
 augroup End
 " }}} -----------------------------------------------------
@@ -133,13 +133,13 @@ set diffopt=vertical
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nnoremap <F4> :DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
-au s:MyAu WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
+au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
 " その他パクリ {{{
-au s:MyAu InsertLeave * set nopaste
-au s:MyAu BufReadPost *.log* normal G
+au vimrc InsertLeave * set nopaste
+au vimrc BufReadPost *.log* normal G
 nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
@@ -158,12 +158,12 @@ function! s:MyColorScheme()
 	hi String ctermfg=blue ctermbg=lightblue
 	hi! link Folded Comment
 endfunction
-au s:MyAu ColorScheme * call <SID>MyColorScheme()
+au vimrc ColorScheme * call <SID>MyColorScheme()
 set t_Co=256
-syntax on
 colorscheme elflord
+syntax on
 if s:is_raspi
-	au s:MyAu BufEnter * if 500 < line('$') | setlocal syntax=off | endif
+	au vimrc BufEnter * if 500 < line('$') | setlocal syntax=off | endif
 endif
 " }}} -----------------------------------------------------
 
@@ -226,7 +226,7 @@ function! s:ReadTemplate()
 		endif
 	endif
 endfunction
-au s:MyAu BufNewFile * call <SID>ReadTemplate()
+au vimrc BufNewFile * call <SID>ReadTemplate()
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -287,14 +287,14 @@ function! s:ShowEditingTime()
 		let g:edit_start_time = localtime()
 	endif
 endfunction
-au s:MyAu VimEnter * call <SID>ShowEditingTime()
+au vimrc VimEnter * call <SID>ShowEditingTime()
 nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
 " その他細々したの {{{
-au s:MyAu BufRead * let &expandtab=(!search('^\t', 'cn', 100) && search('^  ', 'cn', 100))
-au s:MyAu VimEnter,WinEnter *
+au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 100) && search('^  ', 'cn', 100))
+au vimrc VimEnter,WinEnter *
 	\   if !exists('w:match_badchars')
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
@@ -321,7 +321,7 @@ inoremap <C-r><C-r> <C-r>"
 " ---------------------------------------------------------
 " ノーマッピングデー {{{
 if strftime('%d') == '01'
-	au s:MyAu VimEnter * echo "* * * It's no-mapping-day ! * * *"
+	au vimrc VimEnter * echo "* * * It's no-mapping-day ! * * *"
 	imapclear
 	mapclear
 endif
