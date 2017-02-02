@@ -162,9 +162,6 @@ au vimrc ColorScheme * call <SID>MyColorScheme()
 set t_Co=256
 colorscheme elflord
 syntax on
-if s:is_raspi
-	au vimrc BufEnter * if 500 < line('$') | setlocal syntax=off | endif
-endif
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
