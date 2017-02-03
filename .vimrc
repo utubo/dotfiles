@@ -154,12 +154,12 @@ vnoremap gs :%s///g<Left><Left><Left>
 
 " ---------------------------------------------------------
 " 色 {{{
+set t_Co=256
 function! s:MyColorScheme()
 	hi String ctermfg=156 ctermbg=234
 	hi! link Folded Comment
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
-set t_Co=256
 colorscheme elflord
 syntax on
 " }}} -----------------------------------------------------
