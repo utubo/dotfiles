@@ -171,6 +171,7 @@ cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
 nnoremap <silent> <F5> :call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
+nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
