@@ -183,7 +183,7 @@ nnoremap <Space>n /
 nnoremap <Space>b ?
 " スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
-nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to "w'<CR>
+nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to @w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " }}} -----------------------------------------------------
 
@@ -274,6 +274,15 @@ nnoremap <C-w>ql <C-w>l:q<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
+" コマンドモード {{{
+cnoremap <C-h> <Left>
+cnoremap <C-l> <Right>
+cnoremap kj <C-c>
+" 貼り付けて、文末の改行を<BS>で消す
+cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
+" }}} -----------------------------------------------------
+
+" ---------------------------------------------------------
 " やりすぎ注意 {{{
 function! s:ShowEditingTime()
 	if exists('g:edit_start_time')
@@ -299,11 +308,11 @@ au vimrc VimEnter,WinEnter *
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
-cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
 nnoremap <Space>y y$
 nnoremap <Space>d d$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
+inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <ESC>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
@@ -313,7 +322,6 @@ inoremap （ ()<Left>
 " 設定したのを忘れるくらい使って無いので削除しようかな {{{
 noremap  <Space>h ^
 noremap  <Space>l $
-inoremap <C-r><C-r> <C-r>"
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
