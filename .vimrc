@@ -155,7 +155,7 @@ vnoremap gs :%s///g<Left><Left><Left>
 " ---------------------------------------------------------
 " 色 {{{
 function! s:MyColorScheme()
-	hi String ctermfg=blue ctermbg=lightblue
+	hi String ctermfg=156 ctermbg=234
 	hi! link Folded Comment
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
