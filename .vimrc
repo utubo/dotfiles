@@ -23,7 +23,7 @@ set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
 
-let s:is_raspi = !has('win32') && !has('mac') && system('uname -a') =~ 'raspberrypi'
+let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 
 augroup vimrc
 	au!
