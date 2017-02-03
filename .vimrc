@@ -292,7 +292,7 @@ nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
 " その他細々したの {{{
 au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 100) && search('^  ', 'cn', 100))
 au vimrc VimEnter,WinEnter *
-	\   if !exists('w:match_badchars')
+	\   if !exists('w:match_badchars') || !len(getmatches())
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
