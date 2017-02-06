@@ -308,7 +308,7 @@ au vimrc VimEnter,WinEnter *
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
-nnoremap <Space>y y$
+nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap <C-r><C-r> <C-r>"
