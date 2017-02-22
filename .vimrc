@@ -92,7 +92,7 @@ if isdirectory(s:dein_vim)
 		let g:undotree_TreeNodeShape = 'o'
 		let g:undotree_SetFocusWhenToggle = 1
 		let g:undotree_DiffAutoOpen = 0
-		nnoremap <silent> <F3> :silent! UndotreeToggle<cr>
+		nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	endif
 	" }}}
 
@@ -107,8 +107,8 @@ if isdirectory(s:dein_vim)
 	map <Leader>c <Plug>(caw:i:toggle)
 	nmap <Space>m <Plug>(quickhl-manual-this)
 	nmap <Space>M <Plug>(quickhl-manual-reset)
-	nnoremap <silent> <F1> :NERDTreeToggle<CR>
-	nnoremap <silent> <F2> :MRU<CR>
+	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
+	nnoremap <silent> <F2> :<C-u>MRU<CR>
 	" }}}
 endif
 filetype plugin indent on
@@ -131,7 +131,7 @@ inoremap <C-^> <C-o><C-^>
 set splitright
 set diffopt=vertical
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F4> :DiffOrig<CR>
+nnoremap <F4> :<C-u>DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 " }}} -----------------------------------------------------
@@ -168,7 +168,7 @@ syntax on
 " 日付関係 {{{
 inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
-nnoremap <silent> <F5> :call reformatdate#reformat(localtime())<CR>
+nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
@@ -247,18 +247,18 @@ nnoremap zy :<C-u>set foldmethod=syntax<CR>
 " ---------------------------------------------------------
 " 括弧でくくる {{{
 " これでいいや。不便に感じたらプラグインを入れる。
-let g:put_quotation_dic = {'「':'」', '(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>' }
+let g:quotation_marks = {'「':'」', '(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>' }
 function! PutQuotationComp(A, L, P)
-	return keys(g:put_quotation_dic)
+	return keys(g:quotation_marks)
 endfunction
 function! s:PutQuotation()
-	let l:start = input('括る文字: ', '', 'customlist,PutQuotationComp')
-	let l:end = has_key(g:put_quotation_dic, l:start) ? g:put_quotation_dic[l:start] : substitute(l:start, '^<', '</', '')
+	let l:head = input('括る文字: ', '', 'customlist,PutQuotationComp')
+	let l:tail = has_key(g:quotation_marks, l:head) ? g:quotation_marks[l:head] : substitute(l:head, '^<', '</', '')
 	let l:cur = getpos("'>")
 	call setpos('.', getpos("'<"))
-	execute 'normal! i'.l:start
-	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:start)]) + len(l:start))
-	execute 'normal! a'.l:end
+	execute 'normal! i'.l:head
+	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:head)]) + len(l:head))
+	execute 'normal! a'.l:tail
 endfunction
 vnoremap <silent> <Space>q :call <SID>PutQuotation()<CR>
 nmap <Space>q viw q
@@ -295,12 +295,12 @@ function! s:ShowEditingTime()
 	endif
 endfunction
 au vimrc VimEnter * call <SID>ShowEditingTime()
-nnoremap <silent> <Esc><Esc> :noh \| :call <SID>ShowEditingTime()<CR>
+nnoremap <silent> <Esc><Esc> :<C-u>noh \| :call <SID>ShowEditingTime()<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
 " その他細々したの {{{
-au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 100) && search('^  ', 'cn', 100))
+au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
 au vimrc VimEnter,WinEnter *
 	\   if !exists('w:match_badchars') || !len(getmatches())
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
