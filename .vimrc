@@ -22,6 +22,7 @@ set visualbell
 set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
+set timeout timeoutlen=1000 ttimeoutlen=50
 
 let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 
@@ -83,6 +84,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
 	map s <Plug>(easymotion-s)
+	EMCommandLineNoreMap <Space><Space> <Esc>
 	" }}}
 
 	" undotree {{{
@@ -294,9 +296,8 @@ function! s:ShowEditingTime()
 	endif
 endfunction
 au vimrc VimEnter * call <SID>ShowEditingTime()
-nnoremap <silent> <Esc><Esc> :<C-u>noh \| :call <SID>ShowEditingTime()<CR>
-nmap <Space><Space> <ESC><ESC>
-vmap <Space><Space> <ESC><ESC><ESC>
+nnoremap <silent> <Space><Space> :<C-u>noh \| :call <SID>ShowEditingTime()<CR>
+vmap <Space><Space> <Esc><Space><Space>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -313,7 +314,7 @@ nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
 inoremap <C-r><C-r> <C-r>"
-inoremap ｋｊ <ESC>`^
+inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 " }}} -----------------------------------------------------
