@@ -266,11 +266,10 @@ nmap <Space>q viw q
 
 " ---------------------------------------------------------
 " ウィンドウ {{{
-nmap <Space><Space> <C-w>
-nnoremap <C-w>qh <C-w>h:q<CR>
-nnoremap <C-w>qj <C-w>j:q<CR>
-nnoremap <C-w>qk <C-w>k:q<CR>
-nnoremap <C-w>ql <C-w>l:q<CR>
+nnoremap <Space>h <C-w>h<CR>
+nnoremap <Space>j <C-w>j<CR>
+nnoremap <Space>k <C-w>k<CR>
+nnoremap <Space>l <C-w>l<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -296,6 +295,8 @@ function! s:ShowEditingTime()
 endfunction
 au vimrc VimEnter * call <SID>ShowEditingTime()
 nnoremap <silent> <Esc><Esc> :<C-u>noh \| :call <SID>ShowEditingTime()<CR>
+nmap <Space><Space> <ESC><ESC>
+vmap <Space><Space> <ESC><ESC><ESC>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
