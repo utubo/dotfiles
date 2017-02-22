@@ -84,7 +84,11 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
 	map s <Plug>(easymotion-s)
-	EMCommandLineNoreMap <Space><Space> <Esc>
+	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
+	au vimrc ColorScheme *
+		\   hi EasyMotionTarget ctermfg=green guifg=#00ffcc
+		\ | hi EasyMotionTarget2First ctermfg=darkcyan guifg=#00ccff
+		\ | hi! link EasyMotionTarget2Second EasyMotionTarget2First
 	" }}}
 
 	" undotree {{{
