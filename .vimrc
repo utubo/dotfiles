@@ -195,10 +195,14 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 
 " ---------------------------------------------------------
 " 同じインデントの行まで移動 {{{
-noremap <expr> <Space>] search('^' . matchstr(getline('.'), '^\s*') . '\%>' . line('.') . 'l\S', 'e').'G'
-noremap <expr> <Space>[ search('^' . matchstr(getline('.'), '^\s*') . '\%<' . line('.') . 'l\S', 'be').'G'
-noremap <expr> <Space>} (search('^' . matchstr(getline('.'), '^\s*') . '\%>' . line('.') . 'l\S', 'e') - 1).'G'
-noremap <expr> <Space>{ (search('^' . matchstr(getline('.'), '^\s*') . '\%<' . line('.') . 'l\S', 'be') + 1).'G'
+function! s:FindSameIndentLine(forwardOrBack)
+	let l:flags = a:forwardOrBack == '>' ? 'e' : 'be'
+	return search('^'.matchstr(getline('.'), '^\s*').'\%'.a:forwardOrBack.line('.').'l\S', l:flags)
+endfunction
+noremap <expr> <Space>] <SID>FindSameIndentLine('>').'G'
+noremap <expr> <Space>[ <SID>FindSameIndentLine('<').'G'
+noremap <expr> <Space>} (<SID>FindSameIndentLine('>') - 1).'G'
+noremap <expr> <Space>{ (<SID>FindSameIndentLine('<') + 1).'G'
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
