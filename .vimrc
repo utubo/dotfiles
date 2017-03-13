@@ -22,7 +22,7 @@ set visualbell
 set t_vb=
 set autochdir
 set backupskip=/var/tmp/*
-set timeout timeoutlen=1000 ttimeoutlen=50
+set ttimeoutlen=50
 
 let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 
