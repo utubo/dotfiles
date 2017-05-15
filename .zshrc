@@ -75,3 +75,11 @@ export MAILCHECK=0
 export PATH=~/local/bin:~/.local/bin:$PATH:/sbin
 PROMPT="%B%F{green}%n %B%F{cyan}%(4~|...|)%3~%F{white} %# %b%f%k"
 
+case $TERM in
+linux)
+	if [ -c /dev/fb0 ]; then
+		jfbterm -q -e uim-fep -u anthy
+	fi
+	;;
+esac
+
