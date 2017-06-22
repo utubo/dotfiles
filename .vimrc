@@ -286,8 +286,7 @@ nnoremap <Space>l <C-w>l<CR>
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap kj <C-c>
-" 貼り付けて、文末の改行を<BS>で消す
-cnoremap <expr> <C-r><C-r> "\<C-r>\"".(@" =~ '\n$' ? "\<BS>" : '')
+cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
