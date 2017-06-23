@@ -274,14 +274,6 @@ nmap <Space>q viw q
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
-" ウィンドウ {{{
-nnoremap <Space>h <C-w>h<CR>
-nnoremap <Space>j <C-w>j<CR>
-nnoremap <Space>k <C-w>k<CR>
-nnoremap <Space>l <C-w>l<CR>
-" }}} -----------------------------------------------------
-
-" ---------------------------------------------------------
 " コマンドモード {{{
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
@@ -319,6 +311,7 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
+nnoremap <Space>w <C-w>w
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
