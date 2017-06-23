@@ -311,7 +311,8 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap <Space>w <C-w>w
+nnoremap <F9> <C-w>w
+nnoremap <F10> :q<CR>
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
@@ -344,8 +345,8 @@ endif
 " <F5> 日付関係
 " <F6>
 " <F8>
-" <F9>
-" <F10>
+" <F9> ウィンドウ切替
+" <F10> :q
 " <F11>
 " <F12> 折り返し切替
 " ※「構文等のインデントはタブ、見た目の桁合わせは半角スペース」なのでキモインデントになってる所があるかも…ごめんなさい
