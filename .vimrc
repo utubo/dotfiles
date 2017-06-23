@@ -150,6 +150,7 @@ nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
 inoremap kj <Esc>`^
+inoremap kk <Esc>`^
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :%s///g<Left><Left><Left>
@@ -279,6 +280,7 @@ cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
+nnoremap q: q:a
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
