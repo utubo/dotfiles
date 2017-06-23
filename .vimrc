@@ -305,14 +305,14 @@ au vimrc VimEnter,WinEnter *
 	\   if !exists('w:match_badchars') || !len(getmatches())
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
+nnoremap <F9> <C-w>w
+nnoremap <F10> :q<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap <F9> <C-w>w
-nnoremap <F10> :q<CR>
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
