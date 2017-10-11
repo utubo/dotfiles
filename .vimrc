@@ -239,11 +239,10 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 
 " ---------------------------------------------------------
 " 折りたたみ {{{
-" [+]こんな感じ(インデントに合わせて表示)
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
-	let l:fold = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g') . '[+]'
-	return &foldmethod == 'indent' ? l:fold : l:fold . substitute(l:text, '{'.'{{', '', '')
+	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
+	return l:indent . (&foldmethod != 'indent' ? substitute(l:text,  '{' . '{{',  '', '') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
