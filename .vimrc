@@ -242,7 +242,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
-	return l:indent . (&foldmethod != 'indent' ? substitute(l:text,  '{' . '{{',  '', '') : '') . '[+]'
+	return l:indent . (&foldmethod != 'indent' ? substitute(l:text,  '^\s\+\|{' . '{{',  '', 'g') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
