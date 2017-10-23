@@ -283,19 +283,20 @@ nnoremap q: q:a
 
 " ---------------------------------------------------------
 " やりすぎ注意 {{{
-function! s:ShowEditingTime()
-	if exists('g:edit_start_time')
-		let l:t = localtime() - g:edit_start_time
-		let l:h = l:t / 3600
-		let l:m = (l:t % 3600) / 60
-		echo l:h.'時間'.l:m.'分経過'.(2 < l:h ? '(^q^)休憩しろ' : l:h ? '(>_<)' : '')
-	else
-		let g:edit_start_time = localtime()
+if exists('g:vimrc_tea_break')
+	call timer_stop(g:vimrc_tea_break.timer)
+endif
+let g:vimrc_tea_break = { 'count': 0 }
+function! g:vimrc_tea_break.exec(timer)
+	let self.count += 1
+	if self.count == 45
+		echo "そろそろ休憩(*'∀`*)っ 旦~"
+	elseif self.count >= 60
+		echo '休憩終わり'
+		let self.count = 0
 	endif
 endfunction
-au vimrc VimEnter * call <SID>ShowEditingTime()
-nnoremap <silent> <Space><Space> :<C-u>noh \| :call <SID>ShowEditingTime()<CR>
-vmap <Space><Space> <Esc><Space><Space>
+let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repeat': -1 })
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -308,6 +309,7 @@ au vimrc VimEnter,WinEnter *
 nnoremap <F9> <C-w>w
 nnoremap <F10> :q<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
+nnoremap <silent> <Space><Space> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
