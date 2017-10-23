@@ -18,8 +18,7 @@ set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set laststatus=2
 set ruler
 set display=lastline
-set visualbell
-set t_vb=
+set belloff=all
 set autochdir
 set backupskip=/var/tmp/*
 set ttimeoutlen=50
