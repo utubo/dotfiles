@@ -264,26 +264,6 @@ nnoremap zy :<C-u>set foldmethod=syntax<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
-" 括弧でくくる {{{
-" これでいいや。不便に感じたらプラグインを入れる。
-let g:quotation_marks = {'「':'」', '(':')', '{':'}', '{{{':'}}}', '[':']', '<':'>' }
-function! PutQuotationComp(A, L, P)
-	return keys(g:quotation_marks)
-endfunction
-function! s:PutQuotation()
-	let l:head = input('括る文字: ', '', 'customlist,PutQuotationComp')
-	let l:tail = has_key(g:quotation_marks, l:head) ? g:quotation_marks[l:head] : substitute(l:head, '^<', '</', '')
-	let l:cur = getpos("'>")
-	call setpos('.', getpos("'<"))
-	execute 'normal! i'.l:head
-	call cursor(l:cur[1], min([l:cur[2], col([l:cur[1], '$']) - len(l:head)]) + len(l:head))
-	execute 'normal! a'.l:tail
-endfunction
-vnoremap <silent> <Space>q :call <SID>PutQuotation()<CR>
-nmap <Space>q viw q
-" }}} -----------------------------------------------------
-
-" ---------------------------------------------------------
 " コマンドモード {{{
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
