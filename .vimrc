@@ -46,6 +46,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('Shougo/neosnippet-snippets')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
+	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
 	call dein#add('mbbill/undotree')
 	call dein#add('osyo-manga/shabadou.vim')
@@ -82,7 +83,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_smartcase = 1
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
-	map s <Plug>(easymotion-s)
+	map S <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	au vimrc ColorScheme *
 		\   hi EasyMotionTarget ctermfg=green guifg=#00ffcc
@@ -104,6 +105,16 @@ if isdirectory(s:dein_vim)
 	" watchdogs {{{
 	let g:watchdogs_check_BufWritePost_enable = 1
 	let g:watchdogs_check_CursorHold_enable = 1
+	" }}}
+
+	" sandwitch {{{
+	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kakko
+	nmap sw saiw
+	nmap sR' sr"'
+	nmap sR" sr'"
+	" メモ
+	" i:都度入力, t:タグ, k:括弧
 	" }}}
 
 	" その他 {{{
