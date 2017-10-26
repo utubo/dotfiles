@@ -83,7 +83,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_smartcase = 1
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
-	map S <Plug>(easymotion-s)
+	map ss <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	au vimrc ColorScheme *
 		\   hi EasyMotionTarget ctermfg=green guifg=#00ffcc
