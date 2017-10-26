@@ -83,7 +83,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_smartcase = 1
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
-	map ss <Plug>(easymotion-s)
+	map z <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	au vimrc ColorScheme *
 		\   hi EasyMotionTarget ctermfg=green guifg=#00ffcc
@@ -258,9 +258,9 @@ set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
-nnoremap z<Tab> :<C-u>set foldmethod=indent<CR>
-nnoremap z{ :<C-u>set foldmethod=marker<CR>
-nnoremap zy :<C-u>set foldmethod=syntax<CR>
+nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
+nnoremap Z{ :<C-u>set foldmethod=marker<CR>
+nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
