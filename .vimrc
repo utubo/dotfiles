@@ -32,7 +32,8 @@ augroup End
 
 " ----------------------------------------------------------
 "  ユーティリティ {{{
-command! -nargs=* NVmap nmap <args>|vmap <args>
+"  「nmap <agrs>|vmap <agrs>」と同じ。「<if-normal>」以降は「nmap」だけに適用。
+command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
 "  }}}
 
 " ----------------------------------------------------------
@@ -116,11 +117,10 @@ if isdirectory(s:dein_vim)
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kakko
 	let g:operator_sandwich_no_default_key_mappings = 1
-	NVmap Sd <Plug>(operator-sandwich-delete)
-	NVmap Sr <Plug>(operator-sandwich-replace)
+	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
+	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sa <Plug>(operator-sandwich-add)
-	nmap S <Plug>(operator-sandwich-add)iw
-	vmap S <Plug>(operator-sandwich-add)
+	NVmap S <Plug>(operator-sandwich-add)<if-normal>iw
 	nmap SR' Sr"'
 	nmap SR" Sr'"
 	" メモ
