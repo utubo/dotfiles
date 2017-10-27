@@ -23,8 +23,6 @@ set display=lastline
 set belloff=all
 set ttimeoutlen=50
 
-let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
-
 augroup vimrc
 	au!
 augroup End
@@ -32,6 +30,7 @@ augroup End
 
 " ----------------------------------------------------------
 "  ユーティリティ {{{
+let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 "  「nmap <agrs>|vmap <agrs>」と同じ。「<if-normal>」以降は「nmap」だけに適用。
 command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
 "  }}}
@@ -114,7 +113,7 @@ if isdirectory(s:dein_vim)
 
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kakko
+	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kagikakko
 	let g:operator_sandwich_no_default_key_mappings = 1
 	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
@@ -123,7 +122,7 @@ if isdirectory(s:dein_vim)
 	nmap SR' Sr"'
 	nmap SR" Sr'"
 	" メモ
-	" i:都度入力, t:タグ, k:括弧
+	" i:都度入力, t:タグ, k:鍵括弧
 	" }}}
 
 	" その他 {{{
@@ -256,13 +255,14 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 
 " ---------------------------------------------------------
 " 折りたたみ {{{
+"   こんなかんじでインデントに合わせて表示に合わせて表示 [+]
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
 	return l:indent . (&foldmethod != 'indent' ? substitute(l:text,  '^\s\+\|{' . '{{',  '', 'g') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
-set fillchars=fold:\ " 折りたたみの「-」を非表示
+set fillchars=fold:\ " 折りたたみの「-」を非表示(というか「\」のあとの半角空白)
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
