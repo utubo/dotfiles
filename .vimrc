@@ -116,11 +116,11 @@ if isdirectory(s:dein_vim)
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kakko
 	let g:operator_sandwich_no_default_key_mappings = 1
-	NVmap S <nop>
+	NVmap Sd <Plug>(operator-sandwich-delete)
+	NVmap Sr <Plug>(operator-sandwich-replace)
 	NVmap Sa <Plug>(operator-sandwich-add)
-	NVmap Sd <Plug>(operator-sandwich-delete)<Plug>(textobj-sandwich-query-a)
-	NVmap Sr <Plug>(operator-sandwich-replace)<Plug>(textobj-sandwich-query-a)
-	nmap Sw Saiw
+	nmap S <Plug>(operator-sandwich-add)iw
+	vmap S <Plug>(operator-sandwich-add)
 	nmap SR' Sr"'
 	nmap SR" Sr'"
 	" メモ
