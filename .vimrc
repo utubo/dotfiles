@@ -60,7 +60,6 @@ if isdirectory(s:dein_vim)
 	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('rhysd/github-complete.vim')
 	call dein#add('scrooloose/nerdtree')
-	call dein#add('t9md/vim-quickhl')
 	call dein#add('thinca/vim-portal')
 	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
@@ -130,9 +129,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
-	NVmap <Leader>c <Plug>(caw:i:toggle)
-	nmap <Space>m <Plug>(quickhl-manual-this)
-	nmap <Space>M <Plug>(quickhl-manual-reset)
+	NVmap <Space>c <Plug>(caw:i:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	nnoremap <silent> <F2> :<C-u>MRU<CR>
 	" }}}
