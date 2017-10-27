@@ -31,6 +31,11 @@ augroup End
 " }}} -----------------------------------------------------
 
 " ----------------------------------------------------------
+"  ユーティリティ {{{
+command! -nargs=* NVmap nmap <args>|vmap <args>
+"  }}}
+
+" ----------------------------------------------------------
 " プラグイン {{{
 let s:dein_dir = expand('~/.vim/dein')
 let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -83,7 +88,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_smartcase = 1
 	let g:EasyMotion_use_migemo = 1
 	let g:EasyMotion_enter_jump_first = 1
-	map z <Plug>(easymotion-s)
+	map s <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	au vimrc ColorScheme *
 		\   hi EasyMotionTarget ctermfg=green guifg=#00ffcc
@@ -110,9 +115,14 @@ if isdirectory(s:dein_vim)
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kakko
-	nmap sw saiw
-	nmap sR' sr"'
-	nmap sR" sr'"
+	let g:operator_sandwich_no_default_key_mappings = 1
+	NVmap S <nop>
+	NVmap Sa <Plug>(operator-sandwich-add)
+	NVmap Sd <Plug>(operator-sandwich-delete)<Plug>(textobj-sandwich-query-a)
+	NVmap Sr <Plug>(operator-sandwich-replace)<Plug>(textobj-sandwich-query-a)
+	nmap Sw Saiw
+	nmap SR' Sr"'
+	nmap SR" Sr'"
 	" メモ
 	" i:都度入力, t:タグ, k:括弧
 	" }}}
@@ -120,7 +130,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
-	map <Leader>c <Plug>(caw:i:toggle)
+	NVmap <Leader>c <Plug>(caw:i:toggle)
 	nmap <Space>m <Plug>(quickhl-manual-this)
 	nmap <Space>M <Plug>(quickhl-manual-reset)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
