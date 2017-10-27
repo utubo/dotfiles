@@ -29,11 +29,11 @@ augroup End
 " }}} -----------------------------------------------------
 
 " ----------------------------------------------------------
-"  ユーティリティ {{{
+" ユーティリティ {{{
 let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
-"  「nmap <agrs>|vmap <agrs>」と同じ。「<if-normal>」以降は「nmap」だけに適用。
+" 「nmap <agrs>|vmap <agrs>」と同じ。「<if-normal>」以降は「nmap」だけに適用。
 command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
-"  }}}
+" }}}
 
 " ----------------------------------------------------------
 " プラグイン {{{
@@ -259,7 +259,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
-	return l:indent . (&foldmethod != 'indent' ? substitute(l:text,  '^\s\+\|{' . '{{',  '', 'g') : '') . '[+]'
+	return l:indent . (&foldmethod != 'indent' ? substitute(l:text, '^\s\+\|{' . '{{', '', 'g') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示(というか「\」のあとの半角空白)
