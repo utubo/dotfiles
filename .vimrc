@@ -4,6 +4,8 @@ scriptencoding utf-8
 " ----------------------------------------------------------
 " 基本設定 {{{
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
+set backupskip=/var/tmp/*
+set autochdir
 set tabstop=4
 set shiftwidth=4
 set autoindent
@@ -11,16 +13,14 @@ set smartindent
 set breakindent
 set nf=
 set virtualedit=block
-set hlsearch
-nohlsearch
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
+set hlsearch
+nohlsearch
 set laststatus=2
 set ruler
 set display=lastline
 set belloff=all
-set autochdir
-set backupskip=/var/tmp/*
 set ttimeoutlen=50
 
 let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
