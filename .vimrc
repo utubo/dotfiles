@@ -313,6 +313,7 @@ nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
+nnoremap ; .
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
