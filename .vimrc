@@ -169,7 +169,7 @@ inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
-vnoremap gs :%s///g<Left><Left><Left>
+vnoremap gs :s///g<Left><Left><Left>
 " }}} -----------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
