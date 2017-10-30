@@ -283,8 +283,9 @@ nnoremap q: q:a
 " やりすぎ注意 {{{
 if exists('g:vimrc_tea_break')
 	call timer_stop(g:vimrc_tea_break.timer)
+else
+	let g:vimrc_tea_break = { 'count': 0 }
 endif
-let g:vimrc_tea_break = { 'count': 0 }
 function! g:vimrc_tea_break.exec(timer)
 	let self.count += 1
 	if self.count == 45
