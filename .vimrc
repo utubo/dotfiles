@@ -126,6 +126,7 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" その他 {{{
+	let g:lightline = { 'colorscheme': 'wombat' }
 	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
 	NVmap <Space>c <Plug>(caw:i:toggle)
