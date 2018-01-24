@@ -114,6 +114,7 @@ if isdirectory(s:dein_vim)
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kagikakko
+	let g:sandwich_no_default_key_mappings = 1
 	let g:operator_sandwich_no_default_key_mappings = 1
 	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
