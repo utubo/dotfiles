@@ -30,9 +30,12 @@ augroup End
 
 " ----------------------------------------------------------
 " ユーティリティ {{{
+
 let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
-" 「nmap <agrs>|vmap <agrs>」と同じ。「<if-normal>」以降は「nmap」だけに適用。
+
+" 「nmap <agrs>|vmap <agrs>」と同じ。引数の「<if-normal>」から行末までは「nmap」だけに適用する。
 command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
+
 " }}}
 
 " ----------------------------------------------------------
