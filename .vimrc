@@ -175,6 +175,16 @@ inoremap kk <Esc>`^
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
+" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
+inoremap (<CR> (<CR>)<Esc>O
+inoremap {<CR> {<CR>}<Esc>O
+inoremap {; {<CR>};<Esc>O
+inoremap {, {<CR>},<Esc>O
+inoremap [<CR> [<CR>]<Esc>O
+inoremap ([[ ([[<CR>]])<Esc>O
+inoremap ([=[ ([=[<CR>]=])<Esc>O
+inoremap [; [<CR>];<Esc>O
+inoremap [, [<CR>],<Esc>O
 " }}} -----------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
