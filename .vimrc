@@ -185,6 +185,7 @@ inoremap ([[ ([[<CR>]])<Esc>O
 inoremap ([=[ ([=[<CR>]=])<Esc>O
 inoremap [; [<CR>];<Esc>O
 inoremap [, [<CR>],<Esc>O
+xnoremap Y "+y
 " }}} -----------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
@@ -326,7 +327,8 @@ nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
-nnoremap ; .
+nnoremap y} 0y}
+nnoremap y{ $y{
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
