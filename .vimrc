@@ -316,22 +316,22 @@ let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repe
 
 " ---------------------------------------------------------
 " その他細々したの {{{
-au vimrc bufread * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
-au vimrc vimenter,winenter *
+au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
+au vimrc VimEnter,WinEnter *
 	\   if !exists('w:match_badchars') || !len(getmatches())
-	\ | 	let w:match_badchars = matchadd('spellbad', '　\|¥\|\s\+$')
+	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
-nnoremap <f9> <c-w>w
-nnoremap <f10> :q<cr>
-nnoremap <silent> <f12> :<c-u>set wrap! wrap?<cr>
-nnoremap <silent> <space><space> :<c-u>noh<cr>
-nnoremap <expr> g: ":\<c-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<cr>"
-vnoremap g: "vy:<c-r>=@v<cr><cr>
-nnoremap y y$
-nnoremap <space>p $p
-nnoremap <space>p ^p
-onoremap <expr> } '<Esc>0' . v:count1 . v:operator . '}'
-onoremap <expr> { '<Esc>V' . v:count1 . '{' . v:operator
+nnoremap <F9> <C-w>w
+nnoremap <F10> :q<CR>
+nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
+nnoremap <silent> <Space><Space> :<C-u>noh<CR>
+nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
+vnoremap g: "vy:<C-r>=@v<CR><CR>
+nnoremap Y y$
+nnoremap <Space>p $p
+nnoremap <Space>P ^P
+onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
+onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
