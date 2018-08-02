@@ -54,6 +54,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('Shougo/neosnippet-snippets')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
+	call dein#add('luochen1990/rainbow')
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
 	call dein#add('mbbill/undotree')
@@ -131,6 +132,7 @@ if isdirectory(s:dein_vim)
 
 	" その他 {{{
 	let g:lightline = { 'colorscheme': 'wombat' }
+	let g:rainbow_active = 1
 	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
 	NVmap <Space>c <Plug>(caw:i:toggle)
