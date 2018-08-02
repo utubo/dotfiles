@@ -73,7 +73,7 @@ if isdirectory(s:dein_vim)
 		let g:vimproc#download_windows_dll = 1
 		call dein#add('Shougo/vimproc')
 	else
-		call dein#add('Shougo/vimproc', {'build': {'linux': 'make', 'unix': 'gmake'}})
+		call dein#add('Shougo/vimproc', {'build': 'make'})
 	endif
 	call dein#end()
 	" }}}
