@@ -286,6 +286,12 @@ nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
+" ↓ちょっと試してる最中…普通のzfって折りたたみ全部開いちゃわない？
+function! s:Zf() range
+	call append(a:lastline, matchlist(getline(a:firstline), '^\s*')[0] . '}'. '}}')
+	call setline(a:firstline, getline(a:firstline) . ' {{' . '{')
+endfunction
+vnoremap zf :call <SID>Zf()<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
