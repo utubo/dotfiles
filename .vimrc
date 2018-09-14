@@ -295,7 +295,30 @@ vnoremap zf :call <SID>Zf()<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
-" コマンドモード {{{
+" 行移動 {{{
+" オートインデント無し、折り畳みをスキップ
+function! s:MoveLines(d) range
+	let to = (a:d < 0 ? a:firstline : (a:lastline + 1)) + a:d
+	let to = min([max([1, to]), line('w$') + 1])
+	let foldstart = foldclosed(to)
+	if foldstart != -1
+		let to = a:d < 0 ? foldstart : (foldclosedend(to) + 1)
+	endif
+	execute a:firstline . ',' . a:lastline . 'move ' . (to - 1)
+	let c = a:lastline - a:firstline + 1
+	if c != 1
+		normal V
+		call setpos('.', [0, a:d < 0 ? to : (to - c), 1])
+	endif
+endfunction
+vnoremap <silent> <C-k> :call <SID>MoveLines(-1)<CR>
+vnoremap <silent> <C-j> :call <SID>MoveLines(1)<CR>
+nnoremap <silent> <C-k> :<C-u>call <SID>MoveLines(-v:count1)<CR>
+nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
+" }}} -----------------------------------------------------
+
+" ---------------------------------------------------------
+" コマンドモードあれこれ {{{
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap kj <C-c>
