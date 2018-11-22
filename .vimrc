@@ -383,7 +383,7 @@ inoremap :: ::
 " ---------------------------------------------------------
 " デフォルトマッピングデー {{{
 if strftime('%d') == '01'
-	au vimrc VimEnter * echo '+^`^+.,.+ Today is default-mapping-day ! +^`^+.,.+'
+	au vimrc VimEnter * echo "+^`^+.,.+ Today, Let's enjoy VIM with default key mapping ! +^`^+.,.+"
 	imapclear
 	mapclear
 endif
