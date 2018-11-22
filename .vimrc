@@ -229,10 +229,10 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
-" 同じインデントの行まで移動 {{{
+" 現在行以下のインデントを検索 {{{
 function! s:FindSameIndentLine(forwardOrBack)
 	let l:flags = a:forwardOrBack == '>' ? 'e' : 'be'
-	return search('^'.matchstr(getline('.'), '^\s*').'\%'.a:forwardOrBack.line('.').'l\S', l:flags)
+	return search('^\s\{0,'.len(matchstr(getline('.'), '^\s*')).'\}\%'.a:forwardOrBack.line('.').'l\S', l:flags)
 endfunction
 noremap <expr> <Space>] <SID>FindSameIndentLine('>').'G'
 noremap <expr> <Space>[ <SID>FindSameIndentLine('<').'G'
