@@ -20,6 +20,7 @@ nohlsearch
 set laststatus=2
 set ruler
 set display=lastline
+set ambiwidth=double
 set belloff=all
 set ttimeoutlen=50
 
