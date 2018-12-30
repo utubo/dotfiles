@@ -189,6 +189,8 @@ inoremap ([=[ ([=[<CR>]=])<Esc>O
 inoremap [; [<CR>];<Esc>O
 inoremap [, [<CR>],<Esc>O
 xnoremap Y "+y
+" https://github.com/astrorobot110/myvimrc/blob/master/vimrc
+set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 " }}} -----------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
