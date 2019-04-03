@@ -125,8 +125,9 @@ if isdirectory(s:dein_vim)
 	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sa <Plug>(operator-sandwich-add)
 	NVmap S <Plug>(operator-sandwich-add)<if-normal>iw
-	nmap SR' Sr"'
-	nmap SR" Sr'"
+	nmap SD <Plug>(operator-sandwich-delete)<Plug>(textobj-sandwich-auto-a)
+	nmap SR <Plug>(operator-sandwich-replace)<Plug>(textobj-sandwich-auto-a)
+	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
 	" メモ
 	" i:都度入力, t:タグ, k:鍵括弧
 	" }}}
