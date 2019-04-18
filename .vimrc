@@ -356,7 +356,6 @@ au vimrc VimEnter,WinEnter *
 	\   if !exists('w:match_badchars') || !len(getmatches())
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
-nnoremap <F9> <C-w>w
 nnoremap <F10> :q<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
@@ -382,6 +381,9 @@ inoremap :: ::
 " 様子見中 {{{
 inoremap <CR> <CR><C-g>u
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
+nnoremap 「 i「」<Left>
+nnoremap <Space>w <C-w>w
+nnoremap <F9> <C-w>w
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -402,7 +404,7 @@ endif
 " <F5> 日付関係
 " <F6>
 " <F8>
-" <F9> ウィンドウ切替
+" <F9> ウィンドウ切替(やめるかも…)
 " <F10> :q
 " <F11>
 " <F12> 折り返し切替
