@@ -372,6 +372,7 @@ inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
+inoremap <S-Tab> <Esc>ea
 inoremap :w <Esc>`^:w
 " 「::w…」は出番がそこそこあるので、↑のマッピングが誤爆しないように…
 inoremap :: ::
