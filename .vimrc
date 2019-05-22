@@ -202,6 +202,7 @@ set t_Co=256
 function! s:MyColorScheme()
 	hi String ctermfg=156 ctermbg=234
 	hi! link Folded Comment
+	hi CursorLine NONE
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
 colorscheme elflord
@@ -357,6 +358,7 @@ au vimrc VimEnter,WinEnter *
 	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
 	\ | endif
 nnoremap <F10> :q<CR>
+nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
@@ -407,7 +409,7 @@ endif
 " <F8>
 " <F9> ウィンドウ切替(やめるかも…)
 " <F10> :q
-" <F11>
+" <F11> 行番号表示切替
 " <F12> 折り返し切替
 " ※「構文等のインデントはタブ、見た目の桁合わせは半角スペース」なのでキモインデントになってる所があるかも…ごめんなさい
 " }}}
