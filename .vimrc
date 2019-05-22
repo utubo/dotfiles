@@ -68,6 +68,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
+	call dein#add('utubo/vim-utb')
 	call dein#add('yegappan/mru', {'lazy':1, 'on_cmd':'MRU'})
 	" vimproc
 	if has('win32')
@@ -200,13 +201,13 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 " 色 {{{
 set t_Co=256
 function! s:MyColorScheme()
-	hi String ctermfg=156 ctermbg=234
 	hi! link Folded Comment
 	hi CursorLine NONE
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
-colorscheme elflord
 syntax on
+set background=dark
+colorscheme utb
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
