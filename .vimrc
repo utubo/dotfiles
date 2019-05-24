@@ -161,7 +161,7 @@ inoremap <C-^> <C-o><C-^>
 " ----------------------------------------------------------
 " DIFF関係 {{{
 set splitright
-set diffopt=vertical
+set diffopt=vertical,filler
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nnoremap <F4> :<C-u>DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
