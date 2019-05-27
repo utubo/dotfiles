@@ -387,6 +387,8 @@ inoremap <CR> <CR><C-g>u
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap 「 i「」<Left>
 nnoremap <Space>w <C-w>w
+nnoremap <Space>l $
+nnoremap <Space>a A
 nnoremap <F9> <C-w>w
 " }}} -----------------------------------------------------
 
