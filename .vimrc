@@ -288,7 +288,7 @@ endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折りたたみの「-」を非表示(というか「\」のあとの半角空白)
 set foldmethod=marker
-nnoremap <expr> h (col('.') == 1 ? 'zc' : 'h')
+nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
