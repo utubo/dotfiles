@@ -138,7 +138,7 @@ if isdirectory(s:dein_vim)
 	let g:rainbow_active = 1
 	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
-	NVmap <Space>c <Plug>(caw:i:toggle)
+	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	nnoremap <silent> <F2> :<C-u>MRU<CR>
 	" }}}
@@ -330,6 +330,14 @@ cnoremap <C-l> <Right>
 cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
 nnoremap q: q:a
+" }}} -----------------------------------------------------
+
+" ---------------------------------------------------------
+" terminal {{{
+if has('win32')
+	command! Powershell :terminal ++close powershell
+endif
+tnoremap <C-k><C-k> <C-w>N
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
