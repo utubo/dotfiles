@@ -59,6 +59,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
 	call dein#add('mbbill/undotree')
+	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
 	call dein#add('osyo-manga/vim-watchdogs')
@@ -136,6 +137,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rainbow_active = 1
+	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
