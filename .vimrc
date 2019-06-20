@@ -209,7 +209,7 @@ endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
 syntax on
 set background=dark
-colorscheme utb
+colorscheme utb-green
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
