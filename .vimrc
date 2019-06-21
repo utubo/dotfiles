@@ -201,8 +201,22 @@ set t_Co=256
 function! s:MyColorScheme()
 	hi! link Folded Comment
 	hi CursorLine NONE
+	syntax keyword Error ERROR
+endfunction
+function! s:MySyntax()
+	if exists('b:has_my_syntax')
+		return
+	endif
+	let b:has_my_syntax = 1
+	syntax region String start='「' end='」'
+	syntax region Label start='^\s*■' end='$' display
+	syntax match Delimiter /\(★\|※\)[^\s()（）]*/ display
+	syntax match Delimiter /注意\|注:/
+	syntax keyword Delimiter WARN
+	syntax keyword Error ERROR
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
+au vimrc BufEnter * call <SID>MySyntax()
 syntax on
 set background=dark
 colorscheme utb-green
