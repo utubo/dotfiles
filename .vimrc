@@ -201,22 +201,21 @@ set t_Co=256
 function! s:MyColorScheme()
 	hi! link Folded Comment
 	hi CursorLine NONE
-	syntax keyword Error ERROR
-endfunction
-function! s:MySyntax()
-	if exists('b:has_my_syntax')
-		return
-	endif
-	let b:has_my_syntax = 1
-	syntax region String start='「' end='」'
-	syntax region Label start='^\s*■' end='$' display
-	syntax match Delimiter /\(★\|※\)[^\s()（）]*/ display
-	syntax match Delimiter /注意\|注:/
-	syntax keyword Delimiter WARN
-	syntax keyword Error ERROR
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
-au vimrc BufEnter * call <SID>MySyntax()
+function! s:MyMatches()
+	if exists('w:my_matches') && len(getmatches())
+		return
+	end
+	let w:my_matches = 1
+	let a = matchadd('SpellBad', '　\|¥\|\s\+$')
+	let a = matchadd('String', '「[^」]*」')
+	let a = matchadd('Label', '^\s*■.*$')
+	let a = matchadd('Delimiter', '\(★\|※\)[^\s()（）]*')
+	let a = matchadd('Delimiter', 'WARN|注意\|注:')
+	let a = matchadd('Error', 'ERROR')
+endfunction
+au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
 set background=dark
 colorscheme utb-green
@@ -374,10 +373,6 @@ let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repe
 " ---------------------------------------------------------
 " その他細々したの {{{
 au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
-au vimrc VimEnter,WinEnter *
-	\   if !exists('w:match_badchars') || !len(getmatches())
-	\ | 	let w:match_badchars = matchadd('SpellBad', '　\|¥\|\s\+$')
-	\ | endif
 nnoremap <F10> :q<CR>
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
