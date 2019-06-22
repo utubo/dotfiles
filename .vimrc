@@ -211,9 +211,10 @@ function! s:MyMatches()
 	let a = matchadd('SpellBad', '　\|¥\|\s\+$')
 	let a = matchadd('String', '「[^」]*」')
 	let a = matchadd('Label', '^\s*■.*$')
-	let a = matchadd('Delimiter', '\(★\|※\)[^\s()（）]*')
-	let a = matchadd('Delimiter', 'WARN|注意\|注:')
+	let a = matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
 	let a = matchadd('Error', 'ERROR')
+	" 稀によくtypoする単語(気づいたら追加する)
+	let a = matchadd('SpellBad', 'stlye')
 endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
