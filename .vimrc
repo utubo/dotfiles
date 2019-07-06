@@ -291,7 +291,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 
 " ---------------------------------------------------------
 " 折りたたみ {{{
-"   こんなかんじでインデントに合わせて表示に合わせて表示 [+]
+"   こんなかんじでインデントに合わせて表示 [+]
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
