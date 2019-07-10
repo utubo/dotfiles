@@ -392,8 +392,9 @@ inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
 inoremap （ ()<Left>
 inoremap <S-Tab> <Esc>ea
+" Input-Modeでも :w で書き込み
+" どうしても「:w」を入力したい場合は ::<BS>w で頑張る
 inoremap :w <Esc>`^:w
-" 「::w…」は出番がそこそこあるので、↑のマッピングが誤爆しないように…
 inoremap :: ::
 " }}} -----------------------------------------------------
 
