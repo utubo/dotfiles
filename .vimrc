@@ -23,6 +23,7 @@ set display=lastline
 set ambiwidth=double
 set belloff=all
 set ttimeoutlen=50
+set wildmenu
 
 augroup vimrc
 	au!
@@ -337,8 +338,8 @@ nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
 
 " ---------------------------------------------------------
 " コマンドモードあれこれ {{{
-cnoremap <C-h> <Left>
-cnoremap <C-l> <Right>
+cnoremap <C-h> <Space><BS><Left>
+cnoremap <C-l> <Space><BS><Right>
 cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
 nnoremap q: q:a
