@@ -62,6 +62,7 @@ alias po=popd
 alias c=clear
 alias g=grep\ -n $AUTO_COLOR
 alias rm=rm\ -i
+alias crontab=crontab\ -i
 alias v=vim
 alias vw=view
 alias :q=exit
