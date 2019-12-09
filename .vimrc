@@ -54,6 +54,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('Shougo/neocomplcache.vim', (s:is_raspi ? {'rtp': ''} : { }))
 	call dein#add('Shougo/neosnippet')
 	call dein#add('Shougo/neosnippet-snippets')
+	call dein#add('alvan/vim-closetag')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
 	call dein#add('luochen1990/rainbow')
@@ -391,7 +392,9 @@ vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
+inoremap 「」 「」<Left>
 inoremap （ ()<Left>
+inoremap （） ()<Left>
 inoremap <S-Tab> <Esc>ea
 " Input-Modeでも :w で書き込み
 " どうしても「:w」を入力したい場合は ::<BS>w で頑張る
@@ -401,9 +404,14 @@ inoremap :: ::
 
 " ---------------------------------------------------------
 " 様子見中 {{{
+inoremap ( ()<Left>
+inoremap () ()<Left>
+inoremap [ []<Left>
+inoremap [] []<Left>
+inoremap " ""<Left>
+inoremap "" ""<Left>
 inoremap <CR> <CR><C-g>u
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
-nnoremap 「 i「」<Left>
 nnoremap <Space>w <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
