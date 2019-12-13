@@ -72,7 +72,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-utb')
-	call dein#add('yegappan/mru', {'lazy':1, 'on_cmd':'MRU'})
+	call dein#add('yegappan/mru')
 	" vimproc
 	if has('win32')
 		let g:vimproc#download_windows_dll = 1
