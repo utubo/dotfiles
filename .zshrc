@@ -57,7 +57,7 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 if type "exa" > /dev/null 2>&1; then
 	alias l=exa
 	alias ls=exa\ -a
-	alias ll=exa\ -lah
+	alias ll=exa\ -lah\ --git
 	alias la=exa\ -a
 else
 	alias l=ls\ $AUTO_COLOR
