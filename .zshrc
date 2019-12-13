@@ -26,7 +26,7 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
+type dircolors >/dev/null 2>&1 && eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -54,9 +54,17 @@ case "${OSTYPE}" in
 		;;
 esac
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-alias ls=ls\ $AUTO_COLOR
-alias ll=ls\ -lFh $AUTO_COLOR
-alias la=ls\ -alFh $AUTO_COLOR
+if type "exa" > /dev/null 2>&1; then
+	alias l=exa
+	alias ls=exa\ -a
+	alias ll=exa\ -lah
+	alias la=exa\ -a
+else
+	alias l=ls\ $AUTO_COLOR
+	alias ls=ls\ $AUTO_COLOR
+	alias ll=ls\ -lFh $AUTO_COLOR
+	alias la=ls\ -alFh $AUTO_COLOR
+fi
 alias pu=pushd
 alias po=popd
 alias c=clear
@@ -71,6 +79,7 @@ alias ga=git\ add
 alias gc=git\ commit\ -m
 alias fuck='eval $(thefuck $(fc -ln -1))'
 alias f=fuck
+alias fd=fdfind
 export EDITOR=vim
 export MAILCHECK=0
 export PATH=~/local/bin:~/.local/bin:/usr/local/bin:$PATH:/sbin
