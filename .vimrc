@@ -57,6 +57,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('alvan/vim-closetag')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
+	call dein#add('jiangmiao/auto-pairs')
 	call dein#add('luochen1990/rainbow')
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
@@ -404,12 +405,6 @@ inoremap :: ::
 
 " ---------------------------------------------------------
 " 様子見中 {{{
-inoremap ( ()<Left>
-inoremap () ()<Left>
-inoremap [ []<Left>
-inoremap [] []<Left>
-inoremap " ""<Left>
-inoremap "" ""<Left>
 inoremap <CR> <CR><C-g>u
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap <Space>w <C-w>w
