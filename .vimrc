@@ -410,9 +410,9 @@ vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap <Space>w <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
-nnoremap <F8> :<C-u>q<CR>
+nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
-nnoremap <C-w>h 1<C-W>s:1<CR><C-W><C-W>
+nnoremap <silent> <C-w>h 1<C-W>s:1<CR><C-W><C-W>
 vnoremap <C-w>h 1<C-W>s<C-W><C-W>
 nmap <F10> <C-w>h
 vmap <F10> <C-w>h
