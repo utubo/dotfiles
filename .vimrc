@@ -11,7 +11,7 @@ set shiftwidth=4
 set autoindent
 set smartindent
 set breakindent
-set nf=
+set nf=alpha,hex
 set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
@@ -377,7 +377,6 @@ let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repe
 " ---------------------------------------------------------
 " その他細々したの {{{
 au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
-nnoremap <F10> :q<CR>
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
@@ -411,7 +410,12 @@ vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap <Space>w <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
+nnoremap <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
+nnoremap <C-w>h 1<C-W>s:1<CR><C-W><C-W>
+vnoremap <C-w>h 1<C-W>s<C-W><C-W>
+nmap <F10> <C-w>h
+vmap <F10> <C-w>h
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -431,9 +435,9 @@ endif
 " <F4> DiffOrig
 " <F5> 日付関係
 " <F6>
-" <F8>
-" <F9> ウィンドウ切替(やめるかも…)
-" <F10> :q
+" <F8> :q(様子見中)
+" <F9> ウィンドウ切替(様子見中)
+" <F10> ヘッダ行を表示(様子見中)
 " <F11> 行番号表示切替
 " <F12> 折り返し切替
 " ※「構文等のインデントはタブ、見た目の桁合わせは半角スペース」なのでキモインデントになってる所があるかも…ごめんなさい
