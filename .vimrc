@@ -412,8 +412,8 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
-nnoremap <silent> <F10> 1<C-W>s:1<CR><C-W>w
-vnoremap <F10> 1<C-W>s<C-W>w
+nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
+vnoremap <F10> <ESC>1<C-w>s<C-w>w
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
