@@ -359,6 +359,7 @@ tnoremap <C-k><C-k> <C-w>N
 " ---------------------------------------------------------
 " textobj-twochars {{{
 " TODO: そのうちプラグインにしようかな
+" TODO: 正規表現をエスケープしないとダメ
 if ! exists('g:loaded_textobj_twochars')
 	let g:loaded_textobj_twochars = 1
 	function! s:TextobjTwoChars(a_or_i)
