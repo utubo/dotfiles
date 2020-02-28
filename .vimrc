@@ -58,6 +58,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
 	call dein#add('jiangmiao/auto-pairs')
+	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
@@ -354,6 +355,36 @@ if has('win32')
 endif
 tnoremap <C-k><C-k> <C-w>N
 " }}} -----------------------------------------------------
+
+" ---------------------------------------------------------
+" textobj-twochars {{{
+" TODO: そのうちプラグインにしようかな
+function! s:TextobjTwoChars(a_or_i)
+	echoh Question | echo 'Input 2 chars: ' | echoh None
+	let l:left = getchar()
+	if type(l:left) == type(0)
+		let l:left = nr2char(l:left)
+	endif
+	if l:left !~ '[[:print:]]'
+		redraw | echo ""
+		return 0
+	endif
+	redraw | echon "Between '" . l:left . "' and ... "
+	let l:right= getchar()
+	if type(l:right) == type(0)
+		let l:right = nr2char(l:right)
+	endif
+	if l:right !~ '[[:print:]]'
+		redraw | echo ""
+		return 0
+	endif
+	redraw | echon "Between '" . l:left . "' and '" . l:right . "'"
+	call textobj#user#select_pair(l:left, l:right, a:a_or_i, 'o')
+endfunction
+map <Plug>(textobj-twochars-a) :<C-u>call <SID>TextobjTwoChars('a')<CR>
+map <Plug>(textobj-twochars-i) :<C-u>call <SID>TextobjTwoChars('i')<CR>
+call textobj#user#map('twochars', {'a': { 'select': 'a2'  }, 'i': { 'select': 'i2'  } })
+" }}}
 
 " ---------------------------------------------------------
 " やりすぎ注意 {{{
