@@ -359,34 +359,53 @@ tnoremap <C-k><C-k> <C-w>N
 " ---------------------------------------------------------
 " textobj-twochars {{{
 " TODO: そのうちプラグインにしようかな
-" TODO: 正規表現をエスケープしないとダメ
 if ! exists('g:loaded_textobj_twochars')
 	let g:loaded_textobj_twochars = 1
-	function! s:TextobjTwoChars(a_or_i)
+	function! s:TextobjTwoChars(is_in)
 		echoh Question | echo 'Input 2 chars: ' | echoh None
-		let l:left = getchar()
-		if type(l:left) == type(0)
-			let l:left = nr2char(l:left)
-		endif
-		if l:left !~ '[[:print:]]'
-			redraw | echo ""
-			return 0
-		endif
-		redraw | echon "Between '" . l:left . "' and ... "
-		let l:right= getchar()
-		if type(l:right) == type(0)
-			let l:right = nr2char(l:right)
-		endif
-		if l:right !~ '[[:print:]]'
-			redraw | echo ""
-			return 0
-		endif
-		redraw | echon "Between '" . l:left . "' and '" . l:right . "'"
-		call textobj#user#select_pair(l:left, l:right, a:a_or_i, 'o')
+		let l:pos = [0, 0]
+		let l:org = getpos('.')
+		for l:i in [0, 1]
+			let l:c = getchar()
+			if type(l:c) == type(0)
+				let l:c = nr2char(l:c)
+			endif
+			if l:c !~ '[[:print:]]'
+				redraw | echo "Canceled."
+				return 0
+			endif
+			if !search(l:c == '\' ? '\\' : ('\V' . l:c), l:i ? 'W' : 'bW')
+				redraw | echo "Not found."
+				return 0
+			endif
+			if l:i
+				echon '"' . l:c .'"'
+				if a:is_in
+					normal! h
+				endif
+			else
+				redraw | echo 'Between "' . l:c . '" and '
+				if a:is_in
+					normal! l
+				endif
+			endif
+			let l:pos[l:i] = getpos('.')
+			call setpos('.', l:org)
+		endfor
+		return ['v', l:pos[0], l:pos[1]]
 	endfunction
-	map <Plug>(textobj-twochars-a) :<C-u>call <SID>TextobjTwoChars('a')<CR>
-	map <Plug>(textobj-twochars-i) :<C-u>call <SID>TextobjTwoChars('i')<CR>
-	call textobj#user#map('twochars', {'a': { 'select': 'a2'  }, 'i': { 'select': 'i2'  } })
+	function! TextobjTwoCharsA()
+		return <SID>TextobjTwoChars(0)
+	endfunction
+	function! TextobjTwoCharsI()
+		return <SID>TextobjTwoChars(1)
+	endfunction
+	call textobj#user#plugin('twochars', {'-': {
+	\	'select-a': 'a2',
+	\	'select-i': 'i2',
+	\	'select-a-function': 'TextobjTwoCharsA',
+	\	'select-i-function': 'TextobjTwoCharsI'
+	\}})
 endif
 " }}}
 
