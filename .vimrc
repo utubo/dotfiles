@@ -74,6 +74,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
+	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
 	call dein#add('yegappan/mru')
 	" vimproc
@@ -358,56 +359,6 @@ if has('win32')
 endif
 tnoremap <C-k><C-k> <C-w>N
 " }}} -----------------------------------------------------
-
-" ---------------------------------------------------------
-" textobj-twochars {{{
-" TODO: そのうちプラグインにしようかな
-if ! exists('g:loaded_textobj_twochars')
-	let g:loaded_textobj_twochars = 1
-	function! s:TextobjTwoChars(is_inner)
-		echoh Question | echo 'Input 2 chars: ' | echoh None
-		let l:org = getpos('.')
-		let l:pos = [0, 0]
-		for l:i in [0, 1]
-			let l:c = nr2char(getchar())
-			if l:c !~ '[[:print:]]'
-				redraw | echo "Canceled."
-				return 0
-			endif
-			if !search(l:c == '\' ? '\\' : ('\V' . l:c), l:i ? 'W' : 'bW')
-				redraw | echo "Not found."
-				return 0
-			endif
-			if l:i
-				echon '"' . l:c .'"'
-				if a:is_inner
-					normal! h
-				endif
-			else
-				redraw | echo 'Between "' . l:c . '" and '
-				if a:is_inner
-					normal! l
-				endif
-			endif
-			let l:pos[l:i] = getpos('.')
-			call setpos('.', l:org)
-		endfor
-		return ['v', l:pos[0], l:pos[1]]
-	endfunction
-	function! TextobjTwoCharsA()
-		return <SID>TextobjTwoChars(0)
-	endfunction
-	function! TextobjTwoCharsI()
-		return <SID>TextobjTwoChars(1)
-	endfunction
-	call textobj#user#plugin('twochars', {'-': {
-	\	'select-a': 'a2',
-	\	'select-i': 'i2',
-	\	'select-a-function': 'TextobjTwoCharsA',
-	\	'select-i-function': 'TextobjTwoCharsI'
-	\}})
-endif
-" }}}
 
 " ---------------------------------------------------------
 " やりすぎ注意 {{{
