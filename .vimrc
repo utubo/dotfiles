@@ -66,6 +66,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
+	call dein#add('osyo-manga/vim-textobj-multiblock')
 	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('rhysd/github-complete.vim')
 	call dein#add('scrooloose/nerdtree')
@@ -140,6 +141,8 @@ if isdirectory(s:dein_vim)
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
+	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
+	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	nnoremap <silent> <F2> :<C-u>MRU<CR>
@@ -361,7 +364,7 @@ tnoremap <C-k><C-k> <C-w>N
 " TODO: そのうちプラグインにしようかな
 if ! exists('g:loaded_textobj_twochars')
 	let g:loaded_textobj_twochars = 1
-	function! s:TextobjTwoChars(is_in)
+	function! s:TextobjTwoChars(is_inner)
 		echoh Question | echo 'Input 2 chars: ' | echoh None
 		let l:org = getpos('.')
 		let l:pos = [0, 0]
@@ -377,12 +380,12 @@ if ! exists('g:loaded_textobj_twochars')
 			endif
 			if l:i
 				echon '"' . l:c .'"'
-				if a:is_in
+				if a:is_inner
 					normal! h
 				endif
 			else
 				redraw | echo 'Between "' . l:c . '" and '
-				if a:is_in
+				if a:is_inner
 					normal! l
 				endif
 			endif
