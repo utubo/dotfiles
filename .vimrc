@@ -363,13 +363,10 @@ if ! exists('g:loaded_textobj_twochars')
 	let g:loaded_textobj_twochars = 1
 	function! s:TextobjTwoChars(is_in)
 		echoh Question | echo 'Input 2 chars: ' | echoh None
-		let l:pos = [0, 0]
 		let l:org = getpos('.')
+		let l:pos = [0, 0]
 		for l:i in [0, 1]
-			let l:c = getchar()
-			if type(l:c) == type(0)
-				let l:c = nr2char(l:c)
-			endif
+			let l:c = nr2char(getchar())
 			if l:c !~ '[[:print:]]'
 				redraw | echo "Canceled."
 				return 0
