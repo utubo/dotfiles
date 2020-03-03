@@ -452,9 +452,10 @@ inoremap （ ()<Left>
 inoremap （） ()<Left>
 inoremap <S-Tab> <Esc>ea
 " Input-Modeでも :w で書き込み
-" どうしても「:w」を入力したい場合は ::<BS>w で頑張る
+" どうしても「:w」を入力したい場合は ::<BS>w とかで頑張る
 inoremap :w <Esc>`^:w
 inoremap :: ::
+inoremap <silent> <C-Bslash> <C-r>=nr2char(getchar())<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
