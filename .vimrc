@@ -455,7 +455,7 @@ inoremap <S-Tab> <Esc>ea
 " どうしても「:w」を入力したい場合は ::<BS>w とかで頑張る
 inoremap :w <Esc>`^:w
 inoremap :: ::
-inoremap <silent> <C-Bslash> <C-r>=nr2char(getchar())<CR>
+inoremap <silent> <F1> <C-r>=nr2char(getchar())<CR>
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
@@ -482,7 +482,7 @@ endif
 
 " ---------------------------------------------------------
 " メモ {{{
-" <F1> NERDTree
+" <F1> N→NERDTree, I→マッピングを無視して1文字入力
 " <F2> MRU
 " <F3> UndoTree
 " <F4> DiffOrig
