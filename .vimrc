@@ -234,8 +234,8 @@ colorscheme utb-green
 " ---------------------------------------------------------
 " タブ幅やタブ展開を自動設定 {{{
 function! s:SetupTabstop()
-	let l:limit = 100
-	let l:org = getpos('.')
+	const l:limit = 100
+	const l:org = getpos('.')
 	call cursor(1, 1)
 	if search('^\t', 'nc', l:limit)
 		setlocal noexpandtab
