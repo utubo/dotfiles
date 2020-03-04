@@ -217,13 +217,13 @@ function! s:MyMatches()
 		return
 	end
 	let w:my_matches = 1
-	let a = matchadd('SpellBad', '　\|¥\|\s\+$')
-	let a = matchadd('String', '「[^」]*」')
-	let a = matchadd('Label', '^\s*■.*$')
-	let a = matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
-	let a = matchadd('Error', 'ERROR')
+	call matchadd('SpellBad', '　\|¥\|\s\+$')
+	call matchadd('String', '「[^」]*」')
+	call matchadd('Label', '^\s*■.*$')
+	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
+	call matchadd('Error', 'ERROR')
 	" 稀によくtypoする単語(気づいたら追加する)
-	let a = matchadd('SpellBad', 'stlye')
+	call  matchadd('SpellBad', 'stlye')
 endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
