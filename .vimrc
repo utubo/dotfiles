@@ -6,8 +6,9 @@ scriptencoding utf-8
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
 set backupskip=/var/tmp/*
 set autochdir
+set noexpandtab
 set tabstop=4
-set shiftwidth=4
+set shiftwidth=0
 set autoindent
 set smartindent
 set breakindent
@@ -231,6 +232,27 @@ colorscheme utb-green
 " }}} -----------------------------------------------------
 
 " ---------------------------------------------------------
+" タブ幅やタブ展開を自動設定 {{{
+function! s:SetupTabstop()
+	const l:org = getpos('.')
+	const l:limit = 100
+	call cursor(1, 1)
+	if search('^\t', 'nc', l:limit)
+		setlocal noexpandtab
+		setlocal tabstop=4
+	elseif search('^  \S', 'nc', l:limit)
+		setlocal expandtab
+		setlocal tabstop=2
+	elseif search('^    \S', 'nc', l:limit)
+		setlocal expandtab
+		setlocal tabstop=4
+	endif
+	call setpos('.', l:org)
+endfunction
+au vimrc BufRead * call <SID>SetupTabstop()
+" }}}
+
+" ---------------------------------------------------------
 " 日付関係 {{{
 inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
@@ -381,7 +403,6 @@ let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repe
 
 " ---------------------------------------------------------
 " その他細々したの {{{
-au vimrc BufRead * let &expandtab=(!search('^\t', 'cn', 99) && search('^  ', 'cn', 99))
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
