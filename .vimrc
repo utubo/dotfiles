@@ -223,7 +223,7 @@ function! s:MyMatches()
 	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
 	call matchadd('Error', 'ERROR')
 	" 稀によくtypoする単語(気づいたら追加する)
-	call  matchadd('SpellBad', 'stlye')
+	call matchadd('SpellBad', 'stlye')
 endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
