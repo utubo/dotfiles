@@ -187,16 +187,6 @@ inoremap kk <Esc>`^
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
-" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
-inoremap (<CR> (<CR>)<Esc>O
-inoremap {<CR> {<CR>}<Esc>O
-inoremap {; {<CR>};<Esc>O
-inoremap {, {<CR>},<Esc>O
-inoremap [<CR> [<CR>]<Esc>O
-inoremap ([[ ([[<CR>]])<Esc>O
-inoremap ([=[ ([=[<CR>]=])<Esc>O
-inoremap [; [<CR>];<Esc>O
-inoremap [, [<CR>],<Esc>O
 xnoremap Y "+y
 " https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
@@ -324,7 +314,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 " こんなかんじでインデントに合わせて表示 [+] {{{
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
-	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
+	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &tabstop), 'g')
 	return l:indent . (&foldmethod != 'indent' ? substitute(l:text, '^\s\+\|{' . '{{', '', 'g') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
@@ -468,6 +458,12 @@ nnoremap <F9> <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 tnoremap <C-k><C-k> <C-w>N
+
+" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
+inoremap {; {<CR>};<Esc>O
+inoremap {, {<CR>},<Esc>O
+inoremap [; [<CR>];<Esc>O
+inoremap [, [<CR>],<Esc>O
 "}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
