@@ -48,7 +48,6 @@ let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if isdirectory(s:dein_vim)
 	" dein {{{
 	let &runtimepath = s:dein_vim . ',' . &runtimepath
-	let g:neocomplcache_enable_at_startup = 1
 	call dein#begin(s:dein_dir)
 	call dein#add('Lokaltog/vim-easymotion')
 	call dein#add('Shougo/dein.vim')
@@ -83,14 +82,6 @@ if isdirectory(s:dein_vim)
 		call dein#add('Shougo/vimproc', {'build': 'make'})
 	endif
 	call dein#end()
-	"}}}
-
-	" neosnippet {{{
-	imap <S-Tab> <Plug>(neosnippet_expand_or_jump)
-	smap <S-Tab> <Plug>(neosnippet_expand_or_jump)
-	xmap <S-Tab> <Plug>(neosnippet_expand_target)
-	imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
-	smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
 	"}}}
 
 	" easymotion {{{
@@ -139,7 +130,6 @@ if isdirectory(s:dein_vim)
 	let g:rainbow_active = 1
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
-	let g:neocomplete#sources#omni#input_patterns = {'ruby' : '[^. *\t]\.\w*\|\h\w*::',}
 	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
 	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
