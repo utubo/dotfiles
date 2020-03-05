@@ -29,7 +29,7 @@ set wildmenu
 augroup vimrc
 	au!
 augroup End
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ----------------------------------------------------------
 " ユーティリティ {{{
@@ -39,7 +39,7 @@ let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 " 「nmap <agrs>|vmap <agrs>」と同じ。引数の「<if-normal>」から行末までは「nmap」だけに適用する。
 command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
 
-" }}}
+"}}}
 
 " ----------------------------------------------------------
 " プラグイン {{{
@@ -86,7 +86,7 @@ if isdirectory(s:dein_vim)
 		call dein#add('Shougo/vimproc', {'build': 'make'})
 	endif
 	call dein#end()
-	" }}}
+	"}}}
 
 	" neosnippet {{{
 	imap <S-Tab> <Plug>(neosnippet_expand_or_jump)
@@ -94,7 +94,7 @@ if isdirectory(s:dein_vim)
 	xmap <S-Tab> <Plug>(neosnippet_expand_target)
 	imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
 	smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
-	" }}}
+	"}}}
 
 	" easymotion {{{
 	let g:EasyMotion_do_mapping = 0
@@ -103,7 +103,7 @@ if isdirectory(s:dein_vim)
 	let g:EasyMotion_enter_jump_first = 1
 	map s <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
-	" }}}
+	"}}}
 
 	" undotree {{{
 	if has("persistent_undo")
@@ -114,12 +114,12 @@ if isdirectory(s:dein_vim)
 		let g:undotree_DiffAutoOpen = 0
 		nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	endif
-	" }}}
+	"}}}
 
 	" watchdogs {{{
 	let g:watchdogs_check_BufWritePost_enable = 1
 	let g:watchdogs_check_CursorHold_enable = 1
-	" }}}
+	"}}}
 
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
@@ -135,7 +135,7 @@ if isdirectory(s:dein_vim)
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
 	" メモ
 	" i:都度入力, t:タグ, k:鍵括弧
-	" }}}
+	"}}}
 
 	" その他 {{{
 	let g:lightline = { 'colorscheme': 'wombat' }
@@ -148,10 +148,10 @@ if isdirectory(s:dein_vim)
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	nnoremap <silent> <F2> :<C-u>MRU<CR>
-	" }}}
+	"}}}
 endif
 filetype plugin indent on
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ↓ここからしばらくコピペ寄せ集め
 
@@ -163,7 +163,7 @@ inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ----------------------------------------------------------
 " DIFF関係 {{{
@@ -173,12 +173,12 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | d
 nnoremap <F4> :<C-u>DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " その他パクリ {{{
 au vimrc InsertLeave * set nopaste
-au vimrc BufReadPost *.log* normal G
+au vimrc BufReadPost *.log* normal! G
 nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
@@ -200,7 +200,7 @@ inoremap [, [<CR>],<Esc>O
 xnoremap Y "+y
 " https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
 
@@ -229,7 +229,7 @@ au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
 set background=dark
 colorscheme utb-green
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " タブ幅やタブ展開を自動設定 {{{
@@ -250,7 +250,7 @@ function! s:SetupTabstop()
 	call setpos('.', l:org)
 endfunction
 au vimrc BufRead * call <SID>SetupTabstop()
-" }}}
+"}}}
 
 " ---------------------------------------------------------
 " 日付関係 {{{
@@ -260,7 +260,7 @@ nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " スマホ用キーバインド {{{
@@ -273,7 +273,7 @@ nnoremap <Space>b ?
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to @w'<CR>
 nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " 現在行以下のインデントを検索 {{{
@@ -285,7 +285,7 @@ noremap <expr> <Space>] <SID>FindSameIndentLine('>').'G'
 noremap <expr> <Space>[ <SID>FindSameIndentLine('<').'G'
 noremap <expr> <Space>} (<SID>FindSameIndentLine('>') - 1).'G'
 noremap <expr> <Space>{ (<SID>FindSameIndentLine('<') + 1).'G'
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " 文頭に合わせて行移動 {{{
@@ -298,7 +298,7 @@ function! s:PutHat()
 endfunction
 nnoremap <expr> j 'j'.<SID>PutHat()
 nnoremap <expr> k 'k'.<SID>PutHat()
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " テンプレート {{{
@@ -317,30 +317,56 @@ function! s:ReadTemplate()
 	endif
 endfunction
 au vimrc BufNewFile * call <SID>ReadTemplate()
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
-" 折りたたみ {{{
-"   こんなかんじでインデントに合わせて表示 [+]
+" 折り畳み {{{
+" こんなかんじでインデントに合わせて表示 [+] {{{
 function! MyFoldText()
 	let l:text = getline(v:foldstart)
 	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &shiftwidth), 'g')
 	return l:indent . (&foldmethod != 'indent' ? substitute(l:text, '^\s\+\|{' . '{{', '', 'g') : '') . '[+]'
 endfunction
 set foldtext=MyFoldText()
-set fillchars=fold:\ " 折りたたみの「-」を非表示(というか「\」のあとの半角空白)
+set fillchars=fold:\ " 折り畳み時の「-」を非表示(というか「\」の後の半角空白に置き換える)
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
-" ↓ちょっと試してる最中…普通のzfって折りたたみ全部開いちゃわない？
+"}}}
+" マーカーの前にスペース、後ろに改行を入れる {{{
 function! s:Zf() range
-	call append(a:lastline, matchlist(getline(a:firstline), '^\s*')[0] . '}'. '}}')
-	call setline(a:firstline, getline(a:firstline) . ' {{' . '{')
+	execute a:firstline 's/\v(\S)?$/\1 /'
+	execute a:lastline 'normal! o'
+	call cursor([a:firstline, 1])
+	normal! V
+	call cursor([a:lastline + 1, 1])
+	normal! zf
 endfunction
-vnoremap zf :call <SID>Zf()<CR>
-" }}} -----------------------------------------------------
+vnoremap <silent> zf :call <SID>Zf()<CR>
+"}}}
+" マーカーを削除したら文末をトリムする {{{
+function! s:Zd()
+	if foldclosed(line('.')) == -1
+		normal! zc
+	endif
+	const l:head = foldclosed(line('.'))
+	const l:tail = foldclosedend(line('.'))
+	if l:head == -1
+		return
+	endif
+	const l:org = getpos('.')
+	normal! zd
+	silent! execute l:head . 's/\s\+$//'
+	silent! execute l:head . 's/^\s*\n//'
+	silent! execute l:tail . 's/\s\+$//'
+	silent! execute l:tail . 's/^\s*\n//'
+	call setpos('.', l:org)
+endfunction
+nnoremap <silent> zd :call <SID>Zd()<CR>
+"}}}
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " 行移動 {{{
@@ -355,7 +381,7 @@ function! s:MoveLines(d) range
 	execute a:firstline . ',' . a:lastline . 'move ' . (to - 1)
 	let c = a:lastline - a:firstline + 1
 	if c != 1
-		normal V
+		normal! V
 		call setpos('.', [0, a:d < 0 ? to : (to - c), 1])
 	endif
 endfunction
@@ -363,7 +389,7 @@ vnoremap <silent> <C-k> :call <SID>MoveLines(-1)<CR>
 vnoremap <silent> <C-j> :call <SID>MoveLines(1)<CR>
 nnoremap <silent> <C-k> :<C-u>call <SID>MoveLines(-v:count1)<CR>
 nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " コマンドモードあれこれ {{{
@@ -372,15 +398,14 @@ cnoremap <C-l> <Space><BS><Right>
 cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
 nnoremap q: q:a
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " terminal {{{
 if has('win32')
 	command! Powershell :terminal ++close powershell
 endif
-tnoremap <C-k><C-k> <C-w>N
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " やりすぎ注意 {{{
@@ -399,7 +424,7 @@ function! g:vimrc_tea_break.exec(timer)
 	endif
 endfunction
 let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repeat': -1 })
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " その他細々したの {{{
@@ -428,10 +453,11 @@ inoremap <S-Tab> <Esc>ea
 inoremap :w <Esc>`^:w
 inoremap :: ::
 inoremap <silent> <F1> <C-r>=nr2char(getchar())<CR>
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " 様子見中 {{{
+" 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap <Space>w <C-w>w
@@ -441,7 +467,8 @@ nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
-" }}} -----------------------------------------------------
+tnoremap <C-k><C-k> <C-w>N
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " デフォルトマッピングデー {{{
@@ -450,7 +477,7 @@ if strftime('%d') == '01'
 	imapclear
 	mapclear
 endif
-" }}} -----------------------------------------------------
+"}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " メモ {{{
@@ -467,5 +494,5 @@ endif
 " <F11> 行番号表示切替
 " <F12> 折り返し表示切替
 " ※「構文等のインデントはタブ、見た目の桁合わせは半角スペース」なのでキモインデントになってる所があるかも…ごめんなさい
-" }}}
+"}}}
 
