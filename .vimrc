@@ -55,7 +55,6 @@ if isdirectory(s:dein_vim)
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
 	call dein#add('machakann/vim-sandwich')
-	call dein#add('mattn/jscomplete-vim', {'lazy':1, 'on_ft':'javascript'})
 	call dein#add('mbbill/undotree')
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('osyo-manga/shabadou.vim')
@@ -150,7 +149,6 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" 補完 {{{
-	au vimrc FileType javascript :setlocal omnifunc=jscomplete#CompleteJS
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
 		\ 'name': 'omni',
 		\ 'whitelist': ['*'],
