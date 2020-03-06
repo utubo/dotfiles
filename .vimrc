@@ -149,6 +149,9 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" 補完 {{{
+	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+	inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
 		\ 'name': 'omni',
 		\ 'whitelist': ['*'],
