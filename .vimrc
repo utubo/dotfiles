@@ -62,6 +62,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
 	call dein#add('osyo-manga/vim-textobj-multiblock')
 	call dein#add('osyo-manga/vim-watchdogs')
+	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('rhysd/github-complete.vim')
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('thinca/vim-portal')
@@ -70,8 +71,9 @@ if isdirectory(s:dein_vim)
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
+	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
-	" vimproc
+	" vimproc (quickrunとかwathdogsで使ってる)
 	if has('win32')
 		let g:vimproc#download_windows_dll = 1
 		call dein#add('Shougo/vimproc')
@@ -147,11 +149,20 @@ if isdirectory(s:dein_vim)
 	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
 	" }}}
 
+	" 補完 {{{
+	au vimrc FileType javascript :setlocal omnifunc=jscomplete#CompleteJS
+	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+		\ 'name': 'omni',
+		\ 'whitelist': ['*'],
+		\ 'blacklist': ['c', 'cpp', 'html'],
+		\ 'completor': function('asyncomplete#sources#omni#completor')
+		\ }))
+	"}}}
+
 	" その他 {{{
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rainbow_active = 1
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
-	au vimrc FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
 	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
@@ -405,6 +416,9 @@ nnoremap q: q:a
 " terminal {{{
 if has('win32')
 	command! Powershell :terminal ++close powershell
+	nnoremap SH :<C-u>PowerShell<CR>
+else
+	nnoremap SH :<C-u>terminal<CR>
 endif
 "}}} ------------------------------------------------------
 
@@ -437,7 +451,6 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap SH :<C-u>terminal<CR>
 onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
@@ -448,18 +461,17 @@ inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
-inoremap <S-Tab> <Esc>ea
-" Input-Modeでも :w で書き込み
-" どうしても「:w」を入力したい場合は ::<BS>w とかで頑張る
+" 入力中でも「:w」で保存
+" どうしても「:w」を入力したいときは<C-v>で入力する
 inoremap :w <Esc>`^:w
 inoremap :: ::
-inoremap <silent> <F1> <C-r>=nr2char(getchar())<CR>
 "}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
 " 様子見中 {{{
 " 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
+inoremap <S-Tab> <Esc>ea
 vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
 nnoremap <Space>w <C-w>w
 nnoremap <Space>l $
@@ -488,7 +500,7 @@ endif
 
 " ---------------------------------------------------------
 " メモ {{{
-" <F1> N→NERDTree, I→マッピングを無視して1文字入力
+" <F1> N→NERDTree
 " <F2> MRU
 " <F3> UndoTree
 " <F4> DiffOrig
