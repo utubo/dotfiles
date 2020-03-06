@@ -410,7 +410,8 @@ cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
-nnoremap q: q:a
+nnoremap q: :q
+nnoremap q; q:
 "}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
