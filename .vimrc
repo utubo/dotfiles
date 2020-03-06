@@ -126,20 +126,26 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" MRU {{{
-	function! s:MapToMRU(key)
+	function! s:MRUwithNumKey(tab)
 		setlocal number
 		echoh Question
-		echo '[1]..[9] => open with a new ' . (a:key == 't' ? 'tab' : 'window') . '.'
+		echo '[1]..[9] => open with a ' . (a:tab ? 'tab' : 'window') . '.'
 		echoh None
 		for l:i in range(1, 9)
-			execute 'nmap <buffer> ' . l:i . ' :<C-u>' . l:i . '<CR>' . a:key
+			execute 'nmap <buffer> <silent>' . l:i . ' :<C-u>' . l:i . '<CR>' . (a:tab ? 't' : '<CR>')
 		endfor
-		nnoremap <silent> <buffer> T :<C-u>call <SID>MapToMRU('t')<CR>
-		nnoremap <silent> <buffer> w :<C-u>call <SID>MapToMRU('<lt>CR>')<CR>
+	endfunction
+	function! s:MyMRU()
+		let l:is_numkey_open_tab = &modified || expand('%') != ''
+		MRU
+		nnoremap <buffer> <F2> <nop>
 		nnoremap <buffer> f <C-f>
 		nnoremap <buffer> b <C-b>
+		nnoremap <silent> <buffer> w :<C-u>call <SID>MRUwithNumKey(0)<CR>
+		nnoremap <silent> <buffer> T :<C-u>call <SID>MRUwithNumKey(1)<CR>
+		call s:MRUwithNumKey(l:is_numkey_open_tab)
 	endfunction
-	nnoremap <silent> <F2> :<C-u>MRU<CR>:call <SID>MapToMRU('t')<CR>
+	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
 	" }}}
 
 	" その他 {{{
