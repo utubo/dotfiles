@@ -33,6 +33,7 @@ augroup End
 
 " ----------------------------------------------------------
 " ユーティリティ {{{
+
 " 「nmap <agrs>|vmap <agrs>」と同じ。
 " 引数の「<if-normal>」から行末までは「nmap」だけに適用する。
 command! -nargs=* NVmap
@@ -42,6 +43,7 @@ command! -nargs=* NVmap
 " その他
 command! -nargs=1 Enable  execute 'let ' . <f-args> . ' = 1'
 command! -nargs=1 Disable execute 'let ' . <f-args> . ' = 0'
+
 "}}}
 
 " ----------------------------------------------------------
