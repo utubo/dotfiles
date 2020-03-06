@@ -327,8 +327,8 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 " こんなかんじでインデントに合わせて表示 [+] {{{
 function! MyFoldText()
 	let l:src = getline(v:foldstart)
-	let l:indent = substitute(matchstr(l:src, '^\s\+'), '\t', repeat(' ', &tabstop), 'g')
-	let l:text = &foldmethod == 'indent' ? '' : substitute(l:src, '^\s\+\|{' . '{{', '', '')
+	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
+	let l:text = &foldmethod == 'indent' ? '' : trim(trim(l:src, matchstr(&foldmarker, '^[^,]*')))
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
@@ -400,7 +400,7 @@ nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap kj <C-c>
-cnoremap <C-r><C-r> <C-r>=substitute(@", '^\s\+\\|\n\+$', '', 'g')<CR>
+cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
 nnoremap q: q:a
 "}}} ------------------------------------------------------
 
