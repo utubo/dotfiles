@@ -35,7 +35,13 @@ augroup End
 " ユーティリティ {{{
 " 「nmap <agrs>|vmap <agrs>」と同じ。
 " 引数の「<if-normal>」から行末までは「nmap」だけに適用する。
-command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
+command! -nargs=* NVmap
+	\ execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') |
+	\ execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
+
+" その他
+command! -nargs=1 Enable  execute 'let ' . <f-args> . ' = 1'
+command! -nargs=1 Disable execute 'let ' . <f-args> . ' = 0'
 "}}}
 
 " ----------------------------------------------------------
@@ -74,7 +80,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
 	if has('win32')
-		let g:vimproc#download_windows_dll = 1
+		Enable g:vimproc#download_windows_dll
 		call dein#add('Shougo/vimproc')
 	else
 		call dein#add('Shougo/vimproc', {'build': 'make'})
@@ -83,10 +89,10 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" easymotion {{{
-	let g:EasyMotion_do_mapping = 0
-	let g:EasyMotion_smartcase = 1
-	let g:EasyMotion_use_migemo = 1
-	let g:EasyMotion_enter_jump_first = 1
+	Disable g:EasyMotion_do_mapping
+	Enable g:EasyMotion_smartcase
+	Enable g:EasyMotion_use_migemo
+	Enable g:EasyMotion_enter_jump_first
 	map s <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	"}}}
@@ -96,22 +102,17 @@ if isdirectory(s:dein_vim)
 		set undodir='~/.undodir/'
 		set undofile
 		let g:undotree_TreeNodeShape = 'o'
-		let g:undotree_SetFocusWhenToggle = 1
-		let g:undotree_DiffAutoOpen = 0
+		Enable g:undotree_SetFocusWhenToggle
+		Disable g:undotree_DiffAutoOpen
 		nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	endif
-	"}}}
-
-	" watchdogs {{{
-	let g:watchdogs_check_BufWritePost_enable = 1
-	let g:watchdogs_check_CursorHold_enable = 1
 	"}}}
 
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kagikakko
-	let g:sandwich_no_default_key_mappings = 1
-	let g:operator_sandwich_no_default_key_mappings = 1
+	Enable g:sandwich_no_default_key_mappings
+	Enable g:operator_sandwich_no_default_key_mappings
 	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
 	NVmap Sa <Plug>(operator-sandwich-add)
@@ -161,13 +162,20 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" その他 {{{
-	let g:lightline = { 'colorscheme': 'wombat' }
-	let g:rainbow_active = 1
-	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
-	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
+
+	Enable g:watchdogs_check_BufWritePost_enable
+	Enable g:watchdogs_check_CursorHold_enable
+
 	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
-	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
+
+	Enable g:rainbow_active
+	let g:lightline = { 'colorscheme': 'wombat' }
+	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
+
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
+	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+
 	"}}}
 endif
 filetype plugin indent on
