@@ -328,7 +328,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 function! MyFoldText()
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
-	let l:text = &foldmethod == 'indent' ? '' : trim(trim(l:src, matchstr(&foldmarker, '^[^,]*')))
+	let l:text = &foldmethod == 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
