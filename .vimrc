@@ -103,7 +103,6 @@ if isdirectory(s:dein_vim)
 	if has("persistent_undo")
 		set undodir='~/.undodir/'
 		set undofile
-		let g:undotree_TreeNodeShape = 'o'
 		Enable g:undotree_SetFocusWhenToggle
 		Disable g:undotree_DiffAutoOpen
 		nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
