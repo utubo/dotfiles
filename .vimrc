@@ -416,7 +416,7 @@ nnoremap q: q:a
 " terminal {{{
 if has('win32')
 	command! Powershell :terminal ++close powershell
-	nmap SH :<C-u>PowerShell<CR>
+	nnoremap SH :<C-u>Powershell<CR>
 else
 	nnoremap SH :<C-u>terminal<CR>
 endif
