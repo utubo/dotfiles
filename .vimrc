@@ -187,7 +187,7 @@ filetype plugin indent on
 
 " ----------------------------------------------------------
 " Movement in insert mode {{{
-" https://github.com/junegunn/dotfiles/blob/dbeddfce1bd1975e499984632191d2d1ec080e25/vimrc からコピペ
+" https://github.com/junegunn/dotfiles/master/vimrc
 inoremap <C-h> <C-o>h
 inoremap <C-l> <C-o>a
 inoremap <C-j> <C-o>j
