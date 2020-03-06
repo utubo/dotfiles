@@ -128,6 +128,7 @@ if isdirectory(s:dein_vim)
 		echoh Question
 		echo printf('[1]..[9] => open with a %s.', a:tab ? 'tab' : 'window')
 		echoh None
+		redraw
 		let l:key = a:tab ? 't' : '<CR>'
 		for l:i in range(1, 9)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
