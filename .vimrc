@@ -33,12 +33,14 @@ augroup End
 
 " ----------------------------------------------------------
 " ユーティリティ {{{
-
-let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
-
+function! s:Fmt(fmt, ...)
+	let l:a = a:
+	return substitute(a:fmt, '%\(\d\+\)', {m -> get(l:a, m[1], '')}, 'g')
+endfunction
 " 「nmap <agrs>|vmap <agrs>」と同じ。引数の「<if-normal>」から行末までは「nmap」だけに適用する。
 command! -nargs=* NVmap execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') | execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
-
+" Raspiか(今のところ未使用)
+let s:is_raspi = has('unix') && system('uname -a') =~ 'raspberrypi'
 "}}}
 
 " ----------------------------------------------------------
@@ -129,10 +131,11 @@ if isdirectory(s:dein_vim)
 	function! s:MRUwithNumKey(tab)
 		setlocal number
 		echoh Question
-		echo '[1]..[9] => open with a ' . (a:tab ? 'tab' : 'window') . '.'
+		echo s:Fmt('[1]..[9] => open with a %1.', a:tab ? 'tab' : 'window')
 		echoh None
+		let l:key = a:tab ? 't' : '<CR>'
 		for l:i in range(1, 9)
-			execute 'nmap <buffer> <silent>' . l:i . ' :<C-u>' . l:i . '<CR>' . (a:tab ? 't' : '<CR>')
+			execute s:Fmt('nmap <buffer> <silent> %1 :<C-u>%1<CR>%2', l:i, l:key)
 		endfor
 	endfunction
 	function! s:MyMRU()
@@ -275,15 +278,16 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 "}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
-" 現在行以下のインデントを検索 {{{
-function! s:FindSameIndentLine(forwardOrBack)
-	let l:flags = a:forwardOrBack == '>' ? 'e' : 'be'
-	return search('^\s\{0,'.len(matchstr(getline('.'), '^\s*')).'\}\%'.a:forwardOrBack.line('.').'l\S', l:flags)
+" 現在行と同じインデントまで移動 {{{
+function! s:FindSameIndent(back)
+	let l:indent_length = len(matchstr(getline('.'), '^\s*'))
+	let l:pattern = s:Fmt('^\s\{0,%1\}\S', l:indent_length)
+	return search(l:pattern, a:back ? 'bW' : 'W')
 endfunction
-noremap <expr> <Space>] <SID>FindSameIndentLine('>').'G'
-noremap <expr> <Space>[ <SID>FindSameIndentLine('<').'G'
-noremap <expr> <Space>} (<SID>FindSameIndentLine('>') - 1).'G'
-noremap <expr> <Space>{ (<SID>FindSameIndentLine('<') + 1).'G'
+noremap <expr> <Space>] <SID>FindSameIndent(0).'G'
+noremap <expr> <Space>[ <SID>FindSameIndent(1).'G'
+noremap <expr> <Space>i] (<SID>FindSameIndent(0) - 1).'G'
+noremap <expr> <Space>i[ (<SID>FindSameIndent(1) + 1).'G'
 "}}} ------------------------------------------------------
 
 " ---------------------------------------------------------
@@ -303,16 +307,17 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 " テンプレート {{{
 function! s:ReadTemplate()
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
-	if filereadable(l:filename)
-		execute '0r '.l:filename
-		if search('<+CURSOR+>')
-			normal! "_da>
-		endif
-		if col('.') == col('$') - 1
-			startinsert!
-		else
-			startinsert
-		endif
+	if ! filereadable(l:filename)
+		return
+	endif
+	execute '0r '.l:filename
+	if search('<+CURSOR+>')
+		normal! "_da>
+	endif
+	if col('.') == col('$') - 1
+		startinsert!
+	else
+		startinsert
 	endif
 endfunction
 au vimrc BufNewFile * call <SID>ReadTemplate()
@@ -322,9 +327,10 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 " 折り畳み {{{
 " こんなかんじでインデントに合わせて表示 [+] {{{
 function! MyFoldText()
-	let l:text = getline(v:foldstart)
-	let l:indent = substitute(matchstr(l:text, '^\s\+'), '\t', repeat(' ', &tabstop), 'g')
-	return l:indent . (&foldmethod != 'indent' ? substitute(l:text, '^\s\+\|{' . '{{', '', 'g') : '') . '[+]'
+	let l:src = getline(v:foldstart)
+	let l:indent = substitute(matchstr(l:src, '^\s\+'), '\t', repeat(' ', &tabstop), 'g')
+	let l:text = &foldmethod == 'indent' ? '' : substitute(l:src, '^\s\+\|{' . '{{', '', '')
+	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
 set fillchars=fold:\ " 折り畳み時の「-」を非表示(というか「\」の後の半角空白に置き換える)
@@ -345,7 +351,7 @@ function! s:Zf() range
 endfunction
 vnoremap <silent> zf :call <SID>Zf()<CR>
 "}}}
-" マーカーを削除したら文末をトリムする {{{
+" マーカーを削除したら行末をトリムする {{{
 function! s:Zd()
 	if foldclosed(line('.')) == -1
 		normal! zc
@@ -357,10 +363,10 @@ function! s:Zd()
 	endif
 	const l:org = getpos('.')
 	normal! zd
-	silent! execute l:head . 's/\s\+$//'
-	silent! execute l:head . 's/^\s*\n//'
 	silent! execute l:tail . 's/\s\+$//'
 	silent! execute l:tail . 's/^\s*\n//'
+	silent! execute l:head . 's/\s\+$//'
+	silent! execute l:head . 's/^\s*\n//'
 	call setpos('.', l:org)
 endfunction
 nnoremap <silent> zd :call <SID>Zd()<CR>
@@ -377,7 +383,7 @@ function! s:MoveLines(d) range
 	if foldstart != -1
 		let to = a:d < 0 ? foldstart : (foldclosedend(to) + 1)
 	endif
-	execute a:firstline . ',' . a:lastline . 'move ' . (to - 1)
+	execute s:Fmt('%1,%2move%3', a:firstline, a:lastline, to - 1)
 	let c = a:lastline - a:firstline + 1
 	if c != 1
 		normal! V
