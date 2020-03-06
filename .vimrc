@@ -148,7 +148,7 @@ if isdirectory(s:dein_vim)
 		call s:MRUwithNumKey(l:is_numkey_open_tab)
 	endfunction
 	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
-	" }}}
+	"}}}
 
 	" 補完 {{{
 	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -342,7 +342,7 @@ au vimrc BufNewFile * call <SID>ReadTemplate()
 
 " ---------------------------------------------------------
 " 折り畳み {{{
-" こんなかんじでインデントに合わせて表示 [+] {{{
+" こんなかんじでインデントに合わせて表示[+] {{{
 function! MyFoldText()
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
@@ -516,7 +516,7 @@ endif
 " <F3> UndoTree
 " <F4> DiffOrig
 " <F5> 日付関係
-" <F6> 時刻関係
+" <F6>
 " <F7>
 " <F8> :q(様子見中)
 " <F9> ウィンドウ切替(様子見中)
