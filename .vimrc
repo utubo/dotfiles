@@ -501,7 +501,7 @@ endif
 
 " ---------------------------------------------------------
 " メモ {{{
-" <F1> N→NERDTree
+" <F1> NERDTree
 " <F2> MRU
 " <F3> UndoTree
 " <F4> DiffOrig
