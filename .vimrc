@@ -373,17 +373,17 @@ nnoremap <silent> zd :call <SID>Zd()<CR>
 " 行移動 {{{
 " オートインデント無し、折り畳みをスキップ
 function! s:MoveLines(d) range
-	let to = (a:d < 0 ? a:firstline : (a:lastline + 1)) + a:d
-	let to = min([max([1, to]), line('w$') + 1])
-	let foldstart = foldclosed(to)
-	if foldstart != -1
-		let to = a:d < 0 ? foldstart : (foldclosedend(to) + 1)
+	let l:to = (a:d < 0 ? a:firstline : (a:lastline + 1)) + a:d
+	let l:to = min([max([1, l:to]), line('w$') + 1])
+	let l:foldstart = foldclosed(l:to)
+	if l:foldstart != -1
+		let l:to = a:d < 0 ? l:foldstart : (foldclosedend(l:to) + 1)
 	endif
-	execute printf('%d,%dmove%d', a:firstline, a:lastline, to - 1)
-	let c = a:lastline - a:firstline + 1
-	if c != 1
+	execute printf('%d,%dmove%d', a:firstline, a:lastline, l:to - 1)
+	let l:c = a:lastline - a:firstline + 1
+	if l:c != 1
 		normal! V
-		call setpos('.', [0, a:d < 0 ? to : (to - c), 1])
+		call setpos('.', [0, a:d < 0 ? l:to : (l:to - l:c), 1])
 	endif
 endfunction
 vnoremap <silent> <C-k> :call <SID>MoveLines(-1)<CR>
