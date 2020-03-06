@@ -125,6 +125,23 @@ if isdirectory(s:dein_vim)
 	" i:都度入力, t:タグ, k:鍵括弧
 	"}}}
 
+	" MRU {{{
+	function! s:MapToMRU(key)
+		setlocal number
+		echoh Question
+		echo '[1]..[9] => open with a new ' . (a:key == 't' ? 'tab' : 'window') . '.'
+		echoh None
+		for l:i in range(1, 9)
+			execute 'nmap <buffer> ' . l:i . ' :<C-u>' . l:i . '<CR>' . a:key
+		endfor
+		nnoremap <silent> <buffer> T :<C-u>call <SID>MapToMRU('t')<CR>
+		nnoremap <silent> <buffer> w :<C-u>call <SID>MapToMRU('<lt>CR>')<CR>
+		nnoremap <buffer> f <C-f>
+		nnoremap <buffer> b <C-b>
+	endfunction
+	nnoremap <silent> <F2> :<C-u>MRU<CR>:call <SID>MapToMRU('t')<CR>
+	" }}}
+
 	" その他 {{{
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rainbow_active = 1
@@ -134,7 +151,6 @@ if isdirectory(s:dein_vim)
 	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
-	nnoremap <silent> <F2> :<C-u>MRU<CR>
 	"}}}
 endif
 filetype plugin indent on
