@@ -516,6 +516,12 @@ nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 tnoremap <C-k><C-k> <C-w>N
 
+" こうすると:w<CR>が打ちやすい気がする
+nnoremap <Space>; ;
+nnoremap ; :
+cnoremap jj <CR>
+inoremap ;w <Esc>`^:w
+
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
 inoremap {, {<CR>},<Esc>O
