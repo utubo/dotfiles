@@ -74,6 +74,7 @@ alias crontab=crontab\ -i
 alias v=vim
 alias vw=view
 alias :q=exit
+alias ;q=exit
 alias gd=git\ diff
 alias ga=git\ add
 alias gc=git\ commit\ -m
