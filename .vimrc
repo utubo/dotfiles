@@ -520,6 +520,7 @@ tnoremap <C-k><C-k> <C-w>N
 nnoremap <Space>; ;
 nnoremap ; :
 cnoremap jj <CR>
+cnoremap kk <Esc>
 inoremap ;w <Esc>`^:w
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
