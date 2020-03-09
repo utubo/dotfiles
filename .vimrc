@@ -440,7 +440,6 @@ nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
 " コマンドモードあれこれ {{{
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
-cnoremap kj <C-c>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
 nnoremap q: :q
 nnoremap q; q:
@@ -495,10 +494,6 @@ inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
-" 入力中でも「:w」で保存
-" どうしても「:w」を入力したいときは<C-v>で入力する
-inoremap :w <Esc>`^:w
-inoremap :: ::
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -520,8 +515,11 @@ tnoremap <C-k><C-k> <C-w>N
 nnoremap <Space>; ;
 nnoremap ; :
 cnoremap jj <CR>
-cnoremap kk <Esc>
+cnoremap kk <C-c>
 inoremap ;w <Esc>`^:w
+" ↑でOKなので↓は癖が抜けたら削除する
+inoremap :w <Esc>`^:w
+inoremap :: ::
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
