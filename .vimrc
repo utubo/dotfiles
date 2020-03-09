@@ -294,11 +294,14 @@ nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
 function! s:MyQuickFixWindow()
 	nnoremap <buffer> <Space> <CR><C-W>w
+	nnoremap <buffer> w <C-W><CR><C-W>w
 	nnoremap <buffer> t <C-W><CR><C-W>T
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
 	nnoremap <buffer> <silent> q :<C-u>q<CR>
 	nnoremap <buffer> <silent> Q :<C-u>q<CR>:<C-u>cexpr ''<CR>
+	" 様子見中(使わなそうなら削除する)
+	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
 au vimrc FileType qf :call s:MyQuickFixWindow()
 "}}} -------------------------------------------------------
