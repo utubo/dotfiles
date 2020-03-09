@@ -282,12 +282,32 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
+" vimgrep {{{
+function! s:MyVimgrep(...)
+	let l:default_path = expand('%:e') == '' ? '*' : ('*.' . expand('%:e'))
+	execute printf('vimgrep %s %s', a:[1], get(a:, 2, l:default_path))
+	execute 'cw'
+	normal! <C-W>w
+endfunction
+command! -nargs=* MyVimgrep call <SID>MyVimgrep(<f-args>)
+nnoremap <Space>/ :<C-u>MyVimgrep<Space>
+
+function! s:MyQuickFixWindow()
+	nnoremap <buffer> <Space> <CR><C-W>w
+	nnoremap <buffer> t <C-W><CR><C-W>T
+	nnoremap <buffer> f <C-f>
+	nnoremap <buffer> b <C-b>
+	nnoremap <buffer> <silent> q :<C-u>q<CR>
+	nnoremap <buffer> <silent> Q :<C-u>q<CR>:<C-u>cexpr ''<CR>
+endfunction
+au vimrc FileType qf :call s:MyQuickFixWindow()
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
 " スマホ用キーバインド {{{
 " ・キーが小さいので押しにくいものはSpaceへマッピング
 " ・スマホでのコーディングは基本的にバグ取り
 nnoremap <Space>zz :<C-u>q!<CR>
-nnoremap <Space>n /
-nnoremap <Space>b ?
 " スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to @w'<CR>
