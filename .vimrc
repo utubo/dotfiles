@@ -143,8 +143,9 @@ if isdirectory(s:dein_vim)
 		nnoremap <buffer> <F2> <nop>
 		nnoremap <buffer> f <C-f>
 		nnoremap <buffer> b <C-b>
-		nnoremap <silent> <buffer> w :<C-u>call <SID>MRUwithNumKey(0)<CR>
-		nnoremap <silent> <buffer> T :<C-u>call <SID>MRUwithNumKey(1)<CR>
+		nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
+		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(0)<CR>
+		nnoremap <buffer> <silent> T :<C-u>call <SID>MRUwithNumKey(1)<CR>
 		call s:MRUwithNumKey(l:is_numkey_open_tab)
 	endfunction
 	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
@@ -176,6 +177,7 @@ if isdirectory(s:dein_vim)
 
 	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+	au FileType nerdtree nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
 
 	"}}}
 endif
