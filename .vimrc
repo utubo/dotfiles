@@ -285,8 +285,15 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 " vimgrep {{{
 function! s:MyVimgrep(...)
 	let l:default_path = expand('%:e') == '' ? '*' : ('*.' . expand('%:e'))
-	execute printf('vimgrep %s %s', a:[1], get(a:, 2, l:default_path))
-	cwindow
+	let l:path =get(a:, 2, l:default_path)
+	let l:org = &switchbuf
+	set switchbuf+=usetab,newtab
+	execute printf('lvimgrep %s %s', a:[1], l:path)
+	let &switchbuf = l:org
+	if empty(getloclist(0))
+		return
+	endif
+	lwindow
 	normal! <C-W>w
 endfunction
 command! -nargs=* MyVimgrep call <SID>MyVimgrep(<f-args>)
@@ -298,8 +305,8 @@ function! s:MyQuickFixWindow()
 	nnoremap <buffer> t <C-W><CR><C-W>T
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
-	nnoremap <buffer> <silent> q :<C-u>q<CR>
-	nnoremap <buffer> <silent> a :<C-u>q<CR>:<C-u>cexpr ''<CR>
+	nnoremap <buffer> <silent> q :<C-u>q<CR>:<C-u>lexpr ''<CR>
+	nnoremap <buffer> <silent> c :<C-u>q<CR>
 	" 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
