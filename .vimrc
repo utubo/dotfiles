@@ -306,9 +306,9 @@ command! -nargs=+ MyVimgrep call <SID>MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
 function! s:MyQuickFixWindow()
-	nnoremap <buffer> ; <CR><C-W>w
-	nnoremap <buffer> w <C-W><CR><C-W>w
-	nnoremap <buffer> t <C-W><CR><C-W>T
+	nnoremap <buffer> ; <CR>:silent! normal! zv<CR><C-W>w
+	nnoremap <buffer> w <C-W><CR>:silent! normal! zv<CR><C-W>w
+	nnoremap <buffer> t <C-W><CR>:silent! normal! zv<CR><C-W>T
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
 	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:<C-u>lexpr ''<CR>
