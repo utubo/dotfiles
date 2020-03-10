@@ -333,7 +333,7 @@ function! s:MyQuickFixWindow()
 	nnoremap <buffer> t <C-W><CR>:silent! normal! zv<CR><C-W>T
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
-	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:<C-u>lexpr ''<CR>
+	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:lexpr ''<CR>
 	" 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
