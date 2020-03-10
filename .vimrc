@@ -295,7 +295,7 @@ function! s:MyVimgrep(keyword, ...)
 	endif
 	" lvimgrepしてなんやかんやして終わり
 	execute printf('lvimgrep %s %s', a:keyword, l:path)
-	if empty(getloclist(0))
+	if l:path != '%' && empty(getloclist(0))
 		quit
 		return
 	endif
