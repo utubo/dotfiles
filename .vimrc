@@ -491,7 +491,7 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap qq :<C-u>:q<CR>
+nnoremap qq :<C-u>q<CR>
 onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
