@@ -205,6 +205,26 @@ au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) ==
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
+" テンプレート {{{
+function! s:ReadTemplate()
+	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
+	if ! filereadable(l:filename)
+		return
+	endif
+	execute '0r '.l:filename
+	if search('<+CURSOR+>')
+		normal! "_da>
+	endif
+	if col('.') == col('$') - 1
+		startinsert!
+	else
+		startinsert
+	endif
+endfunction
+au vimrc BufNewFile * call <SID>ReadTemplate()
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
 " その他パクリ {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
@@ -345,7 +365,7 @@ noremap <expr> <Space>i[ (<SID>FindSameIndent(1) + 1).'G'
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" 文頭に合わせて行移動 {{{
+" 行頭に合わせて行移動 {{{
 function! s:PutHat()
 	let l:x = match(getline('.'), '\S.') + 1
 	if l:x || !exists('w:my_hat')
@@ -355,26 +375,6 @@ function! s:PutHat()
 endfunction
 nnoremap <expr> j 'j'.<SID>PutHat()
 nnoremap <expr> k 'k'.<SID>PutHat()
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" テンプレート {{{
-function! s:ReadTemplate()
-	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
-	if ! filereadable(l:filename)
-		return
-	endif
-	execute '0r '.l:filename
-	if search('<+CURSOR+>')
-		normal! "_da>
-	endif
-	if col('.') == col('$') - 1
-		startinsert!
-	else
-		startinsert
-	endif
-endfunction
-au vimrc BufNewFile * call <SID>ReadTemplate()
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
