@@ -42,8 +42,8 @@ command! -nargs=* NVmap
 	\ execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
 
 " その他
-command! -nargs=1 Enable  execute 'let ' . <f-args> . ' = 1'
-command! -nargs=1 Disable execute 'let ' . <f-args> . ' = 0'
+command! -nargs=1 Enable  let <args>=1
+command! -nargs=1 Disable let <args>=0
 
 "}}}
 
