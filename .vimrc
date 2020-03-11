@@ -528,15 +528,18 @@ nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 tnoremap <C-k><C-k> <C-w>N
 
-" こうすると:w<CR>が打ちやすい気がする
 nnoremap <Space>; ;
 nnoremap ; :
-cnoremap jj <CR>
+
+" 「jj」で<CR>、「kk」はキャンセル
+" ただし保存は片手で「:jj」でもOK(「:wjj」じゃなくていい)
 cnoremap kk <C-c>
-inoremap ;w <Esc>`^:w
-" ↑でOKなので↓は癖が抜けたら削除する
-inoremap :w <Esc>`^:w
-inoremap :: ::
+cnoremap <expr> jj (empty(getcmdline()) ? 'w<CR>' : '<CR>')
+inoremap ;jj <Esc>`^:w<CR>
+
+" うーん…
+inoremap ;; <End>;<CR>
+imap ;{ <End> {<CR>
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
