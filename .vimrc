@@ -68,7 +68,6 @@ if isdirectory(s:dein_vim)
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
-	call dein#add('osyo-manga/vim-textobj-multiblock')
 	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('scrooloose/nerdtree')
@@ -111,18 +110,40 @@ if isdirectory(s:dein_vim)
 
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kagikakko
+	let g:sandwich#recipes += [
+		\ {'buns': ['「', '」'], 'input': ['k']},
+		\ {'buns': ['>', '<'], 'input': ['>']}
+		\ ]
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
-	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
-	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
-	NVmap Sa <Plug>(operator-sandwich-add)
-	NVmap S <Plug>(operator-sandwich-add)<if-normal>iw
-	nmap SD <Plug>(operator-sandwich-delete)<Plug>(textobj-sandwich-auto-a)
-	nmap SR <Plug>(operator-sandwich-replace)<Plug>(textobj-sandwich-auto-a)
+	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal>as
+	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal>as
+	NVmap Sa <Plug>(operator-sandwich-add)<if-normal>iw
+	NVmap S  <Plug>(operator-sandwich-add)<if-normal>iw
+	nmap SD <Plug>(operator-sandwich-delete)<if-normal>ab
+	nmap SR <Plug>(operator-sandwich-replace)<if-normal>ab
+	nmap S^ v^S
+	nmap S$ vg_S
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
-	" メモ
-	" i:都度入力, t:タグ, k:鍵括弧
+	vmap S<CR> <ESC>`>a<CR><ESC>`<i<CR><ESC>^
+	function! s:BigMac() abort
+		while 1
+			let l:c = nr2char(getchar())
+			if l:c == 'u'
+				return "\<ESC>ugvSm"
+			elseif l:c !~ '[[:print:]\r]' || l:c =~ '[jft]'
+				return "\<ESC>"
+			elseif mode() ==# 'V'
+				return "Sa" . l:c . "gvSm"
+			elseif l:c == "\<CR>"
+				return "S\<CR>\<ESC>"
+			else
+				return "Sa" . l:c . "v`.hSm"
+			endif
+		endwhile
+	endfunction
+	vmap <expr> Sm <SID>BigMac()
+	nmap Sm viwSm
 	"}}}
 
 	" MRU {{{
@@ -167,9 +188,6 @@ if isdirectory(s:dein_vim)
 
 	Enable g:watchdogs_check_BufWritePost_enable
 	Enable g:watchdogs_check_CursorHold_enable
-
-	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
-	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
 
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
