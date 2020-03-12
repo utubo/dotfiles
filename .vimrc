@@ -127,20 +127,18 @@ if isdirectory(s:dein_vim)
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
 	vmap S<CR> <ESC>`>a<CR><ESC>`<i<CR><ESC>^
 	function! s:BigMac() abort
-		while 1
-			let l:c = nr2char(getchar())
-			if l:c == 'u'
-				return "\<ESC>ugvSm"
-			elseif l:c !~ '[[:print:]\r]' || l:c =~ '[jft]'
-				return "\<ESC>"
-			elseif mode() ==# 'V'
-				return "Sa" . l:c . "gvSm"
-			elseif l:c == "\<CR>"
-				return "S\<CR>\<ESC>"
-			else
-				return "Sa" . l:c . "v`.hSm"
-			endif
-		endwhile
+		let l:c = nr2char(getchar())
+		if l:c == 'u'
+			return "\<ESC>ugvSm"
+		elseif l:c !~ '[[:print:]\r]' || l:c =~ '[jft]'
+			return "\<ESC>"
+		elseif mode() ==# 'V'
+			return "Sa" . l:c . "gvSm"
+		elseif l:c == "\<CR>"
+			return "S\<CR>\<ESC>"
+		else
+			return "Sa" . l:c . "v`.hSm"
+		endif
 	endfunction
 	vmap <expr> Sm <SID>BigMac()
 	nmap Sm viwSm
