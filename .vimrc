@@ -114,7 +114,7 @@ if isdirectory(s:dein_vim)
 		\ {'buns': ["\r", ""  ], 'input': ["\r"], 'command': ["normal! i\r"]},
 		\ {'buns': ['',   ''  ], 'input': ["q"]},
 		\ {'buns': ['「', '」'], 'input': ['k']},
-		\ {'buns': ['>', '<'], 'input': ['>']},
+		\ {'buns': ['>',  '<' ], 'input': ['>']},
 		\ ]
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
