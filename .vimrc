@@ -149,9 +149,9 @@ if isdirectory(s:dein_vim)
 	nmap <silent> S. :<C-u>call g:RepeatInner()<CR>
 
 	function! s:BigMac(...) abort
-		let l:p = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
-		if s:big_mac_crown != l:p
-			let s:big_mac_crown = l:p
+		let l:c = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
+		if ! a:0 || s:big_mac_crown != l:c
+			let s:big_mac_crown = l:c
 			au vimrc User OperatorSandwichAddPost ++once call <SID>BigMac(1)
 			call feedkeys(a:0 ? 'S.' : 'gvSa')
 		end
