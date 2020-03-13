@@ -111,8 +111,10 @@ if isdirectory(s:dein_vim)
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [
+		\ {'buns': ["\r", ""  ], 'input': ["\r"], 'command': ["normal! i\r"]},
+		\ {'buns': ['',   ''  ], 'input': ["q"]},
 		\ {'buns': ['「', '」'], 'input': ['k']},
-		\ {'buns': ['>', '<'], 'input': ['>']}
+		\ {'buns': ['>', '<'], 'input': ['>']},
 		\ ]
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
@@ -125,23 +127,37 @@ if isdirectory(s:dein_vim)
 	nmap S^ v^S
 	nmap S$ vg_S
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
-	vmap S<CR> <ESC>`>a<CR><ESC>`<i<CR><ESC>^
-	function! s:BigMac() abort
-		let l:c = nr2char(getchar())
-		if l:c == 'u'
-			return "\<ESC>ugvSm"
-		elseif l:c !~ '[[:print:]\r]' || l:c =~ '[jft]'
-			return "\<ESC>"
-		elseif mode() ==# 'V'
-			return "Sa" . l:c . "gvSm"
-		elseif l:c == "\<CR>"
-			return "S\<CR>\<ESC>"
-		else
-			return "Sa" . l:c . "v`.hSm"
+
+	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
+	function! s:FixSandwichPos()
+		let l:c = g:operator#sandwich#object.cursor
+		if g:fix_sandwich_pos[1] != c.inner_head[1]
+			let l:c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
+			let l:c.inner_tail[2] = match(getline(c.inner_tail[1]), '$') + 1
 		endif
 	endfunction
-	vmap <expr> Sm <SID>BigMac()
+	au vimrc User OperatorSandwichAddPre let g:fix_sandwich_pos = getpos('.')
+	au vimrc User OperatorSandwichAddPost call <SID>FixSandwichPos()
+
+	" 内側に連続で挟むやつ
+	function! g:RepeatInner() abort
+		call setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+		call setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+		normal! gv
+		call feedkeys('Sa')
+	endfunction
+	nmap <silent> S. :<C-u>call g:RepeatInner()<CR>
+
+	function! s:BigMac(...) abort
+		let l:p = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : [0, 0]
+		if !l:p[0] || s:big_mac_crown != l:p
+			let s:big_mac_crown = l:p
+			au vimrc User OperatorSandwichAddPost ++once call <SID>BigMac(1)
+			call feedkeys(a:0 ? 'S.' : 'gvSa')
+		end
+	endfunction
 	nmap Sm viwSm
+	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 	"}}}
 
 	" MRU {{{
