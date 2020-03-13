@@ -88,6 +88,7 @@ if isdirectory(s:dein_vim)
 		call dein#add('Shougo/vimproc', {'build': 'make'})
 	endif
 	call dein#end()
+	call dein#save_state()
 	"}}}
 
 	" easymotion {{{
@@ -116,6 +117,7 @@ if isdirectory(s:dein_vim)
 		\ {'buns': ['',   ''  ], 'input': ["q"]},
 		\ {'buns': ['「', '」'], 'input': ['k']},
 		\ {'buns': ['>',  '<' ], 'input': ['>']},
+		\ {'buns': ['<!--',  '-->' ], 'input': ['!']},
 		\ ]
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
@@ -208,8 +210,8 @@ if isdirectory(s:dein_vim)
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 
-	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	au FileType nerdtree nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
 
 	"}}}
