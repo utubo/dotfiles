@@ -140,13 +140,13 @@ if isdirectory(s:dein_vim)
 	au vimrc User OperatorSandwichAddPost call <SID>FixSandwichPos()
 
 	" 内側に連続で挟むやつ
-	function! g:RepeatInner() abort
+	function! s:RepeatInner() abort
 		call setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 		call setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 		normal! gv
 		call feedkeys('Sa')
 	endfunction
-	nmap <silent> S. :<C-u>call g:RepeatInner()<CR>
+	nmap <silent> S. :<C-u>call <SID>RepeatInner()<CR>
 
 	function! s:BigMac(...) abort
 		let l:c = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
