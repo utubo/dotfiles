@@ -70,6 +70,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
 	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('prabirshrestha/asyncomplete.vim')
+	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('thinca/vim-portal')
 	call dein#add('thinca/vim-quickrun')
@@ -190,12 +191,12 @@ if isdirectory(s:dein_vim)
 	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 	inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-		\ 'name': 'omni',
-		\ 'whitelist': ['*'],
-		\ 'blacklist': ['c', 'cpp', 'html'],
-		\ 'completor': function('asyncomplete#sources#omni#completor')
-		\ }))
+	function! s:RegisterSource(name, white, black)
+		" とても長い
+		execute printf("call asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", a:name, a:name, a:white, a:black, a:name)
+	endfunction
+	call s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
+	call s:RegisterSource('buffer', ['*'], ['go'])
 	"}}}
 
 	" その他 {{{
