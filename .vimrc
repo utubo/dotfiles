@@ -44,7 +44,10 @@ command! -nargs=* NVmap
 " その他
 command! -nargs=1 Enable  let <args>=1
 command! -nargs=1 Disable let <args>=0
-
+function! s:RemoveEmptyLine(line)
+	silent! execute a:line . 's/\s\+$//'
+	silent! execute a:line . 's/^\s*\n//'
+endfunction
 "}}}
 
 " ----------------------------------------------------------
@@ -88,6 +91,7 @@ if isdirectory(s:dein_vim)
 		call dein#add('Shougo/vimproc', {'build': 'make'})
 	endif
 	call dein#end()
+	call dein#save_state()
 	"}}}
 
 	" easymotion {{{
@@ -116,7 +120,11 @@ if isdirectory(s:dein_vim)
 		\ {'buns': ['',   ''  ], 'input': ["q"]},
 		\ {'buns': ['「', '」'], 'input': ['k']},
 		\ {'buns': ['>',  '<' ], 'input': ['>']},
+		\ {'buns': ['CommentSand(0)','CommentSand(1)'], 'expr': 1, 'input': ['c']},
 		\ ]
+	function! CommentSand(index) abort
+		return get(split(&commentstring, '%s'), a:index, '')
+	endfunction
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
 	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal>as
@@ -130,7 +138,7 @@ if isdirectory(s:dein_vim)
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
 
 	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-	function! s:FixSandwichPos()
+	function! s:FixSandwichPos() abort
 		let l:c = g:operator#sandwich#object.cursor
 		if g:fix_sandwich_pos[1] != c.inner_head[1]
 			let l:c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
@@ -159,6 +167,14 @@ if isdirectory(s:dein_vim)
 	endfunction
 	nmap Sm viwSm
 	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
+
+	" 行末空白と空行を削除
+	function! s:RemoveAirBuns()
+		let l:c = g:operator#sandwich#object.cursor
+		call s:RemoveEmptyLine(l:c.tail[1])
+		call s:RemoveEmptyLine(l:c.head[1])
+	endfunction
+	au vimrc User OperatorSandwichDeletePost call <SID>RemoveAirBuns()
 	"}}}
 
 	" MRU {{{
@@ -208,8 +224,8 @@ if isdirectory(s:dein_vim)
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 
-	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
 	au FileType nerdtree nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
 
 	"}}}
@@ -452,10 +468,8 @@ function! s:Zd()
 	endif
 	const l:org = getpos('.')
 	normal! zd
-	silent! execute l:tail . 's/\s\+$//'
-	silent! execute l:tail . 's/^\s*\n//'
-	silent! execute l:head . 's/\s\+$//'
-	silent! execute l:head . 's/^\s*\n//'
+	call s:RemoveEmptyLine(l:tail)
+	call s:RemoveEmptyLine(l:head)
 	call setpos('.', l:org)
 endfunction
 nnoremap <silent> zd :call <SID>Zd()<CR>
