@@ -68,7 +68,6 @@ if isdirectory(s:dein_vim)
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
-	call dein#add('osyo-manga/vim-textobj-multiblock')
 	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('scrooloose/nerdtree')
@@ -111,18 +110,54 @@ if isdirectory(s:dein_vim)
 
 	" sandwitch {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-	let g:sandwich#recipes += [{'buns': ['「', '」'],'input': ['k']}] " kagikakko
+	let g:sandwich#recipes += [
+		\ {'buns': ["\r", ""  ], 'input': ["\r"], 'command': ["normal! i\r"]},
+		\ {'buns': ['',   ''  ], 'input': ["q"]},
+		\ {'buns': ['「', '」'], 'input': ['k']},
+		\ {'buns': ['>',  '<' ], 'input': ['>']},
+		\ ]
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
-	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal><Plug>(textobj-sandwich-query-a)
-	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal><Plug>(textobj-sandwich-query-a)
-	NVmap Sa <Plug>(operator-sandwich-add)
-	NVmap S <Plug>(operator-sandwich-add)<if-normal>iw
-	nmap SD <Plug>(operator-sandwich-delete)<Plug>(textobj-sandwich-auto-a)
-	nmap SR <Plug>(operator-sandwich-replace)<Plug>(textobj-sandwich-auto-a)
+	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal>as
+	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal>as
+	NVmap Sa <Plug>(operator-sandwich-add)<if-normal>iw
+	NVmap S  <Plug>(operator-sandwich-add)<if-normal>iw
+	nmap SD <Plug>(operator-sandwich-delete)<if-normal>ab
+	nmap SR <Plug>(operator-sandwich-replace)<if-normal>ab
+	nmap S^ v^S
+	nmap S$ vg_S
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
-	" メモ
-	" i:都度入力, t:タグ, k:鍵括弧
+
+	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
+	function! s:FixSandwichPos()
+		let l:c = g:operator#sandwich#object.cursor
+		if g:fix_sandwich_pos[1] != c.inner_head[1]
+			let l:c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
+			let l:c.inner_tail[2] = match(getline(c.inner_tail[1]), '$') + 1
+		endif
+	endfunction
+	au vimrc User OperatorSandwichAddPre let g:fix_sandwich_pos = getpos('.')
+	au vimrc User OperatorSandwichAddPost call <SID>FixSandwichPos()
+
+	" 内側に連続で挟むやつ
+	function! s:RepeatInner() abort
+		call setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+		call setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+		normal! gv
+		call feedkeys('Sa')
+	endfunction
+	nmap <silent> S. :<C-u>call <SID>RepeatInner()<CR>
+
+	function! s:BigMac(...) abort
+		let l:c = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
+		if ! a:0 || s:big_mac_crown != l:c
+			let s:big_mac_crown = l:c
+			au vimrc User OperatorSandwichAddPost ++once call <SID>BigMac(1)
+			call feedkeys(a:0 ? 'S.' : 'gvSa')
+		end
+	endfunction
+	nmap Sm viwSm
+	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 	"}}}
 
 	" MRU {{{
@@ -167,9 +202,6 @@ if isdirectory(s:dein_vim)
 
 	Enable g:watchdogs_check_BufWritePost_enable
 	Enable g:watchdogs_check_CursorHold_enable
-
-	let g:textobj_multiblock_blocks = [ ['>', '<'], ['「', '」'] ]
-	call textobj#user#map('multiblock', {'-': {'select-a': 'ab', 'select-i': 'ib'}})
 
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
