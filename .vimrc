@@ -14,6 +14,7 @@ set nf=alpha,hex
 set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
+set fillchars=
 set hlsearch
 nohlsearch
 set laststatus=2
@@ -236,16 +237,6 @@ inoremap <C-^> <C-o><C-^>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" DIFF関係 {{{
-set splitright
-set diffopt=vertical,filler
-command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F4> :<C-u>DiffOrig<CR>
-" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
-au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
 " テンプレート {{{
 function! s:ReadTemplate() abort
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
@@ -333,16 +324,6 @@ au vimrc BufRead * call <SID>SetupTabstop()
 "}}}
 
 " ----------------------------------------------------------
-" 日付関係 {{{
-inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
-cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
-nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
-nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
-nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
 " vimgrep {{{
 function! s:MyVimgrep(keyword, ...) abort
 	let l:path = join(a:000, ' ')
@@ -379,6 +360,26 @@ function! s:MyQuickFixWindow() abort
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
 au vimrc FileType qf :call s:MyQuickFixWindow()
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" DIFF関係 {{{
+set splitright
+set fillchars^=diff:\ " 削除行は空白文字で埋める
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+nnoremap <F4> :<C-u>DiffOrig<CR>
+" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" 日付関係 {{{
+inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
+cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
+nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
+nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
+nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
+nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -428,7 +429,7 @@ function! MyFoldText() abort
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
-set fillchars=fold:\ " 折り畳み時の「-」を非表示(というか「\」の後の半角空白に置き換える)
+set fillchars^=fold:\ " 折り畳み時の「-」は半角空白
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
