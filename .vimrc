@@ -4,8 +4,6 @@ scriptencoding utf-8
 " ----------------------------------------------------------
 " 基本設定 {{{
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
-set backupskip=/var/tmp/*
-set autochdir
 set noexpandtab
 set tabstop=4
 set shiftwidth=0
@@ -16,6 +14,7 @@ set nf=alpha,hex
 set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
+set fillchars=
 set hlsearch
 nohlsearch
 set laststatus=2
@@ -25,6 +24,10 @@ set ambiwidth=double
 set belloff=all
 set ttimeoutlen=50
 set wildmenu
+set autochdir
+set backupskip=/var/tmp/*
+set undodir=~/.vim/undo
+set undofile
 
 augroup vimrc
 	" 新しい自由
@@ -44,10 +47,12 @@ command! -nargs=* NVmap
 " その他
 command! -nargs=1 Enable  let <args>=1
 command! -nargs=1 Disable let <args>=0
-function! s:RemoveEmptyLine(line)
+
+function! s:RemoveEmptyLine(line) abort
 	silent! execute a:line . 's/\s\+$//'
 	silent! execute a:line . 's/^\s*\n//'
 endfunction
+
 "}}}
 
 " ----------------------------------------------------------
@@ -103,26 +108,16 @@ if isdirectory(s:dein_vim)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	"}}}
 
-	" undotree {{{
-	if has("persistent_undo")
-		set undodir='~/.undodir/'
-		set undofile
-		Enable g:undotree_SetFocusWhenToggle
-		Disable g:undotree_DiffAutoOpen
-		nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
-	endif
-	"}}}
-
-	" sandwitch {{{
+	" sandwich {{{
 	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	let g:sandwich#recipes += [
-		\ {'buns': ["\r", ""  ], 'input': ["\r"], 'command': ["normal! i\r"]},
-		\ {'buns': ['',   ''  ], 'input': ["q"]},
+		\ {'buns': ["\r", ''  ], 'input': ["\r"], 'command': ["normal! i\r"]},
+		\ {'buns': ['',   ''  ], 'input': ['q']},
 		\ {'buns': ['「', '」'], 'input': ['k']},
 		\ {'buns': ['>',  '<' ], 'input': ['>']},
-		\ {'buns': ['CommentSand(0)','CommentSand(1)'], 'expr': 1, 'input': ['c']},
+		\ {'buns': ['CommentString(0)','CommentString(1)'], 'expr': 1, 'input': ['c']},
 		\ ]
-	function! CommentSand(index) abort
+	function! CommentString(index) abort
 		return get(split(&commentstring, '%s'), a:index, '')
 	endfunction
 	Enable g:sandwich_no_default_key_mappings
@@ -149,13 +144,11 @@ if isdirectory(s:dein_vim)
 	au vimrc User OperatorSandwichAddPost call <SID>FixSandwichPos()
 
 	" 内側に連続で挟むやつ
-	function! s:RepeatInner() abort
+	function! s:RemarkPatty() abort
 		call setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 		call setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-		normal! gv
-		call feedkeys('Sa')
 	endfunction
-	nmap <silent> S. :<C-u>call <SID>RepeatInner()<CR>
+	nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
 
 	function! s:BigMac(...) abort
 		let l:c = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
@@ -169,7 +162,7 @@ if isdirectory(s:dein_vim)
 	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 
 	" 行末空白と空行を削除
-	function! s:RemoveAirBuns()
+	function! s:RemoveAirBuns() abort
 		let l:c = g:operator#sandwich#object.cursor
 		call s:RemoveEmptyLine(l:c.tail[1])
 		call s:RemoveEmptyLine(l:c.head[1])
@@ -178,7 +171,7 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" MRU {{{
-	function! s:MRUwithNumKey(tab)
+	function! s:MRUwithNumKey(tab) abort
 		setlocal number
 		echoh Question
 		echo printf('[1]..[9] => open with a %s.', a:tab ? 'tab' : 'window')
@@ -189,16 +182,15 @@ if isdirectory(s:dein_vim)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
 		endfor
 	endfunction
-	function! s:MyMRU()
-		let l:is_numkey_open_tab = &modified || expand('%') != ''
+	function! s:MyMRU() abort
+		let l:open_with_tab = &modified || expand('%') != ''
 		MRU
-		nnoremap <buffer> <F2> <nop>
 		nnoremap <buffer> f <C-f>
 		nnoremap <buffer> b <C-b>
-		nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
+		nnoremap <buffer> <silent> <F2> :<C-u>echo ''<CR>:q<CR>
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(0)<CR>
 		nnoremap <buffer> <silent> T :<C-u>call <SID>MRUwithNumKey(1)<CR>
-		call s:MRUwithNumKey(l:is_numkey_open_tab)
+		call s:MRUwithNumKey(l:open_with_tab)
 	endfunction
 	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
 	"}}}
@@ -207,7 +199,7 @@ if isdirectory(s:dein_vim)
 	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 	inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-	function! s:RegisterSource(name, white, black)
+	function! s:RegisterSource(name, white, black) abort
 		" とても長い
 		execute printf("call asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", a:name, a:name, a:white, a:black, a:name)
 	endfunction
@@ -216,18 +208,17 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" その他 {{{
-
 	Enable g:watchdogs_check_BufWritePost_enable
 	Enable g:watchdogs_check_CursorHold_enable
-
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
-
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
-	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
-	au FileType nerdtree nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>
-
+	nnoremap <silent>  <F1> :<C-u>NERDTreeToggle<CR>
+	nnoremap <silent> t<F1> :<C-u>tabe ./<CR>
+	Enable g:undotree_SetFocusWhenToggle
+	Disable g:undotree_DiffAutoOpen
+	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	"}}}
 endif
 filetype plugin indent on
@@ -246,18 +237,8 @@ inoremap <C-^> <C-o><C-^>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" DIFF関係 {{{
-set splitright
-set diffopt=vertical,filler
-command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F4> :<C-u>DiffOrig<CR>
-" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
-au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
 " テンプレート {{{
-function! s:ReadTemplate()
+function! s:ReadTemplate() abort
 	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
 	if ! filereadable(l:filename)
 		return
@@ -297,12 +278,12 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 " ----------------------------------------------------------
 " 色 {{{
 set t_Co=256
-function! s:MyColorScheme()
+function! s:MyColorScheme() abort
 	hi! link Folded Comment
 	hi CursorLine NONE
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
-function! s:MyMatches()
+function! s:MyMatches() abort
 	if exists('w:my_matches') && len(getmatches())
 		return
 	end
@@ -323,7 +304,7 @@ colorscheme utb-green
 
 " ----------------------------------------------------------
 " タブ幅やタブ展開を自動設定 {{{
-function! s:SetupTabstop()
+function! s:SetupTabstop() abort
 	const l:limit = 100
 	const l:org = getpos('.')
 	call cursor(1, 1)
@@ -343,18 +324,8 @@ au vimrc BufRead * call <SID>SetupTabstop()
 "}}}
 
 " ----------------------------------------------------------
-" 日付関係 {{{
-inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
-cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
-nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
-nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
-nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
 " vimgrep {{{
-function! s:MyVimgrep(keyword, ...)
+function! s:MyVimgrep(keyword, ...) abort
 	let l:path = join(a:000, ' ')
 	" パスを省略した場合は、同じ拡張子のファイルから探す
 	if empty(l:path)
@@ -378,7 +349,7 @@ endfunction
 command! -nargs=+ MyVimgrep call <SID>MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
-function! s:MyQuickFixWindow()
+function! s:MyQuickFixWindow() abort
 	nnoremap <buffer> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -389,6 +360,26 @@ function! s:MyQuickFixWindow()
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
 au vimrc FileType qf :call s:MyQuickFixWindow()
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" DIFF関係 {{{
+set splitright
+set fillchars^=diff:\ " 削除行は空白文字で埋める
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+nnoremap <F4> :<C-u>DiffOrig<CR>
+" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" 日付関係 {{{
+inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
+cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
+nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
+nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
+nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
+nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -404,7 +395,7 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 
 " ----------------------------------------------------------
 " 現在行と同じインデントまで移動 {{{
-function! s:FindSameIndent(back)
+function! s:FindSameIndent(back) abort
 	let l:indent_length = len(matchstr(getline('.'), '^\s*'))
 	let l:pattern = printf('^\s\{0,%d\}\S', l:indent_length)
 	return search(l:pattern, a:back ? 'bW' : 'W')
@@ -417,7 +408,7 @@ noremap <expr> <Space>i[ (<SID>FindSameIndent(1) + 1).'G'
 
 " ----------------------------------------------------------
 " 行頭に合わせて行移動 {{{
-function! s:PutHat()
+function! s:PutHat() abort
 	let l:x = match(getline('.'), '\S.') + 1
 	if l:x || !exists('w:my_hat')
 		let w:my_hat = col('.') == l:x ? '^' : ''
@@ -431,14 +422,14 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 " ----------------------------------------------------------
 " 折り畳み {{{
 " こんなかんじでインデントに合わせて表示[+] {{{
-function! MyFoldText()
+function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
 	let l:text = &foldmethod == 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
-set fillchars=fold:\ " 折り畳み時の「-」を非表示(というか「\」の後の半角空白に置き換える)
+set fillchars^=fold:\ " 折り畳み時の「-」は半角空白
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
@@ -446,7 +437,7 @@ nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 "}}}
 " マーカーの前にスペース、後ろに改行を入れる {{{
-function! s:Zf() range
+function! s:Zf() range abort
 	execute a:firstline 's/\v(\S)?$/\1 /'
 	execute a:lastline 'normal! o'
 	call cursor([a:firstline, 1])
@@ -457,7 +448,7 @@ endfunction
 vnoremap <silent> zf :call <SID>Zf()<CR>
 "}}}
 " マーカーを削除したら行末をトリムする {{{
-function! s:Zd()
+function! s:Zd() abort
 	if foldclosed(line('.')) == -1
 		normal! zc
 	endif
@@ -479,7 +470,7 @@ nnoremap <silent> zd :call <SID>Zd()<CR>
 " ----------------------------------------------------------
 " 行移動 {{{
 " オートインデント無し、折り畳みをスキップ
-function! s:MoveLines(d) range
+function! s:MoveLines(d) range abort
 	let l:to = (a:d < 0 ? a:firstline : (a:lastline + 1)) + a:d
 	let l:to = min([max([1, l:to]), line('w$') + 1])
 	let l:foldstart = foldclosed(l:to)
@@ -506,6 +497,15 @@ cnoremap <C-l> <Space><BS><Right>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
 nnoremap q: :q
 nnoremap q; q:
+nnoremap ; :
+nnoremap <Space>; ;
+
+" 「jj」で<CR>、「kk」はキャンセル
+" ただし保存は片手で「:jj」でもOK(「:wjj」じゃなくていい)
+cnoremap kk <C-c>
+cnoremap <expr> jj (empty(getcmdline()) ? 'w<CR>' : '<CR>')
+inoremap ;jj <Esc>`^:w<CR>
+
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -525,7 +525,7 @@ if exists('g:vimrc_tea_break')
 else
 	let g:vimrc_tea_break = { 'count': 0 }
 endif
-function! g:vimrc_tea_break.exec(timer)
+function! g:vimrc_tea_break.exec(timer) abort
 	let self.count += 1
 	if self.count == 45
 		echo "そろそろ休憩(*'∀`*)っ 旦~"
@@ -564,29 +564,20 @@ inoremap （） ()<Left>
 " 様子見中 {{{
 " 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
-inoremap <S-Tab> <Esc>ea
-vnoremap <expr> <Space>p '"_s<C-R>' . v:register . '<ESC>'
+inoremap <c-w> <Esc>ea
+inoremap ;; <End>;<CR>
+imap ;{ <End> {<CR>
+vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
+vnoremap <expr> P p
 nnoremap <Space>w <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
+tnoremap <C-k><C-k> <C-w>N
+
 nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
-tnoremap <C-k><C-k> <C-w>N
-
-nnoremap <Space>; ;
-nnoremap ; :
-
-" 「jj」で<CR>、「kk」はキャンセル
-" ただし保存は片手で「:jj」でもOK(「:wjj」じゃなくていい)
-cnoremap kk <C-c>
-cnoremap <expr> jj (empty(getcmdline()) ? 'w<CR>' : '<CR>')
-inoremap ;jj <Esc>`^:w<CR>
-
-" うーん…
-inoremap ;; <End>;<CR>
-imap ;{ <End> {<CR>
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
