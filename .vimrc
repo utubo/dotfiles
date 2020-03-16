@@ -66,6 +66,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('Lokaltog/vim-easymotion')
 	call dein#add('Shougo/dein.vim')
 	call dein#add('alvan/vim-closetag')
+	call dein#add('airblade/vim-gitgutter')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
 	call dein#add('jiangmiao/auto-pairs')
@@ -299,7 +300,7 @@ endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
 set background=dark
-colorscheme utb-green
+colorscheme utb
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -365,7 +366,7 @@ au vimrc FileType qf :call s:MyQuickFixWindow()
 " ----------------------------------------------------------
 " DIFF関係 {{{
 set splitright
-set fillchars^=diff:\ " 削除行は空白文字で埋める
+set fillchars+=diff:\ " 削除行は空白文字で埋める
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nnoremap <F4> :<C-u>DiffOrig<CR>
 " DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
@@ -429,7 +430,7 @@ function! MyFoldText() abort
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
-set fillchars^=fold:\ " 折り畳み時の「-」は半角空白
+set fillchars+=fold:\ " 折り畳み時の「-」は半角空白
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
