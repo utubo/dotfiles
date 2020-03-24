@@ -215,8 +215,8 @@ if isdirectory(s:dein_vim)
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
-	nnoremap <silent>  <F1> :<C-u>NERDTreeToggle<CR>
-	nnoremap <silent> t<F1> :<C-u>tabe ./<CR>
+	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
+	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
@@ -611,4 +611,8 @@ endif
 " <F11> 行番号表示切替
 " <F12> 折り返し表示切替
 "}}}
+
+if filereadable(expand('~/.vimrc_local'))
+	source ~/.vimrc_local
+endif
 
