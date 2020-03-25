@@ -53,6 +53,10 @@ function! s:RemoveEmptyLine(line) abort
 	silent! execute a:line . 's/^\s*\n//'
 endfunction
 
+function! s:BufIsSmth()
+	return &modified || ! empty(bufname())
+endfunction
+
 "}}}
 
 " ----------------------------------------------------------
@@ -184,7 +188,7 @@ if isdirectory(s:dein_vim)
 		endfor
 	endfunction
 	function! s:MyMRU() abort
-		let l:open_with_tab = &modified || expand('%') != ''
+		let l:open_with_tab = s:BufIsSmth()
 		MRU
 		nnoremap <buffer> f <C-f>
 		nnoremap <buffer> b <C-b>
@@ -332,20 +336,24 @@ function! s:MyVimgrep(keyword, ...) abort
 	if empty(l:path)
 		let l:path = expand('%:e') == '' ? '*' : ('*.' . expand('%:e'))
 	endif
-	" 明示的に現在のファイルを指定してない場合は、新しいタブで開く
-	if l:path != '%'
+	" 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
+	let l:open_with_tab = s:BufIsSmth() && l:path != '%'
+	if l:open_with_tab
 		tabnew
 	endif
 	" lvimgrepしてなんやかんやして終わり
-	execute printf('lvimgrep %s %s', a:keyword, l:path)
-	if empty(getloclist(0))
-		if l:path != '%'
-			quit
+	silent! execute printf('lvimgrep %s %s', a:keyword, l:path)
+	if ! empty(getloclist(0))
+		lwindow
+	else
+		echoh ErrorMsg
+		echomsg 'Not found.: ' . a:keyword
+		echoh None
+		if l:open_with_tab
+			tabnext -
+			tabclose +
 		endif
-		return
 	endif
-	lwindow
-	normal! <C-W>w
 endfunction
 command! -nargs=+ MyVimgrep call <SID>MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
@@ -364,12 +372,12 @@ au vimrc FileType qf :call s:MyQuickFixWindow()
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" DIFF関係 {{{
+" diff {{{
 set splitright
 set fillchars+=diff:\ " 削除行は空白文字で埋める
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nnoremap <F4> :<C-u>DiffOrig<CR>
-" DIFFモードを自動でOFF https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+" diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
 "}}} -------------------------------------------------------
 
