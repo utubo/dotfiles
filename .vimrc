@@ -91,6 +91,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
+	call dein#add('utubo/vim-ytrans')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
@@ -224,6 +225,7 @@ if isdirectory(s:dein_vim)
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
+	let g:ytrans_default_lang = 'ja'
 	"}}}
 endif
 filetype plugin indent on
