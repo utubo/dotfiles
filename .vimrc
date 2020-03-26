@@ -91,6 +91,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
+	call dein#add('utubo/vim-ytrans')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
@@ -224,6 +225,7 @@ if isdirectory(s:dein_vim)
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
+	let g:ytrans_default_lang = 'ja'
 	"}}}
 endif
 filetype plugin indent on
@@ -359,12 +361,12 @@ command! -nargs=+ MyVimgrep call <SID>MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
 function! s:MyQuickFixWindow() abort
-	nnoremap <buffer> ; <CR>:silent! normal! zv<CR><C-W>w
-	nnoremap <buffer> w <C-W><CR>:silent! normal! zv<CR><C-W>w
-	nnoremap <buffer> t <C-W><CR>:silent! normal! zv<CR><C-W>T
+	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
+	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
+	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
+	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:lexpr ''<CR>
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
-	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:lexpr ''<CR>
 	" 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
@@ -579,14 +581,20 @@ imap ;{ <End> {<CR>
 vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
 vnoremap <expr> P p
 nnoremap <Space>w <C-w>w
+nnoremap <Space>o <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
 tnoremap <C-k><C-k> <C-w>N
 
+" F8～F10
 nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
+
+" よく誤爆するので
+nnoremap qj :<C-u>echoh Warningmsg \| echo 'qj is disabled.' \| echoh None<ESC>
+nnoremap qk :<C-u>echoh Warningmsg \| echo 'qk is disabled.' \| echoh None<ESC>
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
