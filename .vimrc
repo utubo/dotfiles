@@ -15,8 +15,6 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
-set hlsearch
-nohlsearch
 set laststatus=2
 set ruler
 set display=lastline
@@ -28,6 +26,9 @@ set autochdir
 set backupskip=/var/tmp/*
 set undodir=~/.vim/undo
 set undofile
+set incsearch
+set hlsearch
+nohlsearch
 
 augroup vimrc
 	" 新しい自由
@@ -514,8 +515,8 @@ nnoremap <Space>; ;
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「:jj」でもOK(「:wjj」じゃなくていい)
 cnoremap kk <C-c>
-cnoremap <expr> jj (empty(getcmdline()) ? 'w<CR>' : '<CR>')
-inoremap ;jj <Esc>`^:w<CR>
+cnoremap <expr> jj (empty(getcmdline()) ? 'update<CR>' : '<CR>')
+inoremap ;jj <Esc>`^:update<CR>
 
 "}}} -------------------------------------------------------
 
