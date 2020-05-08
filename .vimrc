@@ -581,6 +581,11 @@ inoremap {; {<CR>};<Esc>O
 inoremap {, {<CR>},<Esc>O
 inoremap [; [<CR>];<Esc>O
 inoremap [, [<CR>],<Esc>O
+
+" 実は>.や<.より指が動く距離短いのでは…？
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+vnoremap u <ESC>ugv
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
