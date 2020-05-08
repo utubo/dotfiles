@@ -77,6 +77,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('jiangmiao/auto-pairs')
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
+	call dein#add('matze/vim-move')
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mbbill/undotree')
 	call dein#add('mechatroner/rainbow_csv')
@@ -227,6 +228,7 @@ if isdirectory(s:dein_vim)
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:ytrans_default_lang = 'ja'
+	let g:move_key_modifier = 'C'
 	"}}}
 endif
 filetype plugin indent on
@@ -477,29 +479,6 @@ function! s:Zd() abort
 endfunction
 nnoremap <silent> zd :call <SID>Zd()<CR>
 "}}}
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" 行移動 {{{
-" オートインデント無し、折り畳みをスキップ
-function! s:MoveLines(d) range abort
-	let l:to = (a:d < 0 ? a:firstline : (a:lastline + 1)) + a:d
-	let l:to = min([max([1, l:to]), line('w$') + 1])
-	let l:foldstart = foldclosed(l:to)
-	if l:foldstart != -1
-		let l:to = a:d < 0 ? l:foldstart : (foldclosedend(l:to) + 1)
-	endif
-	execute printf('%d,%dmove%d', a:firstline, a:lastline, l:to - 1)
-	let l:c = a:lastline - a:firstline + 1
-	if l:c != 1
-		normal! V
-		call setpos('.', [0, a:d < 0 ? l:to : (l:to - l:c), 1])
-	endif
-endfunction
-vnoremap <silent> <C-k> :call <SID>MoveLines(-1)<CR>
-vnoremap <silent> <C-j> :call <SID>MoveLines(1)<CR>
-nnoremap <silent> <C-k> :<C-u>call <SID>MoveLines(-v:count1)<CR>
-nnoremap <silent> <C-j> :<C-u>call <SID>MoveLines(v:count1)<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
