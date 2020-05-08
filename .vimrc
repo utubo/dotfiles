@@ -137,7 +137,7 @@ if isdirectory(s:dein_vim)
 	nmap SR <Plug>(operator-sandwich-replace)<if-normal>ab
 	nmap S^ v^S
 	nmap S$ vg_S
-	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) == '"') ? 'Sr"''' : 'Sr''"'
+	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
 
 	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 	function! s:FixSandwichPos() abort
@@ -337,7 +337,7 @@ function! s:MyVimgrep(keyword, ...) abort
 	let l:path = join(a:000, ' ')
 	" パスを省略した場合は、同じ拡張子のファイルから探す
 	if empty(l:path)
-		let l:path = expand('%:e') == '' ? '*' : ('*.' . expand('%:e'))
+		let l:path = expand('%:e') ==# '' ? '*' : ('*.' . expand('%:e'))
 	endif
 	" 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
 	let l:open_with_tab = s:BufIsSmth() && l:path != '%'
@@ -437,7 +437,7 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
-	let l:text = &foldmethod == 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
+	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '[+]'
 endfunction
 set foldtext=MyFoldText()
@@ -606,7 +606,7 @@ inoremap [, [<CR>],<Esc>O
 
 " ----------------------------------------------------------
 " デフォルトマッピングデー {{{
-if strftime('%d') == '01'
+if strftime('%d') ==# '01'
 	au vimrc VimEnter * echo "+^`^+.,.+ Today, Let's enjoy VIM with default key mapping ! +^`^+.,.+"
 	imapclear
 	mapclear
