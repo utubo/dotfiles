@@ -75,6 +75,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
 	call dein#add('jiangmiao/auto-pairs')
+	call dein#add('jistr/vim-nerdtree-tabs')
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
 	call dein#add('matze/vim-move')
@@ -222,7 +223,7 @@ if isdirectory(s:dein_vim)
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
-	nnoremap <silent> <F1> :<C-u>NERDTreeToggle<CR>
+	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
