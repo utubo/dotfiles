@@ -225,6 +225,7 @@ if isdirectory(s:dein_vim)
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
+	let g:nerdtree_tabs_autofind = 1
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
@@ -374,7 +375,8 @@ function! s:MyQuickFixWindow() abort
 	" 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
-au vimrc FileType qf :call s:MyQuickFixWindow()
+au vimrc FileType qf call s:MyQuickFixWindow()
+au vimrc WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | q | endif
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -587,6 +589,9 @@ inoremap [, [<CR>],<Esc>O
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
+
+" これするともっといらっとするよ
+"nnoremap <F1> :<C-u>smile<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
