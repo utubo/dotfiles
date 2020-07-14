@@ -375,7 +375,8 @@ function! s:MyQuickFixWindow() abort
 	" 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
-au vimrc FileType qf :call s:MyQuickFixWindow()
+au vimrc FileType qf call s:MyQuickFixWindow()
+au vimrc WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | q | endif
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
