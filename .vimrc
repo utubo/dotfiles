@@ -225,6 +225,7 @@ if isdirectory(s:dein_vim)
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
+	let g:nerdtree_tabs_autofind = 1
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
@@ -587,6 +588,9 @@ inoremap [, [<CR>],<Esc>O
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
+
+" これするともっといらっとするよ
+"nnoremap <F1> :<C-u>smile<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
