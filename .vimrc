@@ -569,7 +569,8 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 tnoremap <C-k><C-k> <C-w>N
 
-" F8～F10
+" ファンクションキー関係
+nmap mru <F2>
 nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
