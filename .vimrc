@@ -546,6 +546,8 @@ onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
+vnoremap J j
+vnoremap K k
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
