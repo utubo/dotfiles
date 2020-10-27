@@ -570,6 +570,8 @@ nnoremap <Space>o <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
 tnoremap <C-k><C-k> <C-w>N
+xnoremap <Tab> >gt
+xnoremap <S-Tab> <gt
 
 " ファンクションキー関係
 nmap mru <F2>
