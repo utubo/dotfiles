@@ -569,6 +569,7 @@ nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
+nnoremap <Space>v V
 tnoremap <C-k><C-k> <C-w>N
 xnoremap <Tab> >gt
 xnoremap <S-Tab> <gt
