@@ -74,7 +74,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('airblade/vim-gitgutter')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
-	call dein#add('jiangmiao/auto-pairs')
+	call dein#add('cohama/lexima.vim')
 	call dein#add('jistr/vim-nerdtree-tabs')
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
@@ -569,7 +569,10 @@ nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
+nnoremap <Space>v V
 tnoremap <C-k><C-k> <C-w>N
+xnoremap <Tab> >gt
+xnoremap <S-Tab> <gt
 
 " ファンクションキー関係
 nmap mru <F2>
