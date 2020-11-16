@@ -77,6 +77,7 @@ alias :q=exit
 alias gd=git\ diff
 alias ga=git\ add
 alias gc=git\ commit\ -m
+alias gl=git\ log\ --name-status\ -n\ 1\ --oneline
 alias fuck='eval $(thefuck $(fc -ln -1))'
 alias f=fuck
 alias fd=fdfind
