@@ -125,6 +125,7 @@ if isdirectory(s:dein_vim)
 		\ {'buns': ['',   ''  ], 'input': ['q']},
 		\ {'buns': ['「', '」'], 'input': ['k']},
 		\ {'buns': ['>',  '<' ], 'input': ['>']},
+		\ {'buns': ['{ ', ' }'], 'input': ['{']},
 		\ {'buns': ['CommentString(0)','CommentString(1)'], 'expr': 1, 'input': ['c']},
 		\ ]
 	function! CommentString(index) abort
