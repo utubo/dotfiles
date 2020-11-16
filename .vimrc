@@ -412,16 +412,17 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" 現在行と同じインデントまで移動 {{{
-function! s:FindSameIndent(back) abort
-	let l:indent_length = len(matchstr(getline('.'), '^\s*'))
-	let l:pattern = printf('^\s\{0,%d\}\S', l:indent_length)
-	return search(l:pattern, a:back ? 'bW' : 'W')
+" インデントが現在行以下の行まで移動 {{{
+function! s:FindSameIndent(flags, inner = 0) abort
+	let l:size = len(matchstr(getline('.'), '^\s*'))
+	let l:pattern = printf('^\s\{0,%d\}\S', l:size)
+	call setpos('.', [0, getpos('.')[1], 1, 1])
+	return search(l:pattern, a:flags) + a:inner
 endfunction
-noremap <expr> <Space>] <SID>FindSameIndent(0).'G'
-noremap <expr> <Space>[ <SID>FindSameIndent(1).'G'
-noremap <expr> <Space>i] (<SID>FindSameIndent(0) - 1).'G'
-noremap <expr> <Space>i[ (<SID>FindSameIndent(1) + 1).'G'
+noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
+noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
+noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
+noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
