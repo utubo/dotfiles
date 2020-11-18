@@ -58,6 +58,10 @@ function! s:BufIsSmth()
 	return &modified || ! empty(bufname())
 endfunction
 
+function! s:indentstr(expr)
+	return matchstr(getline(a:expr), '^\s*')
+endfunction
+
 "}}}
 
 " ----------------------------------------------------------
@@ -82,6 +86,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mbbill/undotree')
 	call dein#add('mechatroner/rainbow_csv')
+	call dein#add('michaeljsmith/vim-indent-object')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
 	call dein#add('osyo-manga/vim-watchdogs')
@@ -124,6 +129,8 @@ if isdirectory(s:dein_vim)
 		\ {'buns': ['',   ''  ], 'input': ['q']},
 		\ {'buns': ['「', '」'], 'input': ['k']},
 		\ {'buns': ['>',  '<' ], 'input': ['>']},
+		\ {'buns': ['{ ', ' }'], 'input': ['{']},
+		\ {'buns': ['${', '}' ], 'input': ['${']},
 		\ {'buns': ['CommentString(0)','CommentString(1)'], 'expr': 1, 'input': ['c']},
 		\ ]
 	function! CommentString(index) abort
@@ -411,16 +418,17 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" 現在行と同じインデントまで移動 {{{
-function! s:FindSameIndent(back) abort
-	let l:indent_length = len(matchstr(getline('.'), '^\s*'))
-	let l:pattern = printf('^\s\{0,%d\}\S', l:indent_length)
-	return search(l:pattern, a:back ? 'bW' : 'W')
+" インデントが現在行以下の行まで移動 {{{
+function! s:FindSameIndent(flags, inner = 0) abort
+	let l:size = len(s:indentstr('.'))
+	let l:pattern = printf('^\s\{0,%d\}\S', l:size)
+	call setpos('.', [0, getpos('.')[1], 1, 1])
+	return search(l:pattern, a:flags) + a:inner
 endfunction
-noremap <expr> <Space>] <SID>FindSameIndent(0).'G'
-noremap <expr> <Space>[ <SID>FindSameIndent(1).'G'
-noremap <expr> <Space>i] (<SID>FindSameIndent(0) - 1).'G'
-noremap <expr> <Space>i[ (<SID>FindSameIndent(1) + 1).'G'
+noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
+noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
+noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
+noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -441,7 +449,7 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 " こんなかんじでインデントに合わせて表示[+] {{{
 function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
-	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
+	let l:indent = repeat(' ', indent(v:foldstart))
 	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '[+]'
 endfunction
@@ -456,7 +464,7 @@ nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 " マーカーの前にスペース、後ろに改行を入れる {{{
 function! s:Zf() range abort
 	execute a:firstline 's/\v(\S)?$/\1 /'
-	execute a:lastline 'normal! o'
+	execute a:lastline "normal! o\<Esc>i" . s:indentstr(a:firstline)
 	call cursor([a:firstline, 1])
 	normal! V
 	call cursor([a:lastline + 1, 1])
