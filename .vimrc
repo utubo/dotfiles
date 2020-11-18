@@ -58,6 +58,10 @@ function! s:BufIsSmth()
 	return &modified || ! empty(bufname())
 endfunction
 
+function! s:indentstr(expr)
+	return matchstr(getline(a:expr), '^\s*')
+endfunction
+
 "}}}
 
 " ----------------------------------------------------------
@@ -416,7 +420,7 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " ----------------------------------------------------------
 " インデントが現在行以下の行まで移動 {{{
 function! s:FindSameIndent(flags, inner = 0) abort
-	let l:size = len(matchstr(getline('.'), '^\s*'))
+	let l:size = len(s:indentstr('.'))
 	let l:pattern = printf('^\s\{0,%d\}\S', l:size)
 	call setpos('.', [0, getpos('.')[1], 1, 1])
 	return search(l:pattern, a:flags) + a:inner
@@ -445,7 +449,7 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 " こんなかんじでインデントに合わせて表示[+] {{{
 function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
-	let l:indent = repeat(' ', strdisplaywidth(matchstr(l:src, '^\s*')))
+	let l:indent = repeat(' ', indent(v:foldstart))
 	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '[+]'
 endfunction
@@ -460,7 +464,7 @@ nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 " マーカーの前にスペース、後ろに改行を入れる {{{
 function! s:Zf() range abort
 	execute a:firstline 's/\v(\S)?$/\1 /'
-	execute a:lastline 'normal! o'
+	execute a:lastline "normal! o\<Esc>i" . s:indentstr(a:firstline)
 	call cursor([a:firstline, 1])
 	normal! V
 	call cursor([a:lastline + 1, 1])
