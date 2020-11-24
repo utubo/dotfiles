@@ -513,7 +513,7 @@ inoremap ;jj <Esc>`^:update<CR>
 " ----------------------------------------------------------
 " terminal {{{
 if has('win32')
-	command! Powershell :terminal ++close powershell
+	command! Powershell :terminal ++close pwsh
 	nnoremap SH :<C-u>Powershell<CR>
 else
 	nnoremap SH :<C-u>terminal<CR>
