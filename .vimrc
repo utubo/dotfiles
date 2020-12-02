@@ -290,6 +290,10 @@ vnoremap gs :s///g<Left><Left><Left>
 xnoremap Y "+y
 " https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
+
+" https://github.com/Tumbler/dotfiles/blob/master/.vimrc
+autocmd vimrc FocusGained * let @" = @+
+autocmd vimrc FocusLost   * let @+ = @"
 "}}} -------------------------------------------------------
 
 " ↑ここまでコピペ寄せ集め
