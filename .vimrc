@@ -582,6 +582,8 @@ nnoremap <Space>o <C-w>w
 nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap <Space>v V
+nnoremap <Space>op o<C-r>"<Esc>
+nnoremap <Space>OP O<C-r>"<Esc>
 tnoremap <C-k><C-k> <C-w>N
 xnoremap <Tab> >gt
 xnoremap <S-Tab> <gt
@@ -607,6 +609,9 @@ inoremap [, [<CR>],<Esc>O
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
+
+" 分割キーボードで右手親指が<CR>になったので…
+nmap <CR> <Space>
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
