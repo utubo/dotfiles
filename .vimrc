@@ -317,7 +317,6 @@ function! s:MyMatches() abort
 	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
 	call matchadd('Error', 'ERROR')
 	call matchadd('Delimiter', '^\s*- \[ \]')
-	call matchadd('Todo', '^\s*- \[x\]')
 	" 稀によくtypoする単語(気づいたら追加する)
 	call matchadd('SpellBad', 'stlye')
 endfunction
