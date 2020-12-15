@@ -316,6 +316,8 @@ function! s:MyMatches() abort
 	call matchadd('Label', '^\s*■.*$')
 	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
 	call matchadd('Error', 'ERROR')
+	call matchadd('Delimiter', '^\s*- \[ \]')
+	call matchadd('Todo', '^\s*- \[x\]')
 	" 稀によくtypoする単語(気づいたら追加する)
 	call matchadd('SpellBad', 'stlye')
 endfunction
@@ -522,6 +524,25 @@ if has('win32')
 else
 	nnoremap SH :<C-u>terminal<CR>
 endif
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" <C-x>でmarkdownのチェックボックス {{{
+function! s:ToggleCheckBox() abort
+	const l:n = getpos('.')[1]
+	let l:a = getline(l:n)
+	let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '')
+	if l:a == l:b
+		let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '')
+	endif
+	if l:a == l:b
+		let l:b = substitute(l:a, '^\(\s*\)', '\1- [ ] ', '')
+	endif
+	if l:a != l:b
+		call setline(l:n, l:b)
+	endif
+endfunction
+noremap <silent> <C-x> :<C-u> call <SID>ToggleCheckBox()<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
