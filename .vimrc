@@ -316,7 +316,7 @@ function! s:MyMatches() abort
 	call matchadd('Label', '^\s*■.*$')
 	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
 	call matchadd('Error', 'ERROR')
-	call matchadd('Delimiter', '^\s*- \[ \]')
+	call matchadd('Delimiter', '- \[ \]')
 	" 稀によくtypoする単語(気づいたら追加する)
 	call matchadd('SpellBad', 'stlye')
 endfunction
@@ -527,21 +527,22 @@ endif
 
 " ----------------------------------------------------------
 " <C-x>でmarkdownのチェックボックス {{{
-function! s:ToggleCheckBox() abort
-	const l:n = getpos('.')[1]
-	let l:a = getline(l:n)
-	let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '')
-	if l:a == l:b
-		let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '')
-	endif
-	if l:a == l:b
-		let l:b = substitute(l:a, '^\(\s*\)', '\1- [ ] ', '')
-	endif
-	if l:a != l:b
-		call setline(l:n, l:b)
-	endif
+function! s:ToggleCheckBox() range abort
+	for l:n in range(a:firstline, a:lastline)
+		let l:a = getline(l:n)
+		let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '') " check on
+		if l:a == l:b
+			let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '') " check off
+		endif
+		if l:a == l:b
+			let l:b = substitute(l:a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') " a new check box
+		endif
+		if l:a != l:b
+			call setline(l:n, l:b)
+		endif
+	endfor
 endfunction
-noremap <silent> <C-x> :<C-u> call <SID>ToggleCheckBox()<CR>
+noremap <silent> <C-x> :call <SID>ToggleCheckBox()<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
