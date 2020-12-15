@@ -437,7 +437,7 @@ noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" 行頭に合わせて行移動 {{{
+" カーソルを行頭に合わせて移動 {{{
 function! s:PutHat() abort
 	let l:x = match(getline('.'), '\S.') + 1
 	if l:x || !exists('w:my_hat')
@@ -594,31 +594,28 @@ inoremap （） ()<Left>
 " 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
 inoremap <c-w> <Esc>ea
-inoremap ;; <End>;<CR>
-imap ;{ <End> {<CR>
 vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
-vnoremap <expr> P p
-nnoremap <Space>w <C-w>w
-nnoremap <Space>o <C-w>w
+vnoremap P p
 nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap <Space>v V
 nnoremap <Space>op o<C-r>"<Esc>
 nnoremap <Space>OP O<C-r>"<Esc>
 tnoremap <C-k><C-k> <C-w>N
-xnoremap <Tab> >gt
-xnoremap <S-Tab> <gt
 
-" ファンクションキー関係
-nmap mru <F2>
-nnoremap <silent> <F8> :<C-u>q<CR>
-nnoremap <F9> <C-w>w
+" どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
+nnoremap <Space>w <C-w>w
+nnoremap <Space>o <C-w>w
+
+" CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 " よく誤爆するので
 nnoremap qj :<C-u>echoh Warningmsg \| echo 'qj is disabled.' \| echoh None<ESC>
 nnoremap qk :<C-u>echoh Warningmsg \| echo 'qk is disabled.' \| echoh None<ESC>
+nnoremap い i
+nnoremap う u
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
@@ -626,7 +623,7 @@ inoremap {, {<CR>},<Esc>O
 inoremap [; [<CR>];<Esc>O
 inoremap [, [<CR>],<Esc>O
 
-" 実は>.や<.より指が動く距離短いのでは…？
+" 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
@@ -636,6 +633,14 @@ nmap <CR> <Space>
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
+
+" あともう1回「これ使ってないな…」と思ったときに消す
+inoremap ;; <End>;<CR>
+imap ;{ <End> {<CR>
+nmap mru <F2>
+nnoremap <silent> <F8> :<C-u>q<CR>
+nnoremap <F9> <C-w>w
+
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
