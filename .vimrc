@@ -526,7 +526,7 @@ endif
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" <C-x>でmarkdownのチェックボックス {{{
+" markdownのチェックボックス {{{
 function! s:ToggleCheckBox() range abort
 	for l:n in range(a:firstline, a:lastline)
 		let l:a = getline(l:n)
@@ -542,7 +542,7 @@ function! s:ToggleCheckBox() range abort
 		endif
 	endfor
 endfunction
-noremap <silent> <C-x> :call <SID>ToggleCheckBox()<CR>
+noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
