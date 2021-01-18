@@ -58,7 +58,7 @@ function! s:BufIsSmth()
 	return &modified || ! empty(bufname())
 endfunction
 
-function! s:indentstr(expr)
+function! s:IndentStr(expr)
 	return matchstr(getline(a:expr), '^\s*')
 endfunction
 
@@ -302,7 +302,7 @@ autocmd vimrc FocusLost   * let @+ = @"
 " 色 {{{
 set t_Co=256
 function! s:MyColorScheme() abort
-	hi! link Folded Comment
+	hi! link Folded Delimiter
 	hi CursorLine NONE
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
@@ -425,7 +425,7 @@ nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
 " ----------------------------------------------------------
 " インデントが現在行以下の行まで移動 {{{
 function! s:FindSameIndent(flags, inner = 0) abort
-	let l:size = len(s:indentstr('.'))
+	let l:size = len(s:IndentStr('.'))
 	let l:pattern = printf('^\s\{0,%d\}\S', l:size)
 	call setpos('.', [0, getpos('.')[1], 1, 1])
 	return search(l:pattern, a:flags) + a:inner
@@ -451,12 +451,12 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 
 " ----------------------------------------------------------
 " 折り畳み {{{
-" こんなかんじでインデントに合わせて表示[+] {{{
+" こんなかんじでインデントに合わせて表示... {{{
 function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', indent(v:foldstart))
 	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
-	return l:indent . l:text . '[+]'
+	return l:indent . l:text . '...'
 endfunction
 set foldtext=MyFoldText()
 set fillchars+=fold:\ " 折り畳み時の「-」は半角空白
@@ -465,11 +465,12 @@ nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
+au vimrc filetype markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
 "}}}
 " マーカーの前にスペース、後ろに改行を入れる {{{
 function! s:Zf() range abort
 	execute a:firstline 's/\v(\S)?$/\1 /'
-	execute a:lastline "normal! o\<Esc>i" . s:indentstr(a:firstline)
+	execute a:lastline "normal! o\<Esc>i" . s:IndentStr(a:firstline)
 	call cursor([a:firstline, 1])
 	normal! V
 	call cursor([a:lastline + 1, 1])
