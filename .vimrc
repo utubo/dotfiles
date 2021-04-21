@@ -62,6 +62,14 @@ function! s:IndentStr(expr)
 	return matchstr(getline(a:expr), '^\s*')
 endfunction
 
+function! s:GetVisualSelection()
+	let l:org = @"
+	silent normal! gvy
+	let l:text = @"
+	let @" = l:org
+	return l:text
+endfunction
+
 "}}}
 
 " ----------------------------------------------------------
@@ -93,13 +101,13 @@ if isdirectory(s:dein_vim)
 	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	call dein#add('scrooloose/nerdtree')
+	call dein#add('skanehira/translate.vim')
 	call dein#add('thinca/vim-portal')
 	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
-	call dein#add('utubo/vim-ytrans')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
@@ -223,6 +231,18 @@ if isdirectory(s:dein_vim)
 	call s:RegisterSource('buffer', ['*'], ['go'])
 	"}}}
 
+	" 翻訳 {{{
+	function! s:AutoTranslate(text)
+		if matchstr(a:text, '[^\x00-\x7F]') == ''
+			execute ':Translate ' . a:text
+		else
+			execute ':Translate! ' . a:text
+		endif
+	endfunction
+	nnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
+	vnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
+	"}}}
+
 	" その他 {{{
 	Enable g:watchdogs_check_BufWritePost_enable
 	Enable g:watchdogs_check_CursorHold_enable
@@ -236,7 +256,6 @@ if isdirectory(s:dein_vim)
 	Enable g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
-	let g:ytrans_default_lang = 'ja'
 	let g:move_key_modifier = 'C'
 	"}}}
 endif
