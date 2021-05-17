@@ -97,7 +97,6 @@ if isdirectory(s:dein_vim)
 	call dein#add('michaeljsmith/vim-indent-object')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
-	call dein#add('osyo-manga/vim-watchdogs')
 	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	call dein#add('scrooloose/nerdtree')
@@ -108,6 +107,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('utubo/vim-utb')
+	call dein#add('dense-analysis/ale')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
@@ -244,8 +244,8 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" その他 {{{
-	Enable g:watchdogs_check_BufWritePost_enable
-	Enable g:watchdogs_check_CursorHold_enable
+	let g:ale_sign_error = '🐞'
+	let g:ale_sign_warning = '🐞'
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
