@@ -72,6 +72,7 @@ alias g=grep\ -n $AUTO_COLOR
 alias rm=rm\ -i
 alias crontab=crontab\ -i
 alias v=vim
+alias vi=vim
 alias vw=view
 alias :q=exit
 alias gsb='git status -sb'
