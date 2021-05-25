@@ -5,7 +5,7 @@ scriptencoding utf-8
 " 基本設定 {{{
 set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
 set noexpandtab
-set tabstop=4
+set tabstop=3 " 意外とありな気がしてきた…
 set shiftwidth=0
 set autoindent
 set smartindent
@@ -353,7 +353,7 @@ function! s:SetupTabstop() abort
 	call cursor(1, 1)
 	if search('^\t', 'nc', l:limit)
 		setlocal noexpandtab
-		setlocal tabstop=4
+		setlocal tabstop=3 " 意外とありな気がしてきた…
 	elseif search('^  \S', 'nc', l:limit)
 		setlocal expandtab
 		setlocal tabstop=2
