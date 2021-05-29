@@ -536,10 +536,11 @@ inoremap ;jj <Esc>`^:update<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" terminal {{{
+" terminalとか {{{
 if has('win32')
 	command! Powershell :terminal ++close pwsh
 	nnoremap SH :<C-u>Powershell<CR>
+	nnoremap <S-F1> :<C-u>!start explorer %:p:h<CR>
 else
 	nnoremap SH :<C-u>terminal<CR>
 endif
@@ -674,7 +675,7 @@ endif
 
 " ----------------------------------------------------------
 " メモ {{{
-" <F1> NERDTree
+" <F1> NERDTree <S-F1>でフォルダを開く(win32)
 " <F2> MRU
 " <F3> UndoTree
 " <F4> DiffOrig
