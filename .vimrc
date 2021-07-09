@@ -653,8 +653,11 @@ vnoremap u <ESC>ugv
 " 分割キーボードで右手親指が<CR>になったので…
 nmap <CR> <Space>
 
-" markdown用 jjをprefixにするのはどうなのか
-inoremap <silent> jjx - [ ]
+" うーん…
+inoremap jjh <Left>
+inoremap jjl <Right>
+inoremap jjx - [ ]<Space>
+imap LL <ESC>vabva
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
