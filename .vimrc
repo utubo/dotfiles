@@ -90,6 +90,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('jistr/vim-nerdtree-tabs')
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
+	call dein#add('mattn/vim-maketable')
 	call dein#add('matze/vim-move')
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mbbill/undotree')
@@ -526,10 +527,11 @@ cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
 nnoremap q: :q
 nnoremap q; q:
 nnoremap ; :
+vnoremap ; :
 nnoremap <Space>; ;
 
 " 「jj」で<CR>、「kk」はキャンセル
-" ただし保存は片手で「:jj」でもOK(「:wjj」じゃなくていい)
+" ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^:update<CR>
