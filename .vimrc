@@ -615,7 +615,6 @@ inoremap （） ()<Left>
 " 様子見中 {{{
 " 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
-inoremap <C-w> <Esc>ea
 vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
 vnoremap P p
 nnoremap <Space>l $
@@ -655,9 +654,12 @@ nmap <CR> <Space>
 
 " うーん…
 inoremap jjx - [ ]<Space>
-inoremap jj; <Esc>A ;
+inoremap jj; <Esc>A;
+inoremap jj, <Esc>A,
 inoremap jj{ <Esc>A {
-inoremap jj, <Esc>A ,
+inoremap jj} <Esc>A }
+inoremap jjl <Esc>ea
+inoremap jjk 「」<Left>
 
 " 括弧の外に出て追記
 nmap <F6> vab<Esc>a
