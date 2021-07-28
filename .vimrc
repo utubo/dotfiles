@@ -615,7 +615,7 @@ inoremap （） ()<Left>
 " 様子見中 {{{
 " 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
-inoremap <c-w> <Esc>ea
+inoremap <C-w> <Esc>ea
 vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
 vnoremap P p
 nnoremap <Space>l $
@@ -654,10 +654,14 @@ vnoremap u <ESC>ugv
 nmap <CR> <Space>
 
 " うーん…
-inoremap jjh <Left>
-inoremap jjl <Right>
 inoremap jjx - [ ]<Space>
-imap LL <ESC>vabva
+inoremap jj; <Esc>A ;
+inoremap jj{ <Esc>A {
+inoremap jj, <Esc>A ,
+
+" 括弧の外に出て追記
+nmap <F6> vab<Esc>a
+imap <F6> <Esc><F6>
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
@@ -684,7 +688,7 @@ endif
 " <F3> UndoTree
 " <F4> DiffOrig
 " <F5> 日付関係
-" <F6>
+" <F6> 括弧の外に出て追記(様子見中)
 " <F7>
 " <F8> :q(様子見中)
 " <F9> ウィンドウ切替(様子見中)
