@@ -248,7 +248,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	let g:ale_sign_error = '🐞'
 	let g:ale_sign_warning = '🐝'
-	let g:ale_pattern_options = { '\.md$': {'ale_enabled': 0} }
+	let g:ale_lint_on_insert_leave = 0
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
