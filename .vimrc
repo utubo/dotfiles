@@ -248,6 +248,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	let g:ale_sign_error = '🐞'
 	let g:ale_sign_warning = '🐝'
+	let g:ale_pattern_options = { '\.md$': {'ale_enabled': 0} }
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
@@ -259,7 +260,6 @@ if isdirectory(s:dein_vim)
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
-	let g:lexima_map_escape = ''
 	"}}}
 endif
 filetype plugin indent on
