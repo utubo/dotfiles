@@ -259,6 +259,7 @@ if isdirectory(s:dein_vim)
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
+	let g:lexima_map_escape = ''
 	"}}}
 endif
 filetype plugin indent on
