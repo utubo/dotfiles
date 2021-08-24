@@ -3,7 +3,7 @@ scriptencoding utf-8
 
 " ----------------------------------------------------------
 " 基本設定 {{{
-set fileencodings=iso-2022-jp,ucs-bom,cp932,sjis,euc-jp,utf-8
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,cp932,euc-jp
 set noexpandtab
 set tabstop=3 " 意外とありな気がしてきた…
 set shiftwidth=0
