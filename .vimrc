@@ -530,6 +530,7 @@ nnoremap q; q:
 nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
+cnoreabbrev cs colorscheme
 
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
@@ -625,6 +626,8 @@ nnoremap <Space>a A
 nnoremap <Space>v V
 nnoremap <Space>op o<C-r>"<Esc>
 nnoremap <Space>OP O<C-r>"<Esc>
+nnoremap TE :<C-u>tabe<Space>
+nnoremap TN :<C-u>tabnew<CR>
 tnoremap <C-k><C-k> <C-w>N
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
@@ -663,10 +666,7 @@ inoremap jj{ <Esc>A {
 inoremap jj} <Esc>A }
 inoremap jjl <Esc>ea
 inoremap jjk 「」<Left>
-
-" 括弧の外に出て追記
-nmap <F6> vab<Esc>a
-imap <F6> <Esc><F6>
+inoremap jj<Tab> <Esc>vab<Esc>a
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
