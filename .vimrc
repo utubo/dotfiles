@@ -80,36 +80,39 @@ if isdirectory(s:dein_vim)
 	" dein {{{
 	let &runtimepath = s:dein_vim . ',' . &runtimepath
 	call dein#begin(s:dein_dir)
-	call dein#add('Lokaltog/vim-easymotion')
 	call dein#add('Shougo/dein.vim')
-	call dein#add('alvan/vim-closetag')
 	call dein#add('airblade/vim-gitgutter')
+	call dein#add('alvan/vim-closetag')
+	call dein#add('cohama/lexima.vim')
+	call dein#add('dense-analysis/ale')
+	call dein#add('easymotion/vim-easymotion')
+	call dein#add('hrsh7th/vim-vsnip')
+	call dein#add('hrsh7th/vim-vsnip-integ')
 	call dein#add('itchyny/lightline.vim')
 	call dein#add('jceb/vim-hier')
-	call dein#add('cohama/lexima.vim')
 	call dein#add('jistr/vim-nerdtree-tabs')
 	call dein#add('kana/vim-textobj-user')
 	call dein#add('luochen1990/rainbow')
+	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/vim-maketable')
 	call dein#add('matze/vim-move')
-	call dein#add('machakann/vim-sandwich')
 	call dein#add('mbbill/undotree')
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('michaeljsmith/vim-indent-object')
 	call dein#add('osyo-manga/shabadou.vim')
 	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
 	call dein#add('othree/html5.vim')
-	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
+	call dein#add('prabirshrestha/asyncomplete.vim')
+	call dein#add('rafamadriz/friendly-snippets')
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('skanehira/translate.vim')
 	call dein#add('thinca/vim-portal')
 	call dein#add('thinca/vim-quickrun')
 	call dein#add('tyru/caw.vim')
+	call dein#add('utubo/vim-colorscheme-utb')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
-	call dein#add('utubo/vim-colorscheme-utb')
-	call dein#add('dense-analysis/ale')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
 	" vimproc (quickrunとかwathdogsで使ってる)
@@ -231,6 +234,18 @@ if isdirectory(s:dein_vim)
 	endfunction
 	call s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
 	call s:RegisterSource('buffer', ['*'], ['go'])
+
+	" Expand
+	imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+	smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+	" Expand or jump
+	imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	" Jump forward or backward
+	imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+	smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+	imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+	smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 	"}}}
 
 	" 翻訳 {{{
@@ -271,8 +286,6 @@ filetype plugin indent on
 " Movement in insert mode {{{
 " https://github.com/junegunn/dotfiles/master/vimrc
 inoremap <C-h> <C-o>h
-inoremap <C-l> <C-o>a
-inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
 "}}} -------------------------------------------------------
