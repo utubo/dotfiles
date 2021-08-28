@@ -254,10 +254,15 @@ if isdirectory(s:dein_vim)
 	vnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
 	"}}}
 
-	" その他 {{{
+	" ALE {{{
 	let g:ale_sign_error = '🐞'
 	let g:ale_sign_warning = '🐝'
 	let g:ale_lint_on_insert_leave = 0
+	nmap <silent> [a <Plug>(ale_previous_wrap)
+	nmap <silent> ]a <Plug>(ale_next_wrap)
+	" }}}
+
+	" その他 {{{
 	Enable g:rainbow_active
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
