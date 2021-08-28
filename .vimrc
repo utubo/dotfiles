@@ -682,7 +682,7 @@ inoremap jjl <Esc>ea
 inoremap jjk 「」<Left>
 inoremap jj<Tab> <Esc>vab<Esc>a
 
-au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^\\s*if\\s*(') ? '===' : '='
+au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^\s*if\s*(') ? '=' : '==='
 au vimrc FileType javascript inoremap <buffer> != !==
 
 " これするともっといらっとするよ
