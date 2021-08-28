@@ -227,7 +227,7 @@ if isdirectory(s:dein_vim)
 	" 補完 {{{
 	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-	inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+	inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
 	function! s:RegisterSource(name, white, black) abort
 		" とても長い
 		execute printf("call asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", a:name, a:name, a:white, a:black, a:name)
@@ -236,16 +236,16 @@ if isdirectory(s:dein_vim)
 	call s:RegisterSource('buffer', ['*'], ['go'])
 
 	" Expand
-	imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-	smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+	imap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
+	smap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
 	" Expand or jump
-	imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-	smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	imap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	" Jump forward or backward
-	imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-	smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-	imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-	smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+	imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+	smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+	imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+	smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 	"}}}
 
 	" 翻訳 {{{
@@ -637,8 +637,8 @@ vnoremap P p
 nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap <Space>v V
-nnoremap <Space>op o<C-r>"<Esc>
-nnoremap <Space>OP O<C-r>"<Esc>
+nnoremap <Space><Space>p o<C-r>"<Esc>
+nnoremap <Space><Space>P O<C-r>"<Esc>
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 tnoremap <C-k><C-k> <C-w>N
@@ -677,9 +677,13 @@ inoremap jj; <Esc>A;
 inoremap jj, <Esc>A,
 inoremap jj{ <Esc>A {
 inoremap jj} <Esc>A }
+inoremap jj<CR> <Esc>A<CR>
 inoremap jjl <Esc>ea
 inoremap jjk 「」<Left>
 inoremap jj<Tab> <Esc>vab<Esc>a
+
+au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^\\s*if\\s*(') ? '===' : '='
+au vimrc FileType javascript inoremap <buffer> != !==
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>

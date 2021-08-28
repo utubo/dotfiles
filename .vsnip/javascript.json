@@ -1,0 +1,46 @@
+{
+	"arrow": {
+		"prefix": ["ar"],
+		"body": [
+			"${1:arg} => {",
+			"\t$2",
+			"};",
+		]
+	},
+	"arrow 1 liner": {
+		"prefix": "al",
+		"body": [
+			"${1:arg} => { $2 };"
+		],
+	},
+	"Math.max": {
+		"prefix": "mM",
+		"body": [
+			"Math.max($1, $2);"
+		]
+	},
+	"Math.min": {
+		"prefix": "mm",
+		"body": [
+			"Math.min($1, $2);"
+		]
+	},
+	"Math.floor": {
+		"prefix": "mf",
+		"body": [
+			"Math.floor($1);"
+		]
+	},
+	"Math.random": {
+		"prefix": "mr",
+		"body": [
+			"Math.floor(Math.random() * ${1:n});"
+		]
+	},
+	"a && a.": {
+		"prefix": "&",
+		"body": [
+			"${1:a} && ${1:a}.$2"
+		]
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"html5ja": {
+		"prefix": ["h"],
+		"body": [
+			"<!DOCTYPE html>",
+			"<html lang=\"ja\">",
+			"<head>",
+			"\t<meta charset=\"UTF-8\">",
+			"\t<title>${1:title}</title>",
+			"\t<meta name=\"og:title\" content=\"${1:title}\">",
+			"\t<meta name=\"og:description\" content=\"$2\">",
+			"\t<!--",
+			"\t<meta name=\"og:image\" content=\"./card.png\">",
+			"\t<meta name=\"twitter:card\" content=\"summary\">",
+			"\t<meta name=\"twitter:creator\" content=\"\">",
+			"\t<link rel=\"stylesheet\" href=\"style.css\">",
+			"\t-->",
+			"</head>",
+			"<body>",
+			"$3",
+			"</body>",
+			"</html>",
+		]
+	}
+}
