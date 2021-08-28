@@ -83,47 +83,41 @@ if isdirectory(s:dein_vim)
 	call dein#add('Shougo/dein.vim')
 	call dein#add('airblade/vim-gitgutter')
 	call dein#add('alvan/vim-closetag')
-	call dein#add('cohama/lexima.vim')
-	call dein#add('dense-analysis/ale')
+	call dein#add('cohama/lexima.vim')      " 括弧補完
+	call dein#add('dense-analysis/ale')     " Syntaxチェッカー
 	call dein#add('easymotion/vim-easymotion')
 	call dein#add('hrsh7th/vim-vsnip')
 	call dein#add('hrsh7th/vim-vsnip-integ')
 	call dein#add('itchyny/lightline.vim')
-	call dein#add('jceb/vim-hier')
+	call dein#add('jceb/vim-hier')          " quickfixをハイライト
 	call dein#add('jistr/vim-nerdtree-tabs')
 	call dein#add('kana/vim-textobj-user')
-	call dein#add('luochen1990/rainbow')
+	call dein#add('luochen1990/rainbow')    " 虹色括弧
 	call dein#add('machakann/vim-sandwich')
 	call dein#add('mattn/vim-maketable')
-	call dein#add('matze/vim-move')
+	call dein#add('matze/vim-move')         " 複数行移動
 	call dein#add('mbbill/undotree')
 	call dein#add('mechatroner/rainbow_csv')
 	call dein#add('michaeljsmith/vim-indent-object')
-	call dein#add('osyo-manga/shabadou.vim')
-	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'})
-	call dein#add('othree/html5.vim')
+	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'}) " rubyの補完
+	call dein#add('othree/html5.vim')       " html5の補完やチェック
 	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	call dein#add('prabirshrestha/asyncomplete.vim')
 	call dein#add('rafamadriz/friendly-snippets')
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('skanehira/translate.vim')
 	call dein#add('thinca/vim-portal')
-	call dein#add('thinca/vim-quickrun')
-	call dein#add('tyru/caw.vim')
+	call dein#add('tyru/caw.vim')            " コメント化
 	call dein#add('utubo/vim-colorscheme-utb')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
-	" vimproc (quickrunとかwathdogsで使ってる)
-	if has('win32')
-		Enable g:vimproc#download_windows_dll
-		call dein#add('Shougo/vimproc')
-	else
-		call dein#add('Shougo/vimproc', {'build': 'make'})
-	endif
 	call dein#end()
 	call dein#save_state()
+	" 削除したら↓をやる
+	" :call map(dein#check_clean(), "delete(v:val, 'rf')")
+	" :call dein#recache_runtimepath()
 	"}}}
 
 	" easymotion {{{
