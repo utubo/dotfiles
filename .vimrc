@@ -260,6 +260,8 @@ if isdirectory(s:dein_vim)
 	let g:ale_lint_on_insert_leave = 0
 	let g:ale_fixers = {'typescript': ['deno']}
 	let g:ale_fix_on_save = 1 " run deno fmt when saving a buffer
+	let g:ale_set_loclist = 0
+	let g:ale_set_quickfix = 1
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	" }}}
