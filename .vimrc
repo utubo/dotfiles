@@ -258,6 +258,8 @@ if isdirectory(s:dein_vim)
 	let g:ale_sign_error = '🐞'
 	let g:ale_sign_warning = '🐝'
 	let g:ale_lint_on_insert_leave = 0
+	let g:ale_fixers = {'typescript': ['deno']}
+	let g:ale_fix_on_save = 1 " run deno fmt when saving a buffer
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	" }}}
@@ -555,12 +557,37 @@ inoremap ;jj <Esc>`^:update<CR>
 " ----------------------------------------------------------
 " terminalとか {{{
 if has('win32')
-	command! Powershell :terminal ++close pwsh
+	command! Powershell :bo terminal ++close pwsh
 	nnoremap SH :<C-u>Powershell<CR>
 	nnoremap <S-F1> :<C-u>!start explorer %:p:h<CR>
 else
-	nnoremap SH :<C-u>terminal<CR>
+	nnoremap SH :<C-u>bo terminal<CR>
 endif
+tnoremap <C-w>; <C-w>:
+"}}} -------------------------------------------------------
+
+" ----------------------------------------------------------
+" ウィンドウを移動するときに縮めたり自動で戻したり {{{
+function! s:ShrinkHeight(height = 1) abort
+	if (! get(w:, 'shrink', 0))
+		let w:height = winheight(0)
+	endif
+	let w:shrink = 1
+	let t:shrinknr = get(t:, 'shrinknr', 0) + 1
+	execute 'resize ' . a:height
+endfunction
+function! s:RestoreHeight() abort
+	if (get(w:, 'shrink', 0))
+		let w:shrink = 0
+		let t:shrinknr = t:shrinknr - 1
+		if t:shrinknr != 1
+			execute 'resize ' . w:height
+		endif
+	endif
+endfunction
+nnoremap <silent> <C-w><C-s> :<C-u>call <SID>ShrinkHeight(5)<CR><C-w><C-w>
+tnoremap <silent> <C-w><C-s> <C-w>:call <SID>ShrinkHeight(5)<CR><C-w><C-w>
+au vimrc WinEnter * call <SID>RestoreHeight()
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -640,7 +667,6 @@ nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
-tnoremap <C-k><C-k> <C-w>N
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
