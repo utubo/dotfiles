@@ -110,6 +110,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('tyru/caw.vim')            " コメント化
 	call dein#add('utubo/vim-colorscheme-utb')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
+	call dein#add('utubo/vim-shrink')
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('yami-beta/asyncomplete-omni.vim')
 	call dein#add('yegappan/mru')
@@ -278,6 +279,8 @@ if isdirectory(s:dein_vim)
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
+	nmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+	tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	"}}}
 endif
 filetype plugin indent on
@@ -566,30 +569,7 @@ else
 	nnoremap SH :<C-u>bo terminal<CR>
 endif
 tnoremap <C-w>; <C-w>:
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" ウィンドウを移動するときに縮めたり自動で戻したり {{{
-function! s:ShrinkHeight(height = 1) abort
-	if (! get(w:, 'shrink', 0))
-		let w:height = winheight(0)
-	endif
-	let w:shrink = 1
-	let t:shrinknr = get(t:, 'shrinknr', 0) + 1
-	execute 'resize ' . a:height
-endfunction
-function! s:RestoreHeight() abort
-	if (get(w:, 'shrink', 0))
-		let w:shrink = 0
-		let t:shrinknr = t:shrinknr - 1
-		if t:shrinknr != 1
-			execute 'resize ' . w:height
-		endif
-	endif
-endfunction
-nnoremap <silent> <C-w><C-s> :<C-u>call <SID>ShrinkHeight(5)<CR><C-w><C-w>
-tnoremap <silent> <C-w><C-s> <C-w>:call <SID>ShrinkHeight(5)<CR><C-w><C-w>
-au vimrc WinEnter * call <SID>RestoreHeight()
+tnoremap <C-w><C-w> <C-w>w
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
