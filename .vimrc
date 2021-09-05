@@ -107,6 +107,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('scrooloose/nerdtree')
 	call dein#add('skanehira/translate.vim')
 	call dein#add('thinca/vim-portal')
+	call dein#add('tpope/vim-fugitive')      " Gdiffとか
 	call dein#add('tyru/caw.vim')            " コメント化
 	call dein#add('utubo/vim-colorscheme-utb')
 	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
@@ -281,43 +282,15 @@ if isdirectory(s:dein_vim)
 	let g:move_key_modifier = 'C'
 	nmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+	nmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+	tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 	"}}}
 endif
 filetype plugin indent on
 "}}} -------------------------------------------------------
 
-" ↓ここからしばらくコピペ寄せ集め
-
 " ----------------------------------------------------------
-" Movement in insert mode {{{
-" https://github.com/junegunn/dotfiles/master/vimrc
-inoremap <C-h> <C-o>h
-inoremap <C-k> <C-o>k
-inoremap <C-^> <C-o><C-^>
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" テンプレート {{{
-function! s:ReadTemplate() abort
-	let l:filename = expand('~/.vim/template/'.&filetype.'.txt')
-	if ! filereadable(l:filename)
-		return
-	endif
-	execute '0r '.l:filename
-	if search('<+CURSOR+>')
-		normal! "_da>
-	endif
-	if col('.') == col('$') - 1
-		startinsert!
-	else
-		startinsert
-	endif
-endfunction
-au vimrc BufNewFile * call <SID>ReadTemplate()
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" その他パクリ {{{
+" コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 nnoremap <silent> <C-c> o<Esc>
@@ -325,19 +298,20 @@ vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><C
 xnoremap . :normal! .<CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
+" https://github.com/junegunn/dotfiles/master/vimrc
+inoremap <C-h> <C-o>h
+inoremap <C-k> <C-o>k
+inoremap <C-^> <C-o><C-^>
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
 xnoremap Y "+y
 " https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
-
 " https://github.com/Tumbler/dotfiles/blob/master/.vimrc
 autocmd vimrc FocusGained * let @" = @+
 autocmd vimrc FocusLost   * let @+ = @"
 "}}} -------------------------------------------------------
-
-" ↑ここまでコピペ寄せ集め
 
 " ----------------------------------------------------------
 " 色 {{{
@@ -621,6 +595,8 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
+nnoremap <Space><Space>p o<C-r>"<Esc>
+nnoremap <Space><Space>P O<C-r>"<Esc>
 nnoremap qq :<C-u>q<CR>
 onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
@@ -642,11 +618,9 @@ inoremap （） ()<Left>
 inoremap <CR> <CR><C-g>u
 vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
 vnoremap P p
+nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>a A
-nnoremap <Space>v V
-nnoremap <Space><Space>p o<C-r>"<Esc>
-nnoremap <Space><Space>P O<C-r>"<Esc>
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 
@@ -654,15 +628,19 @@ nnoremap TN :<C-u>tabnew<CR>
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 
+" 一部qを潰しちゃうけど…
+nnoremap <silent> qh <C-w>h <C-w>:q<CR>
+nnoremap <silent> qj <C-w>j <C-w>:q<CR>
+nnoremap <silent> qk <C-w>k <C-w>:q<CR>
+nnoremap <silent> ql <C-w>l <C-w>:q<CR>
+nnoremap <silent> qH <C-w>h <C-w>:q!<CR>
+nnoremap <silent> qJ <C-w>j <C-w>:q!<CR>
+nnoremap <silent> qK <C-w>k <C-w>:q!<CR>
+nnoremap <silent> qL <C-w>l <C-w>:q!<CR>
+
 " CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
-
-" よく誤爆するので
-nnoremap qj :<C-u>echoh Warningmsg \| echo 'qj is disabled.' \| echoh None<ESC>
-nnoremap qk :<C-u>echoh Warningmsg \| echo 'qk is disabled.' \| echoh None<ESC>
-nnoremap い i
-nnoremap う u
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 inoremap {; {<CR>};<Esc>O
@@ -689,8 +667,8 @@ inoremap jjl <Esc>ea
 inoremap jjk 「」<Left>
 inoremap jj<Tab> <Esc>vab<Esc>a
 
-au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^\s*if\s*(') ? '=' : '==='
-au vimrc FileType javascript inoremap <buffer> != !==
+au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^.*\<if\s*(') ? '=' : '=== '
+au vimrc FileType javascript inoremap <buffer> != !==<Space>
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
@@ -698,6 +676,7 @@ au vimrc FileType javascript inoremap <buffer> != !==
 " あともう1回「これ使ってないな…」と思ったときに消す
 nnoremap <silent> <F8> :<C-u>q<CR>
 nnoremap <F9> <C-w>w
+nnoremap <S-F9> <C-w>W
 
 "}}} -------------------------------------------------------
 
@@ -717,9 +696,9 @@ endif
 " <F3> UndoTree
 " <F4> DiffOrig
 " <F5> 日付関係
-" <F6> 括弧の外に出て追記(様子見中)
+" <F6>
 " <F7>
-" <F8> :q(様子見中)
+" <F8>
 " <F9> ウィンドウ切替(様子見中)
 " <F10> ヘッダ行を表示(様子見中)
 " <F11> 行番号表示切替

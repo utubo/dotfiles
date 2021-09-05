@@ -73,6 +73,8 @@ au gvimrc BufRead * call <SID>MyLightline()
 if has('win32')
 	" Alt-Spaceでシステムメニュー(winaltkeysはメニューバーが無いと動かないので×)
 	noremap <M-Space> :simalt ~<CR>
+	" エクスプローラーで開く
+	nnoremap <S-F1> :<C-u>!start explorer %:p:h<CR>
 endif
 " }}}
 
