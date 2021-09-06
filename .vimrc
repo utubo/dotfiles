@@ -110,7 +110,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('tpope/vim-fugitive')      " Gdiffとか
 	call dein#add('tyru/caw.vim')            " コメント化
 	call dein#add('utubo/vim-colorscheme-utb')
-	call dein#add('utubo/vim-reformatdate', {'lazy':1, 'on_cmd':'reformatdate#reformat'})
+	call dein#add('utubo/vim-reformatdate')
 	call dein#add('utubo/vim-shrink')
 	call dein#add('utubo/vim-textobj-twochars')
 	call dein#add('yami-beta/asyncomplete-omni.vim')

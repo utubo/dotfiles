@@ -75,6 +75,8 @@ if has('win32')
 	noremap <M-Space> :simalt ~<CR>
 	" エクスプローラーで開く
 	nnoremap <S-F1> :<C-u>!start explorer %:p:h<CR>
+	" https://github.com/utubo/winscp_upload.bat
+	nnoremap <S-F2> :<C-u>!winscp_upload.bat <C-r>=expand("%:p")<CR>
 endif
 " }}}
 
