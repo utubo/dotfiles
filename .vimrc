@@ -69,7 +69,6 @@ function! s:GetVisualSelection()
 	let @" = l:org
 	return l:text
 endfunction
-
 "}}}
 
 " ----------------------------------------------------------
@@ -246,7 +245,7 @@ if isdirectory(s:dein_vim)
 
 	" 翻訳 {{{
 	function! s:AutoTranslate(text)
-		if matchstr(a:text, '[^\x00-\x7F]') == ''
+		if matchstr(a:text, '[^\x00-\x7F]') ==# ''
 			execute ':Translate ' . a:text
 		else
 			execute ':Translate! ' . a:text
@@ -371,7 +370,7 @@ function! s:MyVimgrep(keyword, ...) abort
 		let l:path = expand('%:e') ==# '' ? '*' : ('*.' . expand('%:e'))
 	endif
 	" 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	let l:open_with_tab = s:BufIsSmth() && l:path != '%'
+	let l:open_with_tab = s:BufIsSmth() && l:path !=# '%'
 	if l:open_with_tab
 		tabnew
 	endif
@@ -403,7 +402,7 @@ function! s:MyQuickFixWindow() abort
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 endfunction
 au vimrc FileType qf call s:MyQuickFixWindow()
-au vimrc WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | q | endif
+au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -518,7 +517,7 @@ nnoremap <silent> zd :call <SID>Zd()<CR>
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
-nnoremap q: :q
+nnoremap q: :<C-u>confirm q
 nnoremap q; q:
 nnoremap ; :
 vnoremap ; :
@@ -552,13 +551,13 @@ function! s:ToggleCheckBox() range abort
 	for l:n in range(a:firstline, a:lastline)
 		let l:a = getline(l:n)
 		let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '') " check on
-		if l:a == l:b
+		if l:a ==# l:b
 			let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '') " check off
 		endif
-		if l:a == l:b
+		if l:a ==# l:b
 			let l:b = substitute(l:a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') " a new check box
 		endif
-		if l:a != l:b
+		if l:a !=# l:b
 			call setline(l:n, l:b)
 		endif
 	endfor
@@ -597,7 +596,7 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
-nnoremap qq :<C-u>q<CR>
+nnoremap qq :<C-u>confirm q<CR>
 onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
@@ -629,14 +628,17 @@ nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 
 " 一部qを潰しちゃうけど…
-nnoremap <silent> qh <C-w>h <C-w>:q<CR>
-nnoremap <silent> qj <C-w>j <C-w>:q<CR>
-nnoremap <silent> qk <C-w>k <C-w>:q<CR>
-nnoremap <silent> ql <C-w>l <C-w>:q<CR>
-nnoremap <silent> qH <C-w>h <C-w>:q!<CR>
-nnoremap <silent> qJ <C-w>j <C-w>:q!<CR>
-nnoremap <silent> qK <C-w>k <C-w>:q!<CR>
-nnoremap <silent> qL <C-w>l <C-w>:q!<CR>
+function s:Quit()
+	if mode() ==# 't'
+		execute 'quit!'
+	else
+		execute 'confirm quit'
+	endif
+endfunction
+nnoremap <silent> qh <C-w>h<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qj <C-w>j<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qk <C-w>k<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> ql <C-w>l<C-w>:<C-u>call <SID>Quit()<CR>
 
 " CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
