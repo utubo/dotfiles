@@ -645,10 +645,10 @@ nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
-inoremap {; {<CR>};<Esc>O
-inoremap {, {<CR>},<Esc>O
-inoremap [; [<CR>];<Esc>O
-inoremap [, [<CR>],<Esc>O
+inoremap {; {<CR>};<C-o>O
+inoremap {, {<CR>},<C-o>O
+inoremap [; [<CR>];<C-o>O
+inoremap [, [<CR>],<C-o>O
 
 " 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
 vnoremap <Tab> >gv
@@ -659,15 +659,14 @@ vnoremap u <ESC>ugv
 nmap <CR> <Space>
 
 " うーん…
-inoremap jjx - [ ]<Space>
-inoremap jj; <Esc>A;
-inoremap jj, <Esc>A,
-inoremap jj{ <Esc>A {
-inoremap jj} <Esc>A }
-inoremap jj<CR> <Esc>A<CR>
+inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
+inoremap jj; <C-o>$;
+inoremap jj, <C-o>$,
+inoremap jj{ <C-o>$ {
+inoremap jj} <C-o>$ }
+inoremap jj<CR> <C-o>$<CR>
 inoremap jjl <Esc>ea
 inoremap jjk 「」<Left>
-inoremap jj<Tab> <Esc>vab<Esc>a
 
 au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^.*\<if\s*(') ? '=' : '=== '
 au vimrc FileType javascript inoremap <buffer> != !==<Space>
