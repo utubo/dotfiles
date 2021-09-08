@@ -517,7 +517,7 @@ nnoremap <silent> zd :call <SID>Zd()<CR>
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
-nnoremap q: :<C-u>confirm q
+nnoremap q: :q
 nnoremap q; q:
 nnoremap ; :
 vnoremap ; :
@@ -596,7 +596,7 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
-nnoremap qq :<C-u>confirm q<CR>
+nnoremap <silent> qq :<C-u>confirm q<CR>
 onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
 onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
