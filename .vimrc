@@ -307,9 +307,6 @@ vnoremap gs :s///g<Left><Left><Left>
 xnoremap Y "+y
 " https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
-" https://github.com/Tumbler/dotfiles/blob/master/.vimrc
-autocmd vimrc FocusGained * let @" = @+
-autocmd vimrc FocusLost   * let @+ = @"
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -586,6 +583,10 @@ let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repe
 
 " ----------------------------------------------------------
 " その他細々したの {{{
+if has('clipboard')
+	autocmd vimrc FocusGained * let @" = @+
+	autocmd vimrc FocusLost   * let @+ = @"
+endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
 nnoremap <silent> <Space><Space> :<C-u>noh<CR>
