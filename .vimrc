@@ -533,10 +533,10 @@ inoremap ;jj <Esc>`^:update<CR>
 " terminalとか {{{
 if has('win32')
 	command! Powershell :bo terminal ++close pwsh
-	nnoremap SH :<C-u>Powershell<CR>
-	nnoremap <S-F1> :<C-u>!start explorer %:p:h<CR>
+	nnoremap <silent> SH :<C-u>Powershell<CR>
+	nnoremap <silent> <S-F1> :<C-u>silent !start explorer %:p:h<CR>
 else
-	nnoremap SH :<C-u>bo terminal<CR>
+	nnoremap <silent> SH :<C-u>bo terminal<CR>
 endif
 tnoremap <C-w>; <C-w>:
 tnoremap <C-w><C-w> <C-w>w
