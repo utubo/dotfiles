@@ -268,13 +268,17 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" lightline {{{
+	" utf-8じゃないときだけエンコーディングを表示する
+	function! g:LLNoUtf8() abort
+		return &fenc !=# 'utf-8' ? &fenc : ''
+	endfunction
 	" yankの内容を表示する
-	function! g:ShowReg() abort
-		let r = substitute(@0, '[ \t\r\n]', ' ', 'g')
+	function! g:LLReg() abort
+		let r = substitute(@", '[ \t\r\n]', ' ', 'g')
 		return '📎[' . (len(r) <= 10 ? r : (substitute(r, '^\(.\{8\}\).*', '\1..', ''))) . ']'
 	endfunction
 	" 毎時45分から15分間休憩しようね
-	function! g:TeaBreak() abort
+	function! g:LLTeaBreak() abort
 		if !exists('g:opentime')
 			let g:opentime = localtime()
 		endif
@@ -289,12 +293,12 @@ if isdirectory(s:dein_vim)
 	if exists('g:vimrc_timer_60s')
 		call timer_stop(g:vimrc_timer_60s)
 	endif
-
 	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
-	let g:lightline = { 'colorscheme': 'wombat' }
+	" lightline
 	let g:lightline = {
-		\ 'active': { 'right': [['teabreak'],['percent', 'lineinfo'],['reg', 'fileformat', 'fileencoding', 'filetype']] },
-		\ 'component_function': { 'teabreak': 'TeaBreak', 'reg': 'ShowReg' }
+		\ 'colorscheme': 'wombat',
+		\ 'active': { 'right': [['teabreak'],['fileformat', 'noutf8', 'lineinfo'],['reg']] },
+		\ 'component_function': { 'teabreak': 'LLTeaBreak', 'reg': 'LLReg', 'noutf8': 'LLNoUtf8' }
 		\ }
 	" }}}
 
@@ -635,9 +639,10 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
-nnoremap gS :<C-u>%s/<C-r>0//g<Left><Left>
-vnoremap gS :s/<C-r>0//g<Left><Left>
+nnoremap gS :<C-u>%s/<C-r>"//g<Left><Left>
+vnoremap gS :s/<C-r>"//g<Left><Left>
 nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
+nnoremap <Space>d "_d
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
