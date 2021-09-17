@@ -268,13 +268,19 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" lightline {{{
+	" yankの内容を表示する
+	function! g:ShowReg() abort
+		let r = substitute(@0, '[ \t\r\n]', ' ', 'g')
+		return '📎[' . (len(r) <= 10 ? r : (substitute(r, '^\(.\{8\}\).*', '\1..', ''))) . ']'
+	endfunction
+	" 毎時45分から15分間休憩しようね
 	function! g:TeaBreak() abort
 		if !exists('g:opentime')
 			let g:opentime = localtime()
 		endif
 		let tick = (localtime() - g:opentime) / 60
 		let mm = tick % 60
-		let tea = mm >= 45 ? '☕🍴🍰' : '' " 毎時45分から15分間休憩しようね
+		let tea = mm >= 45 ? '☕🍴🍰' : ''
 		return tea . printf('%d:%02d', tick / 60, mm)
 	endfunction
 	function! g:VimrcTimer60s(timer) abort
@@ -283,11 +289,12 @@ if isdirectory(s:dein_vim)
 	if exists('g:vimrc_timer_60s')
 		call timer_stop(g:vimrc_timer_60s)
 	endif
+
 	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
 	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:lightline = {
-		\ 'active': { 'right': [['teabreak'],['percent', 'lineinfo'],['fileformat', 'fileencoding', 'filetype']] },
-		\ 'component_function': { 'teabreak': 'TeaBreak' }
+		\ 'active': { 'right': [['teabreak'],['percent', 'lineinfo'],['reg', 'fileformat', 'fileencoding', 'filetype']] },
+		\ 'component_function': { 'teabreak': 'TeaBreak', 'reg': 'ShowReg' }
 		\ }
 	" }}}
 
@@ -452,8 +459,8 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 nnoremap <Space>zz :<C-u>q!<CR>
 " スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
-nnoremap <Space>w eb"wyee:echo 'yanked "'.@w.'" to @w'<CR>
-nnoremap <expr> <Space>g (@w =~ '^\d\+$' ? ':' : '/').@w."\<CR>"
+nnoremap <Space>y yiw
+nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -543,6 +550,7 @@ nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
+cnoreabbrev gv Gvdiffsplit
 
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
@@ -627,6 +635,9 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
+nnoremap gS :<C-u>%s/<C-r>0//g<Left><Left>
+vnoremap gS :s/<C-r>0//g<Left><Left>
+nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
