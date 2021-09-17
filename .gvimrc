@@ -57,10 +57,8 @@ let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
 au Syntax * RainbowToggleOn
 
 function! s:MyLightline()
-	let g:lightline = {
-		\ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-		\ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
-		\ }
+	let g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
+	let g:lightline.subseparator = { 'left': "", 'right': "" }
 	call lightline#init()
 	call lightline#enable()
 endfunction

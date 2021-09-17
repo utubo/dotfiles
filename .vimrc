@@ -267,9 +267,32 @@ if isdirectory(s:dein_vim)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	" }}}
 
+	" lightline {{{
+	function! g:TeaBreak() abort
+		if !exists('g:opentime')
+			let g:opentime = localtime()
+		endif
+		let tick = (localtime() - g:opentime) / 60
+		let mm = tick % 60
+		let tea = mm >= 45 ? '☕🍴🍰' : '' " 毎時45分から15分間休憩しようね
+		return tea . printf('%d:%02d', tick / 60, mm)
+	endfunction
+	function! g:VimrcTimer60s(timer) abort
+		call lightline#update()
+	endfunction
+	if exists('g:vimrc_timer_60s')
+		call timer_stop(g:vimrc_timer_60s)
+	endif
+	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
+	let g:lightline = { 'colorscheme': 'wombat' }
+	let g:lightline = {
+		\ 'active': { 'right': [['teabreak'],['percent', 'lineinfo'],['fileformat', 'fileencoding', 'filetype']] },
+		\ 'component_function': { 'teabreak': 'TeaBreak' }
+		\ }
+	" }}}
+
 	" その他 {{{
 	Enable g:rainbow_active
-	let g:lightline = { 'colorscheme': 'wombat' }
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
@@ -560,25 +583,6 @@ function! s:ToggleCheckBox() range abort
 	endfor
 endfunction
 noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" やりすぎ注意 {{{
-if exists('g:vimrc_tea_break')
-	call timer_stop(g:vimrc_tea_break.timer)
-else
-	let g:vimrc_tea_break = { 'count': 0 }
-endif
-function! g:vimrc_tea_break.exec(timer) abort
-	let self.count += 1
-	if self.count == 45
-		echo "そろそろ休憩(*'∀`*)っ 旦~"
-	elseif self.count >= 60
-		echo '休憩終わり'
-		let self.count = 0
-	endif
-endfunction
-let g:vimrc_tea_break.timer = timer_start(60000, g:vimrc_tea_break.exec, { 'repeat': -1 })
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
