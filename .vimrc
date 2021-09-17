@@ -268,11 +268,12 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" lightline {{{
-	" utf-8じゃないときだけエンコーディングを表示する
 	function! g:LLNoUtf8() abort
 		return &fenc !=# 'utf-8' ? &fenc : ''
 	endfunction
-	" yankの内容を表示する
+	function! g:LLFf() abort
+		return xor(has('win32'), &ff ==# 'dos') ? &ff : ''
+	endfunction
 	function! g:LLReg() abort
 		let r = substitute(@", '[ \t\r\n]', ' ', 'g')
 		return '📎[' . (len(r) <= 10 ? r : (substitute(r, '^\(.\{8\}\).*', '\1..', ''))) . ']'
@@ -297,9 +298,9 @@ if isdirectory(s:dein_vim)
 	" lightline
 	let g:lightline = {
 		\ 'colorscheme': 'wombat',
-		\ 'active': { 'right': [['teabreak'],['fileformat', 'noutf8', 'lineinfo'],['reg']] },
-		\ 'component_function': { 'teabreak': 'LLTeaBreak', 'reg': 'LLReg', 'noutf8': 'LLNoUtf8' }
-		\ }
+		\ 'active': { 'right': [['teabreak'],['ff', 'noutf8', 'lineinfo'],['reg']] },
+		\ 'component_function': { 'teabreak': 'LLTeaBreak', 'reg': 'LLReg', 'noutf8': 'LLNoUtf8', 'ff': 'LLFf' }
+	\ }
 	" }}}
 
 	" その他 {{{
@@ -643,6 +644,7 @@ nnoremap gS :<C-u>%s/<C-r>"//g<Left><Left>
 vnoremap gS :s/<C-r>"//g<Left><Left>
 nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
 nnoremap <Space>d "_d
+noremap <silent> <C-g> :<C-u>echo expand('%') line('$').'L' &ff &fenc &ft<CR>
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
