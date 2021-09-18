@@ -39,11 +39,18 @@ augroup End
 " ----------------------------------------------------------
 " ユーティリティ {{{
 
-" 「nmap <agrs>|vmap <agrs>」と同じ。
-" 引数の「<if-normal>」から行末までは「nmap」だけに適用する。
-command! -nargs=* NVmap
-	\ execute 'nmap ' . substitute(<q-args>, '<if-normal>', '', '') |
-	\ execute 'vmap ' . substitute(<q-args>, '<if-normal>.*', '', '')
+" こんな感じ
+" MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
+" ↓
+" nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
+command! -nargs=* MultiCmd
+	\ let s:q = substitute(<q-args>, '^\S*', '', '') |
+	\ for s:c in split(matchstr(<q-args>, '^\S*'), ',') |
+		\ let s:a = substitute(s:q, '<if-' . s:c . '>', '<>', 'g') |
+		\ let s:a = substitute(s:a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g') |
+		\ let s:a = substitute(s:a, '<>', '', 'g') |
+		\ execute s:c . s:a |
+	\ endfor
 
 " その他
 command! -nargs=1 Enable  let <args>=1
@@ -146,10 +153,10 @@ if isdirectory(s:dein_vim)
 	endfunction
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
-	NVmap Sd <Plug>(operator-sandwich-delete)<if-normal>as
-	NVmap Sr <Plug>(operator-sandwich-replace)<if-normal>as
-	NVmap Sa <Plug>(operator-sandwich-add)<if-normal>iw
-	NVmap S  <Plug>(operator-sandwich-add)<if-normal>iw
+	MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>as
+	MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>as
+	MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
+	MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
 	nmap SD <Plug>(operator-sandwich-delete)<if-normal>ab
 	nmap SR <Plug>(operator-sandwich-replace)<if-normal>ab
 	nmap S^ v^S
@@ -226,18 +233,11 @@ if isdirectory(s:dein_vim)
 	endfunction
 	call s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
 	call s:RegisterSource('buffer', ['*'], ['go'])
-	" Expand
-	imap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
-	smap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
-	" Expand or jump
-	imap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-	smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-	" Jump forward or backward
-	imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-	smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-	imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-	smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
-	"imap <expr> <CR>>  pumvisible() ? '<C-y>' : '<CR>'
+	MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+	MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+	MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+	"imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 	Enable g:lexima_accept_pum_with_enter
 	"}}}
 
@@ -254,12 +254,12 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" ALE {{{
-	let g:ale_sign_error = '🐞'
-	let g:ale_sign_warning = '🐝'
 	Enable  g:ale_set_quickfix
 	Enable  g:ale_fix_on_save
 	Disable g:ale_lint_on_insert_leave
 	Disable g:ale_set_loclist
+	let g:ale_sign_error = '🐞'
+	let g:ale_sign_warning = '🐝'
 	let g:ale_fixers = {'typescript': ['deno']}
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
@@ -310,7 +310,7 @@ if isdirectory(s:dein_vim)
 	" その他 {{{
 	Enable g:rainbow_active
 	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
-	NVmap <Space>c <Plug>(caw:hatpos:toggle)
+	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
 	Enable  g:nerdtree_tabs_autofind
@@ -318,10 +318,8 @@ if isdirectory(s:dein_vim)
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
-	nmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-	tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-	nmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-	tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 	"}}}
 endif
 filetype plugin indent on
