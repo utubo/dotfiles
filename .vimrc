@@ -220,16 +220,12 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" 補完 {{{
-	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-	inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
 	function! s:RegisterSource(name, white, black) abort
 		" とても長い
 		execute printf("call asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", a:name, a:name, a:white, a:black, a:name)
 	endfunction
 	call s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
 	call s:RegisterSource('buffer', ['*'], ['go'])
-
 	" Expand
 	imap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
 	smap <expr> JJ   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : 'JJ'
@@ -237,10 +233,12 @@ if isdirectory(s:dein_vim)
 	imap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	" Jump forward or backward
-	imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-	smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-	imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-	smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+	imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+	smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+	imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+	smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+	"imap <expr> <CR>>  pumvisible() ? '<C-y>' : '<CR>'
+	let g:lexima_accept_pum_with_enter = 1
 	"}}}
 
 	" 翻訳 {{{
@@ -667,8 +665,7 @@ function! s:ShowBufInfo()
 	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
 endfunction
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
-au vimrc BufReadPost * call <SID>ShowBufInfo()
-au vimrc BufNewFile * call <SID>ShowBufInfo()
+au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
