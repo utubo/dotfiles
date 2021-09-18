@@ -277,22 +277,22 @@ if isdirectory(s:dein_vim)
 		return '📎[' . (len(r) <= 10 ? r : (substitute(r, '^\(.\{8\}\).*', '\1..', ''))) . ']'
 	endfunction
 	" 毎時45分から15分間休憩しようね
-	function! g:LLTeaBreak() abort
-		if !exists('g:opentime')
-			let g:opentime = localtime()
-		endif
-		let tick = (localtime() - g:opentime) / 60
+	let g:ll_tea_break = '0:00'
+	let g:ll_tea_break_opentime = localtime()
+	function! g:VimrcTimer60s(timer) abort
+		let tick = (localtime() - g:ll_tea_break_opentime) / 60
 		let mm = tick % 60
 		let tea = mm >= 45 ? '☕🍴🍰' : ''
-		return tea . printf('%d:%02d', tick / 60, mm)
-	endfunction
-	function! g:VimrcTimer60s(timer) abort
+		let g:ll_tea_break = tea . printf('%d:%02d', tick / 60, mm)
 		call lightline#update()
 	endfunction
 	if exists('g:vimrc_timer_60s')
 		call timer_stop(g:vimrc_timer_60s)
 	endif
 	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
+	function! g:LLTeaBreak() abort
+		return g:ll_tea_break
+	endfunction
 	" lightline
 	let g:lightline = {
 		\ 'colorscheme': 'wombat',
