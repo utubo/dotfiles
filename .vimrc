@@ -644,7 +644,22 @@ nnoremap gS :<C-u>%s/<C-r>"//g<Left><Left>
 vnoremap gS :s/<C-r>"//g<Left><Left>
 nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
 nnoremap <Space>d "_d
-noremap <silent> <C-g> :<C-u>echo expand('%') line('$').'L' &ff &fenc &ft<CR>
+
+function! s:ShowBufInfo()
+	echoh Title
+	echon '"' bufname() '" '
+	if &readonly
+		echoh WarningMsg
+		echon '[RO] '
+	endif
+	let l:w = wordcount()
+	echoh ModeMsg
+	echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
+	echoh MoreMsg
+	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
+endfunction
+noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
+au vimrc BufReadPost * call <SID>ShowBufInfo()
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
