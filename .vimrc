@@ -646,20 +646,29 @@ nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
 nnoremap <Space>d "_d
 
 function! s:ShowBufInfo()
+	redraw
 	echoh Title
 	echon '"' bufname() '" '
+	let l:e = filereadable(expand('%'))
+	if ! l:e
+		echoh Tag
+		echon '[NEW] '
+	endif
 	if &readonly
 		echoh WarningMsg
 		echon '[RO] '
 	endif
 	let l:w = wordcount()
-	echoh ModeMsg
-	echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
+	if l:e || l:w.bytes
+		echoh ModeMsg
+		echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
+	endif
 	echoh MoreMsg
 	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
 endfunction
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
 au vimrc BufReadPost * call <SID>ShowBufInfo()
+au vimrc BufNewFile * call <SID>ShowBufInfo()
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
