@@ -290,16 +290,20 @@ if isdirectory(s:dein_vim)
 	call timer_stop(get(g:, 'vimrc_timer_60s', 0))
 	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
 
+	" その他
+	function! g:LLFF() abort
+		return xor(has('win32'), &ff ==# 'dos') ? &ff : ''
+	endfunction
+	function! g:LLNotUtf8() abort
+		return &fenc ==# 'utf-8' ? '' : &fenc
+	endfunction
+
 	" lightline設定
 	let g:lightline = {
 		\ 'colorscheme': 'wombat',
-		\ 'active': { 'right': [['teabreak'], ['ff', 'noutf8', 'lineinfo'], ['reg']] },
-		\ 'component': {
-			\ 'teabreak': '%{g:ll_tea_break}',
-			\ 'reg'     : '%{g:ll_reg}',
-			\ 'noutf8'  : '%{&fenc !=# "utf-8" ? &fenc : ""}',
-			\ 'ff'      : '%{xor(has("win32"), &ff ==# "dos") ? &ff : ""}',
-		\ },
+		\ 'active': { 'right': [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
+		\ 'component': { 'teabreak': '%{g:ll_tea_break}', 'reg': '%{g:ll_reg}' },
+		\ 'component_function': { 'ff': 'LLFF', 'notutf8': 'LLNotUtf8' },
 	\ }
 	" }}}
 
