@@ -487,7 +487,7 @@ noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
 " ----------------------------------------------------------
 " カーソルを行頭に合わせて移動 {{{
 function! s:PutHat() abort
-	let l:x = match(getline('.'), '\S.') + 1
+	let l:x = match(getline('.'), '\S') + 1
 	if l:x || !exists('w:my_hat')
 		let w:my_hat = col('.') == l:x ? '^' : ''
 	endif
