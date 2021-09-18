@@ -122,10 +122,10 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" easymotion {{{
+	Enable  g:EasyMotion_smartcase
+	Enable  g:EasyMotion_use_migemo
+	Enable  g:EasyMotion_enter_jump_first
 	Disable g:EasyMotion_do_mapping
-	Enable g:EasyMotion_smartcase
-	Enable g:EasyMotion_use_migemo
-	Enable g:EasyMotion_enter_jump_first
 	map s <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	"}}}
@@ -238,7 +238,7 @@ if isdirectory(s:dein_vim)
 	imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 	smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 	"imap <expr> <CR>>  pumvisible() ? '<C-y>' : '<CR>'
-	let g:lexima_accept_pum_with_enter = 1
+	Enable g:lexima_accept_pum_with_enter
 	"}}}
 
 	" 翻訳 {{{
@@ -256,11 +256,11 @@ if isdirectory(s:dein_vim)
 	" ALE {{{
 	let g:ale_sign_error = '🐞'
 	let g:ale_sign_warning = '🐝'
-	let g:ale_lint_on_insert_leave = 0
+	Enable  g:ale_set_quickfix
+	Enable  g:ale_fix_on_save
+	Disable g:ale_lint_on_insert_leave
+	Disable g:ale_set_loclist
 	let g:ale_fixers = {'typescript': ['deno']}
-	let g:ale_fix_on_save = 1 " run deno fmt when saving a buffer
-	let g:ale_set_loclist = 0
-	let g:ale_set_quickfix = 1
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	" }}}
@@ -307,8 +307,8 @@ if isdirectory(s:dein_vim)
 	NVmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
-	let g:nerdtree_tabs_autofind = 1
-	Enable g:undotree_SetFocusWhenToggle
+	Enable  g:nerdtree_tabs_autofind
+	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
