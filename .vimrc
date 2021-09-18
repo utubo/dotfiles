@@ -266,38 +266,40 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" lightline {{{
-	function! g:LLNoUtf8() abort
-		return &fenc !=# 'utf-8' ? &fenc : ''
+	" ヤンクしたやつを表示するやつ
+	let g:ll_reg = ''
+	function! s:YankPost() abort
+		let l:reg = substitute( v:event.regcontents[0], '\t', ' ', 'g')
+		if len(v:event.regcontents) !=# 1 || len(l:reg) > 10
+			let l:reg = substitute(l:reg, '^\(.\{0,8\}\).*', '\1..', '')
+		endif
+		let g:ll_reg = '📎[' . l:reg . ']'
 	endfunction
-	function! g:LLFf() abort
-		return xor(has('win32'), &ff ==# 'dos') ? &ff : ''
-	endfunction
-	function! g:LLReg() abort
-		let r = substitute(@", '[ \t\r\n]', ' ', 'g')
-		return '📎[' . (len(r) <= 10 ? r : (substitute(r, '^\(.\{8\}\).*', '\1..', ''))) . ']'
-	endfunction
+	au vimrc TextYankPost * call <SID>YankPost()
+
 	" 毎時45分から15分間休憩しようね
 	let g:ll_tea_break = '0:00'
 	let g:ll_tea_break_opentime = localtime()
 	function! g:VimrcTimer60s(timer) abort
-		let tick = (localtime() - g:ll_tea_break_opentime) / 60
-		let mm = tick % 60
-		let tea = mm >= 45 ? '☕🍴🍰' : ''
-		let g:ll_tea_break = tea . printf('%d:%02d', tick / 60, mm)
+		let l:tick = (localtime() - g:ll_tea_break_opentime) / 60
+		let l:mm = l:tick % 60
+		let l:tea = l:mm >= 45 ? '☕🍴🍰' : ''
+		let g:ll_tea_break = l:tea . printf('%d:%02d', l:tick / 60, l:mm)
 		call lightline#update()
 	endfunction
-	if exists('g:vimrc_timer_60s')
-		call timer_stop(g:vimrc_timer_60s)
-	endif
+	call timer_stop(get(g:, 'vimrc_timer_60s', 0))
 	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
-	function! g:LLTeaBreak() abort
-		return g:ll_tea_break
-	endfunction
-	" lightline
+
+	" lightline設定
 	let g:lightline = {
 		\ 'colorscheme': 'wombat',
-		\ 'active': { 'right': [['teabreak'],['ff', 'noutf8', 'lineinfo'],['reg']] },
-		\ 'component_function': { 'teabreak': 'LLTeaBreak', 'reg': 'LLReg', 'noutf8': 'LLNoUtf8', 'ff': 'LLFf' }
+		\ 'active': { 'right': [['teabreak'], ['ff', 'noutf8', 'lineinfo'], ['reg']] },
+		\ 'component': {
+			\ 'teabreak': '%{g:ll_tea_break}',
+			\ 'reg'     : '%{g:ll_reg}',
+			\ 'noutf8'  : '%{&fenc !=# "utf-8" ? &fenc : ""}',
+			\ 'ff'      : '%{xor(has("win32"), &ff ==# "dos") ? &ff : ""}',
+		\ },
 	\ }
 	" }}}
 
