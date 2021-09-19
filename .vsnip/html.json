@@ -9,6 +9,8 @@
 			"\t<title>${1:title}</title>",
 			"\t<meta name=\"og:title\" content=\"${1:title}\">",
 			"\t<meta name=\"og:description\" content=\"$2\">",
+			"\t<meta name=\"viewport\" content=\"width=device-width\">",
+			"\t<meta name=\"format-detection\" content=\"telephone=no\">",
 			"\t<!--",
 			"\t<meta name=\"og:image\" content=\"./card.png\">",
 			"\t<meta name=\"twitter:card\" content=\"summary\">",
