@@ -390,9 +390,11 @@ function! s:SetupTabstop() abort
 		setlocal expandtab
 		setlocal tabstop=4
 	endif
+	let &l:shiftwidth = &l:tabstop
+	let &l:softtabstop = &l:tabstop
 	call setpos('.', l:org)
 endfunction
-au vimrc BufRead * call <SID>SetupTabstop()
+au vimrc BufReadPost * call <SID>SetupTabstop()
 "}}}
 
 " ----------------------------------------------------------
