@@ -647,10 +647,10 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
-nnoremap gS :<C-u>%s/<C-r>"//g<Left><Left>
 vnoremap gS :s/<C-r>"//g<Left><Left>
-nnoremap g* yiw:<C-u>%s/<C-r>0//g<Left><Left>
+nnoremap gS :<C-u>%s/<C-r>=expand('<cword>')<CR>//g<Left><Left>
 nnoremap <Space>d "_d
+nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 
 function! s:ShowBufInfo()
 	redraw
@@ -683,9 +683,9 @@ nnoremap <Space>o <C-w>w
 " 一部qを潰しちゃうけど…
 function s:Quit()
 	if mode() ==# 't'
-		execute 'quit!'
+		quit!
 	else
-		execute 'confirm quit'
+		confirm quit
 	endif
 endfunction
 nnoremap <silent> qh <C-w>h<C-w>:<C-u>call <SID>Quit()<CR>
@@ -728,9 +728,7 @@ au vimrc FileType javascript inoremap <buffer> != !==<Space>
 "nnoremap <F1> :<C-u>smile<CR>
 
 " あともう1回「これ使ってないな…」と思ったときに消す
-nnoremap <silent> <F8> :<C-u>q<CR>
-nnoremap <F9> <C-w>w
-nnoremap <S-F9> <C-w>W
+nnoremap <silent> <F8> :<C-u>call <SID>Quit()<CR>
 
 "}}} -------------------------------------------------------
 
@@ -753,7 +751,7 @@ endif
 " <F6>
 " <F7>
 " <F8>
-" <F9> ウィンドウ切替(様子見中)
+" <F9>
 " <F10> ヘッダ行を表示(様子見中)
 " <F11> 行番号表示切替
 " <F12> 折り返し表示切替
