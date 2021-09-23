@@ -330,15 +330,10 @@ filetype plugin indent on
 " コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-nnoremap <silent> <C-c> o<Esc>
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 xnoremap . :normal! .<CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
-" https://github.com/junegunn/dotfiles/master/vimrc
-inoremap <C-h> <C-o>h
-inoremap <C-k> <C-o>k
-inoremap <C-^> <C-o><C-^>
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
@@ -604,6 +599,33 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
+" ファイル情報を色付きで表示 {{{
+function! s:ShowBufInfo()
+	redraw
+	echoh Title
+	echon '"' bufname() '" '
+	let l:e = filereadable(expand('%'))
+	if ! l:e
+		echoh Tag
+		echon '[NEW] '
+	endif
+	if &readonly
+		echoh WarningMsg
+		echon '[RO] '
+	endif
+	let l:w = wordcount()
+	if l:e || l:w.bytes
+		echoh ModeMsg
+		echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
+	endif
+	echoh MoreMsg
+	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
+endfunction
+noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
+au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
+" }}}
+
+" ----------------------------------------------------------
 " その他細々したの {{{
 if has('clipboard')
 	autocmd vimrc FocusGained * let @" = @+
@@ -650,30 +672,6 @@ nnoremap gS :<C-u>%s/<C-r>=expand('<cword>')<CR>//g<Left><Left>
 nnoremap <Space>d "_d
 nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 
-function! s:ShowBufInfo()
-	redraw
-	echoh Title
-	echon '"' bufname() '" '
-	let l:e = filereadable(expand('%'))
-	if ! l:e
-		echoh Tag
-		echon '[NEW] '
-	endif
-	if &readonly
-		echoh WarningMsg
-		echon '[RO] '
-	endif
-	let l:w = wordcount()
-	if l:e || l:w.bytes
-		echoh ModeMsg
-		echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
-	endif
-	echoh MoreMsg
-	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
-endfunction
-noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
-
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
@@ -696,6 +694,7 @@ nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
+" 便利なんだけど忘れてしまう…
 inoremap {; {<CR>};<C-o>O
 inoremap {, {<CR>},<C-o>O
 inoremap [; [<CR>];<C-o>O
@@ -710,13 +709,16 @@ vnoremap u <ESC>ugv
 nmap <CR> <Space>
 
 " うーん…
-inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
+inoremap jjh <C-o>^
+inoremap jjl <C-o>$
+inoremap jjb <C-o>b
+inoremap jjw <C-o>e<C-o>a
 inoremap jj; <C-o>$;
 inoremap jj, <C-o>$,
 inoremap jj{ <C-o>$ {
 inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
-inoremap jjl <Esc>ea
+inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
 inoremap jjk 「」<Left>
 
 au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^.*\<if\s*(') ? '=' : '=== '
