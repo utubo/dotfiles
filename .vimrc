@@ -306,19 +306,19 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" その他 {{{
-	let g:rainbow_conf = {}
-	let g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
-	let g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
-	Enable g:rainbow_active
-	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
-	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
-	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
-	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
+	Enable  g:rainbow_active
 	Enable  g:nerdtree_tabs_autofind
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
-	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	let g:move_key_modifier = 'C'
+	let g:rainbow_conf = {}
+	let g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
+	let g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
+	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
+	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
+	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
+	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
+	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 	"}}}
