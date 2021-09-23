@@ -153,12 +153,10 @@ if isdirectory(s:dein_vim)
 	endfunction
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
-	MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>as
-	MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>as
+	MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+	MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 	MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
 	MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
-	nmap SD <Plug>(operator-sandwich-delete)<if-normal>ab
-	nmap SR <Plug>(operator-sandwich-replace)<if-normal>ab
 	nmap S^ v^S
 	nmap S$ vg_S
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
