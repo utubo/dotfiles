@@ -53,8 +53,8 @@ command! -nargs=* MultiCmd
 	\ endfor
 
 " その他
-command! -nargs=1 Enable  let <args>=1
-command! -nargs=1 Disable let <args>=0
+command! -nargs=1 -complete=var Enable  let <args>=1
+command! -nargs=1 -complete=var Disable let <args>=0
 
 function! s:RemoveEmptyLine(line) abort
 	silent! execute a:line . 's/\s\+$//'
@@ -308,8 +308,11 @@ if isdirectory(s:dein_vim)
 	" }}}
 
 	" その他 {{{
+	let g:rainbow_conf = {}
+	let g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
+	let g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
 	Enable g:rainbow_active
-	let g:rcsv_colorpairs = [['105', '#9999ee',], ['120', '#99ee99'], ['212', '#ee99cc'], ['228', '#eeee99'], ['177', '#cc99ee'], ['117', '#99ccee']]
+	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>

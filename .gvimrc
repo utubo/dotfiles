@@ -54,8 +54,6 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
 
-au Syntax * RainbowToggleOn
-
 function! s:MyLightline()
 	let g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
 	let g:lightline.subseparator = { 'left': "", 'right': "" }
