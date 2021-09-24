@@ -115,7 +115,7 @@ if isdirectory(s:dein_vim)
 	call dein#add('thinca/vim-portal')
 	call dein#add('tpope/vim-fugitive')      " Gdiffとか
 	call dein#add('tyru/caw.vim')            " コメント化
-	call dein#add('utubo/vim-colorscheme-utb')
+	call dein#add('utubo/vim-colorscheme-girly')
 	call dein#add('utubo/vim-reformatdate')
 	call dein#add('utubo/vim-shrink')
 	call dein#add('utubo/vim-textobj-twochars')
@@ -367,7 +367,7 @@ endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
 set background=dark
-colorscheme utb
+colorscheme girly
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
