@@ -367,7 +367,7 @@ endfunction
 au vimrc VimEnter,WinEnter * call <SID>MyMatches()
 syntax on
 set background=dark
-colorscheme girly
+silent! colorscheme girly
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
