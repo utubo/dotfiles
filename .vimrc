@@ -626,6 +626,22 @@ au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
 " }}}
 
 " ----------------------------------------------------------
+" 閉じる {{{
+function s:Quit()
+	if mode() ==# 't'
+		quit!
+	else
+		confirm quit
+	endif
+endfunction
+nnoremap <silent> qh <C-w>h<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qj <C-w>j<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qk <C-w>k<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> ql <C-w>l<C-w>:<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
+" }}}
+
+" ----------------------------------------------------------
 " その他細々したの {{{
 if has('clipboard')
 	autocmd vimrc FocusGained * let @" = @+
@@ -676,19 +692,6 @@ nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 
-" 一部qを潰しちゃうけど…
-function s:Quit()
-	if mode() ==# 't'
-		quit!
-	else
-		confirm quit
-	endif
-endfunction
-nnoremap <silent> qh <C-w>h<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> qj <C-w>j<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> qk <C-w>k<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> ql <C-w>l<C-w>:<C-u>call <SID>Quit()<CR>
-
 " CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
@@ -712,7 +715,8 @@ nmap <CR> <Space>
 inoremap jjh <C-o>^
 inoremap jjl <C-o>$
 inoremap jjb <C-o>b
-inoremap jjw <C-o>e<C-o>a
+inoremap jje <C-o>e<C-o>a
+inoremap jjw <C-o>w
 inoremap jj; <C-o>$;
 inoremap jj, <C-o>$,
 inoremap jj{ <C-o>$ {
@@ -721,8 +725,12 @@ inoremap jj<CR> <C-o>$<CR>
 inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
 inoremap jjk 「」<Left>
 
-au vimrc FileType javascript inoremap <buffer> <expr> = match(getline('.'), '^.*\<if\s*(') ? '=' : '=== '
-au vimrc FileType javascript inoremap <buffer> != !==<Space>
+" 「===」とか「==#」の存在を忘れないように…
+function! s:HiDeprecatedEqual()
+	syntax match SpellRare / == /
+	syntax match SpellRare / != /
+endfunction
+au vimrc Syntax javascript,vim call <SID>HiDeprecatedEqual()
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
