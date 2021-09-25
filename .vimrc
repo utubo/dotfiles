@@ -683,8 +683,8 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
-vnoremap gS :s/<C-r>"//g<Left><Left>
-nnoremap gS :<C-u>%s/<C-r>=expand('<cword>')<CR>//g<Left><Left>
+vnoremap gS :s/<C-r>=escape(@", '^$.*?/\[]()')<CR>//g<Left><Left>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
 nnoremap <Space>d "_d
 nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 
