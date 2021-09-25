@@ -683,10 +683,10 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
-vnoremap gS :s/<C-r>=escape(@", '^$.*?/\[]()')<CR>//g<Left><Left>
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
 nnoremap <Space>d "_d
 nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
+cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
