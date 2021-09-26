@@ -213,13 +213,13 @@ if isdirectory(s:dein_vim)
 		endfor
 	endfunction
 	function! s:MyMRU() abort
+		hi link MruFileName Directory
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>
 		call s:MRUwithNumKey(s:BufIsSmth())
 	endfunction
 	au vimrc FileType mru call s:MyMRU()
 	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
-	hi link MruFileName Directory
 	"}}}
 
 	" 補完 {{{
