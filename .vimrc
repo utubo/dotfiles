@@ -495,12 +495,12 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 
 " ----------------------------------------------------------
 " 折り畳み {{{
-" こんなかんじでインデントに合わせて表示... {{{
+" こんなかんじでインデントに合わせて表示📁 {{{
 function! MyFoldText() abort
 	let l:src = getline(v:foldstart)
 	let l:indent = repeat(' ', indent(v:foldstart))
 	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
-	return l:indent . l:text . '...'
+	return l:indent . l:text . '📁'
 endfunction
 set foldtext=MyFoldText()
 set fillchars+=fold:\ " 折り畳み時の「-」は半角空白
@@ -682,9 +682,10 @@ nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 nnoremap <Space>d "_d
-nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
+nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
+nnoremap <expr> GH ':<C-u>hi ' . substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') . '<CR>'
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
