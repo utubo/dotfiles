@@ -43,14 +43,16 @@ augroup End
 " MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
 " ↓
 " nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
-command! -nargs=* MultiCmd
-	\ let s:q = substitute(<q-args>, '^\S*', '', '') |
-	\ for s:c in split(matchstr(<q-args>, '^\S*'), ',') |
-		\ let s:a = substitute(s:q, '<if-' . s:c . '>', '<>', 'g') |
-		\ let s:a = substitute(s:a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g') |
-		\ let s:a = substitute(s:a, '<>', '', 'g') |
-		\ execute s:c . s:a |
-	\ endfor
+function! s:MultiCmd(qargs) abort
+	const l:q = substitute(a:qargs, '^\S*', '', '')
+	for l:c in split(matchstr(a:qargs, '^\S*'), ',')
+		let l:a = substitute(l:q, '<if-' . l:c . '>', '<>', 'g')
+		let l:a = substitute(l:a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
+		let l:a = substitute(l:a, '<>', '', 'g')
+		execute l:c . l:a
+	endfor
+endfunction
+command! -nargs=* MultiCmd call <SID>MultiCmd(<q-args>)
 
 " その他
 command! -nargs=1 -complete=var Enable  let <args>=1
@@ -70,9 +72,9 @@ function! s:IndentStr(expr)
 endfunction
 
 function! s:GetVisualSelection()
-	let l:org = @"
+	const l:org = @"
 	silent normal! gvy
-	let l:text = @"
+	const l:text = @"
 	let @" = l:org
 	return l:text
 endfunction
@@ -163,10 +165,10 @@ if isdirectory(s:dein_vim)
 
 	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 	function! s:FixSandwichPos() abort
-		let l:c = g:operator#sandwich#object.cursor
-		if g:fix_sandwich_pos[1] != c.inner_head[1]
-			let l:c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
-			let l:c.inner_tail[2] = match(getline(c.inner_tail[1]), '$') + 1
+		const l:c = g:operator#sandwich#object.cursor
+		if g:fix_sandwich_pos[1] != l:c.inner_head[1]
+			let l:c.inner_head[2] = match(getline(l:c.inner_head[1]), '\S') + 1
+			let l:c.inner_tail[2] = match(getline(l:c.inner_tail[1]), '$') + 1
 		endif
 	endfunction
 	au vimrc User OperatorSandwichAddPre let g:fix_sandwich_pos = getpos('.')
@@ -179,12 +181,12 @@ if isdirectory(s:dein_vim)
 	endfunction
 	nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
 
-	function! s:BigMac(...) abort
-		let l:c = a:0 ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
-		if ! a:0 || s:big_mac_crown != l:c
+	function! s:BigMac(is_nest = 0) abort
+		const l:c = a:is_nest ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
+		if ! a:is_nest || s:big_mac_crown !=# l:c
 			let s:big_mac_crown = l:c
 			au vimrc User OperatorSandwichAddPost ++once call <SID>BigMac(1)
-			call feedkeys(a:0 ? 'S.' : 'gvSa')
+			call feedkeys(a:is_nest ? 'S.' : 'gvSa')
 		end
 	endfunction
 	nmap Sm viwSm
@@ -192,7 +194,7 @@ if isdirectory(s:dein_vim)
 
 	" 行末空白と空行を削除
 	function! s:RemoveAirBuns() abort
-		let l:c = g:operator#sandwich#object.cursor
+		const l:c = g:operator#sandwich#object.cursor
 		call s:RemoveEmptyLine(l:c.tail[1])
 		call s:RemoveEmptyLine(l:c.head[1])
 	endfunction
@@ -207,7 +209,7 @@ if isdirectory(s:dein_vim)
 		echoh Question
 		echo printf('[1]..[9] => open with a %s.', b:with_tab ? 'tab' : 'window')
 		echoh None
-		let l:key = b:with_tab ? 't' : '<CR>'
+		const l:key = b:with_tab ? 't' : '<CR>'
 		for l:i in range(1, 9)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
 		endfor
@@ -278,9 +280,9 @@ if isdirectory(s:dein_vim)
 	let g:ll_tea_break = '0:00'
 	let g:ll_tea_break_opentime = localtime()
 	function! g:VimrcTimer60s(timer) abort
-		let l:tick = (localtime() - g:ll_tea_break_opentime) / 60
-		let l:mm = l:tick % 60
-		let l:tea = l:mm >= 45 ? '☕🍴🍰' : ''
+		const l:tick = (localtime() - g:ll_tea_break_opentime) / 60
+		const l:mm = l:tick % 60
+		const l:tea = l:mm >= 45 ? '☕🍴🍰' : ''
 		let g:ll_tea_break = l:tea . printf('%d:%02d', l:tick / 60, l:mm)
 		call lightline#update()
 	endfunction
@@ -400,7 +402,7 @@ function! s:MyVimgrep(keyword, ...) abort
 		let l:path = expand('%:e') ==# '' ? '*' : ('*.' . expand('%:e'))
 	endif
 	" 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	let l:open_with_tab = s:BufIsSmth() && l:path !=# '%'
+	const l:open_with_tab = s:BufIsSmth() && l:path !=# '%'
 	if l:open_with_tab
 		tabnew
 	endif
@@ -469,8 +471,8 @@ nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
 " ----------------------------------------------------------
 " インデントが現在行以下の行まで移動 {{{
 function! s:FindSameIndent(flags, inner = 0) abort
-	let l:size = len(s:IndentStr('.'))
-	let l:pattern = printf('^\s\{0,%d\}\S', l:size)
+	const l:size = len(s:IndentStr('.'))
+	const l:pattern = printf('^\s\{0,%d\}\S', l:size)
 	call setpos('.', [0, getpos('.')[1], 1, 1])
 	return search(l:pattern, a:flags) + a:inner
 endfunction
@@ -483,7 +485,7 @@ noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
 " ----------------------------------------------------------
 " カーソルを行頭に合わせて移動 {{{
 function! s:PutHat() abort
-	let l:x = match(getline('.'), '\S') + 1
+	const l:x = match(getline('.'), '\S') + 1
 	if l:x || !exists('w:my_hat')
 		let w:my_hat = col('.') == l:x ? '^' : ''
 	endif
@@ -497,9 +499,9 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 " 折り畳み {{{
 " こんなかんじでインデントに合わせて表示📁 {{{
 function! MyFoldText() abort
-	let l:src = getline(v:foldstart)
-	let l:indent = repeat(' ', indent(v:foldstart))
-	let l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
+	const l:src = getline(v:foldstart)
+	const l:indent = repeat(' ', indent(v:foldstart))
+	const l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
 	return l:indent . l:text . '📁'
 endfunction
 set foldtext=MyFoldText()
@@ -580,7 +582,7 @@ tnoremap <C-w><C-w> <C-w>w
 " markdownのチェックボックス {{{
 function! s:ToggleCheckBox() range abort
 	for l:n in range(a:firstline, a:lastline)
-		let l:a = getline(l:n)
+		const l:a = getline(l:n)
 		let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '') " check on
 		if l:a ==# l:b
 			let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '') " check off
@@ -599,10 +601,13 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 " ----------------------------------------------------------
 " ファイル情報を色付きで表示 {{{
 function! s:ShowBufInfo()
+	if &ft ==# 'qf'
+		return
+	endif
 	redraw
 	echoh Title
 	echon '"' bufname() '" '
-	let l:e = filereadable(expand('%'))
+	const l:e = filereadable(expand('%'))
 	if ! l:e
 		echoh Tag
 		echon '[NEW] '
@@ -611,7 +616,7 @@ function! s:ShowBufInfo()
 		echoh WarningMsg
 		echon '[RO] '
 	endif
-	let l:w = wordcount()
+	const l:w = wordcount()
 	if l:e || l:w.bytes
 		echoh ModeMsg
 		echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
