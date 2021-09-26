@@ -213,6 +213,7 @@ if isdirectory(s:dein_vim)
 		endfor
 	endfunction
 	function! s:MyMRU() abort
+		setlocal cursorline
 		hi link MruFileName Directory
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>
@@ -345,7 +346,6 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 set t_Co=256
 function! s:MyColorScheme() abort
 	hi! link Folded Delimiter
-	hi CursorLine NONE
 endfunction
 au vimrc ColorScheme * call <SID>MyColorScheme()
 function! s:MyMatches() abort
