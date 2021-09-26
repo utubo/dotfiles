@@ -200,28 +200,26 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" MRU {{{
-	function! s:MRUwithNumKey(tab) abort
+	function! s:MRUwithNumKey(with_tab) abort
+		let b:with_tab = a:with_tab
 		setlocal number
-		echoh Question
-		echo printf('[1]..[9] => open with a %s.', a:tab ? 'tab' : 'window')
-		echoh None
 		redraw
-		let l:key = a:tab ? 't' : '<CR>'
+		echoh Question
+		echo printf('[1]..[9] => open with a %s.', b:with_tab ? 'tab' : 'window')
+		echoh None
+		let l:key = b:with_tab ? 't' : '<CR>'
 		for l:i in range(1, 9)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
 		endfor
 	endfunction
 	function! s:MyMRU() abort
-		let l:open_with_tab = s:BufIsSmth()
-		MRU
-		nnoremap <buffer> f <C-f>
-		nnoremap <buffer> b <C-b>
-		nnoremap <buffer> <silent> <F2> :<C-u>echo ''<CR>:q<CR>
-		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(0)<CR>
-		nnoremap <buffer> <silent> T :<C-u>call <SID>MRUwithNumKey(1)<CR>
-		call s:MRUwithNumKey(l:open_with_tab)
+		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:with_tab)<CR>
+		nnoremap <buffer> R :<C-u>MruRefresh<CR>
+		call s:MRUwithNumKey(s:BufIsSmth())
 	endfunction
-	nnoremap <silent> <F2> :<C-u>call <SID>MyMRU()<CR>
+	au vimrc FileType mru call s:MyMRU()
+	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
+	hi link MruFileName Directory
 	"}}}
 
 	" 補完 {{{
