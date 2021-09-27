@@ -317,8 +317,8 @@ if isdirectory(s:dein_vim)
 	let g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
 	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
-	nnoremap <silent> <Space><F1> :<C-u>tabe ./<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
+	nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -466,20 +466,11 @@ nnoremap <Space>zz :<C-u>q!<CR>
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
 nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
-"}}} -------------------------------------------------------
-
-" ----------------------------------------------------------
-" インデントが現在行以下の行まで移動 {{{
-function! s:FindSameIndent(flags, inner = 0) abort
-	const l:size = len(s:IndentStr('.'))
-	const l:pattern = printf('^\s\{0,%d\}\S', l:size)
-	call setpos('.', [0, getpos('.')[1], 1, 1])
-	return search(l:pattern, a:flags) + a:inner
-endfunction
-noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
-noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
-noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
-noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
+" ConnectBotの:とFキーが遠い
+nmap <Space>, :
+nmap <Space>2 <F2>
+nmap <Space>5 <F5>
+nmap <Space><Space>2 <F12>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -555,7 +546,6 @@ nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
-cnoreabbrev gv Gvdiffsplit
 
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
@@ -652,7 +642,7 @@ if has('clipboard')
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
-nnoremap <silent> <Space><Space> :<C-u>noh<CR>
+nnoremap <silent> <Space><Esc> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t ":]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
@@ -673,6 +663,9 @@ inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
+
+" 分割キーボードで右手親指が<CR>になったので
+nmap <CR> <Space>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -686,10 +679,12 @@ nnoremap <Space>l $
 nnoremap <Space>a A
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
+nnoremap TD :<C-u>tabe ./<CR>
 nnoremap <Space>d "_d
 nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
-nnoremap <silent> GV :<C-u>Gvdiffsplit<CR>
+
+" カーソル位置のハイライトを確認するやつ
 nnoremap <expr> GH ':<C-u>hi ' . substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') . '<CR>'
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
@@ -700,20 +695,14 @@ nnoremap <Space>o <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
-" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
-" 便利なんだけど忘れてしまう…
-inoremap {; {<CR>};<C-o>O
-inoremap {, {<CR>},<C-o>O
-inoremap [; [<CR>];<C-o>O
-inoremap [, [<CR>],<C-o>O
-
 " 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
 
-" 分割キーボードで右手親指が<CR>になったので…
-nmap <CR> <Space>
+" マーク使ってないし
+nnoremap ' "
+nnoremap <Space>' '
 
 " うーん…
 inoremap jjh <C-o>^
@@ -738,9 +727,33 @@ au vimrc Syntax javascript,vim call <SID>HiDeprecatedEqual()
 
 " これするともっといらっとするよ
 "nnoremap <F1> :<C-u>smile<CR>
+"}}} -------------------------------------------------------
 
-" あともう1回「これ使ってないな…」と思ったときに消す
+" ----------------------------------------------------------
+" † あともう1回「これ使ってないな…」と思ったときに消す {{{
+
 nnoremap <silent> <F8> :<C-u>call <SID>Quit()<CR>
+
+" インデントが現在行以下の行まで移動 {{{
+function! s:FindSameIndent(flags, inner = 0) abort
+	const l:size = len(s:IndentStr('.'))
+	const l:pattern = printf('^\s\{0,%d\}\S', l:size)
+	call setpos('.', [0, getpos('.')[1], 1, 1])
+	return search(l:pattern, a:flags) + a:inner
+endfunction
+noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
+noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
+noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
+noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
+
+" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
+" 便利なんだけど忘れてしまう…
+inoremap {; {<CR>};<C-o>O
+inoremap {, {<CR>},<C-o>O
+inoremap [; [<CR>];<C-o>O
+inoremap [, [<CR>],<C-o>O
+
+"}}}
 
 "}}} -------------------------------------------------------
 
