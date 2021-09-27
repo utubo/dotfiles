@@ -202,26 +202,26 @@ if isdirectory(s:dein_vim)
 	"}}}
 
 	" MRU {{{
-	function! s:MRUwithNumKey(with_tab) abort
-		let b:with_tab = a:with_tab
+	function! s:MRUwithNumKey(open_with_tab) abort
+		let b:open_with_tab = a:open_with_tab
 		setlocal number
 		redraw
 		echoh Question
-		echo printf('[1]..[9] => open with a %s.', b:with_tab ? 'tab' : 'window')
+		echo printf('[1]..[9] => open with a %s.', b:open_with_tab ? 'tab' : 'window')
 		echoh None
-		const l:key = b:with_tab ? 't' : '<CR>'
+		const l:key = b:open_with_tab ? 't' : '<CR>'
 		for l:i in range(1, 9)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
 		endfor
 	endfunction
 	function! s:MyMRU() abort
 		setlocal cursorline
-		hi link MruFileName Directory
-		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:with_tab)<CR>
+		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>
 		call s:MRUwithNumKey(s:BufIsSmth())
 	endfunction
 	au vimrc FileType mru call s:MyMRU()
+	au vimrc ColorScheme * hi link MruFileName Directory
 	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
 	"}}}
 
