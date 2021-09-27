@@ -321,7 +321,7 @@ if isdirectory(s:dein_vim)
 	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
-	nnoremap <silent> <C-g><C-v> :<C-u>Gvdiffsplit<CR>
+	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -688,7 +688,7 @@ nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
 
 " カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <C-g><C-h> ':<C-u>hi ' . substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') . '<CR>'
+nnoremap <expr> <Space>gh ':<C-u>hi ' . substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') . '<CR>'
 
 " どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
