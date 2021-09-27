@@ -304,6 +304,9 @@ if isdirectory(s:dein_vim)
 		\ 'component': { 'teabreak': '%{g:ll_tea_break}', 'reg': '%{g:ll_reg}' },
 		\ 'component_function': { 'ff': 'LLFF', 'notutf8': 'LLNotUtf8' },
 	\ }
+
+	" tablineはデフォルト
+	au vimrc VimEnter * set tabline=
 	" }}}
 
 	" その他 {{{
