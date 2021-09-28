@@ -16,7 +16,6 @@ endfunction
 " <C-h>はvim-move、Qと<C-u>はdefault.vim
 let s:default_ignore = {
 	\ 'n': split('gs h j k l q s Q S Y zd zf <C-g> <C-h> <C-u> <Esc> '''),
-	\ 'l': [], 'i': [], 'v': [], 'c': [], 'o': [], 't': [],
 \ }
 
 " わざと被らせてるやつ(ユーザー定義)
@@ -32,8 +31,8 @@ let s:user_map = split(execute('map'), "\n")
 " デフォルトのマッピングを作成する
 let s:default_map = []
 function s:AddDefaultMap(mode, keys)
-	for l:key in split(a:keys, ' ')
-		if index(s:default_ignore[a:mode], l:key) == -1
+	for l:key in split(a:keys)
+		if index(get(s:default_ignore, a:mode, []), l:key) == -1
 			call add(s:default_map, printf('%s  %-13s (default)', a:mode, l:key))
 		endif
 	endfor
@@ -63,7 +62,7 @@ call s:AddDefaultMap('v', '<Esc> . @ " '' / ? : < >')
 let s:all = s:default_map + s:user_map
 
 " 確認前にちょっと整形
-let s:user_ignore_head = []
+let s:user_ignore_head = ['']
 for s:key in keys(s:user_ignore)
 	for s:value in s:user_ignore[s:key]
 		call add(s:user_ignore_head, s:key . '  ' . s:value)
@@ -73,7 +72,7 @@ endfor
 " 被りがないかを確認する
 for s:m in s:user_map
 	let s:head = matchstr(s:m, '^.\s\+\S\+')
-	if s:head ==# '' || index(s:user_ignore_head, s:head) != -1
+	if index(s:user_ignore_head, s:head) != -1
 		continue
 	endif
 	let s:head = escape(s:head,  '^$.*?/\[]()')
