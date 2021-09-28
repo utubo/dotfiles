@@ -78,7 +78,7 @@ function! s:GetVisualSelection()
 	let @" = l:org
 	return l:text
 endfunction
-"}}}
+"}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
 " プラグイン {{{
@@ -262,7 +262,7 @@ if isdirectory(s:dein_vim)
 	let g:ale_fixers = {'typescript': ['deno']}
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
-	" }}}
+	"}}}
 
 	" lightline {{{
 	" ヤンクしたやつを表示するやつ
@@ -307,7 +307,7 @@ if isdirectory(s:dein_vim)
 
 	" tablineはデフォルト
 	au vimrc VimEnter * set tabline=
-	" }}}
+	"}}}
 
 	" その他 {{{
 	Enable  g:rainbow_active
@@ -393,7 +393,7 @@ function! s:SetupTabstop() abort
 	call setpos('.', l:org)
 endfunction
 au vimrc BufReadPost * call <SID>SetupTabstop()
-"}}}
+"}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
 " vimgrep {{{
@@ -460,9 +460,9 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
-" スマホ用キーバインド {{{
-" ・キーが小さいので押しにくいものはSpaceへマッピング
-" ・スマホでのコーディングは基本的にバグ取り
+" スマホ用 {{{
+" - キーが小さいので押しにくいものはSpaceへマッピング
+" - スマホでのコーディングは基本的にバグ取り
 nnoremap <Space>zz :<C-u>q!<CR>
 " スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
@@ -470,8 +470,10 @@ nnoremap <Space>y yiw
 nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
 " ConnectBotの:とFキーが遠い
 nmap <Space>, :
-nmap <Space>2 <F2>
-nmap <Space>5 <F5>
+for s:i in range(1, 10)
+	execute printf('nmap <Space>%d <F%d>', s:i % 10, s:i)
+endfor
+nmap <Space><Space>1 <F11>
 nmap <Space><Space>2 <F12>
 "}}} -------------------------------------------------------
 
@@ -618,7 +620,7 @@ function! s:ShowBufInfo()
 endfunction
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
 au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
-" }}}
+"}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
 " 閉じる {{{
@@ -635,7 +637,7 @@ nnoremap <silent> qk <C-w>k<C-w>:<C-u>call <SID>Quit()<CR>
 nnoremap <silent> ql <C-w>l<C-w>:<C-u>call <SID>Quit()<CR>
 nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
 " レコーディング停止はq<Esc>とかで
-" }}}
+"}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
 " その他細々したの {{{
@@ -748,6 +750,7 @@ noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
 noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
 noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
 noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
+"}}}
 
 " https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
 " 便利なんだけど忘れてしまう…
@@ -755,8 +758,6 @@ inoremap {; {<CR>};<C-o>O
 inoremap {, {<CR>},<C-o>O
 inoremap [; [<CR>];<C-o>O
 inoremap [, [<CR>],<C-o>O
-
-"}}}
 
 "}}} -------------------------------------------------------
 
@@ -773,17 +774,17 @@ endif
 " メモ {{{
 " <F1> NERDTree <S-F1>でフォルダを開く(win32)
 " <F2> MRU
-" <F3> UndoTree
-" <F4> DiffOrig
+" <F3> UndoTree(あんまり使わない)
+" <F4> DiffOrig(あんまり使わない)
 " <F5> 日付関係
 " <F6>
 " <F7>
 " <F8>
 " <F9>
-" <F10> ヘッダ行を表示(様子見中)
+" <F10> ヘッダ行を表示(あんまり使わない)
 " <F11> 行番号表示切替
 " <F12> 折り返し表示切替
-"}}}
+"}}} -------------------------------------------------------
 
 if filereadable(expand('~/.vimrc_local'))
 	source ~/.vimrc_local
