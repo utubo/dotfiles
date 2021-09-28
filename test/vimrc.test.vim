@@ -1,15 +1,26 @@
-" マッピングが想定外に被ってないか確認
-let s:lines = split(execute('map'), "\n")
+" テスト結果格納
+let s:result = []
 
-" ざっくりデフォルトも含めたマッピング
-let s:all = copy(s:lines)
-let s:ignore_default = {
+" マッピングが想定外に被ってないか確認する {{{
+
+" わざと被らせてるやつ(デフォルト)
+" <C-h>はvim-move、Qと<C-u>はdefault.vim
+let s:default_ignore = {
 	\ 'n': split('gs h j k l q s Q S Y zd zf <C-g> <C-h> <C-u> <Esc> '''),
 	\ 'l': [], 'i': [], 'v': [], 'c': [], 'o': [], 't': [],
-\ } " <C-h>はvim-move、Qと<C-u>はdefault.vim
+\ }
+
+" わざと被らせてるやつ(ユーザー定義)
+let s:user_ignore = ['n  S', 'v  S'] " sandwich
+
+" ユーザー定義のマッピングを取得する
+let s:user_map = split(execute('map'), "\n")
+
+" ざっくりデフォルトも含めたマッピングを作る
+let s:all = copy(s:user_map)
 function s:AddToAll(mode, keys)
 	for l:key in split(a:keys, ' ')
-		if index(s:ignore_default[a:mode], l:key) == -1
+		if index(s:default_ignore[a:mode], l:key) == -1
 			call add(s:all, printf('%s  %-13s *default*', a:mode, l:key))
 		endif
 	endfor
@@ -35,10 +46,11 @@ call s:AddToAll('n', '<Esc> . @ " '' / ? * # :')
 call s:AddToAll('v', 'y')
 call s:AddToAll('v', '<Esc> . @ " '' / ? : < >')
 
-" 確認
-for s:line in s:lines
-	let s:head = matchstr(s:line, '^.\s\+\S\+')
-	if s:head ==# ''
+" 被りがないかを確認する
+for s:m in s:user_map
+	echon '.'
+	let s:head = matchstr(s:m, '^.\s\+\S\+')
+	if s:head ==# '' || index(s:user_ignore, s:head) != -1
 		continue
 	endif
 	let s:head = escape(s:head,  '^$.*?/\[]()')
@@ -47,14 +59,19 @@ for s:line in s:lines
 	let s:head = substitute(s:head, '^[il]', '[il]', '')
 	let s:head = '^\C' . s:head
 	let s:dups = []
-	for s:l in s:all
-		if match(s:l, s:head) == 0
+	for s:a in s:all
+		if match(s:a, s:head) == 0
 			call add(s:dups, s:l)
 		endif
 	endfor
 	if len(s:dups) > 1
-		echo 'マッピングが被ってるかも'
-		echo join(s:dups, "\n")
+		call add(s:result, 'マッピングが被ってるかも')
+		call add(s:result, join(s:dups, "\n"))
 	endif
 endfor
+
+" }}}
+
+echo join(s:result, "\n")
+echo 'Ran all test.'
 
