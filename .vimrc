@@ -217,7 +217,7 @@ if isdirectory(s:dein_vim)
 	function! s:MyMRU() abort
 		setlocal cursorline
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
-		nnoremap <buffer> R :<C-u>MruRefresh<CR>
+		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
 		call s:MRUwithNumKey(s:BufIsSmth())
 	endfunction
 	au vimrc FileType mru call s:MyMRU()
