@@ -1,14 +1,32 @@
+" テスト経過を表示したり、結果を最後にまとめて表示したりしたい {{{
+
 " テスト結果格納場所
 let s:result = []
 
-function s:ShowProgressOK()
+function! s:ShowProgressOK()
 	echon '.'
 endfunction
-function s:ShowProgressNG()
+
+function! s:ShowProgressNG()
 	echoh Error
 	echon 'x'
 	echoh Normal
 endfunction
+
+function! s:Assert(expr, ...)
+	if a:expr
+		call s:ShowProgressOK()
+	else
+		call s:ShowProgressNG()
+		let s:result += a:000
+	endif
+endfunction
+
+function! s:AssertLessThan(expr, num, ...)
+	call call('s:Assert', [a:expr < a:num, printf('expect < %d, actual = %d', a:num , a:expr)] + a:000)
+endfunction
+
+" }}}
 
 " マッピングが想定外に被ってないか確認する {{{
 
@@ -86,13 +104,7 @@ for s:m in s:user_map
 			call add(s:dups, s:a)
 		endif
 	endfor
-	if len(s:dups) < 2
-		call s:ShowProgressOK()
-	else
-		call s:ShowProgressNG()
-		call add(s:result, 'マッピングが被ってるかも')
-		call add(s:result, join(s:dups, "\n"))
-	endif
+	call s:AssertLessThan(len(s:dups), 2, 'マッピングが被ってるかも', join(s:dups, "\n"))
 endfor
 
 " }}}
