@@ -4,13 +4,13 @@ let s:lines = split(execute('map'), "\n")
 " ざっくりデフォルトも含めたマッピング
 let s:all = copy(s:lines)
 let s:ignore_default = {
-	\ 'n': split('h j k l q s S Y <C-g> <C-h>'),
+	\ 'n': split('gs h j k l q s Q S Y zd zf <C-g> <C-h> <C-u> <Esc> '''),
 	\ 'l': [], 'i': [], 'v': [], 'c': [], 'o': [], 't': [],
-\ } " <C-h>はvim-moveが設定している
+\ } " <C-h>はvim-move、Qと<C-u>はdefault.vim
 function s:AddToAll(mode, keys)
 	for l:key in split(a:keys, ' ')
-		if index(s:ignore_default[a:mode], l:key) != - 1
-			call add(s:all, printf('%s  %13s *default*', a:mode, l:key))
+		if index(s:ignore_default[a:mode], l:key) == -1
+			call add(s:all, printf('%s  %-13s *default*', a:mode, l:key))
 		endif
 	endfor
 endfunction
@@ -30,8 +30,10 @@ call s:AddToAll('n', 'zt zuw zug zuW zuG zv zw zx zz')
 call s:AddToAll('n', 'z<Left> z<Right>')
 call s:AddToAll('n', 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z')
 call s:AddToAll('n', '<C-f> <C-g> <C-h>')
+call s:AddToAll('n', '<Esc> . @ " '' / ? * # :')
 " ノーマルモード以外の確認はそのうち
 call s:AddToAll('v', 'y')
+call s:AddToAll('v', '<Esc> . @ " '' / ? : < >')
 
 " 確認
 for s:line in s:lines
