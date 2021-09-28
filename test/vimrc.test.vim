@@ -20,7 +20,11 @@ let s:default_ignore = {
 \ }
 
 " わざと被らせてるやつ(ユーザー定義)
-let s:user_ignore = ['n  S', 'v  S'] " sandwich
+" sandwitch
+let s:user_ignore = {
+	\ 'n': ['S'],
+	\ 'v': ['S'],
+\ }
 
 " ユーザー定義のマッピングを取得する
 let s:user_map = split(execute('map'), "\n")
@@ -58,10 +62,18 @@ call s:AddDefaultMap('v', '<Esc> . @ " '' / ? : < >')
 " 全部のマッピング
 let s:all = s:default_map + s:user_map
 
+" 確認前にちょっと整形
+let s:user_ignore_head = []
+for s:key in keys(s:user_ignore)
+	for s:value in s:user_ignore[s:key]
+		call add(s:user_ignore_head, s:key . '  ' . s:value)
+	endfor
+endfor
+
 " 被りがないかを確認する
 for s:m in s:user_map
 	let s:head = matchstr(s:m, '^.\s\+\S\+')
-	if s:head ==# '' || index(s:user_ignore, s:head) != -1
+	if s:head ==# '' || index(s:user_ignore_head, s:head) != -1
 		continue
 	endif
 	let s:head = escape(s:head,  '^$.*?/\[]()')
