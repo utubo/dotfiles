@@ -19,24 +19,20 @@ endfunction
 " わざとデフォルトと被らせてるやつ
 " 以下はvimrc外でデフォルトと被ってる
 " n  <C-A> vim-reformatdate
-" n  <C-H> vim-move
-" n  <C-J> vim-move
-" n  <C-L> vim-move
 " n  <C-U> default.vim
 " n  <C-W><C-H> vim-shrink
 " n  <C-X> vim-reformatdate
 " n  Q     default.vim
 " n  gc    vim-caw
-" v  <C-L> vim-move
 let s:default_ignore = '\C' .
-	\ 'n  \([hjklqsQSTY;'''']\|gc\|gs\|zd\|zf\|<C-[AHJLUWXW]>\|<Esc>\)\|' .
-	\ 'v  \([*]\|<C-L>\)'
+			\ 'n  \([hjklqsQSTY;'''']\|gc\|gs\|zd\|zf\|<C-[AUWX]>\|<Esc>\)\|' .
+			\ 'v  \([*]\)'
 
 " わざと被らせてるやつ(ユーザー定義)
 " sandwitch
 let s:user_ignore = '\C' .
-	\ 'n  S\|' .
-	\ 'v  S'
+			\ 'n  S\|' .
+			\ 'v  S'
 
 " ユーザー定義のマッピング
 let s:user_map = execute('map')

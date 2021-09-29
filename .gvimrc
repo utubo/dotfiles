@@ -18,8 +18,8 @@ function! s:IncFontSize(d) abort
 	let size = size + a:d
 	let &guifont = name . ':h' . size
 endfunction
-nnoremap <silent> <M-k> :call <SID>IncFontSize(1)<CR>
-nnoremap <silent> <M-j> :call <SID>IncFontSize(-1)<CR>
+nnoremap <silent> <M-S-k> :call <SID>IncFontSize(1)<CR>
+nnoremap <silent> <M-S-j> :call <SID>IncFontSize(-1)<CR>
 " }}}
 
 " guioptions {{{
