@@ -550,6 +550,9 @@ nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
+cnoreabbrev Ga Git add %
+cnoreabbrev Gc Git commit -m
+cnoreabbrev Gp Git push
 
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
