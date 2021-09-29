@@ -322,6 +322,10 @@ if isdirectory(s:dein_vim)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
+	nnoremap <Space>ga :<C-u>Git add %
+	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
+	nnoremap <Space>gp :<C-u>Git push
+	nnoremap <Space>gl :<C-u>Git pll
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -550,9 +554,6 @@ nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
-cnoreabbrev Ga Git add %
-cnoreabbrev Gc Git commit -m
-cnoreabbrev Gp Git push
 
 " 「jj」で<CR>、「kk」はキャンセル
 " ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
