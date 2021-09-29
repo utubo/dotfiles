@@ -570,6 +570,8 @@ else
 endif
 tnoremap <C-w>; <C-w>:
 tnoremap <C-w><C-w> <C-w>w
+tnoremap <C-w>q exit
+tnoremap <C-w><C-q> <C-w>:quit!<CR>
 "}}} -------------------------------------------------------
 
 " ----------------------------------------------------------
@@ -624,11 +626,13 @@ au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
 
 " ----------------------------------------------------------
 " 閉じる {{{
-function s:Quit(expr) abort
-	if winnr() == winnr(a:expr)
-		return
+function s:Quit(expr = '') abort
+	if ! empty(a:expr)
+		if winnr() == winnr(a:expr)
+			return
+		endif
+		execute 'wincmd ' . a:expr
 	endif
-	execute 'wincmd ' . a:expr
 	if mode() ==# 't'
 		quit!
 	else
@@ -639,7 +643,7 @@ nnoremap <silent> qh :<C-u>call <SID>Quit('h')<CR>
 nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
 nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
 nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
-nnoremap <silent> qq :<C-u>confirm quit<CR>
+nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
 " レコーディング停止はq<Esc>とかで
 "}}} -------------------------------------------------------
 
