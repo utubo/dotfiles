@@ -325,7 +325,7 @@ if isdirectory(s:dein_vim)
 	nnoremap <Space>ga :<C-u>Git add %
 	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 	nnoremap <Space>gp :<C-u>Git push
-	nnoremap <Space>gl :<C-u>Git pll
+	nnoremap <Space>gl :<C-u>Git pull
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
