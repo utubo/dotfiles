@@ -624,18 +624,22 @@ au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
 
 " ----------------------------------------------------------
 " 閉じる {{{
-function s:Quit()
+function s:Quit(expr) abort
+	if winnr() == winnr(a:expr)
+		return
+	endif
+	execute 'wincmd ' . a:expr
 	if mode() ==# 't'
 		quit!
 	else
 		confirm quit
 	endif
 endfunction
-nnoremap <silent> qh <C-w>h<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> qj <C-w>j<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> qk <C-w>k<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> ql <C-w>l<C-w>:<C-u>call <SID>Quit()<CR>
-nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
+nnoremap <silent> qh :<C-u>call <SID>Quit('h')<CR>
+nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
+nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
+nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
+nnoremap <silent> qq :<C-u>confirm quit<CR>
 " レコーディング停止はq<Esc>とかで
 "}}} -------------------------------------------------------
 
