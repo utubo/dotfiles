@@ -337,7 +337,7 @@ filetype plugin indent on
 " コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vnoremap <silent> * "vy/\V<C-r>=、他はvimrcstitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
