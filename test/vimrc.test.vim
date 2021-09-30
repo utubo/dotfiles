@@ -25,7 +25,7 @@ endfunction
 " n  Q     default.vim
 " n  gc    vim-caw
 let s:default_ignore = '\C' .
-			\ 'n  \([hjklqsQSTY;'''']\|gc\|gs\|zd\|zf\|<C-[AUWX]>\|<Esc>\)\|' .
+			\ 'n  \([hjklqsQSTY;'']\|gc\|gs\|zd\|zf\|<C-[AUWX]>\|<Esc>\)\|' .
 			\ 'v  \([*]\)'
 
 " わざと被らせてるやつ(ユーザー定義)
@@ -74,7 +74,7 @@ for s:i in s:default_map
 	call s:ShowProgress()
 	let s:lst = []
 	call substitute(s:user_map, '\C' . s:i . '[^\n]*', '\=add(s:lst, submatch(0))', 'g')
-	call filter(s:lst, printf("v:val !~ '%s'", s:default_ignore))
+	call filter(s:lst, { -> v:val !~ s:default_ignore })
 	call assert_equal([], s:lst, 'デフォルトと被ってるかも /' . s:i . '/')
 endfor
 
