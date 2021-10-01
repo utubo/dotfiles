@@ -790,7 +790,7 @@ inoremap [, [<CR>],<C-o>O
 if strftime('%d') ==# '01'
 	def s:DMD()
 		var msg = "✨ Today, Let's enjoy VIM with default key mapping ! ✨"
-		var padding = repeat(' ', (winwidth(0) - len(msg)) / 2)
+		var padding = repeat(' ', (winwidth(0) - strdisplaywidth(msg)) / 2)
 		echo padding .. msg
 		imapclear
 		mapclear
