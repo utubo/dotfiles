@@ -1,11 +1,12 @@
+vim9script
 set encoding=utf-8
 scriptencoding utf-8
 
-" ----------------------------------------------------------
-" 基本設定 {{{
+# ----------------------------------------------------------
+# 基本設定 {{{
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,cp932,euc-jp
 set noexpandtab
-set tabstop=3 " 意外とありな気がしてきた…
+set tabstop=3 # 意外とありな気がしてきた…
 set shiftwidth=0
 set autoindent
 set smartindent
@@ -31,128 +32,128 @@ set hlsearch
 nohlsearch
 
 augroup vimrc
-	" 新しい自由
+	# 新しい自由
 	au!
 augroup End
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" ユーティリティ {{{
+# ----------------------------------------------------------
+# ユーティリティ {{{
 
-" こんな感じ
-" MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
-" ↓
-" nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
-function! s:MultiCmd(qargs) abort
-	const l:q = substitute(a:qargs, '^\S*', '', '')
-	for l:c in split(matchstr(a:qargs, '^\S*'), ',')
-		let l:a = substitute(l:q, '<if-' . l:c . '>', '<>', 'g')
-		let l:a = substitute(l:a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
-		let l:a = substitute(l:a, '<>', '', 'g')
-		execute l:c . l:a
+# こんな感じ
+# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
+# ↓
+# nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
+def s:MultiCmd(qargs: string)
+	const q = substitute(qargs, '^\S*', '', '')
+	for cmd in split(matchstr(qargs, '^\S*'), ',')
+		var a = substitute(q, '<if-' .. cmd .. '>', '<>', 'g')
+		a = substitute(a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
+		a = substitute(a, '<>', '', 'g')
+		execute cmd .. a
 	endfor
-endfunction
-command! -nargs=* MultiCmd call <SID>MultiCmd(<q-args>)
+enddef
+command! -nargs=* MultiCmd s:MultiCmd(<q-args>)
 
-" その他
-command! -nargs=1 -complete=var Enable  let <args>=1
-command! -nargs=1 -complete=var Disable let <args>=0
+# その他
+command! -nargs=1 -complete=var Enable  <args> = 1
+command! -nargs=1 -complete=var Disable <args> = 0
 
-function! s:RemoveEmptyLine(line) abort
-	silent! execute a:line . 's/\s\+$//'
-	silent! execute a:line . 's/^\s*\n//'
-endfunction
+def s:RemoveEmptyLine(line: number)
+	execute 'silent! ' .. line .. 's/\s\+$//'
+	execute 'silent! ' .. line .. 's/^\s*\n//'
+enddef
 
-function! s:BufIsSmth()
+def s:BufIsSmth(): bool
 	return &modified || ! empty(bufname())
-endfunction
+enddef
 
-function! s:IndentStr(expr)
-	return matchstr(getline(a:expr), '^\s*')
-endfunction
+def s:IndentStr(expr: any): string
+	return matchstr(getline(expr), '^\s*')
+enddef
 
-function! s:GetVisualSelection()
-	const l:org = @"
+def s:GetVisualSelection(): string
+	const org = @"
 	silent normal! gvy
-	const l:text = @"
-	let @" = l:org
-	return l:text
-endfunction
-"}}} -------------------------------------------------------
+	const text = @"
+	@" = org
+	return text
+enddef
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" プラグイン {{{
-let s:dein_dir = expand('~/.vim/dein')
-let s:dein_vim = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+# ----------------------------------------------------------
+# プラグイン {{{
+var s:dein_dir = expand('~/.vim/dein')
+var s:dein_vim = s:dein_dir .. '/repos/github.com/Shougo/dein.vim'
 if isdirectory(s:dein_vim)
-	" dein {{{
-	let &runtimepath = s:dein_vim . ',' . &runtimepath
-	call dein#begin(s:dein_dir)
-	call dein#add('Shougo/dein.vim')
-	call dein#add('airblade/vim-gitgutter')
-	call dein#add('alvan/vim-closetag')
-	call dein#add('cohama/lexima.vim')      " 括弧補完
-	call dein#add('dense-analysis/ale')     " Syntaxチェッカー
-	call dein#add('easymotion/vim-easymotion')
-	call dein#add('hrsh7th/vim-vsnip')
-	call dein#add('hrsh7th/vim-vsnip-integ')
-	call dein#add('itchyny/lightline.vim')
-	call dein#add('jceb/vim-hier')          " quickfixをハイライト
-	call dein#add('jistr/vim-nerdtree-tabs')
-	call dein#add('kana/vim-textobj-user')
-	call dein#add('luochen1990/rainbow')    " 虹色括弧
-	call dein#add('machakann/vim-sandwich')
-	call dein#add('mattn/vim-maketable')
-	call dein#add('matze/vim-move')         " 複数行移動
-	call dein#add('mbbill/undotree')
-	call dein#add('mechatroner/rainbow_csv')
-	call dein#add('michaeljsmith/vim-indent-object')
-	call dein#add('osyo-manga/vim-monster', {'lazy':1, 'on_ft':'ruby'}) " rubyの補完
-	call dein#add('othree/html5.vim')       " html5の補完やチェック
-	call dein#add('prabirshrestha/asyncomplete-buffer.vim')
-	call dein#add('prabirshrestha/asyncomplete.vim')
-	call dein#add('rafamadriz/friendly-snippets')
-	call dein#add('scrooloose/nerdtree')
-	call dein#add('skanehira/translate.vim')
-	call dein#add('thinca/vim-portal')
-	call dein#add('tpope/vim-fugitive')      " Gdiffとか
-	call dein#add('tyru/caw.vim')            " コメント化
-	call dein#add('utubo/vim-colorscheme-girly')
-	call dein#add('utubo/vim-reformatdate')
-	call dein#add('utubo/vim-shrink')
-	call dein#add('utubo/vim-textobj-twochars')
-	call dein#add('yami-beta/asyncomplete-omni.vim')
-	call dein#add('yegappan/mru')
-	call dein#end()
-	call dein#save_state()
-	" 削除したら↓をやる
-	" :call map(dein#check_clean(), "delete(v:val, 'rf')")
-	" :call dein#recache_runtimepath()
-	"}}}
+	# dein {{{
+	&runtimepath = s:dein_vim .. ',' .. &runtimepath
+	dein#begin(s:dein_dir)
+	dein#add('Shougo/dein.vim')
+	dein#add('airblade/vim-gitgutter')
+	dein#add('alvan/vim-closetag')
+	dein#add('cohama/lexima.vim')      # 括弧補完
+	dein#add('dense-analysis/ale')     # Syntaxチェッカー
+	dein#add('easymotion/vim-easymotion')
+	dein#add('hrsh7th/vim-vsnip')
+	dein#add('hrsh7th/vim-vsnip-integ')
+	dein#add('itchyny/lightline.vim')
+	dein#add('jceb/vim-hier')          # quickfixをハイライト
+	dein#add('jistr/vim-nerdtree-tabs')
+	dein#add('kana/vim-textobj-user')
+	dein#add('luochen1990/rainbow')    # 虹色括弧
+	dein#add('machakann/vim-sandwich')
+	dein#add('mattn/vim-maketable')
+	dein#add('matze/vim-move')         # 複数行移動
+	dein#add('mbbill/undotree')
+	dein#add('mechatroner/rainbow_csv')
+	dein#add('michaeljsmith/vim-indent-object')
+	dein#add('osyo-manga/vim-monster', { 'lazy': 1, 'on_ft': 'ruby' }) # rubyの補完
+	dein#add('othree/html5.vim')       # html5の補完やチェック
+	dein#add('prabirshrestha/asyncomplete-buffer.vim')
+	dein#add('prabirshrestha/asyncomplete.vim')
+	dein#add('rafamadriz/friendly-snippets')
+	dein#add('scrooloose/nerdtree')
+	dein#add('skanehira/translate.vim')
+	dein#add('thinca/vim-portal')
+	dein#add('tpope/vim-fugitive')      # Gdiffとか
+	dein#add('tyru/caw.vim')            # コメント化
+	dein#add('utubo/vim-colorscheme-girly')
+	dein#add('utubo/vim-reformatdate')
+	dein#add('utubo/vim-shrink')
+	dein#add('utubo/vim-textobj-twochars')
+	dein#add('yami-beta/asyncomplete-omni.vim')
+	dein#add('yegappan/mru')
+	dein#end()
+	dein#save_state()
+	# 削除したら↓をやる
+	# :call map(dein#check_clean(), "delete(v:val, 'rf')")
+	# :call dein#recache_runtimepath()
+	#}}}
 
-	" easymotion {{{
+	# easymotion {{{
 	Enable  g:EasyMotion_smartcase
 	Enable  g:EasyMotion_use_migemo
 	Enable  g:EasyMotion_enter_jump_first
 	Disable g:EasyMotion_do_mapping
 	map s <Plug>(easymotion-s)
 	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
-	"}}}
+	#}}}
 
-	" sandwich {{{
-	let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-	let g:sandwich#recipes += [
-		\ {'buns': ["\r", ''  ], 'input': ["\r"], 'command': ["normal! i\r"]},
-		\ {'buns': ['',   ''  ], 'input': ['q']},
-		\ {'buns': ['「', '」'], 'input': ['k']},
-		\ {'buns': ['>',  '<' ], 'input': ['>']},
-		\ {'buns': ['{ ', ' }'], 'input': ['{']},
-		\ {'buns': ['${', '}' ], 'input': ['${']},
-		\ {'buns': ['CommentString(0)','CommentString(1)'], 'expr': 1, 'input': ['c']},
-		\ ]
-	function! CommentString(index) abort
-		return get(split(&commentstring, '%s'), a:index, '')
-	endfunction
+	# sandwich {{{
+	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+	g:sandwich#recipes += [
+		{'buns': ["\r", ''  ], 'input': ["\r"], 'command': ["normal! i\r"]},
+		{'buns': ['',   ''  ], 'input': ['q']},
+		{'buns': ['「', '」'], 'input': ['k']},
+		{'buns': ['>',  '<' ], 'input': ['>']},
+		{'buns': ['{ ', ' }'], 'input': ['{']},
+		{'buns': ['${', '}' ], 'input': ['${']},
+		{'buns': ['CommentString(0)', 'CommentString(1)'], 'expr': 1, 'input': ['c']},
+	]
+	def! g:CommentString(index: number): string
+		return get(split(&commentstring, '%s'), index, '')
+	enddef
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
 	MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
@@ -163,161 +164,170 @@ if isdirectory(s:dein_vim)
 	nmap S$ vg_S
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
 
-	" 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-	function! s:FixSandwichPos() abort
-		const l:c = g:operator#sandwich#object.cursor
-		if g:fix_sandwich_pos[1] != l:c.inner_head[1]
-			let l:c.inner_head[2] = match(getline(l:c.inner_head[1]), '\S') + 1
-			let l:c.inner_tail[2] = match(getline(l:c.inner_tail[1]), '$') + 1
+	# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
+	def s:FixSandwichPos()
+		var c = g:operator#sandwich#object.cursor
+		if g:fix_sandwich_pos[1] != c.inner_head[1]
+			c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
+			c.inner_tail[2] = match(getline(c.inner_tail[1]), '$') + 1
 		endif
-	endfunction
-	au vimrc User OperatorSandwichAddPre let g:fix_sandwich_pos = getpos('.')
-	au vimrc User OperatorSandwichAddPost call <SID>FixSandwichPos()
+	enddef
+	au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
+	au vimrc User OperatorSandwichAddPost s:FixSandwichPos()
 
-	" 内側に連続で挟むやつ
-	function! s:RemarkPatty() abort
-		call setpos("'<", g:operator#sandwich#object.cursor.inner_head)
-		call setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-	endfunction
+	# 内側に連続で挟むやつ
+	def s:RemarkPatty()
+		setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+		setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+	enddef
 	nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
 
-	function! s:BigMac(is_nest = 0) abort
-		const l:c = a:is_nest ? g:operator#sandwich#object.cursor.inner_head[1:2] : []
-		if ! a:is_nest || s:big_mac_crown !=# l:c
-			let s:big_mac_crown = l:c
-			au vimrc User OperatorSandwichAddPost ++once call <SID>BigMac(1)
-			call feedkeys(a:is_nest ? 'S.' : 'gvSa')
-		end
-	endfunction
+	var s:big_mac_crown = []
+	def s:BigMac(is_nest: bool = false)
+		const c = is_nest ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
+		if ! is_nest || s:big_mac_crown !=# c
+			s:big_mac_crown = c
+			au vimrc User OperatorSandwichAddPost ++once s:BigMac(true)
+			feedkeys(is_nest ? 'S.' : 'gvSa')
+		endif
+	enddef
 	nmap Sm viwSm
 	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 
-	" 行末空白と空行を削除
-	function! s:RemoveAirBuns() abort
-		const l:c = g:operator#sandwich#object.cursor
-		call s:RemoveEmptyLine(l:c.tail[1])
-		call s:RemoveEmptyLine(l:c.head[1])
-	endfunction
-	au vimrc User OperatorSandwichDeletePost call <SID>RemoveAirBuns()
-	"}}}
+	# 行末空白と空行を削除
+	def s:RemoveAirBuns()
+		var c = g:operator#sandwich#object.cursor
+		s:RemoveEmptyLine(c.tail[1])
+		s:RemoveEmptyLine(c.head[1])
+	enddef
+	au vimrc User OperatorSandwichDeletePost s:RemoveAirBuns()
+	#}}}
 
-	" MRU {{{
-	function! s:MRUwithNumKey(open_with_tab) abort
-		let b:open_with_tab = a:open_with_tab
+	# MRU {{{
+	def s:MRUwithNumKey(open_with_tab: bool)
+		b:open_with_tab = open_with_tab
 		setlocal number
 		redraw
 		echoh Question
 		echo printf('[1]..[9] => open with a %s.', b:open_with_tab ? 'tab' : 'window')
 		echoh None
-		const l:key = b:open_with_tab ? 't' : '<CR>'
-		for l:i in range(1, 9)
-			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', l:i, l:i, l:key)
+		const key = b:open_with_tab ? 't' : '<CR>'
+		for i in range(1, 9)
+			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
 		endfor
-	endfunction
-	function! s:MyMRU() abort
+	enddef
+	def s:MyMRU()
 		setlocal cursorline
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
-		call s:MRUwithNumKey(s:BufIsSmth())
-	endfunction
-	au vimrc FileType mru call s:MyMRU()
+		s:MRUwithNumKey(s:BufIsSmth())
+	enddef
+	au vimrc FileType mru s:MyMRU()
 	au vimrc ColorScheme * hi link MruFileName Directory
 	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
-	"}}}
+	#}}}
 
-	" 補完 {{{
-	function! s:RegisterSource(name, white, black) abort
-		" とても長い
-		execute printf("call asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", a:name, a:name, a:white, a:black, a:name)
-	endfunction
-	call s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
-	call s:RegisterSource('buffer', ['*'], ['go'])
+	# 補完 {{{
+	def s:RegisterSource(name: string, white: list<string>, black: list<string>)
+		# とても長い
+		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", name, name, white, black, name)
+	enddef
+	s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
+	s:RegisterSource('buffer', ['*'], ['go'])
 	MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 	MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 	MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-	"imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
+	#imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 	Enable g:lexima_accept_pum_with_enter
-	"}}}
+	#}}}
 
-	" 翻訳 {{{
-	function! s:AutoTranslate(text)
-		if matchstr(a:text, '[^\x00-\x7F]') ==# ''
-			execute ':Translate ' . a:text
+	# 翻訳 {{{
+	def s:AutoTranslate(text: string)
+		if matchstr(text, '[^\x00-\x7F]') ==# ''
+			execute ':Translate ' .. text
 		else
-			execute ':Translate! ' . a:text
+			execute ':Translate! ' .. text
 		endif
-	endfunction
+	enddef
 	nnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
 	vnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
-	"}}}
+	#}}}
 
-	" ALE {{{
+	# ALE {{{
 	Enable  g:ale_set_quickfix
 	Enable  g:ale_fix_on_save
 	Disable g:ale_lint_on_insert_leave
 	Disable g:ale_set_loclist
-	let g:ale_sign_error = '🐞'
-	let g:ale_sign_warning = '🐝'
-	let g:ale_fixers = {'typescript': ['deno']}
+	g:ale_sign_error = '🐞'
+	g:ale_sign_warning = '🐝'
+	g:ale_fixers = {'typescript': ['deno']}
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
-	"}}}
+	#}}}
 
-	" lightline {{{
-	" ヤンクしたやつを表示するやつ
-	let g:ll_reg = ''
-	function! s:YankPost() abort
-		let l:reg = substitute( v:event.regcontents[0], '\t', ' ', 'g')
-		if len(v:event.regcontents) !=# 1 || len(l:reg) > 10
-			let l:reg = substitute(l:reg, '^\(.\{0,8\}\).*', '\1..', '')
+	# lightline {{{
+	# ヤンクしたやつを表示するやつ
+	g:ll_reg = ''
+	def s:LLYankPost()
+		var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
+		if len(v:event.regcontents) !=# 1 || len(reg) > 10
+			reg = substitute(reg, '^\(.\{0,8\}\).*', '\1..', '')
 		endif
-		let g:ll_reg = '📎[' . l:reg . ']'
-	endfunction
-	au vimrc TextYankPost * call <SID>YankPost()
+		g:ll_reg = '📎[' .. reg .. ']'
+	enddef
+	au vimrc TextYankPost * s:LLYankPost()
 
-	" 毎時45分から15分間休憩しようね
-	let g:ll_tea_break = '0:00'
-	let g:ll_tea_break_opentime = localtime()
-	function! g:VimrcTimer60s(timer) abort
-		const l:tick = (localtime() - g:ll_tea_break_opentime) / 60
-		const l:mm = l:tick % 60
-		const l:tea = l:mm >= 45 ? '☕🍴🍰' : ''
-		let g:ll_tea_break = l:tea . printf('%d:%02d', l:tick / 60, l:mm)
-		call lightline#update()
-	endfunction
-	call timer_stop(get(g:, 'vimrc_timer_60s', 0))
-	let g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
+	# 毎時45分から15分間休憩しようね
+	g:ll_tea_break = '0:00'
+	g:ll_tea_break_opentime = localtime()
+	def! g:VimrcTimer60s(timer: any)
+		const tick = (localtime() - g:ll_tea_break_opentime) / 60
+		const mm = tick % 60
+		const tea = mm >= 45 ? '☕🍴🍰' : ''
+		g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
+		lightline#update()
+	enddef
+	timer_stop(get(g:, 'vimrc_timer_60s', 0))
+	g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
 
-	" その他
-	function! g:LLFF() abort
-		return xor(has('win32'), &ff ==# 'dos') ? &ff : ''
-	endfunction
-	function! g:LLNotUtf8() abort
+	# &ff
+	if has('win32')
+		def! g:LLFF(): string
+			return &ff !=# 'dos' ? &ff : ''
+		enddef
+	else
+		def! g:LLFF(): string
+			return &ff ==# 'dos' ? &ff : ''
+		enddef
+	endif
+
+	# &fenc
+	def! g:LLNotUtf8(): string
 		return &fenc ==# 'utf-8' ? '' : &fenc
-	endfunction
+	enddef
 
-	" lightline設定
-	let g:lightline = {
-		\ 'colorscheme': 'wombat',
-		\ 'active': { 'right': [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
-		\ 'component': { 'teabreak': '%{g:ll_tea_break}', 'reg': '%{g:ll_reg}' },
-		\ 'component_function': { 'ff': 'LLFF', 'notutf8': 'LLNotUtf8' },
-	\ }
+	# lightline設定
+	g:lightline = {
+		'colorscheme': 'wombat',
+		'active': { 'right': [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
+		'component': { 'teabreak': '%{g:ll_tea_break}', 'reg': '%{g:ll_reg}' },
+		'component_function': { 'ff': 'LLFF', 'notutf8': 'LLNotUtf8' },
+	}
 
-	" tablineはデフォルト
+	# tablineはデフォルト
 	au vimrc VimEnter * set tabline=
-	"}}}
+	#}}}
 
-	" その他 {{{
+	# その他 {{{
 	Enable  g:rainbow_active
 	Enable  g:nerdtree_tabs_autofind
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
-	let g:rainbow_conf = {}
-	let g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
-	let g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
-	let g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
+	g:rainbow_conf = {}
+	g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
+	g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
+	g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
@@ -328,222 +338,227 @@ if isdirectory(s:dein_vim)
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-	"}}}
+	#}}}
 endif
 filetype plugin indent on
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" コピペ寄せ集め色々 {{{
+# ----------------------------------------------------------
+# コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
-" http://deris.hatenablog.jp/entry/2014/05/20/235807
+# http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
 xnoremap Y "+y
-" https://github.com/astrorobot110/myvimrc/blob/master/vimrc
+# https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" 色 {{{
+# ----------------------------------------------------------
+# 色 {{{
 set t_Co=256
-function! s:MyColorScheme() abort
+def s:MyColorScheme()
 	hi! link Folded Delimiter
-endfunction
-au vimrc ColorScheme * call <SID>MyColorScheme()
-function! s:MyMatches() abort
-	if exists('w:my_matches') && len(getmatches())
+enddef
+au vimrc ColorScheme * s:MyColorScheme()
+def s:MyMatches()
+	if exists('w:my_matches') && !empty(getmatches())
 		return
 	end
-	let w:my_matches = 1
-	call matchadd('SpellBad', '　\|¥\|\s\+$')
-	call matchadd('String', '「[^」]*」')
-	call matchadd('Label', '^\s*■.*$')
-	call matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
-	call matchadd('Error', 'ERROR')
-	call matchadd('Delimiter', '- \[ \]')
-	" 稀によくtypoする単語(気づいたら追加する)
-	call matchadd('SpellBad', 'stlye')
-endfunction
-au vimrc VimEnter,WinEnter * call <SID>MyMatches()
+	w:my_matches = 1
+	matchadd('SpellBad', '　\|¥\|\s\+$')
+	matchadd('String', '「[^」]*」')
+	matchadd('Label', '^\s*■.*$')
+	matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
+	matchadd('Error', 'ERROR')
+	matchadd('Delimiter', '- \[ \]')
+	# 稀によくtypoする単語(気づいたら追加する)
+	matchadd('SpellBad', 'stlye')
+enddef
+au vimrc VimEnter,WinEnter * s:MyMatches()
 syntax on
 set background=dark
 silent! colorscheme girly
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" タブ幅やタブ展開を自動設定 {{{
-function! s:SetupTabstop() abort
-	const l:limit = 100
-	const l:org = getpos('.')
-	call cursor(1, 1)
-	if search('^\t', 'nc', l:limit)
+# ----------------------------------------------------------
+# タブ幅やタブ展開を自動設定 {{{
+def s:SetupTabstop()
+	const limit = 100
+	const org = getpos('.')
+	cursor(1, 1)
+	if !!search('^\t', 'nc', limit)
 		setlocal noexpandtab
-		setlocal tabstop=3 " 意外とありな気がしてきた…
-	elseif search('^  \S', 'nc', l:limit)
+		setlocal tabstop=3 # 意外とありな気がしてきた…
+	elseif !!search('^  \S', 'nc', limit)
 		setlocal expandtab
 		setlocal tabstop=2
-	elseif search('^    \S', 'nc', l:limit)
+	elseif !!search('^    \S', 'nc', limit)
 		setlocal expandtab
 		setlocal tabstop=4
 	endif
-	let &l:shiftwidth = &l:tabstop
-	let &l:softtabstop = &l:tabstop
-	call setpos('.', l:org)
-endfunction
-au vimrc BufReadPost * call <SID>SetupTabstop()
-"}}} -------------------------------------------------------
+	&shiftwidth = &tabstop
+	&softtabstop = &tabstop
+	setpos('.', org)
+enddef
+au vimrc BufReadPost * s:SetupTabstop()
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" vimgrep {{{
-function! s:MyVimgrep(keyword, ...) abort
-	let l:path = join(a:000, ' ')
-	" パスを省略した場合は、同じ拡張子のファイルから探す
-	if empty(l:path)
-		let l:path = expand('%:e') ==# '' ? '*' : ('*.' . expand('%:e'))
+# ----------------------------------------------------------
+# vimgrep {{{
+def s:MyVimgrep(keyword: string, ...targets: list<string>)
+	var path = join(targets, ' ')
+	# パスを省略した場合は、同じ拡張子のファイルから探す
+	if empty(path)
+		path = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
 	endif
-	" 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	const l:open_with_tab = s:BufIsSmth() && l:path !=# '%'
-	if l:open_with_tab
+	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
+	const open_with_tab = s:BufIsSmth() && path !=# '%'
+	if open_with_tab
 		tabnew
 	endif
-	" lvimgrepしてなんやかんやして終わり
-	silent! execute printf('lvimgrep %s %s', a:keyword, l:path)
+	# lvimgrepしてなんやかんやして終わり
+	execute printf('silent! lvimgrep %s %s', keyword, path)
 	if ! empty(getloclist(0))
 		lwindow
 	else
 		echoh ErrorMsg
-		echomsg 'Not found.: ' . a:keyword
+		echomsg 'Not found.: ' .. keyword
 		echoh None
-		if l:open_with_tab
+		if open_with_tab
 			tabnext -
 			tabclose +
 		endif
 	endif
-endfunction
-command! -nargs=+ MyVimgrep call <SID>MyVimgrep(<f-args>)
+enddef
+command! -nargs=+ MyVimgrep s:MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
-function! s:MyQuickFixWindow() abort
+def s:MyQuickFixWindow()
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
-	nnoremap <buffer> <silent> <nowait> q :<C-u>q<CR>:lexpr ''<CR>
+	nnoremap <buffer> <silent> <nowait> q :<C-u>lexpr ''<CR>:q<CR>
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
-	" 様子見中(使わなそうなら削除する)
+	# 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
-endfunction
-au vimrc FileType qf call s:MyQuickFixWindow()
+enddef
+au vimrc FileType qf s:MyQuickFixWindow()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" diff {{{
+# ----------------------------------------------------------
+# diff {{{
 set splitright
-set fillchars+=diff:\ " 削除行は空白文字で埋める
+set fillchars+=diff:\ # 削除行は空白文字で埋める
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nnoremap <F4> :<C-u>DiffOrig<CR>
-" diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
-au vimrc WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | endif
-"}}} -------------------------------------------------------
+# diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
+au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" 日付関係 {{{
+# ----------------------------------------------------------
+# 日付関係 {{{
 inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
 nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
 nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
 nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" スマホ用 {{{
-" - キーが小さいので押しにくいものはSpaceへマッピング
-" - スマホでのコーディングは基本的にバグ取り
+# ----------------------------------------------------------
+# スマホ用 {{{
+# - キーが小さいので押しにくいものはSpaceへマッピング
+# - スマホでのコーディングは基本的にバグ取り
 nnoremap <Space>zz :<C-u>q!<CR>
-" スタックトレースからyankしてソースの該当箇所を探すのを補助
+# スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
 nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
-" ConnectBotの:とFキーが遠い
+# ConnectBotの:とFキーが遠い
 nmap <Space>, :
 for s:i in range(1, 10)
 	execute printf('nmap <Space>%d <F%d>', s:i % 10, s:i)
 endfor
 nmap <Space><Space>1 <F11>
 nmap <Space><Space>2 <F12>
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" カーソルを行頭に合わせて移動 {{{
-function! s:PutHat() abort
-	const l:x = match(getline('.'), '\S') + 1
-	if l:x || !exists('w:my_hat')
-		let w:my_hat = col('.') == l:x ? '^' : ''
+# ----------------------------------------------------------
+# カーソルを行頭に合わせて移動 {{{
+def s:PutHat(): string
+	const x = match(getline('.'), '\S') + 1
+	if x != 0 || !exists('w:my_hat')
+		w:my_hat = col('.') == x ? '^' : ''
 	endif
 	return w:my_hat
-endfunction
+enddef
 nnoremap <expr> j 'j'.<SID>PutHat()
 nnoremap <expr> k 'k'.<SID>PutHat()
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" 折り畳み {{{
-" こんなかんじでインデントに合わせて表示📁 {{{
-function! MyFoldText() abort
-	const l:src = getline(v:foldstart)
-	const l:indent = repeat(' ', indent(v:foldstart))
-	const l:text = &foldmethod ==# 'indent' ? '' : trim(substitute(l:src, matchstr(&foldmarker, '^[^,]*'), '', ''))
-	return l:indent . l:text . '📁'
-endfunction
+# ----------------------------------------------------------
+# 折り畳み {{{
+# こんなかんじでインデントに合わせて表示📁 {{{
+def! g:MyFoldText(): string
+	const src = getline(v:foldstart)
+	const indent = repeat(' ', indent(v:foldstart))
+	const text = &foldmethod ==# 'indent' ? '' : trim(substitute(src, matchstr(&foldmarker, '^[^,]*'), '', ''))
+	return indent .. text .. '📁'
+enddef
 set foldtext=MyFoldText()
-set fillchars+=fold:\ " 折り畳み時の「-」は半角空白
+set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
 set foldmethod=marker
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 au vimrc filetype markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
-"}}}
-" マーカーの前にスペース、後ろに改行を入れる {{{
-function! s:Zf() range abort
-	execute a:firstline 's/\v(\S)?$/\1 /'
-	execute a:lastline "normal! o\<Esc>i" . s:IndentStr(a:firstline)
-	call cursor([a:firstline, 1])
+#}}}
+# マーカーの前にスペース、後ろに改行を入れる {{{
+def s:Zf()
+	if line("'<") != line('.')
+		return
+	endif
+	var firstline = line("'<")
+	var lastline = line("'>")
+	execute ':' firstline 's/\v(\S)?$/\1 /'
+	execute ':' lastline "normal! o\<Esc>i" .. s:IndentStr(firstline)
+	cursor([firstline, 1])
 	normal! V
-	call cursor([a:lastline + 1, 1])
+	cursor([lastline + 1, 1])
 	normal! zf
-endfunction
+enddef
 vnoremap <silent> zf :call <SID>Zf()<CR>
-"}}}
-" マーカーを削除したら行末をトリムする {{{
-function! s:Zd() abort
+#}}}
+# マーカーを削除したら行末をトリムする {{{
+def s:Zd()
 	if foldclosed(line('.')) == -1
 		normal! zc
 	endif
-	const l:head = foldclosed(line('.'))
-	const l:tail = foldclosedend(line('.'))
-	if l:head == -1
+	const head = foldclosed(line('.'))
+	const tail = foldclosedend(line('.'))
+	if head == -1
 		return
 	endif
-	const l:org = getpos('.')
+	const org = getpos('.')
 	normal! zd
-	call s:RemoveEmptyLine(l:tail)
-	call s:RemoveEmptyLine(l:head)
-	call setpos('.', l:org)
-endfunction
-nnoremap <silent> zd :call <SID>Zd()<CR>
-"}}}
-"}}} -------------------------------------------------------
+	s:RemoveEmptyLine(tail)
+	s:RemoveEmptyLine(head)
+	setpos('.', org)
+enddef
+nnoremap <silent> zd :Zd()<CR>
+#}}}
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" コマンドモードあれこれ {{{
+# ----------------------------------------------------------
+# コマンドモードあれこれ {{{
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
@@ -554,16 +569,16 @@ vnoremap ; :
 nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
 
-" 「jj」で<CR>、「kk」はキャンセル
-" ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
+# 「jj」で<CR>、「kk」はキャンセル
+# ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^:update<CR>
 
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" terminalとか {{{
+# ----------------------------------------------------------
+# terminalとか {{{
 if has('win32')
 	command! Powershell :bo terminal ++close pwsh
 	nnoremap <silent> SH :<C-u>Powershell<CR>
@@ -575,39 +590,37 @@ tnoremap <C-w>; <C-w>:
 tnoremap <C-w><C-w> <C-w>w
 tnoremap <C-w>q exit
 tnoremap <C-w><C-q> <C-w>:quit!<CR>
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" markdownのチェックボックス {{{
-function! s:ToggleCheckBox() range abort
-	for l:n in range(a:firstline, a:lastline)
-		const l:a = getline(l:n)
-		let l:b = substitute(l:a, '^\(\s*\)- \[ \]', '\1- [x]', '') " check on
-		if l:a ==# l:b
-			let l:b = substitute(l:a, '^\(\s*\)- \[x\]', '\1- [ ]', '') " check off
-		endif
-		if l:a ==# l:b
-			let l:b = substitute(l:a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') " a new check box
-		endif
-		if l:a !=# l:b
-			call setline(l:n, l:b)
-		endif
-	endfor
-endfunction
+# ----------------------------------------------------------
+# markdownのチェックボックス {{{
+def s:ToggleCheckBox()
+	const a = getline('.')
+	var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
+	if a ==# b
+		b =  substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
+	endif
+	if a ==# b
+		b =  substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
+	endif
+	if a !=# b
+		setline(line('.'), b)
+	endif
+enddef
 noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" ファイル情報を色付きで表示 {{{
-function! s:ShowBufInfo()
+# ----------------------------------------------------------
+# ファイル情報を色付きで表示 {{{
+def s:ShowBufInfo()
 	if &ft ==# 'qf'
 		return
 	endif
 	redraw
 	echoh Title
 	echon '"' bufname() '" '
-	const l:e = filereadable(expand('%'))
-	if ! l:e
+	const e = filereadable(expand('%'))
+	if !e
 		echoh Tag
 		echon '[NEW] '
 	endif
@@ -615,46 +628,46 @@ function! s:ShowBufInfo()
 		echoh WarningMsg
 		echon '[RO] '
 	endif
-	const l:w = wordcount()
-	if l:e || l:w.bytes
+	const w = wordcount()
+	if e || w.bytes != 0
 		echoh ModeMsg
-		echon (l:w.bytes ? line('$') : 0) 'L, ' l:w.bytes 'B '
+		echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
 	endif
 	echoh MoreMsg
-	echon &ff ' ' (&fenc ? &fenc : &encoding) ' ' &ft
-endfunction
+	echon &ff ' ' (empty(&fenc) ? &encoding : &fenc) ' ' &ft
+enddef
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost * call <SID>ShowBufInfo()
-"}}} -------------------------------------------------------
+au vimrc BufNewFile,BufReadPost * s:ShowBufInfo()
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" 閉じる {{{
-function s:Quit(expr = '') abort
-	if ! empty(a:expr)
-		if winnr() == winnr(a:expr)
+# ----------------------------------------------------------
+# 閉じる {{{
+def s:Quit(expr: string = '')
+	if ! empty(expr)
+		if winnr() == winnr(expr)
 			return
 		endif
-		execute 'wincmd ' . a:expr
+		execute 'wincmd ' .. expr
 	endif
 	if mode() ==# 't'
 		quit!
 	else
 		confirm quit
 	endif
-endfunction
+enddef
 nnoremap <silent> qh :<C-u>call <SID>Quit('h')<CR>
 nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
 nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
 nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
 nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
-" レコーディング停止はq<Esc>とかで
-"}}} -------------------------------------------------------
+# レコーディング停止はq<Esc>とかで
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" その他細々したの {{{
+# ----------------------------------------------------------
+# その他細々したの {{{
 if has('clipboard')
-	autocmd vimrc FocusGained * let @" = @+
-	autocmd vimrc FocusLost   * let @+ = @"
+	autocmd vimrc FocusGained * @" = @+
+	autocmd vimrc FocusLost   * @+ = @"
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
@@ -667,8 +680,8 @@ nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
 nnoremap <silent> qq :<C-u>confirm q<CR>
-onoremap <expr> } '<Esc>m`0' . v:count1 . v:operator . '}``'
-onoremap <expr> { '<Esc>m`V' . v:count1 . '{' . v:operator . '``'
+onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
+onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 vnoremap J j
@@ -680,15 +693,15 @@ inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
 
-" 分割キーボードで右手親指が<CR>になったので
+# 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" 様子見中 {{{
-" 使わなそうなら削除する
+# ----------------------------------------------------------
+# 様子見中 {{{
+# 使わなそうなら削除する
 inoremap <CR> <CR><C-g>u
-vnoremap <expr> p '"_s<C-R>' . v:register . '<ESC>'
+vnoremap <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
 vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
@@ -700,27 +713,27 @@ nnoremap <Space>d "_d
 nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
 
-" カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh ':<C-u>hi ' . substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') . '<CR>'
+# カーソル位置のハイライトを確認するやつ
+nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') .. '<CR>'
 
-" どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
+# どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 
-" CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
+# CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
-" 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
+# 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap u <ESC>ugv
 
-" マーク使ってないし
+# マーク使ってないし
 nnoremap ' "
 nnoremap <Space>' '
 
-" うーん…
+# うーん…
 inoremap jjh <C-o>^
 inoremap jjl <C-o>$
 inoremap jjb <C-o>b
@@ -734,68 +747,68 @@ inoremap jj<CR> <C-o>$<CR>
 inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
 inoremap jjk 「」<Left>
 
-" 「===」とか「==#」の存在を忘れないように…
-function! s:HiDeprecatedEqual()
+# 「===」とか「==#」の存在を忘れないように…
+def s:HiDeprecatedEqual()
 	syntax match SpellRare / == /
 	syntax match SpellRare / != /
-endfunction
-au vimrc Syntax javascript,vim call <SID>HiDeprecatedEqual()
+enddef
+au vimrc Syntax javascript,vim s:HiDeprecatedEqual()
 
-" これするともっといらっとするよ
-"nnoremap <F1> :<C-u>smile<CR>
-"}}} -------------------------------------------------------
+# これするともっといらっとするよ
+#nnoremap <F1> :<C-u>smile<CR>
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" † あともう1回「これ使ってないな…」と思ったときに消す {{{
+# ----------------------------------------------------------
+# † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
 nnoremap <silent> <F8> :<C-u>call <SID>Quit()<CR>
 
-" インデントが現在行以下の行まで移動 {{{
-function! s:FindSameIndent(flags, inner = 0) abort
-	const l:size = len(s:IndentStr('.'))
-	const l:pattern = printf('^\s\{0,%d\}\S', l:size)
-	call setpos('.', [0, getpos('.')[1], 1, 1])
-	return search(l:pattern, a:flags) + a:inner
-endfunction
+# インデントが現在行以下の行まで移動 {{{
+def s:FindSameIndent(flags: string, inner: number = 0): number
+	const size = len(s:IndentStr('.'))
+	const pattern = printf('^\s\{0,%d\}\S', size)
+	setpos('.', [0, getpos('.')[1], 1, 1])
+	return search(pattern, flags) + inner
+enddef
 noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
 noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
 noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
 noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
-"}}}
+#}}}
 
-" https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
-" 便利なんだけど忘れてしまう…
+# https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
+# 便利なんだけど忘れてしまう…
 inoremap {; {<CR>};<C-o>O
 inoremap {, {<CR>},<C-o>O
 inoremap [; [<CR>];<C-o>O
 inoremap [, [<CR>],<C-o>O
 
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" デフォルトマッピングデー {{{
-if strftime('%d') ==# '01'
+# ----------------------------------------------------------
+# デフォルトマッピングデー {{{
+if strftime('%d') ==# '00'
 	au vimrc VimEnter * echo "+^`^+.,.+ Today, Let's enjoy VIM with default key mapping ! +^`^+.,.+"
 	imapclear
 	mapclear
 endif
-"}}} -------------------------------------------------------
+#}}} -------------------------------------------------------
 
-" ----------------------------------------------------------
-" メモ {{{
-" <F1> NERDTree <S-F1>でフォルダを開く(win32)
-" <F2> MRU
-" <F3> UndoTree(あんまり使わない)
-" <F4> DiffOrig(あんまり使わない)
-" <F5> 日付関係
-" <F6>
-" <F7>
-" <F8>
-" <F9>
-" <F10> ヘッダ行を表示(あんまり使わない)
-" <F11> 行番号表示切替
-" <F12> 折り返し表示切替
-"}}} -------------------------------------------------------
+# ----------------------------------------------------------
+# メモ {{{
+# <F1> NERDTree <S-F1>でフォルダを開く(win32)
+# <F2> MRU
+# <F3> UndoTree(あんまり使わない)
+# <F4> DiffOrig(あんまり使わない)
+# <F5> 日付関係
+# <F6>
+# <F7>
+# <F8>
+# <F9>
+# <F10> ヘッダ行を表示(あんまり使わない)
+# <F11> 行番号表示切替
+# <F12> 折り返し表示切替
+#}}} -------------------------------------------------------
 
 if filereadable(expand('~/.vimrc_local'))
 	source ~/.vimrc_local
