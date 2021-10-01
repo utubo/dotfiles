@@ -8,6 +8,7 @@ set fileencodings=ucs-bom,utf-8,iso-2022-jp,cp932,euc-jp
 set noexpandtab
 set tabstop=3 # 意外とありな気がしてきた…
 set shiftwidth=0
+set softtabstop=0
 set autoindent
 set smartindent
 set breakindent
@@ -402,8 +403,6 @@ def s:SetupTabstop()
 		setlocal expandtab
 		setlocal tabstop=4
 	endif
-	&shiftwidth = &tabstop
-	&softtabstop = &tabstop
 	setpos('.', org)
 enddef
 au vimrc BufReadPost * s:SetupTabstop()
@@ -563,8 +562,7 @@ nnoremap <silent> zd :Zd()<CR>
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
-nnoremap q: :q
-nnoremap q; q:
+nnoremap q; :q
 nnoremap ; :
 vnoremap ; :
 nnoremap <Space>; ;
