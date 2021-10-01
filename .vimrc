@@ -787,7 +787,7 @@ inoremap [, [<CR>],<C-o>O
 
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
-if strftime('%d') ==# '00'
+if strftime('%d') ==# '01'
 	au vimrc VimEnter * echo "+^`^+.,.+ Today, Let's enjoy VIM with default key mapping ! +^`^+.,.+"
 	imapclear
 	mapclear
