@@ -45,11 +45,12 @@ augroup End
 # ↓
 # nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
 def s:MultiCmd(qargs: string)
-	const q = substitute(qargs, '^\S*', '', '')
-	for cmd in split(matchstr(qargs, '^\S*'), ',')
-		var a = substitute(q, '<if-' .. cmd .. '>', '<>', 'g')
-		a = substitute(a, '<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
-		a = substitute(a, '<>', '', 'g')
+	const q = qargs->substitute('^\S*', '', '')
+	for cmd in qargs->matchstr('^\S*')->split(',')
+		var a = q
+			->substitute('<if-' .. cmd .. '>', '<>', 'g')
+			->substitute('<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
+			->substitute('<>', '', 'g')
 		execute cmd .. a
 	endfor
 enddef
@@ -108,7 +109,7 @@ if isdirectory(s:dein_vim)
 	dein#add('mbbill/undotree')
 	dein#add('mechatroner/rainbow_csv')
 	dein#add('michaeljsmith/vim-indent-object')
-	dein#add('osyo-manga/vim-monster', { 'lazy': 1, 'on_ft': 'ruby' }) # rubyの補完
+	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
 	dein#add('othree/html5.vim')       # html5の補完やチェック
 	dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	dein#add('prabirshrestha/asyncomplete.vim')
@@ -143,16 +144,16 @@ if isdirectory(s:dein_vim)
 	# sandwich {{{
 	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	g:sandwich#recipes += [
-		{'buns': ["\r", ''  ], 'input': ["\r"], 'command': ["normal! i\r"]},
-		{'buns': ['',   ''  ], 'input': ['q']},
-		{'buns': ['「', '」'], 'input': ['k']},
-		{'buns': ['>',  '<' ], 'input': ['>']},
-		{'buns': ['{ ', ' }'], 'input': ['{']},
-		{'buns': ['${', '}' ], 'input': ['${']},
-		{'buns': ['CommentString(0)', 'CommentString(1)'], 'expr': 1, 'input': ['c']},
+		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! i\r"] },
+		{ buns: ['',   ''  ], input: ['q'] },
+		{ buns: ['「', '」'], input: ['k'] },
+		{ buns: ['>',  '<' ], input: ['>'] },
+		{ buns: ['{ ', ' }'], input: ['{'] },
+		{ buns: ['${', '}' ], input: ['${'] },
+		{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 	]
 	def! g:CommentString(index: number): string
-		return get(split(&commentstring, '%s'), index, '')
+		return &commentstring->split('%s')->get(index, '')
 	enddef
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
@@ -168,8 +169,8 @@ if isdirectory(s:dein_vim)
 	def s:FixSandwichPos()
 		var c = g:operator#sandwich#object.cursor
 		if g:fix_sandwich_pos[1] != c.inner_head[1]
-			c.inner_head[2] = match(getline(c.inner_head[1]), '\S') + 1
-			c.inner_tail[2] = match(getline(c.inner_tail[1]), '$') + 1
+			c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
+			c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 		endif
 	enddef
 	au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
@@ -230,7 +231,7 @@ if isdirectory(s:dein_vim)
 	# 補完 {{{
 	def s:RegisterSource(name: string, white: list<string>, black: list<string>)
 		# とても長い
-		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ 'name': '%s', 'whitelist': %s, 'blacklist': %s, 'completor': function('asyncomplete#sources#%s#completor') }))", name, name, white, black, name)
+		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: function('asyncomplete#sources#%s#completor') }))", name, name, white, black, name)
 	enddef
 	s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
 	s:RegisterSource('buffer', ['*'], ['go'])
@@ -245,9 +246,9 @@ if isdirectory(s:dein_vim)
 	# 翻訳 {{{
 	def s:AutoTranslate(text: string)
 		if matchstr(text, '[^\x00-\x7F]') ==# ''
-			execute ':Translate ' .. text
+			execute 'Translate ' .. text
 		else
-			execute ':Translate! ' .. text
+			execute 'Translate! ' .. text
 		endif
 	enddef
 	nnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
@@ -261,7 +262,7 @@ if isdirectory(s:dein_vim)
 	Disable g:ale_set_loclist
 	g:ale_sign_error = '🐞'
 	g:ale_sign_warning = '🐝'
-	g:ale_fixers = {'typescript': ['deno']}
+	g:ale_fixers = { typescript: ['deno'] }
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	#}}}
@@ -289,7 +290,7 @@ if isdirectory(s:dein_vim)
 		lightline#update()
 	enddef
 	timer_stop(get(g:, 'vimrc_timer_60s', 0))
-	g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { 'repeat': -1 })
+	g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 	# &ff
 	if has('win32')
@@ -309,10 +310,10 @@ if isdirectory(s:dein_vim)
 
 	# lightline設定
 	g:lightline = {
-		'colorscheme': 'wombat',
-		'active': { 'right': [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
-		'component': { 'teabreak': '%{g:ll_tea_break}', 'reg': '%{g:ll_reg}' },
-		'component_function': { 'ff': 'LLFF', 'notutf8': 'LLNotUtf8' },
+		colorscheme: 'wombat',
+		active: { right: [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
+		component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}' },
+		component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 	}
 
 	# tablineはデフォルト
@@ -493,7 +494,7 @@ nmap <Space><Space>2 <F12>
 # ----------------------------------------------------------
 # カーソルを行頭に合わせて移動 {{{
 def s:PutHat(): string
-	const x = match(getline('.'), '\S') + 1
+	const x = getline('.')->match('\S') + 1
 	if x != 0 || !exists('w:my_hat')
 		w:my_hat = col('.') == x ? '^' : ''
 	endif
@@ -509,7 +510,7 @@ nnoremap <expr> k 'k'.<SID>PutHat()
 def! g:MyFoldText(): string
 	const src = getline(v:foldstart)
 	const indent = repeat(' ', indent(v:foldstart))
-	const text = &foldmethod ==# 'indent' ? '' : trim(substitute(src, matchstr(&foldmarker, '^[^,]*'), '', ''))
+	const text = &foldmethod ==# 'indent' ? '' : src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
 	return indent .. text .. '📁'
 enddef
 set foldtext=MyFoldText()
@@ -666,8 +667,8 @@ nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
 # ----------------------------------------------------------
 # その他細々したの {{{
 if has('clipboard')
-	autocmd vimrc FocusGained * @" = @+
-	autocmd vimrc FocusLost   * @+ = @"
+	au vimrc FocusGained * @" = @+
+	au vimrc FocusLost   * @+ = @"
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
@@ -710,8 +711,8 @@ nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 nnoremap TD :<C-u>tabe ./<CR>
 nnoremap <Space>d "_d
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]()')<CR>//g<Left><Left>
-cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]()')<CR><right>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><right>
 
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') .. '<CR>'

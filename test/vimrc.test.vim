@@ -44,36 +44,37 @@ def TestMapping()
 	var user_map = execute('map')
 
 	# デフォルトのマッピング
-	var default_map = []
-	# ノーマル1文字
-	add(default_map, 'n  [-!#$%&()+,./:;=>?*:^|_~abcdefhijklmnopqrstuvwxABCDEFGHIJKLMOPQRSTUVWXY]')
-	# ノーマル英字スタート
-	add(default_map, 'n  g[-#$&''`*+,@~08;?DEHIJNPQRTUV^_abcdefFghijknmMopqrstuvw\]]')
-	add(default_map, 'n  g<C-[AGH\]]>')
-	add(default_map, 'n  g<\(CR\|Left\|Right\|Down\|End\|Home\|LeftMouse\|RightMouse\|Up\)>')
-	add(default_map, 'n  y[yjk0-9]') # てきとう
-	add(default_map, 'n  z[-+.=ACDEFGHLMNORWX^abcdefghijklmnopestvwxz]')
-	add(default_map, 'n  zu[wgWG]')
-	add(default_map, 'n  Z[ZQ]')
-	# ノーマル記号スタート
-	add(default_map, 'n  @[0-9a-zA-Z+.:%_"#@:]')
-	add(default_map, 'n  "[0-9a-zA-Z+.:%_"#]')
-	add(default_map, 'n  `[()<>\[\]`{}]')
-	add(default_map, 'n  ''[a-z]')
-	add(default_map, 'n  [\[\]]\([''#(*/DIP[]`cdfimpsz{]\|<C-D>\|<C-I>\|<MiddleMouse>\)')
-	add(default_map, 'n  <[<jk0-9]') # てきとう
-	# ノーマルCTRL
-	add(default_map, 'n  <C-[ABCDEFGHIJLMNOPQRTUVWXYZ^@\]]>')
-	add(default_map, 'n  <C-W>[-+:=>FHJKLPRSTW\^_bcdfhijklnopqrstvwxz}|\]]')
-	add(default_map, 'n  <C-W><C-[-+:=>FHJKLPRSTW\^_bcdfhijklnopqrstvwxz}|\]]>')
-	add(default_map, 'n  <C-W>\(g[FTft}\]]\|g<C-]>\|<Down>\|<Left>\|<Right>\|<Up>\)')
-	add(default_map, 'n  <C-W><[^ >]* ')
-	# ノーマルその他キー
-	# add(default_map, 'n  <Esc>…色々') まぁやらなくていいか
-	# ノーマルモード以外の確認はそのうち
-	add(default_map, 'v  [y.@"''/?:>]')
-	add(default_map, 'v  <[^ >]* ')
-	add(default_map, 'v  <Esc>')
+	var default_map = [
+		# ノーマル1文字
+		'n  [-!#$%&()+,./:;=>?*:^|_~abcdefhijklmnopqrstuvwxABCDEFGHIJKLMOPQRSTUVWXY]',
+		# ノーマル英字スタート
+		'n  g[-#$&''`*+,@~08;?DEHIJNPQRTUV^_abcdefFghijknmMopqrstuvw\]]',
+		'n  g<C-[AGH\]]>',
+		'n  g<\(CR\|Left\|Right\|Down\|End\|Home\|LeftMouse\|RightMouse\|Up\)>',
+		'n  y[yjk0-9]', # てきとう
+		'n  z[-+.=ACDEFGHLMNORWX^abcdefghijklmnopestvwxz]',
+		'n  zu[wgWG]',
+		'n  Z[ZQ]',
+		# ノーマル記号スタート
+		'n  @[0-9a-zA-Z+.:%_"#@:]',
+		'n  "[0-9a-zA-Z+.:%_"#]',
+		'n  `[()<>\[\]`{}]',
+		'n  ''[a-z]',
+		'n  [\[\]]\([''#(*/DIP[]`cdfimpsz{]\|<C-D>\|<C-I>\|<MiddleMouse>\)',
+		'n  <[<jk0-9]', # てきとう
+		# ノーマルCTRL
+		'n  <C-[ABCDEFGHIJLMNOPQRTUVWXYZ^@\]]>',
+		'n  <C-W>[-+:=>FHJKLPRSTW\^_bcdfhijklnopqrstvwxz}|\]]',
+		'n  <C-W><C-[-+:=>FHJKLPRSTW\^_bcdfhijklnopqrstvwxz}|\]]>',
+		'n  <C-W>\(g[FTft}\]]\|g<C-]>\|<Down>\|<Left>\|<Right>\|<Up>\)',
+		'n  <C-W><[^ >]* ',
+		# ノーマルその他キー
+		# 	'n  <Esc>…色々') まぁやらなくていいか
+		# ノーマルモード以外の確認はそのうち
+		'v  [y.@"''/?:>]',
+		'v  <[^ >]* ',
+		'v  <Esc>',
+	]
 
 	# デフォルトと被りがないかを確認する
 	for i in default_map
@@ -92,14 +93,15 @@ def TestMapping()
 		if empty(head) || match(head, user_ignore) == 0
 			continue
 		endif
-		head = escape(head,  '^$.*?/\[]')
-		head = substitute(head, '^ ', '.', '')
-		head = substitute(head, '^[xv]', '[xv]', '')
-		head = substitute(head, '^[il]', '[il]', '')
-		head = '^\C' .. head
+		var head_regex = head
+			->escape('^$.*?/\[]')
+			->substitute('^ ', '.', '')
+			->substitute('^[xv]', '[xv]', '')
+			->substitute('^[il]', '[il]', '')
+			->substitute('^', '^\\C', '')
 		var dups = []
 		for j in user_map_lines
-			if match(j, head) == 0
+			if match(j, head_regex) == 0
 			add(dups, j)
 			endif
 		endfor

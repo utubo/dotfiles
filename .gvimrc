@@ -55,8 +55,8 @@ g:webdevicons_conceal_nerdtree_brackets = 1
 g:WebDevIconsNerdTreeAfterGlyphPadding = ''
 
 def s:MyLightline()
-	g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
-	g:lightline.subseparator = { 'left': "", 'right': "" }
+	g:lightline.separator = { left: "\ue0b0", right: "\ue0b2" }
+	g:lightline.subseparator = { left: "", right: "" }
 	lightline#init()
 	lightline#enable()
 enddef
