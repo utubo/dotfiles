@@ -788,9 +788,14 @@ inoremap [, [<CR>],<C-o>O
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
 if strftime('%d') ==# '01'
-	au vimrc VimEnter * echo "✨ Today, Let's enjoy VIM with default key mapping ! ✨"
-	imapclear
-	mapclear
+	def s:DMD()
+		var msg = "✨ Today, Let's enjoy VIM with default key mapping ! ✨"
+		var padding = repeat(' ', (winwidth(0) - len(msg)) / 2)
+		echo padding .. msg
+		imapclear
+		mapclear
+	enddef
+	au vimrc VimEnter * s:DMD()
 endif
 #}}} -------------------------------------------------------
 
