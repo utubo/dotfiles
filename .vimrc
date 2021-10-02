@@ -110,7 +110,7 @@ if isdirectory(s:dein_vim)
 	dein#add('mbbill/undotree')
 	dein#add('mechatroner/rainbow_csv')
 	dein#add('michaeljsmith/vim-indent-object')
-	dein#add('monkoose/vim9-stargate') # まだタブページに対応してないかも？
+	#dein#add('monkoose/vim9-stargate') # まだタブページに対応してないかも？
 	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
 	dein#add('othree/html5.vim')       # html5の補完やチェック
 	dein#add('prabirshrestha/asyncomplete-buffer.vim')
