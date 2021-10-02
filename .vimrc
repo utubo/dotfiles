@@ -141,8 +141,8 @@ if isdirectory(s:dein_vim)
 		hi! link StargateError Error
 		hi! link StargateLabels Title
 		hi! link StargateErrorLabels Error
-		hi! link StargateMain Directory
-		hi! link StargateSecondary Repeat
+		hi! link StargateMain Title
+		hi! link StargateSecondary Directory
 		hi! link StargateShip IncSearch
 		hi! link StargateVIM9000 DiffChange
 		hi! link StargateMessage Question
@@ -239,12 +239,12 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# 補完 {{{
-	def s:RegisterSource(name: string, white: list<string>, black: list<string>)
+	def s:RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 		# とても長い
-		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: function('asyncomplete#sources#%s#completor') }))", name, name, white, black, name)
+		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 	enddef
-	s:RegisterSource('omni', ['*'], ['c', 'cpp', 'html'])
-	s:RegisterSource('buffer', ['*'], ['go'])
+	s:RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
+	s:RegisterAsyncompSource('buffer', ['*'], ['go'])
 	MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 	MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
@@ -361,6 +361,7 @@ au vimrc BufReadPost *.log* normal! G
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
+inoremap <CR> <CR><C-g>u
 # http://deris.hatenablog.jp/entry/2014/05/20/235807
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
@@ -611,9 +612,10 @@ def s:ToggleCheckBox()
 	if a ==# b
 		b =  substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
 	endif
-	if a !=# b
-		setline(line('.'), b)
-	endif
+	setline('.', b)
+	var c = getpos('.')
+	c[2] += len(b) - len(a)
+	setpos('.', c)
 enddef
 noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
@@ -708,7 +710,6 @@ nmap <CR> <Space>
 # ----------------------------------------------------------
 # 様子見中 {{{
 # 使わなそうなら削除する
-inoremap <CR> <CR><C-g>u
 vnoremap <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
 vnoremap P p
 nnoremap <Space>h ^
@@ -719,7 +720,7 @@ nnoremap TN :<C-u>tabnew<CR>
 nnoremap TD :<C-u>tabe ./<CR>
 nnoremap <Space>d "_d
 nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
-cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><right>
+cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'),'^$', 'Normal', '') .. '<CR>'
@@ -769,8 +770,6 @@ au vimrc Syntax javascript,vim s:HiDeprecatedEqual()
 # ----------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
-nnoremap <silent> <F8> :<C-u>call <SID>Quit()<CR>
-
 # インデントが現在行以下の行まで移動 {{{
 def s:FindSameIndent(flags: string, inner: number = 0): number
 	const size = len(s:IndentStr('.'))
@@ -778,10 +777,10 @@ def s:FindSameIndent(flags: string, inner: number = 0): number
 	setpos('.', [0, getpos('.')[1], 1, 1])
 	return search(pattern, flags) + inner
 enddef
-noremap <expr> <Space>[ <SID>FindSameIndent('bW').'G'
-noremap <expr> <Space>] <SID>FindSameIndent('W').'G'
-noremap <expr> <Space>i[ <SID>FindSameIndent('bW', 1).'G'
-noremap <expr> <Space>i] <SID>FindSameIndent('W', -1).'G'
+noremap <expr> [<Tab> <SID>FindSameIndent('bW').'G'
+noremap <expr> ]<Tab> <SID>FindSameIndent('W').'G'
+noremap <expr> [<S-Tab> <SID>FindSameIndent('bW', 1).'G'
+noremap <expr> ]<S-Tab> <SID>FindSameIndent('W', -1).'G'
 #}}}
 
 # https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
