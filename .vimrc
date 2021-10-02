@@ -96,6 +96,7 @@ if isdirectory(s:dein_vim)
 	dein#add('alvan/vim-closetag')
 	dein#add('cohama/lexima.vim')      # 括弧補完
 	dein#add('dense-analysis/ale')     # Syntaxチェッカー
+	dein#add('easymotion/vim-easymotion')
 	dein#add('hrsh7th/vim-vsnip')
 	dein#add('hrsh7th/vim-vsnip-integ')
 	dein#add('itchyny/lightline.vim')
@@ -109,7 +110,7 @@ if isdirectory(s:dein_vim)
 	dein#add('mbbill/undotree')
 	dein#add('mechatroner/rainbow_csv')
 	dein#add('michaeljsmith/vim-indent-object')
-	dein#add('monkoose/vim9-stargate')
+	dein#add('monkoose/vim9-stargate') # まだタブページに対応してないかも？
 	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
 	dein#add('othree/html5.vim')       # html5の補完やチェック
 	dein#add('prabirshrestha/asyncomplete-buffer.vim')
@@ -133,23 +134,33 @@ if isdirectory(s:dein_vim)
 	# :call dein#recache_runtimepath()
 	#}}}
 
-	# stargate {{{
-	noremap s <Cmd>call stargate#ok_vim(1)<CR>
-	def s:SetupStargate()
-		hi! link StargateFocus NonText
-		hi! link StargateDesaturate NonText
-		hi! link StargateError Error
-		hi! link StargateLabels Title
-		hi! link StargateErrorLabels Error
-		hi! link StargateMain Title
-		hi! link StargateSecondary Directory
-		hi! link StargateShip IncSearch
-		hi! link StargateVIM9000 DiffChange
-		hi! link StargateMessage Question
-		hi! link StargateErrorMessage Error
-	enddef
-	au vimrc VimEnter,Colorscheme * s:SetupStargate()
+	# easymotion {{{
+	Enable  g:EasyMotion_smartcase
+	Enable  g:EasyMotion_use_migemo
+	Enable  g:EasyMotion_enter_jump_first
+	Disable g:EasyMotion_do_mapping
+	map s <Plug>(easymotion-s)
+	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 	#}}}
+
+	# まだタブページに対応してないかも？
+	## stargate {{{
+	#noremap s <Cmd>call stargate#ok_vim(1)<CR>
+	#def s:SetupStargate()
+	#	hi! link StargateFocus NonText
+	#	hi! link StargateDesaturate NonText
+	#	hi! link StargateError Error
+	#	hi! link StargateLabels Title
+	#	hi! link StargateErrorLabels Error
+	#	hi! link StargateMain Title
+	#	hi! link StargateSecondary Directory
+	#	hi! link StargateShip IncSearch
+	#	hi! link StargateVIM9000 DiffChange
+	#	hi! link StargateMessage Question
+	#	hi! link StargateErrorMessage Error
+	#enddef
+	#au vimrc VimEnter,Colorscheme * s:SetupStargate()
+	##}}}
 
 	# sandwich {{{
 	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
