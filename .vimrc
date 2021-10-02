@@ -743,17 +743,15 @@ nnoremap ' "
 nnoremap <Space>' '
 
 # うーん…
+inoremap jj <C-o>
 inoremap jjh <C-o>^
 inoremap jjl <C-o>$
-inoremap jjb <C-o>b
 inoremap jje <C-o>e<C-o>a
-inoremap jjw <C-o>w
 inoremap jj; <C-o>$;
 inoremap jj, <C-o>$,
 inoremap jj{ <C-o>$ {
 inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
-inoremap jjx <C-o>:call <SID>ToggleCheckBox()<CR>
 inoremap jjk 「」<Left>
 
 # 「===」とか「==#」の存在を忘れないように…

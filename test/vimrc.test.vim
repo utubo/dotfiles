@@ -24,10 +24,7 @@ var lst = []
 def TestMapping()
 	# わざとデフォルトと被らせてるやつ
 	# 以下はvimrc外でデフォルトと被ってる
-	# n  <C-A> vim-reformatdate
 	# n  <C-U> default.vim
-	# n  <C-W><C-H> vim-shrink
-	# n  <C-X> vim-reformatdate
 	# n  Q     default.vim
 	# n  gc    vim-caw
 	var default_ignore = '\C' ..
@@ -35,13 +32,18 @@ def TestMapping()
 		'v  \([*]\)'
 
 	# わざと被らせてるやつ(ユーザー定義)
-	# sandwitch
+	# 以下はvimrc外でデフォルトと被ってる
+	# i  { vim-lexma
+	# i  [ vim-lexma
+	#    <SNR>XX_(save-cursor-pos) vim-textobj
 	var user_ignore = '\C' ..
 		'n  S\|' ..
-		'v  S'
+		'v  \([JS]\)\|' ..
+		'i  \([「（\[{]\|jj\)\|' ..
+		'   .*(save-cursor-pos)'
 
 	# ユーザー定義のマッピング
-	var user_map = execute('map')
+	var user_map = join([execute('map'), execute('imap'), execute('cmap')], "\n")
 
 	# デフォルトのマッピング
 	var default_map = [
@@ -95,9 +97,16 @@ def TestMapping()
 		endif
 		var head_regex = head
 			->escape('^$.*?/\[]')
-			->substitute('^ ', '.', '')
-			->substitute('^[xv]', '[xv]', '')
-			->substitute('^[il]', '[il]', '')
+			->substitute('^ ', '[ nvxso]', '')
+			->substitute('^n', '[ n]', '')
+			->substitute('^v', '[ vxs]', '')
+			->substitute('^s', '[ s]', '')
+			->substitute('^x', '[ x]', '')
+			->substitute('^o', '[ o]', '')
+			->substitute('^!', '[!ilc]', '')
+			->substitute('^i', '[!i]', '')
+			->substitute('^l', '[!il]', '')
+			->substitute('^c', '[!c]', '')
 			->substitute('^', '^\\C', '')
 		var dups = []
 		for j in user_map_lines
@@ -105,6 +114,8 @@ def TestMapping()
 			add(dups, j)
 			endif
 		endfor
+		dups->uniq() # imapとcmapで「!  ...」 が重複するので
+		dups->filter((k, v) => v !~ user_ignore)
 		assert_equal([dups[0]], dups, 'マッピングが被ってるかも')
 	endfor
 enddef
