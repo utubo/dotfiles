@@ -40,10 +40,10 @@ def TestMapping()
 		'n  S\|' ..
 		'v  \([JS]\)\|' ..
 		'i  \([「（\[{]\|jj\)\|' ..
-		'   .*(save-cursor-pos)'
+		'   <SNR>\d\+_(save-cursor-pos)'
 
 	# ユーザー定義のマッピング
-	var user_map = join([execute('map'), execute('imap'), execute('cmap')], "\n")
+	var user_map = join([execute('map'), execute('map!')], "\n")
 
 	# デフォルトのマッピング
 	var default_map = [

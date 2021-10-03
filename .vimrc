@@ -341,7 +341,7 @@ if isdirectory(s:dein_vim)
 			keepState: true,
 			showCandidatesCount: 1,
 		})
-		MultiCmd imap,cmap <C-j> <Plug>(skkeleton-toggle)
+		map! <C-j> <Plug>(skkeleton-toggle)
 	endif
 	#}}}
 
@@ -505,7 +505,7 @@ nnoremap <Space>zz :<C-u>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
-nnoremap <expr> <Space>n (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
+nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
 # ConnectBotの:とFキーが遠い
 nmap <Space>, :
 for s:i in range(1, 10)
