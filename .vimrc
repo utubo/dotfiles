@@ -127,7 +127,7 @@ if isdirectory(s:dein_vim)
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
 	dein#add('utubo/vim-textobj-twochars')
-	dein#add('utubo/vim-vindent')
+	#dein#add('utubo/vim-vindent')
 	dein#add('yami-beta/asyncomplete-omni.vim')
 	dein#add('yegappan/mru')
 	if s:has_deno
@@ -711,6 +711,10 @@ vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 vnoremap J j
 vnoremap K k
+vnoremap <Tab> <Cmd>normal! >gv<CR>
+vnoremap <S-Tab> <Cmd>normal! <gv<CR>
+vnoremap u <Cmd>undo<CR>gv
+vnoremap <C-r> <Cmd>redo<CR>gv
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
