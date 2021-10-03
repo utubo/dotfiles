@@ -127,6 +127,7 @@ if isdirectory(s:dein_vim)
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
 	dein#add('utubo/vim-textobj-twochars')
+	dein#add('utubo/vim-vindent')
 	dein#add('yami-beta/asyncomplete-omni.vim')
 	dein#add('yegappan/mru')
 	if s:has_deno
@@ -716,7 +717,7 @@ inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
-
+au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
 # 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
 #}}} -------------------------------------------------------
@@ -748,11 +749,6 @@ nnoremap <Space>o <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
-# 実はTabキーでインデント増減するのは>.や<.より指が動く距離短いのでは…？
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
-vnoremap u <ESC>ugv
-
 # マーク使ってないし
 nnoremap ' "
 nnoremap <Space>' '
@@ -776,7 +772,6 @@ def s:HiDeprecatedEqual()
 enddef
 au vimrc Syntax javascript,vim s:HiDeprecatedEqual()
 
-# これするともっといらっとするよ
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
 
