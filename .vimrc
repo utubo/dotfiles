@@ -711,10 +711,6 @@ vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 vnoremap J j
 vnoremap K k
-vnoremap <Tab> <Cmd>normal! >gv<CR>
-vnoremap <S-Tab> <Cmd>normal! <gv<CR>
-vnoremap u <Cmd>undo<CR>gv
-vnoremap <C-r> <Cmd>redo<CR>gv
 inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
@@ -724,6 +720,17 @@ inoremap （） ()<Left>
 au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
 # 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
+
+# ビジュアルモードのインデントとか
+def s:KeepCursor(expr: string)
+	const cur = getcurpos()
+	execute expr
+	setpos('.', cur)
+enddef
+vnoremap <Tab> <Cmd>normal! >gv<CR>
+vnoremap <S-Tab> <Cmd>normal! <gv<CR>
+vnoremap u <Cmd>call <SID>KeepCursor('undo')<CR>
+vnoremap <CR> <Cmd>call <SID>KeepCursor('redo')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
