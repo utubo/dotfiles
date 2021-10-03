@@ -81,6 +81,8 @@ def s:GetVisualSelection(): string
 	@" = org
 	return text
 enddef
+
+var s:has_deno = executable('deno')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -111,7 +113,8 @@ if isdirectory(s:dein_vim)
 	dein#add('mechatroner/rainbow_csv')
 	dein#add('michaeljsmith/vim-indent-object')
 	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
-	dein#add('othree/html5.vim')       # html5の補完やチェック
+	dein#add('othree/html5.vim')
+	dein#add('othree/yajs.vim')
 	dein#add('prabirshrestha/asyncomplete-buffer.vim')
 	dein#add('prabirshrestha/asyncomplete.vim')
 	dein#add('rafamadriz/friendly-snippets')
@@ -126,6 +129,10 @@ if isdirectory(s:dein_vim)
 	dein#add('utubo/vim-textobj-twochars')
 	dein#add('yami-beta/asyncomplete-omni.vim')
 	dein#add('yegappan/mru')
+	if s:has_deno
+		dein#add('vim-denops/denops.vim')
+		dein#add('vim-skk/skkeleton')
+	endif
 	dein#end()
 	dein#save_state()
 	# 削除したら↓をやる
@@ -319,6 +326,23 @@ if isdirectory(s:dein_vim)
 
 	# tablineはデフォルト
 	au vimrc VimEnter * set tabline=
+	#}}}
+
+	# skk {{{
+	if s:has_deno
+		if ! empty($SKK_JISYO_DIR)
+			skkeleton#config({
+				globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
+				userJisyo: expand($SKK_JISYO_DIR .. '.skkeleton'),
+			})
+		endif
+		skkeleton#config({
+			eggLikeNewline: true,
+			keepState: true,
+			showCandidatesCount: 1,
+		})
+		MultiCmd imap,cmap <C-j> <Plug>(skkeleton-toggle)
+	endif
 	#}}}
 
 	# その他 {{{
@@ -598,10 +622,10 @@ def s:ToggleCheckBox()
 	const a = getline('.')
 	var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
 	if a ==# b
-		b =  substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
+		b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
 	endif
 	if a ==# b
-		b =  substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
+		b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
 	endif
 	setline('.', b)
 	var c = getpos('.')
