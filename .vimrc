@@ -696,7 +696,6 @@ if has('clipboard')
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
-nnoremap <silent> <Space><Esc> :<C-u>noh<CR>
 nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t "#:]\+', '', '')."\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
@@ -730,10 +729,11 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>a A
+nnoremap <Space>d "_d
+nnoremap <silent> <Space>nh :<C-u>noh<CR>
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 nnoremap TD :<C-u>tabe ./<CR>
-nnoremap <Space>d "_d
 nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 
