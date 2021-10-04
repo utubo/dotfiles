@@ -87,7 +87,7 @@ var s:has_deno = executable('deno')
 
 # ----------------------------------------------------------
 # プラグイン {{{
-var s:dein_dir = expand('~/.vim/dein')
+var s:dein_dir = expand('~/.cache/dein')
 var s:dein_vim = s:dein_dir .. '/repos/github.com/Shougo/dein.vim'
 if isdirectory(s:dein_vim)
 	# dein {{{
@@ -775,6 +775,7 @@ inoremap jj{ <C-o>$ {
 inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
 inoremap jjk 「」<Left>
+inoremap jjx <Cmd>call <SID>ToggleCheckBox()
 
 # 「===」とか「==#」の存在を忘れないように…
 def s:HiDeprecatedEqual()
