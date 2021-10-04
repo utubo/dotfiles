@@ -775,7 +775,7 @@ inoremap jj{ <C-o>$ {
 inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
 inoremap jjk 「」<Left>
-inoremap jjx <Cmd>call <SID>ToggleCheckBox()
+inoremap jjx <Cmd>call <SID>ToggleCheckBox()<CR>
 
 # 「===」とか「==#」の存在を忘れないように…
 def s:HiDeprecatedEqual()
