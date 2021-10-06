@@ -390,40 +390,6 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# 色 {{{
-set t_Co=256
-def s:DefaultColors()
-	g:rainbow_conf = {
-		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-		ctermfgs: ['105', '117', '120', '228', '212', '177']
-	}
-	g:rcsv_colorpairs = [
-		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
-		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
-	]
-enddef
-au vimrc ColorSchemePre * s:DefaultColors()
-def s:MyMatches()
-	if exists('w:my_matches') && !empty(getmatches())
-		return
-	end
-	w:my_matches = 1
-	matchadd('SpellBad', '　\|¥\|\s\+$')
-	matchadd('String', '「[^」]*」')
-	matchadd('Label', '^\s*■.*$')
-	matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
-	matchadd('Error', 'ERROR')
-	matchadd('Delimiter', '- \[ \]')
-	# 稀によくtypoする単語(気づいたら追加する)
-	matchadd('SpellBad', 'stlye')
-enddef
-au vimrc VimEnter,WinEnter * s:MyMatches()
-syntax on
-set background=dark
-silent! colorscheme girly
-#}}} -------------------------------------------------------
-
-# ----------------------------------------------------------
 # タブ幅やタブ展開を自動設定 {{{
 def s:SetupTabstop()
 	const limit = 100
@@ -845,6 +811,40 @@ if strftime('%d') ==# '01'
 	enddef
 	au vimrc VimEnter * s:DMD()
 endif
+#}}} -------------------------------------------------------
+
+# ----------------------------------------------------------
+# 色 {{{
+set t_Co=256
+def s:DefaultColors()
+	g:rainbow_conf = {
+		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
+		ctermfgs: ['105', '117', '120', '228', '212', '177']
+	}
+	g:rcsv_colorpairs = [
+		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
+		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
+	]
+enddef
+au vimrc ColorSchemePre * s:DefaultColors()
+def s:MyMatches()
+	if exists('w:my_matches') && !empty(getmatches())
+		return
+	end
+	w:my_matches = 1
+	matchadd('SpellBad', '　\|¥\|\s\+$')
+	matchadd('String', '「[^」]*」')
+	matchadd('Label', '^\s*■.*$')
+	matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
+	matchadd('Error', 'ERROR')
+	matchadd('Delimiter', '- \[ \]')
+	# 稀によくtypoする単語(気づいたら追加する)
+	matchadd('SpellBad', 'stlye')
+enddef
+au vimrc VimEnter,WinEnter * s:MyMatches()
+syntax on
+set background=dark
+silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
