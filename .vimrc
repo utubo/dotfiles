@@ -214,6 +214,13 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# MRU {{{
+	# デフォルトだと括弧が含まれているファイル名を開けない
+	g:MRU_Filename_Format = {
+		formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
+		parser: '> \zs.*',
+		syntax: '^.\{-}\ze >'
+	}
+	# 数字キーで開く
 	def s:MRUwithNumKey(open_with_tab: bool)
 		b:open_with_tab = open_with_tab
 		setlocal number
@@ -351,10 +358,6 @@ if isdirectory(s:dein_vim)
 	Enable  g:nerdtree_tabs_autofind
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
-	g:rainbow_conf = {}
-	g:rainbow_conf.guifgs = ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee']
-	g:rainbow_conf.ctermfgs = ['105', '117', '120', '228', '212', '177']
-	g:rcsv_colorpairs = [['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'], ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']]
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
@@ -389,10 +392,17 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # ----------------------------------------------------------
 # 色 {{{
 set t_Co=256
-def s:MyColorScheme()
-	hi! link Folded Delimiter
+def s:DefaultColors()
+	g:rainbow_conf = {
+		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
+		ctermfgs: ['105', '117', '120', '228', '212', '177']
+	}
+	g:rcsv_colorpairs = [
+		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
+		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
+	]
 enddef
-au vimrc ColorScheme * s:MyColorScheme()
+au vimrc ColorSchemePre * s:DefaultColors()
 def s:MyMatches()
 	if exists('w:my_matches') && !empty(getmatches())
 		return
@@ -545,7 +555,8 @@ nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
 nnoremap Zy :<C-u>set foldmethod=syntax<CR>
-au vimrc filetype markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
 # マーカーの前にスペース、後ろに改行を入れる {{{
 def s:Zf()
@@ -582,6 +593,20 @@ enddef
 nnoremap <silent> zd :Zd()<CR>
 #}}}
 #}}} -------------------------------------------------------
+
+# ----------------------------------------------------------
+# ビジュアルモードあれこれ {{{
+# チラつかないようにやるやつ
+def s:KeepCursor(expr: string)
+	const cur = getcurpos()
+	execute expr
+	setpos('.', cur)
+enddef
+vnoremap <Tab> <Cmd>normal! >gv<CR>
+vnoremap <S-Tab> <Cmd>normal! <gv<CR>
+vnoremap u <Cmd>call <SID>KeepCursor('undo')<CR>
+vnoremap <CR> <Cmd>call <SID>KeepCursor('redo')<CR>
+#}}}
 
 # ----------------------------------------------------------
 # コマンドモードあれこれ {{{
@@ -720,17 +745,6 @@ inoremap （） ()<Left>
 au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
 # 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
-
-# ビジュアルモードのインデントとか
-def s:KeepCursor(expr: string)
-	const cur = getcurpos()
-	execute expr
-	setpos('.', cur)
-enddef
-vnoremap <Tab> <Cmd>normal! >gv<CR>
-vnoremap <S-Tab> <Cmd>normal! <gv<CR>
-vnoremap u <Cmd>call <SID>KeepCursor('undo')<CR>
-vnoremap <CR> <Cmd>call <SID>KeepCursor('redo')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -776,6 +790,13 @@ inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
 inoremap jjk 「」<Left>
 inoremap jjx <Cmd>call <SID>ToggleCheckBox()<CR>
+# Altキーでもいいかなぁ…
+inoremap <M-h> <C-o>^
+inoremap <M-l> <C-o>$
+inoremap <M-e> <C-o>e<C-o>a
+inoremap <M-k> 「」<Left>
+# これはちょっと押しにくい
+inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 
 # 「===」とか「==#」の存在を忘れないように…
 def s:HiDeprecatedEqual()
