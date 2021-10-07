@@ -214,7 +214,7 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# MRU {{{
-	# デフォルトだと括弧が含まれているファイル名を開けない
+	# デフォルトだとファイル名に括弧が含まれていると開けない
 	g:MRU_Filename_Format = {
 		formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 		parser: '> \zs.*',
@@ -516,15 +516,9 @@ def! g:MyFoldText(): string
 enddef
 set foldtext=MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
-set foldmethod=marker
-nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
-nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
-nnoremap Z{ :<C-u>set foldmethod=marker<CR>
-nnoremap Zy :<C-u>set foldmethod=syntax<CR>
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
 au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
-# マーカーの前にスペース、後ろに改行を入れる {{{
+# ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def s:Zf()
 	if line("'<") != line('.')
 		return
@@ -540,7 +534,7 @@ def s:Zf()
 enddef
 vnoremap <silent> zf :call <SID>Zf()<CR>
 #}}}
-# マーカーを削除したら行末をトリムする {{{
+# ホールドマーカーを削除したら行末をトリムする {{{
 def s:Zd()
 	if foldclosed(line('.')) == -1
 		normal! zc
@@ -557,6 +551,15 @@ def s:Zd()
 	setpos('.', org)
 enddef
 nnoremap <silent> zd :Zd()<CR>
+#}}}
+# その他折りたたみ関係 {{{
+set foldmethod=marker
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc BufReadPost * :silent! normal! zO
+nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
+nnoremap Z{ :<C-u>set foldmethod=marker<CR>
+nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 #}}}
 #}}} -------------------------------------------------------
 
@@ -764,12 +767,19 @@ inoremap <M-k> 「」<Left>
 # これはちょっと押しにくい
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 
-# 「===」とか「==#」の存在を忘れないように…
-def s:HiDeprecatedEqual()
-	syntax match SpellRare / == /
-	syntax match SpellRare / != /
+# syntax毎に強調する
+def ClearMySyntax()
+	for id in get(w:, 'my_syntax', [])
+		matchdelete(id)
+	endfor
+	w:my_syntax = []
 enddef
-au vimrc Syntax javascript,vim s:HiDeprecatedEqual()
+def AddMySyntax(group: string, pattern: string)
+	w:my_syntax->add(matchadd(group, pattern))
+enddef
+au vimrc Syntax * ClearMySyntax()
+au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
@@ -836,6 +846,7 @@ def s:MyMatches()
 	matchadd('String', '「[^」]*」')
 	matchadd('Label', '^\s*■.*$')
 	matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
+	matchadd('Todo', 'TODO')
 	matchadd('Error', 'ERROR')
 	matchadd('Delimiter', '- \[ \]')
 	# 稀によくtypoする単語(気づいたら追加する)

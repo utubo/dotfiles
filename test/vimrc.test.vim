@@ -1,13 +1,20 @@
 vim9script
 
 v:errors = []
+const vimrc_lines = readfile('../.vimrc')
+
+# テスト用メソッド {{{
 def! g:EchoErrors()
 	# v:errors見づらい…
-	for e in v:errors
-		var m = matchlist(e, '\(line \d\+\:.*\): Expected \(.*\) but got \(.*\)')
-		echo m[1]
-		echo '  Expected: ' .. m[2]
-		echo '    Actual: ' .. m[3]
+	for msg in v:errors
+		var m = matchlist(msg, '\(line \d\+\:.*\): Expected \(.*\) but got \(.*\)')
+		if len(m) == 0
+			echo msg
+		else
+			echo m[1]
+			echo '  Expected: ' .. m[2]
+			echo '    Actual: ' .. m[3]
+		endif
 	endfor
 enddef
 
@@ -19,8 +26,42 @@ def ShowProgress()
 	redraw
 enddef
 
-# マッピングが想定外に被ってないか確認する {{{
-var lst = []
+# 正規表現でマッチする文字列を全て抽出する
+var scan_result = []
+def Scan(expr: any, pat: string): list<string>
+	scan_result = []
+	substitute(expr, pat, '\=add(scan_result, submatch(0))', 'g')
+	return scan_result
+enddef
+#}}}
+
+# setが重複してないこと {{{
+def TestSets()
+	const sets = []
+	const ignore_names = 'fillchars\|foldmethod' # 想定内なので無視する名前s
+	for line in vimrc_lines
+		ShowProgress()
+		var m = matchlist(line, '\<set\s\+\(\w\+\)')
+		if len(m) == 0
+			m = matchlist(line, '\<&\(\w\+\)\s*=')
+		endif
+		if len(m) == 0
+			continue
+		endif
+		const name = m[1]
+		if name =~ ignore_names
+			continue
+		endif
+		if index(sets, name) != -1
+			assert_report('set ' .. name .. 'が複数箇所にある！')
+		endif
+		sets->add(name)
+	endfor
+enddef
+TestSets()
+#}}}
+
+# マッピングが想定外に被ってないこと {{{
 def TestMapping()
 	# わざとデフォルトと被らせてるやつ
 	# 以下はvimrc外でデフォルトと被ってる
@@ -81,10 +122,9 @@ def TestMapping()
 	# デフォルトと被りがないかを確認する
 	for i in default_map
 		ShowProgress()
-		lst = []
-		substitute(user_map, '\C' .. i .. '[^\n]*', '\=add(lst, submatch(0))', 'g')
-		filter(lst, (k, v) => v !~ default_ignore)
-		assert_equal([], lst, 'デフォルトと被ってるかも /' .. i .. '/')
+		const dups = Scan(user_map, '\C' .. i .. '[^\n]*')
+		filter(dups, (k, v) => v !~ default_ignore)
+		assert_equal([], dups, 'デフォルトと被ってるかも /' .. i .. '/')
 	endfor
 
 	# ユーザー定義内で被りがないかを確認する
@@ -121,6 +161,10 @@ def TestMapping()
 enddef
 TestMapping()
 # }}}
+
+# その他かんたんなテスト {{{
+assert_equal([], Scan(vimrc_lines, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+#}}}
 
 g:EchoErrors()
 echo 'Ran all test.'
