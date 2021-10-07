@@ -680,7 +680,8 @@ nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
 nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
 nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
 nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
-# レコーディング停止はq<Esc>とかで
+nnoremap q <Nop>
+nnoremap Q q
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -698,7 +699,6 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
-nnoremap <silent> qq :<C-u>confirm q<CR>
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
