@@ -25,6 +25,14 @@ def ShowProgress()
 	echon progress_char[progress % 12] .. progress
 	redraw
 enddef
+
+# 正規表現でマッチする文字列を全て抽出する
+var scan_result = []
+def Scan(expr: any, pat: string): list<string>
+	scan_result = []
+	substitute(expr, pat, '\=add(scan_result, submatch(0))', 'g')
+	return scan_result
+enddef
 #}}}
 
 # setが重複してないこと {{{
@@ -54,7 +62,6 @@ TestSets()
 #}}}
 
 # マッピングが想定外に被ってないこと {{{
-var lst = []
 def TestMapping()
 	# わざとデフォルトと被らせてるやつ
 	# 以下はvimrc外でデフォルトと被ってる
@@ -115,10 +122,9 @@ def TestMapping()
 	# デフォルトと被りがないかを確認する
 	for i in default_map
 		ShowProgress()
-		lst = []
-		substitute(user_map, '\C' .. i .. '[^\n]*', '\=add(lst, submatch(0))', 'g')
-		filter(lst, (k, v) => v !~ default_ignore)
-		assert_equal([], lst, 'デフォルトと被ってるかも /' .. i .. '/')
+		const dups = Scan(user_map, '\C' .. i .. '[^\n]*')
+		filter(dups, (k, v) => v !~ default_ignore)
+		assert_equal([], dups, 'デフォルトと被ってるかも /' .. i .. '/')
 	endfor
 
 	# ユーザー定義内で被りがないかを確認する
