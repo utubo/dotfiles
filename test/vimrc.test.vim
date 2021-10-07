@@ -163,7 +163,7 @@ TestMapping()
 # }}}
 
 # その他かんたんなテスト {{{
-assert_equal('', matchstr(vimrc_lines, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+assert_equal([], Scan(vimrc_lines, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
 #}}}
 
 g:EchoErrors()

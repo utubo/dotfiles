@@ -516,15 +516,9 @@ def! g:MyFoldText(): string
 enddef
 set foldtext=MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
-set foldmethod=marker
-nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
-nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
-nnoremap Z{ :<C-u>set foldmethod=marker<CR>
-nnoremap Zy :<C-u>set foldmethod=syntax<CR>
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
 au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
-# マーカーの前にスペース、後ろに改行を入れる {{{
+# ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def s:Zf()
 	if line("'<") != line('.')
 		return
@@ -540,7 +534,7 @@ def s:Zf()
 enddef
 vnoremap <silent> zf :call <SID>Zf()<CR>
 #}}}
-# マーカーを削除したら行末をトリムする {{{
+# ホールドマーカーを削除したら行末をトリムする {{{
 def s:Zd()
 	if foldclosed(line('.')) == -1
 		normal! zc
@@ -557,6 +551,15 @@ def s:Zd()
 	setpos('.', org)
 enddef
 nnoremap <silent> zd :Zd()<CR>
+#}}}
+# その他折りたたみ関係 {{{
+set foldmethod=marker
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc BufReadPost * if foldlevel('.') != 0 | normal! zO | endif
+nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
+nnoremap Z{ :<C-u>set foldmethod=marker<CR>
+nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 #}}}
 #}}} -------------------------------------------------------
 
