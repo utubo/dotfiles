@@ -685,6 +685,28 @@ nnoremap Q q
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
+# ファイルを移動して保存 {{{
+def MoveFile(newname: string)
+	const oldpath = expand('%')
+	const newpath = expand(newname)
+	if ! empty(oldpath) && filereadable(oldpath)
+		if filereadable(newpath)
+			echoh Error
+			echo 'file "' .. newname .. '" already exists.'
+			echoh None
+			return
+		endif
+		rename(oldpath, newpath)
+	endif
+	execute 'saveas! ' .. newpath
+	# 開き直してMRUに登録
+	edit
+enddef
+command! -nargs=1 -complete=file MoveFile call <SID>MoveFile(<f-args>)
+cnoreabbrev mv MoveFile
+#}}}
+
+# ----------------------------------------------------------
 # その他細々したの {{{
 if has('clipboard')
 	au vimrc FocusGained * @" = @+
