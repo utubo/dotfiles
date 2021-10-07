@@ -1,13 +1,20 @@
 vim9script
 
 v:errors = []
+const vimrc_lines = readfile('../.vimrc')
+
+# テスト用メソッド {{{
 def! g:EchoErrors()
 	# v:errors見づらい…
-	for e in v:errors
-		var m = matchlist(e, '\(line \d\+\:.*\): Expected \(.*\) but got \(.*\)')
-		echo m[1]
-		echo '  Expected: ' .. m[2]
-		echo '    Actual: ' .. m[3]
+	for msg in v:errors
+		var m = matchlist(msg, '\(line \d\+\:.*\): Expected \(.*\) but got \(.*\)')
+		if len(m) == 0
+			echo msg
+		else
+			echo m[1]
+			echo '  Expected: ' .. m[2]
+			echo '    Actual: ' .. m[3]
+		endif
 	endfor
 enddef
 
@@ -18,8 +25,35 @@ def ShowProgress()
 	echon progress_char[progress % 12] .. progress
 	redraw
 enddef
+#}}}
 
-# マッピングが想定外に被ってないか確認する {{{
+# setが重複してないこと {{{
+def TestSets()
+	const sets = []
+	const ignore_names = 'fillchars\|foldmethod' # 想定内なので無視する名前s
+	for line in vimrc_lines
+		ShowProgress()
+		var m = matchlist(line, '\<set\s\+\(\w\+\)')
+		if len(m) == 0
+			m = matchlist(line, '\<&\(\w\+\)\s*=')
+		endif
+		if len(m) == 0
+			continue
+		endif
+		const name = m[1]
+		if name =~ ignore_names
+			continue
+		endif
+		if index(sets, name) != -1
+			assert_report('set ' .. name .. 'が複数箇所にある！')
+		endif
+		sets->add(name)
+	endfor
+enddef
+TestSets()
+#}}}
+
+# マッピングが想定外に被ってないこと {{{
 var lst = []
 def TestMapping()
 	# わざとデフォルトと被らせてるやつ
@@ -121,6 +155,10 @@ def TestMapping()
 enddef
 TestMapping()
 # }}}
+
+# その他かんたんなテスト {{{
+assert_equal('', matchstr(vimrc_lines, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+#}}}
 
 g:EchoErrors()
 echo 'Ran all test.'

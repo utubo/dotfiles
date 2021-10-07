@@ -214,7 +214,7 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# MRU {{{
-	# デフォルトだと括弧が含まれているファイル名を開けない
+	# デフォルトだとファイル名に括弧が含まれていると開けない
 	g:MRU_Filename_Format = {
 		formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 		parser: '> \zs.*',
