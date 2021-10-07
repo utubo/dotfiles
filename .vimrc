@@ -555,7 +555,7 @@ nnoremap <silent> zd :Zd()<CR>
 # その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
-au vimrc BufReadPost * if foldlevel('.') != 0 | normal! zO | endif
+au vimrc BufReadPost * :silent! normal! zO
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
 nnoremap Z{ :<C-u>set foldmethod=marker<CR>
@@ -767,12 +767,19 @@ inoremap <M-k> 「」<Left>
 # これはちょっと押しにくい
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 
-# 「===」とか「==#」の存在を忘れないように…
-def s:HiDeprecatedEqual()
-	syntax match SpellRare / == /
-	syntax match SpellRare / != /
+# syntax毎に強調する
+def ClearMySyntax()
+	for id in get(w:, 'my_syntax', [])
+		matchdelete(id)
+	endfor
+	w:my_syntax = []
 enddef
-au vimrc Syntax javascript,vim s:HiDeprecatedEqual()
+def AddMySyntax(group: string, pattern: string)
+	w:my_syntax->add(matchadd(group, pattern))
+enddef
+au vimrc Syntax * ClearMySyntax()
+au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
@@ -839,6 +846,7 @@ def s:MyMatches()
 	matchadd('String', '「[^」]*」')
 	matchadd('Label', '^\s*■.*$')
 	matchadd('Delimiter', 'WARN|注意\|注:\|[★※][^\s()（）]*')
+	matchadd('Todo', 'TODO')
 	matchadd('Error', 'ERROR')
 	matchadd('Delimiter', '- \[ \]')
 	# 稀によくtypoする単語(気づいたら追加する)
