@@ -97,6 +97,7 @@ if isdirectory(s:dein_vim)
 	dein#add('airblade/vim-gitgutter')
 	dein#add('alvan/vim-closetag')
 	dein#add('cohama/lexima.vim')      # 括弧補完
+	dein#add('delphinus/vim-auto-cursorline')
 	dein#add('dense-analysis/ale')     # Syntaxチェッカー
 	dein#add('easymotion/vim-easymotion')
 	dein#add('hrsh7th/vim-vsnip')
@@ -234,6 +235,7 @@ if isdirectory(s:dein_vim)
 		endfor
 	enddef
 	def s:MyMRU()
+		Enable b:auto_cursorline_disabled
 		setlocal cursorline
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
@@ -358,6 +360,7 @@ if isdirectory(s:dein_vim)
 	Enable  g:nerdtree_tabs_autofind
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
+	g:auto_cursorline_wait_ms = 3000
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
