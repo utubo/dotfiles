@@ -2,6 +2,7 @@ vim9script
 
 v:errors = []
 const vimrc_lines = readfile('../.vimrc')
+const vimrc_str = vimrc_lines->join("\n")
 
 # テスト用メソッド {{{
 def! g:EchoErrors()
@@ -65,12 +66,13 @@ TestSets()
 def TestMapping()
 	# わざとデフォルトと被らせてるやつ
 	# 以下はvimrc外でデフォルトと被ってる
-	# n  <C-U> default.vim
-	# n  Q     default.vim
+	# n  Q     defaults.vimでgqにしてるけど.vimrcでqへ再マップ
 	# n  gc    vim-caw
+	# i  <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([hjklqsQSTY;'']\|gc\|gs\|zd\|zf\|<C-[AUWX]>\|<Esc>\)\|' ..
-		'v  \([*]\)'
+		'n  \([hjklqsQSTY;'']\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'v  \([*]\)\|' ..
+		'i  \(<C-U>\)'
 
 	# わざと被らせてるやつ(ユーザー定義)
 	# 以下はvimrc外でデフォルトと被ってる
@@ -78,7 +80,7 @@ def TestMapping()
 	# i  [ vim-lexma
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
 	var user_ignore = '\C' ..
-		'n  S\|' ..
+		'n  \([qS]\)\|' ..
 		'v  \([JS]\)\|' ..
 		'i  \([「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)'
@@ -163,7 +165,7 @@ TestMapping()
 # }}}
 
 # その他かんたんなテスト {{{
-assert_equal([], Scan(vimrc_lines, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+assert_equal([], Scan(vimrc_str, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
 #}}}
 
 g:EchoErrors()

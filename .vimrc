@@ -97,6 +97,7 @@ if isdirectory(s:dein_vim)
 	dein#add('airblade/vim-gitgutter')
 	dein#add('alvan/vim-closetag')
 	dein#add('cohama/lexima.vim')      # 括弧補完
+	dein#add('delphinus/vim-auto-cursorline')
 	dein#add('dense-analysis/ale')     # Syntaxチェッカー
 	dein#add('easymotion/vim-easymotion')
 	dein#add('hrsh7th/vim-vsnip')
@@ -234,6 +235,7 @@ if isdirectory(s:dein_vim)
 		endfor
 	enddef
 	def s:MyMRU()
+		Enable b:auto_cursorline_disabled
 		setlocal cursorline
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
@@ -358,6 +360,7 @@ if isdirectory(s:dein_vim)
 	Enable  g:nerdtree_tabs_autofind
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
+	g:auto_cursorline_wait_ms = 3000
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
@@ -680,8 +683,31 @@ nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
 nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
 nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
 nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
-# レコーディング停止はq<Esc>とかで
+nnoremap q <Nop>
+nnoremap Q q
 #}}} -------------------------------------------------------
+
+# ----------------------------------------------------------
+# ファイルを移動して保存 {{{
+def MoveFile(newname: string)
+	const oldpath = expand('%')
+	const newpath = expand(newname)
+	if ! empty(oldpath) && filereadable(oldpath)
+		if filereadable(newpath)
+			echoh Error
+			echo 'file "' .. newname .. '" already exists.'
+			echoh None
+			return
+		endif
+		rename(oldpath, newpath)
+	endif
+	execute 'saveas! ' .. newpath
+	# 開き直してMRUに登録
+	edit
+enddef
+command! -nargs=1 -complete=file MoveFile call <SID>MoveFile(<f-args>)
+cnoreabbrev mv MoveFile
+#}}}
 
 # ----------------------------------------------------------
 # その他細々したの {{{
@@ -698,7 +724,6 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<C-r>"<Esc>
 nnoremap <Space><Space>P O<C-r>"<Esc>
-nnoremap <silent> qq :<C-u>confirm q<CR>
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
