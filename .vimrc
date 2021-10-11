@@ -222,14 +222,14 @@ if isdirectory(s:dein_vim)
 		syntax: '^.\{-}\ze >'
 	}
 	# 数字キーで開く
-	def s:MRUwithNumKey(open_with_tab: bool)
-		b:open_with_tab = open_with_tab
+	def s:MRUwithNumKey(use_tab: bool)
+		b:use_tab = use_tab
 		setlocal number
 		redraw
 		echoh Question
-		echo printf('[1]..[9] => open with a %s.', b:open_with_tab ? 'tab' : 'window')
+		echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
 		echoh None
-		const key = b:open_with_tab ? 't' : '<CR>'
+		const key = use_tab ? 't' : '<CR>'
 		for i in range(1, 9)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
 		endfor
@@ -237,7 +237,7 @@ if isdirectory(s:dein_vim)
 	def s:MyMRU()
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
-		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:open_with_tab)<CR>
+		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:use_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
 		s:MRUwithNumKey(s:BufIsSmth())
 	enddef
@@ -422,8 +422,8 @@ def s:MyVimgrep(keyword: string, ...targets: list<string>)
 		path = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
 	endif
 	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	const open_with_tab = s:BufIsSmth() && path !=# '%'
-	if open_with_tab
+	const use_tab = s:BufIsSmth() && path !=# '%'
+	if use_tab
 		tabnew
 	endif
 	# lvimgrepしてなんやかんやして終わり
@@ -434,7 +434,7 @@ def s:MyVimgrep(keyword: string, ...targets: list<string>)
 		echoh ErrorMsg
 		echomsg 'Not found.: ' .. keyword
 		echoh None
-		if open_with_tab
+		if use_tab
 			tabnext -
 			tabclose +
 		endif
@@ -642,10 +642,14 @@ def s:ShowBufInfo()
 	redraw
 	echoh Title
 	echon '"' bufname() '" '
+	if &modified
+		echoh ErrorMsg
+		echon '[Modified] '
+	endif
 	const e = filereadable(expand('%'))
 	if !e
 		echoh Tag
-		echon '[NEW] '
+		echon '[New] '
 	endif
 	if &readonly
 		echoh WarningMsg
