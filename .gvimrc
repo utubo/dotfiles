@@ -68,7 +68,7 @@ au gvimrc BufRead * s:MyLightline()
 # Windows {{{
 if has('win32')
 	# Alt-Spaceでシステムメニュー(winaltkeysはメニューバーが無いと動かないので×)
-	noremap <M-Space> :simalt ~<CR>
+	noremap <silent> <M-Space> :simalt ~<CR>
 	# 外部ツール
 	# https://github.com/utubo/winscp_upload.bat
 	nnoremap <S-F2> :<C-u>!winscp_upload.bat <C-r>=expand("%:p")<CR>
