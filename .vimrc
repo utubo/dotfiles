@@ -752,9 +752,9 @@ vnoremap <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
 vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
-nnoremap <Space>a A
 nnoremap <Space>d "_d
-nnoremap <silent> <Space>nh :<C-u>noh<CR>
+nnoremap / :<C-u>nohlsearch<CR>/
+nnoremap ? :<C-u>nohlsearch<CR>?
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN :<C-u>tabnew<CR>
 nnoremap TD :<C-u>tabe ./<CR>
@@ -815,6 +815,8 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には�
 
 # ----------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
+
+nnoremap <Space>a A
 
 # インデントが現在行以下の行まで移動 {{{
 def s:FindSameIndent(flags: string, inner: number = 0): number
