@@ -485,7 +485,7 @@ nnoremap <Space>zz :<C-u>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
-nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@"."\<CR>"
+nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" . "\<CR>"
 # ConnectBotの:とFキーが遠い
 nmap <Space>, :
 for s:i in range(1, 10)
@@ -504,8 +504,8 @@ def s:PutHat(): string
 	endif
 	return w:my_hat
 enddef
-nnoremap <expr> j 'j'.<SID>PutHat()
-nnoremap <expr> k 'k'.<SID>PutHat()
+nnoremap <expr> j 'j' . <SID>PutHat()
+nnoremap <expr> k 'k' . <SID>PutHat()
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -721,7 +721,7 @@ if has('clipboard')
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
-nnoremap <expr> g: ":\<C-u>".substitute(getline('.'), '^[\t "#:]\+', '', '')."\<CR>"
+nnoremap <expr> g: ":\<C-u>" . substitute(getline('.'), '^[\t "#:]\+', '', '') . "\<CR>"
 vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
