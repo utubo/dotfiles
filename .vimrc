@@ -281,6 +281,7 @@ if isdirectory(s:dein_vim)
 	g:ale_sign_error = '🐞'
 	g:ale_sign_warning = '🐝'
 	g:ale_fixers = { typescript: ['deno'] }
+	g:ale_lint_delay = 3000
 	nmap <silent> [a <Plug>(ale_previous_wrap)
 	nmap <silent> ]a <Plug>(ale_next_wrap)
 	#}}}
@@ -688,6 +689,9 @@ nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
 nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
 nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
 nnoremap q <Nop>
+nnoremap q: q:
+nnoremap q/ q/
+nnoremap q? q?
 nnoremap Q q
 #}}} -------------------------------------------------------
 
