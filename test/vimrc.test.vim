@@ -38,7 +38,7 @@ enddef
 
 # setが重複してないこと {{{
 def TestSets()
-	const sets = []
+	var sets = []
 	const ignore_names = 'fillchars\|foldmethod' # 想定内なので無視する名前s
 	for line in vimrc_lines
 		ShowProgress()
@@ -70,7 +70,7 @@ def TestMapping()
 	# n  gc    vim-caw
 	# i  <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([hjklqsQSTY;'']\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'n  \([hjklqsQSTY;''/?]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
 		'v  \([*]\)\|' ..
 		'i  \(<C-U>\)'
 
@@ -124,8 +124,8 @@ def TestMapping()
 	# デフォルトと被りがないかを確認する
 	for i in default_map
 		ShowProgress()
-		const dups = Scan(user_map, '\C' .. i .. '[^\n]*')
-		filter(dups, (k, v) => v !~ default_ignore)
+		var dups = Scan(user_map, '\C' .. i .. '[^\n]*')
+		dups->filter((k, v) => v !~ default_ignore)
 		assert_equal([], dups, 'デフォルトと被ってるかも /' .. i .. '/')
 	endfor
 
@@ -138,7 +138,7 @@ def TestMapping()
 			continue
 		endif
 		var head_regex = head
-			->escape('^$.*?/\[]')
+			->escape('^$.*/\[]')
 			->substitute('^ ', '[ nvxso]', '')
 			->substitute('^n', '[ n]', '')
 			->substitute('^v', '[ vxs]', '')
@@ -153,7 +153,7 @@ def TestMapping()
 		var dups = []
 		for j in user_map_lines
 			if match(j, head_regex) == 0
-			add(dups, j)
+				add(dups, j)
 			endif
 		endfor
 		dups->uniq() # imapとcmapで「!  ...」 が重複するので
