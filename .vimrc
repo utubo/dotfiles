@@ -860,7 +860,6 @@ endif
 
 # ----------------------------------------------------------
 # 色 {{{
-set t_Co=256
 def s:DefaultColors()
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
@@ -888,9 +887,10 @@ def s:MyMatches()
 	matchadd('SpellBad', 'stlye')
 enddef
 au vimrc VimEnter,WinEnter * s:MyMatches()
+set t_Co=256
 syntax on
 set background=dark
-silent! colorscheme girly
+au vimrc VimEnter ++nested silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
