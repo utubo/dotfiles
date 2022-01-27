@@ -890,7 +890,7 @@ au vimrc VimEnter,WinEnter * s:MyMatches()
 set t_Co=256
 syntax on
 set background=dark
-au vimrc VimEnter ++nested silent! colorscheme girly
+silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
