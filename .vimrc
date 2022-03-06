@@ -114,6 +114,7 @@ if isdirectory(s:dein_vim)
 	dein#add('mechatroner/rainbow_csv')
 	dein#add('michaeljsmith/vim-indent-object')
 	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
+	dein#add('osyo-manga/vim-textobj-multiblock')
 	dein#add('othree/html5.vim')
 	dein#add('othree/yajs.vim')
 	dein#add('prabirshrestha/asyncomplete-buffer.vim')
@@ -354,6 +355,23 @@ if isdirectory(s:dein_vim)
 		})
 		map! <C-j> <Plug>(skkeleton-toggle)
 	endif
+	#}}}
+
+	# textobj-multiblock  {{{
+	omap ab <Plug>(textobj-multiblock-a)
+	omap ib <Plug>(textobj-multiblock-i)
+	xmap ab <Plug>(textobj-multiblock-a)
+	xmap ib <Plug>(textobj-multiblock-i)
+	g:textobj_multiblock_blocks = [
+		\ [ "(", ")" ],
+		\ [ "[", "]" ],
+		\ [ "{", "}" ],
+		\ [ '<', '>' ],
+		\ [ '"', '"', 1 ],
+		\ [ "'", "'", 1 ],
+		\ [ ">", "<", 1 ],
+		\ [ "「", "」", 1 ],
+	]
 	#}}}
 
 	# その他 {{{
