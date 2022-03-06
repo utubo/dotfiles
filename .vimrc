@@ -155,12 +155,13 @@ if isdirectory(s:dein_vim)
 	# sandwich {{{
 	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 	g:sandwich#recipes += [
-		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! i\r"] },
+		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 		{ buns: ['',   ''  ], input: ['q'] },
 		{ buns: ['「', '」'], input: ['k'] },
 		{ buns: ['>',  '<' ], input: ['>'] },
 		{ buns: ['{ ', ' }'], input: ['{'] },
 		{ buns: ['${', '}' ], input: ['${'] },
+		{ buns: ['%{', '}' ], input: ['%{'] },
 		{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 	]
 	def! g:CommentString(index: number): string
