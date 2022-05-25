@@ -45,7 +45,7 @@ augroup End
 # MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
 # ↓
 # nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
-def s:MultiCmd(qargs: string)
+def MultiCmd(qargs: string)
 	const q = qargs->substitute('^\S*', '', '')
 	for cmd in qargs->matchstr('^\S*')->split(',')
 		var a = q
@@ -55,26 +55,26 @@ def s:MultiCmd(qargs: string)
 		execute cmd .. a
 	endfor
 enddef
-command! -nargs=* MultiCmd s:MultiCmd(<q-args>)
+command! -nargs=* MultiCmd MultiCmd(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-def s:RemoveEmptyLine(line: number)
+def RemoveEmptyLine(line: number)
 	execute 'silent! ' .. line .. 's/\s\+$//'
 	execute 'silent! ' .. line .. 's/^\s*\n//'
 enddef
 
-def s:BufIsSmth(): bool
+def BufIsSmth(): bool
 	return &modified || ! empty(bufname())
 enddef
 
-def s:IndentStr(expr: any): string
+def IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
-def s:GetVisualSelection(): string
+def GetVisualSelection(): string
 	const org = @"
 	silent normal! gvy
 	const text = @"
@@ -82,17 +82,17 @@ def s:GetVisualSelection(): string
 	return text
 enddef
 
-var s:has_deno = executable('deno')
+var has_deno = executable('deno')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # プラグイン {{{
-var s:dein_dir = expand('~/.cache/dein')
-var s:dein_vim = s:dein_dir .. '/repos/github.com/Shougo/dein.vim'
-if isdirectory(s:dein_vim)
+var dein_dir = expand('~/.cache/dein')
+var dein_vim = dein_dir .. '/repos/github.com/Shougo/dein.vim'
+if isdirectory(dein_vim)
 	# dein {{{
-	&runtimepath = s:dein_vim .. ',' .. &runtimepath
-	dein#begin(s:dein_dir)
+	&runtimepath = dein_vim .. ',' .. &runtimepath
+	dein#begin(dein_dir)
 	dein#add('Shougo/dein.vim')
 	dein#add('airblade/vim-gitgutter')
 	dein#add('alvan/vim-closetag')
@@ -132,7 +132,7 @@ if isdirectory(s:dein_vim)
 	#dein#add('utubo/vim-vindent')
 	dein#add('yami-beta/asyncomplete-omni.vim')
 	dein#add('yegappan/mru')
-	if s:has_deno
+	if has_deno
 		dein#add('vim-denops/denops.vim')
 		dein#add('vim-skk/skkeleton')
 	endif
@@ -178,7 +178,7 @@ if isdirectory(s:dein_vim)
 	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
 
 	# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-	def s:FixSandwichPos()
+	def FixSandwichPos()
 		var c = g:operator#sandwich#object.cursor
 		if g:fix_sandwich_pos[1] != c.inner_head[1]
 			c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
@@ -186,21 +186,21 @@ if isdirectory(s:dein_vim)
 		endif
 	enddef
 	au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-	au vimrc User OperatorSandwichAddPost s:FixSandwichPos()
+	au vimrc User OperatorSandwichAddPost FixSandwichPos()
 
 	# 内側に連続で挟むやつ
-	def s:RemarkPatty()
+	def RemarkPatty()
 		setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 		setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 	enddef
 	nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
 
-	var s:big_mac_crown = []
-	def s:BigMac(is_nest: bool = false)
+	var big_mac_crown = []
+	def BigMac(is_nest: bool = false)
 		const c = is_nest ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-		if ! is_nest || s:big_mac_crown !=# c
-			s:big_mac_crown = c
-			au vimrc User OperatorSandwichAddPost ++once s:BigMac(true)
+		if ! is_nest || big_mac_crown !=# c
+			big_mac_crown = c
+			au vimrc User OperatorSandwichAddPost ++once BigMac(true)
 			feedkeys(is_nest ? 'S.' : 'gvSa')
 		endif
 	enddef
@@ -208,12 +208,12 @@ if isdirectory(s:dein_vim)
 	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 
 	# 行末空白と空行を削除
-	def s:RemoveAirBuns()
+	def RemoveAirBuns()
 		var c = g:operator#sandwich#object.cursor
-		s:RemoveEmptyLine(c.tail[1])
-		s:RemoveEmptyLine(c.head[1])
+		RemoveEmptyLine(c.tail[1])
+		RemoveEmptyLine(c.head[1])
 	enddef
-	au vimrc User OperatorSandwichDeletePost s:RemoveAirBuns()
+	au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
 	#}}}
 
 	# MRU {{{
@@ -224,7 +224,7 @@ if isdirectory(s:dein_vim)
 		syntax: '^.\{-}\ze >'
 	}
 	# 数字キーで開く
-	def s:MRUwithNumKey(use_tab: bool)
+	def MRUwithNumKey(use_tab: bool)
 		b:use_tab = use_tab
 		setlocal number
 		redraw
@@ -236,25 +236,25 @@ if isdirectory(s:dein_vim)
 			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
 		endfor
 	enddef
-	def s:MyMRU()
+	def MyMRU()
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
 		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:use_tab)<CR>
 		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
-		s:MRUwithNumKey(s:BufIsSmth())
+		MRUwithNumKey(BufIsSmth())
 	enddef
-	au vimrc FileType mru s:MyMRU()
+	au vimrc FileType mru MyMRU()
 	au vimrc ColorScheme * hi link MruFileName Directory
 	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
 	#}}}
 
 	# 補完 {{{
-	def s:RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
+	def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 		# とても長い
 		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 	enddef
-	s:RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
-	s:RegisterAsyncompSource('buffer', ['*'], ['go'])
+	RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
+	RegisterAsyncompSource('buffer', ['*'], ['go'])
 	MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 	MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 	MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
@@ -264,7 +264,7 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# 翻訳 {{{
-	def s:AutoTranslate(text: string)
+	def AutoTranslate(text: string)
 		if matchstr(text, '[^\x00-\x7F]') ==# ''
 			execute 'Translate ' .. text
 		else
@@ -291,14 +291,14 @@ if isdirectory(s:dein_vim)
 	# lightline {{{
 	# ヤンクしたやつを表示するやつ
 	g:ll_reg = ''
-	def s:LLYankPost()
+	def LLYankPost()
 		var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
 		if len(v:event.regcontents) !=# 1 || len(reg) > 10
 			reg = substitute(reg, '^\(.\{0,8\}\).*', '\1..', '')
 		endif
 		g:ll_reg = '📎[' .. reg .. ']'
 	enddef
-	au vimrc TextYankPost * s:LLYankPost()
+	au vimrc TextYankPost * LLYankPost()
 
 	# 毎時45分から15分間休憩しようね
 	g:ll_tea_break = '0:00'
@@ -342,7 +342,7 @@ if isdirectory(s:dein_vim)
 	#}}}
 
 	# skk {{{
-	if s:has_deno
+	if has_deno
 		if ! empty($SKK_JISYO_DIR)
 			skkeleton#config({
 				globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
@@ -384,6 +384,7 @@ if isdirectory(s:dein_vim)
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
+	nnoremap <silent> <Space>gd :<C-u>Gdiffsplit<CR>
 	nnoremap <Space>ga :<C-u>Git add %
 	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 	nnoremap <Space>gp :<C-u>Git push
@@ -414,7 +415,7 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 
 # ----------------------------------------------------------
 # タブ幅やタブ展開を自動設定 {{{
-def s:SetupTabstop()
+def SetupTabstop()
 	const limit = 100
 	const org = getpos('.')
 	cursor(1, 1)
@@ -430,19 +431,19 @@ def s:SetupTabstop()
 	endif
 	setpos('.', org)
 enddef
-au vimrc BufReadPost * s:SetupTabstop()
+au vimrc BufReadPost * SetupTabstop()
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # vimgrep {{{
-def s:MyVimgrep(keyword: string, ...targets: list<string>)
+def MyVimgrep(keyword: string, ...targets: list<string>)
 	var path = join(targets, ' ')
 	# パスを省略した場合は、同じ拡張子のファイルから探す
 	if empty(path)
 		path = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
 	endif
 	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	const use_tab = s:BufIsSmth() && path !=# '%'
+	const use_tab = BufIsSmth() && path !=# '%'
 	if use_tab
 		tabnew
 	endif
@@ -460,10 +461,10 @@ def s:MyVimgrep(keyword: string, ...targets: list<string>)
 		endif
 	endif
 enddef
-command! -nargs=+ MyVimgrep s:MyVimgrep(<f-args>)
+command! -nargs=+ MyVimgrep MyVimgrep(<f-args>)
 nnoremap <Space>/ :<C-u>MyVimgrep<Space>
 
-def s:MyQuickFixWindow()
+def MyQuickFixWindow()
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -473,7 +474,7 @@ def s:MyQuickFixWindow()
 	# 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
-au vimrc FileType qf s:MyQuickFixWindow()
+au vimrc FileType qf MyQuickFixWindow()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
@@ -508,8 +509,8 @@ nnoremap <Space>y yiw
 nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" .. "\<CR>"
 # ConnectBotの:とFキーが遠い
 nmap <Space>, :
-for s:i in range(1, 10)
-	execute printf('nmap <Space>%d <F%d>', s:i % 10, s:i)
+for i in range(1, 10)
+	execute printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
 nmap <Space><Space>1 <F11>
 nmap <Space><Space>2 <F12>
@@ -517,7 +518,7 @@ nmap <Space><Space>2 <F12>
 
 # ----------------------------------------------------------
 # カーソルを行頭に合わせて移動 {{{
-def s:PutHat(): string
+def PutHat(): string
 	const x = getline('.')->match('\S') + 1
 	if x != 0 || !exists('w:my_hat')
 		w:my_hat = col('.') == x ? '^' : ''
@@ -542,14 +543,14 @@ set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
 au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
-def s:Zf()
+def Zf()
 	if line("'<") != line('.')
 		return
 	endif
 	var firstline = line("'<")
 	var lastline = line("'>")
 	execute ':' firstline 's/\v(\S)?$/\1 /'
-	execute ':' lastline "normal! o\<Esc>i" .. s:IndentStr(firstline)
+	execute ':' lastline "normal! o\<Esc>i" .. IndentStr(firstline)
 	cursor([firstline, 1])
 	normal! V
 	cursor([lastline + 1, 1])
@@ -558,7 +559,7 @@ enddef
 vnoremap <silent> zf :call <SID>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
-def s:Zd()
+def Zd()
 	if foldclosed(line('.')) == -1
 		normal! zc
 	endif
@@ -569,8 +570,8 @@ def s:Zd()
 	endif
 	const org = getpos('.')
 	normal! zd
-	s:RemoveEmptyLine(tail)
-	s:RemoveEmptyLine(head)
+	RemoveEmptyLine(tail)
+	RemoveEmptyLine(head)
 	setpos('.', org)
 enddef
 nnoremap <silent> zd :Zd()<CR>
@@ -589,7 +590,7 @@ nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
 # チラつかないようにやるやつ
-def s:KeepCursor(expr: string)
+def KeepCursor(expr: string)
 	const cur = getcurpos()
 	execute expr
 	setpos('.', cur)
@@ -636,7 +637,7 @@ tnoremap <C-w><C-q> <C-w>:quit!<CR>
 
 # ----------------------------------------------------------
 # markdownのチェックボックス {{{
-def s:ToggleCheckBox()
+def ToggleCheckBox()
 	const a = getline('.')
 	var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
 	if a ==# b
@@ -655,7 +656,7 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 
 # ----------------------------------------------------------
 # ファイル情報を色付きで表示 {{{
-def s:ShowBufInfo()
+def ShowBufInfo()
 	if &ft ==# 'qf'
 		return
 	endif
@@ -684,12 +685,12 @@ def s:ShowBufInfo()
 	echon &ff ' ' (empty(&fenc) ? &encoding : &fenc) ' ' &ft
 enddef
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost * s:ShowBufInfo()
+au vimrc BufNewFile,BufReadPost * ShowBufInfo()
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # 閉じる {{{
-def s:Quit(expr: string = '')
+def Quit(expr: string = '')
 	if ! empty(expr)
 		if winnr() == winnr(expr)
 			return
@@ -842,8 +843,8 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には�
 nnoremap <Space>a A
 
 # インデントが現在行以下の行まで移動 {{{
-def s:FindSameIndent(flags: string, inner: number = 0): number
-	const size = len(s:IndentStr('.'))
+def FindSameIndent(flags: string, inner: number = 0): number
+	const size = len(IndentStr('.'))
 	const pattern = printf('^\s\{0,%d\}\S', size)
 	setpos('.', [0, getpos('.')[1], 1, 1])
 	return search(pattern, flags) + inner
@@ -866,20 +867,20 @@ inoremap [, [<CR>],<C-o>O
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
 if strftime('%d') ==# '01'
-	def s:DMD()
+	def DMD()
 		var msg = "✨ Today, Let's enjoy VIM with default key mapping ! ✨"
 		var padding = repeat(' ', (winwidth(0) - strdisplaywidth(msg)) / 2)
 		echo padding .. msg
 		imapclear
 		mapclear
 	enddef
-	au vimrc VimEnter * s:DMD()
+	au vimrc VimEnter * DMD()
 endif
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # 色 {{{
-def s:DefaultColors()
+def DefaultColors()
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 		ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -889,11 +890,11 @@ def s:DefaultColors()
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
 enddef
-au vimrc ColorSchemePre * s:DefaultColors()
-def s:MyMatches()
+au vimrc ColorSchemePre * DefaultColors()
+def MyMatches()
 	if exists('w:my_matches') && !empty(getmatches())
 		return
-	end
+	endif
 	w:my_matches = 1
 	matchadd('SpellBad', '　\|¥\|\s\+$')
 	matchadd('String', '「[^」]*」')
@@ -905,7 +906,7 @@ def s:MyMatches()
 	# 稀によくtypoする単語(気づいたら追加する)
 	matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * s:MyMatches()
+au vimrc VimEnter,WinEnter * MyMatches()
 set t_Co=256
 syntax on
 set background=dark
