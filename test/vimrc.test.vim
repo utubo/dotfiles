@@ -31,7 +31,7 @@ enddef
 var scan_result = []
 def Scan(expr: any, pat: string): list<string>
 	scan_result = []
-	substitute(expr, pat, '\=add(scan_result, submatch(0))', 'g')
+	substitute(expr, pat, '\=add(scan_result, submatch(0))[0]', 'g')
 	return scan_result
 enddef
 #}}}
