@@ -14,7 +14,7 @@ set guifont=Cica:h13
 # }}}
 
 # フォントサイズ変更 {{{
-def s:IncFontSize(d: number)
+def IncFontSize(d: number)
 	var f = split(&guifont, ':h')
 	&guifont = f[0] .. ':h' .. (str2nr(f[1]) + d)
 enddef
@@ -33,7 +33,7 @@ set go-=T
 # ウィンドウ位置記憶 {{{
 # http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
 g:save_window_file = expand('~/.vimwinpos')
-def s:SaveWindow()
+def SaveWindow()
 	var options = [
 	  'set background=' .. &background,
 	  'colorscheme ' .. g:colors_name,
@@ -43,7 +43,7 @@ def s:SaveWindow()
 	]
 	writefile(options, g:save_window_file)
 enddef
-au gvimrc VimLeavePre * s:SaveWindow()
+au gvimrc VimLeavePre * SaveWindow()
 if filereadable(g:save_window_file)
 	execute 'source' g:save_window_file
 endif
@@ -54,15 +54,15 @@ g:nerdtree_tabs_open_on_gui_startup = 0
 g:webdevicons_conceal_nerdtree_brackets = 1
 g:WebDevIconsNerdTreeAfterGlyphPadding = ''
 
-def s:MyLightline()
+def MyLightline()
 	g:lightline.separator = { left: "\ue0b0", right: "\ue0b2" }
 	g:lightline.subseparator = { left: "", right: "" }
 	lightline#init()
 	lightline#enable()
 enddef
-s:MyLightline()
-au gvimrc VimEnter * ++once s:MyLightline()
-au gvimrc BufRead * s:MyLightline()
+MyLightline()
+au gvimrc VimEnter * ++once MyLightline()
+au gvimrc BufRead * MyLightline()
 # }}}
 
 # Windows {{{
