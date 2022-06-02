@@ -217,7 +217,7 @@ if isdirectory(dein_vim)
 	#}}}
 
 	# MRU {{{
-	# デフォルトだとファイル名に括弧が含まれていると開けない
+	# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない文字を区切りにする
 	g:MRU_Filename_Format = {
 		formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 		parser: '> \zs.*',
@@ -250,7 +250,6 @@ if isdirectory(dein_vim)
 
 	# 補完 {{{
 	def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
-		# とても長い
 		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 	enddef
 	RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
@@ -507,7 +506,7 @@ nnoremap <Space>zz :<C-u>q!<CR>
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
 nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" .. "\<CR>"
-# ConnectBotの:とFキーが遠い
+# スマホだと:とファンクションキーが遠いので…
 nmap <Space>, :
 for i in range(1, 10)
 	execute printf('nmap <Space>%d <F%d>', i % 10, i)
