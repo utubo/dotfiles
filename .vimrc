@@ -96,6 +96,7 @@ if isdirectory(dein_vim)
 	dein#add('Shougo/dein.vim')
 	dein#add('airblade/vim-gitgutter')
 	dein#add('alvan/vim-closetag')
+	dein#add('ctrlpvim/ctrlp.vim')
 	dein#add('cohama/lexima.vim')      # 括弧補完
 	dein#add('delphinus/vim-auto-cursorline')
 	dein#add('dense-analysis/ale')     # Syntaxチェッカー
@@ -108,6 +109,7 @@ if isdirectory(dein_vim)
 	dein#add('kana/vim-textobj-user')
 	dein#add('luochen1990/rainbow')    # 虹色括弧
 	dein#add('machakann/vim-sandwich')
+	dein#add('mattn//ctrlp-matchfuzzy')
 	dein#add('mattn/vim-maketable')
 	dein#add('matze/vim-move')         # 複数行移動
 	dein#add('mbbill/undotree')
@@ -129,7 +131,6 @@ if isdirectory(dein_vim)
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
 	dein#add('utubo/vim-textobj-twochars')
-	#dein#add('utubo/vim-vindent')
 	dein#add('yami-beta/asyncomplete-omni.vim')
 	dein#add('yegappan/mru')
 	if has_deno
@@ -380,6 +381,8 @@ if isdirectory(dein_vim)
 	Enable  g:undotree_SetFocusWhenToggle
 	Disable g:undotree_DiffAutoOpen
 	g:auto_cursorline_wait_ms = 3000
+	g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+	g:ctrlp_cmd = 'CtrlPMixed'
 	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
 	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
