@@ -591,16 +591,16 @@ nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-# チラつかないようにやるやつ
+vnoremap <Tab> <Cmd>normal! >gv<CR>
+vnoremap <S-Tab> <Cmd>normal! <gv<CR>
+# チラつかないようにコマンドを実行するやつ
 def KeepCursor(expr: string)
 	const cur = getcurpos()
 	execute expr
 	setpos('.', cur)
 enddef
-vnoremap <Tab> <Cmd>normal! >gv<CR>
-vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 vnoremap u <Cmd>call <SID>KeepCursor('undo')<CR>
-vnoremap <CR> <Cmd>call <SID>KeepCursor('redo')<CR>
+vnoremap <C-R> <Cmd>call <SID>KeepCursor('redo')<CR>
 #}}}
 
 # ----------------------------------------------------------
