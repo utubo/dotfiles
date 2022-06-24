@@ -409,9 +409,8 @@ inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
 # http://deris.hatenablog.jp/entry/2014/05/20/235807
-nnoremap gs :<C-u>%s///g<Left><Left><Left>
-vnoremap gs :s///g<Left><Left><Left>
-xnoremap Y "+y
+nnoremap gs :<C-u>%s///cg<Left><Left><Left><Left>
+vnoremap gs :s///cg<Left><Left><Left><Left>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 #}}} -------------------------------------------------------
@@ -681,7 +680,7 @@ def ShowBufInfo()
 	endif
 	const w = wordcount()
 	if e || w.bytes != 0
-		echoh ModeMsg
+		echoh Constant
 		echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
 	endif
 	echoh MoreMsg
@@ -753,8 +752,8 @@ vnoremap g: "vy:<C-r>=@v<CR><CR>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap <Space><Space>p o<C-r>"<Esc>
-nnoremap <Space><Space>P O<C-r>"<Esc>
+nnoremap <Space><Space>p o<Esc>P
+nnoremap <Space><Space>P O<Esc>p
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
@@ -780,12 +779,10 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
+nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
 nnoremap / :<C-u>nohlsearch<CR>/
 nnoremap ? :<C-u>nohlsearch<CR>?
-nnoremap TE :<C-u>tabe<Space>
-nnoremap TN :<C-u>tabnew<CR>
-nnoremap TD :<C-u>tabe ./<CR>
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//cg<Left><Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 
 # 最後の選択範囲を現在行の下に移動する
@@ -847,6 +844,9 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には�
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
 nnoremap <Space>a A
+nnoremap TE :<C-u>tabe<Space>
+nnoremap TN :<C-u>tabnew<CR>
+nnoremap TD :<C-u>tabe ./<CR>
 
 # インデントが現在行以下の行まで移動 {{{
 def FindSameIndent(flags: string, inner: number = 0): number
