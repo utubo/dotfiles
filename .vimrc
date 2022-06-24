@@ -333,8 +333,8 @@ if isdirectory(dein_vim)
 	# lightline設定
 	g:lightline = {
 		colorscheme: 'wombat',
-		active: { right: [['teabreak'], ['ff', 'notutf8', 'lineinfo'], ['reg']] },
-		component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}' },
+		active: { right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']] },
+		component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
 		component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 	}
 
