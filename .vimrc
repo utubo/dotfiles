@@ -409,8 +409,8 @@ inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
 # http://deris.hatenablog.jp/entry/2014/05/20/235807
-nnoremap gs :<C-u>%s///cg<Left><Left><Left><Left>
-vnoremap gs :s///cg<Left><Left><Left><Left>
+nnoremap gs :<C-u>%s///g<Left><Left><Left>
+vnoremap gs :s///g<Left><Left><Left>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 #}}} -------------------------------------------------------
@@ -591,16 +591,15 @@ nnoremap Zy :<C-u>set foldmethod=syntax<CR>
 
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-vnoremap <Tab> <Cmd>normal! >gv<CR>
-vnoremap <S-Tab> <Cmd>normal! <gv<CR>
-# チラつかないようにコマンドを実行するやつ
-def KeepCursor(expr: string)
+def KeepingCurPos(expr: string)
 	const cur = getcurpos()
 	execute expr
 	setpos('.', cur)
 enddef
-vnoremap u <Cmd>call <SID>KeepCursor('undo')<CR>
-vnoremap <C-R> <Cmd>call <SID>KeepCursor('redo')<CR>
+vnoremap u <Cmd>call <SID>KeepingCurPos('undo')<CR>
+vnoremap <C-R> <Cmd>call <SID>KeepingCurPos('redo')<CR>
+vnoremap <Tab> <Cmd>normal! >gv<CR>
+vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 #}}}
 
 # ----------------------------------------------------------
@@ -782,7 +781,7 @@ nnoremap <Space>d "_d
 nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
 nnoremap / :<C-u>nohlsearch<CR>/
 nnoremap ? :<C-u>nohlsearch<CR>?
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//cg<Left><Left><Left>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 
 # 最後の選択範囲を現在行の下に移動する
