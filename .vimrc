@@ -111,6 +111,7 @@ if isdirectory(dein_vim)
 	dein#add('machakann/vim-sandwich')
 	dein#add('mattn//ctrlp-matchfuzzy')
 	dein#add('mattn/vim-maketable')
+	dein#add('mattn/vim-notification')
 	dein#add('matze/vim-move')         # 複数行移動
 	dein#add('mbbill/undotree')
 	dein#add('mechatroner/rainbow_csv')
@@ -310,6 +311,9 @@ if isdirectory(dein_vim)
 		const tea = mm >= 45 ? '☕🍴🍰' : ''
 		g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
 		lightline#update()
+		if (mm == 45)
+			notification#show("       ☕🍴🍰\nHave a break time !")
+		endif
 	enddef
 	timer_stop(get(g:, 'vimrc_timer_60s', 0))
 	g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
@@ -873,9 +877,7 @@ inoremap [, [<CR>],<C-o>O
 # デフォルトマッピングデー {{{
 if strftime('%d') ==# '01'
 	def DMD()
-		var msg = "✨ Today, Let's enjoy VIM with default key mapping ! ✨"
-		var padding = repeat(' ', (winwidth(0) - strdisplaywidth(msg)) / 2)
-		echo padding .. msg
+		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		imapclear
 		mapclear
 	enddef
