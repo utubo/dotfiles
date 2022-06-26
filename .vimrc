@@ -417,6 +417,10 @@ nnoremap gs :<C-u>%s///g<Left><Left><Left>
 vnoremap gs :s///g<Left><Left><Left>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
+# https://github.com/Omochice/dotfiles
+nnoremap <expr> i len(getline('.')) ? 'i' : '"_cc'
+nnoremap <expr> a len(getline('.')) ? 'a' : '"_cc'
+nnoremap <expr> A len(getline('.')) ? 'A' : '"_cc'
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
