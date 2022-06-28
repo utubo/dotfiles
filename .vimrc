@@ -412,9 +412,6 @@ vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><C
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
-# http://deris.hatenablog.jp/entry/2014/05/20/235807
-nnoremap gs :<C-u>%s///g<Left><Left><Left>
-vnoremap gs :s///g<Left><Left><Left>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
@@ -747,6 +744,16 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
+# vimrc作成用  {{{
+nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
+nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
+vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
+vnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+# カーソル位置のハイライトを確認するやつ
+nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
+# }}}
+
+# ----------------------------------------------------------
 # その他細々したの {{{
 if has('clipboard')
 	au vimrc FocusGained * @" = @+
@@ -754,8 +761,9 @@ if has('clipboard')
 endif
 nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
-nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-vnoremap g: "vy:<C-r>=@v<CR><CR>
+execute 'nnoremap gs :<C-u>%s///g \| nohlsearch' .. repeat('<Left>', 16)
+execute 'vnoremap gs :s///g \| nohlsearch' .. repeat('<Left>', 16)
+execute 'nnoremap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch' .. repeat('<Left>', 15)
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
@@ -789,14 +797,10 @@ nnoremap <Space>d "_d
 nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
 nnoremap / :<C-u>nohlsearch<CR>/
 nnoremap ? :<C-u>nohlsearch<CR>?
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
 cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 
 # 最後の選択範囲を現在行の下に移動する
 nnoremap <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
-
-# カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
