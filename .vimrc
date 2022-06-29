@@ -131,6 +131,7 @@ if isdirectory(dein_vim)
 	dein#add('utubo/vim-colorscheme-girly')
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
+	dein#add('utubo/vim-tabpopupmenu')
 	dein#add('utubo/vim-tabtoslash')
 	dein#add('utubo/vim-textobj-twochars')
 	dein#add('yami-beta/asyncomplete-omni.vim')
@@ -396,6 +397,7 @@ if isdirectory(dein_vim)
 	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 	nnoremap <Space>gp :<C-u>Git push
 	nnoremap <Space>gl :<C-u>Git pull<CR>
+	nnoremap <silent> <Leader>t :<C-u>call tabpopupmenu#popup()<CR>
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
