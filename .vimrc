@@ -131,6 +131,7 @@ if isdirectory(dein_vim)
 	dein#add('utubo/vim-colorscheme-girly')
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
+	dein#add('utubo/vim-tablist') # 息抜きに作ったので自分で食べる
 	dein#add('utubo/vim-tabpopupmenu')
 	dein#add('utubo/vim-tabtoslash')
 	dein#add('utubo/vim-textobj-twochars')
@@ -274,8 +275,8 @@ if isdirectory(dein_vim)
 			execute 'Translate! ' .. text
 		endif
 	enddef
-	nnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
-	vnoremap <script> <Space>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
+	nnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
+	vnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
 	#}}}
 
 	# ALE {{{
@@ -397,7 +398,8 @@ if isdirectory(dein_vim)
 	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 	nnoremap <Space>gp :<C-u>Git push
 	nnoremap <Space>gl :<C-u>Git pull<CR>
-	nnoremap <silent> <Leader>t :<C-u>call tabpopupmenu#popup()<CR>
+	nnoremap <silent> <Space>t :<C-u>call tabpopupmenu#popup()<CR>
+	nnoremap <silent> <Space>T :<C-u>call tablist#Show()<CR>
 	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
