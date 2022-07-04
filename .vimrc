@@ -31,7 +31,7 @@ noh
 aug vimrc
 au!
 aug End
-def Fb(b: string)
+def Fa(b: string)
 const q = b->substitute('^\S*', '', '')
 for c in b->matchstr('^\S*')->split(',')
 var a = q
@@ -41,25 +41,25 @@ var a = q
 exe c .. a
 endfor
 enddef
-com! -nargs=* MultiCmd Fb(<q-args>)
+com! -nargs=* MultiCmd Fa(<q-args>)
 com! -nargs=1 -complete=var Enable  <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def Fc(b: number)
-exe 'silent! ' .. b .. 's/\s\+$//'
-exe 'silent! ' .. b .. 's/^\s*\n//'
+def Fb(a: number)
+exe 'silent! ' .. a .. 's/\s\+$//'
+exe 'silent! ' .. a .. 's/^\s*\n//'
 enddef
-def Fd(): bool
+def Fc(): bool
 return &modified || ! empty(bufname())
 enddef
-def Fe(b: any): string
-return matchstr(getline(b), '^\s*')
+def Fd(a: any): string
+return matchstr(getline(a), '^\s*')
 enddef
-def Ff(): string
-const b = @"
+def Fe(): string
+const a = @"
 silent normal! gvy
-const c = @"
-@" = b
-return c
+const b = @"
+@" = a
+return b
 enddef
 var has_deno = executable('deno')
 var dein_dir = expand('~/.cache/dein')
@@ -135,8 +135,8 @@ g:sandwich#recipes += [
 { buns: ['%{', '}' ], input: ['%{'] },
 { buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 ]
-def! g:CommentString(b: number): string
-return &commentstring->split('%s')->get(b, '')
+def! g:CommentString(a: number): string
+return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
@@ -147,7 +147,7 @@ MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
-def Fg()
+def Ff()
 var c = g:operator#sandwich#object.cursor
 if g:fix_sandwich_pos[1] != c.inner_head[1]
 c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
@@ -155,75 +155,75 @@ c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost Fg()
-def Fh()
+au vimrc User OperatorSandwichAddPost Ff()
+def Fg()
 setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
-nm <silent> S. :<C-u>call <SID>Fh()<CR>gvSa
+nm <silent> S. :<C-u>call <SID>Fg()<CR>gvSa
 var big_mac_crown = []
-def Fi(b: bool = false)
-const c = b ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-if ! b || big_mac_crown !=# c
+def Fh(a: bool = false)
+const c = a ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
+if ! a || big_mac_crown !=# c
 big_mac_crown = c
-au vimrc User OperatorSandwichAddPost ++once Fi(true)
-feedkeys(b ? 'S.' : 'gvSa')
+au vimrc User OperatorSandwichAddPost ++once Fh(true)
+feedkeys(a ? 'S.' : 'gvSa')
 endif
 enddef
 nm Sm viwSm
-vm <silent> Sm :<C-u>call <SID>Fi()<CR>
-def Fj()
+vm <silent> Sm :<C-u>call <SID>Fh()<CR>
+def Fi()
 var c = g:operator#sandwich#object.cursor
-Fc(c.tail[1])
-Fc(c.head[1])
+Fb(c.tail[1])
+Fb(c.head[1])
 enddef
-au vimrc User OperatorSandwichDeletePost Fj()
+au vimrc User OperatorSandwichDeletePost Fi()
 g:MRU_Filename_Format = {
 formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 parser: '> \zs.*',
 syntax: '^.\{-}\ze >'
 }
-def Fba(b: bool)
-b:use_tab = b
+def Fj(c: bool)
+b:use_tab = c
 setl number
 redraw
 echoh Question
-ec printf('[1]..[9] => open with a %s.', b ? 'tab' : 'window')
+ec printf('[1]..[9] => open with a %s.', c ? 'tab' : 'window')
 echoh None
-const c = b ? 't' : '<CR>'
+const e = c ? 't' : '<CR>'
 for i in range(1, 9)
-exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, c)
+exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, e)
 endfor
 enddef
-def Fbb()
+def Fba()
 Enable b:auto_cursorline_disabled
 setl cursorline
-nn <buffer> <silent> w :<C-u>call <SID>Fba(!b:use_tab)<CR>
+nn <buffer> <silent> w :<C-u>call <SID>Fj(!b:use_tab)<CR>
 nn <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
-Fba(Fd())
+Fj(Fc())
 enddef
-au vimrc FileType mru Fbb()
+au vimrc FileType mru Fba()
 au vimrc ColorScheme * hi link MruFileName Directory
 nn <silent> <F2> :<C-u>MRUToggle<CR>
-def Fbc(b: string, c: list<string>, d: list<string>)
-exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", b, b, c, d, b)
+def Fbb(a: string, b: list<string>, c: list<string>)
+exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
-Fbc('omni', ['*'], ['c', 'cpp', 'html'])
-Fbc('buffer', ['*'], ['go'])
+Fbb('omni', ['*'], ['c', 'cpp', 'html'])
+Fbb('buffer', ['*'], ['go'])
 MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
-def Fbd(b: string)
-if matchstr(b, '[^\x00-\x7F]') ==# ''
-exe 'Translate ' .. b
+def Fbc(a: string)
+if matchstr(a, '[^\x00-\x7F]') ==# ''
+exe 'Translate ' .. a
 else
-exe 'Translate! ' .. b
+exe 'Translate! ' .. a
 endif
 enddef
-nn <script> <Leader>t :<C-u>call <SID>Fbd(expand('<cword>'))<CR>
-vn <script> <Leader>t :<C-u>call <SID>Fbd(<SID>Ff())<CR>gv
+nn <script> <Leader>t :<C-u>call <SID>Fbc(expand('<cword>'))<CR>
+vn <script> <Leader>t :<C-u>call <SID>Fbc(<SID>Fe())<CR>gv
 Enable  g:ale_set_quickfix
 Enable  g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
@@ -235,23 +235,23 @@ g:ale_lint_delay = 3000
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
 g:ll_reg = ''
-def Fbe()
-var b = substitute(v:event.regcontents[0], '\t', ' ', 'g')
-if len(v:event.regcontents) !=# 1 || len(b) > 10
-b = substitute(b, '^\(.\{0,8\}\).*', '\1..', '')
+def Fbd()
+var a = substitute(v:event.regcontents[0], '\t', ' ', 'g')
+if len(v:event.regcontents) !=# 1 || len(a) > 10
+a = substitute(a, '^\(.\{0,8\}\).*', '\1..', '')
 endif
-g:ll_reg = '📎[' .. b .. ']'
+g:ll_reg = '📎[' .. a .. ']'
 enddef
-au vimrc TextYankPost * Fbe()
+au vimrc TextYankPost * Fbd()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
 def! g:VimrcTimer60s(b: any)
 const c = (localtime() - g:ll_tea_break_opentime) / 60
-const d = c % 60
-const e = d >= 45 ? '☕🍴🍰' : ''
-g:ll_tea_break = e .. printf('%d:%02d', c / 60, d)
+const e = c % 60
+const f = e >= 45 ? '☕🍴🍰' : ''
+g:ll_tea_break = f .. printf('%d:%02d', c / 60, e)
 lightline#update()
-if (d == 45)
+if (e == 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 enddef
@@ -336,48 +336,48 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
 nn <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
 nn <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
-def Fbf()
-const b = 100
-const c = getpos('.')
+def Fbe()
+const a = 100
+const b = getpos('.')
 cursor(1, 1)
-if !!search('^\t', 'nc', b)
+if !!search('^\t', 'nc', a)
 setl noet
 setl ts=3
-elseif !!search('^  \S', 'nc', b)
+elseif !!search('^  \S', 'nc', a)
 setl et
 setl ts=2
-elseif !!search('^    \S', 'nc', b)
+elseif !!search('^    \S', 'nc', a)
 setl et
 setl ts=4
 endif
-setpos('.', c)
+setpos('.', b)
 enddef
-au vimrc BufReadPost * Fbf()
-def Fbg(b: string, ...c: list<string>)
-var d = join(c, ' ')
-if empty(d)
-d = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
+au vimrc BufReadPost * Fbe()
+def Fbf(a: string, ...b: list<string>)
+var c = join(b, ' ')
+if empty(c)
+c = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
 endif
-const e = Fd() && d !=# '%'
-if e
+const d = Fc() && c !=# '%'
+if d
 tabnew
 endif
-exe printf('silent! lvimgrep %s %s', b, d)
+exe printf('silent! lvimgrep %s %s', a, c)
 if ! empty(getloclist(0))
 lwindow
 else
 echoh ErrorMsg
-echom 'Not found.: ' .. b
+echom 'Not found.: ' .. a
 echoh None
-if e
+if d
 tabn -
 tabc +
 endif
 endif
 enddef
-com! -nargs=+ MyVimgrep Fbg(<f-args>)
+com! -nargs=+ MyVimgrep Fbf(<f-args>)
 nn <Space>/ :<C-u>MyVimgrep<Space>
-def Fbh()
+def Fbg()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -386,7 +386,7 @@ nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
-au vimrc FileType qf Fbh()
+au vimrc FileType qf Fbg()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 set splitright
 set fcs+=diff:\ 
@@ -409,52 +409,52 @@ exe printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
-def Fbi(): string
+def Fbh(): string
 const x = getline('.')->match('\S') + 1
 if x != 0 || !exists('w:my_hat')
 w:my_hat = col('.') == x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j 'j' .. <SID>Fbi()
-nn <expr> k 'k' .. <SID>Fbi()
+nn <expr> j 'j' .. <SID>Fbh()
+nn <expr> k 'k' .. <SID>Fbh()
 def! g:MyFoldText(): string
-const b = getline(v:foldstart)
-const c = repeat(' ', indent(v:foldstart))
-const d = &foldmethod ==# 'indent' ? '' : b->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
-return c .. d .. '📁'
+const a = getline(v:foldstart)
+const b = repeat(' ', indent(v:foldstart))
+const c = &foldmethod ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
+return b .. c .. '📁'
 enddef
 set foldtext=MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
-def Fbj()
+def Fbi()
 if line("'<") != line('.')
 return
 endif
-var b = line("'<")
-var c = line("'>")
-exe ':' b 's/\v(\S)?$/\1 /'
-exe ':' c "normal! o\<Esc>i" .. Fe(b)
-cursor([b, 1])
+var a = line("'<")
+var b = line("'>")
+exe ':' a 's/\v(\S)?$/\1 /'
+exe ':' b "normal! o\<Esc>i" .. Fd(a)
+cursor([a, 1])
 normal! V
-cursor([c + 1, 1])
+cursor([b + 1, 1])
 normal! zf
 enddef
-vn <silent> zf :call <SID>Fbj()<CR>
-def Fca()
+vn <silent> zf :call <SID>Fbi()<CR>
+def Fbj()
 if foldclosed(line('.')) == -1
 normal! zc
 endif
-const b = foldclosed(line('.'))
-const c = foldclosedend(line('.'))
-if b == -1
+const a = foldclosed(line('.'))
+const b = foldclosedend(line('.'))
+if a == -1
 return
 endif
-const d = getpos('.')
+const c = getpos('.')
 normal! zd
-Fc(c)
-Fc(b)
-setpos('.', d)
+Fb(b)
+Fb(a)
+setpos('.', c)
 enddef
 nn <silent> zd :Zd()<CR>
 set foldmethod=marker
@@ -464,13 +464,13 @@ nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> :<C-u>set foldmethod=indent<CR>
 nn Z{ :<C-u>set foldmethod=marker<CR>
 nn Zy :<C-u>set foldmethod=syntax<CR>
-def Fcb(b: string)
-const c = getcurpos()
-exe b
-setpos('.', c)
+def Fca(a: string)
+const b = getcurpos()
+exe a
+setpos('.', b)
 enddef
-vn u <Cmd>call <SID>Fcb('undo')<CR>
-vn <C-R> <Cmd>call <SID>Fcb('redo')<CR>
+vn u <Cmd>call <SID>Fca('undo')<CR>
+vn <C-R> <Cmd>call <SID>Fca('redo')<CR>
 vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
@@ -495,7 +495,7 @@ tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w>q exit
 tno <C-w><C-q> <C-w>:quit!<CR>
-def Fcc()
+def Fcb()
 const a = getline('.')
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b
@@ -509,8 +509,8 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <silent> <Space>x :call <SID>Fcc()<CR>
-def Fcd()
+no <silent> <Space>x :call <SID>Fcb()<CR>
+def Fcc()
 if &ft ==# 'qf'
 return
 endif
@@ -538,14 +538,14 @@ endif
 echoh MoreMsg
 echon &ff ' ' (empty(&fenc) ? &enc : &fenc) ' ' &ft
 enddef
-no <silent> <C-g> :<C-u>call <SID>Fcd()<CR>
-au vimrc BufNewFile,BufReadPost * Fcd()
-def Fce(b: string = '')
-if ! empty(b)
-if winnr() == winnr(b)
+no <silent> <C-g> :<C-u>call <SID>Fcc()<CR>
+au vimrc BufNewFile,BufReadPost * Fcc()
+def Fcd(a: string = '')
+if ! empty(a)
+if winnr() == winnr(a)
 return
 endif
-exe 'wincmd ' .. b
+exe 'wincmd ' .. a
 endif
 if mode() ==# 't'
 quit!
@@ -553,32 +553,32 @@ else
 confirm quit
 endif
 enddef
-nn <silent> qh :<C-u>call <SID>Fce('h')<CR>
-nn <silent> qj :<C-u>call <SID>Fce('j')<CR>
-nn <silent> qk :<C-u>call <SID>Fce('k')<CR>
-nn <silent> ql :<C-u>call <SID>Fce('l')<CR>
-nn <silent> qq :<C-u>call <SID>Fce()<CR>
+nn <silent> qh :<C-u>call <SID>Fcd('h')<CR>
+nn <silent> qj :<C-u>call <SID>Fcd('j')<CR>
+nn <silent> qk :<C-u>call <SID>Fcd('k')<CR>
+nn <silent> ql :<C-u>call <SID>Fcd('l')<CR>
+nn <silent> qq :<C-u>call <SID>Fcd()<CR>
 nn q <Nop>
 nn q: q:
 nn q/ q/
 nn q? q?
 nn Q q
-def Fcf(b: string)
-const c = expand('%')
-const d = expand(b)
-if ! empty(c) && filereadable(c)
-if filereadable(d)
+def Fce(a: string)
+const b = expand('%')
+const c = expand(a)
+if ! empty(b) && filereadable(b)
+if filereadable(c)
 echoh Error
-ec 'file "' .. b .. '" already exists.'
+ec 'file "' .. a .. '" already exists.'
 echoh None
 return
 endif
-rename(c, d)
+rename(b, c)
 endif
-exe 'saveas! ' .. d
+exe 'saveas! ' .. c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile call <SID>Fcf(<f-args>)
+com! -nargs=1 -complete=file MoveFile call <SID>Fce(<f-args>)
 cnoreabbrev mv MoveFile
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
@@ -639,51 +639,51 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <Cmd>call <SID>Fcc()<CR>
+ino jjx <Cmd>call <SID>Fcb()<CR>
 ino <M-h> <C-o>^
 ino <M-l> <C-o>$
 ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
-ino <M-x> <Cmd>call <SID>Fcc()<CR>
-def Fcg()
-for b in get(w:, 'my_syntax', [])
-matchdelete(b)
+ino <M-x> <Cmd>call <SID>Fcb()<CR>
+def Fcf()
+for a in get(w:, 'my_syntax', [])
+matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def Fch(b: string, c: string)
-w:my_syntax->add(matchadd(b, c))
+def Fcg(a: string, b: string)
+w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * Fcg()
-au vimrc Syntax javascript,vim Fch('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim Fch('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * Fcf()
+au vimrc Syntax javascript,vim Fcg('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim Fcg('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <Space>a A
 nn TE :<C-u>tabe<Space>
 nn TN :<C-u>tabnew<CR>
 nn TD :<C-u>tabe ./<CR>
-def Fci(b: string, c: number = 0): number
-const d = len(Fe('.'))
-const e = printf('^\s\{0,%d\}\S', d)
+def Fch(a: string, b: number = 0): number
+const c = len(Fd('.'))
+const e = printf('^\s\{0,%d\}\S', c)
 setpos('.', [0, getpos('.')[1], 1, 1])
-return search(e, b) + c
+return search(e, a) + b
 enddef
-no <expr> [<Tab> <SID>Fci('bW') .. 'G'
-no <expr> ]<Tab> <SID>Fci('W') .. 'G'
-no <expr> [<S-Tab> <SID>Fci('bW', 1) .. 'G'
-no <expr> ]<S-Tab> <SID>Fci('W', -1) .. 'G'
+no <expr> [<Tab> <SID>Fch('bW') .. 'G'
+no <expr> ]<Tab> <SID>Fch('W') .. 'G'
+no <expr> [<S-Tab> <SID>Fch('bW', 1) .. 'G'
+no <expr> ]<S-Tab> <SID>Fch('W', -1) .. 'G'
 ino {; {<CR>};<C-o>O
 ino {, {<CR>},<C-o>O
 ino [; [<CR>];<C-o>O
 ino [, [<CR>],<C-o>O
 if strftime('%d') ==# '01'
-def Fcj()
+def Fci()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * Fcj()
+au vimrc VimEnter * Fci()
 endif
-def Fda()
+def Fcj()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -693,8 +693,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * Fda()
-def Fdb()
+au vimrc ColorSchemePre * Fcj()
+def Fda()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -708,7 +708,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * Fdb()
+au vimrc VimEnter,WinEnter * Fda()
 set t_Co=256
 syntax on
 set background=dark
