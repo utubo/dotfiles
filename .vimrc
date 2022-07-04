@@ -392,7 +392,7 @@ set splitright
 set fcs+=diff:\ 
 com! DiffOrig vert new | set bt=nofile | r
 nn <F4> :<C-u>DiffOrig<CR>
-au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '<ESCMARK:1>diff') | diffoff | endif
+au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cno <F5> <C-r>=strftime('%Y%m%d')<CR>
 nn <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
