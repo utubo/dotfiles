@@ -510,8 +510,11 @@ c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
 no <silent> <Space>x :call <SID>CB()<CR>
-def CC()
+def CC(a: bool)
 if &ft ==# 'qf'
+return
+endif
+if a && ! filereadable(expand('%'))
 return
 endif
 redraw
@@ -521,8 +524,7 @@ if &modified
 echoh ErrorMsg
 echon '[Modified] '
 endif
-const e = filereadable(expand('%'))
-if !e
+if !a
 echoh Tag
 echon '[New] '
 endif
@@ -531,7 +533,7 @@ echoh WarningMsg
 echon '[RO] '
 endif
 const w = wordcount()
-if e || w.bytes != 0
+if a || w.bytes != 0
 echoh Constant
 echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
 endif
@@ -539,7 +541,8 @@ echoh MoreMsg
 echon &ff ' ' (empty(&fenc) ? &enc : &fenc) ' ' &ft
 enddef
 no <silent> <C-g> :<C-u>call <SID>CC()<CR>
-au vimrc BufNewFile,BufReadPost * CC()
+au vimrc BufNewFile * CC(false)
+au vimrc BufReadPost * CC(true)
 def CD(a: string = '')
 if ! empty(a)
 if winnr() == winnr(a)

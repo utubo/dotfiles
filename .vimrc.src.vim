@@ -667,8 +667,12 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 
 # ----------------------------------------------------------
 # ファイル情報を色付きで表示 {{{
-def ShowBufInfo()
+def ShowBufInfo(isReadPost: bool)
 	if &ft ==# 'qf'
+		return
+	endif
+	if isReadPost && ! filereadable(expand('%'))
+		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
 		return
 	endif
 	redraw
@@ -678,8 +682,7 @@ def ShowBufInfo()
 		echoh ErrorMsg
 		echon '[Modified] '
 	endif
-	const e = filereadable(expand('%'))
-	if !e
+	if !isReadPost
 		echoh Tag
 		echon '[New] '
 	endif
@@ -688,7 +691,7 @@ def ShowBufInfo()
 		echon '[RO] '
 	endif
 	const w = wordcount()
-	if e || w.bytes != 0
+	if isReadPost || w.bytes != 0
 		echoh Constant
 		echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
 	endif
@@ -696,7 +699,8 @@ def ShowBufInfo()
 	echon &ff ' ' (empty(&fenc) ? &encoding : &fenc) ' ' &ft
 enddef
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost * ShowBufInfo()
+au vimrc BufNewFile * ShowBufInfo(false)
+au vimrc BufReadPost * ShowBufInfo(true)
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
