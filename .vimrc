@@ -510,7 +510,7 @@ c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
 no <silent> <Space>x :call <SID>CB()<CR>
-def CC(a: bool)
+def CC(a: bool = true)
 if &ft ==# 'qf'
 return
 endif

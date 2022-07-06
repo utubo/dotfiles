@@ -667,7 +667,7 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 
 # ----------------------------------------------------------
 # ファイル情報を色付きで表示 {{{
-def ShowBufInfo(isReadPost: bool)
+def ShowBufInfo(isReadPost: bool = true)
 	if &ft ==# 'qf'
 		return
 	endif
