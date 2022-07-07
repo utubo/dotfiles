@@ -42,7 +42,7 @@ exe c .. a
 endfor
 enddef
 com! -nargs=* MultiCmd A(<q-args>)
-com! -nargs=1 -complete=var Enable  <args> = 1
+com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def B(a: number)
 exe 'silent! ' .. a .. 's/\s\+$//'
@@ -118,18 +118,18 @@ dein#add('vim-skk/skkeleton')
 endif
 dein#end()
 dein#save_state()
-Enable  g:EasyMotion_smartcase
-Enable  g:EasyMotion_use_migemo
-Enable  g:EasyMotion_enter_jump_first
+Enable g:EasyMotion_smartcase
+Enable g:EasyMotion_use_migemo
+Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 map s <Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
-{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
-{ buns: ['',   ''  ], input: ['q'] },
+{ buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
+{ buns: ['', '' ], input: ['q'] },
 { buns: ['「', '」'], input: ['k'] },
-{ buns: ['>',  '<' ], input: ['>'] },
+{ buns: ['>', '<' ], input: ['>'] },
 { buns: ['{ ', ' }'], input: ['{'] },
 { buns: ['${', '}' ], input: ['${'] },
 { buns: ['%{', '}' ], input: ['%{'] },
@@ -143,7 +143,7 @@ Enable g:operator_sandwich_no_default_key_mappings
 MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
 MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nmap,vmap S <Plug>(operator-sandwich-add)<if-nmap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
@@ -183,16 +183,16 @@ formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 parser: '> \zs.*',
 syntax: '^.\{-}\ze >'
 }
-def J(c: bool)
-b:use_tab = c
+def J(a: bool)
+b:use_tab = a
 setl number
 redraw
 echoh Question
-ec printf('[1]..[9] => open with a %s.', c ? 'tab' : 'window')
+ec printf('[1]..[9] => open with a %s.', a ? 'tab' : 'window')
 echoh None
-const e = c ? 't' : '<CR>'
+const c = a ? 't' : '<CR>'
 for i in range(1, 9)
-exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, e)
+exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, c)
 endfor
 enddef
 def BA()
@@ -210,9 +210,9 @@ exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_opti
 enddef
 BB('omni', ['*'], ['c', 'cpp', 'html'])
 BB('buffer', ['*'], ['go'])
-MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd imap,smap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
 def BC(a: string)
@@ -224,8 +224,8 @@ endif
 enddef
 nn <script> <Leader>t :<C-u>call <SID>BC(expand('<cword>'))<CR>
 vn <script> <Leader>t :<C-u>call <SID>BC(<SID>E())<CR>gv
-Enable  g:ale_set_quickfix
-Enable  g:ale_fix_on_save
+Enable g:ale_set_quickfix
+Enable g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
 Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
@@ -245,13 +245,13 @@ enddef
 au vimrc TextYankPost * BD()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
-def! g:VimrcTimer60s(b: any)
-const c = (localtime() - g:ll_tea_break_opentime) / 60
-const e = c % 60
-const f = e >= 45 ? '☕🍴🍰' : ''
-g:ll_tea_break = f .. printf('%d:%02d', c / 60, e)
+def! g:VimrcTimer60s(a: any)
+const b = (localtime() - g:ll_tea_break_opentime) / 60
+const c = b % 60
+const d = c >= 45 ? '☕🍴🍰' : ''
+g:ll_tea_break = d .. printf('%d:%02d', b / 60, c)
 lightline#update()
-if (e == 45)
+if (c == 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 enddef
@@ -304,9 +304,9 @@ g:textobj_multiblock_blocks = [
 \ [ ">", "<", 1 ],
 \ [ "「", "」", 1 ],
 ]
-Enable  g:rainbow_active
-Enable  g:nerdtree_tabs_autofind
-Enable  g:undotree_SetFocusWhenToggle
+Enable g:rainbow_active
+Enable g:nerdtree_tabs_autofind
+Enable g:undotree_SetFocusWhenToggle
 Disable g:undotree_DiffAutoOpen
 g:auto_cursorline_wait_ms = 3000
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
@@ -590,7 +590,7 @@ vn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
-au vimrc FocusLost   * @+ = @"
+au vimrc FocusLost * @+ = @"
 endif
 nn <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
 nn <silent> <F12> :<C-u>set wrap! wrap?<CR>
@@ -666,9 +666,9 @@ nn TN :<C-u>tabnew<CR>
 nn TD :<C-u>tabe ./<CR>
 def CH(a: string, b: number = 0): number
 const c = len(D('.'))
-const e = printf('^\s\{0,%d\}\S', c)
+const d = printf('^\s\{0,%d\}\S', c)
 setpos('.', [0, getpos('.')[1], 1, 1])
-return search(e, a) + b
+return search(d, a) + b
 enddef
 no <expr> [<Tab> <SID>CH('bW') .. 'G'
 no <expr> ]<Tab> <SID>CH('W') .. 'G'
