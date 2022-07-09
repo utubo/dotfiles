@@ -104,6 +104,7 @@ dein#add('tpope/vim-fugitive')
 dein#add('tyru/caw.vim')
 dein#add('utubo/vim-colorscheme-girly')
 dein#add('utubo/vim-minviml')
+dein#add('utubo/vim-portal-aim')
 dein#add('utubo/vim-reformatdate')
 dein#add('utubo/vim-shrink')
 dein#add('utubo/vim-tablist')
@@ -304,6 +305,10 @@ g:textobj_multiblock_blocks = [
 \ [ ">", "<", 1 ],
 \ [ "「", "」", 1 ],
 ]
+nn <Leader>a :<C-u>PortalAim<CR>
+nn <Leader>b :<C-u>PortalAim blue<CR>
+nn <Leader>o :<C-u>PortalAim orange<CR>
+nn <Leader>r :<C-u>PortalReset<CR>
 Enable g:rainbow_active
 Enable g:nerdtree_tabs_autofind
 Enable g:undotree_SetFocusWhenToggle
@@ -390,7 +395,7 @@ au vimrc FileType qf BG()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 set splitright
 set fcs+=diff:\ 
-com! DiffOrig vert new | set bt=nofile | r
+com! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 nn <F4> :<C-u>DiffOrig<CR>
 au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
