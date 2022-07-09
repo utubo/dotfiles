@@ -130,6 +130,7 @@ if isdirectory(dein_vim)
 	dein#add('tyru/caw.vim')            # コメント化
 	dein#add('utubo/vim-colorscheme-girly')
 	dein#add('utubo/vim-minviml')
+	dein#add('utubo/vim-portal-aim')
 	dein#add('utubo/vim-reformatdate')
 	dein#add('utubo/vim-shrink')
 	dein#add('utubo/vim-tablist') # 息抜きに作ったので自分で食べる
@@ -382,6 +383,14 @@ if isdirectory(dein_vim)
 		\ [ "「", "」", 1 ],
 	]
 	#}}}
+
+	# Portal {{{
+	nnoremap <Leader>a :<C-u>PortalAim<CR>
+	nnoremap <Leader>b :<C-u>PortalAim blue<CR>
+	nnoremap <Leader>o :<C-u>PortalAim orange<CR>
+	nnoremap <Leader>r :<C-u>PortalReset<CR>
+	# }}}
+
 
 	# その他 {{{
 	Enable  g:rainbow_active
