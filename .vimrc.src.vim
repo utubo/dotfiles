@@ -866,6 +866,9 @@ au vimrc Syntax * ClearMySyntax()
 au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 
+# 一つ前のタブ移動する
+nnoremap GT :<C-u>tabnext #<CR>
+
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
 
