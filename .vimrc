@@ -663,7 +663,7 @@ enddef
 au vimrc Syntax * CF()
 au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
 au vimrc Syntax vim CG('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
-nn GT :<C-u>tabnext #<CR>
+nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
 nn TE :<C-u>tabe<Space>
 nn TN :<C-u>tabnew<CR>
