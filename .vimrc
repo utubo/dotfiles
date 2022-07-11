@@ -62,63 +62,59 @@ const b = @"
 return b
 enddef
 var lk = executable('deno')
-var ll = expand('~/.cache/dein')
-var lm = ll .. '/repos/github.com/Shougo/dein.vim'
-if isdirectory(lm)
-&runtimepath = lm .. ',' .. &runtimepath
-dein#begin(ll)
-dein#add('Shougo/dein.vim')
-dein#add('airblade/vim-gitgutter')
-dein#add('alvan/vim-closetag')
-dein#add('ctrlpvim/ctrlp.vim')
-dein#add('cohama/lexima.vim')
-dein#add('delphinus/vim-auto-cursorline')
-dein#add('dense-analysis/ale')
-dein#add('easymotion/vim-easymotion')
-dein#add('hrsh7th/vim-vsnip')
-dein#add('hrsh7th/vim-vsnip-integ')
-dein#add('itchyny/lightline.vim')
-dein#add('jceb/vim-hier')
-dein#add('jistr/vim-nerdtree-tabs')
-dein#add('kana/vim-textobj-user')
-dein#add('luochen1990/rainbow')
-dein#add('machakann/vim-sandwich')
-dein#add('mattn//ctrlp-matchfuzzy')
-dein#add('mattn/vim-maketable')
-dein#add('mattn/vim-notification')
-dein#add('matze/vim-move')
-dein#add('mbbill/undotree')
-dein#add('mechatroner/rainbow_csv')
-dein#add('michaeljsmith/vim-indent-object')
-dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' })
-dein#add('osyo-manga/vim-textobj-multiblock')
-dein#add('othree/html5.vim')
-dein#add('othree/yajs.vim')
-dein#add('prabirshrestha/asyncomplete-buffer.vim')
-dein#add('prabirshrestha/asyncomplete.vim')
-dein#add('rafamadriz/friendly-snippets')
-dein#add('scrooloose/nerdtree')
-dein#add('skanehira/translate.vim')
-dein#add('thinca/vim-portal')
-dein#add('tpope/vim-fugitive')
-dein#add('tyru/caw.vim')
-dein#add('utubo/vim-colorscheme-girly')
-dein#add('utubo/vim-minviml')
-dein#add('utubo/vim-portal-aim')
-dein#add('utubo/vim-reformatdate')
-dein#add('utubo/vim-shrink')
-dein#add('utubo/vim-tablist')
-dein#add('utubo/vim-tabpopupmenu')
-dein#add('utubo/vim-tabtoslash')
-dein#add('utubo/vim-textobj-twochars')
-dein#add('yami-beta/asyncomplete-omni.vim')
-dein#add('yegappan/mru')
+packadd vim-jetpack
+jetpack#begin()
+Jetpack 'tani/vim-jetpack', { 'opt': 1 }
+Jetpack 'airblade/vim-gitgutter'
+Jetpack 'alvan/vim-closetag'
+Jetpack 'ctrlpvim/ctrlp.vim'
+Jetpack 'cohama/lexima.vim'
+Jetpack 'delphinus/vim-auto-cursorline'
+Jetpack 'dense-analysis/ale'
+Jetpack 'easymotion/vim-easymotion'
+Jetpack 'hrsh7th/vim-vsnip'
+Jetpack 'hrsh7th/vim-vsnip-integ'
+Jetpack 'itchyny/lightline.vim'
+Jetpack 'jceb/vim-hier'
+Jetpack 'jistr/vim-nerdtree-tabs'
+Jetpack 'kana/vim-textobj-user'
+Jetpack 'luochen1990/rainbow'
+Jetpack 'machakann/vim-sandwich'
+Jetpack 'mattn//ctrlp-matchfuzzy'
+Jetpack 'mattn/vim-maketable'
+Jetpack 'mattn/vim-notification'
+Jetpack 'matze/vim-move'
+Jetpack 'mbbill/undotree'
+Jetpack 'mechatroner/rainbow_csv'
+Jetpack 'michaeljsmith/vim-indent-object'
+Jetpack 'osyo-manga/vim-monster', { 'for': 'ruby' }
+Jetpack 'osyo-manga/vim-textobj-multiblock'
+Jetpack 'othree/html5.vim'
+Jetpack 'othree/yajs.vim'
+Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
+Jetpack 'prabirshrestha/asyncomplete.vim'
+Jetpack 'rafamadriz/friendly-snippets'
+Jetpack 'scrooloose/nerdtree'
+Jetpack 'skanehira/translate.vim'
+Jetpack 'thinca/vim-portal'
+Jetpack 'tpope/vim-fugitive'
+Jetpack 'tyru/caw.vim'
+Jetpack 'utubo/vim-colorscheme-girly'
+Jetpack 'utubo/vim-minviml'
+Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-reformatdate'
+Jetpack 'utubo/vim-shrink'
+Jetpack 'utubo/vim-tablist'
+Jetpack 'utubo/vim-tabpopupmenu'
+Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-textobj-twochars'
+Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/mru'
 if lk
-dein#add('vim-denops/denops.vim')
-dein#add('vim-skk/skkeleton')
+Jetpack 'vim-denops/denops.vim'
+Jetpack 'vim-skk/skkeleton'
 endif
-dein#end()
-dein#save_state()
+jetpack#end()
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
@@ -162,11 +158,11 @@ setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
 nm <silent> S. :<C-u>call <SID>G()<CR>gvSa
-var ln = []
+var ll = []
 def H(a: bool = false)
 const c = a ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-if ! a || ln !=# c
-ln = c
+if ! a || ll !=# c
+ll = c
 au vimrc User OperatorSandwichAddPost ++once H(true)
 feedkeys(a ? 'S.' : 'gvSa')
 endif
@@ -295,15 +291,7 @@ om ab <Plug>(textobj-multiblock-a)
 om ib <Plug>(textobj-multiblock-i)
 xm ab <Plug>(textobj-multiblock-a)
 xm ib <Plug>(textobj-multiblock-i)
-g:textobj_multiblock_blocks = [
-\ [ "(", ")" ],
-\ [ "[", "]" ],
-\ [ "{", "}" ],
-\ [ '<', '>' ],
-\ [ '"', '"', 1 ],
-\ [ "'", "'", 1 ],
-\ [ ">", "<", 1 ],
-\ [ "「", "」", 1 ],
+g:textobj_multiblock_blocks = [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ], [ '<', '>' ], [ '"', '"', 1 ], [ "'", "'", 1 ], [ ">", "<", 1 ], [ "「", "」", 1 ],
 ]
 nn <Leader>a :<C-u>PortalAim<CR>
 nn <Leader>b :<C-u>PortalAim blue<CR>
@@ -329,7 +317,6 @@ nn <silent> <Space>T :<C-u>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
@@ -429,7 +416,7 @@ const b = repeat(' ', indent(v:foldstart))
 const c = &foldmethod ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
 return b .. c .. '📁'
 enddef
-set foldtext=MyFoldText()
+set foldtext=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
 def BI()

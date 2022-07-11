@@ -87,334 +87,326 @@ var has_deno = executable('deno')
 
 # ----------------------------------------------------------
 # プラグイン {{{
-var dein_dir = expand('~/.cache/dein')
-var dein_vim = dein_dir .. '/repos/github.com/Shougo/dein.vim'
-if isdirectory(dein_vim)
-	# dein {{{
-	&runtimepath = dein_vim .. ',' .. &runtimepath
-	dein#begin(dein_dir)
-	dein#add('Shougo/dein.vim')
-	dein#add('airblade/vim-gitgutter')
-	dein#add('alvan/vim-closetag')
-	dein#add('ctrlpvim/ctrlp.vim')
-	dein#add('cohama/lexima.vim')      # 括弧補完
-	dein#add('delphinus/vim-auto-cursorline')
-	dein#add('dense-analysis/ale')     # Syntaxチェッカー
-	dein#add('easymotion/vim-easymotion')
-	dein#add('hrsh7th/vim-vsnip')
-	dein#add('hrsh7th/vim-vsnip-integ')
-	dein#add('itchyny/lightline.vim')
-	dein#add('jceb/vim-hier')          # quickfixをハイライト
-	dein#add('jistr/vim-nerdtree-tabs')
-	dein#add('kana/vim-textobj-user')
-	dein#add('luochen1990/rainbow')    # 虹色括弧
-	dein#add('machakann/vim-sandwich')
-	dein#add('mattn//ctrlp-matchfuzzy')
-	dein#add('mattn/vim-maketable')
-	dein#add('mattn/vim-notification')
-	dein#add('matze/vim-move')         # 複数行移動
-	dein#add('mbbill/undotree')
-	dein#add('mechatroner/rainbow_csv')
-	dein#add('michaeljsmith/vim-indent-object')
-	dein#add('osyo-manga/vim-monster', { lazy: 1, on_ft: 'ruby' }) # rubyの補完
-	dein#add('osyo-manga/vim-textobj-multiblock')
-	dein#add('othree/html5.vim')
-	dein#add('othree/yajs.vim')
-	dein#add('prabirshrestha/asyncomplete-buffer.vim')
-	dein#add('prabirshrestha/asyncomplete.vim')
-	dein#add('rafamadriz/friendly-snippets')
-	dein#add('scrooloose/nerdtree')
-	dein#add('skanehira/translate.vim')
-	dein#add('thinca/vim-portal')
-	dein#add('tpope/vim-fugitive')      # Gdiffとか
-	dein#add('tyru/caw.vim')            # コメント化
-	dein#add('utubo/vim-colorscheme-girly')
-	dein#add('utubo/vim-minviml')
-	dein#add('utubo/vim-portal-aim')
-	dein#add('utubo/vim-reformatdate')
-	dein#add('utubo/vim-shrink')
-	dein#add('utubo/vim-tablist') # 息抜きに作ったので自分で食べる
-	dein#add('utubo/vim-tabpopupmenu')
-	dein#add('utubo/vim-tabtoslash')
-	dein#add('utubo/vim-textobj-twochars')
-	dein#add('yami-beta/asyncomplete-omni.vim')
-	dein#add('yegappan/mru')
-	if has_deno
-		dein#add('vim-denops/denops.vim')
-		dein#add('vim-skk/skkeleton')
-	endif
-	dein#end()
-	dein#save_state()
-	# 削除したら↓をやる
-	# :call map(dein#check_clean(), "delete(v:val, 'rf')")
-	# :call dein#recache_runtimepath()
-	#}}}
-
-	# easymotion {{{
-	Enable  g:EasyMotion_smartcase
-	Enable  g:EasyMotion_use_migemo
-	Enable  g:EasyMotion_enter_jump_first
-	Disable g:EasyMotion_do_mapping
-	map s <Plug>(easymotion-s)
-	au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
-	#}}}
-
-	# sandwich {{{
-	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-	g:sandwich#recipes += [
-		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
-		{ buns: ['',   ''  ], input: ['q'] },
-		{ buns: ['「', '」'], input: ['k'] },
-		{ buns: ['>',  '<' ], input: ['>'] },
-		{ buns: ['{ ', ' }'], input: ['{'] },
-		{ buns: ['${', '}' ], input: ['${'] },
-		{ buns: ['%{', '}' ], input: ['%{'] },
-		{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
-	]
-	def! g:CommentString(index: number): string
-		return &commentstring->split('%s')->get(index, '')
-	enddef
-	Enable g:sandwich_no_default_key_mappings
-	Enable g:operator_sandwich_no_default_key_mappings
-	MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-	MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-	MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-	MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
-	nmap S^ v^S
-	nmap S$ vg_S
-	nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
-
-	# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-	def FixSandwichPos()
-		var c = g:operator#sandwich#object.cursor
-		if g:fix_sandwich_pos[1] != c.inner_head[1]
-			c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
-			c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
-		endif
-	enddef
-	au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-	au vimrc User OperatorSandwichAddPost FixSandwichPos()
-
-	# 内側に連続で挟むやつ
-	def RemarkPatty()
-		setpos("'<", g:operator#sandwich#object.cursor.inner_head)
-		setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-	enddef
-	nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
-
-	var big_mac_crown = []
-	def BigMac(is_nest: bool = false)
-		const c = is_nest ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-		if ! is_nest || big_mac_crown !=# c
-			big_mac_crown = c
-			au vimrc User OperatorSandwichAddPost ++once BigMac(true)
-			feedkeys(is_nest ? 'S.' : 'gvSa')
-		endif
-	enddef
-	nmap Sm viwSm
-	vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
-
-	# 行末空白と空行を削除
-	def RemoveAirBuns()
-		var c = g:operator#sandwich#object.cursor
-		RemoveEmptyLine(c.tail[1])
-		RemoveEmptyLine(c.head[1])
-	enddef
-	au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
-	#}}}
-
-	# MRU {{{
-	# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない文字を区切りにする
-	g:MRU_Filename_Format = {
-		formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
-		parser: '> \zs.*',
-		syntax: '^.\{-}\ze >'
-	}
-	# 数字キーで開く
-	def MRUwithNumKey(use_tab: bool)
-		b:use_tab = use_tab
-		setlocal number
-		redraw
-		echoh Question
-		echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
-		echoh None
-		const key = use_tab ? 't' : '<CR>'
-		for i in range(1, 9)
-			execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
-		endfor
-	enddef
-	def MyMRU()
-		Enable b:auto_cursorline_disabled
-		setlocal cursorline
-		nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:use_tab)<CR>
-		nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
-		MRUwithNumKey(BufIsSmth())
-	enddef
-	au vimrc FileType mru MyMRU()
-	au vimrc ColorScheme * hi link MruFileName Directory
-	nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
-	#}}}
-
-	# 補完 {{{
-	def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
-		execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
-	enddef
-	RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
-	RegisterAsyncompSource('buffer', ['*'], ['go'])
-	MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-	MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-	MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-	MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-	#imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
-	Enable g:lexima_accept_pum_with_enter
-	#}}}
-
-	# 翻訳 {{{
-	def AutoTranslate(text: string)
-		if matchstr(text, '[^\x00-\x7F]') ==# ''
-			execute 'Translate ' .. text
-		else
-			execute 'Translate! ' .. text
-		endif
-	enddef
-	nnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
-	vnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
-	#}}}
-
-	# ALE {{{
-	Enable  g:ale_set_quickfix
-	Enable  g:ale_fix_on_save
-	Disable g:ale_lint_on_insert_leave
-	Disable g:ale_set_loclist
-	g:ale_sign_error = '🐞'
-	g:ale_sign_warning = '🐝'
-	g:ale_fixers = { typescript: ['deno'] }
-	g:ale_lint_delay = 3000
-	nmap <silent> [a <Plug>(ale_previous_wrap)
-	nmap <silent> ]a <Plug>(ale_next_wrap)
-	#}}}
-
-	# lightline {{{
-	# ヤンクしたやつを表示するやつ
-	g:ll_reg = ''
-	def LLYankPost()
-		var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
-		if len(v:event.regcontents) !=# 1 || len(reg) > 10
-			reg = substitute(reg, '^\(.\{0,8\}\).*', '\1..', '')
-		endif
-		g:ll_reg = '📎[' .. reg .. ']'
-	enddef
-	au vimrc TextYankPost * LLYankPost()
-
-	# 毎時45分から15分間休憩しようね
-	g:ll_tea_break = '0:00'
-	g:ll_tea_break_opentime = localtime()
-	def! g:VimrcTimer60s(timer: any)
-		const tick = (localtime() - g:ll_tea_break_opentime) / 60
-		const mm = tick % 60
-		const tea = mm >= 45 ? '☕🍴🍰' : ''
-		g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
-		lightline#update()
-		if (mm == 45)
-			notification#show("       ☕🍴🍰\nHave a break time !")
-		endif
-	enddef
-	timer_stop(get(g:, 'vimrc_timer_60s', 0))
-	g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-
-	# &ff
-	if has('win32')
-		def! g:LLFF(): string
-			return &ff !=# 'dos' ? &ff : ''
-		enddef
-	else
-		def! g:LLFF(): string
-			return &ff ==# 'dos' ? &ff : ''
-		enddef
-	endif
-
-	# &fenc
-	def! g:LLNotUtf8(): string
-		return &fenc ==# 'utf-8' ? '' : &fenc
-	enddef
-
-	# lightline設定
-	g:lightline = {
-		colorscheme: 'wombat',
-		active: { right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']] },
-		component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
-		component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
-	}
-
-	# tablineはデフォルト
-	au vimrc VimEnter * set tabline=
-	#}}}
-
-	# skk {{{
-	if has_deno
-		if ! empty($SKK_JISYO_DIR)
-			skkeleton#config({
-				globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
-				userJisyo: expand($SKK_JISYO_DIR .. '.skkeleton'),
-			})
-		endif
-		skkeleton#config({
-			eggLikeNewline: true,
-			keepState: true,
-			showCandidatesCount: 1,
-		})
-		map! <C-j> <Plug>(skkeleton-toggle)
-	endif
-	#}}}
-
-	# textobj-multiblock  {{{
-	omap ab <Plug>(textobj-multiblock-a)
-	omap ib <Plug>(textobj-multiblock-i)
-	xmap ab <Plug>(textobj-multiblock-a)
-	xmap ib <Plug>(textobj-multiblock-i)
-	g:textobj_multiblock_blocks = [
-		\ [ "(", ")" ],
-		\ [ "[", "]" ],
-		\ [ "{", "}" ],
-		\ [ '<', '>' ],
-		\ [ '"', '"', 1 ],
-		\ [ "'", "'", 1 ],
-		\ [ ">", "<", 1 ],
-		\ [ "「", "」", 1 ],
-	]
-	#}}}
-
-	# Portal {{{
-	nnoremap <Leader>a :<C-u>PortalAim<CR>
-	nnoremap <Leader>b :<C-u>PortalAim blue<CR>
-	nnoremap <Leader>o :<C-u>PortalAim orange<CR>
-	nnoremap <Leader>r :<C-u>PortalReset<CR>
-	# }}}
-
-
-	# その他 {{{
-	Enable  g:rainbow_active
-	Enable  g:nerdtree_tabs_autofind
-	Enable  g:undotree_SetFocusWhenToggle
-	Disable g:undotree_DiffAutoOpen
-	g:auto_cursorline_wait_ms = 3000
-	g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-	g:ctrlp_cmd = 'CtrlPMixed'
-	nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
-	nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
-	nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
-	nnoremap <silent> <Space>gd :<C-u>Gdiffsplit<CR>
-	nnoremap <Space>ga :<C-u>Git add %
-	nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
-	nnoremap <Space>gp :<C-u>Git push
-	nnoremap <Space>gl :<C-u>Git pull<CR>
-	nnoremap <silent> <Space>t :<C-u>call tabpopupmenu#popup()<CR>
-	nnoremap <silent> <Space>T :<C-u>call tablist#Show()<CR>
-	MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
-	MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-	MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-	#}}}
+# jetpack {{{
+packadd vim-jetpack
+jetpack#begin()
+Jetpack 'tani/vim-jetpack', { 'opt': 1 }
+Jetpack 'airblade/vim-gitgutter'
+Jetpack 'alvan/vim-closetag'
+Jetpack 'ctrlpvim/ctrlp.vim'
+Jetpack 'cohama/lexima.vim'      # 括弧補完
+Jetpack 'delphinus/vim-auto-cursorline'
+Jetpack 'dense-analysis/ale'     # Syntaxチェッカー
+Jetpack 'easymotion/vim-easymotion'
+Jetpack 'hrsh7th/vim-vsnip'
+Jetpack 'hrsh7th/vim-vsnip-integ'
+Jetpack 'itchyny/lightline.vim'
+Jetpack 'jceb/vim-hier'          # quickfixをハイライト
+Jetpack 'jistr/vim-nerdtree-tabs'
+Jetpack 'kana/vim-textobj-user'
+Jetpack 'luochen1990/rainbow'    # 虹色括弧
+Jetpack 'machakann/vim-sandwich'
+Jetpack 'mattn//ctrlp-matchfuzzy'
+Jetpack 'mattn/vim-maketable'
+Jetpack 'mattn/vim-notification'
+Jetpack 'matze/vim-move'         # 複数行移動
+Jetpack 'mbbill/undotree'
+Jetpack 'mechatroner/rainbow_csv'
+Jetpack 'michaeljsmith/vim-indent-object'
+Jetpack 'osyo-manga/vim-monster', { 'for': 'ruby' } # rubyの補完
+Jetpack 'osyo-manga/vim-textobj-multiblock'
+Jetpack 'othree/html5.vim'
+Jetpack 'othree/yajs.vim'
+Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
+Jetpack 'prabirshrestha/asyncomplete.vim'
+Jetpack 'rafamadriz/friendly-snippets'
+Jetpack 'scrooloose/nerdtree'
+Jetpack 'skanehira/translate.vim'
+Jetpack 'thinca/vim-portal'
+Jetpack 'tpope/vim-fugitive'      # Gdiffとか
+Jetpack 'tyru/caw.vim'            # コメント化
+Jetpack 'utubo/vim-colorscheme-girly'
+Jetpack 'utubo/vim-minviml'
+Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-reformatdate'
+Jetpack 'utubo/vim-shrink'
+Jetpack 'utubo/vim-tablist'       # 息抜きに作ったので自分で食べる
+Jetpack 'utubo/vim-tabpopupmenu'
+Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-textobj-twochars'
+Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/mru'
+if has_deno
+	Jetpack 'vim-denops/denops.vim'
+	Jetpack 'vim-skk/skkeleton'
 endif
+jetpack#end()
+#}}}
+
+# easymotion {{{
+Enable  g:EasyMotion_smartcase
+Enable  g:EasyMotion_use_migemo
+Enable  g:EasyMotion_enter_jump_first
+Disable g:EasyMotion_do_mapping
+map s <Plug>(easymotion-s)
+au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
+#}}}
+
+# sandwich {{{
+g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+g:sandwich#recipes += [
+	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
+	{ buns: ['',   ''  ], input: ['q'] },
+	{ buns: ['「', '」'], input: ['k'] },
+	{ buns: ['>',  '<' ], input: ['>'] },
+	{ buns: ['{ ', ' }'], input: ['{'] },
+	{ buns: ['${', '}' ], input: ['${'] },
+	{ buns: ['%{', '}' ], input: ['%{'] },
+	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
+]
+def! g:CommentString(index: number): string
+	return &commentstring->split('%s')->get(index, '')
+enddef
+Enable g:sandwich_no_default_key_mappings
+Enable g:operator_sandwich_no_default_key_mappings
+MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
+nmap S^ v^S
+nmap S$ vg_S
+nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
+
+# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
+def FixSandwichPos()
+	var c = g:operator#sandwich#object.cursor
+	if g:fix_sandwich_pos[1] != c.inner_head[1]
+		c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
+		c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
+	endif
+enddef
+au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
+au vimrc User OperatorSandwichAddPost FixSandwichPos()
+
+# 内側に連続で挟むやつ
+def RemarkPatty()
+	setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+	setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+enddef
+nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
+
+var big_mac_crown = []
+def BigMac(is_nest: bool = false)
+	const c = is_nest ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
+	if ! is_nest || big_mac_crown !=# c
+		big_mac_crown = c
+		au vimrc User OperatorSandwichAddPost ++once BigMac(true)
+		feedkeys(is_nest ? 'S.' : 'gvSa')
+	endif
+enddef
+nmap Sm viwSm
+vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
+
+# 行末空白と空行を削除
+def RemoveAirBuns()
+	var c = g:operator#sandwich#object.cursor
+	RemoveEmptyLine(c.tail[1])
+	RemoveEmptyLine(c.head[1])
+enddef
+au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
+#}}}
+
+# MRU {{{
+# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない文字を区切りにする
+g:MRU_Filename_Format = {
+	formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
+	parser: '> \zs.*',
+	syntax: '^.\{-}\ze >'
+}
+# 数字キーで開く
+def MRUwithNumKey(use_tab: bool)
+	b:use_tab = use_tab
+	setlocal number
+	redraw
+	echoh Question
+	echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
+	echoh None
+	const key = use_tab ? 't' : '<CR>'
+	for i in range(1, 9)
+		execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
+	endfor
+enddef
+def MyMRU()
+	Enable b:auto_cursorline_disabled
+	setlocal cursorline
+	nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:use_tab)<CR>
+	nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
+	MRUwithNumKey(BufIsSmth())
+enddef
+au vimrc FileType mru MyMRU()
+au vimrc ColorScheme * hi link MruFileName Directory
+nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
+#}}}
+
+# 補完 {{{
+def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
+	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
+enddef
+RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
+RegisterAsyncompSource('buffer', ['*'], ['go'])
+MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+#imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
+Enable g:lexima_accept_pum_with_enter
+#}}}
+
+# 翻訳 {{{
+def AutoTranslate(text: string)
+	if matchstr(text, '[^\x00-\x7F]') ==# ''
+		execute 'Translate ' .. text
+	else
+		execute 'Translate! ' .. text
+	endif
+enddef
+nnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
+vnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
+#}}}
+
+# ALE {{{
+Enable  g:ale_set_quickfix
+Enable  g:ale_fix_on_save
+Disable g:ale_lint_on_insert_leave
+Disable g:ale_set_loclist
+g:ale_sign_error = '🐞'
+g:ale_sign_warning = '🐝'
+g:ale_fixers = { typescript: ['deno'] }
+g:ale_lint_delay = 3000
+nmap <silent> [a <Plug>(ale_previous_wrap)
+nmap <silent> ]a <Plug>(ale_next_wrap)
+#}}}
+
+# lightline {{{
+# ヤンクしたやつを表示するやつ
+g:ll_reg = ''
+def LLYankPost()
+	var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
+	if len(v:event.regcontents) !=# 1 || len(reg) > 10
+		reg = substitute(reg, '^\(.\{0,8\}\).*', '\1..', '')
+	endif
+	g:ll_reg = '📎[' .. reg .. ']'
+enddef
+au vimrc TextYankPost * LLYankPost()
+
+# 毎時45分から15分間休憩しようね
+g:ll_tea_break = '0:00'
+g:ll_tea_break_opentime = localtime()
+def! g:VimrcTimer60s(timer: any)
+	const tick = (localtime() - g:ll_tea_break_opentime) / 60
+	const mm = tick % 60
+	const tea = mm >= 45 ? '☕🍴🍰' : ''
+	g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
+	lightline#update()
+	if (mm == 45)
+		notification#show("       ☕🍴🍰\nHave a break time !")
+	endif
+enddef
+timer_stop(get(g:, 'vimrc_timer_60s', 0))
+g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+
+# &ff
+if has('win32')
+	def! g:LLFF(): string
+		return &ff !=# 'dos' ? &ff : ''
+	enddef
+else
+	def! g:LLFF(): string
+		return &ff ==# 'dos' ? &ff : ''
+	enddef
+endif
+
+# &fenc
+def! g:LLNotUtf8(): string
+	return &fenc ==# 'utf-8' ? '' : &fenc
+enddef
+
+# lightline設定
+g:lightline = {
+	colorscheme: 'wombat',
+	active: { right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']] },
+	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
+	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
+}
+
+# tablineはデフォルト
+au vimrc VimEnter * set tabline=
+#}}}
+
+# skk {{{
+if has_deno
+	if ! empty($SKK_JISYO_DIR)
+		skkeleton#config({
+			globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
+			userJisyo: expand($SKK_JISYO_DIR .. '.skkeleton'),
+		})
+	endif
+	skkeleton#config({
+		eggLikeNewline: true,
+		keepState: true,
+		showCandidatesCount: 1,
+	})
+	map! <C-j> <Plug>(skkeleton-toggle)
+endif
+#}}}
+
+# textobj-multiblock  {{{
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+xmap ab <Plug>(textobj-multiblock-a)
+xmap ib <Plug>(textobj-multiblock-i)
+g:textobj_multiblock_blocks = [
+	\ [ "(", ")" ],
+	\ [ "[", "]" ],
+	\ [ "{", "}" ],
+	\ [ '<', '>' ],
+	\ [ '"', '"', 1 ],
+	\ [ "'", "'", 1 ],
+	\ [ ">", "<", 1 ],
+	\ [ "「", "」", 1 ],
+]
+#}}}
+
+# Portal {{{
+nnoremap <Leader>a :<C-u>PortalAim<CR>
+nnoremap <Leader>b :<C-u>PortalAim blue<CR>
+nnoremap <Leader>o :<C-u>PortalAim orange<CR>
+nnoremap <Leader>r :<C-u>PortalReset<CR>
+# }}}
+
+# その他 {{{
+Enable  g:rainbow_active
+Enable  g:nerdtree_tabs_autofind
+Enable  g:undotree_SetFocusWhenToggle
+Disable g:undotree_DiffAutoOpen
+g:auto_cursorline_wait_ms = 3000
+g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+g:ctrlp_cmd = 'CtrlPMixed'
+nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
+nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
+nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
+nnoremap <silent> <Space>gd :<C-u>Gdiffsplit<CR>
+nnoremap <Space>ga :<C-u>Git add %
+nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
+nnoremap <Space>gp :<C-u>Git push
+nnoremap <Space>gl :<C-u>Git pull<CR>
+nnoremap <silent> <Space>t :<C-u>call tabpopupmenu#popup()<CR>
+nnoremap <silent> <Space>T :<C-u>call tablist#Show()<CR>
+MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
+MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+#}}}
+
 filetype plugin indent on
 #}}} -------------------------------------------------------
 
@@ -559,7 +551,7 @@ def! g:MyFoldText(): string
 	const text = &foldmethod ==# 'indent' ? '' : src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
 	return indent .. text .. '📁'
 enddef
-set foldtext=MyFoldText()
+set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
 au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
