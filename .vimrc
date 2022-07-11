@@ -62,6 +62,14 @@ const b = @"
 return b
 enddef
 var lk = executable('deno')
+var ll = has('win32')
+? expand('~\vimfiles\pack\jetpack\opt\vim-jetpack\plugin\jetpack.vim')
+: expand('~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+var lm = filereadable(ll)
+if ! lm
+var ln = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+system(printf('curl -fsSLo %s --create-dirs %s', ll, ln))
+endif
 packadd vim-jetpack
 jetpack#begin()
 Jetpack 'tani/vim-jetpack', { 'opt': 1 }
@@ -115,6 +123,9 @@ Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
+if ! lm
+jetpack#sync()
+endif
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
@@ -158,11 +169,11 @@ setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
 nm <silent> S. :<C-u>call <SID>G()<CR>gvSa
-var ll = []
+var lo = []
 def H(a: bool = false)
 const c = a ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-if ! a || ll !=# c
-ll = c
+if ! a || lo !=# c
+lo = c
 au vimrc User OperatorSandwichAddPost ++once H(true)
 feedkeys(a ? 'S.' : 'gvSa')
 endif

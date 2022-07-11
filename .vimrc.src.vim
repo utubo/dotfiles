@@ -87,7 +87,18 @@ var has_deno = executable('deno')
 
 # ----------------------------------------------------------
 # プラグイン {{{
+
 # jetpack {{{
+
+var jetpackfile = has('win32')
+	? expand('~\vimfiles\pack\jetpack\opt\vim-jetpack\plugin\jetpack.vim')
+	: expand('~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+var has_jetpack = filereadable(jetpackfile)
+if ! has_jetpack
+  var jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+  system(printf('curl -fsSLo %s --create-dirs %s', jetpackfile, jetpackurl))
+endif
+
 packadd vim-jetpack
 jetpack#begin()
 Jetpack 'tani/vim-jetpack', { 'opt': 1 }
@@ -141,6 +152,9 @@ if has_deno
 	Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
+if ! has_jetpack
+	jetpack#sync()
+endif
 #}}}
 
 # easymotion {{{
