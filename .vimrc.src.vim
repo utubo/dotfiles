@@ -421,7 +421,8 @@ MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 #}}}
 
 # 開発用 {{{
-&runtimepath = substitute(expand(rtproot .. '/pack/local/opt/*'), '\n', ',', 'g') .. ',' .. &runtimepath
+const localplugins = substitute(expand(rtproot .. '/pack/local/opt/*'), '\n', ',', 'g')
+&runtimepath = join([localplugins, &runtimepath], ',')
 # }}}
 
 filetype plugin indent on

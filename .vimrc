@@ -327,7 +327,8 @@ nn <silent> <Space>T :<C-u>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-&runtimepath = substitute(expand(lk .. '/pack/local/opt/*'), '\n', ',', 'g') .. ',' .. &runtimepath
+const lq = substitute(expand(lk .. '/pack/local/opt/*'), '\n', ',', 'g')
+&runtimepath = join([lq, &runtimepath], ',')
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
