@@ -82,6 +82,7 @@ def GetVisualSelection(): string
 	return text
 enddef
 
+const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 var has_deno = executable('deno')
 #}}} -------------------------------------------------------
 
@@ -90,9 +91,7 @@ var has_deno = executable('deno')
 
 # jetpack {{{
 
-var jetpackfile = has('win32')
-	? expand('~\vimfiles\pack\jetpack\opt\vim-jetpack\plugin\jetpack.vim')
-	: expand('~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+var jetpackfile = expand(rtproot .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 var has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
   var jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
@@ -420,6 +419,10 @@ MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 #}}}
+
+# 開発用 {{{
+&runtimepath = substitute(expand(rtproot .. '/pack/local/opt/*'), '\n', ',', 'g') .. &runtimepath
+# }}}
 
 filetype plugin indent on
 #}}} -------------------------------------------------------

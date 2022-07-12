@@ -61,14 +61,13 @@ const b = @"
 @" = a
 return b
 enddef
-var lk = executable('deno')
-var ll = has('win32')
-? expand('~\vimfiles\pack\jetpack\opt\vim-jetpack\plugin\jetpack.vim')
-: expand('~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-var lm = filereadable(ll)
-if ! lm
-var ln = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system(printf('curl -fsSLo %s --create-dirs %s', ll, ln))
+const lk = has('win32') ? '~/vimfiles' : '~/.vim'
+var ll = executable('deno')
+var lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+var ln = filereadable(lm)
+if ! ln
+var lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+system(printf('curl -fsSLo %s --create-dirs %s', lm, lo))
 endif
 packadd vim-jetpack
 jetpack#begin()
@@ -118,12 +117,12 @@ Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-textobj-twochars'
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
-if lk
+if ll
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
-if ! lm
+if ! ln
 jetpack#sync()
 endif
 Enable g:EasyMotion_smartcase
@@ -169,11 +168,11 @@ setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
 nm <silent> S. :<C-u>call <SID>G()<CR>gvSa
-var lo = []
+var lp = []
 def H(a: bool = false)
 const c = a ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-if ! a || lo !=# c
-lo = c
+if ! a || lp !=# c
+lp = c
 au vimrc User OperatorSandwichAddPost ++once H(true)
 feedkeys(a ? 'S.' : 'gvSa')
 endif
@@ -284,7 +283,7 @@ component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' 
 component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 au vimrc VimEnter * set tabline=
-if lk
+if ll
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
 globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
@@ -328,6 +327,7 @@ nn <silent> <Space>T :<C-u>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+&runtimepath = substitute(expand(lk .. '/pack/local/opt/*'), '\n', ',', 'g') .. &runtimepath
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
