@@ -546,11 +546,17 @@ add(b, ['Normal', ' '])
 endif
 add(b, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &enc : &fenc), &ft)])
 var c = 0
-const d = &columns - 2
+const e = &columns - 2
 for i in reverse(range(0, len(b) - 1))
-c += len(b[i][1])
-if d < c
-b[i][1] = b[i][1][c - d : ]
+var s = b[i][1]
+var d = strdisplaywidth(s)
+c += d
+if e < c
+const l = e - c + d
+while !empty(s) && l < strdisplaywidth(s)
+s = s[1 :]
+endwhile
+b[i][1] = s
 b = b[i : ]
 insert(b, ['NonText', '<'], 0)
 break

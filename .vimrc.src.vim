@@ -722,9 +722,15 @@ def ShowBufInfo(isReadPost: bool = true)
 	var msglen = 0
 	const maxlen = &columns - 2
 	for i in reverse(range(0, len(msg) - 1))
-		msglen += len(msg[i][1])
+		var s = msg[i][1]
+		var d = strdisplaywidth(s)
+		msglen += d
 		if maxlen < msglen
-			msg[i][1] = msg[i][1][msglen - maxlen : ]
+			const l = maxlen - msglen + d
+			while !empty(s) && l < strdisplaywidth(s)
+				s = s[1 :]
+			endwhile
+			msg[i][1] = s
 			msg = msg[i : ]
 			insert(msg, ['NonText', '<'], 0)
 			break
