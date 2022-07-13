@@ -34,7 +34,7 @@ aug End
 def A(b: string)
 const q = b->substitute('^\S*', '', '')
 for c in b->matchstr('^\S*')->split(',')
-var a = q
+const a = q
 ->substitute('<if-' .. c .. '>', '<>', 'g')
 ->substitute('<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
 ->substitute('<>', '', 'g')
@@ -62,11 +62,11 @@ const b = @"
 return b
 enddef
 const lk = has('win32') ? '~/vimfiles' : '~/.vim'
-var ll = executable('deno')
-var lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-var ln = filereadable(lm)
+const ll = executable('deno')
+const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const ln = filereadable(lm)
 if ! ln
-var lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+const lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
 system(printf('curl -fsSLo %s --create-dirs %s', lm, lo))
 endif
 packadd vim-jetpack
@@ -180,7 +180,7 @@ enddef
 nm Sm viwSm
 vm <silent> Sm :<C-u>call <SID>H()<CR>
 def I()
-var c = g:operator#sandwich#object.cursor
+const c = g:operator#sandwich#object.cursor
 B(c.tail[1])
 B(c.head[1])
 enddef
@@ -438,8 +438,8 @@ def BI()
 if line("'<") != line('.')
 return
 endif
-var a = line("'<")
-var b = line("'>")
+const a = line("'<")
+const b = line("'>")
 exe ':' a 's/\v(\S)?$/\1 /'
 exe ':' b "normal! o\<Esc>i" .. D(a)
 cursor([a, 1])
@@ -521,10 +521,10 @@ def CC(a: bool = true)
 if &ft ==# 'qf'
 return
 endif
-var b = []
 if a && ! filereadable(expand('%'))
 return
 endif
+var b = []
 add(b, ['Title', '"' .. bufname() .. '"'])
 add(b, ['Normal', ' '])
 if &modified

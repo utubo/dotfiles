@@ -48,7 +48,7 @@ augroup End
 def MultiCmd(qargs: string)
 	const q = qargs->substitute('^\S*', '', '')
 	for cmd in qargs->matchstr('^\S*')->split(',')
-		var a = q
+		const a = q
 			->substitute('<if-' .. cmd .. '>', '<>', 'g')
 			->substitute('<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
 			->substitute('<>', '', 'g')
@@ -83,7 +83,7 @@ def GetVisualSelection(): string
 enddef
 
 const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
-var has_deno = executable('deno')
+const has_deno = executable('deno')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -91,10 +91,10 @@ var has_deno = executable('deno')
 
 # jetpack {{{
 
-var jetpackfile = expand(rtproot .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-var has_jetpack = filereadable(jetpackfile)
+const jetpackfile = expand(rtproot .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
-  var jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+  const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
   system(printf('curl -fsSLo %s --create-dirs %s', jetpackfile, jetpackurl))
 endif
 
@@ -222,7 +222,7 @@ vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
 
 # 行末空白と空行を削除
 def RemoveAirBuns()
-	var c = g:operator#sandwich#object.cursor
+	const c = g:operator#sandwich#object.cursor
 	RemoveEmptyLine(c.tail[1])
 	RemoveEmptyLine(c.head[1])
 enddef
@@ -581,8 +581,8 @@ def Zf()
 	if line("'<") != line('.')
 		return
 	endif
-	var firstline = line("'<")
-	var lastline = line("'>")
+	const firstline = line("'<")
+	const lastline = line("'>")
 	execute ':' firstline 's/\v(\S)?$/\1 /'
 	execute ':' lastline "normal! o\<Esc>i" .. IndentStr(firstline)
 	cursor([firstline, 1])
@@ -693,12 +693,12 @@ def ShowBufInfo(isReadPost: bool = true)
 	if &ft ==# 'qf'
 		return
 	endif
-	var msg = []
 	if isReadPost && ! filereadable(expand('%'))
 		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
 		return
 	endif
 
+	var msg = []
 	add(msg, ['Title', '"' .. bufname() .. '"'])
 	add(msg, ['Normal', ' '])
 	if &modified
