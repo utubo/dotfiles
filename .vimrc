@@ -550,7 +550,7 @@ const d = &columns - 2
 for i in reverse(range(0, len(b) - 1))
 c += len(b[i][1])
 if d < c
-b[i][1] = b[i][1][(c - d) : ]
+b[i][1] = b[i][1][c - d : ]
 b = b[i : ]
 insert(b, ['NonText', '<'], 0)
 break
