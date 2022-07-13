@@ -521,31 +521,48 @@ def CC(a: bool = true)
 if &ft ==# 'qf'
 return
 endif
+var b = []
 if a && ! filereadable(expand('%'))
 return
 endif
-redraw
-echoh Title
-echon '"' bufname() '" '
+add(b, ['Title', '"' .. bufname() .. '"'])
+add(b, ['Normal', ' '])
 if &modified
-echoh ErrorMsg
-echon '[Modified] '
+add(b, ['Delimiter', '[Modified]'])
+add(b, ['Normal', ' '])
 endif
 if !a
-echoh Tag
-echon '[New] '
+add(b, ['Tag', '[New]'])
+add(b, ['Normal', ' '])
 endif
 if &readonly
-echoh WarningMsg
-echon '[RO] '
+add(b, ['WarningMsg', '[RO]'])
+add(b, ['Normal', ' '])
 endif
 const w = wordcount()
-if a || w.bytes != 0
-echoh Constant
-echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
+if a || w.bytes !=# 0
+add(b, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
+add(b, ['Normal', ' '])
 endif
-echoh MoreMsg
-echon &ff ' ' (empty(&fenc) ? &enc : &fenc) ' ' &ft
+add(b, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &enc : &fenc), &ft)])
+var c = 0
+const d = &columns - 2
+for i in reverse(range(0, len(b) - 1))
+c += len(b[i][1])
+if d < c
+b[i][1] = b[i][1][(c - d) : ]
+b = b[i : ]
+insert(b, ['NonText', '<'], 0)
+break
+endif
+endfor
+redraw
+for m in b
+exe 'echohl' m[0]
+echon m[1]
+endfor
+echoh Normal
+redraw
 enddef
 no <silent> <C-g> :<C-u>call <SID>CC()<CR>
 au vimrc BufNewFile * CC(false)

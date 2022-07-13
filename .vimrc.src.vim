@@ -688,37 +688,55 @@ noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# ファイル情報を色付きで表示 {{{
+# バッファの情報を色付きで表示 {{{
 def ShowBufInfo(isReadPost: bool = true)
 	if &ft ==# 'qf'
 		return
 	endif
+	var msg = []
 	if isReadPost && ! filereadable(expand('%'))
 		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
 		return
 	endif
-	redraw
-	echoh Title
-	echon '"' bufname() '" '
+
+	add(msg, ['Title', '"' .. bufname() .. '"'])
+	add(msg, ['Normal', ' '])
 	if &modified
-		echoh ErrorMsg
-		echon '[Modified] '
+		add(msg, ['Delimiter', '[Modified]'])
+		add(msg, ['Normal', ' '])
 	endif
 	if !isReadPost
-		echoh Tag
-		echon '[New] '
+		add(msg, ['Tag', '[New]'])
+		add(msg, ['Normal', ' '])
 	endif
 	if &readonly
-		echoh WarningMsg
-		echon '[RO] '
+		add(msg, ['WarningMsg', '[RO]'])
+		add(msg, ['Normal', ' '])
 	endif
 	const w = wordcount()
-	if isReadPost || w.bytes != 0
-		echoh Constant
-		echon (w.bytes == 0 ? 0 : line('$')) 'L, ' w.bytes 'B '
+	if isReadPost || w.bytes !=# 0
+		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
+		add(msg, ['Normal', ' '])
 	endif
-	echoh MoreMsg
-	echon &ff ' ' (empty(&fenc) ? &encoding : &fenc) ' ' &ft
+	add(msg, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &encoding : &fenc), &ft)])
+	var msglen = 0
+	const maxlen = &columns - 2
+	for i in reverse(range(0, len(msg) - 1))
+		msglen += len(msg[i][1])
+		if maxlen < msglen
+			msg[i][1] = msg[i][1][(msglen - maxlen) : ]
+			msg = msg[i : ]
+			insert(msg, ['NonText', '<'], 0)
+			break
+		endif
+	endfor
+	redraw
+	for m in msg
+		execute 'echohl' m[0]
+		echon m[1]
+	endfor
+	echohl Normal
+	redraw
 enddef
 noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
 au vimrc BufNewFile * ShowBufInfo(false)
