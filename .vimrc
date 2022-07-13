@@ -212,6 +212,7 @@ enddef
 au vimrc FileType mru BA()
 au vimrc ColorScheme * hi link MruFileName Directory
 nn <silent> <F2> :<C-u>MRUToggle<CR>
+g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef

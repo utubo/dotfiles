@@ -259,6 +259,7 @@ enddef
 au vimrc FileType mru MyMRU()
 au vimrc ColorScheme * hi link MruFileName Directory
 nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
+g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 #}}}
 
 # 補完 {{{
