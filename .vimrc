@@ -394,12 +394,12 @@ nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
 au vimrc FileType qf BG()
-au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
+au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
 set splitright
 set fcs+=diff:\ 
-com! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+com! DiffOrig vert new|set bt=nofile|r|0d_|diffthis|wincmd p|diffthis
 nn <F4> :<C-u>DiffOrig<CR>
-au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
+au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cno <F5> <C-r>=strftime('%Y%m%d')<CR>
 nn <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
@@ -465,7 +465,7 @@ setpos('.', c)
 enddef
 nn <silent> zd :Zd()<CR>
 set foldmethod=marker
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
 nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> :<C-u>set foldmethod=indent<CR>
@@ -644,7 +644,7 @@ ino 「 「」<Left>
 ino 「」 「」<Left>
 ino （ ()<Left>
 ino （） ()<Left>
-au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
+au vimrc FileType vim if getline(1) ==# 'vim9script'|&commentstring = '#%s'|endif
 nm <CR> <Space>
 vn <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
 vn P p
