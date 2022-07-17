@@ -702,7 +702,7 @@ def ShowBufInfo(isReadPost: bool = true)
 	add(msg, ['Title', '"' .. bufname() .. '"'])
 	add(msg, ['Normal', ' '])
 	if &modified
-		add(msg, ['Delimiter', '[Modified]'])
+		add(msg, ['Delimiter', '[+]'])
 		add(msg, ['Normal', ' '])
 	endif
 	if !isReadPost

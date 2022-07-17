@@ -528,7 +528,7 @@ var b = []
 add(b, ['Title', '"' .. bufname() .. '"'])
 add(b, ['Normal', ' '])
 if &modified
-add(b, ['Delimiter', '[Modified]'])
+add(b, ['Delimiter', '[+]'])
 add(b, ['Normal', ' '])
 endif
 if !a
