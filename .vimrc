@@ -106,6 +106,7 @@ Jetpack 'skanehira/translate.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'
 Jetpack 'tyru/caw.vim'
+Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
@@ -129,6 +130,7 @@ Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
+g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
@@ -328,6 +330,7 @@ nn <silent> <Space>T :<C-u>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+nm <Space>s <Plug>(jumpcursor-jump)
 const lq = expand(lk .. '/pack/local/opt/*')
 if lq !=# ''
 &runtimepath = substitute(lq, '\n', ',', 'g') .. ',' .. &runtimepath

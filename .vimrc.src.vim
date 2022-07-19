@@ -135,6 +135,7 @@ Jetpack 'skanehira/translate.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
 Jetpack 'tyru/caw.vim'            # コメント化
+Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
@@ -161,6 +162,7 @@ Enable  g:EasyMotion_smartcase
 Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
+g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 #}}}
@@ -419,6 +421,8 @@ nnoremap <silent> <Space>T :<C-u>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+# EasyMotionとどっちを使うか様子見中
+nmap <Space>s <Plug>(jumpcursor-jump)
 #}}}
 
 # 開発用 {{{
