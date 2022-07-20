@@ -616,6 +616,25 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CE(<f-args>)
 cnoreabbrev mv MoveFile
+var lr = 0
+def CF()
+lr = 0
+popup_atcursor(execute('reg')->split('\n'), {
+wrap: false,
+moved: 'any',
+maxwidth: 40,
+filter: (id, key) => {
+if lr ==# 0
+lr = 1
+else
+popup_close(id)
+feedkeys('"' .. key, 'n')
+endif
+return true
+},
+})
+enddef
+nn <silent> " :<C-u>call <SID>CF()<CR>"
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
@@ -681,46 +700,46 @@ ino <M-l> <C-o>$
 ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
 ino <M-x> <Cmd>call <SID>CB()<CR>
-def CF()
+def CG()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CG(a: string, b: string)
+def CH(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CF()
-au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CG('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * CG()
+au vimrc Syntax javascript,vim CH('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim CH('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
 nn TE :<C-u>tabe<Space>
 nn TN :<C-u>tabnew<CR>
 nn TD :<C-u>tabe ./<CR>
-def CH(a: string, b: number = 0): number
+def CI(a: string, b: number = 0): number
 const c = len(D('.'))
 const d = printf('^\s\{0,%d\}\S', c)
 setpos('.', [0, getpos('.')[1], 1, 1])
 return search(d, a) + b
 enddef
-no <expr> [<Tab> <SID>CH('bW') .. 'G'
-no <expr> ]<Tab> <SID>CH('W') .. 'G'
-no <expr> [<S-Tab> <SID>CH('bW', 1) .. 'G'
-no <expr> ]<S-Tab> <SID>CH('W', -1) .. 'G'
+no <expr> [<Tab> <SID>CI('bW') .. 'G'
+no <expr> ]<Tab> <SID>CI('W') .. 'G'
+no <expr> [<S-Tab> <SID>CI('bW', 1) .. 'G'
+no <expr> ]<S-Tab> <SID>CI('W', -1) .. 'G'
 ino {; {<CR>};<C-o>O
 ino {, {<CR>},<C-o>O
 ino [; [<CR>];<C-o>O
 ino [, [<CR>],<C-o>O
 if strftime('%d') ==# '01'
-def CI()
+def CJ()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CI()
+au vimrc VimEnter * CJ()
 endif
-def CJ()
+def DA()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -730,8 +749,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CJ()
-def DA()
+au vimrc ColorSchemePre * DA()
+def DB()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -745,7 +764,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DA()
+au vimrc VimEnter,WinEnter * DB()
 set t_Co=256
 syntax on
 set background=dark
