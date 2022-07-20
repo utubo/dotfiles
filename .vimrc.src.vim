@@ -803,26 +803,31 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
-# レジストリをポップアップで表示 {{{
-var IsRegPopuped = 0
+# レジスタをポップアップで表示 {{{
 def PopupReg()
-	IsRegPopuped = 0
-	popup_atcursor(execute('reg')->split('\n'), {
-		wrap: false,
-		moved: 'any',
-		maxwidth: 40,
-		filter: (id, key) => {
-			if IsRegPopuped ==# 0
-				IsRegPopuped = 1
-			else
+	silent nunmap "
+	popup_atcursor(
+		execute('reg')
+			->substitute('\^I', '›', 'g')
+			->substitute('\^J', '↵', 'g')
+			->split('\n'),
+		{
+			wrap: false,
+			moved: 'any',
+			maxwidth: 40,
+			filter: (id, key) => {
+				PopupRegMapping()
 				popup_close(id)
 				feedkeys('"' .. key, 'n')
-			endif
-			return true
-		},
-	})
+				return true
+			},
+		}
+	)
 enddef
-nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>"
+def PopupRegMapping()
+	nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
+enddef
+PopupRegMapping()
 #}}}
 
 # ----------------------------------------------------------
