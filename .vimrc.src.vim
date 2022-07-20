@@ -135,7 +135,7 @@ Jetpack 'skanehira/translate.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
 Jetpack 'tyru/caw.vim'            # コメント化
-Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)
+Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
