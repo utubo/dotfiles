@@ -617,29 +617,35 @@ enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CE(<f-args>)
 cnoreabbrev mv MoveFile
 def CF()
-sil! nu "
-popup_atcursor(
-execute('reg')
+var a = execute('reg')
 ->substitute('\^I', '›', 'g')
 ->substitute('\^J', '↵', 'g')
-->split('\n'),
-{
-wrap: false,
-moved: 'any',
+->split('\n')
+popup_atcursor(a, {
+cursorline: true,
+mapping: 0,
 maxwidth: 40,
+moved: 'any',
+wrap: false,
 filter: (id, key) => {
-CG()
-popup_close(id)
+if key =~# '[jk ]' || key ==# "\<CR>"
+return popup_filter_menu(id, key)
+else
+popup_close(id, -1)
 feedkeys('"' .. key, 'n')
 return true
+endif
 },
-}
-)
+callback: (id, result) => {
+if result <= 1
+return
+endif
+var m = matchlist(a[result - 1], '^\s*\S\s*"\(.\)')
+feedkeys('"' .. m[1], 'n')
+},
+})
 enddef
-def CG()
 nn <silent> " :<C-u>call <SID>CF()<CR>
-enddef
-CG()
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
@@ -705,46 +711,46 @@ ino <M-l> <C-o>$
 ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
 ino <M-x> <Cmd>call <SID>CB()<CR>
-def CH()
+def CG()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CI(a: string, b: string)
+def CH(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CH()
-au vimrc Syntax javascript,vim CI('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CI('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * CG()
+au vimrc Syntax javascript,vim CH('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim CH('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
 nn TE :<C-u>tabe<Space>
 nn TN :<C-u>tabnew<CR>
 nn TD :<C-u>tabe ./<CR>
-def CJ(a: string, b: number = 0): number
+def CI(a: string, b: number = 0): number
 const c = len(D('.'))
 const d = printf('^\s\{0,%d\}\S', c)
 setpos('.', [0, getpos('.')[1], 1, 1])
 return search(d, a) + b
 enddef
-no <expr> [<Tab> <SID>CJ('bW') .. 'G'
-no <expr> ]<Tab> <SID>CJ('W') .. 'G'
-no <expr> [<S-Tab> <SID>CJ('bW', 1) .. 'G'
-no <expr> ]<S-Tab> <SID>CJ('W', -1) .. 'G'
+no <expr> [<Tab> <SID>CI('bW') .. 'G'
+no <expr> ]<Tab> <SID>CI('W') .. 'G'
+no <expr> [<S-Tab> <SID>CI('bW', 1) .. 'G'
+no <expr> ]<S-Tab> <SID>CI('W', -1) .. 'G'
 ino {; {<CR>};<C-o>O
 ino {, {<CR>},<C-o>O
 ino [; [<CR>];<C-o>O
 ino [, [<CR>],<C-o>O
 if strftime('%d') ==# '01'
-def DA()
+def CJ()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * DA()
+au vimrc VimEnter * CJ()
 endif
-def DB()
+def DA()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -754,8 +760,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * DB()
-def DC()
+au vimrc ColorSchemePre * DA()
+def DB()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -769,7 +775,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DC()
+au vimrc VimEnter,WinEnter * DB()
 set t_Co=256
 syntax on
 set background=dark
