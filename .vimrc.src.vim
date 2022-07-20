@@ -805,7 +805,7 @@ cnoreabbrev mv MoveFile
 # ----------------------------------------------------------
 # レジスタをポップアップで表示 {{{
 def PopupReg()
-	silent nunmap "
+	silent! nunmap "
 	popup_atcursor(
 		execute('reg')
 			->substitute('\^I', '›', 'g')

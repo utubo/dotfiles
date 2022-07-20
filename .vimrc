@@ -617,7 +617,7 @@ enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CE(<f-args>)
 cnoreabbrev mv MoveFile
 def CF()
-sil nu "
+sil! nu "
 popup_atcursor(
 execute('reg')
 ->substitute('\^I', '›', 'g')
