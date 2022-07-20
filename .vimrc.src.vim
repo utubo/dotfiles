@@ -803,6 +803,29 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
+# レジストリをポップアップで表示 {{{
+var IsRegPopuped = 0
+def PopupReg()
+	IsRegPopuped = 0
+	popup_atcursor(execute('reg')->split('\n'), {
+		wrap: false,
+		moved: 'any',
+		maxwidth: 40,
+		filter: (id, key) => {
+			if IsRegPopuped ==# 0
+				IsRegPopuped = 1
+			else
+				popup_close(id)
+				feedkeys('"' .. key, 'n')
+			endif
+			return true
+		},
+	})
+enddef
+nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>"
+#}}}
+
+# ----------------------------------------------------------
 # vimrc作成用  {{{
 nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
