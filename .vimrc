@@ -619,7 +619,7 @@ cnoreabbrev mv MoveFile
 def CF()
 sil nu "
 popup_atcursor(
-exe('reg')
+execute('reg')
 ->substitute('\^I', '›', 'g')
 ->substitute('\^J', '↵', 'g')
 ->split('\n'),
