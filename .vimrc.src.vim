@@ -805,29 +805,35 @@ cnoreabbrev mv MoveFile
 # ----------------------------------------------------------
 # レジスタをポップアップで表示 {{{
 def PopupReg()
-	silent! nunmap "
-	popup_atcursor(
-		execute('reg')
-			->substitute('\^I', '›', 'g')
-			->substitute('\^J', '↵', 'g')
-			->split('\n'),
-		{
-			wrap: false,
-			moved: 'any',
-			maxwidth: 40,
-			filter: (id, key) => {
-				PopupRegMapping()
-				popup_close(id)
+	var items = execute('reg')
+		->substitute('\^I', '›', 'g')
+		->substitute('\^J', '↵', 'g')
+		->split('\n')
+	popup_atcursor(items, {
+		cursorline: true,
+		mapping: 0,
+		maxwidth: 40,
+		moved: 'any',
+		wrap: false,
+		filter: (id, key) => {
+			if key =~# '[jk ]' || key ==# "\<CR>"
+				return popup_filter_menu(id, key)
+			else
+				popup_close(id, -1)
 				feedkeys('"' .. key, 'n')
 				return true
-			},
-		}
-	)
+			endif
+		},
+		callback: (id, result) => {
+			if result <= 1
+				return
+			endif
+			var m = matchlist(items[result - 1], '^\s*\S\s*"\(.\)')
+			feedkeys('"' .. m[1], 'n')
+		},
+	})
 enddef
-def PopupRegMapping()
-	nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
-enddef
-PopupRegMapping()
+nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
 #}}}
 
 # ----------------------------------------------------------
