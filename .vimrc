@@ -25,6 +25,7 @@ set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
 set undofile
+set updatetime=3000
 set is
 set hls
 noh
@@ -225,7 +226,7 @@ Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
 g:ale_fixers = { typescript: ['deno'] }
-g:ale_lint_delay = 3000
+g:ale_lint_delay = &updatetime
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
 g:ll_reg = ''
