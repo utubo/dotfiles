@@ -791,7 +791,7 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
-# レジスタをポップアップで表示 {{{
+# registers.nvimみたいなやつ！ {{{
 def PopupReg()
 	var items = execute('reg')
 		->substitute('\^I', '›', 'g')
@@ -804,8 +804,12 @@ def PopupReg()
 		moved: 'any',
 		wrap: false,
 		filter: (id, key) => {
-			if key =~# '[jk ]' || key ==# "\<CR>"
-				return popup_filter_menu(id, key)
+			if key ==# "\<C-n>" || key ==# "\<TAB>"
+				return popup_filter_menu(id, 'j')
+			elseif key ==# "\<C-p>" || key ==# "\<S-TAB>"
+				return popup_filter_menu(id, 'k')
+			elseif key ==# "\<CR>" || key ==# " "
+				return popup_filter_menu(id, ' ')
 			else
 				popup_close(id, -1)
 				feedkeys('"' .. key, 'n')
@@ -822,6 +826,9 @@ def PopupReg()
 	})
 enddef
 nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
+# 作りは違うけれどアイデアの模倣なので本家のライセンスを書いておこう…
+# registers.nvim is under GNU 3.0.
+# https://github.com/tversteeg/registers.nvim/blob/main/LICENSE
 #}}}
 
 # ----------------------------------------------------------
