@@ -82,42 +82,35 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/lightline.vim'
-Jetpack 'jceb/vim-hier'
-Jetpack 'jistr/vim-nerdtree-tabs'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'luochen1990/rainbow'
 Jetpack 'machakann/vim-sandwich'
 Jetpack 'mattn/ctrlp-matchfuzzy'
-Jetpack 'mattn/vim-maketable'
 Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'
-Jetpack 'mbbill/undotree'
 Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
-Jetpack 'osyo-manga/vim-monster', { 'for': 'ruby' }
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'rafamadriz/friendly-snippets'
-Jetpack 'scrooloose/nerdtree'
-Jetpack 'skanehira/translate.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'
 Jetpack 'tyru/caw.vim'
+Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/mru'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-textobj-twochars'
 Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-shrink'
-Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-textobj-twochars'
-Jetpack 'yami-beta/asyncomplete-omni.vim'
-Jetpack 'yegappan/mru'
+Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-shrink'
+Jetpack 'utubo/vim-tablist'
 if ll
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
@@ -311,14 +304,9 @@ nn <Leader>b :<C-u>PortalAim blue<CR>
 nn <Leader>o :<C-u>PortalAim orange<CR>
 nn <Leader>r :<C-u>PortalReset<CR>
 Enable g:rainbow_active
-Enable g:nerdtree_tabs_autofind
-Enable g:undotree_SetFocusWhenToggle
-Disable g:undotree_DiffAutoOpen
 g:auto_cursorline_wait_ms = 3000
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nn <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
-nn <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 nn <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
 nn <silent> <Space>gd :<C-u>Gdiffsplit<CR>
 nn <Space>ga :<C-u>Git add %
@@ -400,8 +388,6 @@ au vimrc FileType qf BG()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
 set splitright
 set fcs+=diff:\ 
-com! DiffOrig vert new|set bt=nofile|r|0d_|diffthis|wincmd p|diffthis
-nn <F4> :<C-u>DiffOrig<CR>
 au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cno <F5> <C-r>=strftime('%Y%m%d')<CR>

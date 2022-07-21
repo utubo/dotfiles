@@ -106,47 +106,42 @@ Jetpack 'alvan/vim-closetag'
 Jetpack 'ctrlpvim/ctrlp.vim'
 Jetpack 'cohama/lexima.vim'      # 括弧補完
 Jetpack 'delphinus/vim-auto-cursorline'
-Jetpack 'dense-analysis/ale'     # Syntaxチェッカー
+Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/lightline.vim'
-Jetpack 'jceb/vim-hier'          # quickfixをハイライト
-Jetpack 'jistr/vim-nerdtree-tabs'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'luochen1990/rainbow'    # 虹色括弧
 Jetpack 'machakann/vim-sandwich'
 Jetpack 'mattn/ctrlp-matchfuzzy'
-Jetpack 'mattn/vim-maketable'
 Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'         # 複数行移動
-Jetpack 'mbbill/undotree'
 Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
-Jetpack 'osyo-manga/vim-monster', { 'for': 'ruby' } # rubyの補完
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'rafamadriz/friendly-snippets'
-Jetpack 'scrooloose/nerdtree'
-Jetpack 'skanehira/translate.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
 Jetpack 'tyru/caw.vim'            # コメント化
+Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/mru'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-textobj-twochars'
 Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-shrink'
-Jetpack 'utubo/vim-tablist'       # 息抜きに作ったので自分で食べる
 Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-textobj-twochars'
-Jetpack 'yami-beta/asyncomplete-omni.vim'
-Jetpack 'yegappan/mru'
+# あまり使ってないけど作ったので…
+Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-shrink'
+Jetpack 'utubo/vim-tablist'
+# denoがある環境用
 if has_deno
 	Jetpack 'vim-denops/denops.vim'
 	Jetpack 'vim-skk/skkeleton'
@@ -402,14 +397,9 @@ nnoremap <Leader>r :<C-u>PortalReset<CR>
 
 # その他 {{{
 Enable  g:rainbow_active
-Enable  g:nerdtree_tabs_autofind
-Enable  g:undotree_SetFocusWhenToggle
-Disable g:undotree_DiffAutoOpen
 g:auto_cursorline_wait_ms = 3000
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nnoremap <silent> <F1> :<C-u>NERDTreeTabsToggle<CR>
-nnoremap <silent> <F3> :<C-u>silent! UndotreeToggle<cr>
 nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
 nnoremap <silent> <Space>gd :<C-u>Gdiffsplit<CR>
 nnoremap <Space>ga :<C-u>Git add %
@@ -520,8 +510,6 @@ au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 # diff {{{
 set splitright
 set fillchars+=diff:\ # 削除行は空白文字で埋める
-command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-nnoremap <F4> :<C-u>DiffOrig<CR>
 # diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
 #}}} -------------------------------------------------------
@@ -1026,10 +1014,10 @@ silent! colorscheme girly
 
 # ----------------------------------------------------------
 # メモ {{{
-# <F1> NERDTree <S-F1>でフォルダを開く(win32)
+# <F1> <S-F1>でフォルダを開く(win32)
 # <F2> MRU
-# <F3> UndoTree(あんまり使わない)
-# <F4> DiffOrig(あんまり使わない)
+# <F3>
+# <F4>
 # <F5> 日付関係
 # <F6>
 # <F7>
