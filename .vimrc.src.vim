@@ -453,7 +453,7 @@ au vimrc BufReadPost * SetupTabstop()
 
 # ----------------------------------------------------------
 # vimgrep {{{
-def MyVimgrep(keyword: string, ...targets: list<string>)
+def VimGrep(keyword: string, ...targets: list<string>)
 	var path = join(targets, ' ')
 	# パスを省略した場合は、同じ拡張子のファイルから探す
 	if empty(path)
@@ -478,10 +478,10 @@ def MyVimgrep(keyword: string, ...targets: list<string>)
 		endif
 	endif
 enddef
-command! -nargs=+ MyVimgrep MyVimgrep(<f-args>)
-nnoremap <Space>/ :<C-u>MyVimgrep<Space>
+command! -nargs=+ VimGrep VimGrep(<f-args>)
+nnoremap <Space>/ :<C-u>VimGrep<Space>
 
-def MyQuickFixWindow()
+def SetupQF()
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -491,7 +491,7 @@ def MyQuickFixWindow()
 	# 様子見中(使わなそうなら削除する)
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
-au vimrc FileType qf MyQuickFixWindow()
+au vimrc FileType qf SetupQF()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
