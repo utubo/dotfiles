@@ -273,18 +273,6 @@ MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'
 Enable g:lexima_accept_pum_with_enter
 #}}}
 
-# 翻訳 {{{
-def AutoTranslate(text: string)
-	if matchstr(text, '[^\x00-\x7F]') ==# ''
-		execute 'Translate ' .. text
-	else
-		execute 'Translate! ' .. text
-	endif
-enddef
-nnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(expand('<cword>'))<CR>
-vnoremap <script> <Leader>t :<C-u>call <SID>AutoTranslate(<SID>GetVisualSelection())<CR>gv
-#}}}
-
 # ALE {{{
 Enable  g:ale_set_quickfix
 Enable  g:ale_fix_on_save

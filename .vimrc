@@ -218,15 +218,6 @@ MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jum
 MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
-def BC(a: string)
-if matchstr(a, '[^\x00-\x7F]') ==# ''
-exe 'Translate ' .. a
-else
-exe 'Translate! ' .. a
-endif
-enddef
-nn <script> <Leader>t :<C-u>call <SID>BC(expand('<cword>'))<CR>
-vn <script> <Leader>t :<C-u>call <SID>BC(<SID>E())<CR>gv
 Enable g:ale_set_quickfix
 Enable g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
@@ -238,14 +229,14 @@ g:ale_lint_delay = 3000
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
 g:ll_reg = ''
-def BD()
+def BC()
 var a = substitute(v:event.regcontents[0], '\t', ' ', 'g')
 if len(v:event.regcontents) !=# 1 || len(a) > 10
 a = substitute(a, '^\(.\{0,8\}\).*', '\1..', '')
 endif
 g:ll_reg = '📎[' .. a .. ']'
 enddef
-au vimrc TextYankPost * BD()
+au vimrc TextYankPost * BC()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
 def! g:VimrcTimer60s(a: any)
@@ -334,7 +325,7 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
 nn <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
 nn <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
-def BE()
+def BD()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -350,8 +341,8 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BE()
-def BF(a: string, ...b: list<string>)
+au vimrc BufReadPost * BD()
+def BE(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
@@ -373,9 +364,9 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ MyVimgrep BF(<f-args>)
+com! -nargs=+ MyVimgrep BE(<f-args>)
 nn <Space>/ :<C-u>MyVimgrep<Space>
-def BG()
+def BF()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -384,7 +375,7 @@ nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
-au vimrc FileType qf BG()
+au vimrc FileType qf BF()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
 set splitright
 set fcs+=diff:\ 
@@ -405,15 +396,15 @@ exe printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
-def BH(): string
+def BG(): string
 const x = getline('.')->match('\S') + 1
 if x != 0 || !exists('w:my_hat')
 w:my_hat = col('.') == x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j 'j' .. <SID>BH()
-nn <expr> k 'k' .. <SID>BH()
+nn <expr> j 'j' .. <SID>BG()
+nn <expr> k 'k' .. <SID>BG()
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -423,7 +414,7 @@ enddef
 set foldtext=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
-def BI()
+def BH()
 if line("'<") != line('.')
 return
 endif
@@ -436,8 +427,8 @@ normal! V
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn <silent> zf :call <SID>BI()<CR>
-def BJ()
+vn <silent> zf :call <SID>BH()<CR>
+def BI()
 if foldclosed(line('.')) == -1
 normal! zc
 endif
@@ -460,13 +451,13 @@ nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> :<C-u>set foldmethod=indent<CR>
 nn Z{ :<C-u>set foldmethod=marker<CR>
 nn Zy :<C-u>set foldmethod=syntax<CR>
-def CA(a: string)
+def BJ(a: string)
 const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-vn u <Cmd>call <SID>CA('undo')<CR>
-vn <C-R> <Cmd>call <SID>CA('redo')<CR>
+vn u <Cmd>call <SID>BJ('undo')<CR>
+vn <C-R> <Cmd>call <SID>BJ('redo')<CR>
 vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
@@ -491,7 +482,7 @@ tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w>q exit
 tno <C-w><C-q> <C-w>:quit!<CR>
-def CB()
+def CA()
 const a = getline('.')
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b
@@ -505,8 +496,8 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <silent> <Space>x :call <SID>CB()<CR>
-def CC(a: bool = true)
+no <silent> <Space>x :call <SID>CA()<CR>
+def CB(a: bool = true)
 if &ft ==# 'qf'
 return
 endif
@@ -559,10 +550,10 @@ endfor
 echoh Normal
 redraw
 enddef
-no <silent> <C-g> :<C-u>call <SID>CC()<CR>
-au vimrc BufNewFile * CC(false)
-au vimrc BufReadPost * CC(true)
-def CD(a: string = '')
+no <silent> <C-g> :<C-u>call <SID>CB()<CR>
+au vimrc BufNewFile * CB(false)
+au vimrc BufReadPost * CB(true)
+def CC(a: string = '')
 if ! empty(a)
 if winnr() == winnr(a)
 return
@@ -575,17 +566,17 @@ else
 confirm quit
 endif
 enddef
-nn <silent> qh :<C-u>call <SID>CD('h')<CR>
-nn <silent> qj :<C-u>call <SID>CD('j')<CR>
-nn <silent> qk :<C-u>call <SID>CD('k')<CR>
-nn <silent> ql :<C-u>call <SID>CD('l')<CR>
-nn <silent> qq :<C-u>call <SID>CD()<CR>
+nn <silent> qh :<C-u>call <SID>CC('h')<CR>
+nn <silent> qj :<C-u>call <SID>CC('j')<CR>
+nn <silent> qk :<C-u>call <SID>CC('k')<CR>
+nn <silent> ql :<C-u>call <SID>CC('l')<CR>
+nn <silent> qq :<C-u>call <SID>CC()<CR>
 nn q <Nop>
 nn q: q:
 nn q/ q/
 nn q? q?
 nn Q q
-def CE(a: string)
+def CD(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -600,9 +591,9 @@ endif
 exe 'saveas! ' .. c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile call <SID>CE(<f-args>)
+com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-def CF()
+def CE()
 var a = execute('reg')
 ->substitute('\^I', '›', 'g')
 ->substitute('\^J', '↵', 'g')
@@ -635,7 +626,7 @@ feedkeys('"' .. m[1], 'n')
 },
 })
 enddef
-nn <silent> " :<C-u>call <SID>CF()<CR>
+nn <silent> " :<C-u>call <SID>CE()<CR>
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
@@ -695,52 +686,52 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <Cmd>call <SID>CB()<CR>
+ino jjx <Cmd>call <SID>CA()<CR>
 ino <M-h> <C-o>^
 ino <M-l> <C-o>$
 ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
-ino <M-x> <Cmd>call <SID>CB()<CR>
-def CG()
+ino <M-x> <Cmd>call <SID>CA()<CR>
+def CF()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CH(a: string, b: string)
+def CG(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CG()
-au vimrc Syntax javascript,vim CH('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CH('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * CF()
+au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim CG('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
 nn TE :<C-u>tabe<Space>
 nn TN :<C-u>tabnew<CR>
 nn TD :<C-u>tabe ./<CR>
-def CI(a: string, b: number = 0): number
+def CH(a: string, b: number = 0): number
 const c = len(D('.'))
 const d = printf('^\s\{0,%d\}\S', c)
 setpos('.', [0, getpos('.')[1], 1, 1])
 return search(d, a) + b
 enddef
-no <expr> [<Tab> <SID>CI('bW') .. 'G'
-no <expr> ]<Tab> <SID>CI('W') .. 'G'
-no <expr> [<S-Tab> <SID>CI('bW', 1) .. 'G'
-no <expr> ]<S-Tab> <SID>CI('W', -1) .. 'G'
+no <expr> [<Tab> <SID>CH('bW') .. 'G'
+no <expr> ]<Tab> <SID>CH('W') .. 'G'
+no <expr> [<S-Tab> <SID>CH('bW', 1) .. 'G'
+no <expr> ]<S-Tab> <SID>CH('W', -1) .. 'G'
 ino {; {<CR>};<C-o>O
 ino {, {<CR>},<C-o>O
 ino [; [<CR>];<C-o>O
 ino [, [<CR>],<C-o>O
 if strftime('%d') ==# '01'
-def CJ()
+def CI()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CJ()
+au vimrc VimEnter * CI()
 endif
-def DA()
+def CJ()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -750,8 +741,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * DA()
-def DB()
+au vimrc ColorSchemePre * CJ()
+def DA()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -765,7 +756,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DB()
+au vimrc VimEnter,WinEnter * DA()
 set t_Co=256
 syntax on
 set background=dark
