@@ -296,7 +296,7 @@ nn <Leader>b :<C-u>PortalAim blue<CR>
 nn <Leader>o :<C-u>PortalAim orange<CR>
 nn <Leader>r :<C-u>PortalReset<CR>
 Enable g:rainbow_active
-g:auto_cursorline_wait_ms = 3000
+g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nn <silent> <Space>gv :<C-u>Gvdiffsplit<CR>

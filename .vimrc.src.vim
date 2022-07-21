@@ -386,7 +386,7 @@ nnoremap <Leader>r :<C-u>PortalReset<CR>
 
 # その他 {{{
 Enable  g:rainbow_active
-g:auto_cursorline_wait_ms = 3000
+g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
