@@ -116,7 +116,7 @@ Jetpack 'jistr/vim-nerdtree-tabs'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'luochen1990/rainbow'    # 虹色括弧
 Jetpack 'machakann/vim-sandwich'
-Jetpack 'mattn//ctrlp-matchfuzzy'
+Jetpack 'mattn/ctrlp-matchfuzzy'
 Jetpack 'mattn/vim-maketable'
 Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'         # 複数行移動
