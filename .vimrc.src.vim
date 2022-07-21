@@ -815,12 +815,8 @@ def PopupReg()
 	})
 enddef
 nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
-# 作りは違うけれどアイデアの模倣なので本家のライセンスを書いておこう
-# …ソフト名と名前入ってなかった
-# registers.nvim is under GPL 3.0.
-# https://github.com/tversteeg/registers.nvim/blob/main/LICENSE
-# Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
-# Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+# 本家のコードは一切見ないようにしたけどアイデアの模倣なので本家のURLを書いておこう🙏
+# https://github.com/tversteeg/registers.nvim/
 #}}}
 
 # ----------------------------------------------------------
