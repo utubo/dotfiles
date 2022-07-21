@@ -845,6 +845,9 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
+nnoremap TE :<C-u>tabe<Space>
+nnoremap TN :<C-u>tabnew<CR>
+nnoremap TD :<C-u>tabe ./<CR>
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
@@ -870,13 +873,11 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
+cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 nnoremap / :<C-u>nohlsearch<CR>/
 nnoremap ? :<C-u>nohlsearch<CR>?
-cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
-
-# 最後の選択範囲を現在行の下に移動する
-nnoremap <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
+au vimrc CursorHold * feedkeys(" n")
 
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
@@ -934,29 +935,9 @@ nnoremap <silent> g<Leader> :<C-u>tabnext #<CR>
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
 nnoremap <Space>a A
-nnoremap TE :<C-u>tabe<Space>
-nnoremap TN :<C-u>tabnew<CR>
-nnoremap TD :<C-u>tabe ./<CR>
 
-# インデントが現在行以下の行まで移動 {{{
-def FindSameIndent(flags: string, inner: number = 0): number
-	const size = len(IndentStr('.'))
-	const pattern = printf('^\s\{0,%d\}\S', size)
-	setpos('.', [0, getpos('.')[1], 1, 1])
-	return search(pattern, flags) + inner
-enddef
-noremap <expr> [<Tab> <SID>FindSameIndent('bW') .. 'G'
-noremap <expr> ]<Tab> <SID>FindSameIndent('W') .. 'G'
-noremap <expr> [<S-Tab> <SID>FindSameIndent('bW', 1) .. 'G'
-noremap <expr> ]<S-Tab> <SID>FindSameIndent('W', -1) .. 'G'
-#}}}
-
-# https://github.com/justinmk/config/blob/master/.config/nvim/init.vim
-# 便利なんだけど忘れてしまう…
-inoremap {; {<CR>};<C-o>O
-inoremap {, {<CR>},<C-o>O
-inoremap [; [<CR>];<C-o>O
-inoremap [, [<CR>],<C-o>O
+# 最後の選択範囲を現在行の下に移動する
+nnoremap <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 
 #}}} -------------------------------------------------------
 

@@ -646,6 +646,9 @@ nn <Space>p $p
 nn <Space>P ^P
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
+nn TE :<C-u>tabe<Space>
+nn TN :<C-u>tabnew<CR>
+nn TD :<C-u>tabe ./<CR>
 ono <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 ono <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
 vn <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
@@ -665,11 +668,11 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-nn <silent> <Space>n :<C-u>nohlsearch<CR>
+cno <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 nn / :<C-u>nohlsearch<CR>/
 nn ? :<C-u>nohlsearch<CR>?
-cno <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
-nn <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nn <silent> <Space>n :<C-u>nohlsearch<CR>
+au vimrc CursorHold * feedkeys(" n")
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
@@ -706,32 +709,16 @@ au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s') # 「==#」とかの
 au vimrc Syntax vim CG('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
-nn TE :<C-u>tabe<Space>
-nn TN :<C-u>tabnew<CR>
-nn TD :<C-u>tabe ./<CR>
-def CH(a: string, b: number = 0): number
-const c = len(D('.'))
-const d = printf('^\s\{0,%d\}\S', c)
-setpos('.', [0, getpos('.')[1], 1, 1])
-return search(d, a) + b
-enddef
-no <expr> [<Tab> <SID>CH('bW') .. 'G'
-no <expr> ]<Tab> <SID>CH('W') .. 'G'
-no <expr> [<S-Tab> <SID>CH('bW', 1) .. 'G'
-no <expr> ]<S-Tab> <SID>CH('W', -1) .. 'G'
-ino {; {<CR>};<C-o>O
-ino {, {<CR>},<C-o>O
-ino [; [<CR>];<C-o>O
-ino [, [<CR>],<C-o>O
+nn <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 if strftime('%d') ==# '01'
-def CI()
+def CH()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CI()
+au vimrc VimEnter * CH()
 endif
-def CJ()
+def CI()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -741,8 +728,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CJ()
-def DA()
+au vimrc ColorSchemePre * CI()
+def CJ()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -756,7 +743,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DA()
+au vimrc VimEnter,WinEnter * CJ()
 set t_Co=256
 syntax on
 set background=dark
