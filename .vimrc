@@ -25,7 +25,7 @@ set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
 set undofile
-set updatetime=3000
+set updatetime=2500
 set is
 set hls
 noh
@@ -105,13 +105,13 @@ Jetpack 'yegappan/mru'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-textobj-twochars'
-Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-tabpopupmenu'
-Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-reformatdate'
+Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-textobj-twochars'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
+Jetpack 'utubo/vim-tabpopupmenu'
 if ll
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
@@ -365,8 +365,8 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ MyVimgrep BE(<f-args>)
-nn <Space>/ :<C-u>MyVimgrep<Space>
+com! -nargs=+ VimGrep BE(<f-args>)
+nn <Space>/ :<C-u>VimGrep<Space>
 def BF()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
@@ -606,9 +606,9 @@ maxwidth: 40,
 moved: 'any',
 wrap: false,
 filter: (id, key) => {
-if key ==# "\<C-n>" || key ==# "\<TAB>"
+if key ==# "\<C-n>" || key ==# "\<TAB>" || key ==# "j"
 return popup_filter_menu(id, 'j')
-elseif key ==# "\<C-p>" || key ==# "\<S-TAB>"
+elseif key ==# "\<C-p>" || key ==# "\<S-TAB>" || key ==# "k"
 return popup_filter_menu(id, 'k')
 elseif key ==# "\<CR>" || key ==# " "
 return popup_filter_menu(id, ' ')
