@@ -28,7 +28,7 @@ set autochdir
 set backupskip=/var/tmp/*
 set undodir=~/.vim/undo
 set undofile
-set updatetime=3000
+set updatetime=2500
 set incsearch
 set hlsearch
 nohlsearch
@@ -793,9 +793,9 @@ def PopupReg()
 		moved: 'any',
 		wrap: false,
 		filter: (id, key) => {
-			if key ==# "\<C-n>" || key ==# "\<TAB>"
+			if key ==# "\<C-n>" || key ==# "\<TAB>" || key ==# "j"
 				return popup_filter_menu(id, 'j')
-			elseif key ==# "\<C-p>" || key ==# "\<S-TAB>"
+			elseif key ==# "\<C-p>" || key ==# "\<S-TAB>" || key ==# "k"
 				return popup_filter_menu(id, 'k')
 			elseif key ==# "\<CR>" || key ==# " "
 				return popup_filter_menu(id, ' ')
@@ -910,6 +910,7 @@ inoremap <M-e> <C-o>e<C-o>a
 inoremap <M-k> 「」<Left>
 # これはちょっと押しにくい
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
+# 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 
 # syntax毎に強調する
 def ClearMySyntax()
