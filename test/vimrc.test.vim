@@ -39,7 +39,7 @@ enddef
 # setが重複してないこと {{{
 def TestSets()
 	var sets = []
-	const ignore_names = 'fillchars\|foldmethod' # 想定内なので無視する名前s
+	const ignore_names = 'fcs\|foldmethod' # 想定内なので無視する名前s
 	for line in vimrc_lines
 		ShowProgress()
 		var m = matchlist(line, '\<set\s\+\(\w\+\)')
@@ -68,21 +68,26 @@ def TestMapping()
 	# 以下はvimrc外でデフォルトと被ってる
 	# n  Q     defaults.vimでgqにしてるけど.vimrcでqへ再マップ
 	# n  gc    vim-caw
+	# n  a     _cc
+	# n  i     _cc
+	# n  A     _cc
 	# i  <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([hjklqsQSTY;''/?]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'n  \([ahijklqsAQSTY;''/?]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
 		'v  \([*]\)\|' ..
 		'i  \(<C-U>\)'
 
 	# わざと被らせてるやつ(ユーザー定義)
-	# 以下はvimrc外でデフォルトと被ってる
-	# i  { vim-lexma
-	# i  [ vim-lexma
+	# 以下はプラグイン
+	# n  <Plug>fugitive:
+	# i  { vim-laxima
+	# i  [ vim-laxima
+	# i  <Esc> vim-laxima
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
 	var user_ignore = '\C' ..
-		'n  \([qS]\)\|' ..
+		'n  \([qS]\|<Plug>fugitive:\)\|' ..
 		'v  \([JS]\)\|' ..
-		'i  \([「（\[{]\|jj\)\|' ..
+		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)'
 
 	# ユーザー定義のマッピング
