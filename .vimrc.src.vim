@@ -272,6 +272,8 @@ MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 #imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 Enable g:lexima_accept_pum_with_enter
+# https://qiita.com/yami_beta/items/26995a5c382bd83ac38f
+inoremap <C-l> <C-r>=lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 #}}}
 
 # ALE {{{
@@ -914,9 +916,10 @@ inoremap <M-h> <C-o>^
 inoremap <M-l> <C-o>$
 inoremap <M-e> <C-o>e<C-o>a
 inoremap <M-k> 「」<Left>
-# これはちょっと押しにくい
+# これはちょっと押しにくい(自分のキーボードだと)
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
+imap ql <C-l>
 
 # syntax毎に強調する
 def ClearMySyntax()

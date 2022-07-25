@@ -219,6 +219,7 @@ MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jum
 MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
+ino <C-l> <C-r>=lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 Enable g:ale_set_quickfix
 Enable g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
@@ -594,27 +595,32 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-def CE()
-var a = execute('reg')
+def CE(a: string)
+var b = a ==# 'i' ? "\<C-r>" : '"'
+var c = execute('reg')
 ->substitute('\^I', '›', 'g')
 ->substitute('\^J', '↵', 'g')
 ->split('\n')
-popup_atcursor(a, {
+popup_atcursor(c, {
 cursorline: true,
 mapping: 0,
 maxwidth: 40,
 moved: 'any',
 wrap: false,
 filter: (id, key) => {
-if key ==# "\<C-n>" || key ==# "\<TAB>" || key ==# "j"
+if stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
 return popup_filter_menu(id, 'j')
-elseif key ==# "\<C-p>" || key ==# "\<S-TAB>" || key ==# "k"
+elseif stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
 return popup_filter_menu(id, 'k')
-elseif key ==# "\<CR>" || key ==# " "
+elseif stridx("\<CR> ", key) !=# -1
 return popup_filter_menu(id, ' ')
+elseif key ==# "\<C-r>"
+popup_close(id, -1)
+feedkeys(b .. '"', 'n')
+return true
 else
 popup_close(id, -1)
-feedkeys('"' .. key, 'n')
+feedkeys(b .. key, 'n')
 return true
 endif
 },
@@ -622,12 +628,13 @@ callback: (id, result) => {
 if result <= 1
 return
 endif
-var m = matchlist(a[result - 1], '^\s*\S\s*"\(.\)')
-feedkeys('"' .. m[1], 'n')
+var m = matchlist(c[result - 1], '^\s*\S\s*"\(.\)')
+feedkeys(b .. m[1], 'n')
 },
 })
 enddef
-nn <silent> " :<C-u>call <SID>CE()<CR>
+nn <silent> " :<C-u>call <SID>CE('n')<CR>
+ino <silent> <C-r> <C-o>:call <SID>CE('i')<CR>
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
@@ -656,7 +663,6 @@ vn <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vn <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 vn J j
 vn K k
-ino <C-r><C-r> <C-r>"
 ino ｋｊ <Esc>`^
 ino 「 「」<Left>
 ino 「」 「」<Left>
@@ -696,6 +702,7 @@ ino <M-l> <C-o>$
 ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
 ino <M-x> <Cmd>call <SID>CA()<CR>
+im ql <C-l>
 def CF()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
