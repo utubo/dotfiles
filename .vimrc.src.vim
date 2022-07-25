@@ -781,7 +781,8 @@ cnoreabbrev mv MoveFile
 
 # ----------------------------------------------------------
 # registers.nvimみたいなやつ！ {{{
-def PopupReg()
+def PopupReg(mode: string)
+	var prefix = mode ==# 'i' ? "\<C-r>" : '"'
 	var items = execute('reg')
 		->substitute('\^I', '›', 'g')
 		->substitute('\^J', '↵', 'g')
@@ -793,15 +794,20 @@ def PopupReg()
 		moved: 'any',
 		wrap: false,
 		filter: (id, key) => {
-			if key ==# "\<C-n>" || key ==# "\<TAB>" || key ==# "j"
+			if stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
 				return popup_filter_menu(id, 'j')
-			elseif key ==# "\<C-p>" || key ==# "\<S-TAB>" || key ==# "k"
+			elseif stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
 				return popup_filter_menu(id, 'k')
-			elseif key ==# "\<CR>" || key ==# " "
+			elseif stridx("\<CR> ", key) !=# -1
 				return popup_filter_menu(id, ' ')
+			elseif key ==# "\<C-r>"
+				# <C-r><C-r> ->  <C-r>" (insert mode)
+				popup_close(id, -1)
+				feedkeys(prefix .. '"', 'n')
+				return true
 			else
 				popup_close(id, -1)
-				feedkeys('"' .. key, 'n')
+				feedkeys(prefix .. key, 'n')
 				return true
 			endif
 		},
@@ -810,11 +816,12 @@ def PopupReg()
 				return
 			endif
 			var m = matchlist(items[result - 1], '^\s*\S\s*"\(.\)')
-			feedkeys('"' .. m[1], 'n')
+			feedkeys(prefix .. m[1], 'n')
 		},
 	})
 enddef
-nnoremap <silent> " :<C-u>call <SID>PopupReg()<CR>
+nnoremap <silent> " :<C-u>call <SID>PopupReg('n')<CR>
+inoremap <silent> <C-r> <C-o>:call <SID>PopupReg('i')<CR>
 # 本家のコードは一切見ないようにしたけどアイデアの模倣なので本家のURLを書いておこう🙏
 # https://github.com/tversteeg/registers.nvim/
 #}}}
@@ -854,7 +861,6 @@ vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
 vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
 vnoremap J j
 vnoremap K k
-inoremap <C-r><C-r> <C-r>"
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
