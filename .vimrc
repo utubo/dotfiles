@@ -4,7 +4,7 @@ scripte utf-8
 set fencs=ucs-bom,utf-8,iso-2022-jp,cp932,euc-jp
 set noet
 set ts=3
-set shiftwidth=0
+set sw=0
 set st=0
 set ai
 set si
@@ -16,7 +16,7 @@ set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
 set ls=2
 set ru
-set display=lastline
+set dy=lastline
 set ambw=double
 set bo=all
 set ttm=50
@@ -24,8 +24,8 @@ set wmnu
 set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
-set undofile
-set updatetime=2500
+set udf
+set ut=2500
 set is
 set hls
 noh
@@ -227,7 +227,7 @@ Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
 g:ale_fixers = { typescript: ['deno'] }
-g:ale_lint_delay = &updatetime
+g:ale_lint_delay = &ut
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
 g:ll_reg = ''
@@ -297,7 +297,7 @@ nn <Leader>b :<C-u>PortalAim blue<CR>
 nn <Leader>o :<C-u>PortalAim orange<CR>
 nn <Leader>r :<C-u>PortalReset<CR>
 Enable g:rainbow_active
-g:auto_cursorline_wait_ms = &updatetime
+g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nn <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
@@ -323,7 +323,7 @@ vn <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
-set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
+set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
 nn <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
 nn <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
@@ -379,7 +379,7 @@ exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
 au vimrc FileType qf BF()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
-set splitright
+set spr
 set fcs+=diff:\ 
 au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
@@ -410,10 +410,10 @@ nn <expr> k 'k' .. <SID>BG()
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
-const c = &foldmethod ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
+const c = &fdm ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
 return b .. c .. '📁'
 enddef
-set foldtext=g:MyFoldText()
+set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
 def BH()
@@ -446,8 +446,8 @@ B(a)
 setpos('.', c)
 enddef
 nn <silent> zd :Zd()<CR>
-set foldmethod=marker
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl foldmethod=indent
+set fdm=marker
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
 nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> :<C-u>set foldmethod=indent<CR>
@@ -754,7 +754,7 @@ enddef
 au vimrc VimEnter,WinEnter * CJ()
 set t_Co=256
 syntax on
-set background=dark
+set bg=dark
 sil! colorscheme girly
 if filereadable(expand('~/.vimrc_local'))
 so ~/.vimrc_local
