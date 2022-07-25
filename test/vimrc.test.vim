@@ -20,7 +20,7 @@ def! g:EchoErrors()
 enddef
 
 var progress = 0
-var progress_char = '🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛'
+const progress_char = '🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛'
 def ShowProgress()
 	progress += 1
 	echon progress_char[progress % 12] .. progress
@@ -28,11 +28,10 @@ def ShowProgress()
 enddef
 
 # 正規表現でマッチする文字列を全て抽出する
-var scan_result = []
-def Scan(expr: any, pat: string): list<string>
-	scan_result = []
-	substitute(expr, pat, '\=add(scan_result, submatch(0))[0]', 'g')
-	return scan_result
+def Scan(expr: any, pat: string, index: number = 0): list<string>
+  var scanResult = []
+  substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
+  return scanResult
 enddef
 #}}}
 
