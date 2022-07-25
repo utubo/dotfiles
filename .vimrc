@@ -605,13 +605,14 @@ popup_atcursor(c, {
 cursorline: true,
 mapping: 0,
 maxwidth: 40,
+maxheight: winline() <= &lines / 2 ? &lines - winline() - 2 : winline(),
 moved: 'any',
 wrap: false,
 filter: (id, key) => {
-if stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
-return popup_filter_menu(id, 'j')
-elseif stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
+if stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
 return popup_filter_menu(id, 'k')
+elseif stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
+return popup_filter_menu(id, 'j')
 elseif stridx("\<CR> ", key) !=# -1
 return popup_filter_menu(id, ' ')
 elseif key ==# "\<C-r>"
