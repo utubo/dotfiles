@@ -135,7 +135,7 @@ Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-je
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
-Jetpack 'utubo/vim-regsters-lite'
+Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-textobj-twochars'
