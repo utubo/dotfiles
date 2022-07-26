@@ -106,6 +106,7 @@ Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-regsters-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-textobj-twochars'
@@ -595,47 +596,6 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-def CE(a: string)
-var b = a ==# 'i' ? "\<C-r>" : '"'
-var c = execute('reg')
-->substitute('\^I', '›', 'g')
-->substitute('\^J', '↵', 'g')
-->split('\n')
-popup_atcursor(c, {
-cursorline: true,
-mapping: 0,
-maxwidth: 40,
-maxheight: winline() <= &lines / 2 ? &lines - winline() - 2 : winline(),
-moved: 'any',
-wrap: false,
-filter: (id, key) => {
-if stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
-return popup_filter_menu(id, 'k')
-elseif stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
-return popup_filter_menu(id, 'j')
-elseif stridx("\<CR> ", key) !=# -1
-return popup_filter_menu(id, ' ')
-elseif key ==# "\<C-r>"
-popup_close(id, -1)
-feedkeys(b .. '"', 'n')
-return true
-else
-popup_close(id, -1)
-feedkeys(b .. key, 'n')
-return true
-endif
-},
-callback: (id, result) => {
-if result <= 1
-return
-endif
-var m = matchlist(c[result - 1], '^\s*\S\s*"\(.\)')
-feedkeys(b .. m[1], 'n')
-},
-})
-enddef
-nn <silent> " :<C-u>call <SID>CE('n')<CR>
-ino <silent> <C-r> <C-o>:call <SID>CE('i')<CR>
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
@@ -704,30 +664,30 @@ ino <M-e> <C-o>e<C-o>a
 ino <M-k> 「」<Left>
 ino <M-x> <Cmd>call <SID>CA()<CR>
 im ql <C-l>
-def CF()
+def CE()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CG(a: string, b: string)
+def CF(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CF()
-au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CG('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * CE()
+au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim CF('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn <silent> g<Leader> :<C-u>tabnext #<CR>
 nn <Space>a A
 nn <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 if strftime('%d') ==# '01'
-def CH()
+def CG()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CH()
+au vimrc VimEnter * CG()
 endif
-def CI()
+def CH()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -737,8 +697,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CI()
-def CJ()
+au vimrc ColorSchemePre * CH()
+def CI()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -752,7 +712,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CJ()
+au vimrc VimEnter,WinEnter * CI()
 set t_Co=256
 syntax on
 set bg=dark
