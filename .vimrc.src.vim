@@ -135,6 +135,7 @@ Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-je
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
+Jetpack 'utubo/vim-regsters-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-textobj-twochars'
@@ -779,58 +780,6 @@ def MoveFile(newname: string)
 enddef
 command! -nargs=1 -complete=file MoveFile call <SID>MoveFile(<f-args>)
 cnoreabbrev mv MoveFile
-#}}}
-
-# ----------------------------------------------------------
-# registers.nvimみたいなやつ！ {{{
-var popupRegWinId = 0
-def PopupReg(mode: string)
-	var prefix = mode ==# 'i' ? "\<C-r>" : '"'
-	var items = execute('reg')
-		->substitute('\^I', '›', 'g')
-		->substitute('\^J', '↵', 'g')
-		->split('\n')
-	popupRegWinId = popup_atcursor(items, {
-		cursorline: true,
-		mapping: 0,
-		maxwidth: 40,
-		maxheight: winline() <= &lines / 2 ? &lines - winline() - 2 : winline(),
-		moved: 'any',
-		wrap: false,
-		filter: (id, key) => {
-			if stridx("\<C-p>\<S-TAB>\<Up>k", key) !=# -1
-				return popup_filter_menu(id, 'k')
-			elseif stridx("\<C-n>\<TAB>\<Down>j", key) !=# -1
-				return popup_filter_menu(id, 'j')
-			elseif stridx("\<CR> ", key) !=# -1
-				return popup_filter_menu(id, ' ')
-			elseif key ==# "G"
-				win_execute(popupRegWinId, printf('setpos(".", [0, %d, 1, 0])', len(items)))
-				return true
-			elseif key ==# "\<C-r>"
-				# <C-r><C-r> ->  <C-r>" (insert mode)
-				popup_close(id, -1)
-				feedkeys(prefix .. '"', 'n')
-				return true
-			else
-				popup_close(id, -1)
-				feedkeys(prefix .. key, 'n')
-				return true
-			endif
-		},
-		callback: (id, result) => {
-			if result <= 1
-				return
-			endif
-			var m = matchlist(items[result - 1], '^\s*\S\s*"\(.\)')
-			feedkeys(prefix .. m[1], 'n')
-		},
-	})
-enddef
-nnoremap <silent> " :<C-u>call <SID>PopupReg('n')<CR>
-inoremap <silent> <C-r> <C-o>:call <SID>PopupReg('i')<CR>
-# 本家のコードは一切見ないようにしたけどアイデアの模倣なので本家のURLを書いておこう🙏
-# https://github.com/tversteeg/registers.nvim/
 #}}}
 
 # ----------------------------------------------------------
