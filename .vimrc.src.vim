@@ -783,13 +783,14 @@ cnoreabbrev mv MoveFile
 
 # ----------------------------------------------------------
 # registers.nvimみたいなやつ！ {{{
+var popupRegWinId = 0
 def PopupReg(mode: string)
 	var prefix = mode ==# 'i' ? "\<C-r>" : '"'
 	var items = execute('reg')
 		->substitute('\^I', '›', 'g')
 		->substitute('\^J', '↵', 'g')
 		->split('\n')
-	popup_atcursor(items, {
+	popupRegWinId = popup_atcursor(items, {
 		cursorline: true,
 		mapping: 0,
 		maxwidth: 40,
@@ -803,6 +804,9 @@ def PopupReg(mode: string)
 				return popup_filter_menu(id, 'j')
 			elseif stridx("\<CR> ", key) !=# -1
 				return popup_filter_menu(id, ' ')
+			elseif key ==# "G"
+				win_execute(popupRegWinId, printf('setpos(".", [0, %d, 1, 0])', len(items)))
+				return true
 			elseif key ==# "\<C-r>"
 				# <C-r><C-r> ->  <C-r>" (insert mode)
 				popup_close(id, -1)
