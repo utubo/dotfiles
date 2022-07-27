@@ -386,8 +386,8 @@ au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff')|di
 ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cno <F5> <C-r>=strftime('%Y%m%d')<CR>
 nn <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nn <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
-nn <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
+nn <silent> <C-a> :<C-u>call reformatdate#inc(v:count)<CR>
+nn <silent> <C-x> :<C-u>call reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 nn <Space>zz :<C-u>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>

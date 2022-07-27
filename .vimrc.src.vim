@@ -511,8 +511,8 @@ au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | 
 inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
 nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nnoremap <silent> <C-a> <C-a>:call reformatdate#reformat()<CR>
-nnoremap <silent> <C-x> <C-x>:call reformatdate#reformat()<CR>
+nnoremap <silent> <C-a> :<C-u>call reformatdate#inc(v:count)<CR>
+nnoremap <silent> <C-x> :<C-u>call reformatdate#dec(v:count)<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 #}}} -------------------------------------------------------
 
