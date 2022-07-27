@@ -84,6 +84,7 @@ Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/lightline.vim'
 Jetpack 'kana/vim-textobj-user'
+Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow'
 Jetpack 'machakann/vim-sandwich'
 Jetpack 'mattn/ctrlp-matchfuzzy'
@@ -297,6 +298,9 @@ nn <Leader>a :<C-u>PortalAim<CR>
 nn <Leader>b :<C-u>PortalAim blue<CR>
 nn <Leader>o :<C-u>PortalAim orange<CR>
 nn <Leader>r :<C-u>PortalReset<CR>
+g:vimhelpgenerator_version = ''
+g:vimhelpgenerator_author = 'Author  : utubo'
+g:vimhelpgenerator_defaultlanguage = 'en'
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
