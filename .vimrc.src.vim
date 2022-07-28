@@ -12,6 +12,7 @@ set softtabstop=0
 set autoindent
 set smartindent
 set breakindent
+set backspace=indent,start,eol
 set nf=alpha,hex
 set virtualedit=block
 set list

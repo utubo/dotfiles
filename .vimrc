@@ -9,6 +9,7 @@ set st=0
 set ai
 set si
 set bri
+set backspace=indent,start,eol
 set nf=alpha,hex
 set ve=block
 set list
