@@ -517,6 +517,10 @@ au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | 
 
 # ----------------------------------------------------------
 # 日付関係 {{{
+g:reformatdate_extend_names = [{
+	a: ['日', '月', '火', '水', '木', '金', '土'],
+	A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+}]
 inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
 cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
 nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
