@@ -127,6 +127,7 @@ Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
+Disable g:EasyMotion_verbose
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
@@ -193,9 +194,11 @@ def J(a: bool)
 b:use_tab = a
 setl number
 redraw
+if &cmdheight !=# 0
 echoh Question
 ec printf('[1]..[9] => open with a %s.', a ? 'tab' : 'window')
 echoh None
+endif
 const c = a ? 't' : '<CR>'
 for i in range(1, 9)
 exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, c)
@@ -509,62 +512,66 @@ c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
 no <Space>x <Cmd>call <SID>CA()<CR>
-def CB(a: bool = true)
+def CB(a: string = '')
 if &ft ==# 'qf'
 return
 endif
-if a && ! filereadable(expand('%'))
+if &cmdheight ==# 0 && ! empty(a)
 return
 endif
-var b = []
-add(b, ['Title', '"' .. bufname() .. '"'])
-add(b, ['Normal', ' '])
-if &modified
-add(b, ['Delimiter', '[+]'])
-add(b, ['Normal', ' '])
+var b = a ==# 'BufReadPost'
+if b && ! filereadable(expand('%'))
+return
 endif
-if !a
-add(b, ['Tag', '[New]'])
-add(b, ['Normal', ' '])
+var c = []
+add(c, ['Title', '"' .. bufname() .. '"'])
+add(c, ['Normal', ' '])
+if &modified
+add(c, ['Delimiter', '[+]'])
+add(c, ['Normal', ' '])
+endif
+if !b
+add(c, ['Tag', '[New]'])
+add(c, ['Normal', ' '])
 endif
 if &readonly
-add(b, ['WarningMsg', '[RO]'])
-add(b, ['Normal', ' '])
+add(c, ['WarningMsg', '[RO]'])
+add(c, ['Normal', ' '])
 endif
 const w = wordcount()
-if a || w.bytes !=# 0
-add(b, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-add(b, ['Normal', ' '])
+if b || w.bytes !=# 0
+add(c, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
+add(c, ['Normal', ' '])
 endif
-add(b, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &enc : &fenc), &ft)])
-var c = 0
-const e = &columns - 2
-for i in reverse(range(0, len(b) - 1))
-var s = b[i][1]
+add(c, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &enc : &fenc), &ft)])
+var e = 0
+const f = &columns - 2
+for i in reverse(range(0, len(c) - 1))
+var s = c[i][1]
 var d = strdisplaywidth(s)
-c += d
-if e < c
-const l = e - c + d
+e += d
+if f < e
+const l = f - e + d
 while !empty(s) && l < strdisplaywidth(s)
 s = s[1 :]
 endwhile
-b[i][1] = s
-b = b[i : ]
-insert(b, ['NonText', '<'], 0)
+c[i][1] = s
+c = c[i : ]
+insert(c, ['NonText', '<'], 0)
 break
 endif
 endfor
 redraw
-for m in b
+ec ''
+for m in c
 exe 'echohl' m[0]
 echon m[1]
 endfor
 echoh Normal
-redraw
 enddef
 no <C-g> <Cmd>call <SID>CB()<CR>
-au vimrc BufNewFile * CB(false)
-au vimrc BufReadPost * CB(true)
+au vimrc BufNewFile * CB('BufNewFile')
+au vimrc BufReadPost * CB('BufReadPost')
 def CC(a: string = '')
 if ! empty(a)
 if winnr() == winnr(a)
@@ -607,8 +614,7 @@ com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-vn g: "vy:<C-u><Cmd>@v<CR><CR>
-vn g: "vy<Cmd>=@v<CR>
+vn g: "vy:<C-u><C-r>=@v<CR><CR>
 vn g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
 nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 if has('clipboard')

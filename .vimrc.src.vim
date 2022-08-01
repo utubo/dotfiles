@@ -161,6 +161,7 @@ Enable  g:EasyMotion_smartcase
 Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
+Disable g:EasyMotion_verbose
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
@@ -242,9 +243,11 @@ def MRUwithNumKey(use_tab: bool)
 	b:use_tab = use_tab
 	setlocal number
 	redraw
-	echoh Question
-	echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
-	echoh None
+	if &cmdheight !=# 0
+		echoh Question
+		echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
+		echoh None
+	endif
 	const key = use_tab ? 't' : '<CR>'
 	for i in range(1, 9)
 		execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
@@ -686,10 +689,16 @@ noremap <Space>x <Cmd>call <SID>ToggleCheckBox()<CR>
 
 # ----------------------------------------------------------
 # バッファの情報を色付きで表示 {{{
-def ShowBufInfo(isReadPost: bool = true)
+def ShowBufInfo(event: string = '')
 	if &ft ==# 'qf'
 		return
 	endif
+
+	if &cmdheight ==# 0 && ! empty(event)
+		return
+	endif
+
+	var isReadPost = event ==# 'BufReadPost'
 	if isReadPost && ! filereadable(expand('%'))
 		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
 		return
@@ -734,16 +743,17 @@ def ShowBufInfo(isReadPost: bool = true)
 		endif
 	endfor
 	redraw
+	echo ''
 	for m in msg
 		execute 'echohl' m[0]
 		echon m[1]
 	endfor
 	echohl Normal
-	redraw
+	#redraw
 enddef
 noremap <C-g> <Cmd>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile * ShowBufInfo(false)
-au vimrc BufReadPost * ShowBufInfo(true)
+au vimrc BufNewFile * ShowBufInfo('BufNewFile')
+au vimrc BufReadPost * ShowBufInfo('BufReadPost')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -799,8 +809,7 @@ cnoreabbrev mv MoveFile
 # vimrc作成用  {{{
 nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-vnoremap g: "vy:<C-u><Cmd>@v<CR><CR>
-vnoremap g: "vy<Cmd>=@v<CR>
+vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 vnoremap g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
