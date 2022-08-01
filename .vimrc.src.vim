@@ -810,7 +810,7 @@ cnoreabbrev mv MoveFile
 nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
-vnoremap g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
+vnoremap g9 "vy:vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 # }}}

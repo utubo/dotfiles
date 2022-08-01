@@ -615,7 +615,7 @@ cnoreabbrev mv MoveFile
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
-vn g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
+vn g9 "vy:vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
