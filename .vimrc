@@ -166,7 +166,7 @@ def G()
 setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
-nm <silent> S. :<C-u>call <SID>G()<CR>gvSa
+nm S. <Cmd>call <SID>G()<CR>gvSa
 var lp = []
 def H(a: bool = false)
 const c = a ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
@@ -177,7 +177,7 @@ feedkeys(a ? 'S.' : 'gvSa')
 endif
 enddef
 nm Sm viwSm
-vm <silent> Sm :<C-u>call <SID>H()<CR>
+vm Sm <Cmd>call <SID>H()<CR>
 def I()
 const c = g:operator#sandwich#object.cursor
 B(c.tail[1])
@@ -204,13 +204,13 @@ enddef
 def BA()
 Enable b:auto_cursorline_disabled
 setl cursorline
-nn <buffer> <silent> w :<C-u>call <SID>J(!b:use_tab)<CR>
-nn <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
+nn <buffer> w <Cmd>call <SID>J(!b:use_tab)<CR>
+nn <buffer> R <Cmd>MruRefresh<CR>:normal u<CR>
 J(C())
 enddef
 au vimrc FileType mru BA()
 au vimrc ColorScheme * hi link MruFileName Directory
-nn <silent> <F2> :<C-u>MRUToggle<CR>
+nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
@@ -222,7 +222,7 @@ MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jum
 MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
-ino <C-l> <C-r>=lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
+ino <C-l> <Cmd>lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 Enable g:ale_set_quickfix
 Enable g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
@@ -295,10 +295,10 @@ xm ab <Plug>(textobj-multiblock-a)
 xm ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ], [ '<', '>' ], [ '"', '"', 1 ], [ "'", "'", 1 ], [ ">", "<", 1 ], [ "「", "」", 1 ],
 ]
-nn <Leader>a :<C-u>PortalAim<CR>
-nn <Leader>b :<C-u>PortalAim blue<CR>
-nn <Leader>o :<C-u>PortalAim orange<CR>
-nn <Leader>r :<C-u>PortalReset<CR>
+nn <Leader>a <Cmd>PortalAim<CR>
+nn <Leader>b <Cmd>PortalAim blue<CR>
+nn <Leader>o <Cmd>PortalAim orange<CR>
+nn <Leader>r <Cmd>PortalReset<CR>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
@@ -306,14 +306,14 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nn <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
-nn <silent> <Space>gd :<C-u>Gdiffsplit<CR>
+nn <Space>gv <Cmd>Gvdiffsplit<CR>
+nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>ga :<C-u>Git add %
 nn <Space>gc :<C-u>Git commit -m ''<Left>
 nn <Space>gp :<C-u>Git push
-nn <Space>gl :<C-u>Git pull<CR>
-nn <silent> <Space>t :<C-u>call tabpopupmenu#popup()<CR>
-nn <silent> <Space>T :<C-u>call tablist#Show()<CR>
+nn <Space>gl <Cmd>Git pull<CR>
+nn <Space>t <Cmd>call tabpopupmenu#popup()<CR>
+nn <Space>T <Cmd>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -325,7 +325,7 @@ endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vn <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+vn <silent> * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
@@ -378,7 +378,7 @@ def BF()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
-nn <buffer> <silent> <nowait> q :<C-u>lexpr ''<CR>:q<CR>
+nn <buffer> <nowait> q <Cmd>lexpr ''<CR>:q<CR>
 nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
@@ -392,13 +392,13 @@ g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-ino <F5> <C-r>=strftime('%Y/%m/%d')<CR>
-cno <F5> <C-r>=strftime('%Y%m%d')<CR>
-nn <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nn <silent> <C-a> :<C-u>call reformatdate#inc(v:count)<CR>
-nn <silent> <C-x> :<C-u>call reformatdate#dec(v:count)<CR>
+ino <F5> <Cmd>strftime('%Y/%m/%d')<CR>
+cno <F5> <Cmd>strftime('%Y%m%d')<CR>
+nn <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
+nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
+nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-nn <Space>zz :<C-u>q!<CR>
+nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <Space>y yiw
 nn <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" .. "\<CR>"
@@ -439,7 +439,7 @@ normal! V
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn <silent> zf :call <SID>BH()<CR>
+vn zf <Cmd>call <SID>BH()<CR>
 def BI()
 if foldclosed(line('.')) == -1
 normal! zc
@@ -455,7 +455,7 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn <silent> zd :Zd()<CR>
+nn zd <Cmd>BI()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -474,7 +474,7 @@ vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
 cno <C-l> <Space><BS><Right>
-cno <C-r><C-r> <C-r>=trim(@")<CR>
+cno <C-r><C-r> <Cmd>trim(@")<CR>
 nn q; :q
 nn ; :
 vn ; :
@@ -485,10 +485,10 @@ cno <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>
 ino ;jj <Esc>`^:update<CR>
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
-nn <silent> SH :<C-u>Powershell<CR>
-nn <silent> <S-F1> :<C-u>silent !start explorer %:p:h<CR>
+nn SH <Cmd>Powershell<CR>
+nn <S-F1> <Cmd>silent !start explorer %:p:h<CR>
 else
-nn <silent> SH :<C-u>bo terminal<CR>
+nn SH <Cmd>bo terminal<CR>
 endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
@@ -508,7 +508,7 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <silent> <Space>x :call <SID>CA()<CR>
+no <Space>x <Cmd>call <SID>CA()<CR>
 def CB(a: bool = true)
 if &ft ==# 'qf'
 return
@@ -562,7 +562,7 @@ endfor
 echoh Normal
 redraw
 enddef
-no <silent> <C-g> :<C-u>call <SID>CB()<CR>
+no <C-g> <Cmd>call <SID>CB()<CR>
 au vimrc BufNewFile * CB(false)
 au vimrc BufReadPost * CB(true)
 def CC(a: string = '')
@@ -578,11 +578,11 @@ else
 confirm quit
 endif
 enddef
-nn <silent> qh :<C-u>call <SID>CC('h')<CR>
-nn <silent> qj :<C-u>call <SID>CC('j')<CR>
-nn <silent> qk :<C-u>call <SID>CC('k')<CR>
-nn <silent> ql :<C-u>call <SID>CC('l')<CR>
-nn <silent> qq :<C-u>call <SID>CC()<CR>
+nn qh <Cmd>call <SID>CC('h')<CR>
+nn qj <Cmd>call <SID>CC('j')<CR>
+nn qk <Cmd>call <SID>CC('k')<CR>
+nn ql <Cmd>call <SID>CC('l')<CR>
+nn qq <Cmd>call <SID>CC()<CR>
 nn q <Nop>
 nn q: q:
 nn q/ q/
@@ -607,15 +607,16 @@ com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
 nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-vn g: "vy:<C-u><C-r>=@v<CR><CR>
-vn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
-nn <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
+vn g: "vy:<C-u><Cmd>@v<CR><CR>
+vn g: "vy<Cmd>=@v<CR>
+vn g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
+nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-nn <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
-nn <silent> <F12> :<C-u>set wrap! wrap?<CR>
+nn <F11> <Cmd>set number! \| let &cursorline=&number<CR>
+nn <F12> <Cmd>set wrap! wrap?<CR>
 exe 'nnoremap gs :<C-u>%s///g \| nohlsearch' .. repeat('<Left>', 16)
 exe 'vnoremap gs :s///g \| nohlsearch' .. repeat('<Left>', 16)
 exe 'nnoremap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch' .. repeat('<Left>', 15)
@@ -645,10 +646,10 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-cno <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
-nn / :<C-u>nohlsearch<CR>/
-nn ? :<C-u>nohlsearch<CR>?
-nn <silent> <Space>n :<C-u>nohlsearch<CR>
+cno <C-r><C-e> <Cmd>escape(@", '^$.*?/\[]')<CR><Right>
+nn / <Cmd>nohlsearch<CR>/
+nn ? <Cmd>nohlsearch<CR>?
+nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n")
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
@@ -685,9 +686,9 @@ enddef
 au vimrc Syntax * CE()
 au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
 au vimrc Syntax vim CF('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
-nn <silent> g<Leader> :<C-u>tabnext #<CR>
+nn g<Leader> <Cmd>tabnext #<CR>
 nn <Space>a A
-nn <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nn <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 if strftime('%d') ==# '01'
 def CG()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")

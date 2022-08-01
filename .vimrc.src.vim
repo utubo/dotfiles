@@ -207,7 +207,7 @@ def RemarkPatty()
 	setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 	setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
 enddef
-nmap <silent> S. :<C-u>call <SID>RemarkPatty()<CR>gvSa
+nmap S. <Cmd>call <SID>RemarkPatty()<CR>gvSa
 
 var big_mac_crown = []
 def BigMac(is_nest: bool = false)
@@ -219,7 +219,7 @@ def BigMac(is_nest: bool = false)
 	endif
 enddef
 nmap Sm viwSm
-vmap <silent> Sm :<C-u>call <SID>BigMac()<CR>
+vmap Sm <Cmd>call <SID>BigMac()<CR>
 
 # 行末空白と空行を削除
 def RemoveAirBuns()
@@ -253,13 +253,13 @@ enddef
 def MyMRU()
 	Enable b:auto_cursorline_disabled
 	setlocal cursorline
-	nnoremap <buffer> <silent> w :<C-u>call <SID>MRUwithNumKey(!b:use_tab)<CR>
-	nnoremap <buffer> R :<C-u>MruRefresh<CR>:normal u<CR>
+	nnoremap <buffer> w <Cmd>call <SID>MRUwithNumKey(!b:use_tab)<CR>
+	nnoremap <buffer> R <Cmd>MruRefresh<CR>:normal u<CR>
 	MRUwithNumKey(BufIsSmth())
 enddef
 au vimrc FileType mru MyMRU()
 au vimrc ColorScheme * hi link MruFileName Directory
-nnoremap <silent> <F2> :<C-u>MRUToggle<CR>
+nnoremap <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 #}}}
 
@@ -276,7 +276,7 @@ MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'
 #imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 Enable g:lexima_accept_pum_with_enter
 # https://qiita.com/yami_beta/items/26995a5c382bd83ac38f
-inoremap <C-l> <C-r>=lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
+inoremap <C-l> <Cmd>lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 #}}}
 
 # ALE {{{
@@ -383,10 +383,10 @@ g:textobj_multiblock_blocks = [
 #}}}
 
 # Portal {{{
-nnoremap <Leader>a :<C-u>PortalAim<CR>
-nnoremap <Leader>b :<C-u>PortalAim blue<CR>
-nnoremap <Leader>o :<C-u>PortalAim orange<CR>
-nnoremap <Leader>r :<C-u>PortalReset<CR>
+nnoremap <Leader>a <Cmd>PortalAim<CR>
+nnoremap <Leader>b <Cmd>PortalAim blue<CR>
+nnoremap <Leader>o <Cmd>PortalAim orange<CR>
+nnoremap <Leader>r <Cmd>PortalReset<CR>
 # }}}
 
 
@@ -401,14 +401,14 @@ Enable  g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nnoremap <silent> <Space>gv :<C-u>Gvdiffsplit<CR>
-nnoremap <silent> <Space>gd :<C-u>Gdiffsplit<CR>
+nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
+nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>ga :<C-u>Git add %
 nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 nnoremap <Space>gp :<C-u>Git push
-nnoremap <Space>gl :<C-u>Git pull<CR>
-nnoremap <silent> <Space>t :<C-u>call tabpopupmenu#popup()<CR>
-nnoremap <silent> <Space>T :<C-u>call tablist#Show()<CR>
+nnoremap <Space>gl <Cmd>Git pull<CR>
+nnoremap <Space>t <Cmd>call tabpopupmenu#popup()<CR>
+nnoremap <Space>T <Cmd>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -430,7 +430,7 @@ filetype plugin indent on
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+vnoremap <silent> * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
@@ -497,7 +497,7 @@ def SetupQF()
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
-	nnoremap <buffer> <silent> <nowait> q :<C-u>lexpr ''<CR>:q<CR>
+	nnoremap <buffer> <nowait> q <Cmd>lexpr ''<CR>:q<CR>
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
 	# 様子見中(使わなそうなら削除する)
@@ -521,11 +521,11 @@ g:reformatdate_extend_names = [{
 	a: ['日', '月', '火', '水', '木', '金', '土'],
 	A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-inoremap <F5> <C-r>=strftime('%Y/%m/%d')<CR>
-cnoremap <F5> <C-r>=strftime('%Y%m%d')<CR>
-nnoremap <silent> <F5> :<C-u>call reformatdate#reformat(localtime())<CR>
-nnoremap <silent> <C-a> :<C-u>call reformatdate#inc(v:count)<CR>
-nnoremap <silent> <C-x> :<C-u>call reformatdate#dec(v:count)<CR>
+inoremap <F5> <Cmd>strftime('%Y/%m/%d')<CR>
+cnoremap <F5> <Cmd>strftime('%Y%m%d')<CR>
+nnoremap <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
+nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
+nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 #}}} -------------------------------------------------------
 
@@ -533,7 +533,7 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 # スマホ用 {{{
 # - キーが小さいので押しにくいものはSpaceへマッピング
 # - スマホでのコーディングは基本的にバグ取り
-nnoremap <Space>zz :<C-u>q!<CR>
+nnoremap <Space>zz <Cmd>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
@@ -587,7 +587,7 @@ def Zf()
 	cursor([lastline + 1, 1])
 	normal! zf
 enddef
-vnoremap <silent> zf :call <SID>Zf()<CR>
+vnoremap zf <Cmd>call <SID>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
 def Zd()
@@ -605,7 +605,7 @@ def Zd()
 	RemoveEmptyLine(head)
 	setpos('.', org)
 enddef
-nnoremap <silent> zd :Zd()<CR>
+nnoremap zd <Cmd>Zd()<CR>
 #}}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
@@ -635,7 +635,7 @@ vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 # コマンドモードあれこれ {{{
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
-cnoremap <C-r><C-r> <C-r>=trim(@")<CR>
+cnoremap <C-r><C-r> <Cmd>trim(@")<CR>
 nnoremap q; :q
 nnoremap ; :
 vnoremap ; :
@@ -654,10 +654,10 @@ inoremap ;jj <Esc>`^:update<CR>
 # terminalとか {{{
 if has('win32')
 	command! Powershell :bo terminal ++close pwsh
-	nnoremap <silent> SH :<C-u>Powershell<CR>
-	nnoremap <silent> <S-F1> :<C-u>silent !start explorer %:p:h<CR>
+	nnoremap SH <Cmd>Powershell<CR>
+	nnoremap <S-F1> <Cmd>silent !start explorer %:p:h<CR>
 else
-	nnoremap <silent> SH :<C-u>bo terminal<CR>
+	nnoremap SH <Cmd>bo terminal<CR>
 endif
 tnoremap <C-w>; <C-w>:
 tnoremap <C-w><C-w> <C-w>w
@@ -681,7 +681,7 @@ def ToggleCheckBox()
 	c[2] += len(b) - len(a)
 	setpos('.', c)
 enddef
-noremap <silent> <Space>x :call <SID>ToggleCheckBox()<CR>
+noremap <Space>x <Cmd>call <SID>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -741,7 +741,7 @@ def ShowBufInfo(isReadPost: bool = true)
 	echohl Normal
 	redraw
 enddef
-noremap <silent> <C-g> :<C-u>call <SID>ShowBufInfo()<CR>
+noremap <C-g> <Cmd>call <SID>ShowBufInfo()<CR>
 au vimrc BufNewFile * ShowBufInfo(false)
 au vimrc BufReadPost * ShowBufInfo(true)
 #}}} -------------------------------------------------------
@@ -761,11 +761,11 @@ def Quit(expr: string = '')
 		confirm quit
 	endif
 enddef
-nnoremap <silent> qh :<C-u>call <SID>Quit('h')<CR>
-nnoremap <silent> qj :<C-u>call <SID>Quit('j')<CR>
-nnoremap <silent> qk :<C-u>call <SID>Quit('k')<CR>
-nnoremap <silent> ql :<C-u>call <SID>Quit('l')<CR>
-nnoremap <silent> qq :<C-u>call <SID>Quit()<CR>
+nnoremap qh <Cmd>call <SID>Quit('h')<CR>
+nnoremap qj <Cmd>call <SID>Quit('j')<CR>
+nnoremap qk <Cmd>call <SID>Quit('k')<CR>
+nnoremap ql <Cmd>call <SID>Quit('l')<CR>
+nnoremap qq <Cmd>call <SID>Quit()<CR>
 nnoremap q <Nop>
 nnoremap q: q:
 nnoremap q/ q/
@@ -799,10 +799,11 @@ cnoreabbrev mv MoveFile
 # vimrc作成用  {{{
 nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
 nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
-vnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+vnoremap g: "vy:<C-u><Cmd>@v<CR><CR>
+vnoremap g: "vy<Cmd>=@v<CR>
+vnoremap g9 "vy<Cmd>vim9cmd <Cmd>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh ':<C-u>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
+nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 # }}}
 
 # ----------------------------------------------------------
@@ -811,8 +812,8 @@ if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"
 endif
-nnoremap <silent> <F11> :<C-u>set number! \| let &cursorline=&number<CR>
-nnoremap <silent> <F12> :<C-u>set wrap! wrap?<CR>
+nnoremap <F11> <Cmd>set number! \| let &cursorline=&number<CR>
+nnoremap <F12> <Cmd>set wrap! wrap?<CR>
 execute 'nnoremap gs :<C-u>%s///g \| nohlsearch' .. repeat('<Left>', 16)
 execute 'vnoremap gs :s///g \| nohlsearch' .. repeat('<Left>', 16)
 execute 'nnoremap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch' .. repeat('<Left>', 15)
@@ -848,10 +849,10 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
-nnoremap / :<C-u>nohlsearch<CR>/
-nnoremap ? :<C-u>nohlsearch<CR>?
-nnoremap <silent> <Space>n :<C-u>nohlsearch<CR>
+cnoremap <C-r><C-e> <Cmd>escape(@", '^$.*?/\[]')<CR><Right>
+nnoremap / <Cmd>nohlsearch<CR>/
+nnoremap ? <Cmd>nohlsearch<CR>?
+nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n")
 
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
@@ -903,7 +904,7 @@ au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 
 # 一つ前のタブ移動する(割り当てるキーが思いつかない…)
-nnoremap <silent> g<Leader> :<C-u>tabnext #<CR>
+nnoremap g<Leader> <Cmd>tabnext #<CR>
 
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
@@ -914,7 +915,7 @@ nnoremap <silent> g<Leader> :<C-u>tabnext #<CR>
 nnoremap <Space>a A
 
 # 最後の選択範囲を現在行の下に移動する
-nnoremap <expr> <Space>m ':<C-u>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nnoremap <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 
 #}}} -------------------------------------------------------
 
