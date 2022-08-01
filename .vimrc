@@ -205,7 +205,7 @@ def BA()
 Enable b:auto_cursorline_disabled
 setl cursorline
 nn <buffer> w <Cmd>call <SID>J(!b:use_tab)<CR>
-nn <buffer> R <Cmd>MruRefresh<CR>:normal u<CR>
+nn <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
 J(C())
 enddef
 au vimrc FileType mru BA()
@@ -392,8 +392,8 @@ g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-ino <F5> <Cmd>strftime('%Y/%m/%d')<CR>
-cno <F5> <Cmd>strftime('%Y%m%d')<CR>
+ino <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
+cno <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
 nn <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>

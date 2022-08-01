@@ -254,7 +254,7 @@ def MyMRU()
 	Enable b:auto_cursorline_disabled
 	setlocal cursorline
 	nnoremap <buffer> w <Cmd>call <SID>MRUwithNumKey(!b:use_tab)<CR>
-	nnoremap <buffer> R <Cmd>MruRefresh<CR>:normal u<CR>
+	nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
 	MRUwithNumKey(BufIsSmth())
 enddef
 au vimrc FileType mru MyMRU()
@@ -521,8 +521,8 @@ g:reformatdate_extend_names = [{
 	a: ['日', '月', '火', '水', '木', '金', '土'],
 	A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-inoremap <F5> <Cmd>strftime('%Y/%m/%d')<CR>
-cnoremap <F5> <Cmd>strftime('%Y%m%d')<CR>
+inoremap <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
+cnoremap <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
 nnoremap <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
