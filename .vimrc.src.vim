@@ -430,7 +430,7 @@ filetype plugin indent on
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vnoremap <silent> * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+vnoremap * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
@@ -523,7 +523,7 @@ g:reformatdate_extend_names = [{
 }]
 inoremap <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
 cnoremap <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
-nnoremap <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
+nnoremap <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>

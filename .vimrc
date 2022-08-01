@@ -325,7 +325,7 @@ endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vn <silent> * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+vn * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
@@ -394,7 +394,7 @@ A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日'
 }]
 ino <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
 cno <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
-nn <silent> <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
+nn <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
