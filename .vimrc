@@ -15,6 +15,7 @@ set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
+set cmdheight=0
 set ls=2
 set ru
 set dy=lastline
@@ -33,6 +34,8 @@ noh
 aug vimrc
 au!
 aug End
+const lk = has('win32') ? '~/vimfiles' : '~/.vim'
+const ll = executable('deno')
 def A(b: string)
 const q = b->substitute('^\S*', '', '')
 for c in b->matchstr('^\S*')->split(',')
@@ -63,8 +66,27 @@ const b = @"
 @" = a
 return b
 enddef
-const lk = has('win32') ? '~/vimfiles' : '~/.vim'
-const ll = executable('deno')
+aug vimrc_SCL
+au!
+aug END
+def! g:ShowCmdLine(a: number)
+set cmdheight=1
+au! vimrc_SCL
+au vimrc_SCL CursorHold * ++once call HideCmdLine(0)
+au vimrc_SCL CursorMoved * ++once timer_start(&ut, 'HideCmdLine')
+if a !=# 0
+feedkeys(string(a), 'i')
+endif
+enddef
+def! g:HideCmdLine(_: any)
+au! vimrc_SCL
+if mode() ==# 'c'
+au vimrc_SCL CmdLineLeave * ++once set cmdheight=0
+else
+set cmdheight=0
+endif
+enddef
+map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
 const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
@@ -127,9 +149,8 @@ Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
-Disable g:EasyMotion_verbose
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <Plug>(easymotion-s)
+map s <vimrc>(SCL)<Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
@@ -309,6 +330,8 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+nm [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
+nm ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>ga :<C-u>Git add %

@@ -18,6 +18,7 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
+set cmdheight=0
 set laststatus=2
 set ruler
 set display=lastline
@@ -42,6 +43,8 @@ augroup End
 
 # ----------------------------------------------------------
 # ユーティリティ {{{
+const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
+const has_deno = executable('deno')
 
 # こんな感じ
 # MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
@@ -84,8 +87,28 @@ def GetVisualSelection(): string
 	return text
 enddef
 
-const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
-const has_deno = executable('deno')
+# コマンドラインを出したりひっこめたり
+augroup vimrc_SCL
+	au!
+augroup END
+def! g:ShowCmdLine(count: number)
+	set cmdheight=1
+	au! vimrc_SCL
+	au vimrc_SCL CursorHold * ++once call HideCmdLine(0)
+	au vimrc_SCL CursorMoved * ++once timer_start(&updatetime, 'HideCmdLine')
+	if count !=# 0
+		feedkeys(string(count), 'i')
+	endif
+enddef
+def! g:HideCmdLine(_: any)
+	au! vimrc_SCL
+	if mode() ==# 'c'
+		au vimrc_SCL CmdLineLeave * ++once set cmdheight=0
+	else
+		set cmdheight=0
+	endif
+enddef
+map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -161,9 +184,8 @@ Enable  g:EasyMotion_smartcase
 Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
-Disable g:EasyMotion_verbose
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <Plug>(easymotion-s)
+map s <vimrc>(SCL)<Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 #}}}
 
@@ -392,7 +414,6 @@ nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
 # }}}
 
-
 # ヘルプ作成 {{{
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
@@ -404,6 +425,8 @@ Enable  g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+nmap [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
+nmap ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>ga :<C-u>Git add %
