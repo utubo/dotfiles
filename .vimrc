@@ -66,31 +66,6 @@ const b = @"
 @" = a
 return b
 enddef
-aug vimrc_SCL
-au!
-aug END
-def! g:ShowCmdLine(a: number, b: number = 0)
-set cmdheight=1
-au! vimrc_SCL
-if b ==# 1
-au vimrc_SCL CmdLineLeave * ++once timer_start(1, 'HideCmdLine')
-else
-au vimrc_SCL CmdLineLeave * ++once timer_start(&ut, 'HideCmdLine')
-endif
-if a !=# 0
-feedkeys(string(a), 'i')
-endif
-enddef
-def! g:HideCmdLine(_: any)
-au! vimrc_SCL
-if mode() ==# 'c'
-au vimrc_SCL CmdLineLeave * ++once set cmdheight=0
-else
-set cmdheight=0
-endif
-enddef
-map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
-map <vimrc>(SCL-nowait) <Cmd>call ShowCmdLine(v:count, 1)<CR>
 const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
@@ -131,6 +106,7 @@ Jetpack 'tyru/caw.vim'
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'utubo/jumpcuorsor.vim'
+Jetpack 'utubo/vim-auto-hide-cmdline'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
@@ -154,7 +130,7 @@ Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <vimrc>(SCL)<Plug>(easymotion-s)
+map s <Plug>(ahc)<Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
@@ -334,11 +310,11 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nm [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
-nm ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
+nm [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
+nm ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nm <Space>ga <vimrc>(SCL-nowait):<C-u>Git add %
+nm <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
 nn <Space>gc :<C-u>Git commit -m ''<Left>
 nn <Space>gp :<C-u>Git push
 nn <Space>gl <Cmd>Git pull<CR>
@@ -679,7 +655,7 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-cno <C-r><C-e> <Cmd>escape(@", '^$.*?/\[]')<CR><Right>
+cno <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 nn / <Cmd>nohlsearch<CR>/
 nn ? <Cmd>nohlsearch<CR>?
 nn <Space>n <Cmd>nohlsearch<CR>

@@ -86,33 +86,6 @@ def GetVisualSelection(): string
 	@" = org
 	return text
 enddef
-
-# コマンドラインを出したりひっこめたり
-augroup vimrc_SCL
-	au!
-augroup END
-def! g:ShowCmdLine(count: number, nowait: number = 0)
-	set cmdheight=1
-	au! vimrc_SCL
-	if nowait ==# 1
-		au vimrc_SCL CmdLineLeave * ++once timer_start(1, 'HideCmdLine')
-	else
-		au vimrc_SCL CmdLineLeave * ++once timer_start(&updatetime, 'HideCmdLine')
-	endif
-	if count !=# 0
-		feedkeys(string(count), 'i')
-	endif
-enddef
-def! g:HideCmdLine(_: any)
-	au! vimrc_SCL
-	if mode() ==# 'c'
-		au vimrc_SCL CmdLineLeave * ++once set cmdheight=0
-	else
-		set cmdheight=0
-	endif
-enddef
-map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
-map <vimrc>(SCL-nowait) <Cmd>call ShowCmdLine(v:count, 1)<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -161,6 +134,7 @@ Jetpack 'tyru/caw.vim'            # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
+Jetpack 'utubo/vim-auto-hide-cmdline'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
@@ -189,7 +163,7 @@ Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <vimrc>(SCL)<Plug>(easymotion-s)
+map s <Plug>(ahc)<Plug>(easymotion-s)
 au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 #}}}
 
@@ -429,11 +403,11 @@ Enable  g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nmap [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
-nmap ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
+nmap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nmap     <Space>ga <vimrc>(SCL-nowait):<C-u>Git add %
+nmap     <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
 nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gl <Cmd>Git pull<CR>
@@ -885,7 +859,7 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-cnoremap <C-r><C-e> <Cmd>escape(@", '^$.*?/\[]')<CR><Right>
+cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
 nnoremap / <Cmd>nohlsearch<CR>/
 nnoremap ? <Cmd>nohlsearch<CR>?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
