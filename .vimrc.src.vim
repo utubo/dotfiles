@@ -91,11 +91,14 @@ enddef
 augroup vimrc_SCL
 	au!
 augroup END
-def! g:ShowCmdLine(count: number)
+def! g:ShowCmdLine(count: number, nowait: number = 0)
 	set cmdheight=1
 	au! vimrc_SCL
-	au vimrc_SCL CursorHold * ++once call HideCmdLine(0)
-	au vimrc_SCL CursorMoved * ++once timer_start(&updatetime, 'HideCmdLine')
+	if nowait ==# 1
+		au vimrc_SCL CmdLineLeave * ++once timer_start(1, 'HideCmdLine')
+	else
+		au vimrc_SCL CmdLineLeave * ++once timer_start(&updatetime, 'HideCmdLine')
+	endif
 	if count !=# 0
 		feedkeys(string(count), 'i')
 	endif
@@ -109,6 +112,7 @@ def! g:HideCmdLine(_: any)
 	endif
 enddef
 map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
+map <vimrc>(SCL-nowait) <Cmd>call ShowCmdLine(v:count, 1)<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -429,7 +433,7 @@ nmap [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
 nmap ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>ga :<C-u>Git add %
+nmap     <Space>ga <vimrc>(SCL-nowait):<C-u>Git add %
 nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gl <Cmd>Git pull<CR>

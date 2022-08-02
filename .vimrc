@@ -69,11 +69,14 @@ enddef
 aug vimrc_SCL
 au!
 aug END
-def! g:ShowCmdLine(a: number)
+def! g:ShowCmdLine(a: number, b: number = 0)
 set cmdheight=1
 au! vimrc_SCL
-au vimrc_SCL CursorHold * ++once call HideCmdLine(0)
-au vimrc_SCL CursorMoved * ++once timer_start(&ut, 'HideCmdLine')
+if b ==# 1
+au vimrc_SCL CmdLineLeave * ++once timer_start(1, 'HideCmdLine')
+else
+au vimrc_SCL CmdLineLeave * ++once timer_start(&ut, 'HideCmdLine')
+endif
 if a !=# 0
 feedkeys(string(a), 'i')
 endif
@@ -87,6 +90,7 @@ set cmdheight=0
 endif
 enddef
 map <vimrc>(SCL) <Cmd>call ShowCmdLine(v:count)<CR>
+map <vimrc>(SCL-nowait) <Cmd>call ShowCmdLine(v:count, 1)<CR>
 const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
@@ -334,7 +338,7 @@ nm [c <vimrc>(SCL)<Plug>(GitGutterPrevHunk)
 nm ]c <vimrc>(SCL)<Plug>(GitGutterNextHunk)
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>ga :<C-u>Git add %
+nm <Space>ga <vimrc>(SCL-nowait):<C-u>Git add %
 nn <Space>gc :<C-u>Git commit -m ''<Left>
 nn <Space>gp :<C-u>Git push
 nn <Space>gl <Cmd>Git pull<CR>
