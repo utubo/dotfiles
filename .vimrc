@@ -27,7 +27,7 @@ set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
 set udf
-set ut=2500
+set ut=2000
 set is
 set hls
 noh
@@ -439,13 +439,13 @@ endif
 const a = line("'<")
 const b = line("'>")
 exe ':' a 's/\v(\S)?$/\1 /'
-exe ':' b "normal! o\<Esc>i" .. D(a)
+exe ':' b 'normal! o<Esc>i' .. D(a)
 cursor([a, 1])
 normal! V
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf <Cmd>call <SID>BH()<CR>
+vn zf :call <SID>BH()<CR>
 def BI()
 if foldclosed(line('.')) == -1
 normal! zc
@@ -466,9 +466,9 @@ set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
 nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
-nn Z<Tab> :<C-u>set foldmethod=indent<CR>
-nn Z{ :<C-u>set foldmethod=marker<CR>
-nn Zy :<C-u>set foldmethod=syntax<CR>
+nn Z<Tab> <Cmd>set foldmethod=indent<CR>
+nn Z{ <Cmd>set foldmethod=marker<CR>
+nn Zy <Cmd>set foldmethod=syntax<CR>
 def BJ(a: string)
 const b = getcurpos()
 exe a
@@ -615,8 +615,8 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-nn <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-nn <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
+nn <expr> g: '<Plug>(ahc):<C-u>' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
+nn <expr> g9 '<Plug>(ahc):<C-u>vim9cmd ' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
 vn g: "vy:<C-u><C-r>=@v<CR><CR>
 vn g9 "vy:vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
@@ -635,12 +635,12 @@ nn <Space>P ^P
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
 nn TE :<C-u>tabe<Space>
-nn TN :<C-u>tabnew<CR>
-nn TD :<C-u>tabe ./<CR>
+nn TN <Cmd>tabnew<CR>
+nn TD <Cmd>tabe ./<CR>
 ono <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 ono <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
-vn <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
-vn <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
+vn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
+vn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vn J j
 vn K k
 ino ｋｊ <Esc>`^

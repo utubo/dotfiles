@@ -30,7 +30,7 @@ set autochdir
 set backupskip=/var/tmp/*
 set undodir=~/.vim/undo
 set undofile
-set updatetime=2500
+set updatetime=2000
 set incsearch
 set hlsearch
 nohlsearch
@@ -585,13 +585,13 @@ def Zf()
 	const firstline = line("'<")
 	const lastline = line("'>")
 	execute ':' firstline 's/\v(\S)?$/\1 /'
-	execute ':' lastline "normal! o\<Esc>i" .. IndentStr(firstline)
+	execute ':' lastline 'normal! o<Esc>i' .. IndentStr(firstline)
 	cursor([firstline, 1])
 	normal! V
 	cursor([lastline + 1, 1])
 	normal! zf
 enddef
-vnoremap zf <Cmd>call <SID>Zf()<CR>
+vnoremap zf :call <SID>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
 def Zd()
@@ -616,9 +616,9 @@ set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
 nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
-nnoremap Z<Tab> :<C-u>set foldmethod=indent<CR>
-nnoremap Z{ :<C-u>set foldmethod=marker<CR>
-nnoremap Zy :<C-u>set foldmethod=syntax<CR>
+nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
+nnoremap Z{ <Cmd>set foldmethod=marker<CR>
+nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 #}}}
 #}}} -------------------------------------------------------
 
@@ -808,8 +808,8 @@ cnoreabbrev mv MoveFile
 
 # ----------------------------------------------------------
 # vimrc作成用  {{{
-nnoremap <expr> g: ":\<C-u>" .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
-nnoremap <expr> g9 ":\<C-u>vim9cmd " .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. "\<CR>"
+nnoremap <expr> g: '<Plug>(ahc):<C-u>' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
+nnoremap <expr> g9 '<Plug>(ahc):<C-u>vim9cmd ' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
 vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 vnoremap g9 "vy:vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
@@ -833,12 +833,12 @@ nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
 nnoremap TE :<C-u>tabe<Space>
-nnoremap TN :<C-u>tabnew<CR>
-nnoremap TD :<C-u>tabe ./<CR>
+nnoremap TN <Cmd>tabnew<CR>
+nnoremap TD <Cmd>tabe ./<CR>
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
-vnoremap <expr> h mode() ==# 'V' ? "\<Esc>h" : 'h'
-vnoremap <expr> l mode() ==# 'V' ? "\<Esc>l" : 'l'
+vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
+vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vnoremap J j
 vnoremap K k
 inoremap ｋｊ <Esc>`^
