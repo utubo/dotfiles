@@ -525,8 +525,8 @@ g:reformatdate_extend_names = [{
 	a: ['日', '月', '火', '水', '木', '金', '土'],
 	A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-inoremap <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
-cnoremap <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
+inoremap <expr> <F5> strftime('%Y/%m/%d')
+cnoremap <expr> <F5> strftime('%Y%m%d')
 nnoremap <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
@@ -541,7 +541,7 @@ nnoremap <Space>zz <Cmd>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
-nnoremap <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" .. "\<CR>"
+nnoremap <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
 # スマホだと:とファンクションキーが遠いので…
 nmap <Space>, :
 for i in range(1, 10)
@@ -859,7 +859,7 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-cnoremap <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
+cnoremap <expr> <C-r><C-e> escape(@", '^$.*?/\[]') .. '<Right>'
 nnoremap / <Cmd>nohlsearch<CR>/
 nnoremap ? <Cmd>nohlsearch<CR>?
 nnoremap <Space>n <Cmd>nohlsearch<CR>

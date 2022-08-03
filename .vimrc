@@ -398,8 +398,8 @@ g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
-ino <F5> <Cmd>feedkeys(strftime('%Y/%m/%d'), 'n')<CR>
-cno <F5> <Cmd>feedkeys(strftime('%Y%m%d'), 'n')<CR>
+ino <expr> <F5> strftime('%Y/%m/%d')
+cno <expr> <F5> strftime('%Y%m%d')
 nn <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
 nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
 nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
@@ -407,7 +407,7 @@ nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <Space>y yiw
-nn <expr> <Space>f (@" =~ '^\d\+$' ? ':' : '/').@" .. "\<CR>"
+nn <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
 nm <Space>, :
 for i in range(1, 10)
 exe printf('nmap <Space>%d <F%d>', i % 10, i)
@@ -655,7 +655,7 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-cno <C-r><C-e> <C-r>=escape(@", '^$.*?/\[]')<CR><Right>
+cno <expr> <C-r><C-e> escape(@", '^$.*?/\[]') .. '<Right>'
 nn / <Cmd>nohlsearch<CR>/
 nn ? <Cmd>nohlsearch<CR>?
 nn <Space>n <Cmd>nohlsearch<CR>
