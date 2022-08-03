@@ -78,14 +78,6 @@ enddef
 def IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
-
-def GetVisualSelection(): string
-	const org = @"
-	silent normal! gvy
-	const text = @"
-	@" = org
-	return text
-enddef
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -665,8 +657,7 @@ else
 endif
 tnoremap <C-w>; <C-w>:
 tnoremap <C-w><C-w> <C-w>w
-tnoremap <C-w>q exit
-tnoremap <C-w><C-q> <C-w>:quit!<CR>
+tnoremap <C-w><C-q> exit<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -777,10 +768,10 @@ nnoremap qj <Cmd>call <SID>Quit('j')<CR>
 nnoremap qk <Cmd>call <SID>Quit('k')<CR>
 nnoremap ql <Cmd>call <SID>Quit('l')<CR>
 nnoremap qq <Cmd>call <SID>Quit()<CR>
-nnoremap q <Nop>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
+nnoremap q <Nop>
 nnoremap Q q
 #}}} -------------------------------------------------------
 
@@ -808,10 +799,11 @@ cnoreabbrev mv MoveFile
 
 # ----------------------------------------------------------
 # vimrc作成用  {{{
-nnoremap <expr> g: '<Plug>(ahc):<C-u>' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
-nnoremap <expr> g9 '<Plug>(ahc):<C-u>vim9cmd ' .. substitute(getline('.'), '^[\t "#:]\+', '', '') .. '<CR>'
-vnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
-vnoremap g9 "vy:vim9cmd <C-r>=@v<CR><CR>
+cnoremap <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
+nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
+nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
+vmap g: "vy:<C-u><C-r>=@v<CR><CR>
+vmap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 # }}}
@@ -824,9 +816,10 @@ if has('clipboard')
 endif
 nnoremap <F11> <Cmd>set number! \| let &cursorline=&number<CR>
 nnoremap <F12> <Cmd>set wrap! wrap?<CR>
-execute 'nnoremap gs :<C-u>%s///g \| nohlsearch' .. repeat('<Left>', 16)
-execute 'vnoremap gs :s///g \| nohlsearch' .. repeat('<Left>', 16)
-execute 'nnoremap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch' .. repeat('<Left>', 15)
+cnoremap <expr> <SID>(left16) repeat('<Left>', 16)
+nmap gs :<C-u>%s///g \| nohlsearch<SID>(left16)
+vmap gs :s///g \| nohlsearch<SID>(left16)
+nmap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch<SID>(left16)<Right>
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
@@ -835,8 +828,8 @@ nnoremap <Space><Space>P O<Esc>p
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
-onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}``'
-onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator .. '``'
+onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}'
+onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator
 vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vnoremap J j
@@ -899,7 +892,7 @@ inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 imap ql <C-l>
 
-# syntax毎に強調する
+# syntax固有の追加強調
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
 		matchdelete(id)
@@ -913,7 +906,7 @@ au vimrc Syntax * ClearMySyntax()
 au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 
-# 一つ前のタブ移動する(割り当てるキーが思いつかない…)
+# 直前のタブ移動する(割り当てるキーが思いつかない…)
 nnoremap g<Leader> <Cmd>tabnext #<CR>
 
 #nnoremap <F1> :<C-u>smile<CR>
