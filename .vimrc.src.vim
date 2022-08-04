@@ -310,9 +310,9 @@ g:ll_reg = ''
 def LLYankPost()
 	var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
 	if len(v:event.regcontents) !=# 1 || len(reg) > 10
-		reg = substitute(reg, '^\(.\{0,8\}\).*', '\1..', '')
+		reg = substitute(reg, '^\(.\{0,8\}\).*', '\1>', '')
 	endif
-	g:ll_reg = '📎[' .. reg .. ']'
+	g:ll_reg = '📋:' .. reg
 enddef
 au vimrc TextYankPost * LLYankPost()
 

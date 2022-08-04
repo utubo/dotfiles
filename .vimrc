@@ -250,9 +250,9 @@ g:ll_reg = ''
 def BC()
 var a = substitute(v:event.regcontents[0], '\t', ' ', 'g')
 if len(v:event.regcontents) !=# 1 || len(a) > 10
-a = substitute(a, '^\(.\{0,8\}\).*', '\1..', '')
+a = substitute(a, '^\(.\{0,8\}\).*', '\1>', '')
 endif
-g:ll_reg = '📎[' .. a .. ']'
+g:ll_reg = '📋:' .. a
 enddef
 au vimrc TextYankPost * BC()
 g:ll_tea_break = '0:00'
