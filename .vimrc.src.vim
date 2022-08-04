@@ -296,7 +296,13 @@ def ALEEchoCursorCmdHeight0()
 		ALEEchoed = true
 		set cmdheight=1
 		set laststatus=0
-		echo get(loc, 'detail', loc.text)->split('\n')[0]
+		echoh WarningMsg
+		var s = get(loc, 'detail', loc.text)->split('\n')[0]
+		while !empty(s) && &columns <= strdisplaywidth(s)
+			s = s[0 : -2]
+		endwhile
+		echon s
+		echoh Normal
 	elseif ALEEchoed
 		ALEEchoed = false
 		set cmdheight=0

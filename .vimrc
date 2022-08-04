@@ -17,7 +17,9 @@ set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
 set cmdheight=0
 set ls=2
-set ru
+set noru
+set noshowcmd
+set noshowmode
 set dy=lastline
 set ambw=double
 set bo=all
@@ -231,15 +233,37 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &ut
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
-g:ll_reg = ''
+Disable g:ale_echo_cursor
+var lq = false
 def BB()
+var a = ale#util#FindItemAtCursor(bufnr())[1]
+if !empty(a)
+lq = true
+set cmdheight=1
+set ls=0
+echoh WarningMsg
+var s = get(a, 'detail', a.text)->split('\n')[0]
+while !empty(s) && &columns <= strdisplaywidth(s)
+s = s[0 : -2]
+endwhile
+echon s
+echoh Normal
+elseif lq
+lq = false
+set cmdheight=0
+set ls=2
+endif
+enddef
+au vimrc CursorMoved * BB()
+g:ll_reg = ''
+def BC()
 var a = substitute(v:event.regcontents[0], '\t', ' ', 'g')
 if len(v:event.regcontents) !=# 1 || len(a) > 10
 a = substitute(a, '^\(.\{0,8\}\).*', '\1..', '')
 endif
 g:ll_reg = '📎[' .. a .. ']'
 enddef
-au vimrc TextYankPost * BB()
+au vimrc TextYankPost * BC()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
 def! g:VimrcTimer60s(a: any)
@@ -322,9 +346,9 @@ MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 nm <Space>s <Plug>(jumpcursor-jump)
-const lq = expand(lk .. '/pack/local/opt/*')
-if lq !=# ''
-&runtimepath = substitute(lq, '\n', ',', 'g') .. ',' .. &runtimepath
+const lr = expand(lk .. '/pack/local/opt/*')
+if lr !=# ''
+&runtimepath = substitute(lr, '\n', ',', 'g') .. ',' .. &runtimepath
 endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
@@ -337,7 +361,7 @@ set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
 nn <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
 nn <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
-def BC()
+def BD()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -353,8 +377,8 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BC()
-def BD(a: string, ...b: list<string>)
+au vimrc BufReadPost * BD()
+def BE(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
@@ -376,9 +400,9 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ VimGrep BD(<f-args>)
+com! -nargs=+ VimGrep BE(<f-args>)
 nn <Space>/ :<C-u>VimGrep<Space>
-def BE()
+def BF()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -387,7 +411,7 @@ nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
-au vimrc FileType qf BE()
+au vimrc FileType qf BF()
 au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
@@ -412,15 +436,15 @@ exe printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
-def BF(): string
+def BG(): string
 const x = getline('.')->match('\S') + 1
 if x != 0 || !exists('w:my_hat')
 w:my_hat = col('.') == x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j 'j' .. <SID>BF()
-nn <expr> k 'k' .. <SID>BF()
+nn <expr> j 'j' .. <SID>BG()
+nn <expr> k 'k' .. <SID>BG()
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -430,7 +454,7 @@ enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
-def BG()
+def BH()
 if line("'<") != line('.')
 return
 endif
@@ -443,8 +467,8 @@ normal! V
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf :call <SID>BG()<CR>
-def BH()
+vn zf :call <SID>BH()<CR>
+def BI()
 if foldclosed(line('.')) == -1
 normal! zc
 endif
@@ -459,7 +483,7 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn zd <Cmd>BH()<CR>
+nn zd <Cmd>BI()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -467,13 +491,13 @@ nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
-def BI(a: string)
+def BJ(a: string)
 const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-vn u <Cmd>call <SID>BI('undo')<CR>
-vn <C-R> <Cmd>call <SID>BI('redo')<CR>
+vn u <Cmd>call <SID>BJ('undo')<CR>
+vn <C-R> <Cmd>call <SID>BJ('redo')<CR>
 vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
@@ -495,7 +519,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def BJ()
+def CA()
 const a = getline('.')
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b
@@ -509,8 +533,8 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <Space>x <Cmd>call <SID>BJ()<CR>
-def CA(a: string = '')
+no <Space>x <Cmd>call <SID>CA()<CR>
+def CB(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -567,10 +591,10 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-no <C-g> <Cmd>call <SID>CA()<CR>
-au vimrc BufNewFile * CA('BufNewFile')
-au vimrc BufReadPost * CA('BufReadPost')
-def CB(a: string = '')
+no <C-g> <Cmd>call <SID>CB()<CR>
+au vimrc BufNewFile * CB('BufNewFile')
+au vimrc BufReadPost * CB('BufReadPost')
+def CC(a: string = '')
 if ! empty(a)
 if winnr() == winnr(a)
 return
@@ -583,17 +607,17 @@ else
 confirm quit
 endif
 enddef
-nn qh <Cmd>call <SID>CB('h')<CR>
-nn qj <Cmd>call <SID>CB('j')<CR>
-nn qk <Cmd>call <SID>CB('k')<CR>
-nn ql <Cmd>call <SID>CB('l')<CR>
-nn qq <Cmd>call <SID>CB()<CR>
+nn qh <Cmd>call <SID>CC('h')<CR>
+nn qj <Cmd>call <SID>CC('j')<CR>
+nn qk <Cmd>call <SID>CC('k')<CR>
+nn ql <Cmd>call <SID>CC('l')<CR>
+nn qq <Cmd>call <SID>CC()<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
 nn q <Nop>
 nn Q q
-def CC(a: string)
+def CD(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -608,7 +632,7 @@ endif
 exe 'saveas! ' .. c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile call <SID>CC(<f-args>)
+com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
@@ -676,33 +700,33 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <Cmd>call <SID>BJ()<CR>
-ino <M-x> <Cmd>call <SID>BJ()<CR>
+ino jjx <Cmd>call <SID>CA()<CR>
+ino <M-x> <Cmd>call <SID>CA()<CR>
 im ql <C-l>
-def CD()
+def CE()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CE(a: string, b: string)
+def CF(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CD()
-au vimrc Syntax javascript,vim CE('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CE('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax * CE()
+au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
+au vimrc Syntax vim CF('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
 nn g<Leader> <Cmd>tabnext #<CR>
 nn <Space>a A
 nn <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 if strftime('%d') ==# '01'
-def CF()
+def CG()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CF()
+au vimrc VimEnter * CG()
 endif
-def CG()
+def CH()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -712,8 +736,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CG()
-def CH()
+au vimrc ColorSchemePre * CH()
+def CI()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -727,7 +751,7 @@ matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CH()
+au vimrc VimEnter,WinEnter * CI()
 set t_Co=256
 syntax on
 set bg=dark
