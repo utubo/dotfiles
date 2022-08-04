@@ -481,9 +481,6 @@ cno <C-l> <Space><BS><Right>
 cno <expr> <C-r><C-r> trim(@")
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 nn q; :q
-nn ; :
-vn ; :
-nn <Space>; ;
 cnoreabbrev cs colorscheme
 cno kk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
@@ -655,9 +652,12 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-nn ; <Plug>(ahc-nowait):
-nn / <Cmd>nohlsearch<CR><Plug>(ahc-nowait)/
-nn ? <Cmd>nohlsearch<CR><Plug>(ahc-nowait)?
+nn <Space>: :
+nn <Space>; ;
+MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,vnoremap ; <Plug>(ahc-switch):
+nn / <Cmd>nohlsearch<CR><Plug>(ahc-switch)/
+nn ? <Cmd>nohlsearch<CR><Plug>(ahc-switch)?
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 nn <Space>w <C-w>w

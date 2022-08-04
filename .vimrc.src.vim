@@ -639,9 +639,6 @@ cnoremap <C-l> <Space><BS><Right>
 cnoremap <expr> <C-r><C-r> trim(@")
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 nnoremap q; :q
-nnoremap ; :
-vnoremap ; :
-nnoremap <Space>; ;
 cnoreabbrev cs colorscheme
 
 # 「jj」で<CR>、「kk」はキャンセル
@@ -858,9 +855,12 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-nnoremap ; <Plug>(ahc-nowait):
-nnoremap / <Cmd>nohlsearch<CR><Plug>(ahc-nowait)/
-nnoremap ? <Cmd>nohlsearch<CR><Plug>(ahc-nowait)?
+nnoremap <Space>: :
+nnoremap <Space>; ;
+MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,vnoremap ; <Plug>(ahc-switch):
+nnoremap / <Cmd>nohlsearch<CR><Plug>(ahc-switch)/
+nnoremap ? <Cmd>nohlsearch<CR><Plug>(ahc-switch)?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 
