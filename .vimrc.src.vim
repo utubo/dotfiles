@@ -20,7 +20,9 @@ set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
 set cmdheight=0
 set laststatus=2
-set ruler
+set noruler
+set noshowcmd
+set noshowmode
 set display=lastline
 set ambiwidth=double
 set belloff=all
@@ -286,6 +288,22 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nmap <silent> [a <Plug>(ale_previous_wrap)
 nmap <silent> ]a <Plug>(ale_next_wrap)
+Disable g:ale_echo_cursor
+var ALEEchoed = false
+def ALEEchoCursorCmdHeight0()
+	var loc = ale#util#FindItemAtCursor(bufnr())[1]
+	if !empty(loc)
+		ALEEchoed = true
+		set cmdheight=1
+		set laststatus=0
+		echo get(loc, 'detail', loc.text)->split('\n')[0]
+	elseif ALEEchoed
+		ALEEchoed = false
+		set cmdheight=0
+		set laststatus=2
+	endif
+enddef
+au vimrc CursorMoved * ALEEchoCursorCmdHeight0()
 #}}}
 
 # lightline {{{
