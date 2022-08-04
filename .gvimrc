@@ -18,14 +18,14 @@ def IncFontSize(d: number)
 	var f = split(&guifont, ':h')
 	&guifont = f[0] .. ':h' .. (str2nr(f[1]) + d)
 enddef
-nnoremap <silent> <M-S-k> :call <SID>IncFontSize(1)<CR>
-nnoremap <silent> <M-S-j> :call <SID>IncFontSize(-1)<CR>
+nnoremap <silent> <M-S-k> <Cmd>call <SID>IncFontSize(v:count1)<CR>
+nnoremap <silent> <M-S-j> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
 # }}}
 
 # guioptions {{{
-nnoremap <silent> <Esc> :<C-u>set go-=m<Bar>set go-=T<CR>
-nnoremap <silent> <M-m> :<C-u>if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
-nnoremap <silent> <M-t> :<C-u>if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
+nnoremap <silent> <Esc> <Cmd>set go-=m<Bar>set go-=T<CR>
+nnoremap <silent> <M-m> <Cmd>if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
+nnoremap <silent> <M-t> <Cmd>if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
 set go-=m
 set go-=T
 # }}}
@@ -68,7 +68,7 @@ au gvimrc BufRead * MyLightline()
 # Windows {{{
 if has('win32')
 	# Alt-Spaceでシステムメニュー(winaltkeysはメニューバーが無いと動かないので×)
-	noremap <silent> <M-Space> :simalt ~<CR>
+	noremap <silent> <M-Space> <Cmd>simalt ~<CR>
 	# 外部ツール
 	# https://github.com/utubo/winscp_upload.bat
 	nnoremap <S-F2> :<C-u>!winscp_upload.bat <C-r>=expand("%:p")<CR>
