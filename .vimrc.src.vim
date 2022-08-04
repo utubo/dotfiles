@@ -287,25 +287,18 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nmap <silent> [a <Plug>(ale_previous_wrap)
 nmap <silent> ]a <Plug>(ale_next_wrap)
+# cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
 Disable g:ale_echo_cursor
-var ALEEchoed = false
+g:ll_are = ''
 def ALEEchoCursorCmdHeight0()
 	var loc = ale#util#FindItemAtCursor(bufnr())[1]
 	if !empty(loc)
-		ALEEchoed = true
-		set cmdheight=1
-		set laststatus=0
-		echoh WarningMsg
-		var s = get(loc, 'detail', loc.text)->split('\n')[0]
-		while !empty(s) && &columns <= strdisplaywidth(s)
-			s = s[0 : -2]
-		endwhile
-		echon s
-		echoh Normal
-	elseif ALEEchoed
-		ALEEchoed = false
-		set cmdheight=0
-		set laststatus=2
+		g:ll_ale = loc.type ==# 'E' ? '🐞' : '🐝'
+		g:ll_ale ..= ' '
+		g:ll_ale ..= get(loc, 'detail', loc.text)->split('\n')[0]
+			->substitute('^\[[^]]*\] ', '', '')
+	else
+		g:ll_ale = ''
 	endif
 enddef
 au vimrc CursorMoved * ALEEchoCursorCmdHeight0()
@@ -359,9 +352,10 @@ enddef
 g:lightline = {
 	colorscheme: 'wombat',
 	active: {
+		left:  [['mode', 'paste'], ['fugitive', 'filename'], ['ale']],
 		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
 	},
-	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
+	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
 	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 
@@ -879,8 +873,8 @@ nnoremap <Space>l $
 nnoremap <Space>d "_d
 nnoremap <Space>: :
 nnoremap <Space>; ;
+MultiCmd nmap,vmap ; :
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
-MultiCmd nnoremap,vnoremap ; <Plug>(ahc-switch):
 nnoremap / <Cmd>nohlsearch<CR><Plug>(ahc-switch)/
 nnoremap ? <Cmd>nohlsearch<CR><Plug>(ahc-switch)?
 nnoremap <Space>n <Cmd>nohlsearch<CR>

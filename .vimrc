@@ -233,24 +233,16 @@ g:ale_lint_delay = &ut
 nm <silent> [a <Plug>(ale_previous_wrap)
 nm <silent> ]a <Plug>(ale_next_wrap)
 Disable g:ale_echo_cursor
-var lq = false
+g:ll_are = ''
 def BB()
 var a = ale#util#FindItemAtCursor(bufnr())[1]
 if !empty(a)
-lq = true
-set cmdheight=1
-set ls=0
-echoh WarningMsg
-var s = get(a, 'detail', a.text)->split('\n')[0]
-while !empty(s) && &columns <= strdisplaywidth(s)
-s = s[0 : -2]
-endwhile
-echon s
-echoh Normal
-elseif lq
-lq = false
-set cmdheight=0
-set ls=2
+g:ll_ale = a.type ==# 'E' ? '🐞' : '🐝'
+g:ll_ale ..= ' '
+g:ll_ale ..= get(a, 'detail', a.text)->split('\n')[0]
+->substitute('^\[[^]]*\] ', '', '')
+else
+g:ll_ale = ''
 endif
 enddef
 au vimrc CursorMoved * BB()
@@ -292,9 +284,10 @@ enddef
 g:lightline = {
 colorscheme: 'wombat',
 active: {
+left: [['mode', 'paste'], ['fugitive', 'filename'], ['ale']],
 right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
 },
-component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
+component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
 component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 au vimrc VimEnter * set tabline=
@@ -344,9 +337,9 @@ MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 nm <Space>s <Plug>(jumpcursor-jump)
-const lr = expand(lk .. '/pack/local/opt/*')
-if lr !=# ''
-&runtimepath = substitute(lr, '\n', ',', 'g') .. ',' .. &runtimepath
+const lq = expand(lk .. '/pack/local/opt/*')
+if lq !=# ''
+&runtimepath = substitute(lq, '\n', ',', 'g') .. ',' .. &runtimepath
 endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
@@ -676,8 +669,8 @@ nn <Space>l $
 nn <Space>d "_d
 nn <Space>: :
 nn <Space>; ;
+MultiCmd nmap,vmap ; :
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
-MultiCmd nnoremap,vnoremap ; <Plug>(ahc-switch):
 nn / <Cmd>nohlsearch<CR><Plug>(ahc-switch)/
 nn ? <Cmd>nohlsearch<CR><Plug>(ahc-switch)?
 nn <Space>n <Cmd>nohlsearch<CR>
