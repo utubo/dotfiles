@@ -281,6 +281,7 @@ Disable g:ale_lint_on_insert_leave
 Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
+g:ale_statusline_format = ['🐞x%d', '🐝x%d', '']
 g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nmap <silent> [a <Plug>(ale_previous_wrap)
@@ -334,9 +335,12 @@ enddef
 # lightline設定
 g:lightline = {
 	colorscheme: 'wombat',
-	active: { right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']] },
+	active: {
+		left: [['mode', 'paste'], ['readonly', 'filename', 'modified', 'are']],
+		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
+	},
 	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
-	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
+	component_function: { are: 'ALEGetStatusLine', ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 
 # tablineはデフォルト
@@ -393,6 +397,7 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 # その他 {{{
 Enable  g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
+g:auto_hide_cmdline_switch_statusline = 1
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nmap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
@@ -631,7 +636,8 @@ vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 # コマンドモードあれこれ {{{
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
-cnoremap <C-r><C-r> <Cmd>trim(@")<CR>
+cnoremap <expr> <C-r><C-r> trim(@")
+cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 nnoremap q; :q
 nnoremap ; :
 vnoremap ; :
@@ -815,7 +821,7 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 nnoremap <F11> <Cmd>set number! \| let &cursorline=&number<CR>
-nnoremap <F12> <Cmd>set wrap! wrap?<CR>
+nnoremap <F12> <Cmd>set wrap!<CR>
 cnoremap <expr> <SID>(left16) repeat('<Left>', 16)
 nmap gs :<C-u>%s///g \| nohlsearch<SID>(left16)
 vmap gs :s///g \| nohlsearch<SID>(left16)
@@ -852,11 +858,10 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-cnoremap <expr> <C-r><C-e> escape(@", '^$.*?/\[]') .. '<Right>'
 nnoremap / <Cmd>nohlsearch<CR>/
 nnoremap ? <Cmd>nohlsearch<CR>?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
-au vimrc CursorHold * feedkeys(" n")
+au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
@@ -882,14 +887,10 @@ inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
 inoremap jjk 「」<Left>
 inoremap jjx <Cmd>call <SID>ToggleCheckBox()<CR>
-# Altキーでもいいかなぁ…
-inoremap <M-h> <C-o>^
-inoremap <M-l> <C-o>$
-inoremap <M-e> <C-o>e<C-o>a
-inoremap <M-k> 「」<Left>
 # これはちょっと押しにくい(自分のキーボードだと)
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
+# そもそも`q`が押しにくいか…
 imap ql <C-l>
 
 # syntax固有の追加強調
