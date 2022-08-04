@@ -283,7 +283,6 @@ Disable g:ale_lint_on_insert_leave
 Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
-g:ale_statusline_format = ['🐞x%d', '🐝x%d', '']
 g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nmap <silent> [a <Plug>(ale_previous_wrap)
@@ -360,11 +359,10 @@ enddef
 g:lightline = {
 	colorscheme: 'wombat',
 	active: {
-		left: [['mode', 'paste'], ['readonly', 'filename', 'modified', 'are']],
 		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
 	},
 	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
-	component_function: { are: 'ALEGetStatusLine', ff: 'LLFF', notutf8: 'LLNotUtf8' },
+	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 
 # tablineはデフォルト
