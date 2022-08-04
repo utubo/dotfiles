@@ -6,7 +6,7 @@ augroup gvimrc
 augroup END
 
 # 表示設定 {{{
-set cmdheight=1
+set cmdheight=0
 set textwidth=0
 set renderoptions=type:directx,renmode:6
 set guifont=Cica:h13
