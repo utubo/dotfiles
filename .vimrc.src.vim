@@ -660,7 +660,8 @@ cnoreabbrev cs colorscheme
 # 「jj」で<CR>、「kk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
-cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
+# auto-hide-cmdlineのためにcnoremapではなくcmapを使う
+cmap <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^:update<CR>
 
 #}}} -------------------------------------------------------

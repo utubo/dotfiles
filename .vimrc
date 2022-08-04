@@ -498,7 +498,7 @@ cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 nn q; :q
 cnoreabbrev cs colorscheme
 cno kk <C-c>
-cno <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
+cm <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^:update<CR>
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
