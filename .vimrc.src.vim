@@ -858,8 +858,9 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-nnoremap / <Cmd>nohlsearch<CR>/
-nnoremap ? <Cmd>nohlsearch<CR>?
+nnoremap ; <Plug>(ahc-nowait):
+nnoremap / <Cmd>nohlsearch<CR><Plug>(ahc-nowait)/
+nnoremap ? <Cmd>nohlsearch<CR><Plug>(ahc-nowait)?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 

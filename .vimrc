@@ -655,8 +655,9 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-nn / <Cmd>nohlsearch<CR>/
-nn ? <Cmd>nohlsearch<CR>?
+nn ; <Plug>(ahc-nowait):
+nn / <Cmd>nohlsearch<CR><Plug>(ahc-nowait)/
+nn ? <Cmd>nohlsearch<CR><Plug>(ahc-nowait)?
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 nn <Space>w <C-w>w
