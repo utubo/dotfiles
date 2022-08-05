@@ -419,6 +419,7 @@ g:auto_hide_cmdline_switch_statusline = 1
 #   を`if (cmdheight0)`の手前で実行する？
 #   `firstc == -1`のくだりは後の行から移動してきてもいいかもしれない
 #   ドキュメント修正も必要
+#   でもautocmdの中で`cmdheight`を変更されたらどうするの？
 # 後者
 #   理由があって今のタイミングでupdate_screenしているのだから移動できるわけがない…
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
