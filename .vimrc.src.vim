@@ -872,12 +872,10 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-nnoremap <Space>: :
 nnoremap <Space>; ;
 MultiCmd nmap,vmap ; :
-MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
-nnoremap / <Cmd>nohlsearch<CR><Plug>(ahc-switch)/
-nnoremap ? <Cmd>nohlsearch<CR><Plug>(ahc-switch)?
+nnoremap / <Cmd>nohlsearch<CR>/
+nnoremap ? <Cmd>nohlsearch<CR>?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 
