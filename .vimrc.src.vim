@@ -412,7 +412,15 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 
 # cmdline statusline 切り替え {{{
 g:auto_hide_cmdline_switch_statusline = 1
-# statusline非表示→cmdline表示の順にしないとちらつくのでその対応
+# statusline非表示→cmdline表示の順にしないとちらつくので応急処置…
+# 本筋はCmdlineEnterPreを作るかupdate_screen(VALID)をCmdlineEnter発行の後にするしかない？
+# 前者
+#   `trigger_cmd_autocmd(firstc == -1 || firstc == NUL ? '-' : firstc, EVENT_CMDLINEENTERPRE)`
+#   を`if (cmdheight0)`の手前で実行する？
+#   `firstc == -1`のくだりは後の行から移動してきてもいいかもしれない
+#   ドキュメント修正も必要
+# 後者
+#   理由があって今のタイミングでupdate_screenしているのだから移動できるわけがない…
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
