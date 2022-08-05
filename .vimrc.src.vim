@@ -410,19 +410,29 @@ g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 # }}}
 
+# cmdline statusline 切り替え {{{
+g:auto_hide_cmdline_switch_statusline = 1
+nnoremap <Space>: :
+MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
+MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
+inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
+MultiCmd nmap,vmap <Space>; ;
+MultiCmd nmap,vmap ; :
+#}}}
+
 # その他 {{{
 Enable  g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
-g:auto_hide_cmdline_switch_statusline = 1
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nmap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
 nmap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
+nmap <Space>ga :<C-u>Git add %
+nmap <Space>gc :<C-u>Git commit -m ''<Left>
+nmap <Space>gp :<C-u>Git push
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
-nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
-nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>t <Cmd>call tabpopupmenu#popup()<CR>
 nnoremap <Space>T <Cmd>call tablist#Show()<CR>
@@ -508,7 +518,7 @@ def VimGrep(keyword: string, ...targets: list<string>)
 	endif
 enddef
 command! -nargs=+ VimGrep VimGrep(<f-args>)
-nnoremap <Space>/ :<C-u>VimGrep<Space>
+nmap <Space>/ :<C-u>VimGrep<Space>
 
 def SetupQF()
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
@@ -599,7 +609,8 @@ def Zf()
 	const firstline = line("'<")
 	const lastline = line("'>")
 	execute ':' firstline 's/\v(\S)?$/\1 /'
-	execute ':' lastline 'normal! o<Esc>i' .. IndentStr(firstline)
+	execute ':' lastline 'normal! o'
+	setline(lastline + 1, IndentStr(firstline))
 	cursor([firstline, 1])
 	normal! V
 	cursor([lastline + 1, 1])
@@ -873,10 +884,6 @@ vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
-nnoremap <Space>; ;
-MultiCmd nmap,vmap ; :
-nnoremap / <Cmd>nohlsearch<CR>/
-nnoremap ? <Cmd>nohlsearch<CR>?
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 

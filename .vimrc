@@ -318,18 +318,25 @@ nn <Leader>r <Cmd>PortalReset<CR>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
+g:auto_hide_cmdline_switch_statusline = 1
+nn <Space>: :
+MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
+MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
+ino <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
+MultiCmd nmap,vmap <Space>; ;
+MultiCmd nmap,vmap ; :
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
-g:auto_hide_cmdline_switch_statusline = 1
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 nm [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
 nm ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
+nm <Space>ga :<C-u>Git add %
+nm <Space>gc :<C-u>Git commit -m ''<Left>
+nm <Space>gp :<C-u>Git push
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
-nn <Space>gc :<C-u>Git commit -m ''<Left>
-nn <Space>gp :<C-u>Git push
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>t <Cmd>call tabpopupmenu#popup()<CR>
 nn <Space>T <Cmd>call tablist#Show()<CR>
@@ -392,7 +399,7 @@ endif
 endif
 enddef
 com! -nargs=+ VimGrep BE(<f-args>)
-nn <Space>/ :<C-u>VimGrep<Space>
+nm <Space>/ :<C-u>VimGrep<Space>
 def BF()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
@@ -453,7 +460,8 @@ endif
 const a = line("'<")
 const b = line("'>")
 exe ':' a 's/\v(\S)?$/\1 /'
-exe ':' b 'normal! o<Esc>i' .. D(a)
+exe ':' b 'normal! o'
+setline(b + 1, D(a))
 cursor([a, 1])
 normal! V
 cursor([b + 1, 1])
@@ -668,10 +676,6 @@ vn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
-nn <Space>; ;
-MultiCmd nmap,vmap ; :
-nn / <Cmd>nohlsearch<CR>/
-nn ? <Cmd>nohlsearch<CR>?
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
 nn <Space>w <C-w>w
