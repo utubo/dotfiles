@@ -412,13 +412,14 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 
 # cmdline statusline 切り替え {{{
 g:auto_hide_cmdline_switch_statusline = 1
-nnoremap <Space>: :
+# statusline非表示→cmdline表示の順にしないとちらつくのでその対応
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
-inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
 MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
+inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
+nnoremap <Space>: :
 #}}}
 
 # その他 {{{

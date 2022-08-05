@@ -319,13 +319,13 @@ g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:auto_hide_cmdline_switch_statusline = 1
-nn <Space>: :
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
-ino <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
 MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
+ino <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
+nn <Space>: :
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
