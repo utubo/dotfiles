@@ -420,7 +420,7 @@ nmap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
 nmap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nmap     <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
+nnoremap <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
 nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gl <Cmd>Git pull<CR>
@@ -430,7 +430,7 @@ MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 # EasyMotionとどっちを使うか様子見中
-nmap <Space>s <Plug>(jumpcursor-jump)
+noremap <Space>s <Plug>(jumpcursor-jump)
 #}}}
 
 # 開発用 {{{
@@ -555,8 +555,9 @@ nnoremap <Space>zz <Cmd>q!<CR>
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
 nnoremap <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
-# スマホだと:とファンクションキーが遠いので…
-nmap <Space>, :
+# スマホだと:と/とファンクションキーが遠いので…
+nmap <Space>. :
+nmap <Space>, /
 for i in range(1, 10)
 	execute printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
@@ -822,8 +823,8 @@ cnoreabbrev mv MoveFile
 cnoremap <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
 nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
 nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vmap g: "vy:<C-u><C-r>=@v<CR><CR>
-vmap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+vmap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+vmap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 # }}}

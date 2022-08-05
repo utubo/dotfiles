@@ -327,7 +327,7 @@ nm [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
 nm ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nm <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
+nn <Space>ga <Plug>(ahc-nowait):<C-u>Git add %
 nn <Space>gc :<C-u>Git commit -m ''<Left>
 nn <Space>gp :<C-u>Git push
 nn <Space>gl <Cmd>Git pull<CR>
@@ -336,7 +336,7 @@ nn <Space>T <Cmd>call tablist#Show()<CR>
 MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-nm <Space>s <Plug>(jumpcursor-jump)
+no <Space>s <Plug>(jumpcursor-jump)
 const lq = expand(lk .. '/pack/local/opt/*')
 if lq !=# ''
 &runtimepath = substitute(lq, '\n', ',', 'g') .. ',' .. &runtimepath
@@ -421,7 +421,8 @@ nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <Space>y yiw
 nn <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
-nm <Space>, :
+nm <Space>. :
+nm <Space>, /
 for i in range(1, 10)
 exe printf('nmap <Space>%d <F%d>', i % 10, i)
 endfor
@@ -628,8 +629,8 @@ cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
 nm g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vm g: "vy:<C-u><C-r>=@v<CR><CR>
-vm g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+vm g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+vm g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
