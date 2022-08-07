@@ -252,6 +252,7 @@ def MyMRU()
 	setlocal cursorline
 	nnoremap <buffer> w <Cmd>call <SID>MRUwithNumKey(!b:use_tab)<CR>
 	nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
+	nnoremap <buffer> <Esc> <Cmd>q!<CR>
 	MRUwithNumKey(BufIsSmth())
 enddef
 au vimrc FileType mru MyMRU()

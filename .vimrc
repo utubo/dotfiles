@@ -205,6 +205,7 @@ Enable b:auto_cursorline_disabled
 setl cursorline
 nn <buffer> w <Cmd>call <SID>I(!b:use_tab)<CR>
 nn <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
+nn <buffer> <Esc> <Cmd>q!<CR>
 I(C())
 enddef
 au vimrc FileType mru J()
