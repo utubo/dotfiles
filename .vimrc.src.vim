@@ -428,8 +428,9 @@ MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
 MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
-inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
 nnoremap <Space>: :
+# 自作プラグイン(vim-registerslite)と被ってしまった…
+# inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
 #}}}
 
 # その他 {{{
