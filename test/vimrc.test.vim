@@ -63,28 +63,32 @@ TestSets()
 
 # マッピングが想定外に被ってないこと {{{
 def TestMapping()
-	# わざとデフォルトと被らせてるやつ
-	# 以下はvimrc外でデフォルトと被ってる
-	# n  Q     defaults.vimでgqにしてるけど.vimrcでqへ再マップ
-	# n  gc    vim-caw
-	# n  a     _cc
-	# n  i     _cc
-	# n  A     _cc
-	# i  <C-U> defaults.vim
+	# わざとデフォルト(`map`コマンドで取得できないやつ)と被らせてるやつ
+	# n  Q  defaults.vimでgqにしてるけど.vimrcでqへ再マップ
+	# n  gc vim-caw
+	# n  a  _cc
+	# n  i  _cc
+	# n  A  _cc
+	# n  %  matchit(いつ入れたっけ？)
+	# n  :  <Plug><ahc-switch>:
+	# v  :  <Plug><ahc-switch>:
+	# v  /  <Plug><ahc-switch>/
+	# v  ?  <Plug><ahc-switch>?
+	# i     <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([ahijklqsAQSTY;''/?]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
-		'v  \([*]\)\|' ..
+		'n  \([ahijklqsAQSTY;''/?:%]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 
-	# わざと被らせてるやつ(ユーザー定義)
-	# 以下はプラグイン
+	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
+	# 概ねプラグイン内で被ってる
 	# n  <Plug>fugitive:
-	# i  { vim-laxima
-	# i  [ vim-laxima
+	# i  {     vim-laxima
+	# i  [     vim-laxima
 	# i  <Esc> vim-laxima
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
 	var user_ignore = '\C' ..
-		'n  \([qS]\|<Plug>fugitive:\)\|' ..
+		'n  \([qS:]\|<Plug>fugitive:\)\|' ..
 		'v  \([JS]\)\|' ..
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)'
