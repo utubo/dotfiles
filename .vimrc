@@ -52,8 +52,8 @@ com! -nargs=* MultiCmd A(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def B(a: number)
-exe 'silent! ' .. a .. 's/\s\+$//'
-exe 'silent! ' .. a .. 's/^\s*\n//'
+sil! exe ':' a 's/\s\+$//'
+sil! exe ':' a 's/^\s*\n//'
 enddef
 def C(): bool
 return &modified || ! empty(bufname())
@@ -152,7 +152,7 @@ nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
 def E()
 var c = g:operator#sandwich#object.cursor
-if g:fix_sandwich_pos[1] != c.inner_head[1]
+if g:fix_sandwich_pos[1] !=# c.inner_head[1]
 c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
 c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 endif
@@ -264,7 +264,7 @@ const c = b % 60
 const d = c >= 45 ? '☕🍴🍰' : ''
 g:ll_tea_break = d .. printf('%d:%02d', b / 60, c)
 lightline#update()
-if (c == 45)
+if (c ==# 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 enddef
@@ -325,7 +325,6 @@ MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
 MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
-ino <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
 nn <Space>: :
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
@@ -411,10 +410,10 @@ nn <buffer> b <C-b>
 exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
 au vimrc FileType qf BF()
-au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix'|q|endif
+au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
-au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
+au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
 g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
@@ -438,8 +437,8 @@ nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
 def BG(): string
 const x = getline('.')->match('\S') + 1
-if x != 0 || !exists('w:my_hat')
-w:my_hat = col('.') == x ? '^' : ''
+if x !=# 0 || !exists('w:my_hat')
+w:my_hat = col('.') ==# x ? '^' : ''
 endif
 return w:my_hat
 enddef
@@ -455,27 +454,22 @@ set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
 def BH()
-if line("'<") != line('.')
-return
-endif
-const a = line("'<")
-const b = line("'>")
+const a = min([line('.'), line('v')])
+const b = max([line('.'), line('v')])
 exe ':' a 's/\v(\S)?$/\1 /'
-exe ':' b 'normal! o'
-setline(b + 1, D(a))
+append(b, D(a))
 cursor([a, 1])
-normal! V
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf :call <SID>BH()<CR>
+vn zf <Cmd>call <SID>BH()<CR>
 def BI()
-if foldclosed(line('.')) == -1
+if foldclosed(line('.')) ==# -1
 normal! zc
 endif
 const a = foldclosed(line('.'))
 const b = foldclosedend(line('.'))
-if a == -1
+if a ==# -1
 return
 endif
 const c = getpos('.')
@@ -484,11 +478,11 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn zd <Cmd>BI()<CR>
+nn zd <Cmd>call <SID>BI()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
-nn <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
@@ -508,7 +502,7 @@ cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 nn q; :q
 cnoreabbrev cs colorscheme
 cno kk <C-c>
-cm <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
+cm <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^:update<CR>
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
@@ -597,7 +591,7 @@ au vimrc BufNewFile * CB('BufNewFile')
 au vimrc BufReadPost * CB('BufReadPost')
 def CC(a: string = '')
 if ! empty(a)
-if winnr() == winnr(a)
+if winnr() ==# winnr(a)
 return
 endif
 exe 'wincmd ' .. a

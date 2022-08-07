@@ -69,8 +69,8 @@ command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
 def RemoveEmptyLine(line: number)
-	execute 'silent! ' .. line .. 's/\s\+$//'
-	execute 'silent! ' .. line .. 's/^\s*\n//'
+	silent! execute ':' line 's/\s\+$//'
+	silent! execute ':' line 's/^\s*\n//'
 enddef
 
 def BufIsSmth(): bool
@@ -189,7 +189,7 @@ nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"'
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 def FixSandwichPos()
 	var c = g:operator#sandwich#object.cursor
-	if g:fix_sandwich_pos[1] != c.inner_head[1]
+	if g:fix_sandwich_pos[1] !=# c.inner_head[1]
 		c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
 		c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 	endif
@@ -326,7 +326,7 @@ def! g:VimrcTimer60s(timer: any)
 	const tea = mm >= 45 ? '☕🍴🍰' : ''
 	g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
 	lightline#update()
-	if (mm == 45)
+	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
 enddef
@@ -546,7 +546,7 @@ def SetupQF()
 	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
 enddef
 au vimrc FileType qf SetupQF()
-au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
+au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -554,7 +554,7 @@ au vimrc WinEnter * if winnr('$') == 1 && &buftype ==# 'quickfix' | q | endif
 set splitright
 set fillchars+=diff:\ # 削除行は空白文字で埋める
 # diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
-au vimrc WinEnter * if (winnr('$') == 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
+au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -594,8 +594,8 @@ nmap <Space><Space>2 <F12>
 # カーソルを行頭に合わせて移動 {{{
 def PutHat(): string
 	const x = getline('.')->match('\S') + 1
-	if x != 0 || !exists('w:my_hat')
-		w:my_hat = col('.') == x ? '^' : ''
+	if x !=# 0 || !exists('w:my_hat')
+		w:my_hat = col('.') ==# x ? '^' : ''
 	endif
 	return w:my_hat
 enddef
@@ -618,29 +618,24 @@ au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def Zf()
-	if line("'<") != line('.')
-		return
-	endif
-	const firstline = line("'<")
-	const lastline = line("'>")
+	const firstline = min([line('.'), line('v')])
+	const lastline = max([line('.'), line('v')])
 	execute ':' firstline 's/\v(\S)?$/\1 /'
-	execute ':' lastline 'normal! o'
-	setline(lastline + 1, IndentStr(firstline))
+	append(lastline, IndentStr(firstline))
 	cursor([firstline, 1])
-	normal! V
 	cursor([lastline + 1, 1])
 	normal! zf
 enddef
-vnoremap zf :call <SID>Zf()<CR>
+vnoremap zf <Cmd>call <SID>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
 def Zd()
-	if foldclosed(line('.')) == -1
+	if foldclosed(line('.')) ==# -1
 		normal! zc
 	endif
 	const head = foldclosed(line('.'))
 	const tail = foldclosedend(line('.'))
-	if head == -1
+	if head ==# -1
 		return
 	endif
 	const org = getpos('.')
@@ -649,13 +644,13 @@ def Zd()
 	RemoveEmptyLine(head)
 	setpos('.', org)
 enddef
-nnoremap zd <Cmd>Zd()<CR>
+nnoremap zd <Cmd>call <SID>Zd()<CR>
 #}}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
-nnoremap <expr> h (col('.') == 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
 nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
@@ -688,7 +683,7 @@ cnoreabbrev cs colorscheme
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
 # auto-hide-cmdlineのためにcnoremapではなくcmapを使う
-cmap <expr> jj (empty(getcmdline()) && getcmdtype() == ':' ? 'update<CR>' : '<CR>')
+cmap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^:update<CR>
 
 #}}} -------------------------------------------------------
@@ -799,7 +794,7 @@ au vimrc BufReadPost * ShowBufInfo('BufReadPost')
 # 閉じる {{{
 def Quit(expr: string = '')
 	if ! empty(expr)
-		if winnr() == winnr(expr)
+		if winnr() ==# winnr(expr)
 			return
 		endif
 		execute 'wincmd ' .. expr
