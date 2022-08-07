@@ -586,7 +586,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-no <C-g> <Cmd>call <SID>CB()<CR>
+no <C-g> <Plug>(ahc)<Cmd>call <SID>CB()<CR>
 au vimrc BufNewFile * CB('BufNewFile')
 au vimrc BufReadPost * CB('BufReadPost')
 def CC(a: string = '')
@@ -602,6 +602,8 @@ else
 confirm quit
 endif
 enddef
+nn q <Nop>
+nn Q q
 nn qh <Cmd>call <SID>CC('h')<CR>
 nn qj <Cmd>call <SID>CC('j')<CR>
 nn qk <Cmd>call <SID>CC('k')<CR>
@@ -610,8 +612,6 @@ nn qq <Cmd>call <SID>CC()<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
-nn q <Nop>
-nn Q q
 def CD(a: string)
 const b = expand('%')
 const c = expand(a)

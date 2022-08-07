@@ -785,7 +785,7 @@ def ShowBufInfo(event: string = '')
 	echohl Normal
 	#redraw
 enddef
-noremap <C-g> <Cmd>call <SID>ShowBufInfo()<CR>
+noremap <C-g> <Plug>(ahc)<Cmd>call <SID>ShowBufInfo()<CR>
 au vimrc BufNewFile * ShowBufInfo('BufNewFile')
 au vimrc BufReadPost * ShowBufInfo('BufReadPost')
 #}}} -------------------------------------------------------
@@ -805,6 +805,8 @@ def Quit(expr: string = '')
 		confirm quit
 	endif
 enddef
+nnoremap q <Nop>
+nnoremap Q q
 nnoremap qh <Cmd>call <SID>Quit('h')<CR>
 nnoremap qj <Cmd>call <SID>Quit('j')<CR>
 nnoremap qk <Cmd>call <SID>Quit('k')<CR>
@@ -813,8 +815,6 @@ nnoremap qq <Cmd>call <SID>Quit()<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
-nnoremap q <Nop>
-nnoremap Q q
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
