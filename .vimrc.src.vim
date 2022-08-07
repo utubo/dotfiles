@@ -415,6 +415,9 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 g:auto_hide_cmdline_switch_statusline = 1
 # statusline非表示→cmdline表示の順にしないとちらつくので応急処置…
 # 本筋はCmdlineEnterPreを作るかupdate_screen(VALID)をCmdlineEnter発行の後にするしかない？
+# ソース
+#   https://github.com/vim/vim/blob/master/src/ex_getln.c
+#   static char_u * getcmdline_int()
 # 前者
 #   `trigger_cmd_autocmd(firstc == -1 || firstc == NUL ? '-' : firstc, EVENT_CMDLINEENTERPRE)`
 #   を`if (cmdheight0)`の手前で実行する？
