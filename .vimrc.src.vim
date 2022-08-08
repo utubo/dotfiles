@@ -913,9 +913,10 @@ nnoremap <Space>o <C-w>w
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
-# マーク使ってないし
+# US→「"」押しにくい、JIS→「'」押しにくい
 nnoremap ' "
-nnoremap <Space>' '
+nnoremap m '
+nnoremap M m
 
 # うーん…
 inoremap jj <C-o>

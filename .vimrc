@@ -684,7 +684,8 @@ nn <Space>o <C-w>w
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
-nn <Space>' '
+nn m '
+nn M m
 ino jj <C-o>
 ino jjh <C-o>^
 ino jjl <C-o>$
