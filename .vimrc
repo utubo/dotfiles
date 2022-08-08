@@ -508,7 +508,7 @@ cno <C-l> <Space><BS><Right>
 cno <expr> <C-r><C-r> trim(@")
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 cnoreabbrev cs colorscheme
-cno kk <C-c>
+cno kk <Esc>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
 if has('win32')
@@ -641,20 +641,22 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-nn <F11> <Cmd>set number! \| let &cursorline=&number<CR>
+nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
-cno <expr> <SID>(left16) repeat('<Left>', 16)
-nm gs :<C-u>%s///g \| nohlsearch<SID>(left16)
-vm gs :s///g \| nohlsearch<SID>(left16)
-nm gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch<SID>(left16)<Right>
+cno <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
+nm gs :<C-u>%<SID>(rpl)
+nm gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+vm gs :<SID>(replace)
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
-nn TE :<C-u>tabe<Space>
+nm <CR> <Space>
+nm TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
+nn TT <Cmd>silent! tabnext #<CR>
 ono <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}'
 ono <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator
 vn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
@@ -667,7 +669,6 @@ ino 「」 「」<Left>
 ino （ ()<Left>
 ino （） ()<Left>
 au vimrc FileType vim if getline(1) ==# 'vim9script'|&commentstring = '#%s'|endif
-nm <CR> <Space>
 vn <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
 vn P p
 nn <Space>h ^
@@ -707,7 +708,6 @@ enddef
 au vimrc Syntax * CE()
 au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim CF('SpellRare', '\<normal!\@!')
-nn g<Leader> <Cmd>tabnext #<CR>
 nn <Space>a A
 nn <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
 if strftime('%d') ==# '01'

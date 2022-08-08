@@ -688,7 +688,7 @@ cnoreabbrev cs colorscheme
 
 # 「jj」で<CR>、「kk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap kk <C-c>
+cnoremap kk <Esc>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
 
@@ -859,34 +859,45 @@ if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"
 endif
-nnoremap <F11> <Cmd>set number! \| let &cursorline=&number<CR>
+
+nnoremap <F11> <Cmd>set number!<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
-cnoremap <expr> <SID>(left16) repeat('<Left>', 16)
-nmap gs :<C-u>%s///g \| nohlsearch<SID>(left16)
-vmap gs :s///g \| nohlsearch<SID>(left16)
-nmap gS :<C-u>%s/<C-r>=escape(expand("<cword>"), "^$.*?/\[]")<CR>//g \| nohlsearch<SID>(left16)<Right>
+
+cnoremap <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
+nmap gs :<C-u>%<SID>(rpl)
+nmap gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+vmap gs :<SID>(replace)
+
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
-nnoremap TE :<C-u>tabe<Space>
+
+# 分割キーボードで右手親指が<CR>になったので
+nmap <CR> <Space>
+
+# `T`多少潰しても大丈夫だろう…
+nmap     TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
+nnoremap TT <Cmd>silent! tabnext #<CR>
+
 onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}'
 onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator
+
 vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vnoremap J j
 vnoremap K k
+
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
+
 au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
-# 分割キーボードで右手親指が<CR>になったので
-nmap <CR> <Space>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -947,9 +958,6 @@ au vimrc Syntax * ClearMySyntax()
 au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
 # 基本的にnormalは再マッピングさせないように「!」を付ける
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
-
-# 直前のタブ移動する(割り当てるキーが思いつかない…)
-nnoremap g<Leader> <Cmd>tabnext #<CR>
 
 #nnoremap <F1> :<C-u>smile<CR>
 #}}} -------------------------------------------------------
