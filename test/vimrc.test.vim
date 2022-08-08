@@ -58,7 +58,6 @@ def TestSets()
 		sets->add(name)
 	endfor
 enddef
-TestSets()
 #}}}
 
 # マッピングが想定外に被ってないこと {{{
@@ -169,13 +168,51 @@ def TestMapping()
 		assert_equal([dups[0]], dups, 'マッピングが被ってるかも')
 	endfor
 enddef
-TestMapping()
 # }}}
 
 # その他かんたんなテスト {{{
-assert_equal([], Scan(vimrc_str, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+def TestAutocmd()
+	assert_equal([], Scan(vimrc_str, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+enddef
 #}}}
 
-g:EchoErrors()
-echo 'Ran all test.'
+# テスト実行 {{{
+var testDefs = []
+def SetupTestDefs()
+	for i in range(line('$'))
+		var m = getline(i)->matchlist('^def \(Test.*\)()')
+		if !empty(m)
+			testDefs->add(m[1])
+		endif
+	endfor
+enddef
+SetupTestDefs()
+
+def CompTestDefs(A: any, L: any, P: any): list<string>
+	return testDefs
+enddef
+
+def RunTestAtCursor()
+	var m = getline('.')->matchlist('^def \(Test.*\)()')
+	if !empty(m)
+		echo 'Run' m[1]
+		RunTest(m[1])
+	endif
+enddef
+
+def RunTest(qargs: string = '')
+	v:errors = []
+	var targets = empty(qargs) ? testDefs : qargs->split(' ')
+	for target in targets
+		execute target .. '()'
+	endfor
+	g:EchoErrors()
+	if empty(v:errors)
+		echo 'Success!'
+	endif
+enddef
+command! -nargs=* -complete=customlist,CompTestDefs RunTest RunTest(<q-args>)
+nnoremap <buffer> <Leader>T <Cmd>call <SID>RunTest()<CR>
+nnoremap <buffer> <Leader>t <Cmd>call <SID>RunTestAtCursor()<CR>
+#}}}
 
