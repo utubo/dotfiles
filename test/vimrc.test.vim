@@ -67,6 +67,8 @@ def TestMapping()
 	# n  gc vim-caw
 	# n  a  _cc
 	# n  i  _cc
+	# n  m  '
+	# n  M  m
 	# n  A  _cc
 	# n  %  matchit(いつ入れたっけ？)
 	# n  :  <Plug><ahc-switch>:
@@ -75,7 +77,7 @@ def TestMapping()
 	# v  ?  <Plug><ahc-switch>?
 	# i     <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([ahijklqsAQSTY;''/?:%]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'n  \([ahijklmqsAMQSTY;''/?:%]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 

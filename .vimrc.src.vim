@@ -914,6 +914,7 @@ nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 vnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 # US→「"」押しにくい、JIS→「'」押しにくい
+# デフォルトのMはあまり使わないかなぁ…
 nnoremap ' "
 nnoremap m '
 nnoremap M m
