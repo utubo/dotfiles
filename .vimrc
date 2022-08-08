@@ -333,8 +333,8 @@ g:auto_hide_cmdline_switch_statusline = 1
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
-MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
+nn <Space>; ;
 nn <Space>: :
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut

@@ -440,8 +440,8 @@ g:auto_hide_cmdline_switch_statusline = 1
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
-MultiCmd nmap,vmap <Space>; ;
 MultiCmd nmap,vmap ; :
+nnoremap <Space>; ;
 nnoremap <Space>: :
 # 自作プラグイン(vim-registerslite)と被ってしまった…
 # inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
