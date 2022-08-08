@@ -142,7 +142,6 @@ g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
 { buns: ['', '' ], input: ['q'] },
 { buns: ['「', '」'], input: ['k'] },
-{ buns: ['>', '<' ], input: ['>'] },
 { buns: ['{ ', ' }'], input: ['{'] },
 { buns: ['${', '}' ], input: ['${'] },
 { buns: ['%{', '}' ], input: ['%{'] },
@@ -317,10 +316,8 @@ showCandidatesCount: 1,
 })
 map! <C-j> <Plug>(skkeleton-toggle)
 endif
-om ab <Plug>(textobj-multiblock-a)
-om ib <Plug>(textobj-multiblock-i)
-xm ab <Plug>(textobj-multiblock-a)
-xm ib <Plug>(textobj-multiblock-i)
+MultiCmd omap,xmap ab <Plug>(textobj-multiblock-a)
+MultiCmd omap,xmap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ], [ '<', '>' ], [ '"', '"', 1 ], [ "'", "'", 1 ], [ ">", "<", 1 ], [ "「", "」", 1 ],
 ]
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -510,11 +507,10 @@ cno <C-h> <Space><BS><Left>
 cno <C-l> <Space><BS><Right>
 cno <expr> <C-r><C-r> trim(@")
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
-nn q; :q
 cnoreabbrev cs colorscheme
 cno kk <C-c>
-cm <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
-ino ;jj <Esc>`^:update<CR>
+cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
+ino ;jj <Esc>`^<Cmd>update<CR>
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -635,12 +631,12 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-cno <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
+cno <expr> <SID>(exec_line) getline('.')->substitute('^[ \t"#:]\+', '', '') .. '<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
 nm g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
 vm g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vm g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
-nn <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
+nn <expr> <Space>gh '<Cmd>hi ' .. synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '') .. '<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
@@ -709,8 +705,8 @@ def CF(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
 au vimrc Syntax * CE()
-au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim CF('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim CF('SpellRare', '\<normal!\@!')
 nn g<Leader> <Cmd>tabnext #<CR>
 nn <Space>a A
 nn <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
@@ -738,13 +734,13 @@ if exists('w:my_matches') && !empty(getmatches())
 return
 endif
 w:my_matches = 1
-matchadd('SpellBad', '　\|¥\|\s\+$')
 matchadd('String', '「[^」]*」')
 matchadd('Label', '^\s*■.*$')
 matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 matchadd('Todo', 'TODO')
 matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
+matchadd('SpellBad', '　\|¥\|\s\+$')
 matchadd('SpellBad', 'stlye')
 enddef
 au vimrc VimEnter,WinEnter * CI()

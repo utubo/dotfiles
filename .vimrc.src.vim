@@ -178,7 +178,6 @@ g:sandwich#recipes += [
 	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 	{ buns: ['',   ''  ], input: ['q'] },
 	{ buns: ['「', '」'], input: ['k'] },
-	{ buns: ['>',  '<' ], input: ['>'] },
 	{ buns: ['{ ', ' }'], input: ['{'] },
 	{ buns: ['${', '}' ], input: ['${'] },
 	{ buns: ['%{', '}' ], input: ['%{'] },
@@ -237,7 +236,7 @@ au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
 #}}}
 
 # MRU {{{
-# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない文字を区切りにする
+# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない">"を区切りにする
 g:MRU_Filename_Format = {
 	formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 	parser: '> \zs.*',
@@ -393,10 +392,8 @@ endif
 #}}}
 
 # textobj-multiblock  {{{
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-xmap ab <Plug>(textobj-multiblock-a)
-xmap ib <Plug>(textobj-multiblock-i)
+MultiCmd omap,xmap ab <Plug>(textobj-multiblock-a)
+MultiCmd omap,xmap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 	\ [ "(", ")" ],
 	\ [ "[", "]" ],
@@ -602,7 +599,7 @@ nmap <Space><Space>2 <F12>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# カーソルを行頭に合わせて移動 {{{
+# カーソルを行頭に沿わせて移動 {{{
 def PutHat(): string
 	const x = getline('.')->match('\S') + 1
 	if x !=# 0 || !exists('w:my_hat')
@@ -687,15 +684,13 @@ cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
 cnoremap <expr> <C-r><C-r> trim(@")
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
-nnoremap q; :q
 cnoreabbrev cs colorscheme
 
 # 「jj」で<CR>、「kk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
-# auto-hide-cmdlineのためにcnoremapではなくcmapを使う
-cmap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
-inoremap ;jj <Esc>`^:update<CR>
+cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
+inoremap ;jj <Esc>`^<Cmd>update<CR>
 
 #}}} -------------------------------------------------------
 
@@ -790,7 +785,6 @@ def ShowBufInfo(event: string = '')
 		echon m[1]
 	endfor
 	echohl Normal
-	#redraw
 enddef
 noremap <C-g> <Plug>(ahc)<Cmd>call <SID>ShowBufInfo()<CR>
 # cmdheight=0にしたら無用になった
@@ -849,13 +843,14 @@ cnoreabbrev mv MoveFile
 
 # ----------------------------------------------------------
 # vimrc作成用  {{{
-cnoremap <expr> <SID>(exec_line) substitute(getline('.'), '^[ \t"#:]\+', '', '') .. '<CR>'
+# カーソル行を実行するやつ
+cnoremap <expr> <SID>(exec_line) getline('.')->substitute('^[ \t"#:]\+', '', '') .. '<CR>'
 nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
 nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
 vmap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vmap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh '<Cmd>hi ' .. substitute(synIDattr(synID(line('.'), col('.'), 1), 'name'), '^$', 'Normal', '') .. '<CR>'
+nnoremap <expr> <Space>gh '<Cmd>hi ' .. synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '') .. '<CR>'
 # }}}
 
 # ----------------------------------------------------------
@@ -948,8 +943,10 @@ def AddMySyntax(group: string, pattern: string)
 	w:my_syntax->add(matchadd(group, pattern))
 enddef
 au vimrc Syntax * ClearMySyntax()
-au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s') # 「==#」とかの存在を忘れないように
-au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!') # 基本的には再マッピングさせないように「!」を付ける
+# 「==#」とかの存在を忘れないように
+au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
+# 基本的にnormalは再マッピングさせないように「!」を付ける
+au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
 # 直前のタブ移動する(割り当てるキーが思いつかない…)
 nnoremap g<Leader> <Cmd>tabnext #<CR>
@@ -997,13 +994,14 @@ def MyMatches()
 		return
 	endif
 	w:my_matches = 1
-	matchadd('SpellBad', '　\|¥\|\s\+$')
 	matchadd('String', '「[^」]*」')
 	matchadd('Label', '^\s*■.*$')
 	matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 	matchadd('Todo', 'TODO')
 	matchadd('Error', 'ERROR')
 	matchadd('Delimiter', '- \[ \]')
+	# 全角空白、半角幅の円記号、文末空白
+	matchadd('SpellBad', '　\|¥\|\s\+$')
 	# 稀によくtypoする単語(気づいたら追加する)
 	matchadd('SpellBad', 'stlye')
 enddef
