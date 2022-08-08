@@ -39,13 +39,13 @@ aug End
 const lk = has('win32') ? '~/vimfiles' : '~/.vim'
 const ll = executable('deno')
 def A(b: string)
-const q = b->substitute('^\S*', '', '')
-for c in b->matchstr('^\S*')->split(',')
-const a = q
-->substitute('<if-' .. c .. '>', '<>', 'g')
-->substitute('<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
+const [c, d] = b->split('^\S*\zs')
+for e in c->split(',')
+const a = d
+->substitute('<if-' .. e .. '>', '<>', 'g')
+->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
 ->substitute('<>', '', 'g')
-exe c .. a
+exe e a
 endfor
 enddef
 com! -nargs=* MultiCmd A(<q-args>)
@@ -596,7 +596,7 @@ if ! empty(a)
 if winnr() ==# winnr(a)
 return
 endif
-exe 'wincmd ' .. a
+exe 'wincmd' a
 endif
 if mode() ==# 't'
 quit!
@@ -626,7 +626,7 @@ return
 endif
 rename(b, c)
 endif
-exe 'saveas! ' .. c
+exe 'saveas!' c
 edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)

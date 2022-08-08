@@ -53,13 +53,13 @@ const has_deno = executable('deno')
 # ↓
 # nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
 def MultiCmd(qargs: string)
-	const q = qargs->substitute('^\S*', '', '')
-	for cmd in qargs->matchstr('^\S*')->split(',')
-		const a = q
+	const [cmds, args] = qargs->split('^\S*\zs')
+	for cmd in cmds->split(',')
+		const a = args
 			->substitute('<if-' .. cmd .. '>', '<>', 'g')
-			->substitute('<if-.\{-1,}\(<if-\|<>\|$\)', '', 'g')
+			->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
 			->substitute('<>', '', 'g')
-		execute cmd .. a
+		execute cmd a
 	endfor
 enddef
 command! -nargs=* MultiCmd MultiCmd(<q-args>)
@@ -799,7 +799,7 @@ def Quit(expr: string = '')
 		if winnr() ==# winnr(expr)
 			return
 		endif
-		execute 'wincmd ' .. expr
+		execute 'wincmd' expr
 	endif
 	if mode() ==# 't'
 		quit!
@@ -833,7 +833,7 @@ def MoveFile(newname: string)
 		endif
 		rename(oldpath, newpath)
 	endif
-	execute 'saveas! ' .. newpath
+	execute 'saveas!' newpath
 	# 開き直してMRUに登録
 	edit
 enddef
