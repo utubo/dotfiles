@@ -195,7 +195,7 @@ MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
 MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
 nmap S^ v^S
 nmap S$ vg_S
-nmap <expr> SS (matchstr(getline('.'), '[''"]', getpos('.')[2]) ==# '"') ? 'Sr"''' : 'Sr''"'
+nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 def FixSandwichPos()
@@ -209,25 +209,25 @@ au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost FixSandwichPos()
 
 # 内側に連続で挟むやつ
-def RemarkPatty()
-	setpos("'<", g:operator#sandwich#object.cursor.inner_head)
-	setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-enddef
-nmap S. <Cmd>call <SID>RemarkPatty()<CR>gvSa
-
 var big_mac_crown = []
-def BigMac(is_nest: bool = false)
-	const c = is_nest ? g:operator#sandwich#object.cursor.inner_head[1 : 2] : []
-	if ! is_nest || big_mac_crown !=# c
+def BigMac(first: bool = true)
+	const c = g:operator#sandwich#object.cursor.inner_head[1 : 2]
+	if first || big_mac_crown !=# c
 		big_mac_crown = c
-		au vimrc User OperatorSandwichAddPost ++once BigMac(true)
-		feedkeys(is_nest ? 'S.' : 'gvSa')
+		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
+		if first
+			feedkeys('Sa')
+		else
+			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+			feedkeys('gvSa')
+		endif
 	endif
 enddef
 nmap Sm viwSm
 vmap Sm <Cmd>call <SID>BigMac()<CR>
 
-# 行末空白と空行を削除
+# 囲みを削除したら行末空白と空行も削除
 def RemoveAirBuns()
 	const c = g:operator#sandwich#object.cursor
 	RemoveEmptyLine(c.tail[1])
@@ -903,7 +903,7 @@ nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
 nnoremap <Space>n <Cmd>nohlsearch<CR>
-au vimrc CursorHold * feedkeys(" n") # nohはauで動かない(:help noh)
+au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
