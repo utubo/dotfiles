@@ -70,14 +70,13 @@ def TestMapping()
 	# n  m  '
 	# n  M  m
 	# n  A  _cc
-	# n  %  matchit(いつ入れたっけ？)
 	# n  :  <Plug><ahc-switch>:
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
 	# i     <C-U> defaults.vim
 	var default_ignore = '\C' ..
-		'n  \([ahijklmqsAMQSTY;''/?:%]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 
