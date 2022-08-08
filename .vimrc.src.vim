@@ -80,6 +80,17 @@ enddef
 def IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
+
+def TruncToDisplayWidth(str: string, width: number): string
+	var result = ''
+	for c in str->split('\zs')
+		if strdisplaywidth(result) > width
+			return result->substitute('..$', '>', '')
+		endif
+		result ..= c
+	endfor
+	return result
+enddef
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -309,10 +320,10 @@ au vimrc CursorMoved * ALEEchoCursorCmdHeight0()
 # ヤンクしたやつを表示するやつ
 g:ll_reg = ''
 def LLYankPost()
-	var reg = substitute(v:event.regcontents[0], '\t', ' ', 'g')
-	if len(v:event.regcontents) !=# 1 || len(reg) > 10
-		reg = substitute(reg, '^\(.\{0,8\}\).*', '\1>', '')
-	endif
+	var reg = v:event.regcontents
+		->join('\n')
+		->substitute('\t', ' ', 'g')
+		->TruncToDisplayWidth(20)
 	g:ll_reg = '📋:' .. reg
 enddef
 au vimrc TextYankPost * LLYankPost()
@@ -728,10 +739,6 @@ def ShowBufInfo(event: string = '')
 		return
 	endif
 
-	if &cmdheight ==# 0 && ! empty(event)
-		return
-	endif
-
 	var isReadPost = event ==# 'BufReadPost'
 	if isReadPost && ! filereadable(expand('%'))
 		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
@@ -786,8 +793,9 @@ def ShowBufInfo(event: string = '')
 	#redraw
 enddef
 noremap <C-g> <Plug>(ahc)<Cmd>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile * ShowBufInfo('BufNewFile')
-au vimrc BufReadPost * ShowBufInfo('BufReadPost')
+# cmdheight=0にしたら無用になった
+# au vimrc BufNewFile * ShowBufInfo('BufNewFile')
+# au vimrc BufReadPost * ShowBufInfo('BufReadPost')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
