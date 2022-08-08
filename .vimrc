@@ -646,7 +646,7 @@ nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
 nm gs :<C-u>%<SID>(rpl)
 nm gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-vm gs :<SID>(replace)
+vm gs :<SID>(rpl)
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P

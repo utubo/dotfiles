@@ -866,7 +866,7 @@ nnoremap <F12> <Cmd>set wrap!<CR>
 cnoremap <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
 nmap gs :<C-u>%<SID>(rpl)
 nmap gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-vmap gs :<SID>(replace)
+vmap gs :<SID>(rpl)
 
 nnoremap Y y$
 nnoremap <Space>p $p
