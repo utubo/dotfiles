@@ -202,6 +202,7 @@ enddef
 
 def RunTest(qargs: string = '')
 	v:errors = []
+	progress = 0
 	var targets = empty(qargs) ? testDefs : qargs->split(' ')
 	for target in targets
 		execute target .. '()'
