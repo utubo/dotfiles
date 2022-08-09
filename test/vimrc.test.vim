@@ -211,19 +211,18 @@ enddef
 #}}}
 
 # テスト実行 {{{
-var testDefs = []
-def SetupTestDefs()
+var allTest = []
+def GetAllTest(A: any = 0, L: any = 0, P: any = 0): list<string>
+	if !empty(allTest)
+		return allTest
+	endif
 	for i in range(line('$'))
 		var m = getline(i)->matchlist('^def \(Test.*\)()')
 		if !empty(m)
-			testDefs->add(m[1])
+			allTest->add(m[1])
 		endif
 	endfor
-enddef
-SetupTestDefs()
-
-def CompTestDefs(A: any, L: any, P: any): list<string>
-	return testDefs
+	return allTest
 enddef
 
 def RunTestAtCursor()
@@ -237,7 +236,7 @@ enddef
 def RunTest(qargs: string = '')
 	v:errors = []
 	progress = 0
-	var targets = empty(qargs) ? testDefs : qargs->split(' ')
+	var targets = empty(qargs) ? GetAllTest() : qargs->split(' ')
 	for target in targets
 		execute target .. '()'
 	endfor
@@ -246,7 +245,7 @@ def RunTest(qargs: string = '')
 		echo 'Success!'
 	endif
 enddef
-command! -nargs=* -complete=customlist,CompTestDefs RunTest RunTest(<q-args>)
+command! -nargs=* -complete=customlist,GetAllTest RunTest RunTest(<q-args>)
 nnoremap <buffer> <Leader>T <Cmd>call <SID>RunTest()<CR>
 nnoremap <buffer> <Leader>t <Cmd>call <SID>RunTestAtCursor()<CR>
 #}}}
