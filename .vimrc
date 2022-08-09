@@ -62,8 +62,11 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
+if b < 1
+return ''
+endif
 var c = a
-while len(c) > 1 && strdisplaywidth(c) > b
+while strdisplaywidth(c) > b
 c = substitute(c, '.>\?$', '>', '')
 endwhile
 return c
@@ -258,7 +261,7 @@ g:ll_reg = ''
 def BC()
 var a = v:event.regcontents
 ->join('\n')
-->substitute('\t', ' ', 'g')
+->substitute('\t', '›', 'g')
 ->E(20)
 g:ll_reg = '📋:' .. a
 enddef

@@ -82,8 +82,11 @@ def IndentStr(expr: any): string
 enddef
 
 def TruncToDisplayWidth(str: string, width: number): string
+	if width < 1
+		return ''
+	endif
 	var result = str
-	while len(result) > 1 && strdisplaywidth(result) > width
+	while strdisplaywidth(result) > width
 		result = substitute(result, '.>\?$', '>', '')
 	endwhile
 	return result
@@ -318,7 +321,7 @@ g:ll_reg = ''
 def LLYankPost()
 	var reg = v:event.regcontents
 		->join('\n')
-		->substitute('\t', ' ', 'g')
+		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
 	g:ll_reg = '📋:' .. reg
 enddef

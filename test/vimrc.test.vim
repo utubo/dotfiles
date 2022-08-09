@@ -207,6 +207,11 @@ def TestTruncToDisplayWidth()
 	assert_equal('あいう', F('あいう', 6))
 	assert_equal('あい>',  F('あいう1', 6))
 	assert_equal('あい>',  F('あいう', 5))
+	assert_equal('>', F('>', 1))
+	assert_equal('>', F('あ', 1))
+	assert_equal('', F('', 1))
+	assert_equal('', F('a', 0))
+	assert_equal('', F('a', -1))
 enddef
 #}}}
 
