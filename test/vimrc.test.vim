@@ -70,6 +70,9 @@ def TestMapping()
 	# n  m  '
 	# n  M  m
 	# n  A  _cc
+	# n  S  Sandwich
+	# n  T  タブ関係
+	# n  Y  y$ヘルプにもそう書いてある
 	# n  :  <Plug><ahc-switch>:
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
@@ -174,6 +177,36 @@ enddef
 # その他かんたんなテスト {{{
 def TestAutocmd()
 	assert_equal([], Scan(vimrc_str, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+enddef
+#}}}
+
+# ユーティリティのテスト {{{
+def TestMultiCmd()
+	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
+	assert_equal("\n\nn  xxx           yyyNNNzzz", execute('nmap xxx'))
+	assert_equal("\n\nv  xxx           yyyVVVzzz", execute('vmap xxx'))
+	nunmap xxx
+	vunmap xxx
+enddef
+
+def TestEnableDisable()
+	Enable g:test_vimrc_enable
+	Disable g:test_vimrc_disable
+	assert_equal(1, g:test_vimrc_enable)
+	assert_equal(0, g:test_vimrc_disable)
+	unlet g:test_vimrc_enable
+	unlet g:test_vimrc_disable
+enddef
+
+def TestTruncToDisplayWidth()
+	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
+	# var F = function('<SNR>1_TruncToDisplayWidth')
+	var F = function('<SNR>1_E')
+	assert_equal('123', F('123', 3))
+	assert_equal('12>', F('1234', 3))
+	assert_equal('あいう', F('あいう', 6))
+	assert_equal('あい>',  F('あいう1', 6))
+	assert_equal('あい>',  F('あいう', 5))
 enddef
 #}}}
 

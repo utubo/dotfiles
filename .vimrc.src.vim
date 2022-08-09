@@ -82,13 +82,10 @@ def IndentStr(expr: any): string
 enddef
 
 def TruncToDisplayWidth(str: string, width: number): string
-	var result = ''
-	for c in str->split('\zs')
-		if strdisplaywidth(result) > width
-			return result->substitute('..$', '>', '')
-		endif
-		result ..= c
-	endfor
+	var result = str
+	while len(result) > 1 && strdisplaywidth(result) > width
+		result = substitute(result, '.>\?$', '>', '')
+	endwhile
 	return result
 enddef
 #}}} -------------------------------------------------------

@@ -62,14 +62,11 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
-var d = ''
-for c in a->split('\zs')
-if strdisplaywidth(d) > b
-return d->substitute('..$', '>', '')
-endif
-d ..= c
-endfor
-return d
+var c = a
+while len(c) > 1 && strdisplaywidth(c) > b
+c = substitute(c, '.>\?$', '>', '')
+endwhile
+return c
 enddef
 const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
