@@ -62,14 +62,7 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
-if b < 1
-return ''
-endif
-var c = a
-while strdisplaywidth(c) > b
-c = substitute(c, '.>\?$', '>', '')
-endwhile
-return c
+return strdisplaywidth(a) <= b ? a : a->matchstr(printf('.*\%%<%dv', b + 1)) .. '>'
 enddef
 const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
@@ -110,6 +103,7 @@ Jetpack 'tpope/vim-fugitive'
 Jetpack 'tyru/caw.vim'
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
+Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-auto-hide-cmdline'
 Jetpack 'utubo/vim-colorscheme-girly'
@@ -136,7 +130,6 @@ Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(ahc)<Plug>(easymotion-s)
-au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
@@ -232,7 +225,6 @@ MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jum
 MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
-ino <C-l> <Cmd>lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 Enable g:ale_set_quickfix
 Enable g:ale_fix_on_save
 Disable g:ale_lint_on_insert_leave
@@ -508,7 +500,7 @@ cno <C-l> <Space><BS><Right>
 cno <expr> <C-r><C-r> trim(@")
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
 cnoreabbrev cs colorscheme
-cno kk <Esc>
+cno kk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
 if has('win32')
@@ -695,7 +687,7 @@ ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
 ino jjx <Cmd>call <SID>CA()<CR>
 ino <M-x> <Cmd>call <SID>CA()<CR>
-im ql <C-l>
+cno qq <C-f>
 def CE()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)

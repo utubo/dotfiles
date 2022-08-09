@@ -81,15 +81,9 @@ def IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
+# 指定幅以上なら'>'で省略する
 def TruncToDisplayWidth(str: string, width: number): string
-	if width < 1
-		return ''
-	endif
-	var result = str
-	while strdisplaywidth(result) > width
-		result = substitute(result, '.>\?$', '>', '')
-	endwhile
-	return result
+	return strdisplaywidth(str) <= width ? str : str->matchstr(printf('.*\%%<%dv', width + 1)) .. '>'
 enddef
 #}}} -------------------------------------------------------
 
@@ -97,7 +91,6 @@ enddef
 # プラグイン {{{
 
 # jetpack {{{
-
 const jetpackfile = expand(rtproot .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
@@ -138,6 +131,7 @@ Jetpack 'tpope/vim-fugitive'      # Gdiffとか
 Jetpack 'tyru/caw.vim'            # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
+Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-auto-hide-cmdline'
 Jetpack 'utubo/vim-colorscheme-girly'
@@ -169,7 +163,6 @@ Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 map s <Plug>(ahc)<Plug>(easymotion-s)
-au vimrc VimEnter,BufEnter * EMCommandLineNoreMap <Space><Space> <Esc>
 #}}}
 
 # sandwich {{{
@@ -283,8 +276,6 @@ MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'
 MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 #imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 Enable g:lexima_accept_pum_with_enter
-# https://qiita.com/yami_beta/items/26995a5c382bd83ac38f
-inoremap <C-l> <Cmd>lexima#insmode#leave(1, '<LT>C-G>U<LT>RIGHT>')<CR>
 #}}}
 
 # ALE {{{
@@ -411,13 +402,13 @@ nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
 nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
-# }}}
+#}}}
 
 # ヘルプ作成 {{{
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
-# }}}
+#}}}
 
 # cmdline statusline 切り替え {{{
 g:auto_hide_cmdline_switch_statusline = 1
@@ -471,7 +462,7 @@ const localplugins = expand(rtproot .. '/pack/local/opt/*')
 if localplugins !=# ''
 	&runtimepath = substitute(localplugins, '\n', ',', 'g') .. ',' .. &runtimepath
 endif
-# }}}
+#}}}
 
 filetype plugin indent on
 #}}} -------------------------------------------------------
@@ -688,7 +679,7 @@ cnoreabbrev cs colorscheme
 
 # 「jj」で<CR>、「kk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap kk <Esc>
+cnoremap kk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
 
@@ -842,7 +833,7 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
-# vimrc作成用  {{{
+# vimrc作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <expr> <SID>(exec_line) getline('.')->substitute('^[ \t"#:]\+', '', '') .. '<CR>'
 nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
@@ -851,7 +842,7 @@ vmap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vmap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh '<Cmd>hi ' .. synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '') .. '<CR>'
-# }}}
+#}}}
 
 # ----------------------------------------------------------
 # その他細々したの {{{
@@ -941,7 +932,7 @@ inoremap jjx <Cmd>call <SID>ToggleCheckBox()<CR>
 inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
-imap ql <C-l>
+cnoremap qq <C-f>
 
 # syntax固有の追加強調
 def ClearMySyntax()
@@ -959,7 +950,7 @@ au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
 # 基本的にnormalは再マッピングさせないように「!」を付ける
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
-#nnoremap <F1> :<C-u>smile<CR>
+#noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

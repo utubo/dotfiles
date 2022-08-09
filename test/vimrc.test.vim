@@ -210,8 +210,6 @@ def TestTruncToDisplayWidth()
 	assert_equal('>', F('>', 1))
 	assert_equal('>', F('あ', 1))
 	assert_equal('', F('', 1))
-	assert_equal('', F('a', 0))
-	assert_equal('', F('a', -1))
 enddef
 #}}}
 
