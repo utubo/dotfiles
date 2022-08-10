@@ -140,12 +140,12 @@ Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-textobj-twochars'
 # あまり使ってないけど作ったので…
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
-# denoがある環境用
+Jetpack 'utubo/vim-textobj-twochars'
+
 if has_deno
 	Jetpack 'vim-denops/denops.vim'
 	Jetpack 'vim-skk/skkeleton'
@@ -411,7 +411,7 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 #}}}
 
 # cmdline statusline 切り替え {{{
-g:auto_hide_cmdline_switch_statusline = 1
+Enable g:auto_hide_cmdline_switch_statusline
 # statusline非表示→cmdline表示の順にしないとちらつくので応急処置…
 # 本筋はCmdlineEnterPreを作るかupdate_screen(VALID)をCmdlineEnter発行の後にするしかない？
 # ソース
@@ -436,7 +436,7 @@ nnoremap <Space>: :
 #}}}
 
 # その他 {{{
-Enable  g:rainbow_active
+Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'

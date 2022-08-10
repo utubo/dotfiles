@@ -112,10 +112,10 @@ Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-textobj-twochars'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
+Jetpack 'utubo/vim-textobj-twochars'
 if ll
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
@@ -319,7 +319,7 @@ nn <Leader>r <Cmd>PortalReset<CR>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
-g:auto_hide_cmdline_switch_statusline = 1
+Enable g:auto_hide_cmdline_switch_statusline
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
 MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
