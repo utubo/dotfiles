@@ -62,7 +62,7 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
-return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{width + 1}v')}>'
+return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
 const lm = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
