@@ -68,7 +68,7 @@ const lm = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
 const lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system('curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
+system($'curl -fsSLo {lm} --create-dirs {lo}')
 endif
 packadd vim-jetpack
 jetpack#begin()
