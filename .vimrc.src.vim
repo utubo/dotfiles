@@ -176,7 +176,7 @@ g:sandwich#recipes += [
 	{ buns: ['%{', '}' ], input: ['%{'] },
 	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 ]
-def g:CommentString(index: number): string
+def! g:CommentString(index: number): string
 	return &commentstring->split('%s')->get(index, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
@@ -321,7 +321,7 @@ au vimrc TextYankPost * LLYankPost()
 # 毎時vim起動後45分から15分間休憩しようね
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
-def g:VimrcTimer60s(timer: any)
+def! g:VimrcTimer60s(timer: any)
 	const tick = (localtime() - g:ll_tea_break_opentime) / 60
 	const mm = tick % 60
 	const tea = mm >= 45 ? '☕🍴🍰' : ''
@@ -336,17 +336,17 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # &ff
 if has('win32')
-	def g:LLFF(): string
+	def! g:LLFF(): string
 		return &ff !=# 'dos' ? &ff : ''
 	enddef
 else
-	def g:LLFF(): string
+	def! g:LLFF(): string
 		return &ff ==# 'dos' ? &ff : ''
 	enddef
 endif
 
 # &fenc
-def g:LLNotUtf8(): string
+def! g:LLNotUtf8(): string
 	return &fenc ==# 'utf-8' ? '' : &fenc
 enddef
 
@@ -605,7 +605,7 @@ nnoremap <expr> k $'k{<SID>PutHat()}'
 # ----------------------------------------------------------
 # 折り畳み {{{
 # こんなかんじでインデントに合わせて表示📁 {{{
-def g:MyFoldText(): string
+def! g:MyFoldText(): string
 	const src = getline(v:foldstart)
 	const indent = repeat(' ', indent(v:foldstart))
 	const text = &foldmethod ==# 'indent' ? '' : src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
