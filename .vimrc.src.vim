@@ -181,10 +181,10 @@ def! g:CommentString(index: number): string
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-MultiCmd nnoremap,vnoremap S  <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
+MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,vnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap S^ v^S
 nmap S$ vg_S
 nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
