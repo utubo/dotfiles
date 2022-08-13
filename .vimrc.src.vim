@@ -1,4 +1,4 @@
-vim9script
+vim9script noclear
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -318,9 +318,9 @@ def LLYankPost()
 enddef
 au vimrc TextYankPost * LLYankPost()
 
-# 毎時45分から15分間休憩しようね
+# 毎時vim起動後45分から15分間休憩しようね
 g:ll_tea_break = '0:00'
-g:ll_tea_break_opentime = localtime()
+g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
 def g:VimrcTimer60s(timer: any)
 	const tick = (localtime() - g:ll_tea_break_opentime) / 60
 	const mm = tick % 60
