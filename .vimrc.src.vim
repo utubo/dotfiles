@@ -874,8 +874,8 @@ nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
 nnoremap TT <Cmd>silent! tabnext #<CR>
 
-onoremap <expr> } $'<Esc>m`0{v:count1}{v:operator}' .. '}'
-onoremap <expr> { $'<Esc>m`V{v:count1}' .. '{' .. v:operator
+onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
+onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 
 vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'

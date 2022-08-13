@@ -649,8 +649,8 @@ nm TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
 nn TT <Cmd>silent! tabnext #<CR>
-ono <expr> } $'<Esc>m`0{v:count1}{v:operator}' .. '}'
-ono <expr> { $'<Esc>m`V{v:count1}' .. '{' .. v:operator
+ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
+ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 vn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vn J j
