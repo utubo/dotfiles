@@ -35,7 +35,7 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
-nohlsearch
+nohlsearch # TODO: viminfoのhオプションを見直すのが正攻法
 
 augroup vimrc
 	# 新しい自由
@@ -56,7 +56,7 @@ def MultiCmd(qargs: string)
 	const [cmds, args] = qargs->split('^\S*\zs')
 	for cmd in cmds->split(',')
 		const a = args
-			->substitute('<if-' .. cmd .. '>', '<>', 'g')
+			->substitute($'<if-{cmd}>', '<>', 'g')
 			->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
 			->substitute('<>', '', 'g')
 		execute cmd a
@@ -83,7 +83,7 @@ enddef
 
 # 指定幅以上なら'>'で省略する
 def TruncToDisplayWidth(str: string, width: number): string
-	return strdisplaywidth(str) <= width ? str : str->matchstr(printf('.*\%%<%dv', width + 1)) .. '>'
+	return strdisplaywidth(str) <= width ? str : $'{str->matchstr(printf('.*\%%<%dv', width + 1))}>'
 enddef
 #}}} -------------------------------------------------------
 
@@ -91,7 +91,7 @@ enddef
 # プラグイン {{{
 
 # jetpack {{{
-const jetpackfile = expand(rtproot .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const jetpackfile = expand( $'{rtproot}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
   const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
@@ -176,15 +176,15 @@ g:sandwich#recipes += [
 	{ buns: ['%{', '}' ], input: ['%{'] },
 	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 ]
-def! g:CommentString(index: number): string
+def g:CommentString(index: number): string
 	return &commentstring->split('%s')->get(index, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-MultiCmd nmap,vmap S  <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap S  <Plug>(operator-sandwich-add)<if-nmap>iw
 nmap S^ v^S
 nmap S$ vg_S
 nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
@@ -261,7 +261,7 @@ enddef
 au vimrc FileType mru MyMRU()
 au vimrc ColorScheme * hi link MruFileName Directory
 nnoremap <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
+g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 #}}}
 
 # 補完 {{{
@@ -287,8 +287,8 @@ g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
 g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
-nmap <silent> [a <Plug>(ale_previous_wrap)
-nmap <silent> ]a <Plug>(ale_next_wrap)
+nnoremap <silent> [a <Plug>(ale_previous_wrap)
+nnoremap <silent> ]a <Plug>(ale_next_wrap)
 # cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
 Disable g:ale_echo_cursor
 g:ll_are = ''
@@ -314,18 +314,18 @@ def LLYankPost()
 		->join('\n')
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
-	g:ll_reg = '📋:' .. reg
+	g:ll_reg = $'📋:{reg}'
 enddef
 au vimrc TextYankPost * LLYankPost()
 
 # 毎時45分から15分間休憩しようね
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
-def! g:VimrcTimer60s(timer: any)
+def g:VimrcTimer60s(timer: any)
 	const tick = (localtime() - g:ll_tea_break_opentime) / 60
 	const mm = tick % 60
 	const tea = mm >= 45 ? '☕🍴🍰' : ''
-	g:ll_tea_break = tea .. printf('%d:%02d', tick / 60, mm)
+	g:ll_tea_break = printf('%s%d:%02d', tea, tick / 60, mm)
 	lightline#update()
 	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
@@ -336,17 +336,17 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # &ff
 if has('win32')
-	def! g:LLFF(): string
+	def g:LLFF(): string
 		return &ff !=# 'dos' ? &ff : ''
 	enddef
 else
-	def! g:LLFF(): string
+	def g:LLFF(): string
 		return &ff ==# 'dos' ? &ff : ''
 	enddef
 endif
 
 # &fenc
-def! g:LLNotUtf8(): string
+def g:LLNotUtf8(): string
 	return &fenc ==# 'utf-8' ? '' : &fenc
 enddef
 
@@ -369,8 +369,8 @@ au vimrc VimEnter * set tabline=
 if has_deno
 	if ! empty($SKK_JISYO_DIR)
 		skkeleton#config({
-			globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
-			userJisyo: expand($SKK_JISYO_DIR .. '.skkeleton'),
+		globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
+			userJisyo: expand($'{$SKK_JISYO_DIR}.skkeleton'),
 		})
 	endif
 	skkeleton#config({
@@ -440,8 +440,8 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nmap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
-nmap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
+nnoremap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
+nnoremap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nmap <Space>ga :<C-u>Git add %
 nmap <Space>gc :<C-u>Git commit -m ''<Left>
 nmap <Space>gp :<C-u>Git push
@@ -450,17 +450,17 @@ nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>t <Cmd>call tabpopupmenu#popup()<CR>
 nnoremap <Space>T <Cmd>call tablist#Show()<CR>
-MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
-MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
+MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 # EasyMotionとどっちを使うか様子見中
 noremap <Space>s <Plug>(jumpcursor-jump)
 #}}}
 
 # 開発用 {{{
-const localplugins = expand(rtproot .. '/pack/local/opt/*')
+const localplugins = expand($'{rtproot}/pack/local/opt/*')
 if localplugins !=# ''
-	&runtimepath = substitute(localplugins, '\n', ',', 'g') .. ',' .. &runtimepath
+	&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
 endif
 #}}}
 
@@ -478,9 +478,9 @@ inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-nnoremap <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
-nnoremap <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
-nnoremap <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
+nnoremap <expr> i !empty(getline('.')) ? 'i' : '"_cc'
+nnoremap <expr> a !empty(getline('.')) ? 'a' : '"_cc'
+nnoremap <expr> A !empty(getline('.')) ? 'A' : '"_cc'
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -510,7 +510,7 @@ def VimGrep(keyword: string, ...targets: list<string>)
 	var path = join(targets, ' ')
 	# パスを省略した場合は、同じ拡張子のファイルから探す
 	if empty(path)
-		path = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
+		path = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
 	endif
 	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
 	const use_tab = BufIsSmth() && path !=# '%'
@@ -523,7 +523,7 @@ def VimGrep(keyword: string, ...targets: list<string>)
 		lwindow
 	else
 		echoh ErrorMsg
-		echomsg 'Not found.: ' .. keyword
+		echomsg $'Not found.: {keyword}'
 		echoh None
 		if use_tab
 			tabnext -
@@ -578,7 +578,7 @@ nnoremap <Space>zz <Cmd>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <Space>y yiw
-nnoremap <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
+nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 # スマホだと:と/とファンクションキーが遠いので…
 nmap <Space>. :
 nmap <Space>, /
@@ -598,18 +598,18 @@ def PutHat(): string
 	endif
 	return w:my_hat
 enddef
-nnoremap <expr> j 'j' .. <SID>PutHat()
-nnoremap <expr> k 'k' .. <SID>PutHat()
+nnoremap <expr> j $'j{<SID>PutHat()}'
+nnoremap <expr> k $'k{<SID>PutHat()}'
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # 折り畳み {{{
 # こんなかんじでインデントに合わせて表示📁 {{{
-def! g:MyFoldText(): string
+def g:MyFoldText(): string
 	const src = getline(v:foldstart)
 	const indent = repeat(' ', indent(v:foldstart))
 	const text = &foldmethod ==# 'indent' ? '' : src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
-	return indent .. text .. '📁'
+	return $'{indent}{text} 📁'
 enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
@@ -732,7 +732,7 @@ def ShowBufInfo(event: string = '')
 	endif
 
 	var msg = []
-	add(msg, ['Title', '"' .. bufname() .. '"'])
+	add(msg, ['Title', $'"{bufname()}"'])
 	add(msg, ['Normal', ' '])
 	if &modified
 		add(msg, ['Delimiter', '[+]'])
@@ -818,7 +818,7 @@ def MoveFile(newname: string)
 	if ! empty(oldpath) && filereadable(oldpath)
 		if filereadable(newpath)
 			echoh Error
-			echo 'file "' .. newname .. '" already exists.'
+			echo $'file "{newname}" already exists.'
 			echoh None
 			return
 		endif
@@ -835,13 +835,13 @@ cnoreabbrev mv MoveFile
 # ----------------------------------------------------------
 # vimrc作成用 {{{
 # カーソル行を実行するやつ
-cnoremap <expr> <SID>(exec_line) getline('.')->substitute('^[ \t"#:]\+', '', '') .. '<CR>'
+cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
 nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vmap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
-vmap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
+vnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+vnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh '<Cmd>hi ' .. synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '') .. '<CR>'
+nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 #}}}
 
 # ----------------------------------------------------------
@@ -854,7 +854,7 @@ endif
 nnoremap <F11> <Cmd>set number!<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
-cnoremap <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
+cnoremap <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nmap gs :<C-u>%<SID>(rpl)
 nmap gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
 vmap gs :<SID>(rpl)
@@ -874,8 +874,8 @@ nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
 nnoremap TT <Cmd>silent! tabnext #<CR>
 
-onoremap <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}'
-onoremap <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator
+onoremap <expr> } $'<Esc>m`0{v:count1}{v:operator}' .. '}'
+onoremap <expr> { $'<Esc>m`V{v:count1}' .. '{' .. v:operator
 
 vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
@@ -894,7 +894,7 @@ au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | 
 # ----------------------------------------------------------
 # 様子見中 {{{
 # 使わなそうなら削除する
-vnoremap <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
+vnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
 vnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
@@ -959,7 +959,7 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 nnoremap <Space>a A
 
 # 最後の選択範囲を現在行の下に移動する
-nnoremap <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 
 #}}} -------------------------------------------------------
 

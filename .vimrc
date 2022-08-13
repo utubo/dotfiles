@@ -42,7 +42,7 @@ def A(b: string)
 const [c, d] = b->split('^\S*\zs')
 for e in c->split(',')
 const a = d
-->substitute('<if-' .. e .. '>', '<>', 'g')
+->substitute($'<if-{cmd}>', '<>', 'g')
 ->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
 ->substitute('<>', '', 'g')
 exe e a
@@ -62,9 +62,9 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
-return strdisplaywidth(a) <= b ? a : a->matchstr(printf('.*\%%<%dv', b + 1)) .. '>'
+return strdisplaywidth(a) <= b ? a : $'{str->matchstr(printf('.*\%%<%dv', width + 1))}>'
 enddef
-const lm = expand(lk .. '/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const lm = expand( $'{rtproot}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
 const lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
@@ -140,15 +140,15 @@ g:sandwich#recipes += [
 { buns: ['%{', '}' ], input: ['%{'] },
 { buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 ]
-def! g:CommentString(a: number): string
+def g:CommentString(a: number): string
 return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nmap,vmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nmap,vmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nmap,vmap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-MultiCmd nmap,vmap S <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap S <Plug>(operator-sandwich-add)<if-nmap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
@@ -214,7 +214,7 @@ enddef
 au vimrc FileType mru J()
 au vimrc ColorScheme * hi link MruFileName Directory
 nn <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $TEMP .. '\\.*' : '^/tmp/.*\|^/var/tmp/.*'
+g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 def BA(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
@@ -233,8 +233,8 @@ g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
 g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &ut
-nm <silent> [a <Plug>(ale_previous_wrap)
-nm <silent> ]a <Plug>(ale_next_wrap)
+nn <silent> [a <Plug>(ale_previous_wrap)
+nn <silent> ]a <Plug>(ale_next_wrap)
 Disable g:ale_echo_cursor
 g:ll_are = ''
 def BB()
@@ -255,16 +255,16 @@ var a = v:event.regcontents
 ->join('\n')
 ->substitute('\t', '›', 'g')
 ->E(20)
-g:ll_reg = '📋:' .. a
+g:ll_reg = $'📋:{reg}'
 enddef
 au vimrc TextYankPost * BC()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = localtime()
-def! g:VimrcTimer60s(a: any)
+def g:VimrcTimer60s(a: any)
 const b = (localtime() - g:ll_tea_break_opentime) / 60
 const c = b % 60
 const d = c >= 45 ? '☕🍴🍰' : ''
-g:ll_tea_break = d .. printf('%d:%02d', b / 60, c)
+g:ll_tea_break = printf('%s%d:%02d', d, b / 60, c)
 lightline#update()
 if (c ==# 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
@@ -273,15 +273,15 @@ enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 if has('win32')
-def! g:LLFF(): string
+def g:LLFF(): string
 return &ff !=# 'dos' ? &ff : ''
 enddef
 else
-def! g:LLFF(): string
+def g:LLFF(): string
 return &ff ==# 'dos' ? &ff : ''
 enddef
 endif
-def! g:LLNotUtf8(): string
+def g:LLNotUtf8(): string
 return &fenc ==# 'utf-8' ? '' : &fenc
 enddef
 g:lightline = {
@@ -297,8 +297,8 @@ au vimrc VimEnter * set tabline=
 if ll
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
-globalJisyo: expand($SKK_JISYO_DIR .. 'SKK-JISYO.L'),
-userJisyo: expand($SKK_JISYO_DIR .. '.skkeleton'),
+globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
+userJisyo: expand($'{$SKK_JISYO_DIR}.skkeleton'),
 })
 endif
 skkeleton#config({
@@ -330,8 +330,8 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nm [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
-nm ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
+nn [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
+nn ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
 nm <Space>ga :<C-u>Git add %
 nm <Space>gc :<C-u>Git commit -m ''<Left>
 nm <Space>gp :<C-u>Git push
@@ -340,13 +340,13 @@ nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>t <Cmd>call tabpopupmenu#popup()<CR>
 nn <Space>T <Cmd>call tablist#Show()<CR>
-MultiCmd nmap,vmap <Space>c <Plug>(caw:hatpos:toggle)
-MultiCmd nmap,tmap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-MultiCmd nmap,tmap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
+MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lq = expand(lk .. '/pack/local/opt/*')
+const lq = expand($'{rtproot}/pack/local/opt/*')
 if lq !=# ''
-&runtimepath = substitute(lq, '\n', ',', 'g') .. ',' .. &runtimepath
+&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
 endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
@@ -356,9 +356,9 @@ ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-nn <expr> i len(getline('.')) !=# 0 ? 'i' : '"_cc'
-nn <expr> a len(getline('.')) !=# 0 ? 'a' : '"_cc'
-nn <expr> A len(getline('.')) !=# 0 ? 'A' : '"_cc'
+nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
+nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
+nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
 def BD()
 const a = 100
 const b = getpos('.')
@@ -379,7 +379,7 @@ au vimrc BufReadPost * BD()
 def BE(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
-c = expand('%:e') ==# '' ? '*' : ('*.' .. expand('%:e'))
+c = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
 endif
 const d = C() && c !=# '%'
 if d
@@ -390,7 +390,7 @@ if ! empty(getloclist(0))
 lwindow
 else
 echoh ErrorMsg
-echom 'Not found.: ' .. a
+echom $'Not found.: {keyword}'
 echoh None
 if d
 tabn -
@@ -427,7 +427,7 @@ nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <Space>y yiw
-nn <expr> <Space>f (getreg('"') =~ '^\d\+$' ? ':' : '/') .. getreg('"') .. '<CR>'
+nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
 nm <Space>, /
 for i in range(1, 10)
@@ -442,13 +442,13 @@ w:my_hat = col('.') ==# x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j 'j' .. <SID>BG()
-nn <expr> k 'k' .. <SID>BG()
-def! g:MyFoldText(): string
+nn <expr> j $'j{<SID>BG()}'
+nn <expr> k $'k{<SID>BG()}'
+def g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
 const c = &fdm ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
-return b .. c .. '📁'
+return $'{indent}{text} 📁'
 enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
@@ -537,7 +537,7 @@ if b && ! filereadable(expand('%'))
 return
 endif
 var c = []
-add(c, ['Title', '"' .. bufname() .. '"'])
+add(c, ['Title', $'"{bufname()}"'])
 add(c, ['Normal', ' '])
 if &modified
 add(c, ['Delimiter', '[+]'])
@@ -612,7 +612,7 @@ const c = expand(a)
 if ! empty(b) && filereadable(b)
 if filereadable(c)
 echoh Error
-ec 'file "' .. a .. '" already exists.'
+ec $'file "{newname}" already exists.'
 echoh None
 return
 endif
@@ -623,19 +623,19 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile call <SID>CD(<f-args>)
 cnoreabbrev mv MoveFile
-cno <expr> <SID>(exec_line) getline('.')->substitute('^[ \t"#:]\+', '', '') .. '<CR>'
+cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
 nm g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vm g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
-vm g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
-nn <expr> <Space>gh '<Cmd>hi ' .. synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '') .. '<CR>'
+vn g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+vn g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
+nn <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
 nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
-cno <expr> <SID>(rpl) 's///g \| noh' .. repeat('<Left>', 9)
+cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
 nm gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
 vm gs :<SID>(rpl)
@@ -649,8 +649,8 @@ nm TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
 nn TT <Cmd>silent! tabnext #<CR>
-ono <expr> } '<Esc>m`0' .. v:count1 .. v:operator .. '}'
-ono <expr> { '<Esc>m`V' .. v:count1 .. '{' .. v:operator
+ono <expr> } $'<Esc>m`0{v:count1}{v:operator}' .. '}'
+ono <expr> { $'<Esc>m`V{v:count1}' .. '{' .. v:operator
 vn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 vn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 vn J j
@@ -661,7 +661,7 @@ ino 「」 「」<Left>
 ino （ ()<Left>
 ino （） ()<Left>
 au vimrc FileType vim if getline(1) ==# 'vim9script'|&commentstring = '#%s'|endif
-vn <expr> p '"_s<C-R>' .. v:register .. '<ESC>'
+vn <expr> p $'"_s<C-R>{v:register}<ESC>'
 vn P p
 nn <Space>h ^
 nn <Space>l $
@@ -701,7 +701,7 @@ au vimrc Syntax * CE()
 au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim CF('SpellRare', '\<normal!\@!')
 nn <Space>a A
-nn <expr> <Space>m '<Cmd>' .. getpos("'<")[1] .. ',' .. getpos("'>")[1] .. 'move ' .. getpos('.')[1] .. '<CR>'
+nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
 def CG()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
