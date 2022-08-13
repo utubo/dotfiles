@@ -83,7 +83,7 @@ enddef
 
 # 指定幅以上なら'>'で省略する
 def TruncToDisplayWidth(str: string, width: number): string
-	return strdisplaywidth(str) <= width ? str : $'{str->matchstr(printf('.*\%%<%dv', width + 1))}>'
+	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 #}}} -------------------------------------------------------
 
@@ -95,7 +95,7 @@ const jetpackfile = expand( $'{rtproot}/pack/jetpack/opt/vim-jetpack/plugin/jetp
 const has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
   const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-  system(printf('curl -fsSLo %s --create-dirs %s', jetpackfile, jetpackurl))
+  system('curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
 endif
 
 packadd vim-jetpack
@@ -242,12 +242,12 @@ def MRUwithNumKey(use_tab: bool)
 	redraw
 	if &cmdheight !=# 0
 		echoh Question
-		echo printf('[1]..[9] => open with a %s.', use_tab ? 'tab' : 'window')
+		echo $'[1]..[9] => open with a {use_tab ? 'tab' : 'window'}.'
 		echoh None
 	endif
 	const key = use_tab ? 't' : '<CR>'
 	for i in range(1, 9)
-		execute printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, key)
+		execute $'nmap <buffer> <silent> {i} :<C-u>{i}<CR>{key}'
 	endfor
 enddef
 def MyMRU()
@@ -518,7 +518,7 @@ def VimGrep(keyword: string, ...targets: list<string>)
 		tabnew
 	endif
 	# lvimgrepしてなんやかんやして終わり
-	execute printf('silent! lvimgrep %s %s', keyword, path)
+	execute $'silent! lvimgrep {keyword} {path}'
 	if ! empty(getloclist(0))
 		lwindow
 	else
@@ -542,7 +542,7 @@ def SetupQF()
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
 	# 様子見中(使わなそうなら削除する)
-	execute printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
+	execute $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
 enddef
 au vimrc FileType qf SetupQF()
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
@@ -583,7 +583,7 @@ nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<
 nmap <Space>. :
 nmap <Space>, /
 for i in range(1, 10)
-	execute printf('nmap <Space>%d <F%d>', i % 10, i)
+	execute $'nmap <Space>{i % 10} <F{i}>'
 endfor
 nmap <Space><Space>1 <F11>
 nmap <Space><Space>2 <F12>
@@ -751,7 +751,7 @@ def ShowBufInfo(event: string = '')
 		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 		add(msg, ['Normal', ' '])
 	endif
-	add(msg, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &encoding : &fenc), &ft)])
+	add(msg, ['MoreMsg', $'{&ff} {empty(&fenc) ? &encoding : &fenc} {&ft}'])
 	var msglen = 0
 	const maxlen = &columns - 2
 	for i in reverse(range(0, len(msg) - 1))

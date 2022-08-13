@@ -62,13 +62,13 @@ def D(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
 def E(a: string, b: number): string
-return strdisplaywidth(a) <= b ? a : $'{a->matchstr(printf('.*\%%<%dv', b + 1))}>'
+return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 const lm = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
 const lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system(printf('curl -fsSLo %s --create-dirs %s', lm, lo))
+system('curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
 endif
 packadd vim-jetpack
 jetpack#begin()
@@ -145,10 +145,10 @@ return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nmap>iw
-MultiCmd nnoremap,vnoremap S <Plug>(operator-sandwich-add)<if-nmap>iw
+MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
+MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,vnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
@@ -195,12 +195,12 @@ setl number
 redraw
 if &cmdheight !=# 0
 echoh Question
-ec printf('[1]..[9] => open with a %s.', a ? 'tab' : 'window')
+ec $'[1]..[9] => open with a {a ? 'tab' : 'window'}.'
 echoh None
 endif
 const c = a ? 't' : '<CR>'
 for i in range(1, 9)
-exe printf('nmap <buffer> <silent> %d :<C-u>%d<CR>%s', i, i, c)
+exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR>{c}'
 endfor
 enddef
 def J()
@@ -385,7 +385,7 @@ const d = C() && c !=# '%'
 if d
 tabnew
 endif
-exe printf('silent! lvimgrep %s %s', a, c)
+exe $'silent! lvimgrep {a} {c}'
 if ! empty(getloclist(0))
 lwindow
 else
@@ -407,7 +407,7 @@ nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
 nn <buffer> <nowait> q <Cmd>lexpr ''<CR>:q<CR>
 nn <buffer> f <C-f>
 nn <buffer> b <C-b>
-exe printf('nnoremap <buffer> T <C-W><CR><C-W>T%dgt', tabpagenr())
+exe $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
 enddef
 au vimrc FileType qf BF()
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
@@ -431,7 +431,7 @@ nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
 nm <Space>, /
 for i in range(1, 10)
-exe printf('nmap <Space>%d <F%d>', i % 10, i)
+exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
@@ -556,7 +556,7 @@ if b || w.bytes !=# 0
 add(c, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 add(c, ['Normal', ' '])
 endif
-add(c, ['MoreMsg', printf('%s %s %s', &ff, (empty(&fenc) ? &enc : &fenc), &ft)])
+add(c, ['MoreMsg', $'{&ff} {empty(&fenc) ? &enc : &fenc} {&ft}'])
 var e = 0
 const f = &columns - 2
 for i in reverse(range(0, len(c) - 1))
