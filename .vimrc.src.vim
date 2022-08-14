@@ -311,7 +311,7 @@ au vimrc CursorMoved * ALEEchoCursorCmdHeight0()
 g:ll_reg = ''
 def LLYankPost()
 	var reg = v:event.regcontents
-		->join('\n')
+		->join('↵')
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
 	g:ll_reg = $'📋:{reg}'
@@ -673,8 +673,8 @@ vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 # コマンドモードあれこれ {{{
 cnoremap <C-h> <Space><BS><Left>
 cnoremap <C-l> <Space><BS><Right>
-cnoremap <expr> <C-r><C-r> trim(@")
-cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
+cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
+cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
 
 # 「jj」で<CR>、「kk」はキャンセル

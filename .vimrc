@@ -252,7 +252,7 @@ au vimrc CursorMoved * BB()
 g:ll_reg = ''
 def BC()
 var a = v:event.regcontents
-->join('\n')
+->join('↵')
 ->substitute('\t', '›', 'g')
 ->E(20)
 g:ll_reg = $'📋:{a}'
@@ -497,8 +497,8 @@ vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
 cno <C-l> <Space><BS><Right>
-cno <expr> <C-r><C-r> trim(@")
-cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')
+cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
+cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
 cno kk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
