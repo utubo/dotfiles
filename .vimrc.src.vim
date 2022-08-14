@@ -270,11 +270,11 @@ def RegisterAsyncompSource(name: string, white: list<string>, black: list<string
 enddef
 RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
 RegisterAsyncompSource('buffer', ['*'], ['go'])
-MultiCmd imap,smap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd imap,smap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd imap,smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-#imap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
+MultiCmd inoremap,snoremap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd inoremap,snoremap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+#inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
 Enable g:lexima_accept_pum_with_enter
 #}}}
 
@@ -320,7 +320,7 @@ au vimrc TextYankPost * LLYankPost()
 
 # 毎時vim起動後45分から15分間休憩しようね
 g:ll_tea_break = '0:00'
-g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
+g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime()) # .vimrcを再読込して起動時間は持ち越し(1行目でnoclearしてるので持ち越せる)
 def! g:VimrcTimer60s(timer: any)
 	const tick = (localtime() - g:ll_tea_break_opentime) / 60
 	const mm = tick % 60
@@ -383,8 +383,8 @@ endif
 #}}}
 
 # textobj-multiblock  {{{
-MultiCmd omap,xmap ab <Plug>(textobj-multiblock-a)
-MultiCmd omap,xmap ib <Plug>(textobj-multiblock-i)
+MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 	\ [ "(", ")" ],
 	\ [ "[", "]" ],
@@ -888,7 +888,7 @@ inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
 
-au vimrc FileType vim if getline(1) ==# 'vim9script' | &commentstring = '#%s' | endif
+
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

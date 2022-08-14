@@ -220,10 +220,10 @@ exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_opti
 enddef
 BA('omni', ['*'], ['c', 'cpp', 'html'])
 BA('buffer', ['*'], ['go'])
-MultiCmd imap,smap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd imap,smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-MultiCmd imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd inoremap,snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:lexima_accept_pum_with_enter
 Enable g:ale_set_quickfix
 Enable g:ale_fix_on_save
@@ -308,8 +308,8 @@ showCandidatesCount: 1,
 })
 map! <C-j> <Plug>(skkeleton-toggle)
 endif
-MultiCmd omap,xmap ab <Plug>(textobj-multiblock-a)
-MultiCmd omap,xmap ib <Plug>(textobj-multiblock-i)
+MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ], [ '<', '>' ], [ '"', '"', 1 ], [ "'", "'", 1 ], [ ">", "<", 1 ], [ "「", "」", 1 ],
 ]
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -660,7 +660,6 @@ ino 「 「」<Left>
 ino 「」 「」<Left>
 ino （ ()<Left>
 ino （） ()<Left>
-au vimrc FileType vim if getline(1) ==# 'vim9script'|&commentstring = '#%s'|endif
 vn <expr> p $'"_s<C-R>{v:register}<ESC>'
 vn P p
 nn <Space>h ^
