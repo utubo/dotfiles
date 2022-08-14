@@ -177,7 +177,7 @@ endif
 endif
 enddef
 nm Sm viwSm
-vm Sm <Cmd>call <SID>G()<CR>
+vm Sm <ScriptCmd>G()<CR>
 def H()
 const c = g:operator#sandwich#object.cursor
 B(c.tail[1])
@@ -206,7 +206,7 @@ enddef
 def J()
 Enable b:auto_cursorline_disabled
 setl cursorline
-nn <buffer> w <Cmd>call <SID>I(!b:use_tab)<CR>
+nn <buffer> w <ScriptCmd>I(!b:use_tab)<CR>
 nn <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
 nn <buffer> <Esc> <Cmd>q!<CR>
 I(C())
@@ -338,8 +338,8 @@ nm <Space>gp :<C-u>Git push
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
-nn <Space>t <Cmd>call tabpopupmenu#popup()<CR>
-nn <Space>T <Cmd>call tablist#Show()<CR>
+nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
+nn <Space>T <ScriptCmd>tablist#Show()<CR>
 MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -420,9 +420,9 @@ A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日'
 }]
 ino <expr> <F5> strftime('%Y/%m/%d')
 cno <expr> <F5> strftime('%Y%m%d')
-nn <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
-nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
-nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
+nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
+nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
+nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -462,7 +462,7 @@ cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf <Cmd>call <SID>BH()<CR>
+vn zf <ScriptCmd>BH()<CR>
 def BI()
 if foldclosed(line('.')) ==# -1
 normal! zc
@@ -478,7 +478,7 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn zd <Cmd>call <SID>BI()<CR>
+nn zd <ScriptCmd>BI()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -491,8 +491,8 @@ const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-vn u <Cmd>call <SID>BJ('undo')<CR>
-vn <C-R> <Cmd>call <SID>BJ('redo')<CR>
+vn u <ScriptCmd>BJ('undo')<CR>
+vn <C-R> <ScriptCmd>BJ('redo')<CR>
 vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
@@ -527,7 +527,7 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <Space>x <Cmd>call <SID>CA()<CR>
+no <Space>x <ScriptCmd>CA()<CR>
 def CB(a: string = '')
 if &ft ==# 'qf'
 return
@@ -582,7 +582,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-no <C-g> <Plug>(ahc)<Cmd>call <SID>CB()<CR>
+no <C-g> <Plug>(ahc)<ScriptCmd>call <SID>CB()<CR>
 def CC(a: string = '')
 if ! empty(a)
 if winnr() ==# winnr(a)
@@ -598,11 +598,11 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-nn qh <Cmd>call <SID>CC('h')<CR>
-nn qj <Cmd>call <SID>CC('j')<CR>
-nn qk <Cmd>call <SID>CC('k')<CR>
-nn ql <Cmd>call <SID>CC('l')<CR>
-nn qq <Cmd>call <SID>CC()<CR>
+nn qh <ScriptCmd>CC('h')<CR>
+nn qj <ScriptCmd>CC('j')<CR>
+nn qk <ScriptCmd>CC('k')<CR>
+nn ql <ScriptCmd>CC('l')<CR>
+nn qq <ScriptCmd>CC()<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
@@ -637,7 +637,7 @@ nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
-nm gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+nm gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
 vm gs :<SID>(rpl)
 nn Y y$
 nn <Space>p $p
@@ -684,8 +684,8 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <Cmd>call <SID>CA()<CR>
-ino <M-x> <Cmd>call <SID>CA()<CR>
+ino jjx <ScriptCmd>CA()<CR>
+ino <M-x> <ScriptCmd>CA()<CR>
 cno qq <C-f>
 def CE()
 for a in get(w:, 'my_syntax', [])

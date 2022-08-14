@@ -217,7 +217,7 @@ def BigMac(first: bool = true)
 	endif
 enddef
 nmap Sm viwSm
-vmap Sm <Cmd>call <SID>BigMac()<CR>
+vmap Sm <ScriptCmd>BigMac()<CR>
 
 # 囲みを削除したら行末空白と空行も削除
 def RemoveAirBuns()
@@ -253,7 +253,7 @@ enddef
 def MyMRU()
 	Enable b:auto_cursorline_disabled
 	setlocal cursorline
-	nnoremap <buffer> w <Cmd>call <SID>MRUwithNumKey(!b:use_tab)<CR>
+	nnoremap <buffer> w <ScriptCmd>MRUwithNumKey(!b:use_tab)<CR>
 	nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
 	nnoremap <buffer> <Esc> <Cmd>q!<CR>
 	MRUwithNumKey(BufIsSmth())
@@ -448,8 +448,8 @@ nmap <Space>gp :<C-u>Git push
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
-nnoremap <Space>t <Cmd>call tabpopupmenu#popup()<CR>
-nnoremap <Space>T <Cmd>call tablist#Show()<CR>
+nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
+nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
@@ -564,9 +564,9 @@ g:reformatdate_extend_names = [{
 }]
 inoremap <expr> <F5> strftime('%Y/%m/%d')
 cnoremap <expr> <F5> strftime('%Y%m%d')
-nnoremap <F5> <Cmd>call reformatdate#reformat(localtime())<CR>
-nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
-nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
+nnoremap <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
+nnoremap <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
+nnoremap <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 #}}} -------------------------------------------------------
 
@@ -625,7 +625,7 @@ def Zf()
 	cursor([lastline + 1, 1])
 	normal! zf
 enddef
-vnoremap zf <Cmd>call <SID>Zf()<CR>
+vnoremap zf <ScriptCmd>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
 def Zd()
@@ -643,7 +643,7 @@ def Zd()
 	RemoveEmptyLine(head)
 	setpos('.', org)
 enddef
-nnoremap zd <Cmd>call <SID>Zd()<CR>
+nnoremap zd <ScriptCmd>Zd()<CR>
 #}}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
@@ -663,8 +663,8 @@ def KeepingCurPos(expr: string)
 	execute expr
 	setpos('.', cur)
 enddef
-vnoremap u <Cmd>call <SID>KeepingCurPos('undo')<CR>
-vnoremap <C-R> <Cmd>call <SID>KeepingCurPos('redo')<CR>
+vnoremap u <ScriptCmd>KeepingCurPos('undo')<CR>
+vnoremap <C-R> <ScriptCmd>KeepingCurPos('redo')<CR>
 vnoremap <Tab> <Cmd>normal! >gv<CR>
 vnoremap <S-Tab> <Cmd>normal! <gv<CR>
 #}}}
@@ -715,7 +715,7 @@ def ToggleCheckBox()
 	c[2] += len(b) - len(a)
 	setpos('.', c)
 enddef
-noremap <Space>x <Cmd>call <SID>ToggleCheckBox()<CR>
+noremap <Space>x <ScriptCmd>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -776,8 +776,8 @@ def ShowBufInfo(event: string = '')
 		echon m[1]
 	endfor
 	echohl Normal
-enddef
-noremap <C-g> <Plug>(ahc)<Cmd>call <SID>ShowBufInfo()<CR>
+enddef # TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
+noremap <C-g> <Plug>(ahc)<ScriptCmd>call <SID>ShowBufInfo()<CR>
 # cmdheight=0にしたら無用になった
 # au vimrc BufNewFile * ShowBufInfo('BufNewFile')
 # au vimrc BufReadPost * ShowBufInfo('BufReadPost')
@@ -800,11 +800,11 @@ def Quit(expr: string = '')
 enddef
 nnoremap q <Nop>
 nnoremap Q q
-nnoremap qh <Cmd>call <SID>Quit('h')<CR>
-nnoremap qj <Cmd>call <SID>Quit('j')<CR>
-nnoremap qk <Cmd>call <SID>Quit('k')<CR>
-nnoremap ql <Cmd>call <SID>Quit('l')<CR>
-nnoremap qq <Cmd>call <SID>Quit()<CR>
+nnoremap qh <ScriptCmd>Quit('h')<CR>
+nnoremap qj <ScriptCmd>Quit('j')<CR>
+nnoremap qk <ScriptCmd>Quit('k')<CR>
+nnoremap ql <ScriptCmd>Quit('l')<CR>
+nnoremap qq <ScriptCmd>Quit()<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
@@ -856,7 +856,7 @@ nnoremap <F12> <Cmd>set wrap!<CR>
 
 cnoremap <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nmap gs :<C-u>%<SID>(rpl)
-nmap gS :<C-u>%<SID>(rpl)<Cmd>call feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+nmap gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
 vmap gs :<SID>(rpl)
 
 nnoremap Y y$
@@ -927,9 +927,9 @@ inoremap jj{ <C-o>$ {
 inoremap jj} <C-o>$ }
 inoremap jj<CR> <C-o>$<CR>
 inoremap jjk 「」<Left>
-inoremap jjx <Cmd>call <SID>ToggleCheckBox()<CR>
+inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
 # これはちょっと押しにくい(自分のキーボードだと)
-inoremap <M-x> <Cmd>call <SID>ToggleCheckBox()<CR>
+inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
 cnoremap qq <C-f>
