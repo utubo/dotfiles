@@ -35,7 +35,7 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
-nohlsearch # TODO: viminfoのhオプションを見直すのが正攻法
+# nohlsearch # TODO: Vimはデフォルトでviminfoのhオプションが有効なのでこの行は不要。読書会が終わったら削除する
 
 augroup vimrc
 	# 新しい自由
