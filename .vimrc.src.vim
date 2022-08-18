@@ -988,6 +988,9 @@ def DefaultColors()
 	]
 enddef
 au vimrc ColorSchemePre * DefaultColors()
+
+# 好みでハイライト
+# vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
 def MyMatches()
 	if exists('w:my_matches') && !empty(getmatches())
 		return
@@ -999,6 +1002,7 @@ def MyMatches()
 	matchadd('Todo', 'TODO')
 	matchadd('Error', 'ERROR')
 	matchadd('Delimiter', '- \[ \]')
+	matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 	# 全角空白と半角幅の円記号
 	matchadd('SpellBad', '[　¥]')
 	# 稀によくtypoする単語(気づいたら追加する)

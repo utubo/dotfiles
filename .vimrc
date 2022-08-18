@@ -730,6 +730,7 @@ matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 matchadd('Todo', 'TODO')
 matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
+matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
