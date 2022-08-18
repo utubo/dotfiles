@@ -999,12 +999,27 @@ def MyMatches()
 	matchadd('Todo', 'TODO')
 	matchadd('Error', 'ERROR')
 	matchadd('Delimiter', '- \[ \]')
-	# 全角空白、半角幅の円記号、文末空白
-	matchadd('SpellBad', '　\|¥\|\s\+$')
+	# 全角空白と半角幅の円記号
+	matchadd('SpellBad', '[　¥]')
 	# 稀によくtypoする単語(気づいたら追加する)
 	matchadd('SpellBad', 'stlye')
 enddef
 au vimrc VimEnter,WinEnter * MyMatches()
+
+# 文末空白(&listが有効のときだけSpellBadで目立たせる)
+def HiTail()
+	if &list && !exists('w:hi_tail')
+		w:hi_tail = matchadd('SpellBad', '\s\+$')
+	elseif !&list && exists('w:hi_tail')
+		# calendar.vim等で見づらくなるのでその対応
+		matchdelete(w:hi_tail)
+		unlet w:hi_tail
+	endif
+enddef
+au OptionSet list silent! HiTail()
+# matchaddはウィンドウ単位だが、`setlocal list`を考慮してBuf...イベントで実行する
+au vimrc BufNew,BufReadPost * silent! HiTail()
+
 set t_Co=256
 syntax on
 set background=dark

@@ -32,7 +32,6 @@ set udf
 set ut=2000
 set is
 set hls
-noh
 aug vimrc
 au!
 aug End
@@ -731,10 +730,20 @@ matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 matchadd('Todo', 'TODO')
 matchadd('Error', 'ERROR')
 matchadd('Delimiter', '- \[ \]')
-matchadd('SpellBad', '　\|¥\|\s\+$')
+matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
 au vimrc VimEnter,WinEnter * CI()
+def CJ()
+if &list && !exists('w:hi_tail')
+w:hi_tail = matchadd('SpellBad', '\s\+$')
+elseif !&list && exists('w:hi_tail')
+matchdelete(w:hi_tail)
+unlet w:hi_tail
+endif
+enddef
+au OptionSet list silent! CJ()
+au vimrc BufNew,BufReadPost * silent! CJ()
 set t_Co=256
 syntax on
 set bg=dark
