@@ -1046,7 +1046,15 @@ silent! colorscheme girly
 # <F12> 折り返し表示切替
 #}}} -------------------------------------------------------
 
-if filereadable(expand('~/.vimrc_local'))
+if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local
 endif
+
+def OpenLastfile()
+	var lastfile = get(v:oldfiles, 0, '')->expand()
+	if lastfile->filereadable()
+		execute 'edit' lastfile
+	endif
+enddef
+au vimrc VimEnter * OpenLastfile()
 

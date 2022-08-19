@@ -749,6 +749,13 @@ set t_Co=256
 syntax on
 set bg=dark
 sil! colorscheme girly
-if filereadable(expand('~/.vimrc_local'))
+if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
+def DA()
+var a = get(v:oldfiles, 0, '')->expand()
+if a->filereadable()
+exe 'edit' a
+endif
+enddef
+au vimrc VimEnter * DA()
