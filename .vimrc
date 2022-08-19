@@ -753,12 +753,9 @@ if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
 def DA()
-if C()
-return
-endif
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * DA()
+au vimrc VimEnter * if !C()|DA()|endif

@@ -1051,13 +1051,10 @@ if '~/.vimrc_local'->expand()->filereadable()
 endif
 
 def OpenLastfile()
-	if BufIsSmth()
-		return
-	endif
 	var lastfile = get(v:oldfiles, 0, '')->expand()
 	if lastfile->filereadable()
 		execute 'edit' lastfile
 	endif
 enddef
-au vimrc VimEnter * OpenLastfile()
+au vimrc VimEnter * if !BufIsSmth() | OpenLastfile() | endif
 
