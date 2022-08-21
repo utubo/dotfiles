@@ -35,7 +35,6 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
-# nohlsearch # TODO: Vimはデフォルトでviminfoのhオプションが有効なのでこの行は不要。読書会が終わったら削除する
 
 augroup vimrc
 	# 新しい自由
@@ -334,6 +333,54 @@ enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
+# markdownのチェックボックスの数をカウント
+g:ll_mdcb = ''
+def! g:LLMdcb()
+	var firstline = 0
+	var lastline = 0
+	if mode() !=? 'V'
+		if &ft !=# 'markdown'
+			g:ll_mdcb = ''
+			return
+		endif
+		firstline = line('.')
+		lastline = firstline
+		const indent = indent(firstline)
+		for l in range(firstline + 1, line('$'))
+			if indent(l) <= indent
+				break
+			endif
+			lastline = l
+		endfor
+	else
+		firstline = min([line('.'), line('v')])
+		lastline = max([line('.'), line('v')])
+	endif
+	# 念のためmax99行
+	const MAX_LINES = 99 - 1
+	var andmore = ''
+	if firstline + MAX_LINES < lastline
+		andmore = '+'
+		lastline = firstline + MAX_LINES
+	endif
+	var chkd = 0
+	var empty = 0
+	for l in range(firstline, lastline)
+		const line = getline(l)
+		if line->match('^\s*- \[x\]') !=# -1
+			chkd += 1
+		elseif line->match('^\s*- \[ \]') !=# -1
+			empty += 1
+		endif
+	endfor
+	if chkd ==# 0 && empty ==# 0
+		g:ll_mdcb = ''
+	else
+		g:ll_mdcb = $'[x]:{chkd}/{chkd + empty}{andmore}'
+	endif
+enddef
+au vimrc CursorMoved * g:LLMdcb()
+
 # &ff
 if has('win32')
 	def! g:LLFF(): string
@@ -355,9 +402,9 @@ g:lightline = {
 	colorscheme: 'wombat',
 	active: {
 		left:  [['mode', 'paste'], ['fugitive', 'filename'], ['ale']],
-		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
+		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg', 'mdcb']]
 	},
-	component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
+	component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
 	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 
@@ -562,6 +609,8 @@ g:reformatdate_extend_names = [{
 	a: ['日', '月', '火', '水', '木', '金', '土'],
 	A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
+g:reformatdate_extend_formats = ['%m/%d(%a)']
+reformatdate#init()
 inoremap <expr> <F5> strftime('%Y/%m/%d')
 cnoremap <expr> <F5> strftime('%Y%m%d')
 nnoremap <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
@@ -842,6 +891,8 @@ vnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
+# 保存して実行
+au vimrc FileType vim nnoremap ge <Cmd>update<CR><Cmd>source %<CR>
 #}}}
 
 # ----------------------------------------------------------

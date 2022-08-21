@@ -271,6 +271,51 @@ endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+g:ll_mdcb = ''
+def! g:LLMdcb()
+var a = 0
+var b = 0
+if mode() !=? 'V'
+if &ft !=# 'markdown'
+g:ll_mdcb = ''
+return
+endif
+a = line('.')
+b = a
+const c = indent(a)
+for l in range(a + 1, line('$'))
+if indent(l) <= c
+break
+endif
+b = l
+endfor
+else
+a = min([line('.'), line('v')])
+b = max([line('.'), line('v')])
+endif
+const d = 99 - 1
+var e = ''
+if a + d < b
+e = '+'
+b = a + d
+endif
+var f = 0
+var h = 0
+for l in range(a, b)
+const i = getline(l)
+if i->match('^\s*- \[x\]') !=# -1
+f += 1
+elseif i->match('^\s*- \[ \]') !=# -1
+h += 1
+endif
+endfor
+if f ==# 0 && h ==# 0
+g:ll_mdcb = ''
+else
+g:ll_mdcb = $'[x]:{f}/{f + h}{e}'
+endif
+enddef
+au vimrc CursorMoved * g:LLMdcb()
 if has('win32')
 def! g:LLFF(): string
 return &ff !=# 'dos' ? &ff : ''
@@ -287,9 +332,9 @@ g:lightline = {
 colorscheme: 'wombat',
 active: {
 left: [['mode', 'paste'], ['fugitive', 'filename'], ['ale']],
-right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg']]
+right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg', 'mdcb']]
 },
-component: { teabreak: '%{g:ll_tea_break}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
+component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
 component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
 }
 au vimrc VimEnter * set tabline=
@@ -417,6 +462,8 @@ g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
 }]
+g:reformatdate_extend_formats = ['%m/%d(%a)']
+reformatdate#init()
 ino <expr> <F5> strftime('%Y/%m/%d')
 cno <expr> <F5> strftime('%Y%m%d')
 nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
@@ -628,6 +675,7 @@ nm g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
 vn g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vn g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
+au vimrc FileType vim nnoremap ge <Cmd>update<CR><Cmd>source %<CR>
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
