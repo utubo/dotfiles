@@ -336,14 +336,15 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # markdownのチェックボックスの数をカウント
 g:ll_mdcb = ''
-def! g:LLMdcb()
+def! CountCheckBoxs(): string
 	var firstline = 0
 	var lastline = 0
-	if mode() !=? 'V'
-		if &ft !=# 'markdown'
-			g:ll_mdcb = ''
-			return
-		endif
+	if mode() ==? 'V'
+		firstline = min([line('.'), line('v')])
+		lastline = max([line('.'), line('v')])
+	elseif &ft !=# 'markdown'
+		return ''
+	else
 		firstline = line('.')
 		lastline = firstline
 		const indent = indent(firstline)
@@ -353,9 +354,6 @@ def! g:LLMdcb()
 			endif
 			lastline = l
 		endfor
-	else
-		firstline = min([line('.'), line('v')])
-		lastline = max([line('.'), line('v')])
 	endif
 	# 念のためmax99行
 	const MAX_LINES = 99 - 1
@@ -375,12 +373,12 @@ def! g:LLMdcb()
 		endif
 	endfor
 	if chkd ==# 0 && empty ==# 0
-		g:ll_mdcb = ''
+		return ''
 	else
-		g:ll_mdcb = $'[x]:{chkd}/{chkd + empty}{andmore}'
+		return  $'[x]:{chkd}/{chkd + empty}{andmore}'
 	endif
 enddef
-au vimrc CursorMoved * g:LLMdcb()
+au vimrc CursorMoved * g:ll_mdcb = CountCheckBoxs()
 
 # &ff
 if has('win32')
