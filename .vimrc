@@ -273,7 +273,7 @@ enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 g:ll_mdcb = ''
-def! BD(): string
+def BD(): string
 var a = 0
 var b = 0
 if mode() ==? 'V'

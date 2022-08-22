@@ -336,7 +336,7 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # markdownのチェックボックスの数をカウント
 g:ll_mdcb = ''
-def! CountCheckBoxs(): string
+def CountCheckBoxs(): string
 	var firstline = 0
 	var lastline = 0
 	if mode() ==? 'V'
