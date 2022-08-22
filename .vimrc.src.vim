@@ -870,6 +870,9 @@ nnoremap qj <ScriptCmd>Quit('j')<CR>
 nnoremap qk <ScriptCmd>Quit('k')<CR>
 nnoremap ql <ScriptCmd>Quit('l')<CR>
 nnoremap qq <ScriptCmd>Quit()<CR>
+nnoremap qn <Cmd>confirm tabclose +<CR>
+nnoremap qp <Cmd>confirm tabclose -<CR>
+nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
@@ -907,8 +910,8 @@ vnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
 vnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
-# 保存して実行
-au vimrc FileType vim nnoremap ge <Cmd>update<CR><Cmd>source %<CR>
+# 保存して実行 TODO: `g!`は微妙かな…
+au vimrc FileType vim nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
 #}}}
 
 # ----------------------------------------------------------
@@ -1087,7 +1090,7 @@ def HiTail()
 		unlet w:hi_tail
 	endif
 enddef
-au OptionSet list silent! HiTail()
+au vimrc OptionSet list silent! HiTail()
 # matchaddはウィンドウ単位だが、`setlocal list`を考慮してBuf...イベントで実行する
 au vimrc BufNew,BufReadPost * silent! HiTail()
 
