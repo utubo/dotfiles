@@ -110,6 +110,7 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/lightline.vim'
+Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow'    # 虹色括弧
@@ -456,6 +457,21 @@ g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 #}}}
+
+# カレンダー {{{
+g:calendar_first_day = 'sunday'
+def MyCalender()
+	nnoremap <buffer> k <Plug>(ahc)<Plug>(calendar_up)
+	nnoremap <buffer> j <Plug>(ahc)<Plug>(calendar_down)
+	nnoremap <buffer> h <Plug>(ahc)<Plug>(calendar_prev)
+	nnoremap <buffer> l <Plug>(ahc)<Plug>(calendar_next)
+	nnoremap <buffer> gh <Plug>(ahc)<Plug>(calendar_left)
+	nnoremap <buffer> gl <Plug>(ahc)<Plug>(calendar_right)
+	nmap <buffer> <CR> >
+	nmap <buffer> <BS> <
+enddef
+au vimrc FileType calendar MyCalender()
+# }}}
 
 # cmdline statusline 切り替え {{{
 Enable g:auto_hide_cmdline_switch_statusline
