@@ -176,7 +176,7 @@ enddef
 
 # その他かんたんなテスト {{{
 def TestAutocmd()
-	assert_equal([], Scan(vimrc_str, 'au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+	assert_equal([], Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
 enddef
 #}}}
 
