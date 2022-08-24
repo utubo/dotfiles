@@ -105,6 +105,15 @@ def CursorMovedDelay()
 	cm_delay_timer = timer_start(300, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * CursorMovedDelay()
+
+# <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
+def VFirstLast(): list<number>
+	return mode() ==? 'V' ? sort([line('.'), line('v')]) : [line('.'), line('.')]
+enddef
+def VRange(): list<number>
+	const a = VFirstLast()
+	return range(a[0], a[1])
+enddef
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -358,16 +367,12 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 # markdownのチェックボックスの数をカウント
 g:ll_mdcb = ''
 def CountCheckBoxs(): string
-	var firstline = 0
-	var lastline = 0
+	var [firstline, lastline] = VFirstLast()
 	if mode() ==? 'V'
-		firstline = min([line('.'), line('v')])
-		lastline = max([line('.'), line('v')])
+		# OK
 	elseif &ft !=# 'markdown'
 		return ''
 	else
-		firstline = line('.')
-		lastline = firstline
 		const indent = indent(firstline)
 		for l in range(firstline + 1, line('$'))
 			if indent(l) <= indent
@@ -710,8 +715,7 @@ au vimrc ColorScheme * hi! link Folded Delimiter
 #}}}
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def Zf()
-	const firstline = min([line('.'), line('v')])
-	const lastline = max([line('.'), line('v')])
+	var [firstline, lastline] = VFirstLast()
 	execute ':' firstline 's/\v(\S)?$/\1 /'
 	append(lastline, IndentStr(firstline))
 	cursor([firstline, 1])
@@ -795,18 +799,22 @@ tnoremap <C-w><C-q> exit<CR>
 # ----------------------------------------------------------
 # markdownのチェックボックス {{{
 def ToggleCheckBox()
-	const a = getline('.')
-	var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
-	if a ==# b
-		b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
-	endif
-	if a ==# b
-		b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
-	endif
-	setline('.', b)
-	var c = getpos('.')
-	c[2] += len(b) - len(a)
-	setpos('.', c)
+	for l in VRange()
+		const a = getline(l)
+		var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
+		if a ==# b
+			b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
+		endif
+		if a ==# b
+			b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
+		endif
+		setline(l, b)
+		if l ==# line('.')
+			var c = getpos('.')
+			c[2] += len(b) - len(a)
+			setpos('.', c)
+		endif
+	endfor
 enddef
 noremap <Space>x <ScriptCmd>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
@@ -985,8 +993,6 @@ inoremap 「 「」<Left>
 inoremap 「」 「」<Left>
 inoremap （ ()<Left>
 inoremap （） ()<Left>
-
-
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
