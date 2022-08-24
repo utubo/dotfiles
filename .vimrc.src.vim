@@ -84,6 +84,26 @@ enddef
 def TruncToDisplayWidth(str: string, width: number): string
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
+
+# MoveCursorは呼び出し回数が多いのでその対応
+g:cm_delay_timer = 0
+g:cm_delay_cueue = 0
+def CursorMovedDelay()
+	if g:cm_delay_timer !=# 0
+		g:cm_delay_cueue += 1
+		return
+	endif
+	g:cm_delay_cueue = 0
+	doautocmd User CursorMovedDelay
+	g:cm_delay_timer = timer_start(300, (_) => {
+		g:cm_delay_timer = 0
+		if g:cm_delay_cueue !=# 0
+			g:cm_delay_cueue = 0
+			doautocmd User CursorMovedDelay
+		endif
+	})
+enddef
+au vimrc CursorMoved * CursorMovedDelay()
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -378,7 +398,16 @@ def CountCheckBoxs(): string
 		return  $'[x]:{chkd}/{chkd + empty}{andmore}'
 	endif
 enddef
-au vimrc CursorMoved * g:ll_mdcb = CountCheckBoxs()
+
+def CountCheckBoxsDelay()
+	const count = CountCheckBoxs()
+	if count !=# g:ll_mdcb
+		g:ll_mdcb = count
+		lightline#update()
+	endif
+enddef
+
+au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 
 # &ff
 if has('win32')

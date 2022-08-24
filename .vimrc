@@ -63,6 +63,24 @@ enddef
 def E(a: string, b: number): string
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
+g:cm_delay_timer = 0
+g:cm_delay_cueue = 0
+def F()
+if g:cm_delay_timer !=# 0
+g:cm_delay_cueue += 1
+return
+endif
+g:cm_delay_cueue = 0
+doautocmd User CursorMovedDelay
+g:cm_delay_timer = timer_start(300, (_) => {
+g:cm_delay_timer = 0
+if g:cm_delay_cueue !=# 0
+g:cm_delay_cueue = 0
+doautocmd User CursorMovedDelay
+endif
+})
+enddef
+au vimrc CursorMoved * F()
 const lm = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const ln = filereadable(lm)
 if ! ln
@@ -152,7 +170,7 @@ MultiCmd nnoremap,vnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
-def F()
+def G()
 var c = g:operator#sandwich#object.cursor
 if g:fix_sandwich_pos[1] !=# c.inner_head[1]
 c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
@@ -160,13 +178,13 @@ c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost F()
+au vimrc User OperatorSandwichAddPost G()
 var lp = []
-def G(a: bool = true)
+def H(a: bool = true)
 const c = g:operator#sandwich#object.cursor.inner_head[1 : 2]
 if a || lp !=# c
 lp = c
-au vimrc User OperatorSandwichAddPost ++once G(false)
+au vimrc User OperatorSandwichAddPost ++once H(false)
 if a
 feedkeys('Sa')
 else
@@ -177,19 +195,19 @@ endif
 endif
 enddef
 nm Sm viwSm
-vm Sm <ScriptCmd>G()<CR>
-def H()
+vm Sm <ScriptCmd>H()<CR>
+def I()
 const c = g:operator#sandwich#object.cursor
 B(c.tail[1])
 B(c.head[1])
 enddef
-au vimrc User OperatorSandwichDeletePost H()
+au vimrc User OperatorSandwichDeletePost I()
 g:MRU_Filename_Format = {
 formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
 parser: '> \zs.*',
 syntax: '^.\{-}\ze >'
 }
-def I(a: bool)
+def J(a: bool)
 b:use_tab = a
 setl number
 redraw
@@ -203,23 +221,23 @@ for i in range(1, 9)
 exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR>{c}'
 endfor
 enddef
-def J()
+def BA()
 Enable b:auto_cursorline_disabled
 setl cursorline
-nn <buffer> w <ScriptCmd>I(!b:use_tab)<CR>
+nn <buffer> w <ScriptCmd>J(!b:use_tab)<CR>
 nn <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
 nn <buffer> <Esc> <Cmd>q!<CR>
-I(C())
+J(C())
 enddef
-au vimrc FileType mru J()
+au vimrc FileType mru BA()
 au vimrc ColorScheme * hi link MruFileName Directory
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-def BA(a: string, b: list<string>, c: list<string>)
+def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
-BA('omni', ['*'], ['c', 'cpp', 'html'])
-BA('buffer', ['*'], ['go'])
+BB('omni', ['*'], ['c', 'cpp', 'html'])
+BB('buffer', ['*'], ['go'])
 MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 MultiCmd inoremap,snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
@@ -237,7 +255,7 @@ nn <silent> [a <Plug>(ale_previous_wrap)
 nn <silent> ]a <Plug>(ale_next_wrap)
 Disable g:ale_echo_cursor
 g:ll_are = ''
-def BB()
+def BC()
 var a = ale#util#FindItemAtCursor(bufnr())[1]
 if !empty(a)
 g:ll_ale = a.type ==# 'E' ? '🐞' : '🐝'
@@ -248,16 +266,16 @@ else
 g:ll_ale = ''
 endif
 enddef
-au vimrc CursorMoved * BB()
+au vimrc CursorMoved * BC()
 g:ll_reg = ''
-def BC()
+def BD()
 var a = v:event.regcontents
 ->join('↵')
 ->substitute('\t', '›', 'g')
 ->E(20)
 g:ll_reg = $'📋:{a}'
 enddef
-au vimrc TextYankPost * BC()
+au vimrc TextYankPost * BD()
 g:ll_tea_break = '0:00'
 g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
 def! g:VimrcTimer60s(a: any)
@@ -273,7 +291,7 @@ enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 g:ll_mdcb = ''
-def BD(): string
+def BE(): string
 var a = 0
 var b = 0
 if mode() ==? 'V'
@@ -314,7 +332,14 @@ else
 return $'[x]:{f}/{f + g}{e}'
 endif
 enddef
-au vimrc CursorMoved * g:ll_mdcb = BD()
+def CountCheckBoxsDelay()
+const a = BE()
+if a !=# g:ll_mdcb
+g:ll_mdcb = a
+lightline#update()
+endif
+enddef
+au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 if has('win32')
 def! g:LLFF(): string
 return &ff !=# 'dos' ? &ff : ''
@@ -363,7 +388,7 @@ g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:calendar_first_day = 'sunday'
-def BE()
+def BG()
 nn <buffer> k <Plug>(ahc)<Plug>(calendar_up)
 nn <buffer> j <Plug>(ahc)<Plug>(calendar_down)
 nn <buffer> h <Plug>(ahc)<Plug>(calendar_prev)
@@ -373,7 +398,7 @@ nn <buffer> gl <Plug>(ahc)<Plug>(calendar_right)
 nm <buffer> <CR> >
 nm <buffer> <BS> <
 enddef
-au vimrc FileType calendar BE()
+au vimrc FileType calendar BG()
 Enable g:auto_hide_cmdline_switch_statusline
 MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
 MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
@@ -414,7 +439,7 @@ set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
 nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
-def BF()
+def BH()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -430,8 +455,8 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BF()
-def BG(a: string, ...b: list<string>)
+au vimrc BufReadPost * BH()
+def BI(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
@@ -453,9 +478,9 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ VimGrep BG(<f-args>)
+com! -nargs=+ VimGrep BI(<f-args>)
 nm <Space>/ :<C-u>VimGrep<Space>
-def BH()
+def BJ()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -464,7 +489,7 @@ nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
 enddef
-au vimrc FileType qf BH()
+au vimrc FileType qf BJ()
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
@@ -492,15 +517,15 @@ exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
-def BI(): string
+def CA(): string
 const x = getline('.')->match('\S') + 1
 if x !=# 0 || !exists('w:my_hat')
 w:my_hat = col('.') ==# x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j $'j{<SID>BI()}'
-nn <expr> k $'k{<SID>BI()}'
+nn <expr> j $'j{<SID>CA()}'
+nn <expr> k $'k{<SID>CA()}'
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -510,7 +535,7 @@ enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
-def BJ()
+def CB()
 const a = min([line('.'), line('v')])
 const b = max([line('.'), line('v')])
 exe ':' a 's/\v(\S)?$/\1 /'
@@ -519,8 +544,8 @@ cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf <ScriptCmd>BJ()<CR>
-def CA()
+vn zf <ScriptCmd>CB()<CR>
+def CC()
 if foldclosed(line('.')) ==# -1
 normal! zc
 endif
@@ -535,7 +560,7 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn zd <ScriptCmd>CA()<CR>
+nn zd <ScriptCmd>CC()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -543,13 +568,13 @@ nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
-def CB(a: string)
+def CD(a: string)
 const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-vn u <ScriptCmd>CB('undo')<CR>
-vn <C-R> <ScriptCmd>CB('redo')<CR>
+vn u <ScriptCmd>CD('undo')<CR>
+vn <C-R> <ScriptCmd>CD('redo')<CR>
 vn <Tab> <Cmd>normal! >gv<CR>
 vn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
@@ -570,7 +595,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def CC()
+def CE()
 const a = getline('.')
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b
@@ -584,8 +609,8 @@ var c = getpos('.')
 c[2] += len(b) - len(a)
 setpos('.', c)
 enddef
-no <Space>x <ScriptCmd>CC()<CR>
-def CD(a: string = '')
+no <Space>x <ScriptCmd>CE()<CR>
+def CF(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -639,8 +664,8 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-no <C-g> <Plug>(ahc)<ScriptCmd>call <SID>CD()<CR>
-def CE(a: string = '')
+no <C-g> <Plug>(ahc)<ScriptCmd>call <SID>CF()<CR>
+def CG(a: string = '')
 if ! empty(a)
 if winnr() ==# winnr(a)
 return
@@ -655,18 +680,18 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-nn qh <ScriptCmd>CE('h')<CR>
-nn qj <ScriptCmd>CE('j')<CR>
-nn qk <ScriptCmd>CE('k')<CR>
-nn ql <ScriptCmd>CE('l')<CR>
-nn qq <ScriptCmd>CE()<CR>
+nn qh <ScriptCmd>CG('h')<CR>
+nn qj <ScriptCmd>CG('j')<CR>
+nn qk <ScriptCmd>CG('k')<CR>
+nn ql <ScriptCmd>CG('l')<CR>
+nn qq <ScriptCmd>CG()<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
-def CF(a: string)
+def CH(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -681,7 +706,7 @@ endif
 exe 'saveas!' c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile call <SID>CF(<f-args>)
+com! -nargs=1 -complete=file MoveFile call <SID>CH(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
@@ -745,32 +770,32 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <ScriptCmd>CC()<CR>
-ino <M-x> <ScriptCmd>CC()<CR>
+ino jjx <ScriptCmd>CE()<CR>
+ino <M-x> <ScriptCmd>CE()<CR>
 cno qq <C-f>
-def CG()
+def CI()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CH(a: string, b: string)
+def CJ(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CG()
-au vimrc Syntax javascript,vim CH('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim CH('SpellRare', '\<normal!\@!')
+au vimrc Syntax * CI()
+au vimrc Syntax javascript,vim CJ('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim CJ('SpellRare', '\<normal!\@!')
 nn <Space>a A
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def CI()
+def DA()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * CI()
+au vimrc VimEnter * DA()
 endif
-def CJ()
+def DB()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -780,8 +805,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CJ()
-def DA()
+au vimrc ColorSchemePre * DB()
+def DC()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -796,8 +821,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DA()
-def DB()
+au vimrc VimEnter,WinEnter * DC()
+def DD()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -805,8 +830,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! DB()
-au vimrc BufNew,BufReadPost * silent! DB()
+au vimrc OptionSet list silent! DD()
+au vimrc BufNew,BufReadPost * silent! DD()
 set t_Co=256
 syntax on
 set bg=dark
@@ -814,10 +839,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def DC()
+def DE()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * if !C()|DC()|endif
+au vimrc VimEnter * if !C()|DE()|endif
