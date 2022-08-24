@@ -85,7 +85,8 @@ def TruncToDisplayWidth(str: string, width: number): string
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 
-# MoveCursorは呼び出し回数が多いのでその対応
+# MoveCursorは呼び出し回数が多いので、移動途中は300ミリ秒に1回だけ実行するようにする
+const CM_DELAY_MSEC = 300
 var cm_delay_timer = 0
 var cm_delay_cueue = 0
 def CursorMovedDelayExec(timer: any)
@@ -100,9 +101,10 @@ def CursorMovedDelay()
 		cm_delay_cueue += 1
 		return
 	endif
+	# 最初の1回は即時実行する
 	cm_delay_cueue = 0
 	doautocmd User CursorMovedDelay
-	cm_delay_timer = timer_start(300, CursorMovedDelayExec)
+	cm_delay_timer = timer_start(CM_DELAY_MSEC, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * CursorMovedDelay()
 

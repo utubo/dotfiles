@@ -63,23 +63,24 @@ enddef
 def E(a: string, b: number): string
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
-var lm = 0
+const lm = 300
 var ln = 0
+var lo = 0
 def CursorMovedDelayExec(a: any)
-lm = 0
-if ln !=# 0
 ln = 0
+if lo !=# 0
+lo = 0
 doautocmd User CursorMovedDelay
 endif
 enddef
 def G()
-if lm !=# 0
-ln += 1
+if ln !=# 0
+lo += 1
 return
 endif
-ln = 0
+lo = 0
 doautocmd User CursorMovedDelay
-lm = timer_start(300, CursorMovedDelayExec)
+ln = timer_start(lm, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * G()
 def H(): list<number>
@@ -89,11 +90,11 @@ def I(): list<number>
 const a = H()
 return range(a[0], a[1])
 enddef
-const lo = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-const lp = filereadable(lo)
-if ! lp
-const lq = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system($'curl -fsSLo {lo} --create-dirs {lq}')
+const lp = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const lq = filereadable(lp)
+if ! lq
+const lr = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+system($'curl -fsSLo {lp} --create-dirs {lr}')
 endif
 packadd vim-jetpack
 jetpack#begin()
@@ -147,7 +148,7 @@ Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
-if ! lp
+if ! lq
 jetpack#sync()
 endif
 Enable g:EasyMotion_smartcase
@@ -187,11 +188,11 @@ endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost J()
-var lr = []
+var lt = []
 def BA(a: bool = true)
 const c = g:operator#sandwich#object.cursor.inner_head[1 : 2]
-if a || lr !=# c
-lr = c
+if a || lt !=# c
+lt = c
 au vimrc User OperatorSandwichAddPost ++once BA(false)
 if a
 feedkeys('Sa')
@@ -427,9 +428,9 @@ MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lt = expand($'{lk}/pack/local/opt/*')
-if lt !=# ''
-&runtimepath = $'{substitute(lt, '\n', ',', 'g')},{&runtimepath}'
+const mk = expand($'{lk}/pack/local/opt/*')
+if mk !=# ''
+&runtimepath = $'{substitute(mk, '\n', ',', 'g')},{&runtimepath}'
 endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
