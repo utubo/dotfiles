@@ -86,23 +86,23 @@ def TruncToDisplayWidth(str: string, width: number): string
 enddef
 
 # MoveCursorは呼び出し回数が多いのでその対応
-g:cm_delay_timer = 0
-g:cm_delay_cueue = 0
+var cm_delay_timer = 0
+var cm_delay_cueue = 0
 def CursorMovedDelayExec(timer: any)
-	g:cm_delay_timer = 0
-	if g:cm_delay_cueue !=# 0
-		g:cm_delay_cueue = 0
+	cm_delay_timer = 0
+	if cm_delay_cueue !=# 0
+		cm_delay_cueue = 0
 		doautocmd User CursorMovedDelay
 	endif
 enddef
 def CursorMovedDelay()
-	if g:cm_delay_timer !=# 0
-		g:cm_delay_cueue += 1
+	if cm_delay_timer !=# 0
+		cm_delay_cueue += 1
 		return
 	endif
-	g:cm_delay_cueue = 0
+	cm_delay_cueue = 0
 	doautocmd User CursorMovedDelay
-	g:cm_delay_timer = timer_start(300, CursorMovedDelayExec)
+	cm_delay_timer = timer_start(300, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * CursorMovedDelay()
 #}}} -------------------------------------------------------
