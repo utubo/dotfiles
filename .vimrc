@@ -852,4 +852,4 @@ if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * if !C()|DH()|endif
+au vimrc VimEnter * ++nested if !C()|DH()|endif

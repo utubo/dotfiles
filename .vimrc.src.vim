@@ -1162,5 +1162,5 @@ def OpenLastfile()
 		execute 'edit' lastfile
 	endif
 enddef
-au vimrc VimEnter * if !BufIsSmth() | OpenLastfile() | endif
+au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
 
