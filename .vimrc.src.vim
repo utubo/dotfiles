@@ -908,6 +908,7 @@ nnoremap qj <ScriptCmd>Quit('j')<CR>
 nnoremap qk <ScriptCmd>Quit('k')<CR>
 nnoremap ql <ScriptCmd>Quit('l')<CR>
 nnoremap qq <ScriptCmd>Quit()<CR>
+nnoremap q<CR> <ScriptCmd>Quit()<CR>
 nnoremap qn <Cmd>confirm tabclose +<CR>
 nnoremap qp <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>

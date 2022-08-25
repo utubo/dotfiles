@@ -692,6 +692,7 @@ nn qj <ScriptCmd>CJ('j')<CR>
 nn qk <ScriptCmd>CJ('k')<CR>
 nn ql <ScriptCmd>CJ('l')<CR>
 nn qq <ScriptCmd>CJ()<CR>
+nn q<CR> <ScriptCmd>CJ()<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
