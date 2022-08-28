@@ -29,9 +29,9 @@ enddef
 
 # 正規表現でマッチする文字列を全て抽出する
 def Scan(expr: any, pat: string, index: number = 0): list<string>
-  var scanResult = []
-  substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
-  return scanResult
+	var scanResult = []
+	substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
+	return scanResult
 enddef
 #}}}
 
@@ -78,8 +78,9 @@ def TestMapping()
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
 	# i     <C-U> defaults.vim
+	# i     <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|<C-[AWX]>\|<Esc>\)\|' ..
+		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 
@@ -92,7 +93,8 @@ def TestMapping()
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
 	var user_ignore = '\C' ..
 		'n  \([qS:]\|<Plug>fugitive:\)\|' ..
-		'v  \([JS]\)\|' ..
+		'v  \([J]\)\|' ..
+		'x  \([S]\)\|' ..
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)'
 

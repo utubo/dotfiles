@@ -979,7 +979,7 @@ nnoremap <Space><Space>P O<Esc>p
 nmap <CR> <Space>
 
 # `T`多少潰しても大丈夫だろう…
-nmap     TE :<C-u>tabe<Space>
+nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
 nnoremap TT <Cmd>silent! tabnext #<CR>
