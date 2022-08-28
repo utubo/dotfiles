@@ -213,10 +213,10 @@ def! g:CommentString(index: number): string
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
-MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
-MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
-MultiCmd nnoremap,vnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
+MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap S^ v^S
 nmap S$ vg_S
 nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
@@ -523,9 +523,9 @@ Enable g:auto_hide_cmdline_switch_statusline
 #   でもautocmdの中で`cmdheight`を変更されたらどうするの？
 # 後者
 #   理由があって今のタイミングでupdate_screenしているのだから移動できるわけがない…
-MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
-MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
-MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
+MultiCmd nnoremap,xnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,xnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
+MultiCmd nnoremap,xnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
 MultiCmd nmap,vmap ; :
 nnoremap <Space>; ;
 nnoremap <Space>: :
@@ -548,7 +548,7 @@ nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
+MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 # EasyMotionとどっちを使うか様子見中
@@ -569,7 +569,7 @@ filetype plugin indent on
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vnoremap * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xnoremap * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
@@ -724,7 +724,7 @@ def Zf()
 	cursor([lastline + 1, 1])
 	normal! zf
 enddef
-vnoremap zf <ScriptCmd>Zf()<CR>
+xnoremap zf <ScriptCmd>Zf()<CR>
 #}}}
 # ホールドマーカーを削除したら行末をトリムする {{{
 def Zd()
@@ -746,7 +746,7 @@ nnoremap zd <ScriptCmd>Zd()<CR>
 #}}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99 | setlocal foldmethod=indent
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
 nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
@@ -762,10 +762,11 @@ def KeepingCurPos(expr: string)
 	execute expr
 	setpos('.', cur)
 enddef
-vnoremap u <ScriptCmd>KeepingCurPos('undo')<CR>
-vnoremap <C-R> <ScriptCmd>KeepingCurPos('redo')<CR>
-vnoremap <Tab> <Cmd>normal! >gv<CR>
-vnoremap <S-Tab> <Cmd>normal! <gv<CR>
+xnoremap u <ScriptCmd>KeepingCurPos('undo')<CR>
+xnoremap <Space>u u
+xnoremap <C-R> <ScriptCmd>KeepingCurPos('redo')<CR>
+xnoremap <Tab> <Cmd>normal! >gv<CR>
+xnoremap <S-Tab> <Cmd>normal! <gv<CR>
 #}}}
 
 # ----------------------------------------------------------
@@ -880,7 +881,7 @@ def ShowBufInfo(event: string = '')
 	endfor
 	echohl Normal
 enddef # TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
-noremap <C-g> <Plug>(ahc)<ScriptCmd>call <SID>ShowBufInfo()<CR>
+nnoremap <C-g> <Plug>(ahc)<ScriptCmd>call <SID>ShowBufInfo()<CR>
 # cmdheight=0にしたら無用になった
 # au vimrc BufNewFile * ShowBufInfo('BufNewFile')
 # au vimrc BufReadPost * ShowBufInfo('BufReadPost')
@@ -945,8 +946,8 @@ cnoreabbrev mv MoveFile
 cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
 nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
-vnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
+xnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+xnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 保存して実行 TODO: `g!`は微妙かな…
@@ -986,10 +987,10 @@ nnoremap TT <Cmd>silent! tabnext #<CR>
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 
-vnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
-vnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
-vnoremap J j
-vnoremap K k
+xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
+xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
+xnoremap J j
+xnoremap K k
 
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<Left>
@@ -1001,8 +1002,8 @@ inoremap （） ()<Left>
 # ----------------------------------------------------------
 # 様子見中 {{{
 # 使わなそうなら削除する
-vnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
-vnoremap P p
+xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
+xnoremap P p
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
@@ -1015,7 +1016,7 @@ nnoremap <Space>o <C-w>w
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
-vnoremap <F10> <ESC>1<C-w>s<C-w>w
+xnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 # US→「"」押しにくい、JIS→「'」押しにくい
 # デフォルトのMはあまり使わないかなぁ…

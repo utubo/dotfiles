@@ -172,10 +172,10 @@ return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,vnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
-MultiCmd nnoremap,vnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
-MultiCmd nnoremap,vnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
-MultiCmd nnoremap,vnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
+MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
@@ -404,9 +404,9 @@ nm <buffer> <BS> <
 enddef
 au vimrc FileType calendar BJ()
 Enable g:auto_hide_cmdline_switch_statusline
-MultiCmd nnoremap,vnoremap : <Plug>(ahc-switch):
-MultiCmd nnoremap,vnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
-MultiCmd nnoremap,vnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
+MultiCmd nnoremap,xnoremap : <Plug>(ahc-switch):
+MultiCmd nnoremap,xnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
+MultiCmd nnoremap,xnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
 MultiCmd nmap,vmap ; :
 nn <Space>; ;
 nn <Space>: :
@@ -424,7 +424,7 @@ nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
-MultiCmd nnoremap,vnoremap <Space>c <Plug>(caw:hatpos:toggle)
+MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
@@ -435,7 +435,7 @@ endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-vn * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xn * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
@@ -547,7 +547,7 @@ cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
 enddef
-vn zf <ScriptCmd>CE()<CR>
+xn zf <ScriptCmd>CE()<CR>
 def CF()
 if foldclosed(line('.')) ==# -1
 normal! zc
@@ -565,7 +565,7 @@ setpos('.', c)
 enddef
 nn zd <ScriptCmd>CF()<CR>
 set fdm=marker
-au vimrc FileType markdown,yaml setlocal foldlevelstart=99|setl fdm=indent
+au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
 nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
@@ -576,10 +576,11 @@ const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-vn u <ScriptCmd>CG('undo')<CR>
-vn <C-R> <ScriptCmd>CG('redo')<CR>
-vn <Tab> <Cmd>normal! >gv<CR>
-vn <S-Tab> <Cmd>normal! <gv<CR>
+xn u <ScriptCmd>CG('undo')<CR>
+xn <Space>u u
+xn <C-R> <ScriptCmd>CG('redo')<CR>
+xn <Tab> <Cmd>normal! >gv<CR>
+xn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Space><BS><Left>
 cno <C-l> <Space><BS><Right>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
@@ -671,7 +672,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-no <C-g> <Plug>(ahc)<ScriptCmd>call <SID>CI()<CR>
+nn <C-g> <Plug>(ahc)<ScriptCmd>call <SID>CI()<CR>
 def CJ(a: string = '')
 if ! empty(a)
 if winnr() ==# winnr(a)
@@ -719,8 +720,8 @@ cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)
 nm g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-vn g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
-vn g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
+xn g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
+xn g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 au vimrc FileType vim nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
 if has('clipboard')
@@ -745,17 +746,17 @@ nn TD <Cmd>tabe ./<CR>
 nn TT <Cmd>silent! tabnext #<CR>
 ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
-vn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
-vn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
-vn J j
-vn K k
+xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
+xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
+xn J j
+xn K k
 ino ｋｊ <Esc>`^
 ino 「 「」<Left>
 ino 「」 「」<Left>
 ino （ ()<Left>
 ino （） ()<Left>
-vn <expr> p $'"_s<C-R>{v:register}<ESC>'
-vn P p
+xn <expr> p $'"_s<C-R>{v:register}<ESC>'
+xn P p
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
@@ -764,7 +765,7 @@ au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
-vn <F10> <ESC>1<C-w>s<C-w>w
+xn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
 nn m '
 nn M m
