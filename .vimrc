@@ -740,7 +740,7 @@ nn <Space>P ^P
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
 nm <CR> <Space>
-nm TE :<C-u>tabe<Space>
+nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
 nn TT <Cmd>silent! tabnext #<CR>
