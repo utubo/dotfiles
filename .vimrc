@@ -715,7 +715,7 @@ endif
 exe 'saveas!' c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile call <SID>DA(<f-args>)
+com! -nargs=1 -complete=file MoveFile DA(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: <Plug>(ahc):<C-u><SID>(exec_line)

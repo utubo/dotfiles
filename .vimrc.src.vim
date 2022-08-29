@@ -936,7 +936,7 @@ def MoveFile(newname: string)
 	# 開き直してMRUに登録
 	edit
 enddef
-command! -nargs=1 -complete=file MoveFile call <SID>MoveFile(<f-args>)
+command! -nargs=1 -complete=file MoveFile MoveFile(<f-args>)
 cnoreabbrev mv MoveFile
 #}}}
 
