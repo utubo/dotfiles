@@ -187,7 +187,7 @@ au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost J()
 var lt = []
 def BA(a: bool = true)
-const c = g:operator#sandwich#object.cursor.inner_head[1 : 2]
+const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
 if a || lt !=# c
 lt = c
 au vimrc User OperatorSandwichAddPost ++once BA(false)
@@ -196,7 +196,7 @@ feedkeys('Sa')
 else
 setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-feedkeys('gvSa')
+feedkeys('gvS')
 endif
 endif
 enddef

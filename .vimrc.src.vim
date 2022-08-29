@@ -232,7 +232,7 @@ au vimrc User OperatorSandwichAddPost FixSandwichPos()
 # 内側に連続で挟むやつ
 var big_mac_crown = []
 def BigMac(first: bool = true)
-	const c = g:operator#sandwich#object.cursor.inner_head[1 : 2]
+	const c = first ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
 	if first || big_mac_crown !=# c
 		big_mac_crown = c
 		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
@@ -241,7 +241,7 @@ def BigMac(first: bool = true)
 		else
 			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-			feedkeys('gvSa')
+			feedkeys('gvS')
 		endif
 	endif
 enddef
