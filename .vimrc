@@ -41,9 +41,9 @@ def A(b: string)
 const [c, d] = b->split('^\S*\zs')
 for e in c->split(',')
 const a = d
-->substitute($'<if-{e}>', '<>', 'g')
-->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
-->substitute('<>', '', 'g')
+->substitute($'<if-{e}>', '<if-*>', 'g')
+->substitute('<if-[^*>]\+>.\{-1,}\(<if-\*>\|$\)', '', 'g')
+->substitute('<if-\*>', '', 'g')
 exe e a
 endfor
 enddef
@@ -156,7 +156,7 @@ Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <Plug>(ahc)<Plug>(easymotion-s)
+no s <Plug>(ahc)<Plug>(easymotion-s)
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
@@ -174,10 +174,7 @@ Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
 MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
-MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nm S^ v^S
-nm S$ vg_S
 nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
 def J()
 var c = g:operator#sandwich#object.cursor
@@ -581,8 +578,10 @@ xn <Space>u u
 xn <C-R> <ScriptCmd>CG('redo')<CR>
 xn <Tab> <Cmd>normal! >gv<CR>
 xn <S-Tab> <Cmd>normal! <gv<CR>
-cno <C-h> <Space><BS><Left>
-cno <C-l> <Space><BS><Right>
+cno <C-h> <Left>
+cno <C-l> <Right>
+cno <C-j> <Down>
+cno <C-k> <Up>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
@@ -795,6 +794,9 @@ au vimrc Syntax * DB()
 au vimrc Syntax javascript,vim DC('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim DC('SpellRare', '\<normal!\@!')
 nn <Space>a A
+MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+nm S^ v^S
+nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
 def DD()

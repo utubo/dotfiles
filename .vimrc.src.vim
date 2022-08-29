@@ -48,16 +48,16 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
+# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
 # ↓
 # nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
 def MultiCmd(qargs: string)
 	const [cmds, args] = qargs->split('^\S*\zs')
 	for cmd in cmds->split(',')
 		const a = args
-			->substitute($'<if-{cmd}>', '<>', 'g')
-			->substitute('<if-.\{-1,}\(<>\|$\)', '', 'g')
-			->substitute('<>', '', 'g')
+			->substitute($'<if-{cmd}>', '<if-*>', 'g')
+			->substitute('<if-[^*>]\+>.\{-1,}\(<if-\*>\|$\)', '', 'g')
+			->substitute('<if-\*>', '', 'g')
 		execute cmd a
 	endfor
 enddef
@@ -85,7 +85,7 @@ def TruncToDisplayWidth(str: string, width: number): string
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 
-# MoveCursorは呼び出し回数が多いので、移動途中は300ミリ秒に1回だけ実行するようにする
+# MoveCursorは呼び出し回数が多いので、移動途中はユーザーイベントで300ミリ秒に1回だけ実行するようにする
 const CM_DELAY_MSEC = 300
 var cm_delay_timer = 0
 var cm_delay_cueue = 0
@@ -194,7 +194,7 @@ Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-map s <Plug>(ahc)<Plug>(easymotion-s)
+noremap s <Plug>(ahc)<Plug>(easymotion-s)
 #}}}
 
 # sandwich {{{
@@ -215,10 +215,7 @@ Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
 MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
-MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nmap S^ v^S
-nmap S$ vg_S
 nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
@@ -771,18 +768,18 @@ xnoremap <S-Tab> <Cmd>normal! <gv<CR>
 
 # ----------------------------------------------------------
 # コマンドモードあれこれ {{{
-cnoremap <C-h> <Space><BS><Left>
-cnoremap <C-l> <Space><BS><Right>
+cnoremap <C-h> <Left>
+cnoremap <C-l> <Right>
+cnoremap <C-j> <Down>
+cnoremap <C-k> <Up>
 cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
-
 # 「jj」で<CR>、「kk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap kk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
-
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -1065,6 +1062,11 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
 nnoremap <Space>a A
+
+# sandwich
+MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
+nmap S^ v^S
+nmap S$ vg_S
 
 # 最後の選択範囲を現在行の下に移動する
 nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'

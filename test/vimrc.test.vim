@@ -180,11 +180,16 @@ enddef
 def TestAutocmd()
 	assert_equal([], Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
 enddef
+def TestIndent()
+	const has_noexpand = vimrc_str->match('\n\t') !=# -1
+	const has_expand = vimrc_str->match('\n ') !=# -1
+	assert_false(has_noexpand && has_expand || has_noexpand && !has_expand, 'インデントはハードタブかスペースかどちらかであること')
+enddef
 #}}}
 
 # ユーティリティのテスト {{{
 def TestMultiCmd()
-	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<>zzz
+	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
 	assert_equal("\n\nn  xxx           yyyNNNzzz", execute('nmap xxx'))
 	assert_equal("\n\nv  xxx           yyyVVVzzz", execute('vmap xxx'))
 	nunmap xxx
