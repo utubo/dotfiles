@@ -119,6 +119,7 @@ Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'
 Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
+Jetpack 'obcat/vim-hitspop'
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
@@ -192,7 +193,7 @@ if a || lt !=# c
 lt = c
 au vimrc User OperatorSandwichAddPost ++once BA(false)
 if a
-feedkeys('Sa')
+feedkeys('S')
 else
 setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
@@ -201,7 +202,7 @@ endif
 endif
 enddef
 nm Sm viwSm
-vm Sm <ScriptCmd>BA()<CR>
+vn Sm <ScriptCmd>BA()<CR>
 def BB()
 const c = g:operator#sandwich#object.cursor
 B(c.tail[1])

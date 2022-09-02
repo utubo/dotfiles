@@ -152,6 +152,7 @@ Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'         # 行移動
 Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
+Jetpack 'obcat/vim-hitspop'
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
@@ -237,7 +238,7 @@ def BigMac(first: bool = true)
 		big_mac_crown = c
 		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
 		if first
-			feedkeys('Sa')
+			feedkeys('S')
 		else
 			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
@@ -246,7 +247,7 @@ def BigMac(first: bool = true)
 	endif
 enddef
 nmap Sm viwSm
-vmap Sm <ScriptCmd>BigMac()<CR>
+vnoremap Sm <ScriptCmd>BigMac()<CR>
 
 # 囲みを削除したら行末空白と空行も削除
 def RemoveAirBuns()
