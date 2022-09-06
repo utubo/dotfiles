@@ -18,7 +18,7 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
-set cmdheight=0
+set cmdheight=1
 set laststatus=2
 set noruler
 set noshowcmd
@@ -153,6 +153,7 @@ Jetpack 'matze/vim-move'         # 行移動
 Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
 Jetpack 'obcat/vim-hitspop'
+Jetpack 'obcat/vim-sclow'
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
@@ -166,7 +167,6 @@ Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
-Jetpack 'utubo/vim-auto-hide-cmdline'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-portal-aim'
@@ -195,7 +195,7 @@ Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-noremap s <Plug>(ahc)<Plug>(easymotion-s)
+noremap s <Plug>(easymotion-s)
 #}}}
 
 # sandwich {{{
@@ -270,11 +270,9 @@ def MRUwithNumKey(use_tab: bool)
 	b:use_tab = use_tab
 	setlocal number
 	redraw
-	if &cmdheight !=# 0
-		echoh Question
-		echo $'[1]..[9] => open with a {use_tab ? 'tab' : 'window'}.'
-		echoh None
-	endif
+	echoh Question
+	echo $'[1]..[9] => open with a {use_tab ? 'tab' : 'window'}.'
+	echoh None
 	const key = use_tab ? 't' : '<CR>'
 	for i in range(1, 9)
 		execute $'nmap <buffer> <silent> {i} :<C-u>{i}<CR>{key}'
@@ -319,21 +317,6 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nnoremap <silent> [a <Plug>(ale_previous_wrap)
 nnoremap <silent> ]a <Plug>(ale_next_wrap)
-# cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
-Disable g:ale_echo_cursor
-g:ll_are = ''
-def ALEEchoCursorCmdHeight0()
-	var loc = ale#util#FindItemAtCursor(bufnr())[1]
-	if !empty(loc)
-		g:ll_ale = loc.type ==# 'E' ? '🐞' : '🐝'
-		g:ll_ale ..= ' '
-		g:ll_ale ..= get(loc, 'detail', loc.text)->split('\n')[0]
-			->substitute('^\[[^]]*\] ', '', '')
-	else
-		g:ll_ale = ''
-	endif
-enddef
-au vimrc User CursorMovedDelay ALEEchoCursorCmdHeight0()
 #}}}
 
 # lightline {{{
@@ -435,11 +418,12 @@ enddef
 g:lightline = {
 	colorscheme: 'wombat',
 	active: {
-		left:  [['mode', 'paste'], ['fugitive', 'filename'], ['ale']],
+		left:  [['mode', 'paste'], ['fugitive', 'filename']],
 		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg', 'mdcb']]
 	},
-	component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', ale: '%=%{g:ll_ale}', li: '%2c,%l/%L' },
+	component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
 	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
+	subseparator: { left: "", right: "" }
 }
 
 # tablineはデフォルト
@@ -494,12 +478,12 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 # カレンダー {{{
 g:calendar_first_day = 'sunday'
 def MyCalender()
-	nnoremap <buffer> k <Plug>(ahc)<Plug>(calendar_up)
-	nnoremap <buffer> j <Plug>(ahc)<Plug>(calendar_down)
-	nnoremap <buffer> h <Plug>(ahc)<Plug>(calendar_prev)
-	nnoremap <buffer> l <Plug>(ahc)<Plug>(calendar_next)
-	nnoremap <buffer> gh <Plug>(ahc)<Plug>(calendar_left)
-	nnoremap <buffer> gl <Plug>(ahc)<Plug>(calendar_right)
+	nnoremap <buffer> k <Plug>(calendar_up)
+	nnoremap <buffer> j <Plug>(calendar_down)
+	nnoremap <buffer> h <Plug>(calendar_prev)
+	nnoremap <buffer> l <Plug>(calendar_next)
+	nnoremap <buffer> gh <Plug>(calendar_left)
+	nnoremap <buffer> gl <Plug>(calendar_right)
 	nmap <buffer> <CR> >
 	nmap <buffer> <BS> <
 enddef
@@ -507,28 +491,13 @@ au vimrc FileType calendar MyCalender()
 # }}}
 
 # cmdline statusline 切り替え {{{
-Enable g:auto_hide_cmdline_switch_statusline
-# statusline非表示→cmdline表示の順にしないとちらつくので応急処置…
-# 本筋はCmdlineEnterPreを作るかupdate_screen(VALID)をCmdlineEnter発行の後にするしかない？
-# ソース
-#   https://github.com/vim/vim/blob/master/src/ex_getln.c
-#   static char_u * getcmdline_int()
-# 前者
-#   `trigger_cmd_autocmd(firstc == -1 || firstc == NUL ? '-' : firstc, EVENT_CMDLINEENTERPRE)`
-#   を`if (cmdheight0)`の手前で実行する？
-#   `firstc == -1`のくだりは後の行から移動してきてもいいかもしれない
-#   ドキュメント修正も必要
-#   でもautocmdの中で`cmdheight`を変更されたらどうするの？
-# 後者
-#   理由があって今のタイミングでupdate_screenしているのだから移動できるわけがない…
-MultiCmd nnoremap,xnoremap : <Plug>(ahc-switch):
-MultiCmd nnoremap,xnoremap / <Plug>(ahc-switch)<Cmd>noh<CR>/
-MultiCmd nnoremap,xnoremap ? <Plug>(ahc-switch)<Cmd>noh<CR>?
+MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
+MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
 MultiCmd nmap,vmap ; :
 nnoremap <Space>; ;
 nnoremap <Space>: :
 # 自作プラグイン(vim-registerslite)と被ってしまった…
-# inoremap <C-r>= <C-o><Plug>(ahc-switch)<C-r>=
+# inoremap <C-r>= <C-o><C-r>=
 #}}}
 
 # その他 {{{
@@ -536,8 +505,8 @@ Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-nnoremap [c <Plug>(ahc)<Plug>(GitGutterPrevHunk)
-nnoremap ]c <Plug>(ahc)<Plug>(GitGutterNextHunk)
+nnoremap [c <Plug>(GitGutterPrevHunk)
+nnoremap ]c <Plug>(GitGutterNextHunk)
 nmap <Space>ga :<C-u>Git add %
 nmap <Space>gc :<C-u>Git commit -m ''<Left>
 nmap <Space>gp :<C-u>Git push
@@ -879,10 +848,9 @@ def ShowBufInfo(event: string = '')
 	endfor
 	echohl Normal
 enddef # TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
-nnoremap <C-g> <Plug>(ahc)<ScriptCmd>call <SID>ShowBufInfo()<CR>
-# cmdheight=0にしたら無用になった
-# au vimrc BufNewFile * ShowBufInfo('BufNewFile')
-# au vimrc BufReadPost * ShowBufInfo('BufReadPost')
+nnoremap <C-g> <ScriptCmd>call <SID>ShowBufInfo()<CR>
+au vimrc BufNewFile * ShowBufInfo('BufNewFile')
+au vimrc BufReadPost * ShowBufInfo('BufReadPost')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -942,10 +910,10 @@ cnoreabbrev mv MoveFile
 # vimrc作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
-nmap g: <Plug>(ahc):<C-u><SID>(exec_line)
-nmap g9 <Plug>(ahc):<C-u>vim9cmd <SID>(exec_line)
-xnoremap g: "vy<Plug>(ahc):<C-u><C-r>=@v<CR><CR>
-xnoremap g9 "vy<Plug>(ahc):<C-u>vim9cmd <C-r>=@v<CR><CR>
+nmap g: :<C-u><SID>(exec_line)
+nmap g9 :<C-u>vim9cmd <SID>(exec_line)
+xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
+xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 保存して実行 TODO: `g!`は微妙かな…
