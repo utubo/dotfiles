@@ -49,19 +49,8 @@ endif
 # }}}
 
 # プラグイン {{{
-g:nerdtree_tabs_open_on_gui_startup = 0
 g:webdevicons_conceal_nerdtree_brackets = 1
 g:WebDevIconsNerdTreeAfterGlyphPadding = ''
-
-def MyLightline()
-	g:lightline.separator = { left: "\ue0b0", right: "\ue0b2" }
-	g:lightline.subseparator = { left: "", right: "" }
-	lightline#init()
-	lightline#enable()
-enddef
-MyLightline()
-au gvimrc VimEnter * ++once MyLightline()
-au gvimrc BufRead * MyLightline()
 # }}}
 
 # Windows {{{
