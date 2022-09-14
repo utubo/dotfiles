@@ -317,6 +317,28 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nnoremap <silent> [a <Plug>(ale_previous_wrap)
 nnoremap <silent> ]a <Plug>(ale_next_wrap)
+
+# cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
+g:ale_echo_cursor = 0
+g:ruler_ale = ''
+def RulerALEEchoCursor()
+	const loc = ale#util#FindItemAtCursor(bufnr())[1]
+	var msg = ''
+	if !empty(loc)
+		msg = loc.type ==# 'E' ? '🐞' : '🐝'
+		msg ..= ' '
+		msg ..= get(loc, 'detail', loc.text)
+			\->split('\n')[0]
+			\->substitute('^\[[^]]*\] ', '', '')
+	else
+		msg = ''
+	endif
+	if msg !=# g:ruler_ale
+		g:ruler_ale = msg
+		nocmdline#Invalidate()
+	endif
+enddef
+au vimrc User CursorMovedDelay RulerALEEchoCursor()
 #}}}
 
 # nocmdline {{{
@@ -422,7 +444,7 @@ enddef
 
 # nocmdline設定
 g:nocmdline = get(g:, 'nocmdline', {})
-g:nocmdline.format = '%t %m%r%=%{ruler_reg} %{ruler_mdcb}%|%{RulerFF()}%{RulerFenc()}%3l:%-2c%|%L%|%{ruler_tea_break}'
+g:nocmdline.format = '%t %m%r %{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%{RulerFF()}%{RulerFenc()}%3l:%-2c%|%L%|%{ruler_tea_break}'
 g:nocmdline.tail = "\ue0be"
 g:nocmdline.sep  = "\ue0bc"
 g:nocmdline.sub  = "\ue0bb"
