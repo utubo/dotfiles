@@ -51,6 +51,7 @@ endif
 # プラグイン {{{
 g:webdevicons_conceal_nerdtree_brackets = 1
 g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+SclowDisable
 # }}}
 
 # Windows {{{
