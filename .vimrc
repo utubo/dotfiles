@@ -16,8 +16,6 @@ set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
 set cmdheight=1
-set ls=2
-set noru
 set noshowcmd
 set noshowmode
 set dy=lastline
@@ -108,7 +106,6 @@ Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
-Jetpack 'itchyny/lightline.vim'
 Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
@@ -136,6 +133,7 @@ Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
+Jetpack 'utubo/vim-nocmdline'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
@@ -155,8 +153,10 @@ endif
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
+Disable g:EasyMotion_verbose
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
+g:EasyMotion_prompt = 'EasyMotion: '
 no s <Plug>(easymotion-s)
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
@@ -186,11 +186,11 @@ endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost J()
-var lt = []
+var ls = []
 def BA(a: bool = true)
 const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
-if a || lt !=# c
-lt = c
+if a || ls !=# c
+ls = c
 au vimrc User OperatorSandwichAddPost ++once BA(false)
 if a
 feedkeys('S')
@@ -258,30 +258,29 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &ut
 nn <silent> [a <Plug>(ale_previous_wrap)
 nn <silent> ]a <Plug>(ale_next_wrap)
-g:ll_reg = ''
+g:ruler_reg = ''
 def BF()
 var a = v:event.regcontents
 ->join('↵')
 ->substitute('\t', '›', 'g')
 ->E(20)
-g:ll_reg = $'📋:{a}'
+g:ruler_reg = $'📋:{a}'
 enddef
 au vimrc TextYankPost * BF()
-g:ll_tea_break = '0:00'
-g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
+g:ruler_tea_break = '0:00'
+g:ruler_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
 def! g:VimrcTimer60s(a: any)
-const b = (localtime() - g:ll_tea_break_opentime) / 60
+const b = (localtime() - g:ruler_tea_break_opentime) / 60
 const c = b % 60
 const d = c >= 45 ? '☕🍴🍰' : ''
-g:ll_tea_break = printf('%s%d:%02d', d, b / 60, c)
-lightline#update()
+g:ruler_tea_break = printf('%s%d:%02d', d, b / 60, c)
 if (c ==# 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-g:ll_mdcb = ''
+g:ruler_mdcb = ''
 def BG(): string
 var [a, b] = H()
 if mode() ==? 'V'
@@ -302,6 +301,9 @@ if a + d < b
 e = '+'
 b = a + d
 endif
+if a < b
+return ''
+endif
 var f = 0
 var g = 0
 for l in range(a, b)
@@ -319,36 +321,35 @@ return $'[x]:{f}/{f + g}{e}'
 endif
 enddef
 def CountCheckBoxsDelay()
+if mode()[0] !=# 'n'
+return
+endif
 const a = BG()
-if a !=# g:ll_mdcb
-g:ll_mdcb = a
-lightline#update()
+if a !=# g:ruler_mdcb
+g:ruler_mdcb = a
 endif
 enddef
 au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 if has('win32')
-def! g:LLFF(): string
-return &ff !=# 'dos' ? &ff : ''
+def! g:RulerFF(): string
+return &ff !=# 'dos' ? $' {&ff}' : ''
 enddef
 else
-def! g:LLFF(): string
-return &ff ==# 'dos' ? &ff : ''
+def! g:RulerFF(): string
+return &ff ==# 'dos' ? $' {&ff}' : ''
 enddef
 endif
-def! g:LLNotUtf8(): string
-return &fenc ==# 'utf-8' ? '' : &fenc
+def! g:RulerFenc(): string
+return &fenc ==# 'utf-8' ? '' : $' {&fenc}'
 enddef
-g:lightline = {
-colorscheme: 'wombat',
-active: {
-left: [['mode', 'paste'], ['fugitive', 'filename']],
-right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg', 'mdcb']]
-},
-component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
-component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
-subseparator: { left: "", right: "" }
-}
-au vimrc VimEnter * set tabline=
+g:nocmdline = get(g:, 'nocmdline', {})
+g:nocmdline.format = '%t %m%r%=%{ruler_reg} %{ruler_mdcb}%|%{RulerFF()}%{RulerFenc()}%3l:%-2c%|%L%|%{ruler_tea_break}'
+g:nocmdline.tail = "\ue0be"
+g:nocmdline.sep = "\ue0bc"
+g:nocmdline.sub = "\ue0bb"
+g:nocmdline.horiz = "─"
+Enable g:nocmdline.zen
+nn ZZ <ScriptCmd>nocmdline#ToggleZen()<CR>
 if ll
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
@@ -409,9 +410,9 @@ MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const mk = expand($'{lk}/pack/local/opt/*')
-if mk !=# ''
-&runtimepath = $'{substitute(mk, '\n', ',', 'g')},{&runtimepath}'
+const lt = expand($'{lk}/pack/local/opt/*')
+if lt !=# ''
+&runtimepath = $'{substitute(lt, '\n', ',', 'g')},{&runtimepath}'
 endif
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
@@ -803,6 +804,7 @@ g:rcsv_colorpairs = [
 ]
 enddef
 au vimrc ColorSchemePre * DD()
+au vimrc ColorScheme * hi! link NoCmdlineHoriz NonText
 def DE()
 if exists('w:my_matches') && !empty(getmatches())
 return

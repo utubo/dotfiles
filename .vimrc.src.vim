@@ -19,8 +19,6 @@ set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
 set cmdheight=1
-set laststatus=2
-set noruler
 set noshowcmd
 set noshowmode
 set display=lastline
@@ -141,7 +139,6 @@ Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
-Jetpack 'itchyny/lightline.vim'
 Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
@@ -169,6 +166,7 @@ Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
+Jetpack 'utubo/vim-nocmdline'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
@@ -193,8 +191,10 @@ endif
 Enable  g:EasyMotion_smartcase
 Enable  g:EasyMotion_use_migemo
 Enable  g:EasyMotion_enter_jump_first
+Disable g:EasyMotion_verbose
 Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
+g:EasyMotion_prompt = 'EasyMotion: '
 noremap s <Plug>(easymotion-s)
 #}}}
 
@@ -319,27 +319,27 @@ nnoremap <silent> [a <Plug>(ale_previous_wrap)
 nnoremap <silent> ]a <Plug>(ale_next_wrap)
 #}}}
 
-# lightline {{{
+# nocmdline {{{
 # ヤンクしたやつを表示するやつ
-g:ll_reg = ''
+g:ruler_reg = ''
 def LLYankPost()
 	var reg = v:event.regcontents
 		->join('↵')
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
-	g:ll_reg = $'📋:{reg}'
+	g:ruler_reg = $'📋:{reg}'
 enddef
 au vimrc TextYankPost * LLYankPost()
 
 # 毎時vim起動後45分から15分間休憩しようね
-g:ll_tea_break = '0:00'
-g:ll_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime()) # .vimrcを再読込して起動時間は持ち越し(1行目でnoclearしてるので持ち越せる)
+g:ruler_tea_break = '0:00'
+g:ruler_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime()) # .vimrcを再読込して起動時間は持ち越し(1行目でnoclearしてるので持ち越せる)
 def! g:VimrcTimer60s(timer: any)
-	const tick = (localtime() - g:ll_tea_break_opentime) / 60
+	const tick = (localtime() - g:ruler_tea_break_opentime) / 60
 	const mm = tick % 60
 	const tea = mm >= 45 ? '☕🍴🍰' : ''
-	g:ll_tea_break = printf('%s%d:%02d', tea, tick / 60, mm)
-	lightline#update()
+	g:ruler_tea_break = printf('%s%d:%02d', tea, tick / 60, mm)
+	# TODO exruler#Update()
 	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
@@ -348,7 +348,7 @@ timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # markdownのチェックボックスの数をカウント
-g:ll_mdcb = ''
+g:ruler_mdcb = ''
 def CountCheckBoxs(): string
 	var [firstline, lastline] = VFirstLast()
 	if mode() ==? 'V'
@@ -371,6 +371,9 @@ def CountCheckBoxs(): string
 		andmore = '+'
 		lastline = firstline + MAX_LINES
 	endif
+	if firstline < lastline # TODO: なんで？
+		return ''
+	endif
 	var chkd = 0
 	var empty = 0
 	for l in range(firstline, lastline)
@@ -389,10 +392,13 @@ def CountCheckBoxs(): string
 enddef
 
 def CountCheckBoxsDelay()
+	if mode()[0] !=# 'n'
+		return
+	endif
 	const count = CountCheckBoxs()
-	if count !=# g:ll_mdcb
-		g:ll_mdcb = count
-		lightline#update()
+	if count !=# g:ruler_mdcb
+		g:ruler_mdcb = count
+		# silent! nocmdline#Update()
 	endif
 enddef
 
@@ -400,34 +406,29 @@ au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 
 # &ff
 if has('win32')
-	def! g:LLFF(): string
-		return &ff !=# 'dos' ? &ff : ''
+	def! g:RulerFF(): string
+		return &ff !=# 'dos' ? $' {&ff}' : ''
 	enddef
 else
-	def! g:LLFF(): string
-		return &ff ==# 'dos' ? &ff : ''
+	def! g:RulerFF(): string
+		return &ff ==# 'dos' ? $' {&ff}' : ''
 	enddef
 endif
 
 # &fenc
-def! g:LLNotUtf8(): string
-	return &fenc ==# 'utf-8' ? '' : &fenc
+def! g:RulerFenc(): string
+	return &fenc ==# 'utf-8' ? '' : $' {&fenc}'
 enddef
 
-# lightline設定
-g:lightline = {
-	colorscheme: 'wombat',
-	active: {
-		left:  [['mode', 'paste'], ['fugitive', 'filename']],
-		right: [['teabreak'], ['ff', 'notutf8', 'li'], ['reg', 'mdcb']]
-	},
-	component: { teabreak: '%{g:ll_tea_break}', mdcb: '%{g:ll_mdcb}', reg: '%{g:ll_reg}', li: '%2c,%l/%L' },
-	component_function: { ff: 'LLFF', notutf8: 'LLNotUtf8' },
-	subseparator: { left: "", right: "" }
-}
-
-# tablineはデフォルト
-au vimrc VimEnter * set tabline=
+# nocmdline設定
+g:nocmdline = get(g:, 'nocmdline', {})
+g:nocmdline.format = '%t %m%r%=%{ruler_reg} %{ruler_mdcb}%|%{RulerFF()}%{RulerFenc()}%3l:%-2c%|%L%|%{ruler_tea_break}'
+g:nocmdline.tail = "\ue0be"
+g:nocmdline.sep  = "\ue0bc"
+g:nocmdline.sub  = "\ue0bb"
+g:nocmdline.horiz = "─"
+Enable g:nocmdline.zen
+nnoremap ZZ <ScriptCmd>nocmdline#ToggleZen()<CR>
 #}}}
 
 # skk {{{
@@ -809,7 +810,7 @@ def ShowBufInfo(event: string = '')
 		add(msg, ['Delimiter', '[+]'])
 		add(msg, ['Normal', ' '])
 	endif
-	if !isReadPost
+	if !isReadPost # TODO: 判定バグってる
 		add(msg, ['Tag', '[New]'])
 		add(msg, ['Normal', ' '])
 	endif
@@ -1067,6 +1068,7 @@ def DefaultColors()
 	]
 enddef
 au vimrc ColorSchemePre * DefaultColors()
+au vimrc ColorScheme * hi! link NoCmdlineHoriz NonText
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
