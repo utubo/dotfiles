@@ -349,22 +349,29 @@ endif
 enddef
 au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 if has('win32')
-def! g:RulerFF(): string
-return &ff !=# 'dos' ? $' {&ff}' : ''
+def CA(): string
+return &ff !=# 'dos' ? $'{&ff} ' : ''
 enddef
 else
-def! g:RulerFF(): string
-return &ff ==# 'dos' ? $' {&ff}' : ''
+def CA(): string
+return &ff ==# 'dos' ? $'{&ff} ' : ''
 enddef
 endif
-def! g:RulerFenc(): string
-return &fenc ==# 'utf-8' ? '' : $' {&fenc}'
+def! g:RulerBufInfo(): string
+if winwidth(winnr()) < 60
+return ''
+else
+var a = &fenc ==# 'utf-8' ? '' : $'{toupper(&fenc)} '
+a ..= CA()
+a ..= $'({line("$")}){g:nocmdline.sub}'
+return a
+endif
 enddef
 g:nocmdline = get(g:, 'nocmdline', {})
-g:nocmdline.format = '%t %m%r %{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%{RulerFF()}%{RulerFenc()}%3l:%-2c%|%L%|%{ruler_tea_break}'
-g:nocmdline.tail = "\ue0be"
-g:nocmdline.sep = "\ue0bc"
-g:nocmdline.sub = "\ue0bb"
+g:nocmdline.format = '%t %m%r %{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
+g:nocmdline.tail = "\ue0c5"
+g:nocmdline.sep = "\ue0b0"
+g:nocmdline.sub = "\ue0b3 "
 g:nocmdline.horiz = "─"
 Enable g:nocmdline.zen
 nn ZZ <ScriptCmd>nocmdline#ToggleZen()<CR>
@@ -394,7 +401,7 @@ g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:calendar_first_day = 'sunday'
-def BJ()
+def CB()
 nn <buffer> k <Plug>(calendar_up)
 nn <buffer> j <Plug>(calendar_down)
 nn <buffer> h <Plug>(calendar_prev)
@@ -404,7 +411,7 @@ nn <buffer> gl <Plug>(calendar_right)
 nm <buffer> <CR> >
 nm <buffer> <BS> <
 enddef
-au vimrc FileType calendar BJ()
+au vimrc FileType calendar CB()
 MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
 MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
 MultiCmd nmap,vmap ; :
@@ -443,7 +450,7 @@ set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
 nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
-def CA()
+def CC()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -459,8 +466,8 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * CA()
-def CB(a: string, ...b: list<string>)
+au vimrc BufReadPost * CC()
+def CD(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
@@ -482,9 +489,9 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ VimGrep CB(<f-args>)
+com! -nargs=+ VimGrep CD(<f-args>)
 nm <Space>/ :<C-u>VimGrep<Space>
-def CC()
+def CE()
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 nn <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
@@ -493,7 +500,7 @@ nn <buffer> f <C-f>
 nn <buffer> b <C-b>
 exe $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
 enddef
-au vimrc FileType qf CC()
+au vimrc FileType qf CE()
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
@@ -521,15 +528,15 @@ exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
-def CD(): string
+def CF(): string
 const x = getline('.')->match('\S') + 1
 if x !=# 0 || !exists('w:my_hat')
 w:my_hat = col('.') ==# x ? '^' : ''
 endif
 return w:my_hat
 enddef
-nn <expr> j $'j{<SID>CD()}'
-nn <expr> k $'k{<SID>CD()}'
+nn <expr> j $'j{<SID>CF()}'
+nn <expr> k $'k{<SID>CF()}'
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -539,7 +546,7 @@ enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
-def CE()
+def CG()
 var [a, b] = H()
 exe ':' a 's/\v(\S)?$/\1 /'
 append(b, D(a))
@@ -547,8 +554,8 @@ cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
 enddef
-xn zf <ScriptCmd>CE()<CR>
-def CF()
+xn zf <ScriptCmd>CG()<CR>
+def CH()
 if foldclosed(line('.')) ==# -1
 normal! zc
 endif
@@ -563,7 +570,7 @@ B(b)
 B(a)
 setpos('.', c)
 enddef
-nn zd <ScriptCmd>CF()<CR>
+nn zd <ScriptCmd>CH()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -571,14 +578,14 @@ nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
-def CG(a: string)
+def CI(a: string)
 const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-xn u <ScriptCmd>CG('undo')<CR>
+xn u <ScriptCmd>CI('undo')<CR>
 xn <Space>u u
-xn <C-R> <ScriptCmd>CG('redo')<CR>
+xn <C-R> <ScriptCmd>CI('redo')<CR>
 xn <Tab> <Cmd>normal! >gv<CR>
 xn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Left>
@@ -601,7 +608,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def CH()
+def CJ()
 for l in I()
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
@@ -619,8 +626,8 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <Space>x <ScriptCmd>CH()<CR>
-def CI(a: string = '')
+no <Space>x <ScriptCmd>CJ()<CR>
+def DA(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -674,10 +681,10 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <C-g> <ScriptCmd>call <SID>CI()<CR>
-au vimrc BufNewFile * CI('BufNewFile')
-au vimrc BufReadPost * CI('BufReadPost')
-def CJ(a: string = '')
+nn <C-g> <ScriptCmd>call <SID>DA()<CR>
+au vimrc BufNewFile * DA('BufNewFile')
+au vimrc BufReadPost * DA('BufReadPost')
+def DB(a: string = '')
 if ! empty(a)
 if winnr() ==# winnr(a)
 return
@@ -692,19 +699,19 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-nn qh <ScriptCmd>CJ('h')<CR>
-nn qj <ScriptCmd>CJ('j')<CR>
-nn qk <ScriptCmd>CJ('k')<CR>
-nn ql <ScriptCmd>CJ('l')<CR>
-nn qq <ScriptCmd>CJ()<CR>
-nn q<CR> <ScriptCmd>CJ()<CR>
+nn qh <ScriptCmd>DB('h')<CR>
+nn qj <ScriptCmd>DB('j')<CR>
+nn qk <ScriptCmd>DB('k')<CR>
+nn ql <ScriptCmd>DB('l')<CR>
+nn qq <ScriptCmd>DB()<CR>
+nn q<CR> <ScriptCmd>DB()<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
-def DA(a: string)
+def DC(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -719,7 +726,7 @@ endif
 exe 'saveas!' c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile DA(<f-args>)
+com! -nargs=1 -complete=file MoveFile DC(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: :<C-u><SID>(exec_line)
@@ -783,35 +790,35 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <ScriptCmd>CH()<CR>
-ino <M-x> <ScriptCmd>CH()<CR>
+ino jjx <ScriptCmd>CJ()<CR>
+ino <M-x> <ScriptCmd>CJ()<CR>
 cno qq <C-f>
-def DB()
+def DD()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def DC(a: string, b: string)
+def DE(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * DB()
-au vimrc Syntax javascript,vim DC('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim DC('SpellRare', '\<normal!\@!')
+au vimrc Syntax * DD()
+au vimrc Syntax javascript,vim DE('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim DE('SpellRare', '\<normal!\@!')
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def DD()
+def DF()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * DD()
+au vimrc VimEnter * DF()
 endif
-def DE()
+def DG()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -821,9 +828,9 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * DE()
+au vimrc ColorSchemePre * DG()
 au vimrc ColorScheme * hi! link NoCmdlineHoriz NonText
-def DF()
+def DH()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -838,8 +845,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DF()
-def DG()
+au vimrc VimEnter,WinEnter * DH()
+def DI()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -847,8 +854,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! DG()
-au vimrc BufNew,BufReadPost * silent! DG()
+au vimrc OptionSet list silent! DI()
+au vimrc BufNew,BufReadPost * silent! DI()
 set t_Co=256
 syntax on
 set bg=dark
@@ -856,10 +863,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def DH()
+def DJ()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|DH()|endif
+au vimrc VimEnter * ++nested if !C()|DJ()|endif
