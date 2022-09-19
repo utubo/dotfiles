@@ -556,6 +556,14 @@ const localplugins = expand($'{rtproot}/pack/local/opt/*')
 if localplugins !=# ''
 	&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
 endif
+def DevColorScheme()
+	if expand('%:p') !~# '/colors/'
+		return
+	endif
+	nnoremap <buffer> <expr> ZX $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
+	nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
+enddef
+au vimrc FileType vim DevColorScheme()
 #}}}
 
 filetype plugin indent on
