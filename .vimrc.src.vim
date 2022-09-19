@@ -450,11 +450,12 @@ enddef
 
 # nocmdline設定
 g:nocmdline = get(g:, 'nocmdline', {})
-g:nocmdline.format = '%t %m%r %{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
 g:nocmdline.tail = "\ue0c6"
 g:nocmdline.sep  = "\ue0b0"
 g:nocmdline.sub  = "\ue0b3 "
+g:nocmdline.subl = "\ue0b1"
 g:nocmdline.horiz = "─"
+g:nocmdline.format = '%t %m%r%{nocmdline.subl}%{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
 Enable g:nocmdline.zen
 nnoremap ZZ <ScriptCmd>nocmdline#ToggleZen()<CR>
 #}}}
