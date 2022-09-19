@@ -230,7 +230,7 @@ def BD()
 Enable b:auto_cursorline_disabled
 setl cursorline
 nn <buffer> w <ScriptCmd>BC(!b:use_tab)<CR>
-nn <buffer> R <Cmd>MruRefresh<CR><Cmd>normal! u
+nn <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR>
 nn <buffer> <Esc> <Cmd>q!<CR>
 BC(C())
 enddef
