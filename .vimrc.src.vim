@@ -393,7 +393,7 @@ def CountCheckBoxs(): string
 		andmore = '+'
 		lastline = firstline + MAX_LINES
 	endif
-	if firstline < lastline # TODO: なんで？
+	if firstline > lastline # TODO: なんで？
 		return ''
 	endif
 	var chkd = 0

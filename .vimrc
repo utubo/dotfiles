@@ -319,7 +319,7 @@ if a + d < b
 e = '+'
 b = a + d
 endif
-if a < b
+if a > b
 return ''
 endif
 var f = 0
