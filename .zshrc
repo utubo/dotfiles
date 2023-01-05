@@ -53,17 +53,21 @@ case "${OSTYPE}" in
 		AUTO_COLOR=--color=auto
 		;;
 esac
+
+
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 if type "exa" > /dev/null 2>&1; then
-	alias l=exa
-	alias ls=exa\ -a
-	alias ll=exa\ -lah\ --git
-	alias la=exa\ -a
+	TIME_STYLE=--time-style=long-iso
+	alias l=exa\ $TIME_STYLE
+	alias ls=exa\ -a\ $TIME_STYLE
+	alias ll=exa\ -lah\ --git\ $TIME_STYLE
+	alias la=exa\ -a\ $TIME_STYLE
 else
+	TIME_STYLE=-D\ %F\ %R
 	alias l=ls\ $AUTO_COLOR
-	alias ls=ls\ $AUTO_COLOR
-	alias ll=ls\ -lFh $AUTO_COLOR
-	alias la=ls\ -alFh $AUTO_COLOR
+	alias ls=ls\ $AUTO_COLOR $TIME_STYLE
+	alias ll=ls\ -lFh $AUTO_COLOR $TIME_STYLE
+	alias la=ls\ -alFh $AUTO_COLOR $TIME_STYLE
 fi
 alias pu=pushd
 alias po=popd
