@@ -58,16 +58,16 @@ esac
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 if type "exa" > /dev/null 2>&1; then
 	TIME_STYLE=--time-style=long-iso
-	alias l=exa\ $TIME_STYLE
-	alias ls=exa\ -a\ $TIME_STYLE
-	alias ll=exa\ -lah\ --git\ $TIME_STYLE
+	alias l=exa
+	alias ls=exa
 	alias la=exa\ -a\ $TIME_STYLE
+	alias ll=exa\ -lah\ --git\ $TIME_STYLE
 else
-	TIME_STYLE=-D\ %F\ %R
+	TIME_STYLE=-D\ "%F\ %R"
 	alias l=ls\ $AUTO_COLOR
-	alias ls=ls\ $AUTO_COLOR $TIME_STYLE
-	alias ll=ls\ -lFh $AUTO_COLOR $TIME_STYLE
-	alias la=ls\ -alFh $AUTO_COLOR $TIME_STYLE
+	alias ls=ls\ $AUTO_COLOR
+	alias la=ls\ -a\ $AUTO_COLOR
+	alias ll=ls\ -lahF\ $AUTO_COLOR\ $TIME_STYLE
 fi
 alias pu=pushd
 alias po=popd
