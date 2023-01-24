@@ -313,6 +313,7 @@ Disable g:ale_lint_on_insert_leave
 Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
 g:ale_sign_warning = '🐝'
+g:ale_linters = { javascript: ['eslint'] }
 g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nnoremap <silent> [a <Plug>(ale_previous_wrap)
