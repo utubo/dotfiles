@@ -839,7 +839,7 @@ g:rcsv_colorpairs = [
 ]
 enddef
 au vimrc ColorSchemePre * DH()
-au vimrc ColorScheme * hi! link NoCmdlineHoriz NonText
+au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
 def DI()
 if exists('w:my_matches') && !empty(getmatches())
 return

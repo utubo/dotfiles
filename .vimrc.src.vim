@@ -1106,7 +1106,7 @@ def DefaultColors()
 	]
 enddef
 au vimrc ColorSchemePre * DefaultColors()
-au vimrc ColorScheme * hi! link NoCmdlineHoriz NonText
+au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
