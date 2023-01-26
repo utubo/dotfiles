@@ -166,7 +166,7 @@ Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-nocmdline'
+Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
@@ -336,13 +336,13 @@ def RulerALEEchoCursor()
 	endif
 	if msg !=# g:ruler_ale
 		g:ruler_ale = msg
-		nocmdline#Invalidate()
+		cmdheight0#Invalidate()
 	endif
 enddef
 au vimrc User CursorMovedDelay RulerALEEchoCursor()
 #}}}
 
-# nocmdline {{{
+# cmdheight0 {{{
 # ヤンクしたやつを表示するやつ
 g:ruler_reg = ''
 def LLYankPost()
@@ -421,7 +421,7 @@ def CountCheckBoxsDelay()
 	const count = CountCheckBoxs()
 	if count !=# g:ruler_mdcb
 		g:ruler_mdcb = count
-		# silent! nocmdline#Invalidate()
+		# silent! cmdheight0#Invalidate()
 	endif
 enddef
 
@@ -444,21 +444,21 @@ def! g:RulerBufInfo(): string
 	else
 		var info = &fenc ==# 'utf-8' ? '' : $'{toupper(&fenc)} '
 		info ..= RulerFF()
-		info ..= $'({line("$")}){g:nocmdline.sub}'
+		info ..= $'({line("$")}){g:cmdheight0.sub}'
 		return info
 	endif
 enddef
 
-# nocmdline設定
-g:nocmdline = get(g:, 'nocmdline', {})
-g:nocmdline.tail = "\ue0c6"
-g:nocmdline.sep  = "\ue0b0"
-g:nocmdline.sub  = "\ue0b3 "
-g:nocmdline.subl = "\ue0b1"
-g:nocmdline.horiz = "─"
-g:nocmdline.format = '%t %m%r%{nocmdline.subl}%{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
-Enable g:nocmdline.zen
-nnoremap ZZ <ScriptCmd>nocmdline#ToggleZen()<CR>
+# cmdheight0設定
+g:cmdheight0 = get(g:, 'cmdheight0', {})
+g:cmdheight0.tail = "\ue0c6"
+g:cmdheight0.sep  = "\ue0b0"
+g:cmdheight0.sub  = "\ue0b3 "
+g:cmdheight0.subl = "\ue0b1"
+g:cmdheight0.horiz = "─"
+g:cmdheight0.format = '%t %m%r%{g:cmdheight0.subl}%{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
+Enable g:cmdheight0.zen
+nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
 
 # skk {{{
