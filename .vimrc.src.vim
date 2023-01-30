@@ -321,6 +321,7 @@ nnoremap <silent> ]a <Plug>(ale_next_wrap)
 
 # cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
 g:ale_echo_cursor = 0
+# TODO: DELETE THIS!
 g:ruler_ale = ''
 def RulerALEEchoCursor()
 	const loc = ale#util#FindItemAtCursor(bufnr())[1]
