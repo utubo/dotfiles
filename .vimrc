@@ -351,30 +351,28 @@ enddef
 au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 if has('win32')
 def CA(): string
-return &ff !=# 'dos' ? $'{&ff} ' : ''
+return &ff !=# 'dos' ? $' {&ff}' : ''
 enddef
 else
 def CA(): string
-return &ff ==# 'dos' ? $'{&ff} ' : ''
+return &ff ==# 'dos' ? $' {&ff}' : ''
 enddef
 endif
 def! g:RulerBufInfo(): string
 if winwidth(winnr()) < 60
 return ''
 else
-var a = &fenc ==# 'utf-8' ? '' : $'{toupper(&fenc)} '
+var a = &fenc ==# 'utf-8' ? '' : &fenc
 a ..= CA()
-a ..= $'({line("$")}){g:cmdheight0.sub}'
 return a
 endif
 enddef
 g:cmdheight0 = get(g:, 'cmdheight0', {})
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0b0"
-g:cmdheight0.sub = "\ue0b3 "
-g:cmdheight0.subl = "\ue0b1"
+g:cmdheight0.sub = ["\ue0b1", "\ue0b3 "]
 g:cmdheight0.horiz = "─"
-g:cmdheight0.format = '%t %m%r%{g:cmdheight0.subl}%{ruler_ale}%=%{ruler_reg} %{ruler_mdcb}%|%3l:%-2c%|%{RulerBufInfo()}%{ruler_tea_break}'
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c(%L)%|%{RulerBufInfo()|}%{ruler_tea_break}'
 Enable g:cmdheight0.zen
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if ll
