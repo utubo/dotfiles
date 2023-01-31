@@ -640,7 +640,7 @@ if &ft ==# 'qf'
 return
 endif
 var b = a ==# 'BufReadPost'
-if b && ! filereadable(expand('%'))
+if b && !filereadable(expand('%'))
 return
 endif
 var c = []
@@ -650,7 +650,7 @@ if &modified
 add(c, ['Delimiter', '[+]'])
 add(c, ['Normal', ' '])
 endif
-if !b
+if !b && !filereadable(expand('%'))
 add(c, ['Tag', '[New]'])
 add(c, ['Normal', ' '])
 endif
@@ -690,8 +690,7 @@ endfor
 echoh Normal
 enddef
 nn <C-g> <ScriptCmd>call <SID>DB()<CR>
-au vimrc BufNewFile * DB('BufNewFile')
-au vimrc BufReadPost * DB('BufReadPost')
+au vimrc BufNewFile,BufReadPost,BufWritePost * DB('BufNewFile')
 def DC(a: string = '')
 if ! empty(a)
 if winnr() ==# winnr(a)

@@ -835,7 +835,7 @@ def ShowBufInfo(event: string = '')
 	endif
 
 	var isReadPost = event ==# 'BufReadPost'
-	if isReadPost && ! filereadable(expand('%'))
+	if isReadPost && !filereadable(expand('%'))
 		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
 		return
 	endif
@@ -847,7 +847,7 @@ def ShowBufInfo(event: string = '')
 		add(msg, ['Delimiter', '[+]'])
 		add(msg, ['Normal', ' '])
 	endif
-	if !isReadPost # TODO: 判定バグってる
+	if !isReadPost && !filereadable(expand('%'))
 		add(msg, ['Tag', '[New]'])
 		add(msg, ['Normal', ' '])
 	endif
@@ -887,8 +887,7 @@ def ShowBufInfo(event: string = '')
 	echohl Normal
 enddef # TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
 nnoremap <C-g> <ScriptCmd>call <SID>ShowBufInfo()<CR>
-au vimrc BufNewFile * ShowBufInfo('BufNewFile')
-au vimrc BufReadPost * ShowBufInfo('BufReadPost')
+au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
