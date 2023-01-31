@@ -812,7 +812,7 @@ enddef
 au vimrc Syntax * DE()
 au vimrc Syntax javascript,vim DF('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim DF('SpellRare', '\<normal!\@!')
-textobj#user#map('twochars', {'-': {'select-a': 'A', 'select-i': 'I'}})
+textobj#user#map('twochars', {'-': {'select-a': 'aa', 'select-i': 'ii'}})
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
