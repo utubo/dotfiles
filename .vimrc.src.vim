@@ -1061,6 +1061,9 @@ au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
 # 基本的にnormalは再マッピングさせないように「!」を付ける
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
+# 自分で作ったのに使わなすぎるので啓発
+textobj#user#map('twochars', {'-': {'select-a': 'A', 'select-i': 'I'}})
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
