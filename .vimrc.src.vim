@@ -893,7 +893,7 @@ au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 # ----------------------------------------------------------
 # 閉じる {{{
 def Quit(expr: string = '')
-	if ! empty(expr)
+	if !!expr
 		if winnr() ==# winnr(expr)
 			return
 		endif
@@ -916,6 +916,7 @@ nnoremap q<CR> <ScriptCmd>Quit()<CR>
 nnoremap qn <Cmd>confirm tabclose +<CR>
 nnoremap qp <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
+nnoremap qo <Cmd>confirm tabonly<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?

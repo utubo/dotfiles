@@ -692,7 +692,7 @@ enddef
 nn <C-g> <ScriptCmd>call <SID>DB()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * DB('BufNewFile')
 def DC(a: string = '')
-if ! empty(a)
+if !!a
 if winnr() ==# winnr(a)
 return
 endif
@@ -715,6 +715,7 @@ nn q<CR> <ScriptCmd>DC()<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
+nn qo <Cmd>confirm tabonly<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
