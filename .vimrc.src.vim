@@ -964,7 +964,17 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
-nnoremap <F11> <Cmd>set number!<CR>
+def ToggleNumber()
+	if &number
+		set nonumber
+	elseif &relativenumber
+		set number norelativenumber
+	else
+		set relativenumber
+	endif
+enddef
+
+nnoremap <F11> <ScriptCmd>ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
 cnoremap <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
