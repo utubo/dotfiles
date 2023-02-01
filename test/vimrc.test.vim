@@ -73,6 +73,7 @@ def TestMapping()
 	# n  S  Sandwich
 	# n  T  タブ関係
 	# n  Y  y$ヘルプにもそう書いてある
+	# n  ZZ Zenモード
 	# n  :  <Plug><ahc-switch>:
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
@@ -80,13 +81,14 @@ def TestMapping()
 	# i     <C-U> defaults.vim
 	# i     <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
 	# 概ねプラグイン内で被ってる
 	# n  <Plug>fugitive:
+	# n  n     vim-cmdheight0
 	# i  {     vim-laxima
 	# i  [     vim-laxima
 	# i  <Esc> vim-laxima
