@@ -746,7 +746,16 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-nn <F11> <Cmd>set number!<CR>
+def DE()
+if &number
+set nonumber
+elseif &relativenumber
+set number norelativenumber
+else
+set relativenumber
+endif
+enddef
+nn <F11> <ScriptCmd>DE()<CR>
 nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
@@ -800,18 +809,18 @@ ino jjk 「」<Left>
 ino jjx <ScriptCmd>DA()<CR>
 ino <M-x> <ScriptCmd>DA()<CR>
 cno qq <C-f>
-def DE()
+def DF()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def DF(a: string, b: string)
+def DG(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * DE()
-au vimrc Syntax javascript,vim DF('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim DF('SpellRare', '\<normal!\@!')
+au vimrc Syntax * DF()
+au vimrc Syntax javascript,vim DG('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim DG('SpellRare', '\<normal!\@!')
 textobj#user#map('twochars', {'-': {'select-a': 'aa', 'select-i': 'ii'}})
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
@@ -819,14 +828,14 @@ nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def DG()
+def DH()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * DG()
+au vimrc VimEnter * DH()
 endif
-def DH()
+def DI()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -836,9 +845,9 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * DH()
+au vimrc ColorSchemePre * DI()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
-def DI()
+def DJ()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -853,8 +862,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * DI()
-def DJ()
+au vimrc VimEnter,WinEnter * DJ()
+def EA()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -862,8 +871,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! DJ()
-au vimrc BufNew,BufReadPost * silent! DJ()
+au vimrc OptionSet list silent! EA()
+au vimrc BufNew,BufReadPost * silent! EA()
 set t_Co=256
 syntax on
 set bg=dark
@@ -871,10 +880,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def EA()
+def EB()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|EA()|endif
+au vimrc VimEnter * ++nested if !C()|EB()|endif
