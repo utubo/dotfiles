@@ -69,12 +69,14 @@ else
 	alias la=ls\ -a\ $AUTO_COLOR
 	alias ll=ls\ -lahF\ $AUTO_COLOR\ $TIME_STYLE
 fi
+
+crontab () { [[ $@ =~ -[iel]*r ]] && echo '"r" not allowed' || command crontab "$@" ;}
+
 alias pu=pushd
 alias po=popd
 alias c=clear
 alias g=grep\ -n $AUTO_COLOR
 alias rm=rm\ -i
-alias crontab=crontab\ -i
 alias v=vim
 alias vi=vim
 alias vw=view
