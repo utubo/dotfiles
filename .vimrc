@@ -848,6 +848,8 @@ g:rcsv_colorpairs = [
 enddef
 au vimrc ColorSchemePre * DI()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
+au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
+au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
 def DJ()
 if exists('w:my_matches') && !empty(getmatches())
 return

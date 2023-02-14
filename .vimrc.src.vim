@@ -1119,6 +1119,8 @@ def DefaultColors()
 enddef
 au vimrc ColorSchemePre * DefaultColors()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
+au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
+au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
