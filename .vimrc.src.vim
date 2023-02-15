@@ -356,14 +356,13 @@ enddef
 au vimrc TextYankPost * LLYankPost()
 
 # 毎時vim起動後45分から15分間休憩しようね
-g:ruler_tea_break = '0:00'
-g:ruler_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime()) # .vimrcを再読込して起動時間は持ち越し(1行目でnoclearしてるので持ち越せる)
+g:ruler_worktime = '🕛'
+g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime()) # .vimrcを再実行しても(1行目のnoclearで)持ち越し
 def! g:VimrcTimer60s(timer: any)
-	const tick = (localtime() - g:ruler_tea_break_opentime) / 60
-	const mm = tick % 60
-	const tea = mm >= 45 ? '☕🍴🍰' : ''
-	g:ruler_tea_break = printf('%s%d:%02d', tea, tick / 60, mm)
-	# TODO exruler#Update()
+	const hhmm = (localtime() - g:ruler_worktime_open_at) / 60
+	const mm = hhmm % 60
+	#:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
+	g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
 	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
@@ -452,10 +451,10 @@ enddef
 # cmdheight0設定
 g:cmdheight0 = get(g:, 'cmdheight0', {})
 g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep  = "\ue0b0"
-g:cmdheight0.sub  = ["\ue0b1", "\ue0b3 "]
+g:cmdheight0.sep  = "\ue0c6"
+g:cmdheight0.sub  = [" \ue0b5", "\ue0b7 "]
 g:cmdheight0.horiz = "─"
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c(%L)%|%{RulerBufInfo()|}%{ruler_tea_break}'
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 Enable g:cmdheight0.zen
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
@@ -719,6 +718,8 @@ enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
 au vimrc ColorScheme * hi! link Folded Delimiter
+au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEWarningSign
+au vimrc ColorScheme * hi! link ALEVirtualTextError ALEErrorSign
 #}}}
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def Zf()
