@@ -286,13 +286,12 @@ var a = v:event.regcontents
 g:ruler_reg = $'📋:{a}'
 enddef
 au vimrc TextYankPost * BG()
-g:ruler_tea_break = '0:00'
-g:ruler_tea_break_opentime = get(g:, 'll_tea_break_opentime', localtime())
+g:ruler_worktime = '🕛'
+g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(a: any)
-const b = (localtime() - g:ruler_tea_break_opentime) / 60
+const b = (localtime() - g:ruler_worktime_open_at) / 60
 const c = b % 60
-const d = c >= 45 ? '☕🍴🍰' : ''
-g:ruler_tea_break = printf('%s%d:%02d', d, b / 60, c)
+g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[c / 5]
 if (c ==# 45)
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
@@ -369,10 +368,10 @@ endif
 enddef
 g:cmdheight0 = get(g:, 'cmdheight0', {})
 g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep = "\ue0b0"
-g:cmdheight0.sub = ["\ue0b1", "\ue0b3 "]
+g:cmdheight0.sep = "\ue0c6"
+g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
 g:cmdheight0.horiz = "─"
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c(%L)%|%{RulerBufInfo()|}%{ruler_tea_break}'
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 Enable g:cmdheight0.zen
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if ll
@@ -554,6 +553,8 @@ enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * hi! link Folded Delimiter
+au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEWarningSign
+au vimrc ColorScheme * hi! link ALEVirtualTextError ALEErrorSign
 def CH()
 var [a, b] = H()
 exe ':' a 's/\v(\S)?$/\1 /'
