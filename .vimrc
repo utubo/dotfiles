@@ -831,7 +831,7 @@ MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
-if strftime('%d') ==# '99'
+if strftime('%d') ==# '01'
 def DH()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear

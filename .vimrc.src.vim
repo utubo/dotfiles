@@ -1098,7 +1098,7 @@ nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos(
 
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
-if strftime('%d') ==# '99'
+if strftime('%d') ==# '01'
 	def DMD()
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		imapclear
