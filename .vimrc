@@ -374,7 +374,7 @@ g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
 g:cmdheight0.horiz = "─"
 g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
-Enable g:cmdheight0.zen
+g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if ll
 if ! empty($SKK_JISYO_DIR)
