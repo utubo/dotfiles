@@ -574,7 +574,7 @@ filetype plugin indent on
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-xnoremap * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 inoremap kj <Esc>`^
 inoremap kk <Esc>`^
 inoremap <CR> <CR><C-g>u
@@ -1097,7 +1097,7 @@ nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos(
 
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
-if strftime('%d') ==# '01'
+if strftime('%d') ==# '99'
 	def DMD()
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		imapclear

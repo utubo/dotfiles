@@ -450,7 +450,7 @@ au vimrc FileType vim CC()
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
-xn * "vy/\V<Cmd>substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino kj <Esc>`^
 ino kk <Esc>`^
 ino <CR> <CR><C-g>u
@@ -830,7 +830,7 @@ MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
-if strftime('%d') ==# '01'
+if strftime('%d') ==# '99'
 def DH()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
