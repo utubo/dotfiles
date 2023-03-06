@@ -368,7 +368,7 @@ return a
 endif
 enddef
 g:cmdheight0 = get(g:, 'cmdheight0', {})
-g:cmdheight0.delay = -1;
+g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
