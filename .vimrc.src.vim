@@ -114,6 +114,28 @@ def VRange(): list<number>
 	const a = VFirstLast()
 	return range(a[0], a[1])
 enddef
+
+def GetVisualSelectionLines(): list<string>
+	var v = getpos('v')[1 : 2]
+	var c = getpos('.')[1 : 2]
+	if c[0] < v[0]
+		[v, c] = [c, v]
+	endif
+	var lines = getline(v[0], c[0])
+	if mode() ==# 'V'
+		# nop
+	elseif mode() ==# 'v'
+		lines[0] = lines[0][v[1] : ]
+		lines[-1] = lines[-1][1 : c[1]]
+	else
+		var [s, e] = sort([c[1], v[1]])
+		for i in range(0, len(lines) - 1)
+			lines[i] = lines[i][s : e]
+		endfor
+	endif
+	return lines
+enddef
+
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -140,6 +162,7 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
+Jetpack 'itchyny/vim-parenmatch'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow'    # 虹色括弧
@@ -322,26 +345,6 @@ nnoremap <silent> ]a <Plug>(ale_next_wrap)
 
 # cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
 g:ale_echo_cursor = 0
-# TODO: DELETE THIS!
-g:ruler_ale = ''
-def RulerALEEchoCursor()
-	const loc = ale#util#FindItemAtCursor(bufnr())[1]
-	var msg = ''
-	if !empty(loc)
-		msg = loc.type ==# 'E' ? '🐞' : '🐝'
-		msg ..= ' '
-		msg ..= get(loc, 'detail', loc.text)
-			\->split('\n')[0]
-			\->substitute('^\[[^]]*\] ', '', '')
-	else
-		msg = ''
-	endif
-	if msg !=# g:ruler_ale
-		g:ruler_ale = msg
-		cmdheight0#Invalidate()
-	endif
-enddef
-au vimrc User CursorMovedDelay RulerALEEchoCursor()
 #}}}
 
 # cmdheight0 {{{
@@ -533,6 +536,7 @@ nnoremap <Space>: :
 
 # その他 {{{
 Enable g:rainbow_active
+g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
@@ -888,8 +892,21 @@ def ShowBufInfo(event: string = '')
 		echon m[1]
 	endfor
 	echohl Normal
-enddef # TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
-nnoremap <C-g> <ScriptCmd>call <SID>ShowBufInfo()<CR>
+enddef
+
+# Zenモードで位置が分からなくなるのでPOPUPで現在位置を表示
+def PopupCursorPos()
+	popup_create($' {line(".")}:{col(".")} ', {
+		pos: 'botleft',
+		line: 'cursor-1',
+		col: 'cursor',
+		moved: 'any',
+		padding: [1, 1, 1, 1],
+	})
+enddef
+
+# TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
+nnoremap <C-g> <ScriptCmd>call <SID>ShowBufInfo()<CR><scriptCmd>call <SID>PopupCursorPos()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 
@@ -1077,6 +1094,36 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
 # 自分で作ったのに使わなすぎるので啓発
 textobj#user#map('twochars', {'-': {'select-a': 'aa', 'select-i': 'ii'}})
+
+# 'itchyny/vim-cursorword'の簡易CursorHold版
+def HiCursorWord()
+	var cword = expand('<cword>')
+	if cword !=# '' && cword !=# get(w:, 'cword_match', '')
+		if exists('w:cword_match_id')
+			matchdelete(w:cword_match_id)
+			unlet w:cword_match_id
+		endif
+		if cword =~ "^[a-zA-Z0-9]"
+			w:cword_match_id = matchadd('CWordMatch', cword)
+			w:cword_match = cword
+		endif
+	endif
+enddef
+au vimrc CursorHold * HiCursorWord()
+au vimrc ColorScheme * hi CWordMatch cterm=underline gui=underline
+
+# 選択中の文字数をポップアップ
+def PopupVisualLength()
+	var text = GetVisualSelectionLines()->join('')
+	popup_create($'{strlen(text)}chars', {
+		pos: 'botleft',
+		line: 'cursor-1',
+		col: 'cursor',
+		moved: 'any',
+		padding: [1, 1, 1, 1],
+	})
+enddef
+vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
