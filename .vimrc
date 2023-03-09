@@ -96,11 +96,11 @@ if c[0] < v[0]
 endif
 var a = getline(v[0], c[0])
 if mode() ==# 'V'
-elseif mode() ==# 'v'
-a[0] = a[0][v[1] : ]
-a[-1] = a[-1][1 : c[1]]
+elseif mode() ==# 'v' && v[0] !=# c[0]
+a[-1] = a[-1][0 : c[1] - 1]
+a[0] = a[0][v[1] - 1 : ]
 else
-var [s, e] = sort([c[1], v[1]])
+var [s, e] = sort([c[1] - 1, v[1] - 1])
 for i in range(0, len(a) - 1)
 a[i] = a[i][s : e]
 endfor

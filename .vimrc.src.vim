@@ -124,11 +124,11 @@ def GetVisualSelectionLines(): list<string>
 	var lines = getline(v[0], c[0])
 	if mode() ==# 'V'
 		# nop
-	elseif mode() ==# 'v'
-		lines[0] = lines[0][v[1] : ]
-		lines[-1] = lines[-1][1 : c[1]]
+	elseif mode() ==# 'v' && v[0] !=# c[0]
+		lines[-1] = lines[-1][0 : c[1] - 1]
+		lines[0] = lines[0][v[1] - 1 : ]
 	else
-		var [s, e] = sort([c[1], v[1]])
+		var [s, e] = sort([c[1] - 1, v[1] - 1])
 		for i in range(0, len(lines) - 1)
 			lines[i] = lines[i][s : e]
 		endfor
