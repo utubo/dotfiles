@@ -82,30 +82,32 @@ ln = timer_start(lm, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * G()
 def H(): list<number>
-return mode() ==? 'V' ? sort([line('.'), line('v')]) : [line('.'), line('.')]
+return mode() ==? 'V' ? [line('.'), line('v')]->sort('n') : [line('.'), line('.')]
 enddef
 def I(): list<number>
 const a = H()
 return range(a[0], a[1])
 enddef
 def J(): list<string>
-var v = getpos('v')[1 : 2]
-var c = getpos('.')[1 : 2]
-if c[0] < v[0]
-[v, c] = [c, v]
+var [a, b] = getpos('v')[1 : 2]
+var [c, d] = getpos('.')[1 : 2]
+if c < a
+[b, d] = [d, b]
+[a, c] = [c, a]
 endif
-var a = getline(v[0], c[0])
+var f = getline(a, c)
 if mode() ==# 'V'
-elseif mode() ==# 'v' && v[0] !=# c[0]
-a[-1] = a[-1][0 : c[1] - 1]
-a[0] = a[0][v[1] - 1 : ]
+elseif mode() ==# 'v' && a !=# c
+f[-1] = f[-1][0 : d - 1]
+f[0] = f[0][b - 1 : ]
 else
-var [s, e] = sort([c[1] - 1, v[1] - 1])
-for i in range(0, len(a) - 1)
-a[i] = a[i][s : e]
+var [s, e] = [b - 1, d - 1]->sort('n')
+ec $'{s},{e}'
+for i in range(0, c - a)
+f[i] = f[i][s : e]
 endfor
 endif
-return a
+return f
 enddef
 const lp = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const lq = filereadable(lp)

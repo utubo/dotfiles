@@ -108,7 +108,7 @@ au vimrc CursorMoved * CursorMovedDelay()
 
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
 def VFirstLast(): list<number>
-	return mode() ==? 'V' ? sort([line('.'), line('v')]) : [line('.'), line('.')]
+	return mode() ==? 'V' ? [line('.'), line('v')]->sort('n') : [line('.'), line('.')]
 enddef
 def VRange(): list<number>
 	const a = VFirstLast()
@@ -116,20 +116,22 @@ def VRange(): list<number>
 enddef
 
 def GetVisualSelectionLines(): list<string>
-	var v = getpos('v')[1 : 2]
-	var c = getpos('.')[1 : 2]
-	if c[0] < v[0]
-		[v, c] = [c, v]
+	var [ay, ax] = getpos('v')[1 : 2]
+	var [by, bx] = getpos('.')[1 : 2]
+	if by < ay
+		[ax, bx] = [bx, ax]
+		[ay, by] = [by, ay]
 	endif
-	var lines = getline(v[0], c[0])
+	var lines = getline(ay, by)
 	if mode() ==# 'V'
 		# nop
-	elseif mode() ==# 'v' && v[0] !=# c[0]
-		lines[-1] = lines[-1][0 : c[1] - 1]
-		lines[0] = lines[0][v[1] - 1 : ]
+	elseif mode() ==# 'v' && ay !=# by
+		lines[-1] = lines[-1][0 : bx - 1]
+		lines[0] = lines[0][ax - 1 : ]
 	else
-		var [s, e] = sort([c[1] - 1, v[1] - 1])
-		for i in range(0, len(lines) - 1)
+		var [s, e] = [ax - 1, bx - 1]->sort('n')
+		echo $'{s},{e}'
+		for i in range(0, by - ay)
 			lines[i] = lines[i][s : e]
 		endfor
 	endif
