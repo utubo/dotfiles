@@ -164,6 +164,7 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
+Jetpack 'itchyny/lightline.vim'
 Jetpack 'itchyny/vim-parenmatch'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
@@ -192,11 +193,11 @@ Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-zenmode'
 # あまり使ってないけど作ったので…
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
@@ -454,16 +455,7 @@ def! g:RulerBufInfo(): string
 	endif
 enddef
 
-# cmdheight0設定
-g:cmdheight0 = get(g:, 'cmdheight0', {})
-g:cmdheight0.delay = -1
-g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep  = "\ue0c6"
-g:cmdheight0.sub  = [" \ue0b5", "\ue0b7 "]
-g:cmdheight0.horiz = "─"
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
-g:cmdheight0.laststatus = 0
-nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+nnoremap ZZ <Cmd>let &laststatus = !&laststatus ? 2 : 0<CR>
 #}}}
 
 # skk {{{
@@ -1120,7 +1112,7 @@ def PopupVisualLength()
 	popup_create($'{strlen(text)}chars', {
 		pos: 'botleft',
 		line: 'cursor-1',
-		col: 'cursor',
+		col: 'cursor+1',
 		moved: 'any',
 		padding: [1, 1, 1, 1],
 	})
