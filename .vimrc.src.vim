@@ -197,7 +197,7 @@ Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-zenmode'
+#Jetpack 'utubo/vim-zenmode'
 # あまり使ってないけど作ったので…
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
@@ -455,7 +455,7 @@ def! g:RulerBufInfo(): string
 	endif
 enddef
 
-nnoremap ZZ <Cmd>let &laststatus = !&laststatus ? 2 : 0<CR>
+nnoremap ZZ <Cmd>call zenmode#Toggle()<CR>
 #}}}
 
 # skk {{{
