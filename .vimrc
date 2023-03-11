@@ -128,7 +128,6 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
-Jetpack 'itchyny/lightline.vim'
 Jetpack 'itchyny/vim-parenmatch'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
@@ -157,11 +156,11 @@ Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-minviml'
+Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
-Jetpack 'utubo/vim-zenmode'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
@@ -210,11 +209,11 @@ endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost BA()
-var lt = []
+var ls = []
 def BB(a: bool = true)
 const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
-if a || lt !=# c
-lt = c
+if a || ls !=# c
+ls = c
 au vimrc User OperatorSandwichAddPost ++once BB(false)
 if a
 feedkeys('S')
@@ -373,7 +372,22 @@ a ..= CA()
 return a
 endif
 enddef
-nn ZZ <Cmd>let &ls = !&ls ? 2 : 0<CR>
+g:cmdheight0 = get(g:, 'cmdheight0', {})
+g:cmdheight0.delay = -1
+g:cmdheight0.tail = "\ue0c6"
+g:cmdheight0.sep = "\ue0c6"
+g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
+g:cmdheight0.horiz = "─"
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.mode = {
+n: ' N ', i: ' I ',
+v: ' v ', V: ' V ', '^V': '^V ',
+s: ' s ', S: ' S ', '^S': '^B ',
+R: ' R ', c: ' C ', r: ' > ', t: ' $ ',
+'!': ' ! ', '*': ' * ', 'NC': ' - ',
+}
+g:cmdheight0.laststatus = 0
+nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if ll
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
@@ -435,9 +449,9 @@ MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const mk = expand($'{lk}/pack/local/opt/*')
-if mk !=# ''
-&runtimepath = $'{substitute(mk, '\n', ',', 'g')},{&runtimepath}'
+const lt = expand($'{lk}/pack/local/opt/*')
+if lt !=# ''
+&runtimepath = $'{substitute(lt, '\n', ',', 'g')},{&runtimepath}'
 endif
 def CC()
 if expand('%:p') !~# '/colors/'
