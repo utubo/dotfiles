@@ -1136,6 +1136,7 @@ vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
 g:tabline_maxlen = 20
+g:tabline_labelsep = has('gui') ? ', ' : '|'
 
 def g:MyTablabel(tab: number = 0): string
 	var label = ''
@@ -1171,7 +1172,7 @@ def g:MyTablabel(tab: number = 0): string
 			names += [name]
 		endif
 	endfor
-	label ..= names->join('|')
+	label ..= names->join()
 	return label
 enddef
 

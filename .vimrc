@@ -876,6 +876,7 @@ vn <C-g> <ScriptCmd>DJ()<CR>
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
 g:tabline_maxlen = 20
+g:tabline_labelsep = has('gui') ? ', ' : '|'
 def g:MyTablabel(a: number = 0): string
 var c = ''
 var d = tabpagebuflist(a)
@@ -908,7 +909,7 @@ if i->index(j) ==# -1
 i += [j]
 endif
 endfor
-c ..= i->join('|')
+c ..= i->join()
 return c
 enddef
 def g:MyTabline(): string
