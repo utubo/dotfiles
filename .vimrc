@@ -154,6 +154,7 @@ Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
+Jetpack 'utubo/vim-hlpairs.vim'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
@@ -434,6 +435,8 @@ g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &ut
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+NoMatchParen
+nn % <Cmd>hlpairs#Jump()<CR>
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 nm <Space>ga :<C-u>Git add %

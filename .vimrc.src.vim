@@ -190,6 +190,7 @@ Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
+Jetpack 'utubo/vim-hlpairs.vim'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
@@ -547,6 +548,8 @@ g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+NoMatchParen
+nnoremap % <Cmd>hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 nmap <Space>ga :<C-u>Git add %
