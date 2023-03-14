@@ -875,51 +875,57 @@ enddef
 vn <C-g> <ScriptCmd>DJ()<CR>
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
-def g:MyTabline(): string
-const a = 20
-var c = '%#TabLineFill#'
-c ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
-const d = tabpagenr()
-for i in range(1, tabpagenr('$'))
-c ..= i ==# d ? '%#TabLineSel#' : '%#TabLine#'
-c ..= ' '
-var e = tabpagebuflist(i)
+g:tabline_maxlen = 20
+def g:MyTablabel(a: number = 0): string
+var c = ''
+var d = tabpagebuflist(a)
+var e = ''
 var f = ''
-var h = ''
-for b in e
-if !f && getbufvar(b, '&modified')
-f = g:tabline_mod_sign
+for b in d
+if !e && getbufvar(b, '&modified')
+e = g:tabline_mod_sign
 endif
-if !h
+if !f
 var g = false
 sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
 if g
-h = g:tabline_git_sign
+f = g:tabline_git_sign
 endif
 endif
 endfor
-c ..= f .. h
-const j = tabpagewinnr(i) - 1
-e = remove(e, j, j) + e
-var ba = []
-for b in e
-if len(ba) ==# 2
-ba += ['..']
+c ..= e .. f
+const h = tabpagewinnr(a) - 1
+d = remove(d, h, h) + d
+var i = []
+for b in d
+if len(i) ==# 2
+i += ['..']
 break
 endif
-var bb = bufname(b)
-bb = !bb ? '[No Name]' : bb->pathshorten()[- a : ]
-if ba->index(bb) ==# -1
-ba += [bb]
+var j = bufname(b)
+j = !j ? '[No Name]' : j->pathshorten()[- g:tabline_maxlen : ]
+if i->index(j) ==# -1
+i += [j]
 endif
 endfor
-c ..= ba->join('|')
-c ..= ' '
-endfor
-c ..= '%#TabLineFill#%T'
+c ..= i->join('|')
 return c
 enddef
+def g:MyTabline(): string
+var a = '%#TabLineFill#'
+a ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
+const b = tabpagenr()
+for c in range(1, tabpagenr('$'))
+a ..= c ==# b ? '%#TabLineSel#' : '%#TabLine#'
+a ..= ' '
+a ..= g:MyTablabel(c)
+a ..= ' '
+endfor
+a ..= '%#TabLineFill#%T'
+return a
+enddef
 set tabline=%!g:MyTabline()
+set guitablabel=%{g:MyTablabel()}
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S

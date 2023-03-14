@@ -1135,55 +1135,64 @@ vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 # tabline
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
+g:tabline_maxlen = 20
+
+def g:MyTablabel(tab: number = 0): string
+	var label = ''
+	var bufs = tabpagebuflist(tab)
+	# Sign
+	var mod = ''
+	var git = ''
+	for b in bufs
+		if !mod && getbufvar(b, '&modified')
+			mod = g:tabline_mod_sign
+		endif
+		if !git
+			var g = false
+			silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
+			if g
+				git = g:tabline_git_sign
+			endif
+		endif
+	endfor
+	label ..= mod .. git
+	# バッファ名 `current.txt|sub.txt|..`(3つめ以降は省略)
+	const win = tabpagewinnr(tab) - 1
+	bufs = remove(bufs, win, win) + bufs
+	var names = []
+	for b in bufs
+		if len(names) ==# 2
+			names += ['..']
+			break
+		endif
+		var name = bufname(b)
+		name = !name ? '[No Name]' : name->pathshorten()[- g:tabline_maxlen : ]
+		if names->index(name) ==# -1
+			names += [name]
+		endif
+	endfor
+	label ..= names->join('|')
+	return label
+enddef
+
 def g:MyTabline(): string
-	const max_len = 20
 	# 左端をバッファの表示に合わせる(ずれてるとなんか気持ち悪いので)
 	var line = '%#TabLineFill#'
 	line ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
 	# タブ一覧
 	const curtab = tabpagenr()
-	for i in range(1, tabpagenr('$'))
-		line ..= i ==# curtab ? '%#TabLineSel#' : '%#TabLine#'
+	for tab in range(1, tabpagenr('$'))
+		line ..= tab ==# curtab ? '%#TabLineSel#' : '%#TabLine#'
 		line ..= ' '
-		var bufs = tabpagebuflist(i)
-		# Sign
-		var mod = ''
-		var git = ''
-		for b in bufs
-			if !mod && getbufvar(b, '&modified')
-				mod = g:tabline_mod_sign
-			endif
-			if !git
-				var g = false
-				silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
-				if g
-					git = g:tabline_git_sign
-				endif
-			endif
-		endfor
-		line ..= mod .. git
-		# バッファ名 `current.txt|sub.txt|..`(3つめ以降は省略)
-	   const win = tabpagewinnr(i) - 1
-		bufs = remove(bufs, win, win) + bufs
-		var names = []
-		for b in bufs
-			if len(names) ==# 2
-				names += ['..']
-				break
-			endif
-			var name = bufname(b)
-			name = !name ? '[No Name]' : name->pathshorten()[- max_len : ]
-			if names->index(name) ==# -1
-				names += [name]
-			endif
-		endfor
-		line ..= names->join('|')
+		line ..= g:MyTablabel(tab)
 		line ..= ' '
 	endfor
 	line ..= '%#TabLineFill#%T'
 	return line
 enddef
+
 set tabline=%!g:MyTabline()
+set guitablabel=%{g:MyTablabel()}
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
