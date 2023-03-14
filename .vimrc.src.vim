@@ -1146,7 +1146,7 @@ def g:MyTabline(): string
 		line ..= i ==# curtab ? '%#TabLineSel#' : '%#TabLine#'
 		line ..= ' '
 		var bufs = tabpagebuflist(i)
-		# 未保存 = `+`, 未git add = `#`
+		# Sign
 		var mod = ''
 		var git = ''
 		for b in bufs
