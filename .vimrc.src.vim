@@ -1133,8 +1133,8 @@ enddef
 vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 
 # tabline
-g:tabline_mod_sign = '+'
-g:tabline_git_sign = '#'
+g:tabline_mod_sign = '✏'
+g:tabline_git_sign = '🐙'
 def g:MyTabline(): string
 	const max_len = 20
 	# 左端をバッファの表示に合わせる(ずれてるとなんか気持ち悪いので)

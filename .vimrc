@@ -873,8 +873,8 @@ padding: [1, 1, 1, 1],
 })
 enddef
 vn <C-g> <ScriptCmd>DJ()<CR>
-g:tabline_mod_sign = '+'
-g:tabline_git_sign = '#'
+g:tabline_mod_sign = '✏'
+g:tabline_git_sign = '🐙'
 def g:MyTabline(): string
 const a = 20
 var c = '%#TabLineFill#'
