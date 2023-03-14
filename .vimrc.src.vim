@@ -190,7 +190,7 @@ Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
 Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
 Jetpack 'utubo/vim-colorscheme-girly'
-Jetpack 'utubo/vim-hlpairs.vim'
+Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-portal-aim'
