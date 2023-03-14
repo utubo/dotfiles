@@ -128,7 +128,6 @@ Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
-Jetpack 'itchyny/vim-parenmatch'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow'
@@ -874,6 +873,53 @@ padding: [1, 1, 1, 1],
 })
 enddef
 vn <C-g> <ScriptCmd>DJ()<CR>
+g:tabline_mod_sign = '+'
+g:tabline_git_sign = '#'
+def g:MyTabline(): string
+const a = 20
+var c = '%#TabLineFill#'
+c ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
+const d = tabpagenr()
+for i in range(1, tabpagenr('$'))
+c ..= i ==# d ? '%#TabLineSel#' : '%#TabLine#'
+c ..= ' '
+var e = tabpagebuflist(i)
+var f = ''
+var h = ''
+for b in e
+if !f && getbufvar(b, '&modified')
+f = g:tabline_mod_sign
+endif
+if !h
+var g = false
+sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
+if g
+h = g:tabline_git_sign
+endif
+endif
+endfor
+c ..= f .. h
+const j = tabpagewinnr(i) - 1
+e = remove(e, j, j) + e
+var ba = []
+for b in e
+if len(ba) ==# 2
+ba += ['..']
+break
+endif
+var bb = bufname(b)
+bb = !bb ? '[No Name]' : bb->pathshorten()[- a : ]
+if ba->index(bb) ==# -1
+ba += [bb]
+endif
+endfor
+c ..= ba->join('|')
+c ..= ' '
+endfor
+c ..= '%#TabLineFill#%T'
+return c
+enddef
+set tabline=%!g:MyTabline()
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
