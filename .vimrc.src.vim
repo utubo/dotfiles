@@ -184,6 +184,7 @@ Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'rafamadriz/friendly-snippets'
 Jetpack 'thinca/vim-portal'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
+Jetpack 'tyru/capture.vim'
 Jetpack 'tyru/caw.vim'            # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
