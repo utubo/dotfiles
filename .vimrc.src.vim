@@ -549,7 +549,7 @@ g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 NoMatchParen
-nnoremap % <Cmd>hlpairs#Jump()<CR>
+nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 nmap <Space>ga :<C-u>Git add %
