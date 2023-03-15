@@ -548,7 +548,7 @@ g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
-NoMatchParen
+au vimrc VimEnter * silent! NoMatchParen
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
