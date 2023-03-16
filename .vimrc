@@ -548,6 +548,7 @@ nn <Space>y yiw
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
 nm <Space>, /
+nm g<Space> g;
 for i in range(1, 10)
 exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
