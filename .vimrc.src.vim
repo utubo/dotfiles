@@ -703,6 +703,7 @@ nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<
 # スマホだと:と/とファンクションキーが遠いので…
 nmap <Space>. :
 nmap <Space>, /
+nmap g<Space> g;
 for i in range(1, 10)
 	execute $'nmap <Space>{i % 10} <F{i}>'
 endfor
