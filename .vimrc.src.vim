@@ -1202,6 +1202,21 @@ enddef
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
 
+# これは誤爆しそう…例えば`all`とか`call`とか
+def SkipParen(): string
+	const c = matchstr(getline('.'), '.', col('.') - 1)
+	if !c || stridx(')]}"''`」', c) ==# -1
+		return 'll'
+	endif
+	# 誤爆防止
+	const a = matchstr(getline('.'), '.', col('.') - 2)
+	if stridx('a', a) !=# -1
+		return 'll'
+	endif
+	return  "\<C-o>a"
+enddef
+inoremap <expr> ll SkipParen()
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 

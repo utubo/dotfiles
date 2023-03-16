@@ -34,7 +34,7 @@ aug vimrc
 au!
 aug End
 const lk = has('win32') ? '~/vimfiles' : '~/.vim'
-const ll = executable('deno')
+const lm = executable('deno')
 def A(b: string)
 const [c, d] = b->split('^\S*\zs')
 for e in c->split(',')
@@ -61,24 +61,24 @@ enddef
 def E(a: string, b: number): string
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
-const lm = 300
-var ln = 0
+const ln = 300
 var lo = 0
+var lp = 0
 def CursorMovedDelayExec(a: any)
-ln = 0
-if lo !=# 0
 lo = 0
+if lp !=# 0
+lp = 0
 doautocmd User CursorMovedDelay
 endif
 enddef
 def G()
-if ln !=# 0
-lo += 1
+if lo !=# 0
+lp += 1
 return
 endif
-lo = 0
+lp = 0
 doautocmd User CursorMovedDelay
-ln = timer_start(lm, CursorMovedDelayExec)
+lo = timer_start(ln, CursorMovedDelayExec)
 enddef
 au vimrc CursorMoved * G()
 def H(): list<number>
@@ -109,11 +109,11 @@ endfor
 endif
 return f
 enddef
-const lp = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-const lq = filereadable(lp)
-if ! lq
-const lr = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system($'curl -fsSLo {lp} --create-dirs {lr}')
+const lq = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const lr = filereadable(lq)
+if ! lr
+const ls = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+system($'curl -fsSLo {lq} --create-dirs {ls}')
 endif
 packadd vim-jetpack
 jetpack#begin()
@@ -166,12 +166,12 @@ Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-textobj-twochars'
-if ll
+if lm
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
-if ! lq
+if ! lr
 jetpack#sync()
 endif
 Enable g:EasyMotion_smartcase
@@ -210,11 +210,11 @@ endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
 au vimrc User OperatorSandwichAddPost BA()
-var ls = []
+var lt = []
 def BB(a: bool = true)
 const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
-if a || ls !=# c
-ls = c
+if a || lt !=# c
+lt = c
 au vimrc User OperatorSandwichAddPost ++once BB(false)
 if a
 feedkeys('S')
@@ -389,7 +389,7 @@ R: ' R ', c: ' C ', r: ' > ', t: ' $ ',
 }
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
-if ll
+if lm
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
 globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
@@ -452,9 +452,9 @@ MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lt = expand($'{lk}/pack/local/opt/*')
-if lt !=# ''
-&runtimepath = $'{substitute(lt, '\n', ',', 'g')},{&runtimepath}'
+const mk = expand($'{lk}/pack/local/opt/*')
+if mk !=# ''
+&runtimepath = $'{substitute(mk, '\n', ',', 'g')},{&runtimepath}'
 endif
 def CC()
 if expand('%:p') !~# '/colors/'
@@ -935,20 +935,32 @@ return a
 enddef
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
+def EB(): string
+const c = matchstr(getline('.'), '.', col('.') - 1)
+if !c || stridx(')]}"''`」', c) ==# -1
+return 'll'
+endif
+const a = matchstr(getline('.'), '.', col('.') - 2)
+if stridx('a', a) !=# -1
+return 'll'
+endif
+return "\<C-o>a"
+enddef
+ino <expr> ll EB()
 nn <Space>a A
 MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def EB()
+def EC()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * EB()
+au vimrc VimEnter * EC()
 endif
-def EC()
+def ED()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -958,11 +970,11 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * EC()
+au vimrc ColorSchemePre * ED()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
 au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
 au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
-def ED()
+def EE()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -977,8 +989,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * ED()
-def EE()
+au vimrc VimEnter,WinEnter * EE()
+def EF()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -986,8 +998,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! EE()
-au vimrc BufNew,BufReadPost * silent! EE()
+au vimrc OptionSet list silent! EF()
+au vimrc BufNew,BufReadPost * silent! EF()
 set t_Co=256
 syntax on
 set bg=dark
@@ -995,10 +1007,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def EF()
+def EG()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|EF()|endif
+au vimrc VimEnter * ++nested if !C()|EG()|endif
