@@ -189,7 +189,7 @@ Jetpack 'tyru/caw.vim'            # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
-Jetpack 'utubo/jumpcuorsor.vim'   # vimに対応させたやつ(様子見)vim-jetpackだとインストール出来ないかも？
+Jetpack 'utubo/jumpcursor.vim'   # vimに対応させたやつ(様子見)
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
