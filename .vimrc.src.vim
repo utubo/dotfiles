@@ -1142,10 +1142,7 @@ g:tabline_git_sign = '🐙'
 g:tabline_maxlen = 20
 g:tabline_labelsep = has('gui') ? ', ' : '|'
 
-def g:MyTablabel(tab: number = 0): string
-	var label = ''
-	var bufs = tabpagebuflist(tab)
-	# Sign
+def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
 	var mod = ''
 	var git = ''
 	for b in bufs
@@ -1160,27 +1157,33 @@ def g:MyTablabel(tab: number = 0): string
 			endif
 		endif
 	endfor
-	label ..= mod .. git
-	# バッファ名 `current.txt|sub.txt|..`(3つめ以降は省略)
+	return mod .. git .. sufix
+enddef
+def! g:MyTablabel(tab: number = 0): string
+	# `current.txt|sub.txt|..`(3つめ以降は省略)
+	var label = ''
+	var bufs = tabpagebuflist(tab)
 	const win = tabpagewinnr(tab) - 1
 	bufs = remove(bufs, win, win) + bufs
 	var names = []
+	var i = -1
 	for b in bufs
+		i += 1
 		if len(names) ==# 2
-			names += ['..']
+			names += [MyTablabelSign(bufs[i : ], '..')]
 			break
 		endif
 		var name = bufname(b)
 		name = !name ? '[No Name]' : name->pathshorten()[- g:tabline_maxlen : ]
 		if names->index(name) ==# -1
-			names += [name]
+			names += [MyTablabelSign([b], name)]
 		endif
 	endfor
-	label ..= names->join()
+	label ..= names->join(g:tabline_labelsep)
 	return label
 enddef
 
-def g:MyTabline(): string
+def! g:MyTabline(): string
 	# 左端をバッファの表示に合わせる(ずれてるとなんか気持ち悪いので)
 	var line = '%#TabLineFill#'
 	line ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)

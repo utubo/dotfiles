@@ -881,42 +881,46 @@ g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
 g:tabline_maxlen = 20
 g:tabline_labelsep = has('gui') ? ', ' : '|'
-def g:MyTablabel(a: number = 0): string
-var c = ''
-var d = tabpagebuflist(a)
+def EA(a: list<number>, c: string = ''): string
+var d = ''
 var e = ''
-var f = ''
-for b in d
-if !e && getbufvar(b, '&modified')
-e = g:tabline_mod_sign
+for b in a
+if !d && getbufvar(b, '&modified')
+d = g:tabline_mod_sign
 endif
-if !f
+if !e
 var g = false
 sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
 if g
-f = g:tabline_git_sign
+e = g:tabline_git_sign
 endif
 endif
 endfor
-c ..= e .. f
-const h = tabpagewinnr(a) - 1
-d = remove(d, h, h) + d
-var i = []
+return d .. e .. c
+enddef
+def! g:MyTablabel(a: number = 0): string
+var c = ''
+var d = tabpagebuflist(a)
+const e = tabpagewinnr(a) - 1
+d = remove(d, e, e) + d
+var f = []
+var i = -1
 for b in d
-if len(i) ==# 2
-i += ['..']
+i += 1
+if len(f) ==# 2
+f += [EA(d[i : ], '..')]
 break
 endif
-var j = bufname(b)
-j = !j ? '[No Name]' : j->pathshorten()[- g:tabline_maxlen : ]
-if i->index(j) ==# -1
-i += [j]
+var h = bufname(b)
+h = !h ? '[No Name]' : h->pathshorten()[- g:tabline_maxlen : ]
+if f->index(h) ==# -1
+f += [EA([b], h)]
 endif
 endfor
-c ..= i->join()
+c ..= f->join(g:tabline_labelsep)
 return c
 enddef
-def g:MyTabline(): string
+def! g:MyTabline(): string
 var a = '%#TabLineFill#'
 a ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
 const b = tabpagenr()
@@ -937,14 +941,14 @@ nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def EA()
+def EB()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * EA()
+au vimrc VimEnter * EB()
 endif
-def EB()
+def EC()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -954,11 +958,11 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * EB()
+au vimrc ColorSchemePre * EC()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
 au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
 au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
-def EC()
+def ED()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -973,8 +977,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * EC()
-def ED()
+au vimrc VimEnter,WinEnter * ED()
+def EE()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -982,8 +986,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! ED()
-au vimrc BufNew,BufReadPost * silent! ED()
+au vimrc OptionSet list silent! EE()
+au vimrc BufNew,BufReadPost * silent! EE()
 set t_Co=256
 syntax on
 set bg=dark
@@ -991,10 +995,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def EE()
+def EF()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|EE()|endif
+au vimrc VimEnter * ++nested if !C()|EF()|endif
