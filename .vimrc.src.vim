@@ -1050,6 +1050,7 @@ inoremap （） ()<Left>
 # 使わなそうなら削除する
 xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
 xnoremap P p
+nnoremap <silent> g; g;zo
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>d "_d
