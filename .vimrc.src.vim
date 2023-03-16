@@ -1113,7 +1113,7 @@ def HiCursorWord()
 	var cword = expand('<cword>')
 	if cword !=# '' && cword !=# get(w:, 'cword_match', '')
 		if exists('w:cword_match_id')
-			matchdelete(w:cword_match_id)
+			silent! matchdelete(w:cword_match_id)
 			unlet w:cword_match_id
 		endif
 		if cword =~ "^[a-zA-Z0-9]"
@@ -1228,7 +1228,6 @@ inoremap <expr> ll SkipParen()
 nnoremap <Space>a A
 
 # sandwich
-MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap S^ v^S
 nmap S$ vg_S
 

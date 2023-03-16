@@ -857,7 +857,7 @@ def DI()
 var a = expand('<cword>')
 if a !=# '' && a !=# get(w:, 'cword_match', '')
 if exists('w:cword_match_id')
-matchdelete(w:cword_match_id)
+sil! matchdelete(w:cword_match_id)
 unlet w:cword_match_id
 endif
 if a =~ "^[a-zA-Z0-9]"
@@ -950,7 +950,6 @@ return "\<C-o>a"
 enddef
 ino <expr> ll EB()
 nn <Space>a A
-MultiCmd nnoremap,xnoremap Sa <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
