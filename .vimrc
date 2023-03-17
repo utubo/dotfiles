@@ -606,14 +606,72 @@ nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
-def CJ(a: string)
+g:tabline_mod_sign = '✏'
+g:tabline_git_sign = '🐙'
+g:tabline_maxlen = 20
+g:tabline_labelsep = has('gui') ? ', ' : '|'
+def CJ(a: list<number>, c: string = ''): string
+var d = ''
+var e = ''
+for b in a
+if !d && getbufvar(b, '&modified')
+d = g:tabline_mod_sign
+endif
+if !e
+var g = false
+sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
+if g
+e = g:tabline_git_sign
+endif
+endif
+endfor
+return d .. e .. c
+enddef
+def! g:MyTablabel(a: number = 0): string
+var c = ''
+var d = tabpagebuflist(a)
+const e = tabpagewinnr(a) - 1
+d = remove(d, e, e) + d
+var f = []
+var i = -1
+for b in d
+i += 1
+if len(f) ==# 2
+f += [CJ(d[i : ], '..')]
+break
+endif
+var h = bufname(b)
+h = !h ? '[No Name]' : h->pathshorten()[- g:tabline_maxlen : ]
+if f->index(h) ==# -1
+f += [CJ([b], h)]
+endif
+endfor
+c ..= f->join(g:tabline_labelsep)
+return c
+enddef
+def! g:MyTabline(): string
+var a = '%#TabLineFill#'
+a ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
+const b = tabpagenr()
+for c in range(1, tabpagenr('$'))
+a ..= c ==# b ? '%#TabLineSel#' : '%#TabLine#'
+a ..= ' '
+a ..= g:MyTablabel(c)
+a ..= ' '
+endfor
+a ..= '%#TabLineFill#%T'
+return a
+enddef
+set tabline=%!g:MyTabline()
+set guitablabel=%{g:MyTablabel()}
+def DA(a: string)
 const b = getcurpos()
 exe a
 setpos('.', b)
 enddef
-xn u <ScriptCmd>CJ('undo')<CR>
+xn u <ScriptCmd>DA('undo')<CR>
 xn <Space>u u
-xn <C-R> <ScriptCmd>CJ('redo')<CR>
+xn <C-R> <ScriptCmd>DA('redo')<CR>
 xn <Tab> <Cmd>normal! >gv<CR>
 xn <S-Tab> <Cmd>normal! <gv<CR>
 cno <C-h> <Left>
@@ -636,7 +694,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def DA()
+def DB()
 for l in I()
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
@@ -654,8 +712,8 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <Space>x <ScriptCmd>DA()<CR>
-def DB(a: string = '')
+no <Space>x <ScriptCmd>DB()<CR>
+def DC(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -709,7 +767,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def DC()
+def DD()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -718,9 +776,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <C-g> <ScriptCmd>call <SID>DB()<CR><scriptCmd>call <SID>DC()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * DB('BufNewFile')
-def DD(a: string = '')
+nn <C-g> <ScriptCmd>call <SID>DC()<CR><scriptCmd>call <SID>DD()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * DC('BufNewFile')
+def DE(a: string = '')
 if !!a
 if winnr() ==# winnr(a)
 return
@@ -735,12 +793,12 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-nn qh <ScriptCmd>DD('h')<CR>
-nn qj <ScriptCmd>DD('j')<CR>
-nn qk <ScriptCmd>DD('k')<CR>
-nn ql <ScriptCmd>DD('l')<CR>
-nn qq <ScriptCmd>DD()<CR>
-nn q<CR> <ScriptCmd>DD()<CR>
+nn qh <ScriptCmd>DE('h')<CR>
+nn qj <ScriptCmd>DE('j')<CR>
+nn qk <ScriptCmd>DE('k')<CR>
+nn ql <ScriptCmd>DE('l')<CR>
+nn qq <ScriptCmd>DE()<CR>
+nn q<CR> <ScriptCmd>DE()<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
@@ -748,7 +806,7 @@ nn qo <Cmd>confirm tabonly<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
-def DE(a: string)
+def DF(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -763,7 +821,7 @@ endif
 exe 'saveas!' c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile DE(<f-args>)
+com! -nargs=1 -complete=file MoveFile DF(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: :<C-u><SID>(exec_line)
@@ -776,7 +834,7 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-def DF()
+def DG()
 if &number
 set nonumber
 elseif &relativenumber
@@ -785,7 +843,7 @@ else
 set relativenumber
 endif
 enddef
-nn <F11> <ScriptCmd>DF()<CR>
+nn <F11> <ScriptCmd>DG()<CR>
 nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
@@ -837,23 +895,23 @@ ino jj{ <C-o>$ {
 ino jj} <C-o>$ }
 ino jj<CR> <C-o>$<CR>
 ino jjk 「」<Left>
-ino jjx <ScriptCmd>DA()<CR>
-ino <M-x> <ScriptCmd>DA()<CR>
+ino jjx <ScriptCmd>DB()<CR>
+ino <M-x> <ScriptCmd>DB()<CR>
 cno qq <C-f>
-def DG()
+def DH()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def DH(a: string, b: string)
+def DI(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * DG()
-au vimrc Syntax javascript,vim DH('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim DH('SpellRare', '\<normal!\@!')
+au vimrc Syntax * DH()
+au vimrc Syntax javascript,vim DI('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim DI('SpellRare', '\<normal!\@!')
 textobj#user#map('twochars', {'-': {'select-a': 'aa', 'select-i': 'ii'}})
-def DI()
+def DJ()
 var a = expand('<cword>')
 if a !=# '' && a !=# get(w:, 'cword_match', '')
 if exists('w:cword_match_id')
@@ -866,9 +924,9 @@ w:cword_match = a
 endif
 endif
 enddef
-au vimrc CursorHold * DI()
+au vimrc CursorHold * DJ()
 au vimrc ColorScheme * hi CWordMatch cterm=underline gui=underline
-def DJ()
+def EA()
 var a = J()->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -878,65 +936,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-vn <C-g> <ScriptCmd>DJ()<CR>
-g:tabline_mod_sign = '✏'
-g:tabline_git_sign = '🐙'
-g:tabline_maxlen = 20
-g:tabline_labelsep = has('gui') ? ', ' : '|'
-def EA(a: list<number>, c: string = ''): string
-var d = ''
-var e = ''
-for b in a
-if !d && getbufvar(b, '&modified')
-d = g:tabline_mod_sign
-endif
-if !e
-var g = false
-sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
-if g
-e = g:tabline_git_sign
-endif
-endif
-endfor
-return d .. e .. c
-enddef
-def! g:MyTablabel(a: number = 0): string
-var c = ''
-var d = tabpagebuflist(a)
-const e = tabpagewinnr(a) - 1
-d = remove(d, e, e) + d
-var f = []
-var i = -1
-for b in d
-i += 1
-if len(f) ==# 2
-f += [EA(d[i : ], '..')]
-break
-endif
-var h = bufname(b)
-h = !h ? '[No Name]' : h->pathshorten()[- g:tabline_maxlen : ]
-if f->index(h) ==# -1
-f += [EA([b], h)]
-endif
-endfor
-c ..= f->join(g:tabline_labelsep)
-return c
-enddef
-def! g:MyTabline(): string
-var a = '%#TabLineFill#'
-a ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
-const b = tabpagenr()
-for c in range(1, tabpagenr('$'))
-a ..= c ==# b ? '%#TabLineSel#' : '%#TabLine#'
-a ..= ' '
-a ..= g:MyTablabel(c)
-a ..= ' '
-endfor
-a ..= '%#TabLineFill#%T'
-return a
-enddef
-set tabline=%!g:MyTabline()
-set guitablabel=%{g:MyTablabel()}
+vn <C-g> <ScriptCmd>EA()<CR>
 def EB(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}"''`」', c) ==# -1

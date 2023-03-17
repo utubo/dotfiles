@@ -780,6 +780,75 @@ nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
+# Tabline {{{
+g:tabline_mod_sign = '✏'
+g:tabline_git_sign = '🐙'
+g:tabline_maxlen = 20
+g:tabline_labelsep = has('gui') ? ', ' : '|'
+
+def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
+	var mod = ''
+	var git = ''
+	for b in bufs
+		if !mod && getbufvar(b, '&modified')
+			mod = g:tabline_mod_sign
+		endif
+		if !git
+			var g = false
+			silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
+			if g
+				git = g:tabline_git_sign
+			endif
+		endif
+	endfor
+	return mod .. git .. sufix
+enddef
+
+def! g:MyTablabel(tab: number = 0): string
+	# `current.txt|sub.txt|..`(3つめ以降は省略)
+	var label = ''
+	var bufs = tabpagebuflist(tab)
+	const win = tabpagewinnr(tab) - 1
+	bufs = remove(bufs, win, win) + bufs
+	var names = []
+	var i = -1
+	for b in bufs
+		i += 1
+		if len(names) ==# 2
+			names += [MyTablabelSign(bufs[i : ], '..')]
+			break
+		endif
+		var name = bufname(b)
+		name = !name ? '[No Name]' : name->pathshorten()[- g:tabline_maxlen : ]
+		if names->index(name) ==# -1
+			names += [MyTablabelSign([b], name)]
+		endif
+	endfor
+	label ..= names->join(g:tabline_labelsep)
+	return label
+enddef
+
+def! g:MyTabline(): string
+	# 左端をバッファの表示に合わせる(ずれてるとなんか気持ち悪いので)
+	var line = '%#TabLineFill#'
+	line ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
+	# タブ一覧
+	const curtab = tabpagenr()
+	for tab in range(1, tabpagenr('$'))
+		line ..= tab ==# curtab ? '%#TabLineSel#' : '%#TabLine#'
+		line ..= ' '
+		line ..= g:MyTablabel(tab)
+		line ..= ' '
+	endfor
+	line ..= '%#TabLineFill#%T'
+	return line
+enddef
+
+set tabline=%!g:MyTabline()
+set guitablabel=%{g:MyTablabel()}
+# }}}
+
+# ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
 def KeepingCurPos(expr: string)
 	const cur = getcurpos()
@@ -1137,72 +1206,6 @@ def PopupVisualLength()
 	})
 enddef
 vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
-
-# tabline
-g:tabline_mod_sign = '✏'
-g:tabline_git_sign = '🐙'
-g:tabline_maxlen = 20
-g:tabline_labelsep = has('gui') ? ', ' : '|'
-
-def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
-	var mod = ''
-	var git = ''
-	for b in bufs
-		if !mod && getbufvar(b, '&modified')
-			mod = g:tabline_mod_sign
-		endif
-		if !git
-			var g = false
-			silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
-			if g
-				git = g:tabline_git_sign
-			endif
-		endif
-	endfor
-	return mod .. git .. sufix
-enddef
-def! g:MyTablabel(tab: number = 0): string
-	# `current.txt|sub.txt|..`(3つめ以降は省略)
-	var label = ''
-	var bufs = tabpagebuflist(tab)
-	const win = tabpagewinnr(tab) - 1
-	bufs = remove(bufs, win, win) + bufs
-	var names = []
-	var i = -1
-	for b in bufs
-		i += 1
-		if len(names) ==# 2
-			names += [MyTablabelSign(bufs[i : ], '..')]
-			break
-		endif
-		var name = bufname(b)
-		name = !name ? '[No Name]' : name->pathshorten()[- g:tabline_maxlen : ]
-		if names->index(name) ==# -1
-			names += [MyTablabelSign([b], name)]
-		endif
-	endfor
-	label ..= names->join(g:tabline_labelsep)
-	return label
-enddef
-
-def! g:MyTabline(): string
-	# 左端をバッファの表示に合わせる(ずれてるとなんか気持ち悪いので)
-	var line = '%#TabLineFill#'
-	line ..= repeat(' ', getwininfo(win_getid(1))[0].textoff)
-	# タブ一覧
-	const curtab = tabpagenr()
-	for tab in range(1, tabpagenr('$'))
-		line ..= tab ==# curtab ? '%#TabLineSel#' : '%#TabLine#'
-		line ..= ' '
-		line ..= g:MyTablabel(tab)
-		line ..= ' '
-	endfor
-	line ..= '%#TabLineFill#%T'
-	return line
-enddef
-
-set tabline=%!g:MyTabline()
-set guitablabel=%{g:MyTablabel()}
 
 # これは誤爆しそう…例えば`all`とか`call`とか
 def SkipParen(): string
