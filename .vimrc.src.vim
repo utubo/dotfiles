@@ -712,19 +712,6 @@ nmap <Space><Space>2 <F12>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# カーソルを行頭に沿わせて移動 {{{
-def PutHat(): string
-	const x = getline('.')->match('\S') + 1
-	if x !=# 0 || !exists('w:my_hat')
-		w:my_hat = col('.') ==# x ? '^' : ''
-	endif
-	return w:my_hat
-enddef
-nnoremap <expr> j $'j{<SID>PutHat()}'
-nnoremap <expr> k $'k{<SID>PutHat()}'
-#}}} -------------------------------------------------------
-
-# ----------------------------------------------------------
 # 折り畳み {{{
 # こんなかんじでインデントに合わせて表示📁 {{{
 def! g:MyFoldText(): string
@@ -1089,6 +1076,8 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
+nnoremap j +
+nnoremap k -
 
 # 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
