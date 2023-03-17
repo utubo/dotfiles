@@ -770,13 +770,18 @@ nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 # Tabline {{{
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
+g:tabline_dir_sign = '📂'
 g:tabline_maxlen = 20
 g:tabline_labelsep = has('gui') ? ', ' : '|'
 
 def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
 	var mod = ''
 	var git = ''
+	var dir = ''
 	for b in bufs
+		if !dir && getbufvar(b, '&filetype') ==# 'netrw'
+			dir = g:tabline_dir_sign
+		endif
 		if !mod && getbufvar(b, '&modified')
 			mod = g:tabline_mod_sign
 		endif
@@ -788,7 +793,7 @@ def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
 			endif
 		endif
 	endfor
-	return mod .. git .. sufix
+	return mod .. git .. dir .. sufix
 enddef
 
 def! g:MyTablabel(tab: number = 0): string

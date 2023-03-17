@@ -599,12 +599,17 @@ nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
+g:tabline_dir_sign = '📂'
 g:tabline_maxlen = 20
 g:tabline_labelsep = has('gui') ? ', ' : '|'
 def CI(a: list<number>, c: string = ''): string
 var d = ''
 var e = ''
+var f = ''
 for b in a
+if !f && getbufvar(b, '&filetype') ==# 'netrw'
+f = g:tabline_dir_sign
+endif
 if !d && getbufvar(b, '&modified')
 d = g:tabline_mod_sign
 endif
@@ -616,7 +621,7 @@ e = g:tabline_git_sign
 endif
 endif
 endfor
-return d .. e .. c
+return d .. e .. f .. c
 enddef
 def! g:MyTablabel(a: number = 0): string
 var c = ''
