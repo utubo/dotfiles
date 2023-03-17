@@ -911,7 +911,7 @@ if exists('w:cword_match_id')
 sil! matchdelete(w:cword_match_id)
 unlet w:cword_match_id
 endif
-if a =~ "^[a-zA-Z0-9]"
+if a !~ '^[[-` -/:-@{-~]'
 w:cword_match_id = matchadd('CWordMatch', a)
 w:cword_match = a
 endif
