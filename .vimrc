@@ -949,6 +949,7 @@ endif
 return "\<C-o>a"
 enddef
 ino <expr> ll EB()
+au vimrc FileType html,xml,svg nnoremap <buffer> <Tab> f>l
 nn <Space>a A
 nm S^ v^S
 nm S$ vg_S

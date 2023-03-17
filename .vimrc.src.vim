@@ -1222,6 +1222,9 @@ def SkipParen(): string
 enddef
 inoremap <expr> ll SkipParen()
 
+# タグの中に侵入
+au vimrc FileType html,xml,svg nnoremap <buffer> <Tab> f>l
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
