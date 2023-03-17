@@ -949,7 +949,8 @@ endif
 return "\<C-o>a"
 enddef
 ino <expr> ll EB()
-au vimrc FileType html,xml,svg nnoremap <buffer> <Tab> f>l
+au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
 nn <Space>a A
 nm S^ v^S
 nm S$ vg_S

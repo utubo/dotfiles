@@ -1223,7 +1223,8 @@ enddef
 inoremap <expr> ll SkipParen()
 
 # タグの中に侵入
-au vimrc FileType html,xml,svg nnoremap <buffer> <Tab> f>l
+au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
