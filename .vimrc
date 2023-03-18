@@ -737,21 +737,26 @@ if b || w.bytes !=# 0
 add(c, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 add(c, ['Normal', ' '])
 endif
-add(c, ['MoreMsg', $'{&ff} {empty(&fenc) ? &enc : &fenc} {&ft}'])
-var e = 0
-const f = &columns - 2
+add(c, ['MoreMsg', &ff])
+add(c, ['Normal', ' '])
+const e = empty(&fenc) ? &enc : &fenc
+add(c, [e ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', e])
+add(c, ['Normal', ' '])
+add(c, ['MoreMsg', &ft])
+var f = 0
+const g = &columns - 2
 for i in reverse(range(0, len(c) - 1))
 var s = c[i][1]
 var d = strdisplaywidth(s)
-e += d
-if f < e
-const l = f - e + d
+f += d
+if g < f
+const l = g - f + d
 while !empty(s) && l < strdisplaywidth(s)
 s = s[1 :]
 endwhile
 c[i][1] = s
 c = c[i : ]
-insert(c, ['NonText', '<'], 0)
+insert(c, ['SpecialKey', '<'], 0)
 break
 endif
 endfor

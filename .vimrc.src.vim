@@ -940,7 +940,12 @@ def ShowBufInfo(event: string = '')
 		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 		add(msg, ['Normal', ' '])
 	endif
-	add(msg, ['MoreMsg', $'{&ff} {empty(&fenc) ? &encoding : &fenc} {&ft}'])
+	add(msg, ['MoreMsg', &ff])
+	add(msg, ['Normal', ' '])
+	const enc = empty(&fenc) ? &encoding : &fenc
+	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])
+	add(msg, ['Normal', ' '])
+	add(msg, ['MoreMsg', &ft])
 	var msglen = 0
 	const maxlen = &columns - 2
 	for i in reverse(range(0, len(msg) - 1))
@@ -954,7 +959,7 @@ def ShowBufInfo(event: string = '')
 			endwhile
 			msg[i][1] = s
 			msg = msg[i : ]
-			insert(msg, ['NonText', '<'], 0)
+			insert(msg, ['SpecialKey', '<'], 0)
 			break
 		endif
 	endfor
