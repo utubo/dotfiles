@@ -460,7 +460,7 @@ g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = [" \ue0b5", "\ue0b7 "]
-g:cmdheight0.horiz = "─"
+g:cmdheight0.horiz = '-'
 g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.mode = {
 	n: ' N ', i: ' I ',
@@ -547,6 +547,7 @@ nnoremap <Space>: :
 Enable g:rainbow_active
 g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
+g:hlairs = { delay: 250 }
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 au vimrc VimEnter * silent! NoMatchParen
@@ -1270,6 +1271,7 @@ au vimrc ColorSchemePre * DefaultColors()
 au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
 au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
 au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
+au vimrc ColorScheme * hi! link CmdHeight0Horiz MoreMsg
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
