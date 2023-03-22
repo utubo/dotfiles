@@ -241,10 +241,10 @@ def! g:CommentString(index: number): string
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
-MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nmap <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
+nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 def FixSandwichPos()

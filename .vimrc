@@ -197,10 +197,10 @@ return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nnoremap,xnoremap Sd <Plug>(operator-sandwich-delete)<if-nnoremap>ab
-MultiCmd nnoremap,xnoremap Sr <Plug>(operator-sandwich-replace)<if-nnoremap>ab
+MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nm <expr> SS (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? 'Sr''' : 'Sr"'
+nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 def BA()
 var c = g:operator#sandwich#object.cursor
 if g:fix_sandwich_pos[1] !=# c.inner_head[1]
