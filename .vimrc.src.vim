@@ -466,7 +466,7 @@ g:cmdheight0.mode = {
 	n: ' N ', i: ' I ',
 	v: ' v ', V: ' V ', '^V': '^V ',
 	s: ' s ', S: ' S ', '^S': '^B ',
-	R: ' R ', c: ' C ', r: ' > ', t: ' $ ',
+	R: ' R ', c: ' C ', r: ' > ', t: ' # ',
 	'!': ' ! ', '*': ' * ', 'NC': ' - ',
 }
 g:cmdheight0.laststatus = 0
@@ -1087,8 +1087,8 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
-nnoremap j +
-nnoremap k -
+nnoremap <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
+nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 
 # 分割キーボードで右手親指が<CR>になったので
 nmap <CR> <Space>
