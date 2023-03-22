@@ -380,13 +380,6 @@ g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
 g:cmdheight0.horiz = '-'
 g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
-g:cmdheight0.mode = {
-n: ' N ', i: ' I ',
-v: ' v ', V: ' V ', '^V': '^V ',
-s: ' s ', S: ' S ', '^S': '^B ',
-R: ' R ', c: ' C ', r: ' > ', t: ' $ ',
-'!': ' ! ', '*': ' * ', 'NC': ' - ',
-}
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if lm
@@ -856,8 +849,8 @@ nn <Space>p $p
 nn <Space>P ^P
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
-nn j +
-nn k -
+nn <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
+nn <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 nm <CR> <Space>
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>

@@ -462,13 +462,6 @@ g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = [" \ue0b5", "\ue0b7 "]
 g:cmdheight0.horiz = '-'
 g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
-g:cmdheight0.mode = {
-	n: ' N ', i: ' I ',
-	v: ' v ', V: ' V ', '^V': '^V ',
-	s: ' s ', S: ' S ', '^S': '^B ',
-	R: ' R ', c: ' C ', r: ' > ', t: ' # ',
-	'!': ' ! ', '*': ' * ', 'NC': ' - ',
-}
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
