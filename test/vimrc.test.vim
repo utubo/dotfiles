@@ -65,15 +65,18 @@ def TestMapping()
 	# わざとデフォルト(`map`コマンドで取得できないやつ)と被らせてるやつ
 	# n  Q  defaults.vimでgqにしてるけど.vimrcでqへ再マップ
 	# n  gc vim-caw
+	# n  g; 折り畳みを開くように修正
 	# n  a  _cc
 	# n  i  _cc
 	# n  m  '
 	# n  M  m
+	# n  n  vim-cmdheight0
 	# n  A  _cc
 	# n  S  Sandwich
 	# n  T  タブ関係
 	# n  Y  y$ヘルプにもそう書いてある
 	# n  ZZ Zenモード
+	# n  %  hlpairsのJump
 	# n  :  <Plug><ahc-switch>:
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
@@ -81,14 +84,13 @@ def TestMapping()
 	# i     <C-U> defaults.vim
 	# i     <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([ahijklmqsAMQSTY;''/?:]\|gc\|gs\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([ahijklmnqsAMQSTY;''/?:%]\|gc\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
 	# 概ねプラグイン内で被ってる
 	# n  <Plug>fugitive:
-	# n  n     vim-cmdheight0
 	# i  {     vim-laxima
 	# i  [     vim-laxima
 	# i  <Esc> vim-laxima
