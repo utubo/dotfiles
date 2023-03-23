@@ -1180,7 +1180,7 @@ def HiCursorWord()
 			unlet w:cword_match_id
 		endif
 		if cword !~ '^[[-` -/:-@{-~]'
-			w:cword_match_id = matchadd('CWordMatch', cword)
+			w:cword_match_id = matchadd('CWordMatch', cword, 0)
 			w:cword_match = cword
 		endif
 	endif

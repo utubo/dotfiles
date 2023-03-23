@@ -918,7 +918,7 @@ sil! matchdelete(w:cword_match_id)
 unlet w:cword_match_id
 endif
 if a !~ '^[[-` -/:-@{-~]'
-w:cword_match_id = matchadd('CWordMatch', a)
+w:cword_match_id = matchadd('CWordMatch', a, 0)
 w:cword_match = a
 endif
 endif
