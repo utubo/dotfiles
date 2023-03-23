@@ -358,7 +358,7 @@ def LLYankPost()
 		->join('↵')
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
-	g:ruler_reg = $'📋:{reg}'
+	g:ruler_reg = $'📋{reg}'
 enddef
 au vimrc TextYankPost * LLYankPost()
 
@@ -417,7 +417,7 @@ def CountCheckBoxs(): string
 	if chkd ==# 0 && empty ==# 0
 		return ''
 	else
-		return  $'[x]:{chkd}/{chkd + empty}{andmore}'
+		return  $'✅{chkd}/{chkd + empty}{andmore}'
 	endif
 enddef
 
@@ -428,7 +428,7 @@ def CountCheckBoxsDelay()
 	const count = CountCheckBoxs()
 	if count !=# g:ruler_mdcb
 		g:ruler_mdcb = count
-		# silent! cmdheight0#Invalidate()
+		silent! cmdheight0#Invalidate()
 	endif
 enddef
 
@@ -459,9 +459,9 @@ g:cmdheight0 = get(g:, 'cmdheight0', {})
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
-g:cmdheight0.sub  = [" \ue0b5", "\ue0b7 "]
+g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}

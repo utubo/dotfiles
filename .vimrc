@@ -290,7 +290,7 @@ var a = v:event.regcontents
 ->join('↵')
 ->substitute('\t', '›', 'g')
 ->E(20)
-g:ruler_reg = $'📋:{a}'
+g:ruler_reg = $'📋{a}'
 enddef
 au vimrc TextYankPost * BG()
 g:ruler_worktime = '🕛'
@@ -342,7 +342,7 @@ endfor
 if f ==# 0 && g ==# 0
 return ''
 else
-return $'[x]:{f}/{f + g}{e}'
+return $'✅{f}/{f + g}{e}'
 endif
 enddef
 def BI()
@@ -352,6 +352,7 @@ endif
 const a = BH()
 if a !=# g:ruler_mdcb
 g:ruler_mdcb = a
+sil! cmdheight0#Invalidate()
 endif
 enddef
 au vimrc User CursorMovedDelay BI()
@@ -377,9 +378,9 @@ g:cmdheight0 = get(g:, 'cmdheight0', {})
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
-g:cmdheight0.sub = [" \ue0b5", "\ue0b7 "]
+g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_reg|}%{ruler_mdcb|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if lm
