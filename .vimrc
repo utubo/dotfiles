@@ -375,7 +375,7 @@ a ..= CA()
 return a
 endif
 enddef
-g:cmdheight0 = get(g:, 'cmdheight0', {})
+g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
@@ -429,9 +429,9 @@ nn <Space>: :
 Enable g:rainbow_active
 g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &ut
-g:hlairs = { delay: 250 }
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+g:hlairs = { delay: 250 }
 au vimrc VimEnter * silent! NoMatchParen
 nn % <ScriptCmd>call hlpairs#Jump()<CR>
 nn [c <Plug>(GitGutterPrevHunk)

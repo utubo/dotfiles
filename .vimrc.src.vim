@@ -456,7 +456,7 @@ def! g:RulerBufInfo(): string
 	endif
 enddef
 # cmdheight0設定
-g:cmdheight0 = get(g:, 'cmdheight0', {})
+g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
@@ -541,9 +541,9 @@ nnoremap <Space>: :
 Enable g:rainbow_active
 g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
-g:hlairs = { delay: 250 }
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+g:hlairs = { delay: 250 }
 au vimrc VimEnter * silent! NoMatchParen
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
