@@ -305,7 +305,7 @@ endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-g:ruler_mdcb = ''
+w:ruler_mdcb = ''
 def BH(): string
 var [a, b] = H()
 if mode() ==? 'V'
@@ -350,11 +350,12 @@ if mode()[0] !=# 'n'
 return
 endif
 const a = BH()
-if a !=# g:ruler_mdcb
-g:ruler_mdcb = a
+if a !=# w:ruler_mdcb
+w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
 endif
 enddef
+au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
 au vimrc User CursorMovedDelay BI()
 if has('win32')
 def CA(): string
@@ -380,7 +381,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = '%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 if lm

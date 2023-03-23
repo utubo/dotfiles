@@ -378,7 +378,7 @@ timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # markdownのチェックボックスの数をカウント
-g:ruler_mdcb = ''
+w:ruler_mdcb = ''
 def CountCheckBoxs(): string
 	var [firstline, lastline] = VFirstLast()
 	if mode() ==? 'V'
@@ -426,12 +426,13 @@ def CountCheckBoxsDelay()
 		return
 	endif
 	const count = CountCheckBoxs()
-	if count !=# g:ruler_mdcb
-		g:ruler_mdcb = count
+	if count !=# w:ruler_mdcb
+		w:ruler_mdcb = count
 		silent! cmdheight0#Invalidate()
 	endif
 enddef
 
+au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
 au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 
 # &ff
@@ -461,7 +462,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = '%t %m%r%|%=%|%{ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = '%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
