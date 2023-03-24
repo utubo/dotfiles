@@ -189,7 +189,14 @@ Jetpack 'tyru/caw.vim'            # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
-Jetpack 'utubo/jumpcursor.vim'   # vimに対応させたやつ(様子見)
+# Fern
+Jetpack 'lambdalisue/fern.vim'
+Jetpack 'lambdalisue/fern-git-status.vim'
+Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
+Jetpack 'lambdalisue/fern-hijack.vim'
+Jetpack 'lambdalisue/nerdfont.vim'
+# 🐶🍚
+Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
@@ -498,6 +505,18 @@ g:textobj_multiblock_blocks = [
 	\ [ "「", "」", 1 ],
 ]
 #}}}
+
+# fern {{{
+g:fern#default_hidden = 1
+g:fern#renderer = "nerdfont"
+def MyFern()
+	Enable b:auto_cursorline_disabled
+	setlocal cursorline
+	nmap <buffer> <Space>h <BS>
+enddef
+au vimrc FileType fern MyFern()
+# }}}
+
 
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
