@@ -1,3 +1,6 @@
+# ln -s ~/dotfiles/.gitignore_global ~/
+# git config --global core.excludesfile ~/.gitignore_global
+
 *.sw?
 Thumbs.db
 
