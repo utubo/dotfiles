@@ -453,6 +453,10 @@ else
 	enddef
 endif
 
+# アイコン
+b:icon = ''
+au vimrc WinNew,FileType * b:icon = nerdfont#find()
+
 def! g:RulerBufInfo(): string
 	if winwidth(winnr()) < 60
 		return ''
@@ -469,7 +473,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = '%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = ' %{b:icon}%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
@@ -507,16 +511,17 @@ g:textobj_multiblock_blocks = [
 #}}}
 
 # fern {{{
-g:fern#default_hidden = 1
+Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
 def MyFern()
 	Enable b:auto_cursorline_disabled
 	setlocal cursorline
-	nmap <buffer> <Space>h <BS>
+	nnoremap <buffer> <F1> <Cmd>:q!<CR>
+	nnoremap <buffer> p <Plug>(fern-action-leave)
 enddef
 au vimrc FileType fern MyFern()
+nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 # }}}
-
 
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
@@ -872,8 +877,8 @@ xnoremap <S-Tab> <Cmd>normal! <gv<CR>
 # コマンドモードあれこれ {{{
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
 cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
@@ -1155,21 +1160,17 @@ nnoremap M m
 
 # うーん…
 inoremap jj <C-o>
-inoremap jjh <C-o>^
-inoremap jjl <C-o>$
 inoremap jje <C-o>e<C-o>a
-inoremap jj; <C-o>$;
-inoremap jj, <C-o>$,
-inoremap jj{ <C-o>$ {
-inoremap jj} <C-o>$ }
-inoremap jj<CR> <C-o>$<CR>
+inoremap jj; <C-o>$;<CR>
+inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<Left>
 inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
 # これはちょっと押しにくい(自分のキーボードだと)
 inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
-cnoremap qq <C-f>
+# `cnoremap kk <C-c>`が誤爆しそうなので`qq`にも割り当てて様子見
+cnoremap qq <C-c>
 
 # syntax固有の追加強調
 def ClearMySyntax()
@@ -1186,26 +1187,6 @@ au vimrc Syntax * ClearMySyntax()
 au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
 # 基本的にnormalは再マッピングさせないように「!」を付ける
 au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
-
-# 自分で作ったのに使わなすぎるので啓発
-textobj#user#map('twochars', {'-': {'select-a': 'aa', 'select-i': 'ii'}})
-
-# 'itchyny/vim-cursorword'の簡易CursorHold版
-def HiCursorWord()
-	var cword = expand('<cword>')
-	if cword !=# '' && cword !=# get(w:, 'cword_match', '')
-		if exists('w:cword_match_id')
-			silent! matchdelete(w:cword_match_id)
-			unlet w:cword_match_id
-		endif
-		if cword !~ '^[[-` -/:-@{-~]'
-			w:cword_match_id = matchadd('CWordMatch', cword, 0)
-			w:cword_match = cword
-		endif
-	endif
-enddef
-au vimrc CursorHold * HiCursorWord()
-au vimrc ColorScheme * hi CWordMatch cterm=underline gui=underline
 
 # 選択中の文字数をポップアップ
 def PopupVisualLength()
@@ -1328,8 +1309,23 @@ silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
+# 終わりに {{{
+if '~/.vimrc_local'->expand()->filereadable()
+	source ~/.vimrc_local
+endif
+
+def OpenLastfile()
+	var lastfile = get(v:oldfiles, 0, '')->expand()
+	if lastfile->filereadable()
+		execute 'edit' lastfile
+	endif
+enddef
+au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
+# }}}
+
+# ----------------------------------------------------------
 # メモ {{{
-# <F1> <S-F1>でフォルダを開く(win32)
+# <F1> fern <S-F1>でフォルダを開く(win32)
 # <F2> MRU
 # <F3>
 # <F4>
@@ -1342,16 +1338,4 @@ silent! colorscheme girly
 # <F11> 行番号表示切替
 # <F12> 折り返し表示切替
 #}}} -------------------------------------------------------
-
-if '~/.vimrc_local'->expand()->filereadable()
-	source ~/.vimrc_local
-endif
-
-def OpenLastfile()
-	var lastfile = get(v:oldfiles, 0, '')->expand()
-	if lastfile->filereadable()
-		execute 'edit' lastfile
-	endif
-enddef
-au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
 
