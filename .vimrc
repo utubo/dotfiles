@@ -355,7 +355,7 @@ if mode()[0] !=# 'n'
 return
 endif
 const a = BH()
-if a !=# w:ruler_mdcb
+if a !=# get(w:, 'ruler_mdcb', '')
 w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
 endif
@@ -968,12 +968,15 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * EC()
-au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
-au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
-au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
-au vimrc ColorScheme * hi! link CmdHeight0Horiz MoreMsg
 def ED()
+hi! link CmdHeight0Horiz TabLineFill
+hi! link ALEVirtualTextWarning ALEStyleWarningSign
+hi! link ALEVirtualTextError ALEStyleErrorSign
+hi! link CmdHeight0Horiz MoreMsg
+enddef
+au vimrc ColorSchemePre * EC()
+au vimrc ColorScheme * ED()
+def EE()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -988,8 +991,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * ED()
-def EE()
+au vimrc VimEnter,WinEnter * EE()
+def EF()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -997,8 +1000,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! EE()
-au vimrc BufNew,BufReadPost * silent! EE()
+au vimrc OptionSet list silent! EF()
+au vimrc BufNew,BufReadPost * silent! EF()
 set t_Co=256
 syntax on
 set bg=dark
@@ -1006,10 +1009,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def EF()
+def EG()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|EF()|endif
+au vimrc VimEnter * ++nested if !C()|EG()|endif

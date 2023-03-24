@@ -433,7 +433,7 @@ def CountCheckBoxsDelay()
 		return
 	endif
 	const count = CountCheckBoxs()
-	if count !=# w:ruler_mdcb
+	if count !=# get(w:, 'ruler_mdcb', '')
 		w:ruler_mdcb = count
 		silent! cmdheight0#Invalidate()
 	endif
@@ -1261,11 +1261,14 @@ def DefaultColors()
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
 enddef
+def MyColorScheme()
+	hi! link CmdHeight0Horiz TabLineFill
+	hi! link ALEVirtualTextWarning ALEStyleWarningSign
+	hi! link ALEVirtualTextError ALEStyleErrorSign
+	hi! link CmdHeight0Horiz MoreMsg
+enddef
 au vimrc ColorSchemePre * DefaultColors()
-au vimrc ColorScheme * hi! link CmdHeight0Horiz TabLineFill
-au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEStyleWarningSign
-au vimrc ColorScheme * hi! link ALEVirtualTextError ALEStyleErrorSign
-au vimrc ColorScheme * hi! link CmdHeight0Horiz MoreMsg
+au vimrc ColorScheme * MyColorScheme()
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
