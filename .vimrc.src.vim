@@ -610,8 +610,7 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
-inoremap kj <Esc>`^
-inoremap kk <Esc>`^
+inoremap jk <Esc>`^
 inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
@@ -883,9 +882,9 @@ cnoremap <C-p> <Up>
 cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
-# 「jj」で<CR>、「kk」はキャンセル
+# 「jj」で<CR>、「jk」はキャンセル
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap kk <C-c>
+cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
 #}}} -------------------------------------------------------
@@ -999,7 +998,7 @@ def PopupCursorPos()
 	popup_create($' {line(".")}:{col(".")} ', {
 		pos: 'botleft',
 		line: 'cursor-1',
-		col: 'cursor',
+		col: 'cursor+1',
 		moved: 'any',
 		padding: [1, 1, 1, 1],
 	})
@@ -1172,8 +1171,6 @@ inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
 inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
-# `cnoremap kk <C-c>`が誤爆しそうなので`qq`にも割り当てて様子見
-cnoremap qq <C-c>
 
 # syntax固有の追加強調
 def ClearMySyntax()

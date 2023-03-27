@@ -481,8 +481,7 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
-ino kj <Esc>`^
-ino kk <Esc>`^
+ino jk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
@@ -691,7 +690,7 @@ cno <C-p> <Up>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
-cno kk <C-c>
+cno jk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
 if has('win32')
@@ -788,7 +787,7 @@ def DD()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
-col: 'cursor',
+col: 'cursor+1',
 moved: 'any',
 padding: [1, 1, 1, 1],
 })
@@ -911,7 +910,6 @@ ino jj<Space> <C-o>$<CR>
 ino jjk 「」<Left>
 ino jjx <ScriptCmd>DB()<CR>
 ino <M-x> <ScriptCmd>DB()<CR>
-cno qq <C-c>
 def DH()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
