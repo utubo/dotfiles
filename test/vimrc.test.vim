@@ -1,9 +1,10 @@
 vim9script
 
 # テストフレームワーク {{{
-# VimEenter後にテストをしたいので自作するしかなさそう
+# VimEnter後にテストをしたいので自作するしかなさそう
 #const suite = themis#suite('Test for .vimrc')
 #const assert = themis#helper('assert')
+#execute 'source ' .. vimrc_path
 
 # Github Actionsで以下の通り実行する
 # cd $GITHUB_WORKSPACE/test
@@ -49,9 +50,7 @@ enddef
 const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
 const vimrc_lines = readfile(vimrc_path)
 const vimrc_str = vimrc_lines->join("\n")
-
-# Load .vimrc
-# execute 'source ' .. vimrc_path
+# スクリプトローカルな関数をテストするためにSIDを確保しておく
 var scriptnames_output = ''
 redir => scriptnames_output
 silent scriptnames
@@ -266,3 +265,5 @@ suite.TestTruncToDisplayWidth = () => {
 
 call g:RunTests()
 
+#ちょっとえらーにしてみる
+nnoremap gt gT
