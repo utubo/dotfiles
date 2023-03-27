@@ -1,7 +1,7 @@
 vim9script
 
 # テストフレームワーク {{{
-# VimEnter後にテストをしたいので自作するしかなさそう
+# 諸々のプラグインを読み込んでVimEnter後にテストをしたいので自作するしかなさそう
 #const suite = themis#suite('Test for .vimrc')
 #const assert = themis#helper('assert')
 #execute 'source ' .. vimrc_path
