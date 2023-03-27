@@ -902,7 +902,7 @@ ino （ ()<Left>
 ino （） ()<Left>
 xn <expr> p $'"_s<C-R>{v:register}<ESC>'
 xn P p
-nn <silent> g; g;zo
+nn <silent> g; g;zO
 nn <Space>h ^
 nn <Space>l $
 nn <Space>d "_d
