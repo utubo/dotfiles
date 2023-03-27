@@ -27,8 +27,6 @@ inoremap jjh <C-o>^
 inoremap jjl <C-o>$
 # }}}
 
-
-
 # テスト用メソッド {{{
 def! g:EchoErrors()
 	# v:errors見づらい…
