@@ -2,7 +2,8 @@ vim9script
 
 # Setup {{{
 const suite = themis#suite('Test for .vimrc')
-const Expect = themis#helper('expect')
+const assert = themis#helper('assert')
+const Expect = themis#helper('expect') # expectはactualがログに出ないから控えたほうがいいかも
 
 # Read .vimrc
 const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
@@ -138,9 +139,7 @@ suite.TestMapping = () => {
 	for i in default_map
 		var dups = Scan(user_map, '\C' .. i .. '[^\n]*')
 		dups->filter((k, v) => v !~ default_ignore)
-		Expect(dups)
-			.with_message($'マッピングがデフォルトと被ってないこと /{i}/')
-			.to_equal([])
+		assert.equals(dups, [], $'マッピングがデフォルトと被ってないこと /{i}/')
 	endfor
 
 	# ユーザー定義内で被りがないかを確認する
@@ -171,18 +170,17 @@ suite.TestMapping = () => {
 		endfor
 		dups->uniq() # imapとcmapで「!  ...」 が重複するので
 		dups->filter((k, v) => v !~ user_ignore)
-		Expect([dups[0]])
-			.with_message('マッピングが被っていないこと')
-			.to_equal(dups)
+		assert.equals([dups[0]], dups, $'マッピングが被っていないこと {dups}')
 	endfor
 }
 # }}}
 
 # その他かんたんなテスト {{{
 suite.TestAutocmd = () => {
-	Expect(Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'))
-		.with_message('autocmdはすべてvimrcグループに属すること')
-		.to_equal([])
+	assert.euqals(
+		Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), [],
+		'autocmdはすべてvimrcグループに属すること'
+	)
 }
 
 suite.TestIndent = () => {
@@ -197,8 +195,8 @@ suite.TestIndent = () => {
 # ユーティリティのテスト {{{
 suite.TestMultiCmd = () => {
 	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
-	Expect(execute('nmap xxx')).to_equal("\n\nn  xxx           yyyNNNzzz")
-	Expect(execute('vmap xxx')).to_equal("\n\nv  xxx           yyyVVVzzz")
+	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyyNNNzzz")
+	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyyVVVzzz")
 	nunmap xxx
 	vunmap xxx
 }
@@ -206,8 +204,8 @@ suite.TestMultiCmd = () => {
 suite.TestEnableDisable = () => {
 	Enable g:test_vimrc_enable
 	Disable g:test_vimrc_disable
-	Expect(g:test_vimrc_enable).to_equal(1)
-	Expect(g:test_vimrc_disable).to_equal(0)
+	assert.equals(g:test_vimrc_enable, 1)
+	assert.equals(g:test_vimrc_disable, 0)
 	unlet g:test_vimrc_enable
 	unlet g:test_vimrc_disable
 }
@@ -216,14 +214,14 @@ suite.TestTruncToDisplayWidth = () => {
 	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
 	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
 	const F = function($'<SNR>{vimrc_sid}_E')
-	Expect(F('123',  3)).to_equal('123')
-	Expect(F('1234', 3)).to_equal('12>')
-	Expect(F('あいう',  6)).to_equal('あいう')
-	Expect(F('あいう1', 6)).to_equal('あい>')
-	Expect(F('あいう',  5)).to_equal('あい>')
-	Expect(F('', 1)).to_equal('')
-	Expect(F('>', 1)).to_equal('>')
-	Expect(F('あ', 1)).to_equal('>')
+	assert.equals(F('123',  3), '123')
+	assert.equals(F('1234', 3), '12>')
+	assert.equals(F('あいう',  6), 'あいう')
+	assert.equals(F('あいう1', 6), 'あい>')
+	assert.equals(F('あいう',  5), 'あい>')
+	assert.equals(F('', 1), '')
+	assert.equals(F('>', 1), '>')
+	assert.equals(F('あ', 1), '>')
 }
 #}}}
 
