@@ -263,7 +263,4 @@ suite.TestTruncToDisplayWidth = () => {
 }
 #}}}
 
-#ちょっとえらーにしてみる
-nnoremap gt gT
-
 call g:RunTests()
