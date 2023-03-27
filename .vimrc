@@ -417,7 +417,7 @@ g:textobj_multiblock_blocks = [
 [ ">", "<", 1 ],
 [ "「", "」", 1 ],
 ]
-call textobj#user#plugin('non-whitespace', {
+call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a ', 'i '], }
 })
 Enable g:fern#default_hidden
