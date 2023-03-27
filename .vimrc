@@ -419,7 +419,7 @@ g:textobj_multiblock_blocks = [
 [ "「", "」", 1 ],
 ]
 call textobj#user#plugin('nonwhitespace', {
-'-': { 'pattern': '\S\+', 'select': ['a ', 'i '], }
+'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
