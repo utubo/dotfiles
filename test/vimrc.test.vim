@@ -47,7 +47,7 @@ suite.TestSets = () => {
 			continue
 		endif
 		Expect(index(sets, name))
-			.with_message($'set {name}が複数箇所にある！')
+			.with_message($'set {name}を複数箇所で定義していないこと')
 			.to_equal(-1)
 		sets->add(name)
 	endfor
@@ -139,7 +139,7 @@ suite.TestMapping = () => {
 		var dups = Scan(user_map, '\C' .. i .. '[^\n]*')
 		dups->filter((k, v) => v !~ default_ignore)
 		Expect(dups)
-			.with_message($'デフォルトと被っているかも /{i}/')
+			.with_message($'マッピングがデフォルトと被ってないこと /{i}/')
 			.to_equal([])
 	endfor
 
@@ -172,7 +172,7 @@ suite.TestMapping = () => {
 		dups->uniq() # imapとcmapで「!  ...」 が重複するので
 		dups->filter((k, v) => v !~ user_ignore)
 		Expect([dups[0]])
-			.with_message('マッピングが被ってるかも')
+			.with_message('マッピングが被っていないこと')
 			.to_equal(dups)
 	endfor
 }
