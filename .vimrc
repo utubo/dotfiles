@@ -620,7 +620,8 @@ var d = ''
 var e = ''
 var f = ''
 for b in a
-if !f && getbufvar(b, '&filetype') ==# 'netrw'
+const h = getbufvar(b, '&filetype')
+if !f && (h ==# 'netrw' || h ==# 'fern')
 f = g:tabline_dir_sign
 endif
 if !d && getbufvar(b, '&modified')
@@ -722,6 +723,8 @@ endif
 endfor
 enddef
 no <Space>x <ScriptCmd>DB()<CR>
+nn <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
+nn <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 def DC(a: string = '')
 if &ft ==# 'qf'
 return

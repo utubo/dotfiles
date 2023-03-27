@@ -798,7 +798,8 @@ def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
 	var git = ''
 	var dir = ''
 	for b in bufs
-		if !dir && getbufvar(b, '&filetype') ==# 'netrw'
+		const ft = getbufvar(b, '&filetype')
+		if !dir && (ft ==# 'netrw' || ft ==# 'fern')
 			dir = g:tabline_dir_sign
 		endif
 		if !mod && getbufvar(b, '&modified')
@@ -924,6 +925,8 @@ def ToggleCheckBox()
 	endfor
 enddef
 noremap <Space>x <ScriptCmd>ToggleCheckBox()<CR>
+nnoremap <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
+nnoremap <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
