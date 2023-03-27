@@ -2,7 +2,7 @@ vim9script
 
 # Setup {{{
 const suite = themis#suite('Test for .vimrc')
-const assert = themis#helper('assert')
+const Expect = themis#helper('expect')
 
 # Read .vimrc
 const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
@@ -46,9 +46,9 @@ suite.TestSets = () => {
 		if name =~ ignore_names
 			continue
 		endif
-		if index(sets, name) != -1
-			assert.fail('set ' .. name .. 'が複数箇所にある！')
-		endif
+		Expect(index(sets, name))
+			.with_message($'set {name}が複数箇所にある！')
+			.to_equal(-1)
 		sets->add(name)
 	endfor
 }
@@ -138,7 +138,9 @@ suite.TestMapping = () => {
 	for i in default_map
 		var dups = Scan(user_map, '\C' .. i .. '[^\n]*')
 		dups->filter((k, v) => v !~ default_ignore)
-		assert.equals([], dups, 'デフォルトと被ってるかも /' .. i .. '/')
+		Expect(dups)
+			.with_message($'デフォルトと被っているかも /{i}/')
+			.to_equal([])
 	endfor
 
 	# ユーザー定義内で被りがないかを確認する
@@ -169,28 +171,34 @@ suite.TestMapping = () => {
 		endfor
 		dups->uniq() # imapとcmapで「!  ...」 が重複するので
 		dups->filter((k, v) => v !~ user_ignore)
-		assert.equals(dups, [dups[0]], 'マッピングが被ってるかも')
+		Expect([dups[0]])
+			.with_message('マッピングが被ってるかも')
+			.to_equal(dups)
 	endfor
 }
 # }}}
 
 # その他かんたんなテスト {{{
 suite.TestAutocmd = () => {
-	assert.equals([], Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), 'autocmdはすべてvimrcグループに属すること')
+	Expect(Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'))
+		.with_message('autocmdはすべてvimrcグループに属すること')
+		.to_equal([])
 }
 
 suite.TestIndent = () => {
 	const has_noexpand = vimrc_str->match('\n\t') !=# -1
 	const has_expand = vimrc_str->match('\n ') !=# -1
-	assert.false(has_noexpand && has_expand || has_noexpand && !has_expand, 'インデントはハードタブかスペースかどちらかであること')
+	Expect(has_noexpand && has_expand || has_noexpand && !has_expand)
+		.with_message('インデントはハードタブかスペースかどちらかであること')
+		.to_be_falsy()
 }
 #}}}
 
 # ユーティリティのテスト {{{
 suite.TestMultiCmd = () => {
 	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
-	assert.equals("\n\nn  xxx           yyyNNNzzz", execute('nmap xxx'))
-	assert.equals("\n\nv  xxx           yyyVVVzzz", execute('vmap xxx'))
+	Expect(execute('nmap xxx')).to_equal("\n\nn  xxx           yyyNNNzzz")
+	Expect(execute('vmap xxx')).to_equal("\n\nv  xxx           yyyVVVzzz")
 	nunmap xxx
 	vunmap xxx
 }
@@ -198,8 +206,8 @@ suite.TestMultiCmd = () => {
 suite.TestEnableDisable = () => {
 	Enable g:test_vimrc_enable
 	Disable g:test_vimrc_disable
-	assert.equals(1, g:test_vimrc_enable)
-	assert.equals(0, g:test_vimrc_disable)
+	Expect(g:test_vimrc_enable).to_equal(1)
+	Expect(g:test_vimrc_disable).to_equal(0)
 	unlet g:test_vimrc_enable
 	unlet g:test_vimrc_disable
 }
@@ -208,14 +216,14 @@ suite.TestTruncToDisplayWidth = () => {
 	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
 	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
 	const F = function($'<SNR>{vimrc_sid}_E')
-	assert.equals('123', F('123', 3))
-	assert.equals('12>', F('1234', 3))
-	assert.equals('あいう', F('あいう', 6))
-	assert.equals('あい>',  F('あいう1', 6))
-	assert.equals('あい>',  F('あいう', 5))
-	assert.equals('>', F('>', 1))
-	assert.equals('>', F('あ', 1))
-	assert.equals('', F('', 1))
+	Expect(F('123',  3)).to_equal('123')
+	Expect(F('1234', 3)).to_equal('12>')
+	Expect(F('あいう',  6)).to_equal('あいう')
+	Expect(F('あいう1', 6)).to_equal('あい>')
+	Expect(F('あいう',  5)).to_equal('あい>')
+	Expect(F('', 1)).to_equal('')
+	Expect(F('>', 1)).to_equal('>')
+	Expect(F('あ', 1)).to_equal('>')
 }
 #}}}
 
