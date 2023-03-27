@@ -20,6 +20,10 @@ const vimrc_sid = scriptnames_output
 	->split("\n")
 	->filter((i, v) => v =~# '/\.vimrc$')[0]
 	->matchstr('\d\+')
+
+# TODO: VimEnterで実行されるものがテストできない気がするなぁ
+# ↓これはエラーになった
+# doautocmd VimEnter
 # }}}
 
 # ユーティリティ {{{
