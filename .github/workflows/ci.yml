@@ -26,7 +26,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Initialize
         run: |
-          sudo apt install -y vim git
+          sudo apt-get update
+          sudo apt-get install -y vim git
           cd ~/dotfiles
           ln -s $GITHUB_WORKSPACE/dotfiles/.vimrc ~/.vimrc
           vim -c JetpackSync -c qa!
