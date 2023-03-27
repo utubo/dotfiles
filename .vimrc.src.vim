@@ -495,19 +495,22 @@ if has_deno
 endif
 #}}}
 
-# textobj-multiblock  {{{
+# textobj-user {{{
 MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
-	\ [ "(", ")" ],
-	\ [ "[", "]" ],
-	\ [ "{", "}" ],
-	\ [ '<', '>' ],
-	\ [ '"', '"', 1 ],
-	\ [ "'", "'", 1 ],
-	\ [ ">", "<", 1 ],
-	\ [ "「", "」", 1 ],
+	[ "(", ")" ],
+	[ "[", "]" ],
+	[ "{", "}" ],
+	[ '<', '>' ],
+	[ '"', '"', 1 ],
+	[ "'", "'", 1 ],
+	[ ">", "<", 1 ],
+	[ "「", "」", 1 ],
 ]
+call textobj#user#plugin('non-whitespace', {
+  '-': { 'pattern': '\S\+', 'select': ['a ', 'i '], }
+})
 #}}}
 
 # fern {{{

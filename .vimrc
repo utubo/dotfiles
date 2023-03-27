@@ -407,8 +407,19 @@ map! <C-j> <Plug>(skkeleton-toggle)
 endif
 MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
-g:textobj_multiblock_blocks = [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ], [ '<', '>' ], [ '"', '"', 1 ], [ "'", "'", 1 ], [ ">", "<", 1 ], [ "「", "」", 1 ],
+g:textobj_multiblock_blocks = [
+[ "(", ")" ],
+[ "[", "]" ],
+[ "{", "}" ],
+[ '<', '>' ],
+[ '"', '"', 1 ],
+[ "'", "'", 1 ],
+[ ">", "<", 1 ],
+[ "「", "」", 1 ],
 ]
+call textobj#user#plugin('non-whitespace', {
+'-': { 'pattern': '\S\+', 'select': ['a ', 'i '], }
+})
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
 def CB()
