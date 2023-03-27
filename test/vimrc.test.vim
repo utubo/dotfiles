@@ -1,9 +1,49 @@
 vim9script
 
+# テストフレームワーク {{{
+# VimEenter後にテストをしたいので自作するしかなさそう
+#const suite = themis#suite('Test for .vimrc')
+#const assert = themis#helper('assert')
+
+# Github Actionsで以下の通り実行する
+# cd $GITHUB_WORKSPACE/test
+# vim -c 'source ./vimrc.test.vim' -c 'call ExitTests()' dummy.vim
+
+var suite = {}
+var assert = {}
+var failed = false
+assert.equals = (act: any, exp: any, msg: string = '') => {
+	if act !=# exp
+		failed = true
+		echom $'  {msg}'
+		echom $'    act: {act}'
+		echom $'    exp: {exp}'
+	endif
+}
+assert.falsy = (act: any, msg: string = '') => {
+	assert.equals(act, false, msg)
+}
+def! g:RunTests()
+	for s in suite->keys()
+		echom s
+		suite[s]()
+	endfor
+	if failed
+		echom 'Tests failed.'
+	else
+		echom 'Tests success.'
+	endif
+enddef
+def! g:ExitTests()
+	if failed
+		cq
+	else
+		q
+	endif
+enddef
+# }}}
+
 # Setup {{{
-const suite = themis#suite('Test for .vimrc')
-const assert = themis#helper('assert')
-const Expect = themis#helper('expect') # expectはactualがログに出ないから控えたほうがいいかも
 
 # Read .vimrc
 const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
@@ -11,7 +51,7 @@ const vimrc_lines = readfile(vimrc_path)
 const vimrc_str = vimrc_lines->join("\n")
 
 # Load .vimrc
-execute 'source ' .. vimrc_path
+# execute 'source ' .. vimrc_path
 var scriptnames_output = ''
 redir => scriptnames_output
 silent scriptnames
@@ -20,10 +60,6 @@ const vimrc_sid = scriptnames_output
 	->split("\n")
 	->filter((i, v) => v =~# '/\.vimrc$')[0]
 	->matchstr('\d\+')
-
-# TODO: VimEnterで実行されるものがテストできない気がするなぁ
-# ↓これはエラーになった
-# doautocmd VimEnter
 # }}}
 
 # ユーティリティ {{{
@@ -51,9 +87,7 @@ suite.TestSets = () => {
 		if name =~ ignore_names
 			continue
 		endif
-		Expect(index(sets, name))
-			.with_message($'set {name}を複数箇所で定義していないこと')
-			.to_equal(-1)
+		assert.equals(index(sets, name), -1, $'set {name}を複数箇所で定義していないこと')
 		sets->add(name)
 	endfor
 }
@@ -190,9 +224,10 @@ suite.TestAutocmd = () => {
 suite.TestIndent = () => {
 	const has_noexpand = vimrc_str->match('\n\t') !=# -1
 	const has_expand = vimrc_str->match('\n ') !=# -1
-	Expect(has_noexpand && has_expand || has_noexpand && !has_expand)
-		.with_message('インデントはハードタブかスペースかどちらかであること')
-		.to_be_falsy()
+	assert.falsy(
+		has_noexpand && has_expand || has_noexpand && !has_expand,
+		'インデントはハードタブかスペースかどちらかであること'
+	)
 }
 #}}}
 
@@ -228,4 +263,6 @@ suite.TestTruncToDisplayWidth = () => {
 	assert.equals(F('あ', 1), '>')
 }
 #}}}
+
+call g:RunTests()
 

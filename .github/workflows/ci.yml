@@ -34,4 +34,4 @@ jobs:
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/test
-          ~/.vim/pack/jetpack/opt/vim-themis/bin/themis vimrc.test.vim
+          vim -c 'source ./vimrc.test.vim' -c 'call ExitTests()' dummy.vim
