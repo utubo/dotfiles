@@ -177,7 +177,7 @@ suite.TestMapping = () => {
 
 # その他かんたんなテスト {{{
 suite.TestAutocmd = () => {
-	assert.euqals(
+	assert.equals(
 		Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), [],
 		'autocmdはすべてvimrcグループに属すること'
 	)
