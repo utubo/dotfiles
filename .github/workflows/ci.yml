@@ -28,9 +28,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y vim git
-          ln -s $GITHUB_WORKSPACE/dotfiles/.vimrc ~/.vimrc
+          ln -s $GITHUB_WORKSPACE/.vimrc ~/.vimrc
           vim -c JetpackSync -c qa!
       - name: Run tests
         run: |
-          cd $GITHUB_WORKSPACE/dotfiles/test
+          cd $GITHUB_WORKSPACE/test
           ~/.vim/pack/jetpack/opt/vim-themis/bin/themis vimrc.test.vim
