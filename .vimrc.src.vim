@@ -183,6 +183,7 @@ Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'rafamadriz/friendly-snippets'
 Jetpack 'thinca/vim-portal'
+Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
 Jetpack 'tyru/capture.vim'
 Jetpack 'tyru/caw.vim'            # コメント化

@@ -147,6 +147,7 @@ Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'rafamadriz/friendly-snippets'
 Jetpack 'thinca/vim-portal'
+Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'
 Jetpack 'tyru/capture.vim'
 Jetpack 'tyru/caw.vim'
@@ -419,7 +420,7 @@ g:textobj_multiblock_blocks = [
 [ "「", "」", 1 ],
 ]
 call textobj#user#plugin('nonwhitespace', {
-'-': { 'pattern': '\S\+', 'select': ['a ', 'i '], }
+'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
