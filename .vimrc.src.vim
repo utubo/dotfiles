@@ -473,7 +473,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiz = '-'
-g:cmdheight0.format = ' %{b:icon}%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
+g:cmdheight0.format = ' %{get(b:, "icon", "")}%t %m%r%|%=%|%{w:ruler_mdcb|}%{ruler_reg|}%3l:%-2c:%L%|%{RulerBufInfo()|}%{ruler_worktime} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
