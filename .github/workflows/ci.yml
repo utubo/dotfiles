@@ -27,6 +27,7 @@ jobs:
       - name: Initialize
         run: |
           sudo apt-get update
+          sudo add-apt-repository ppa:jonathonf/vim
           sudo apt-get install -y vim git
           ln -s $GITHUB_WORKSPACE/.vimrc ~/.vimrc
           vim -c JetpackSync -c qa!
