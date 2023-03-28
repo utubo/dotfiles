@@ -8,7 +8,7 @@ vim9script
 
 # Github Actionsで以下の通り実行する
 # cd $GITHUB_WORKSPACE/test
-# vim -c 'source ./vimrc.test.vim' -c 'call ExitTests()' dummy.vim
+# vim -c 'let $run_width_ci=1|source ./vimrc.test.vim' dummy.vim
 
 var suite = {}
 var assert = {}
@@ -25,27 +25,19 @@ assert.falsy = (act: any, msg: string = '') => {
 	assert.equals(act, false, msg)
 }
 def! g:RunTests()
+	failed = false
 	for s in suite->keys()
 		echom s
 		suite[s]()
 	endfor
-	if failed
-		echom 'Tests failed.'
-	else
-		echom 'Tests success.'
+	echom failed ? 'Tests faild.' : 'Tests success.'
+	if !!$run_with_ci
+		execute failed ? 'cq' : 'q'
 	endif
 enddef
-def! g:ExitTests()
-	if failed
-		cq
-	else
-		q
-	endif
-enddef
-# }}}
+#}}}
 
 # Setup {{{
-
 # Read .vimrc
 const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
 const vimrc_lines = readfile(vimrc_path)
@@ -59,7 +51,7 @@ const vimrc_sid = scriptnames_output
 	->split("\n")
 	->filter((i, v) => v =~# '/\.vimrc$')[0]
 	->matchstr('\d\+')
-# }}}
+#}}}
 
 # ユーティリティ {{{
 # 正規表現でマッチする文字列を全て抽出する
