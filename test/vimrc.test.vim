@@ -8,7 +8,7 @@ vim9script
 
 # Github Actionsで以下の通り実行する
 # cd $GITHUB_WORKSPACE/test
-# vim -c 'let $run_width_ci=1|source ./vimrc.test.vim' dummy.vim
+# vim -c 'let $run_with_ci=1|source ./vimrc.test.vim' dummy.vim
 
 var suite = {}
 var assert = {}

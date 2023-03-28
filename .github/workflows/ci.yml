@@ -34,5 +34,5 @@ jobs:
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/test
-          vim -c 'let $run_width_ci=1|source ./vimrc.test.vim' dummy.vim
+          vim -c 'let $run_with_ci=1|source ./vimrc.test.vim' dummy.vim
 
