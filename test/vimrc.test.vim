@@ -10,6 +10,7 @@ vim9script
 # cd $GITHUB_WORKSPACE/test
 # vim -c 'let $run_with_ci=1|source ./vimrc.test.vim' dummy.vim
 
+# themis like instead of assert_eqaul()
 var suite = {}
 var assert = {}
 var failed = false
