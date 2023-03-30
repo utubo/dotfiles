@@ -13,10 +13,10 @@ vim9script
 # themis like instead of assert_eqaul()
 var suite = {}
 var assert = {}
-var failed = false
+g:test_failed = false
 assert.equals = (act: any, exp: any, msg: string = '') => {
 	if act !=# exp
-		failed = true
+		g:test_failed = true
 		echom $'  {msg}'
 		echom $'    act: {act}'
 		echom $'    exp: {exp}'
@@ -26,14 +26,14 @@ assert.falsy = (act: any, msg: string = '') => {
 	assert.equals(act, false, msg)
 }
 def! g:RunTests()
-	failed = false
+	g:test_failed = false
 	for s in suite->keys()
 		echom s
 		suite[s]()
 	endfor
-	echom failed ? 'Tests faild.' : 'Tests success.'
+	echom g:test_failed ? 'Tests faild.' : 'Tests success.'
 	if !!$run_with_ci
-		execute failed ? 'cq' : 'q'
+		execute g:test_failed ? 'cq' : 'q'
 	endif
 enddef
 #}}}
