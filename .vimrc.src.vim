@@ -1079,6 +1079,14 @@ xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 保存して実行 TODO: `g!`は微妙かな…
 au vimrc FileType vim nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
+
+def TestVimrc()
+	if expand('%:t') !=# '.vimrc.src.vim'
+		return
+	endif
+	source ./test/vimrc.test.vim
+enddef
+au vimrc User MinVimlMinified TestVimrc()
 #}}}
 
 # ----------------------------------------------------------
