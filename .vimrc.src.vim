@@ -1080,6 +1080,7 @@ nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('n
 # 保存して実行 TODO: `g!`は微妙かな…
 au vimrc FileType vim nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
 
+# これだとちょっと頻度多いかな？
 def TestVimrc()
 	if expand('%:t') !=# '.vimrc.src.vim'
 		return
@@ -1179,6 +1180,15 @@ inoremap jj; <C-o>$;<CR>
 inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<Left>
 inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
+def IndentOnInsertMode(expr: string)
+	const len = getline('.')->len()
+	var cur = getcurpos()
+	execute 'normal! ' .. expr
+	cur[2] += getline('.')->len() - len
+	setpos('.', cur)
+enddef
+inoremap jj<Tab> <ScriptCmd>IndentOnInsertMode('>>')<CR>
+inoremap jj<S-Tab> <ScriptCmd>IndentOnInsertMode('<<')<CR>
 # これはちょっと押しにくい(自分のキーボードだと)
 inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
