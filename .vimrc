@@ -686,15 +686,16 @@ enddef
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
 def DA(a: string)
-const b = getcurpos()
+const b = getline('.')->len()
+var c = getcurpos()
 exe a
-setpos('.', b)
+c[2] += getline('.')->len() - b
+setpos('.', c)
 enddef
 xn u <ScriptCmd>DA('undo')<CR>
-xn <Space>u u
 xn <C-R> <ScriptCmd>DA('redo')<CR>
-xn <Tab> <Cmd>normal! >gv<CR>
-xn <S-Tab> <Cmd>normal! <gv<CR>
+xn <Tab> <ScriptCmd>DA('normal! >gv')<CR>
+xn <S-Tab> <ScriptCmd>DA('normal! <gv')<CR>
 cno <C-h> <Left>
 cno <C-l> <Right>
 cno <C-n> <Down>
@@ -928,29 +929,22 @@ ino jj; <C-o>$;<CR>
 ino jj<Space> <C-o>$<CR>
 ino jjk 「」<Left>
 ino jjx <ScriptCmd>DB()<CR>
-def DI(a: string)
-const b = getline('.')->len()
-var c = getcurpos()
-exe 'normal! ' .. a
-c[2] += getline('.')->len() - b
-setpos('.', c)
-enddef
-ino jj<Tab> <ScriptCmd>DI('>>')<CR>
-ino jj<S-Tab> <ScriptCmd>DI('<<')<CR>
+ino jj<Tab> <ScriptCmd>DA('normal! >>')<CR>
+ino jj<S-Tab> <ScriptCmd>DA('normal! <<')<CR>
 ino <M-x> <ScriptCmd>DB()<CR>
-def DJ()
+def DI()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def EA(a: string, b: string)
+def DJ(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * DJ()
-au vimrc Syntax javascript,vim EA('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim EA('SpellRare', '\<normal!\@!')
-def EB()
+au vimrc Syntax * DI()
+au vimrc Syntax javascript,vim DJ('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim DJ('SpellRare', '\<normal!\@!')
+def EA()
 var a = J()->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -960,8 +954,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-vn <C-g> <ScriptCmd>EB()<CR>
-def EC(): string
+vn <C-g> <ScriptCmd>EA()<CR>
+def EB(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}"''`」', c) ==# -1
 return 'll'
@@ -972,7 +966,7 @@ return 'll'
 endif
 return "\<C-o>a"
 enddef
-ino <expr> ll EC()
+ino <expr> ll EB()
 au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
 nn <Space>a A
@@ -980,14 +974,14 @@ nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def ED()
+def EC()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * ED()
+au vimrc VimEnter * EC()
 endif
-def EE()
+def ED()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -997,15 +991,15 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-def EF()
+def EE()
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 enddef
-au vimrc ColorSchemePre * EE()
-au vimrc ColorScheme * EF()
-def EG()
+au vimrc ColorSchemePre * ED()
+au vimrc ColorScheme * EE()
+def EF()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -1020,8 +1014,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * EG()
-def EH()
+au vimrc VimEnter,WinEnter * EF()
+def EG()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -1029,8 +1023,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! EH()
-au vimrc BufNew,BufReadPost * silent! EH()
+au vimrc OptionSet list silent! EG()
+au vimrc BufNew,BufReadPost * silent! EG()
 set t_Co=256
 syntax on
 set bg=dark
@@ -1038,10 +1032,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def EI()
+def EH()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|EI()|endif
+au vimrc VimEnter * ++nested if !C()|EH()|endif

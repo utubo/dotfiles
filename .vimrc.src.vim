@@ -865,16 +865,17 @@ set guitablabel=%{g:MyTablabel()}
 
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-def KeepingCurPos(expr: string)
-	const cur = getcurpos()
+def StayCurPos(expr: string)
+	const len = getline('.')->len()
+	var cur = getcurpos()
 	execute expr
+	cur[2] += getline('.')->len() - len
 	setpos('.', cur)
 enddef
-xnoremap u <ScriptCmd>KeepingCurPos('undo')<CR>
-xnoremap <Space>u u
-xnoremap <C-R> <ScriptCmd>KeepingCurPos('redo')<CR>
-xnoremap <Tab> <Cmd>normal! >gv<CR>
-xnoremap <S-Tab> <Cmd>normal! <gv<CR>
+xnoremap u <ScriptCmd>StayCurPos('undo')<CR>
+xnoremap <C-R> <ScriptCmd>StayCurPos('redo')<CR>
+xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 #}}}
 
 # ----------------------------------------------------------
@@ -1180,15 +1181,8 @@ inoremap jj; <C-o>$;<CR>
 inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<Left>
 inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
-def IndentOnInsertMode(expr: string)
-	const len = getline('.')->len()
-	var cur = getcurpos()
-	execute 'normal! ' .. expr
-	cur[2] += getline('.')->len() - len
-	setpos('.', cur)
-enddef
-inoremap jj<Tab> <ScriptCmd>IndentOnInsertMode('>>')<CR>
-inoremap jj<S-Tab> <ScriptCmd>IndentOnInsertMode('<<')<CR>
+inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 # これはちょっと押しにくい(自分のキーボードだと)
 inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
