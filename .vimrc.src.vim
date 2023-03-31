@@ -872,8 +872,8 @@ def StayCurPos(expr: string)
 	cur[2] += getline('.')->len() - len
 	setpos('.', cur)
 enddef
-xnoremap u <ScriptCmd>StayCurPos('undo')<CR>
-xnoremap <C-R> <ScriptCmd>StayCurPos('redo')<CR>
+xnoremap u <ScriptCmd>undo\|normal! gv<CR>
+xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 #}}}

@@ -692,8 +692,8 @@ exe a
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-xn u <ScriptCmd>DA('undo')<CR>
-xn <C-R> <ScriptCmd>DA('redo')<CR>
+xn u <ScriptCmd>undo\|normal! gv<CR>
+xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>DA('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>DA('normal! <gv')<CR>
 cno <C-h> <Left>
