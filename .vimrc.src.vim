@@ -91,35 +91,12 @@ def TruncToDisplayWidth(str: string, width: number): string
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 
-# MoveCursorは呼び出し回数が多いので、移動途中はユーザーイベントで300ミリ秒に1回だけ実行するようにする
-const CM_DELAY_MSEC = 300
-var cm_delay_timer = 0
-var cm_delay_cueue = 0
-def CursorMovedDelayExec(timer: any)
-	cm_delay_timer = 0
-	if cm_delay_cueue !=# 0
-		cm_delay_cueue = 0
-		doautocmd User CursorMovedDelay
-	endif
-enddef
-def CursorMovedDelay()
-	if cm_delay_timer !=# 0
-		cm_delay_cueue += 1
-		return
-	endif
-	# 最初の1回は即時実行する
-	cm_delay_cueue = 0
-	doautocmd User CursorMovedDelay
-	cm_delay_timer = timer_start(CM_DELAY_MSEC, CursorMovedDelayExec)
-enddef
-au vimrc CursorMoved * CursorMovedDelay()
-
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
-def VFirstLast(): list<number>
+def g:VFirstLast(): list<number>
 	return mode() ==? 'V' ? [line('.'), line('v')]->sort('n') : [line('.'), line('.')]
 enddef
-def VRange(): list<number>
-	const a = VFirstLast()
+def g:VRange(): list<number>
+	const a = g:VFirstLast()
 	return range(a[0], a[1])
 enddef
 
@@ -302,35 +279,6 @@ au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
 #}}}
 
 # MRU {{{
-# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない">"を区切りにする
-g:MRU_Filename_Format = {
-	formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
-	parser: '> \zs.*',
-	syntax: '^.\{-}\ze >'
-}
-# 数字キーで開く
-def MRUwithNumKey(use_tab: bool)
-	b:use_tab = use_tab
-	setlocal number
-	redraw
-	echoh Question
-	echo $'[1]..[9] => open with a {use_tab ? 'tab' : 'window'}.'
-	echoh None
-	const key = use_tab ? 't' : '<CR>'
-	for i in range(1, 9)
-		execute $'nmap <buffer> <silent> {i} :<C-u>{i}<CR>{key}'
-	endfor
-enddef
-def MyMRU()
-	Enable b:auto_cursorline_disabled
-	setlocal cursorline
-	nnoremap <buffer> w <ScriptCmd>MRUwithNumKey(!b:use_tab)<CR>
-	nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR>
-	nnoremap <buffer> <Esc> <Cmd>q!<CR>
-	MRUwithNumKey(BufIsSmth())
-enddef
-au vimrc FileType mru MyMRU()
-au vimrc ColorScheme * hi link MruFileName Directory
 nnoremap <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 #}}}
@@ -398,62 +346,9 @@ timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
 # markdownのチェックボックスの数をカウント
+# 本体は.vim/after/ftplugin/markdown.vim
 w:ruler_mdcb = ''
-def CountCheckBoxs(): string
-	var [firstline, lastline] = VFirstLast()
-	if mode() ==? 'V'
-		# OK
-	elseif &ft !=# 'markdown'
-		return ''
-	else
-		const indent = indent(firstline)
-		for l in range(firstline + 1, line('$'))
-			if indent(l) <= indent
-				break
-			endif
-			lastline = l
-		endfor
-	endif
-	# 念のためmax99行
-	const MAX_LINES = 99 - 1
-	var andmore = ''
-	if firstline + MAX_LINES < lastline
-		andmore = '+'
-		lastline = firstline + MAX_LINES
-	endif
-	if firstline > lastline # TODO: なんで？
-		return ''
-	endif
-	var chkd = 0
-	var empty = 0
-	for l in range(firstline, lastline)
-		const line = getline(l)
-		if line->match('^\s*- \[x\]') !=# -1
-			chkd += 1
-		elseif line->match('^\s*- \[ \]') !=# -1
-			empty += 1
-		endif
-	endfor
-	if chkd ==# 0 && empty ==# 0
-		return ''
-	else
-		return  $'✅{chkd}/{chkd + empty}{andmore}'
-	endif
-enddef
-
-def CountCheckBoxsDelay()
-	if mode()[0] !=# 'n'
-		return
-	endif
-	const count = CountCheckBoxs()
-	if count !=# get(w:, 'ruler_mdcb', '')
-		w:ruler_mdcb = count
-		silent! cmdheight0#Invalidate()
-	endif
-enddef
-
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-au vimrc User CursorMovedDelay CountCheckBoxsDelay()
 
 # &ff
 if has('win32')
@@ -906,31 +801,6 @@ tnoremap <C-w><C-q> exit<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# markdownのチェックボックス {{{
-def ToggleCheckBox()
-	for l in VRange()
-		const a = getline(l)
-		var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
-		if a ==# b
-			b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
-		endif
-		if a ==# b
-			b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
-		endif
-		setline(l, b)
-		if l ==# line('.')
-			var c = getpos('.')
-			c[2] += len(b) - len(a)
-			setpos('.', c)
-		endif
-	endfor
-enddef
-noremap <Space>x <ScriptCmd>ToggleCheckBox()<CR>
-nnoremap <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
-nnoremap <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
-#}}} -------------------------------------------------------
-
-# ----------------------------------------------------------
 # バッファの情報を色付きで表示 {{{
 def ShowBufInfo(event: string = '')
 	if &ft ==# 'qf'
@@ -1075,32 +945,7 @@ xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
-au vimrc FileType vim {
-	nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
-	nnoremap <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
-	nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
-}
-
-# .vimrcを保存したらテストを実行する
-def g:TestExit(job: any, status: number)
-	if status ==# 0
-		echoh Statement
-		echo 'Test Success'
-	else
-		echoh ErrorMsg
-		echo 'Test Error!'
-	endif
-	echoh Normal
-enddef
-def TestVimrc()
-	if expand('%:t') ==# '.vimrc.src.vim'
-		job_start(
-			["vim", "-c", "let $run_with_ci=1", "-c", "source ./test/vimrc.test.vim", "dummy.vim"],
-			{ exit_cb: g:TestExit }
-		)
-	endif
-enddef
-au vimrc User MinVimlMinified TestVimrc()
+# 他の定義は.vim/after/ftplugin/vim.vim
 #}}}
 
 # ----------------------------------------------------------
