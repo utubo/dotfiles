@@ -1281,16 +1281,18 @@ endif
 
 # ----------------------------------------------------------
 # 色 {{{
-au vimrc ColorSchemePre * {
+def DefaultColors()
+	# (メモ)autocmdの{}とDictionaryの{}は相性が悪いみたい(`}`の位置に気を付けてもNG)
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-		ctermfgs: ['105', '117', '120', '228', '212', '177'] }
-	# } (メモ)行頭が`}`だとblockが終わってしまう
+		ctermfgs: ['105', '117', '120', '228', '212', '177']
+	}
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
-}
+enddef
+au vimrc ColorSchemePre * DefaultColors()
 au vimrc ColorScheme * {
 	hi! link CmdHeight0Horiz TabLineFill
 	hi! link ALEVirtualTextWarning ALEStyleWarningSign

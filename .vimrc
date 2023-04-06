@@ -996,22 +996,24 @@ mapclear
 enddef
 au vimrc VimEnter * EA()
 endif
-au vimrc ColorSchemePre * {
+def EB()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-ctermfgs: ['105', '117', '120', '228', '212', '177'] }
+ctermfgs: ['105', '117', '120', '228', '212', '177']
+}
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
-}
+enddef
+au vimrc ColorSchemePre * EB()
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def EB()
+def EC()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -1026,8 +1028,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * EB()
-def EC()
+au vimrc VimEnter,WinEnter * EC()
+def ED()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -1035,8 +1037,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! EC()
-au vimrc BufNew,BufReadPost * silent! EC()
+au vimrc OptionSet list silent! ED()
+au vimrc BufNew,BufReadPost * silent! ED()
 set t_Co=256
 syntax on
 set bg=dark
@@ -1044,10 +1046,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def ED()
+def EE()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|ED()|endif
+au vimrc VimEnter * ++nested if !C()|EE()|endif
