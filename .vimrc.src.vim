@@ -1066,7 +1066,7 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
-# vimrc、plugin作成用 {{{
+# vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nmap g: :<C-u><SID>(exec_line)
@@ -1076,18 +1076,31 @@ xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 au vimrc FileType vim {
-	# TODO: `g!`は微妙かな…
 	nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
 	nnoremap <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
 	nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
 }
 
-# 保存したらテスト。これだとちょっと頻度多いかな？
-au vimrc User MinVimlMinified {
-	if expand('%:t') ==# '.vimrc.src.vim'
-		source ./test/vimrc.test.vim
+# .vimrcを保存したらテストを実行する
+def g:TestExit(job: any, status: number)
+	if status ==# 0
+		echoh Statement
+		echo 'Test Success'
+	else
+		echoh ErrorMsg
+		echo 'Test Error!'
 	endif
-}
+	echoh Normal
+enddef
+def TestVimrc()
+	if expand('%:t') ==# '.vimrc.src.vim'
+		job_start(
+			["vim", "-c", "let $run_with_ci=1", "-c", "source ./test/vimrc.test.vim", "dummy.vim"],
+			{ exit_cb: g:TestExit }
+		)
+	endif
+enddef
+au vimrc User MinVimlMinified TestVimrc()
 #}}}
 
 # ----------------------------------------------------------
@@ -1268,17 +1281,16 @@ endif
 
 # ----------------------------------------------------------
 # 色 {{{
-def DefaultColors()
+au vimrc ColorSchemePre * {
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-		ctermfgs: ['105', '117', '120', '228', '212', '177']
-	} # `}`があるのでdefでやるしかなさそう
+		ctermfgs: ['105', '117', '120', '228', '212', '177'] }
+	# } (メモ)行頭が`}`だとblockが終わってしまう
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
-enddef
-au vimrc ColorSchemePre * DefaultColors()
+}
 au vimrc ColorScheme * {
 	hi! link CmdHeight0Horiz TabLineFill
 	hi! link ALEVirtualTextWarning ALEStyleWarningSign

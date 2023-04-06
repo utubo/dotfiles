@@ -860,16 +860,30 @@ nn g! <Cmd>update<CR><Cmd>source %<CR>
 nn <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
 nn <buffer> <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 }
-au vimrc User MinVimlMinified {
-if expand('%:t') ==# '.vimrc.src.vim'
-so ./test/vimrc.test.vim
+def g:TestExit(a: any, b: number)
+if b ==# 0
+echoh Statement
+ec 'Test Success'
+else
+echoh ErrorMsg
+ec 'Test Error!'
 endif
-}
+echoh Normal
+enddef
+def DE()
+if expand('%:t') ==# '.vimrc.src.vim'
+job_start(
+["vim", "-c", "let $run_with_ci=1", "-c", "source ./test/vimrc.test.vim", "dummy.vim"],
+{ exit_cb: g:TestExit }
+)
+endif
+enddef
+au vimrc User MinVimlMinified DE()
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-def DE()
+def DF()
 if &number
 set nonumber
 elseif &relativenumber
@@ -878,7 +892,7 @@ else
 set relativenumber
 endif
 enddef
-nn <F11> <ScriptCmd>DE()<CR>
+nn <F11> <ScriptCmd>DF()<CR>
 nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
@@ -931,19 +945,19 @@ ino jjx <ScriptCmd>CJ()<CR>
 ino jj<Tab> <ScriptCmd>E('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>E('normal! <<')<CR>
 ino <M-x> <ScriptCmd>CJ()<CR>
-def DF()
+def DG()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def DG(a: string, b: string)
+def DH(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * DF()
-au vimrc Syntax javascript,vim DG('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim DG('SpellRare', '\<normal!\@!')
-def DH()
+au vimrc Syntax * DG()
+au vimrc Syntax javascript,vim DH('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim DH('SpellRare', '\<normal!\@!')
+def DI()
 var a = BA()->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -953,8 +967,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-vn <C-g> <ScriptCmd>DH()<CR>
-def DI(): string
+vn <C-g> <ScriptCmd>DI()<CR>
+def DJ(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}"''`」', c) ==# -1
 return 'll'
@@ -965,7 +979,7 @@ return 'll'
 endif
 return "\<C-o>a"
 enddef
-ino <expr> ll DI()
+ino <expr> ll DJ()
 au vimrc FileType html,xml,svg {
 nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
@@ -975,24 +989,22 @@ nm S^ v^S
 nm S$ vg_S
 nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
-def DJ()
+def EA()
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 imapclear
 mapclear
 enddef
-au vimrc VimEnter * DJ()
+au vimrc VimEnter * EA()
 endif
-def EA()
+au vimrc ColorSchemePre * {
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-ctermfgs: ['105', '117', '120', '228', '212', '177']
-}
+ctermfgs: ['105', '117', '120', '228', '212', '177'] }
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
-enddef
-au vimrc ColorSchemePre * EA()
+}
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
