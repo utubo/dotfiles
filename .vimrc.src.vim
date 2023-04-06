@@ -78,6 +78,14 @@ def IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
+def StayCurPos(expr: string)
+	const len = getline('.')->len()
+	var cur = getcurpos()
+	execute expr
+	cur[2] += getline('.')->len() - len
+	setpos('.', cur)
+enddef
+
 # 指定幅以上なら'>'で省略する
 def TruncToDisplayWidth(str: string, width: number): string
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
@@ -383,7 +391,7 @@ def! g:VimrcTimer60s(timer: any)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
 	if g:ruler_worktime ==# '🍰'
-		g:ruler_worktime = '%#Cmdheight0Warn' .. g:ruler_worktime .. '%*'
+		g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
 	endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
@@ -600,14 +608,6 @@ const localplugins = expand($'{rtproot}/pack/local/opt/*')
 if localplugins !=# ''
 	&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
 endif
-def DevColorScheme()
-	if expand('%:p') !~# '/colors/'
-		return
-	endif
-	nnoremap <buffer> <expr> ZX $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
-	nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
-enddef
-au vimrc FileType vim DevColorScheme()
 #}}}
 
 filetype plugin indent on
@@ -679,17 +679,15 @@ enddef
 command! -nargs=+ VimGrep VimGrep(<f-args>)
 nmap <Space>/ :<C-u>VimGrep<Space>
 
-def SetupQF()
+au vimrc FileType qf {
 	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
 	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
 	nnoremap <buffer> <nowait> q <Cmd>lexpr ''<CR>:q<CR>
 	nnoremap <buffer> f <C-f>
 	nnoremap <buffer> b <C-b>
-	# 様子見中(使わなそうなら削除する)
 	execute $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
-enddef
-au vimrc FileType qf SetupQF()
+}
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
@@ -748,9 +746,11 @@ def! g:MyFoldText(): string
 enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
-au vimrc ColorScheme * hi! link Folded Delimiter
-au vimrc ColorScheme * hi! link ALEVirtualTextWarning ALEWarningSign
-au vimrc ColorScheme * hi! link ALEVirtualTextError ALEErrorSign
+au vimrc ColorScheme * {
+	hi! link Folded Delimiter
+	hi! link ALEVirtualTextWarning ALEWarningSign
+	hi! link ALEVirtualTextError ALEErrorSign
+}
 #}}}
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 def Zf()
@@ -869,13 +869,6 @@ set guitablabel=%{g:MyTablabel()}
 
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-def StayCurPos(expr: string)
-	const len = getline('.')->len()
-	var cur = getcurpos()
-	execute expr
-	cur[2] += getline('.')->len() - len
-	setpos('.', cur)
-enddef
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
@@ -1073,7 +1066,7 @@ cnoreabbrev mv MoveFile
 #}}}
 
 # ----------------------------------------------------------
-# vimrc作成用 {{{
+# vimrc、plugin作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nmap g: :<C-u><SID>(exec_line)
@@ -1082,17 +1075,19 @@ xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
-# 保存して実行 TODO: `g!`は微妙かな…
-au vimrc FileType vim nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
+au vimrc FileType vim {
+	# TODO: `g!`は微妙かな…
+	nnoremap g! <Cmd>update<CR><Cmd>source %<CR>
+	nnoremap <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
+	nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
+}
 
-# これだとちょっと頻度多いかな？
-def TestVimrc()
-	if expand('%:t') !=# '.vimrc.src.vim'
-		return
+# 保存したらテスト。これだとちょっと頻度多いかな？
+au vimrc User MinVimlMinified {
+	if expand('%:t') ==# '.vimrc.src.vim'
+		source ./test/vimrc.test.vim
 	endif
-	source ./test/vimrc.test.vim
-enddef
-au vimrc User MinVimlMinified TestVimrc()
+}
 #}}}
 
 # ----------------------------------------------------------
@@ -1237,8 +1232,10 @@ enddef
 inoremap <expr> ll SkipParen()
 
 # タグの中に侵入
-au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-au vimrc FileType html,xml,svg nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+au vimrc FileType html,xml,svg {
+	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+}
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
@@ -1275,20 +1272,19 @@ def DefaultColors()
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 		ctermfgs: ['105', '117', '120', '228', '212', '177']
-	}
+	} # `}`があるのでdefでやるしかなさそう
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
 enddef
-def MyColorScheme()
+au vimrc ColorSchemePre * DefaultColors()
+au vimrc ColorScheme * {
 	hi! link CmdHeight0Horiz TabLineFill
 	hi! link ALEVirtualTextWarning ALEStyleWarningSign
 	hi! link ALEVirtualTextError ALEStyleErrorSign
 	hi! link CmdHeight0Horiz MoreMsg
-enddef
-au vimrc ColorSchemePre * DefaultColors()
-au vimrc ColorScheme * MyColorScheme()
+}
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ

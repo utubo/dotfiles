@@ -244,7 +244,7 @@ suite.TestEnableDisable = () => {
 suite.TestTruncToDisplayWidth = () => {
 	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
 	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
-	const F = function($'<SNR>{vimrc_sid}_E')
+	const F = function($'<SNR>{vimrc_sid}_F')
 	assert.equals(F('123',  3), '123')
 	assert.equals(F('1234', 3), '12>')
 	assert.equals(F('あいう',  6), 'あいう')
