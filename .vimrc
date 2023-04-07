@@ -773,10 +773,10 @@ xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
 ino ｋｊ <Esc>`^
-ino 「 「」<Left>
-ino 「」 「」<Left>
-ino （ ()<Left>
-ino （） ()<Left>
+ino 「 「」<C-g>U<Left>
+ino 「」 「」<C-g>U<Left>
+ino （ ()<C-g>U<Left>
+ino （） ()<C-g>U<Left>
 xn <expr> p $'"_s<C-R>{v:register}<ESC>'
 xn P p
 nn <silent> g; g;zO
@@ -796,7 +796,7 @@ ino jj <C-o>
 ino jje <C-o>e<C-o>a
 ino jj; <C-o>$;<CR>
 ino jj<Space> <C-o>$<CR>
-ino jjk 「」<Left>
+ino jjk 「」<C-g>U<Left>
 ino jjx <ScriptCmd>ToggleCheckBox()<CR>
 ino jj<Tab> <ScriptCmd>E('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>E('normal! <<')<CR>

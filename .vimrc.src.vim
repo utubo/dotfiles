@@ -997,10 +997,10 @@ xnoremap J j
 xnoremap K k
 
 inoremap ｋｊ <Esc>`^
-inoremap 「 「」<Left>
-inoremap 「」 「」<Left>
-inoremap （ ()<Left>
-inoremap （） ()<Left>
+inoremap 「 「」<C-g>U<Left>
+inoremap 「」 「」<C-g>U<Left>
+inoremap （ ()<C-g>U<Left>
+inoremap （） ()<C-g>U<Left>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -1034,7 +1034,7 @@ inoremap jj <C-o>
 inoremap jje <C-o>e<C-o>a
 inoremap jj; <C-o>$;<CR>
 inoremap jj<Space> <C-o>$<CR>
-inoremap jjk 「」<Left>
+inoremap jjk 「」<C-g>U<Left>
 inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
 inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
