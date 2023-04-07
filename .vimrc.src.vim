@@ -424,13 +424,12 @@ call textobj#user#plugin('nonwhitespace', {
 # fern {{{
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
-def MyFern()
+au vimrc FileType fern {
 	Enable b:auto_cursorline_disabled
 	setlocal cursorline
 	nnoremap <buffer> <F1> <Cmd>:q!<CR>
 	nnoremap <buffer> p <Plug>(fern-action-leave)
-enddef
-au vimrc FileType fern MyFern()
+}
 nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 # }}}
 
@@ -449,7 +448,7 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 
 # カレンダー {{{
 g:calendar_first_day = 'sunday'
-def MyCalender()
+au vimrc FileType calendar {
 	nnoremap <buffer> k <Plug>(calendar_up)
 	nnoremap <buffer> j <Plug>(calendar_down)
 	nnoremap <buffer> h <Plug>(calendar_prev)
@@ -458,8 +457,7 @@ def MyCalender()
 	nnoremap <buffer> gl <Plug>(calendar_right)
 	nmap <buffer> <CR> >
 	nmap <buffer> <BS> <
-enddef
-au vimrc FileType calendar MyCalender()
+}
 # }}}
 
 # cmdline statusline 切り替え {{{
