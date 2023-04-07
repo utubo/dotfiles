@@ -33,8 +33,6 @@ au gvimrc VimLeavePre * B()
 if filereadable(g:save_window_file)
 exe 'source' g:save_window_file
 endif
-g:webdevicons_conceal_nerdtree_brackets = 1
-g:WebDevIconsNerdTreeAfterGlyphPadding = ''
 SclowDisable
 if has('win32')
 no <silent> <M-Space> <Cmd>simalt ~<CR>

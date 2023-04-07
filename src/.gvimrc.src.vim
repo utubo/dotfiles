@@ -48,9 +48,7 @@ if filereadable(g:save_window_file)
 endif
 # }}}
 
-# プラグイン {{{
-g:webdevicons_conceal_nerdtree_brackets = 1
-g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+# プラグイン設定 {{{
 SclowDisable
 # }}}
 
