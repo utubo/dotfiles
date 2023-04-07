@@ -32,7 +32,7 @@ enddef
 Enable b:auto_cursorline_disabled
 setlocal cursorline
 nnoremap <buffer> w <ScriptCmd>MRUwithNumKey(!b:use_tab)<CR>
-nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR>
+nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR><Cmd>setlocal number<CR>
 nnoremap <buffer> <Esc> <Cmd>q!<CR>
 MRUwithNumKey(BufIsSmth())
 

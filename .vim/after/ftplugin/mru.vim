@@ -1,4 +1,4 @@
-vim9script
+vim9script noclear
 if exists("b:did_my_after_ftplugin")
 finish
 endif
@@ -26,7 +26,7 @@ enddef
 Enable b:auto_cursorline_disabled
 setl cursorline
 nn <buffer> w <ScriptCmd>B(!b:use_tab)<CR>
-nn <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR>
+nn <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR><Cmd>setlocal number<CR>
 nn <buffer> <Esc> <Cmd>q!<CR>
 B(A())
 hi link MruFileName Directory
