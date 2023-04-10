@@ -351,17 +351,6 @@ nn <Leader>r <Cmd>PortalReset<CR>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
-g:calendar_first_day = 'sunday'
-au vimrc FileType calendar {
-nn <buffer> k <Plug>(calendar_up)
-nn <buffer> j <Plug>(calendar_down)
-nn <buffer> h <Plug>(calendar_prev)
-nn <buffer> l <Plug>(calendar_next)
-nn <buffer> gh <Plug>(calendar_left)
-nn <buffer> gl <Plug>(calendar_right)
-nm <buffer> <CR> >
-nm <buffer> <BS> <
-}
 MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
 MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
 MultiCmd nmap,vmap ; :

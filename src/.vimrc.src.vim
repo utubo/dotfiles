@@ -446,18 +446,6 @@ g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 #}}}
 
-# カレンダー {{{
-g:calendar_first_day = 'sunday'
-au vimrc FileType calendar {
-	nnoremap <buffer> k <Plug>(calendar_up)
-	nnoremap <buffer> j <Plug>(calendar_down)
-	nnoremap <buffer> h <Plug>(calendar_prev)
-	nnoremap <buffer> l <Plug>(calendar_next)
-	nnoremap <buffer> gh <Plug>(calendar_left)
-	nnoremap <buffer> gl <Plug>(calendar_right)
-	nmap <buffer> <CR> >
-	nmap <buffer> <BS> <
-}
 # }}}
 
 # cmdline statusline 切り替え {{{
