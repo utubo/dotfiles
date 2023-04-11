@@ -106,7 +106,6 @@ packadd vim-jetpack
 jetpack#begin()
 Jetpack 'tani/vim-jetpack', { 'opt': 1 }
 Jetpack 'airblade/vim-gitgutter'
-Jetpack 'alvan/vim-closetag'
 Jetpack 'ctrlpvim/ctrlp.vim'
 Jetpack 'cohama/lexima.vim'
 Jetpack 'delphinus/vim-auto-cursorline'
