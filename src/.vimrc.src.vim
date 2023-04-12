@@ -165,7 +165,6 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
-Jetpack 'rafamadriz/friendly-snippets'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'      # Gdiffとか
@@ -181,16 +180,16 @@ Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
 Jetpack 'lambdalisue/fern-hijack.vim'
 Jetpack 'lambdalisue/nerdfont.vim'
 # 🐶🍚
-Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
-Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
-# あまり使ってないけど作ったので…
+# 🐶🍚様子見中
+Jetpack 'utubo/jumpcursor.vim'
+Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
@@ -506,6 +505,17 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nnoremap <expr> i !empty(getline('.')) ? 'i' : '"_cc'
 nnoremap <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nnoremap <expr> A !empty(getline('.')) ? 'A' : '"_cc'
+# すごい
+# https://zenn.dev/mattn/articles/83c2d4c7645faa
+MultiCmd nmap,tmap <C-w>+ <C-w>+<SID>ws
+MultiCmd nmap,tmap <C-w>- <C-w>-<SID>ws
+MultiCmd nmap,tmap <C-w>> <C-w>><SID>ws
+MultiCmd nmap,tmap <C-w>< <C-w><<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws+ <C-w>+<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws- <C-w>-<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws> <C-w>><SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws< <C-w><<SID>ws
+MultiCmd nmap,tmap <SID>ws <Nop>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

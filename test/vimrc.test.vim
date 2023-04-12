@@ -127,7 +127,8 @@ suite.TestMapping = () => {
 		'v  \([J]\)\|' ..
 		'x  \([S]\)\|' ..
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
-		'   <SNR>\d\+_(save-cursor-pos)'
+		'   <SNR>\d\+_(save-cursor-pos)\|' ..
+		'n  <SNR>\d_ws.'
 
 	# ユーザー定義のマッピング
 	var user_map = join([execute('map'), execute('map!')], "\n")
@@ -169,7 +170,7 @@ suite.TestMapping = () => {
 	for i in default_map
 		var dups = Scan(user_map, '\C' .. i .. '[^\n]*')
 		dups->filter((k, v) => v !~ default_ignore)
-		assert.equals(dups, [], $'マッピングがデフォルトと被ってないこと /{i}/')
+		assert.equals(dups, [], 'マッピングがデフォルトと被ってないこと')
 	endfor
 
 	# ユーザー定義内で被りがないかを確認する
@@ -180,7 +181,7 @@ suite.TestMapping = () => {
 			continue
 		endif
 		var head_regex = head
-			->escape('^$.*/\[]')
+			->escape('^$.*/\[]<')
 			->substitute('^ ', '[ nvxso]', '')
 			->substitute('^n', '[ n]', '')
 			->substitute('^v', '[ vxs]', '')
@@ -200,7 +201,9 @@ suite.TestMapping = () => {
 		endfor
 		dups->uniq() # imapとcmapで「!  ...」 が重複するので
 		dups->filter((k, v) => v !~ user_ignore)
-		assert.equals([dups[0]], dups, $'マッピングが被っていないこと {dups}')
+		if !!dups
+			assert.equals(dups, [dups[0]], 'マッピングが被っていないこと')
+		endif
 	endfor
 }
 # }}}
@@ -256,4 +259,4 @@ suite.TestTruncToDisplayWidth = () => {
 }
 #}}}
 
-call g:RunTests()
+g:RunTests()

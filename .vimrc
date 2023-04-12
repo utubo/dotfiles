@@ -131,7 +131,6 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
-Jetpack 'rafamadriz/friendly-snippets'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'
@@ -145,15 +144,15 @@ Jetpack 'lambdalisue/fern-git-status.vim'
 Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
 Jetpack 'lambdalisue/fern-hijack.vim'
 Jetpack 'lambdalisue/nerdfont.vim'
-Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
-Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/jumpcursor.vim'
+Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
@@ -391,6 +390,15 @@ set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
 nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
+MultiCmd nmap,tmap <C-w>+ <C-w>+<SID>ws
+MultiCmd nmap,tmap <C-w>- <C-w>-<SID>ws
+MultiCmd nmap,tmap <C-w>> <C-w>><SID>ws
+MultiCmd nmap,tmap <C-w>< <C-w><<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws+ <C-w>+<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws- <C-w>-<SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws> <C-w>><SID>ws
+MultiCmd nnoremap,tnoremap <script> <SID>ws< <C-w><<SID>ws
+MultiCmd nmap,tmap <SID>ws <Nop>
 def BE()
 const a = 100
 const b = getpos('.')
