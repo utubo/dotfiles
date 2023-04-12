@@ -26,6 +26,7 @@ def g:TestExit(job: any, status: number)
 enddef
 def TestVimrc()
 	if expand('%:t') ==# '.vimrc.src.vim'
+		echo 'Testing ...'
 		job_start(
 			["vim", "-c", "let $run_with_ci=1", "-c", "source ../test/vimrc.test.vim", "dummy.vim"],
 			{ exit_cb: g:TestExit }

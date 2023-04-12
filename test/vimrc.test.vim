@@ -208,6 +208,27 @@ suite.TestMapping = () => {
 }
 # }}}
 
+# マッピングの動作確認 {{{
+suite.TestWindowSizeChange = () => {
+	# 高さ
+	split
+	const h = winheight(0)
+	execute "normal \<C-w>++"
+	assert.equals(winheight(0), h + 2, '<C-w>++でウインドウ高さ+2')
+	execute "normal \<C-w>--"
+	assert.equals(winheight(0), h, '<C-w>--でウインドウ高さ-2')
+	quit
+	# 幅
+	vsplit
+	const w = winwidth(0)
+	execute "normal \<C-w>>>"
+	assert.equals(winwidth(0), w + 2, '<C-w>>>でウインドウ幅+2')
+	execute "normal \<C-w><<"
+	assert.equals(winwidth(0), w, '<C-w><<でウインドウ幅-2')
+	quit
+}
+#}}}
+
 # その他かんたんなテスト {{{
 suite.TestAutocmd = () => {
 	assert.equals(

@@ -21,6 +21,7 @@ echoh Normal
 enddef
 def A()
 if expand('%:t') ==# '.vimrc.src.vim'
+ec 'Testing ...'
 job_start(
 ["vim", "-c", "let $run_with_ci=1", "-c", "source ../test/vimrc.test.vim", "dummy.vim"],
 { exit_cb: g:TestExit }
