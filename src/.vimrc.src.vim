@@ -46,16 +46,16 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
+# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
 # ↓
 # nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
 def MultiCmd(qargs: string)
 	const [cmds, args] = qargs->split('^\S*\zs')
 	for cmd in cmds->split(',')
 		const a = args
-			->substitute($'<if-{cmd}>', '<if-*>', 'g')
-			->substitute('<if-[^*>]\+>.\{-1,}\(<if-\*>\|$\)', '', 'g')
-			->substitute('<if-\*>', '', 'g')
+			->substitute($'<if-{cmd}>', '<endif>', 'g')
+			->substitute('<if-[^>]\+>.\{-1,}\(<endif>\|$\)', '', 'g')
+			->substitute('<endif>', '', 'g')
 		execute cmd a
 	endfor
 enddef
