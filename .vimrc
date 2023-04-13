@@ -390,14 +390,10 @@ set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
 nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
-MultiCmd nmap,tmap <C-w>+ <C-w>+<SID>ws
-MultiCmd nmap,tmap <C-w>- <C-w>-<SID>ws
-MultiCmd nmap,tmap <C-w>> <C-w>><SID>ws
-MultiCmd nmap,tmap <C-w>< <C-w><<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws+ <C-w>+<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws- <C-w>-<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws> <C-w>><SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws< <C-w><<SID>ws
+for i in ['+', '-', '<', '>']
+exe $'MultiCmd nmap,tmap <C-w>{i} <C-w>{i}<SID>ws'
+exe $'MultiCmd nnoremap,tnoremap <script> <SID>ws{i} <C-w>{i}<SID>ws'
+endfor
 MultiCmd nmap,tmap <SID>ws <Nop>
 def BE()
 const a = 100
