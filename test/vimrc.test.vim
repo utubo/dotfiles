@@ -249,9 +249,17 @@ suite.TestIndent = () => {
 
 # ユーティリティのテスト {{{
 suite.TestMultiCmd = () => {
-	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<if-*>zzz
+	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
 	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyyNNNzzz")
 	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyyVVVzzz")
+	nunmap xxx
+	vunmap xxx
+}
+
+suite.TestExeEach = () => {
+	ExeEach nmap,vmap {} xxx yyy_{}
+	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyy_nmap")
+	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyy_vmap")
 	nunmap xxx
 	vunmap xxx
 }
@@ -268,7 +276,7 @@ suite.TestEnableDisable = () => {
 suite.TestTruncToDisplayWidth = () => {
 	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
 	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
-	const F = function($'<SNR>{vimrc_sid}_F')
+	const F = function($'<SNR>{vimrc_sid}_G')
 	assert.equals(F('123',  3), '123')
 	assert.equals(F('1234', 3), '12>')
 	assert.equals(F('あいう',  6), 'あいう')

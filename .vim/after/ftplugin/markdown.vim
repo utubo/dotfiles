@@ -65,9 +65,6 @@ if a + d < b
 e = '+'
 b = a + d
 endif
-if a > b
-return ''
-endif
 var f = 0
 var h = 0
 for l in range(a, b)

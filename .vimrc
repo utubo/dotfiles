@@ -39,33 +39,40 @@ def A(b: string)
 const [c, d] = b->split('^\S*\zs')
 for e in c->split(',')
 const a = d
-->substitute($'<if-{e}>', '<if-*>', 'g')
-->substitute('<if-[^*>]\+>.\{-1,}\(<if-\*>\|$\)', '', 'g')
-->substitute('<if-\*>', '', 'g')
+->substitute($'<if-{e}>', '<endif>', 'g')
+->substitute('<if-[^>]\+>.\{-1,}\(<endif>\|$\)', '', 'g')
+->substitute('<endif>', '', 'g')
 exe e a
 endfor
 enddef
 com! -nargs=* MultiCmd A(<q-args>)
+def B(a: string)
+const [b, c] = a->split('^\S*\zs')
+for i in b->split(',')
+exe c->substitute('{}', i, 'g')
+endfor
+enddef
+com! -nargs=* ExeEach B(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def B(a: number)
+def C(a: number)
 sil! exe ':' a 's/\s\+$//'
 sil! exe ':' a 's/^\s*\n//'
 enddef
-def C(): bool
+def D(): bool
 return &modified || ! empty(bufname())
 enddef
-def D(a: any): string
+def E(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
-def E(a: string)
+def F(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe a
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-def F(a: string, b: number): string
+def G(a: string, b: number): string
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
 def g:VFirstLast(): list<number>
@@ -75,7 +82,7 @@ def g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-def G(): list<string>
+def H(): list<string>
 var [a, b] = getpos('v')[1 : 2]
 var [c, d] = getpos('.')[1 : 2]
 if c < a
@@ -192,7 +199,7 @@ MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
 MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
-def H()
+def I()
 var c = g:operator#sandwich#object.cursor
 if g:fix_sandwich_pos[1] !=# c.inner_head[1]
 c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
@@ -200,13 +207,13 @@ c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost H()
+au vimrc User OperatorSandwichAddPost I()
 var lq = []
-def I(a: bool = true)
+def J(a: bool = true)
 const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
 if a || lq !=# c
 lq = c
-au vimrc User OperatorSandwichAddPost ++once I(false)
+au vimrc User OperatorSandwichAddPost ++once J(false)
 if a
 feedkeys('S')
 else
@@ -217,20 +224,20 @@ endif
 endif
 enddef
 nm Sm viwSm
-vn Sm <ScriptCmd>I()<CR>
-def J()
+vn Sm <ScriptCmd>J()<CR>
+def BA()
 const c = g:operator#sandwich#object.cursor
-B(c.tail[1])
-B(c.head[1])
+C(c.tail[1])
+C(c.head[1])
 enddef
-au vimrc User OperatorSandwichDeletePost J()
+au vimrc User OperatorSandwichDeletePost BA()
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-def BA(a: string, b: list<string>, c: list<string>)
+def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
-BA('omni', ['*'], ['c', 'cpp', 'html'])
-BA('buffer', ['*'], ['go'])
+BB('omni', ['*'], ['c', 'cpp', 'html'])
+BB('buffer', ['*'], ['go'])
 MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 MultiCmd inoremap,snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
@@ -249,15 +256,15 @@ nn <silent> [a <Plug>(ale_previous_wrap)
 nn <silent> ]a <Plug>(ale_next_wrap)
 g:ale_echo_cursor = 0
 g:ruler_reg = ''
-def BB()
+def BC()
 var a = v:event.regcontents
 ->join('↵')
 ->substitute('\t', '›', 'g')
-->F(20)
+->G(20)
 ->substitute('%', '%%', 'g')
 g:ruler_reg = $'📋%#Cmdheight0Info#{a}%*'
 enddef
-au vimrc TextYankPost * BB()
+au vimrc TextYankPost * BC()
 g:ruler_worktime = '🕛'
 g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(a: any)
@@ -276,11 +283,11 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
 if has('win32')
-def BD(): string
+def BE(): string
 return &ff !=# 'dos' ? $' {&ff}' : ''
 enddef
 else
-def BD(): string
+def BE(): string
 return &ff ==# 'dos' ? $' {&ff}' : ''
 enddef
 endif
@@ -291,7 +298,7 @@ if winwidth(winnr()) < 60
 return ''
 else
 var a = &fenc ==# 'utf-8' ? '' : &fenc
-a ..= BD()
+a ..= BE()
 return a
 endif
 enddef
@@ -349,11 +356,6 @@ nn <Leader>r <Cmd>PortalReset<CR>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
-MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
-MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
-MultiCmd nmap,vmap ; :
-nn <Space>; ;
-nn <Space>: :
 Enable g:rainbow_active
 g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &ut
@@ -387,15 +389,11 @@ xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino jk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-nn <expr> i !empty(getline('.')) ? 'i' : '"_cc'
-nn <expr> a !empty(getline('.')) ? 'a' : '"_cc'
-nn <expr> A !empty(getline('.')) ? 'A' : '"_cc'
-for i in ['+', '-', '<', '>']
-exe $'MultiCmd nmap,tmap <C-w>{i} <C-w>{i}<SID>ws'
-exe $'MultiCmd nnoremap,tnoremap <script> <SID>ws{i} <C-w>{i}<SID>ws'
-endfor
+ExeEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
+ExeEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
+ExeEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 MultiCmd nmap,tmap <SID>ws <Nop>
-def BE()
+def BF()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -411,13 +409,13 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BE()
-def BF(a: string, ...b: list<string>)
+au vimrc BufReadPost * BF()
+def BG(a: string, ...b: list<string>)
 var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
 endif
-const d = C() && c !=# '%'
+const d = D() && c !=# '%'
 if d
 tabnew
 endif
@@ -434,7 +432,7 @@ tabc +
 endif
 endif
 enddef
-com! -nargs=+ VimGrep BF(<f-args>)
+com! -nargs=+ VimGrep BG(<f-args>)
 nm <Space>/ :<C-u>VimGrep<Space>
 au vimrc FileType qf {
 nn <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
@@ -486,16 +484,16 @@ hi! link Folded Delimiter
 hi! link ALEVirtualTextWarning ALEWarningSign
 hi! link ALEVirtualTextError ALEErrorSign
 }
-def BG()
+def BH()
 var [a, b] = VFirstLast()
 exe ':' a 's/\v(\S)?$/\1 /'
-append(b, D(a))
+append(b, E(a))
 cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
 enddef
-xn zf <ScriptCmd>BG()<CR>
-def BH()
+xn zf <ScriptCmd>BH()<CR>
+def BI()
 if foldclosed(line('.')) ==# -1
 normal! zc
 endif
@@ -506,11 +504,11 @@ return
 endif
 const c = getpos('.')
 normal! zd
-B(b)
-B(a)
+C(b)
+C(a)
 setpos('.', c)
 enddef
-nn zd <ScriptCmd>BH()<CR>
+nn zd <ScriptCmd>BI()<CR>
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc BufReadPost * :silent! normal! zO
@@ -523,7 +521,7 @@ g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
 g:tabline_maxlen = 20
 g:tabline_labelsep = has('gui') ? ', ' : '|'
-def BI(a: list<number>, c: string = ''): string
+def BJ(a: list<number>, c: string = ''): string
 var d = ''
 var e = ''
 var f = ''
@@ -555,13 +553,13 @@ var i = -1
 for b in d
 i += 1
 if len(f) ==# 2
-f += [BI(d[i : ], '..')]
+f += [BJ(d[i : ], '..')]
 break
 endif
 var h = bufname(b)
 h = !h ? '[No Name]' : h->pathshorten()[- g:tabline_maxlen : ]
 if f->index(h) ==# -1
-f += [BI([b], h)]
+f += [BJ([b], h)]
 endif
 endfor
 c ..= f->join(g:tabline_labelsep)
@@ -584,8 +582,13 @@ set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>E('normal! >gv')<CR>
-xn <S-Tab> <ScriptCmd>E('normal! <gv')<CR>
+xn <Tab> <ScriptCmd>F('normal! >gv')<CR>
+xn <S-Tab> <ScriptCmd>F('normal! <gv')<CR>
+MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
+MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
+MultiCmd nmap,vmap ; :
+nn <Space>; ;
+nn <Space>: :
 cno <C-h> <Left>
 cno <C-l> <Right>
 cno <C-n> <Down>
@@ -606,7 +609,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def BJ(a: string = '')
+def CA(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -665,7 +668,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def CA()
+def CB()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -674,10 +677,10 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <C-g> <ScriptCmd>call <SID>BJ()<CR><scriptCmd>call <SID>CA()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BJ('BufNewFile')
-def CB(a: string = '')
-if !!a
+nn <C-g> <ScriptCmd>call <SID>CA()<CR><scriptCmd>call <SID>CB()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * CA('BufNewFile')
+def CC(a: string)
+if a !=# 'q'
 if winnr() ==# winnr(a)
 return
 endif
@@ -691,12 +694,7 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-nn qh <ScriptCmd>CB('h')<CR>
-nn qj <ScriptCmd>CB('j')<CR>
-nn qk <ScriptCmd>CB('k')<CR>
-nn ql <ScriptCmd>CB('l')<CR>
-nn qq <ScriptCmd>CB()<CR>
-nn q<CR> <ScriptCmd>CB()<CR>
+ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>CC('{}')<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
@@ -704,7 +702,7 @@ nn qo <Cmd>confirm tabonly<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
-def CC(a: string)
+def CD(a: string)
 const b = expand('%')
 const c = expand(a)
 if ! empty(b) && filereadable(b)
@@ -719,7 +717,7 @@ endif
 exe 'saveas!' c
 edit
 enddef
-com! -nargs=1 -complete=file MoveFile CC(<f-args>)
+com! -nargs=1 -complete=file MoveFile CD(<f-args>)
 cnoreabbrev mv MoveFile
 cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nm g: :<C-u><SID>(exec_line)
@@ -731,7 +729,7 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-def CD()
+def CE()
 if &number
 set nonumber
 elseif &relativenumber
@@ -740,7 +738,7 @@ else
 set relativenumber
 endif
 enddef
-nn <F11> <ScriptCmd>CD()<CR>
+nn <F11> <ScriptCmd>CE()<CR>
 nn <F12> <Cmd>set wrap!<CR>
 cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nm gs :<C-u>%<SID>(rpl)
@@ -789,23 +787,23 @@ ino jje <C-o>e<C-o>a
 ino jj; <C-o>$;<CR>
 ino jj<Space> <C-o>$<CR>
 ino jjk 「」<C-g>U<Left>
-ino jj<Tab> <ScriptCmd>E('normal! >>')<CR>
-ino jj<S-Tab> <ScriptCmd>E('normal! <<')<CR>
+ino jj<Tab> <ScriptCmd>F('normal! >>')<CR>
+ino jj<S-Tab> <ScriptCmd>F('normal! <<')<CR>
 ino <M-x> <ScriptCmd>ToggleCheckBox()<CR>
-def CE()
+def CF()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CF(a: string, b: string)
+def CG(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * CE()
-au vimrc Syntax javascript,vim CF('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim CF('SpellRare', '\<normal!\@!')
-def CG()
-var a = G()->join('')
+au vimrc Syntax * CF()
+au vimrc Syntax javascript,vim CG('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim CG('SpellRare', '\<normal!\@!')
+def CH()
+var a = H()->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -814,8 +812,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-vn <C-g> <ScriptCmd>CG()<CR>
-def CH(): string
+vn <C-g> <ScriptCmd>CH()<CR>
+def CI(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}"''`」', c) ==# -1
 return 'll'
@@ -826,7 +824,7 @@ return 'll'
 endif
 return "\<C-o>a"
 enddef
-ino <expr> ll CH()
+ino <expr> ll CI()
 au vimrc FileType html,xml,svg {
 nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
@@ -842,7 +840,7 @@ imapclear
 mapclear
 }
 endif
-def CI()
+def CJ()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -852,14 +850,14 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CI()
+au vimrc ColorSchemePre * CJ()
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def CJ()
+def DA()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -874,8 +872,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CJ()
-def DA()
+au vimrc VimEnter,WinEnter * DA()
+def DB()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -883,8 +881,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! DA()
-au vimrc BufNew,BufReadPost * silent! DA()
+au vimrc OptionSet list silent! DB()
+au vimrc BufNew,BufReadPost * silent! DB()
 set t_Co=256
 syntax on
 set bg=dark
@@ -892,10 +890,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def DB()
+def DC()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|DB()|endif
+au vimrc VimEnter * ++nested if !D()|DC()|endif
