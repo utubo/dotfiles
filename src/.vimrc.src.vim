@@ -457,18 +457,6 @@ g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 #}}}
 
-# }}}
-
-# cmdline statusline 切り替え {{{
-MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
-MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
-MultiCmd nmap,vmap ; :
-nnoremap <Space>; ;
-nnoremap <Space>: :
-# 自作プラグイン(vim-registerslite)と被ってしまった…
-# inoremap <C-r>= <C-o><C-r>=
-#}}}
-
 # その他 {{{
 Enable g:rainbow_active
 g:loaded_matchparen = 1
@@ -772,6 +760,12 @@ xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 
 # ----------------------------------------------------------
 # コマンドモードあれこれ {{{
+MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
+MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
+MultiCmd nmap,vmap ; :
+nnoremap <Space>; ;
+nnoremap <Space>: :
+
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap <C-n> <Down>
@@ -784,7 +778,7 @@ cnoreabbrev cs colorscheme
 cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
-#}}} -------------------------------------------------------
+#}}}
 
 # ----------------------------------------------------------
 # terminalとか {{{
