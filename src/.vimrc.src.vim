@@ -507,15 +507,12 @@ nnoremap <expr> a !empty(getline('.')) ? 'a' : '"_cc'
 nnoremap <expr> A !empty(getline('.')) ? 'A' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-MultiCmd nmap,tmap <C-w>+ <C-w>+<SID>ws
-MultiCmd nmap,tmap <C-w>- <C-w>-<SID>ws
-MultiCmd nmap,tmap <C-w>> <C-w>><SID>ws
-MultiCmd nmap,tmap <C-w>< <C-w><<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws+ <C-w>+<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws- <C-w>-<SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws> <C-w>><SID>ws
-MultiCmd nnoremap,tnoremap <script> <SID>ws< <C-w><<SID>ws
+for i in ['+', '-', '<', '>']
+	execute $'MultiCmd nmap,tmap <C-w>{i} <C-w>{i}<SID>ws'
+	execute $'MultiCmd nnoremap,tnoremap <script> <SID>ws{i} <C-w>{i}<SID>ws'
+endfor
 MultiCmd nmap,tmap <SID>ws <Nop>
+
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
