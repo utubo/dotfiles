@@ -81,9 +81,6 @@ def CountCheckBoxs(): string
 		andmore = '+'
 		lastline = firstline + MAX_LINES
 	endif
-	if firstline > lastline # TODO: なんで？
-		return ''
-	endif
 	var chkd = 0
 	var empty = 0
 	for l in range(firstline, lastline)
