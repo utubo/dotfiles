@@ -719,9 +719,9 @@ edit
 enddef
 com! -nargs=1 -complete=file MoveFile CD(<f-args>)
 cnoreabbrev mv MoveFile
-cno <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
-nm g: :<C-u><SID>(exec_line)
-nm g9 :<C-u>vim9cmd <SID>(exec_line)
+cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
+nn <script> g: :<C-u><SID>(exec_line)
+nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xn g: "vy:<C-u><C-r>=@v<CR><CR>
 xn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
@@ -740,10 +740,10 @@ endif
 enddef
 nn <F11> <ScriptCmd>CE()<CR>
 nn <F12> <Cmd>set wrap!<CR>
-cno <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
-nm gs :<C-u>%<SID>(rpl)
-nm gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-vm gs :<SID>(rpl)
+cno <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
+nn <script> gs :<C-u>%<SID>(rpl)
+nn <script> gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+vn <script> gs :<SID>(rpl)
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P

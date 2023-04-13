@@ -930,9 +930,9 @@ cnoreabbrev mv MoveFile
 # ----------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
-cnoremap <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
-nmap g: :<C-u><SID>(exec_line)
-nmap g9 :<C-u>vim9cmd <SID>(exec_line)
+cnoremap <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
+nnoremap <script> g: :<C-u><SID>(exec_line)
+nnoremap <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
@@ -960,10 +960,10 @@ enddef
 nnoremap <F11> <ScriptCmd>ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
-cnoremap <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
-nmap gs :<C-u>%<SID>(rpl)
-nmap gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-vmap gs :<SID>(rpl)
+cnoremap <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
+nnoremap <script> gs :<C-u>%<SID>(rpl)
+nnoremap <script> gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
+vnoremap <script> gs :<SID>(rpl)
 
 nnoremap Y y$
 nnoremap <Space>p $p
