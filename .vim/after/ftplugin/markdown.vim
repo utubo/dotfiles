@@ -27,7 +27,25 @@ enddef
 no <buffer> <Space>x <ScriptCmd>A()<CR>
 nn <buffer> <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 nn <buffer> <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
-def B(): string
+ino <buffer> jjx <ScriptCmd>A()<CR>
+def B()
+for l in g:VRange()
+const a = getline(l)
+var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '')
+if a ==# b
+b = substitute(a, '^\(\s*\)', '\1- ', '')
+endif
+setline(l, b)
+if l ==# line('.')
+var c = getpos('.')
+c[2] += len(b) - len(a)
+setpos('.', c)
+endif
+endfor
+enddef
+nn <buffer> <Space>- <ScriptCmd>B()<CR>
+ino <buffer> jj- <ScriptCmd>B()<CR>
+def C(): string
 var [a, b] = g:VFirstLast()
 if mode() ==? 'V'
 elseif &ft !=# 'markdown'
@@ -66,11 +84,11 @@ else
 return $'✅{f}/{f + h}{e}'
 endif
 enddef
-def C()
+def D()
 if mode()[0] !=# 'n'
 return
 endif
-const a = B()
+const a = C()
 if a !=# get(w:, 'ruler_mdcb', '')
 w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
@@ -83,16 +101,16 @@ def CursorMovedDelayExec(a: any = 0)
 m = 0
 if n !=# 0
 n = 0
-C()
+D()
 endif
 enddef
-def E()
+def F()
 if m !=# 0
 n += 1
 return
 endif
-C()
+D()
 n = 0
 m = timer_start(k, CursorMovedDelayExec)
 enddef
-au after_ftplugin_md CursorMoved <buffer> E()
+au after_ftplugin_md CursorMoved <buffer> F()

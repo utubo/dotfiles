@@ -512,7 +512,6 @@ for i in ['+', '-', '<', '>']
 	execute $'MultiCmd nnoremap,tnoremap <script> <SID>ws{i} <C-w>{i}<SID>ws'
 endfor
 MultiCmd nmap,tmap <SID>ws <Nop>
-
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -1029,7 +1028,6 @@ inoremap jje <C-o>e<C-o>a
 inoremap jj; <C-o>$;<CR>
 inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<C-g>U<Left>
-inoremap jjx <ScriptCmd>ToggleCheckBox()<CR>
 inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 # これはちょっと押しにくい(自分のキーボードだと)
@@ -1107,19 +1105,18 @@ nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos(
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
 if strftime('%d') ==# '01'
-	def DMD()
+	au vimrc VimEnter * {
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		imapclear
 		mapclear
-	enddef
-	au vimrc VimEnter * DMD()
+	}
 endif
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # 色 {{{
 def DefaultColors()
-	# (メモ)autocmdの{}とDictionaryの{}は相性が悪いみたい(`}`の位置に気を付けてもNG)
+	# (メモ)autocmdの{}は行末が`,`だとエラーになる
 	g:rainbow_conf = {
 		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 		ctermfgs: ['105', '117', '120', '228', '212', '177']

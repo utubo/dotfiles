@@ -33,6 +33,28 @@ enddef
 noremap <buffer> <Space>x <ScriptCmd>ToggleCheckBox()<CR>
 nnoremap <buffer> <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 nnoremap <buffer> <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
+inoremap <buffer> jjx <ScriptCmd>ToggleCheckBox()<CR>
+#}}} -------------------------------------------------------
+
+# ----------------------------------------------------------
+# リストオンオフ {{{
+def ToggleListMark()
+	for l in g:VRange()
+		const a = getline(l)
+		var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '') # remove list-mark
+		if a ==# b
+			b = substitute(a, '^\(\s*\)', '\1- ', '') # dd list-mark
+		endif
+		setline(l, b)
+		if l ==# line('.')
+			var c = getpos('.')
+			c[2] += len(b) - len(a)
+			setpos('.', c)
+		endif
+	endfor
+enddef
+nnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
+inoremap <buffer> jj- <ScriptCmd>ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
