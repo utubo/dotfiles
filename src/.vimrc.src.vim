@@ -61,18 +61,21 @@ def MultiCmd(qargs: string)
 enddef
 command! -nargs=* MultiCmd MultiCmd(<q-args>)
 
-# こんな感じ(これ使うよりべたで書いたほうが起動は速い)
-# ExecuteEach j,k nnoremap {} g{}
+# こんな感じ
+# ExeEach j,k nnoremap {} g{}
 # ↓
 # nnoremap j gj
 # nnoremap k gk
-def ExecuteEach(qargs: string)
+# ※これ使うよりべたで書いたほうが起動は速い
+# ※MultiCmdに統合できそう
+# ※やりすぎ感は否めない
+def ExeEach(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
 	for i in items->split(',')
 		execute args->substitute('{}', i, 'g')
 	endfor
 enddef
-command! -nargs=* ExecuteEach ExecuteEach(<q-args>)
+command! -nargs=* ExeEach ExeEach(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
@@ -503,11 +506,11 @@ inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-ExecuteEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
+ExeEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-ExecuteEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
-ExecuteEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
+ExeEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
+ExeEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 MultiCmd nmap,tmap <SID>ws <Nop>
 #}}} -------------------------------------------------------
 
@@ -877,8 +880,8 @@ au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 
 # ----------------------------------------------------------
 # 閉じる {{{
-def Quit(expr: string = '')
-	if !!expr
+def Quit(expr: string)
+	if expr !=# 'q'
 		if winnr() ==# winnr(expr)
 			return
 		endif
@@ -892,12 +895,7 @@ def Quit(expr: string = '')
 enddef
 nnoremap q <Nop>
 nnoremap Q q
-nnoremap qh <ScriptCmd>Quit('h')<CR>
-nnoremap qj <ScriptCmd>Quit('j')<CR>
-nnoremap qk <ScriptCmd>Quit('k')<CR>
-nnoremap ql <ScriptCmd>Quit('l')<CR>
-nnoremap qq <ScriptCmd>Quit()<CR>
-nnoremap q<CR> <ScriptCmd>Quit()<CR>
+ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>Quit('{}')<CR>
 nnoremap qn <Cmd>confirm tabclose +<CR>
 nnoremap qp <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
