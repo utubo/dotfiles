@@ -61,6 +61,19 @@ def MultiCmd(qargs: string)
 enddef
 command! -nargs=* MultiCmd MultiCmd(<q-args>)
 
+# こんな感じ(これ使うよりべたで書いたほうが起動は速い)
+# ExecuteEach j,k nnoremap {} g{}
+# ↓
+# nnoremap j gj
+# nnoremap k gk
+def ExecuteEach(qargs: string)
+	const [items, args] = qargs->split('^\S*\zs')
+	for i in items->split(',')
+		execute args->substitute('{}', i, 'g')
+	endfor
+enddef
+command! -nargs=* ExecuteEach ExecuteEach(<q-args>)
+
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
@@ -502,15 +515,11 @@ inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-nnoremap <expr> i !empty(getline('.')) ? 'i' : '"_cc'
-nnoremap <expr> a !empty(getline('.')) ? 'a' : '"_cc'
-nnoremap <expr> A !empty(getline('.')) ? 'A' : '"_cc'
+ExecuteEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-for i in ['+', '-', '<', '>']
-	execute $'MultiCmd nmap,tmap <C-w>{i} <C-w>{i}<SID>ws'
-	execute $'MultiCmd nnoremap,tnoremap <script> <SID>ws{i} <C-w>{i}<SID>ws'
-endfor
+ExecuteEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
+ExecuteEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 MultiCmd nmap,tmap <SID>ws <Nop>
 #}}} -------------------------------------------------------
 
