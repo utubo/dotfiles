@@ -677,7 +677,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <C-g> <ScriptCmd>call <SID>CA()<CR><scriptCmd>call <SID>CB()<CR>
+nn <script> <C-g> <ScriptCmd>CA()<CR><scriptCmd>CB()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * CA('BufNewFile')
 def CC(a: string)
 if a !=# 'q'

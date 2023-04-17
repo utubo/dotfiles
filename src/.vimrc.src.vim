@@ -873,8 +873,7 @@ def PopupCursorPos()
 	})
 enddef
 
-# TODO: ↓`call <SID>`を削ったら"not an editor command"になった要調査
-nnoremap <C-g> <ScriptCmd>call <SID>ShowBufInfo()<CR><scriptCmd>call <SID>PopupCursorPos()<CR>
+nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><scriptCmd>PopupCursorPos()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 
