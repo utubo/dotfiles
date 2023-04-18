@@ -109,7 +109,7 @@ enddef
 
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
 def g:VFirstLast(): list<number>
-	return mode() ==? 'V' ? [line('.'), line('v')]->sort('n') : [line('.'), line('.')]
+	return [line('.'), line('v')]->sort('n')
 enddef
 def g:VRange(): list<number>
 	const a = g:VFirstLast()
@@ -447,6 +447,16 @@ au vimrc FileType fern {
 nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 # }}}
 
+# Git {{{
+nnoremap <Space>ga :<C-u>Git add %
+nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
+nnoremap <Space>gp :<C-u>Git push
+nnoremap <Space>gs <Cmd>Git status -sb<CR>
+nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
+nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
+nnoremap <Space>gl <Cmd>Git pull<CR>
+# }}}
+
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
@@ -471,12 +481,6 @@ au vimrc VimEnter * silent! NoMatchParen
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
-nmap <Space>ga :<C-u>Git add %
-nmap <Space>gc :<C-u>Git commit -m ''<Left>
-nmap <Space>gp :<C-u>Git push
-nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
-nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
@@ -1008,10 +1012,6 @@ nnoremap <Space>d "_d
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 
-# どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
-nnoremap <Space>w <C-w>w
-nnoremap <Space>o <C-w>w
-
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xnoremap <F10> <ESC>1<C-w>s<C-w>w
@@ -1022,7 +1022,7 @@ nnoremap ' "
 nnoremap m '
 nnoremap M m
 
-# うーん…
+# 悪くないけどノーマルモードでjjを誤爆する
 inoremap jj <C-o>
 inoremap jje <C-o>e<C-o>a
 inoremap jj; <C-o>$;<CR>
@@ -1090,6 +1090,10 @@ au vimrc FileType html,xml,svg {
 
 # ----------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
+
+# どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
+nnoremap <Space>w <C-w>w
+nnoremap <Space>o <C-w>w
 
 nnoremap <Space>a A
 
