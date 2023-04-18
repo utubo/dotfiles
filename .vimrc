@@ -234,7 +234,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{b:stl_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_yanktext|%}%3l:%-2c:%L%|%{%b:stl_bufinfo|%}%{%ruler_worktime%} '
+g:cmdheight0.format = ' %{b:stl_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%g:stl_reg|%}%3l:%-2c:%L%|%{%b:stl_bufinfo|%}%{%g:stl_worktime%} '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 Enable g:EasyMotion_smartcase
