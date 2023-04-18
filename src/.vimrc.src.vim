@@ -46,9 +46,9 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
+# MultiCmd nmap,xmap xxx yyy<if-nmap>NNN<if-xmap>VVV<endif>zzz
 # ↓
-# nmap xxx yyyNNNzzz | vmap xxx yyyVVVzzz
+# nmap xxx yyyNNNzzz | xmap xxx yyyVVVzzz
 def MultiCmd(qargs: string)
 	const [cmds, args] = qargs->split('^\S*\zs')
 	for cmd in cmds->split(',')
@@ -111,6 +111,7 @@ enddef
 def g:VFirstLast(): list<number>
 	return [line('.'), line('v')]->sort('n')
 enddef
+
 def g:VRange(): list<number>
 	const a = g:VFirstLast()
 	return range(a[0], a[1])
@@ -222,8 +223,9 @@ endif
 #}}}
 
 # ALE {{{
-Enable  g:ale_set_quickfix
 Enable  g:ale_fix_on_save
+Enable  g:ale_set_quickfix
+Disable g:ale_echo_cursor
 Disable g:ale_lint_on_insert_leave
 Disable g:ale_set_loclist
 g:ale_sign_error = '🐞'
@@ -233,9 +235,6 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &updatetime
 nnoremap <silent> [a <Plug>(ale_previous_wrap)
 nnoremap <silent> ]a <Plug>(ale_next_wrap)
-
-# cmdheight=0だとALEのホバーメッセージがちらつくのでg:ll_aleに代入してlightlineで表示する
-g:ale_echo_cursor = 0
 #}}}
 
 # cmdheight0 {{{
@@ -266,10 +265,10 @@ def! g:VimrcTimer60s(timer: any)
 		g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
 	endif
 enddef
-timer_stop(get(g:, 'vimrc_timer_60s', 0))
+timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 
-# markdownのチェックボックスの数をカウント
+# カーソル以下のmarkdownのチェックボックスの数を表示する
 # 本体は.vim/after/ftplugin/markdown.vim
 w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
@@ -286,8 +285,7 @@ else
 endif
 
 # アイコン
-b:icon = ''
-au vimrc WinNew,FileType * b:icon = nerdfont#find()
+au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
 
 def! g:RulerBufInfo(): string
 	if winwidth(winnr()) < 60
@@ -334,7 +332,15 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 # }}}
 
 # Git {{{
-nnoremap <Space>ga :<C-u>Git add %
+def GitAddAll()
+	const cmd = $'git add -A'
+	const cmd_n = cmd .. ' -n'
+	if input(cmd_n .. "\n" .. system(cmd_n) .. "execute ? (y/n) > ", 'y') ==# 'y'
+		system(cmd)
+	endif
+enddef
+nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
+nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
@@ -373,7 +379,7 @@ Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
 MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
+MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
@@ -412,7 +418,7 @@ def BigMac(first: bool = true)
 	endif
 enddef
 nmap Sm viwSm
-vnoremap Sm <ScriptCmd>BigMac()<CR>
+xnoremap Sm <ScriptCmd>BigMac()<CR>
 #}}}
 
 # skk {{{
@@ -451,26 +457,27 @@ call textobj#user#plugin('nonwhitespace', {
 #}}}
 
 # 補完 {{{
+Enable g:lexima_accept_pum_with_enter
+for cmd in ['inoremap', 'snoremap']
+	execute cmd "<expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'"
+	execute cmd "<expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'"
+	execute cmd "<expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'"
+	execute cmd "<expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'"
+endfor
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 enddef
 RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
 RegisterAsyncompSource('buffer', ['*'], ['go'])
-MultiCmd inoremap,snoremap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd inoremap,snoremap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd inoremap,snoremap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-#inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
-Enable g:lexima_accept_pum_with_enter
 #}}}
 
 # その他 {{{
 Enable g:rainbow_active
-g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &updatetime
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:hlairs = { delay: 250 }
+g:loaded_matchparen = 1
 au vimrc VimEnter * silent! NoMatchParen
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
@@ -766,7 +773,7 @@ xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 # コマンドモードあれこれ {{{
 MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
 MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
-MultiCmd nmap,vmap ; :
+MultiCmd nmap,xmap ; :
 nnoremap <Space>; ;
 nnoremap <Space>: :
 
@@ -963,7 +970,7 @@ nnoremap <F12> <Cmd>set wrap!<CR>
 cnoremap <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
 nnoremap <script> gs :<C-u>%<SID>(rpl)
 nnoremap <script> gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-vnoremap <script> gs :<SID>(rpl)
+xnoremap <script> gs :<SID>(rpl)
 
 nnoremap Y y$
 nnoremap <Space>p $p
@@ -1059,7 +1066,7 @@ def PopupVisualLength()
 		padding: [1, 1, 1, 1],
 	})
 enddef
-vnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
+xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 
 # これは誤爆しそう…例えば`all`とか`call`とか
 def SkipParen(): string
