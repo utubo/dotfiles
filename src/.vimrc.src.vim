@@ -335,7 +335,10 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 def GitAddAll()
 	const cmd = $'git add -A'
 	const cmd_n = cmd .. ' -n'
-	if input(cmd_n .. "\n" .. system(cmd_n) .. "execute ? (y/n) > ", 'y') ==# 'y'
+	const list = system(cmd_n)
+	if list ==# ''
+		echo cmd_n .. "\nnone."
+	elseif input(cmd_n .. "\n" .. list .. "execute ? (y/n) > ", 'y') ==# 'y'
 		system(cmd)
 	endif
 enddef

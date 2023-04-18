@@ -259,7 +259,10 @@ nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 def BB()
 const a = $'git add -A'
 const b = a .. ' -n'
-if input(b .. "\n" .. system(b) .. "execute ? (y/n) > ", 'y') ==# 'y'
+const c = system(b)
+if c ==# ''
+ec b .. "\nnone."
+elseif input(b .. "\n" .. c .. "execute ? (y/n) > ", 'y') ==# 'y'
 system(a)
 endif
 enddef
