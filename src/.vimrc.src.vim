@@ -273,29 +273,26 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
 
-# &ff
-if has('win32')
-	def RulerFF(): string
-		return &ff !=# 'dos' ? $' {&ff}' : ''
-	enddef
-else
-	def RulerFF(): string
-		return &ff ==# 'dos' ? $' {&ff}' : ''
-	enddef
-endif
-
 # アイコン
 au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
 
-def! g:RulerBufInfo(): string
-	if winwidth(winnr()) < 60
-		return ''
+# 文字コードと改行コード
+b:ruler_bufinfo = ''
+def UpdateRulerBufInfo()
+	var info = []
+	if &fenc !=# 'utf-8' && !!&fenc
+		info += [&fenc->toupper()]
+	endif
+	if &ff !=# '' && (has('win32') && &ff !=# 'dos' || !has('win32') && &ff !=# 'unix')
+		info += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
+	endif
+	if !info
+		b:ruler_bufinfo = ''
 	else
-		var info = &fenc ==# 'utf-8' ? '' : &fenc
-		info ..= RulerFF()
-		return info
+		b:ruler_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%*'
 	endif
 enddef
+au vimrc BufNew,BufRead,OptionSet * UpdateRulerBufInfo()
 # cmdheight0設定
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
@@ -303,7 +300,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{get(b:, "icon", "")}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{RulerBufInfo()|}%{%ruler_worktime%} '
+g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
