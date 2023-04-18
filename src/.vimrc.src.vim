@@ -221,96 +221,6 @@ if ! has_jetpack
 endif
 #}}}
 
-# easymotion {{{
-Enable  g:EasyMotion_smartcase
-Enable  g:EasyMotion_use_migemo
-Enable  g:EasyMotion_enter_jump_first
-Disable g:EasyMotion_verbose
-Disable g:EasyMotion_do_mapping
-g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-g:EasyMotion_prompt = 'EasyMotion: '
-noremap s <Plug>(easymotion-s)
-#}}}
-
-# sandwich {{{
-g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-g:sandwich#recipes += [
-	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
-	{ buns: ['',   ''  ], input: ['q'] },
-	{ buns: ['「', '」'], input: ['k'] },
-	{ buns: ['{ ', ' }'], input: ['{'] },
-	{ buns: ['${', '}' ], input: ['${'] },
-	{ buns: ['%{', '}' ], input: ['%{'] },
-	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
-]
-def! g:CommentString(index: number): string
-	return &commentstring->split('%s')->get(index, '')
-enddef
-Enable g:sandwich_no_default_key_mappings
-Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
-
-# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-def FixSandwichPos()
-	var c = g:operator#sandwich#object.cursor
-	if g:fix_sandwich_pos[1] !=# c.inner_head[1]
-		c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
-		c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
-	endif
-enddef
-au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost FixSandwichPos()
-
-# 内側に連続で挟むやつ
-var big_mac_crown = []
-def BigMac(first: bool = true)
-	const c = first ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
-	if first || big_mac_crown !=# c
-		big_mac_crown = c
-		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
-		if first
-			feedkeys('S')
-		else
-			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
-			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-			feedkeys('gvS')
-		endif
-	endif
-enddef
-nmap Sm viwSm
-vnoremap Sm <ScriptCmd>BigMac()<CR>
-
-# 囲みを削除したら行末空白と空行も削除
-def RemoveAirBuns()
-	const c = g:operator#sandwich#object.cursor
-	RemoveEmptyLine(c.tail[1])
-	RemoveEmptyLine(c.head[1])
-enddef
-au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
-#}}}
-
-# MRU {{{
-nnoremap <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-#}}}
-
-# 補完 {{{
-def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
-	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
-enddef
-RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
-RegisterAsyncompSource('buffer', ['*'], ['go'])
-MultiCmd inoremap,snoremap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd inoremap,snoremap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd inoremap,snoremap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-#inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
-Enable g:lexima_accept_pum_with_enter
-#}}}
-
 # ALE {{{
 Enable  g:ale_set_quickfix
 Enable  g:ale_fix_on_save
@@ -400,6 +310,111 @@ g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
 
+# easymotion {{{
+Enable  g:EasyMotion_smartcase
+Enable  g:EasyMotion_use_migemo
+Enable  g:EasyMotion_enter_jump_first
+Disable g:EasyMotion_verbose
+Disable g:EasyMotion_do_mapping
+g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
+g:EasyMotion_prompt = 'EasyMotion: '
+noremap s <Plug>(easymotion-s)
+#}}}
+
+# fern {{{
+Enable g:fern#default_hidden
+g:fern#renderer = "nerdfont"
+au vimrc FileType fern {
+	Enable b:auto_cursorline_disabled
+	setlocal cursorline
+	nnoremap <buffer> <F1> <Cmd>:q!<CR>
+	nnoremap <buffer> p <Plug>(fern-action-leave)
+}
+nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
+# }}}
+
+# Git {{{
+nnoremap <Space>ga :<C-u>Git add %
+nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
+nnoremap <Space>gp :<C-u>Git push
+nnoremap <Space>gs <Cmd>Git status -sb<CR>
+nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
+nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
+nnoremap <Space>gl <Cmd>Git pull<CR>
+# }}}
+
+# MRU {{{
+nnoremap <F2> <Cmd>MRUToggle<CR>
+g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
+#}}}
+
+# Portal {{{
+nnoremap <Leader>a <Cmd>PortalAim<CR>
+nnoremap <Leader>b <Cmd>PortalAim blue<CR>
+nnoremap <Leader>o <Cmd>PortalAim orange<CR>
+nnoremap <Leader>r <Cmd>PortalReset<CR>
+#}}}
+
+# sandwich {{{
+g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+g:sandwich#recipes += [
+	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
+	{ buns: ['',   ''  ], input: ['q'] },
+	{ buns: ['「', '」'], input: ['k'] },
+	{ buns: ['{ ', ' }'], input: ['{'] },
+	{ buns: ['${', '}' ], input: ['${'] },
+	{ buns: ['%{', '}' ], input: ['%{'] },
+	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
+]
+def! g:CommentString(index: number): string
+	return &commentstring->split('%s')->get(index, '')
+enddef
+Enable g:sandwich_no_default_key_mappings
+Enable g:operator_sandwich_no_default_key_mappings
+MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+MultiCmd nnoremap,xnoremap S  <Plug>(operator-sandwich-add)<if-nnoremap>iw
+nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
+
+# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
+def FixSandwichPos()
+	var c = g:operator#sandwich#object.cursor
+	if g:fix_sandwich_pos[1] !=# c.inner_head[1]
+		c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
+		c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
+	endif
+enddef
+au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
+au vimrc User OperatorSandwichAddPost FixSandwichPos()
+
+# 囲みを削除したら行末空白と空行も削除
+def RemoveAirBuns()
+	const c = g:operator#sandwich#object.cursor
+	RemoveEmptyLine(c.tail[1])
+	RemoveEmptyLine(c.head[1])
+enddef
+au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
+
+# 内側に連続で挟むやつ
+var big_mac_crown = []
+def BigMac(first: bool = true)
+	const c = first ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
+	if first || big_mac_crown !=# c
+		big_mac_crown = c
+		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
+		if first
+			feedkeys('S')
+		else
+			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
+			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
+			feedkeys('gvS')
+		endif
+	endif
+enddef
+nmap Sm viwSm
+vnoremap Sm <ScriptCmd>BigMac()<CR>
+#}}}
+
 # skk {{{
 if has_deno
 	if ! empty($SKK_JISYO_DIR)
@@ -435,39 +450,18 @@ call textobj#user#plugin('nonwhitespace', {
 })
 #}}}
 
-# fern {{{
-Enable g:fern#default_hidden
-g:fern#renderer = "nerdfont"
-au vimrc FileType fern {
-	Enable b:auto_cursorline_disabled
-	setlocal cursorline
-	nnoremap <buffer> <F1> <Cmd>:q!<CR>
-	nnoremap <buffer> p <Plug>(fern-action-leave)
-}
-nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
-# }}}
-
-# Git {{{
-nnoremap <Space>ga :<C-u>Git add %
-nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
-nnoremap <Space>gp :<C-u>Git push
-nnoremap <Space>gs <Cmd>Git status -sb<CR>
-nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
-nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>gl <Cmd>Git pull<CR>
-# }}}
-
-# Portal {{{
-nnoremap <Leader>a <Cmd>PortalAim<CR>
-nnoremap <Leader>b <Cmd>PortalAim blue<CR>
-nnoremap <Leader>o <Cmd>PortalAim orange<CR>
-nnoremap <Leader>r <Cmd>PortalReset<CR>
-#}}}
-
-# ヘルプ作成 {{{
-g:vimhelpgenerator_version = ''
-g:vimhelpgenerator_author = 'Author  : utubo'
-g:vimhelpgenerator_defaultlanguage = 'en'
+# 補完 {{{
+def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
+	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
+enddef
+RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
+RegisterAsyncompSource('buffer', ['*'], ['go'])
+MultiCmd inoremap,snoremap <expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd inoremap,snoremap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+#inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
+Enable g:lexima_accept_pum_with_enter
 #}}}
 
 # その他 {{{
@@ -495,6 +489,9 @@ const localplugins = expand($'{rtproot}/pack/local/opt/*')
 if localplugins !=# ''
 	&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
 endif
+g:vimhelpgenerator_version = ''
+g:vimhelpgenerator_author = 'Author  : utubo'
+g:vimhelpgenerator_defaultlanguage = 'en'
 #}}}
 
 filetype plugin indent on

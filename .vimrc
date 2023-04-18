@@ -172,6 +172,74 @@ jetpack#end()
 if ! lo
 jetpack#sync()
 endif
+Enable g:ale_set_quickfix
+Enable g:ale_fix_on_save
+Disable g:ale_lint_on_insert_leave
+Disable g:ale_set_loclist
+g:ale_sign_error = '🐞'
+g:ale_sign_warning = '🐝'
+g:ale_linters = { javascript: ['eslint'] }
+g:ale_fixers = { typescript: ['deno'] }
+g:ale_lint_delay = &ut
+nn <silent> [a <Plug>(ale_previous_wrap)
+nn <silent> ]a <Plug>(ale_next_wrap)
+g:ale_echo_cursor = 0
+g:ruler_reg = ''
+def I()
+var a = v:event.regcontents
+->join('↵')
+->substitute('\t', '›', 'g')
+->G(20)
+->substitute('%', '%%', 'g')
+g:ruler_reg = $'📋%#Cmdheight0Info#{a}%*'
+enddef
+au vimrc TextYankPost * I()
+g:ruler_worktime = '🕛'
+g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
+def! g:VimrcTimer60s(a: any)
+const b = (localtime() - g:ruler_worktime_open_at) / 60
+const c = b % 60
+g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[c / 5]
+if (c ==# 45)
+notification#show("       ☕🍴🍰\nHave a break time !")
+endif
+if g:ruler_worktime ==# '🍰'
+g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
+endif
+enddef
+timer_stop(get(g:, 'vimrc_timer_60s', 0))
+g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+w:ruler_mdcb = ''
+au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
+if has('win32')
+def BA(): string
+return &ff !=# 'dos' ? $' {&ff}' : ''
+enddef
+else
+def BA(): string
+return &ff ==# 'dos' ? $' {&ff}' : ''
+enddef
+endif
+b:icon = ''
+au vimrc WinNew,FileType * b:icon = nerdfont#find()
+def! g:RulerBufInfo(): string
+if winwidth(winnr()) < 60
+return ''
+else
+var a = &fenc ==# 'utf-8' ? '' : &fenc
+a ..= BA()
+return a
+endif
+enddef
+g:cmdheight0 = {}
+g:cmdheight0.delay = -1
+g:cmdheight0.tail = "\ue0c6"
+g:cmdheight0.sep = "\ue0c6"
+g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
+g:cmdheight0.horiznr = '─'
+g:cmdheight0.format = ' %{get(b:, "icon", "")}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{RulerBufInfo()|}%{%ruler_worktime%} '
+g:cmdheight0.laststatus = 0
+nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
@@ -180,6 +248,28 @@ Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 g:EasyMotion_prompt = 'EasyMotion: '
 no s <Plug>(easymotion-s)
+Enable g:fern#default_hidden
+g:fern#renderer = "nerdfont"
+au vimrc FileType fern {
+Enable b:auto_cursorline_disabled
+setl cursorline
+nn <buffer> <F1> <Cmd>:q!<CR>
+nn <buffer> p <Plug>(fern-action-leave)
+}
+nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
+nn <Space>ga :<C-u>Git add %
+nn <Space>gc :<C-u>Git commit -m ''<Left>
+nn <Space>gp :<C-u>Git push
+nn <Space>gs <Cmd>Git status -sb<CR>
+nn <Space>gv <Cmd>Gvdiffsplit<CR>
+nn <Space>gd <Cmd>Gdiffsplit<CR>
+nn <Space>gl <Cmd>Git pull<CR>
+nn <F2> <Cmd>MRUToggle<CR>
+g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
+nn <Leader>a <Cmd>PortalAim<CR>
+nn <Leader>b <Cmd>PortalAim blue<CR>
+nn <Leader>o <Cmd>PortalAim orange<CR>
+nn <Leader>r <Cmd>PortalReset<CR>
 g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
@@ -199,7 +289,7 @@ MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
 MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
-def I()
+def BB()
 var c = g:operator#sandwich#object.cursor
 if g:fix_sandwich_pos[1] !=# c.inner_head[1]
 c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
@@ -207,13 +297,19 @@ c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
 endif
 enddef
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost I()
+au vimrc User OperatorSandwichAddPost BB()
+def BC()
+const c = g:operator#sandwich#object.cursor
+C(c.tail[1])
+C(c.head[1])
+enddef
+au vimrc User OperatorSandwichDeletePost BC()
 var lq = []
-def J(a: bool = true)
+def BD(a: bool = true)
 const c = a ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
 if a || lq !=# c
 lq = c
-au vimrc User OperatorSandwichAddPost ++once J(false)
+au vimrc User OperatorSandwichAddPost ++once BD(false)
 if a
 feedkeys('S')
 else
@@ -224,93 +320,7 @@ endif
 endif
 enddef
 nm Sm viwSm
-vn Sm <ScriptCmd>J()<CR>
-def BA()
-const c = g:operator#sandwich#object.cursor
-C(c.tail[1])
-C(c.head[1])
-enddef
-au vimrc User OperatorSandwichDeletePost BA()
-nn <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-def BB(a: string, b: list<string>, c: list<string>)
-exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
-enddef
-BB('omni', ['*'], ['c', 'cpp', 'html'])
-BB('buffer', ['*'], ['go'])
-MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-MultiCmd inoremap,snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-Enable g:lexima_accept_pum_with_enter
-Enable g:ale_set_quickfix
-Enable g:ale_fix_on_save
-Disable g:ale_lint_on_insert_leave
-Disable g:ale_set_loclist
-g:ale_sign_error = '🐞'
-g:ale_sign_warning = '🐝'
-g:ale_linters = { javascript: ['eslint'] }
-g:ale_fixers = { typescript: ['deno'] }
-g:ale_lint_delay = &ut
-nn <silent> [a <Plug>(ale_previous_wrap)
-nn <silent> ]a <Plug>(ale_next_wrap)
-g:ale_echo_cursor = 0
-g:ruler_reg = ''
-def BC()
-var a = v:event.regcontents
-->join('↵')
-->substitute('\t', '›', 'g')
-->G(20)
-->substitute('%', '%%', 'g')
-g:ruler_reg = $'📋%#Cmdheight0Info#{a}%*'
-enddef
-au vimrc TextYankPost * BC()
-g:ruler_worktime = '🕛'
-g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
-def! g:VimrcTimer60s(a: any)
-const b = (localtime() - g:ruler_worktime_open_at) / 60
-const c = b % 60
-g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[c / 5]
-if (c ==# 45)
-notification#show("       ☕🍴🍰\nHave a break time !")
-endif
-if g:ruler_worktime ==# '🍰'
-g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
-endif
-enddef
-timer_stop(get(g:, 'vimrc_timer_60s', 0))
-g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-w:ruler_mdcb = ''
-au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-if has('win32')
-def BE(): string
-return &ff !=# 'dos' ? $' {&ff}' : ''
-enddef
-else
-def BE(): string
-return &ff ==# 'dos' ? $' {&ff}' : ''
-enddef
-endif
-b:icon = ''
-au vimrc WinNew,FileType * b:icon = nerdfont#find()
-def! g:RulerBufInfo(): string
-if winwidth(winnr()) < 60
-return ''
-else
-var a = &fenc ==# 'utf-8' ? '' : &fenc
-a ..= BE()
-return a
-endif
-enddef
-g:cmdheight0 = {}
-g:cmdheight0.delay = -1
-g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep = "\ue0c6"
-g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
-g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{get(b:, "icon", "")}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{RulerBufInfo()|}%{%ruler_worktime%} '
-g:cmdheight0.laststatus = 0
-nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+vn Sm <ScriptCmd>BD()<CR>
 if lm
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
@@ -340,29 +350,16 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-Enable g:fern#default_hidden
-g:fern#renderer = "nerdfont"
-au vimrc FileType fern {
-Enable b:auto_cursorline_disabled
-setl cursorline
-nn <buffer> <F1> <Cmd>:q!<CR>
-nn <buffer> p <Plug>(fern-action-leave)
-}
-nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
-nn <Space>ga :<C-u>Git add %
-nn <Space>gc :<C-u>Git commit -m ''<Left>
-nn <Space>gp :<C-u>Git push
-nn <Space>gs <Cmd>Git status -sb<CR>
-nn <Space>gv <Cmd>Gvdiffsplit<CR>
-nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gl <Cmd>Git pull<CR>
-nn <Leader>a <Cmd>PortalAim<CR>
-nn <Leader>b <Cmd>PortalAim blue<CR>
-nn <Leader>o <Cmd>PortalAim orange<CR>
-nn <Leader>r <Cmd>PortalReset<CR>
-g:vimhelpgenerator_version = ''
-g:vimhelpgenerator_author = 'Author  : utubo'
-g:vimhelpgenerator_defaultlanguage = 'en'
+def BE(a: string, b: list<string>, c: list<string>)
+exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
+enddef
+BE('omni', ['*'], ['c', 'cpp', 'html'])
+BE('buffer', ['*'], ['go'])
+MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+MultiCmd inoremap,snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+MultiCmd inoremap,snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+Enable g:lexima_accept_pum_with_enter
 Enable g:rainbow_active
 g:loaded_matchparen = 1
 g:auto_cursorline_wait_ms = &ut
@@ -383,6 +380,9 @@ const lr = expand($'{lk}/pack/local/opt/*')
 if lr !=# ''
 &runtimepath = $'{substitute(lr, '\n', ',', 'g')},{&runtimepath}'
 endif
+g:vimhelpgenerator_version = ''
+g:vimhelpgenerator_author = 'Author  : utubo'
+g:vimhelpgenerator_defaultlanguage = 'en'
 filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
