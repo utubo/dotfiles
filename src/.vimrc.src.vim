@@ -237,13 +237,13 @@ nnoremap <silent> [a <Plug>(ale_previous_wrap)
 nnoremap <silent> ]a <Plug>(ale_next_wrap)
 #}}}
 
-# cmdheight0 {{{
+# cmdheight0, statusline {{{
 # アイコン
-au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
+au vimrc WinNew,FileType * b:stl_icon = nerdfont#find()
 
 # 文字コードと改行コード
-b:ruler_bufinfo = ''
-def UpdateRulerBufInfo()
+b:stl_bufinfo = ''
+def UpdateStlBufInfo()
 	var info = []
 	if &fenc !=# 'utf-8' && !!&fenc
 		info += [&fenc->toupper()]
@@ -252,12 +252,12 @@ def UpdateRulerBufInfo()
 		info += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
 	endif
 	if !info
-		b:ruler_bufinfo = ''
+		b:stl_bufinfo = ''
 	else
-		b:ruler_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%*'
+		b:stl_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%*'
 	endif
 enddef
-au vimrc BufNew,BufRead,OptionSet * UpdateRulerBufInfo()
+au vimrc BufNew,BufRead,OptionSet * UpdateStlBufInfo()
 
 # カーソル以下のmarkdownのチェックボックスの数
 # 本体は.vim/after/ftplugin/markdown.vim
@@ -265,30 +265,30 @@ w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
 
 # ヤンクしたやつを表示するやつ
-g:ruler_yanktext = ''
-def UpdateRulerYankText()
+g:stl_reg = ''
+def UpdateStlRegister()
 	var reg = v:event.regcontents
 		->join('↵')
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
 		->substitute('%', '%%', 'g')
-	g:ruler_yanktext = $'📋%#Cmdheight0Info#{reg}%*'
+	g:stl_reg = $'📋%#Cmdheight0Info#{reg}%*'
 enddef
-au vimrc TextYankPost * UpdateRulerYankText()
+au vimrc TextYankPost * UpdateStlRegister()
 
 # 毎時vim起動後45分から15分間休憩しようね
-g:ruler_worktime = '🕛'
-g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
+g:stl_worktime = '🕛'
+g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(timer: any)
-	const hhmm = (localtime() - g:ruler_worktime_open_at) / 60
+	const hhmm = (localtime() - g:stl_worktime_open_at) / 60
 	const mm = hhmm % 60
 	#:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
-	g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
+	g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
 	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
-	if g:ruler_worktime ==# '🍰'
-		g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
+	if g:stl_worktime ==# '🍰'
+		g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime .. '%*'
 	endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
@@ -301,7 +301,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_yanktext|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
+g:cmdheight0.format = ' %{b:stl_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_yanktext|%}%3l:%-2c:%L%|%{%b:stl_bufinfo|%}%{%ruler_worktime%} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
@@ -575,7 +575,7 @@ def VimGrep(keyword: string, ...targets: list<string>)
 		endif
 	endif
 enddef
-command! -nargs=+ VimGrep VimGrep(<f-args>)
+command! -nargs=+ -complete=dir VimGrep VimGrep(<f-args>)
 nmap <Space>/ :<C-u>VimGrep<Space>
 
 au vimrc FileType qf {
