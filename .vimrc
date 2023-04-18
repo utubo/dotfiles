@@ -184,16 +184,35 @@ g:ale_fixers = { typescript: ['deno'] }
 g:ale_lint_delay = &ut
 nn <silent> [a <Plug>(ale_previous_wrap)
 nn <silent> ]a <Plug>(ale_next_wrap)
-g:ruler_reg = ''
+au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
+b:ruler_bufinfo = ''
 def I()
+var a = []
+if &fenc !=# 'utf-8' && !!&fenc
+a += [&fenc->toupper()]
+endif
+if &ff !=# '' && (has('win32') && &ff !=# 'dos' || !has('win32') && &ff !=# 'unix')
+a += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
+endif
+if !a
+b:ruler_bufinfo = ''
+else
+b:ruler_bufinfo = '%#Cmdheight0Warn#' .. a->join(',') .. '%*'
+endif
+enddef
+au vimrc BufNew,BufRead,OptionSet * I()
+w:ruler_mdcb = ''
+au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
+g:ruler_yanktext = ''
+def J()
 var a = v:event.regcontents
 ->join('↵')
 ->substitute('\t', '›', 'g')
 ->G(20)
 ->substitute('%', '%%', 'g')
-g:ruler_reg = $'📋%#Cmdheight0Info#{a}%*'
+g:ruler_yanktext = $'📋%#Cmdheight0Info#{a}%*'
 enddef
-au vimrc TextYankPost * I()
+au vimrc TextYankPost * J()
 g:ruler_worktime = '🕛'
 g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(a: any)
@@ -209,32 +228,13 @@ endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
 g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-w:ruler_mdcb = ''
-au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
-b:ruler_bufinfo = ''
-def J()
-var a = []
-if &fenc !=# 'utf-8' && !!&fenc
-a += [&fenc->toupper()]
-endif
-if &ff !=# '' && (has('win32') && &ff !=# 'dos' || !has('win32') && &ff !=# 'unix')
-a += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
-endif
-if !a
-b:ruler_bufinfo = ''
-else
-b:ruler_bufinfo = '%#Cmdheight0Warn#' .. a->join(',') .. '%*'
-endif
-enddef
-au vimrc BufNew,BufRead,OptionSet * J()
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep = "\ue0c6"
 g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
+g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_yanktext|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 Enable g:EasyMotion_smartcase

@@ -238,41 +238,6 @@ nnoremap <silent> ]a <Plug>(ale_next_wrap)
 #}}}
 
 # cmdheight0 {{{
-# ヤンクしたやつを表示するやつ
-g:ruler_reg = ''
-def LLYankPost()
-	var reg = v:event.regcontents
-		->join('↵')
-		->substitute('\t', '›', 'g')
-		->TruncToDisplayWidth(20)
-		->substitute('%', '%%', 'g')
-	g:ruler_reg = $'📋%#Cmdheight0Info#{reg}%*'
-enddef
-au vimrc TextYankPost * LLYankPost()
-
-# 毎時vim起動後45分から15分間休憩しようね
-g:ruler_worktime = '🕛'
-g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime()) # .vimrcを再実行しても(1行目のnoclearで)持ち越し
-def! g:VimrcTimer60s(timer: any)
-	const hhmm = (localtime() - g:ruler_worktime_open_at) / 60
-	const mm = hhmm % 60
-	#:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
-	g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
-	if (mm ==# 45)
-		notification#show("       ☕🍴🍰\nHave a break time !")
-	endif
-	if g:ruler_worktime ==# '🍰'
-		g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
-	endif
-enddef
-timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
-g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
-
-# カーソル以下のmarkdownのチェックボックスの数を表示する
-# 本体は.vim/after/ftplugin/markdown.vim
-w:ruler_mdcb = ''
-au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-
 # アイコン
 au vimrc WinNew,FileType * b:ruler_icon = nerdfont#find()
 
@@ -293,6 +258,42 @@ def UpdateRulerBufInfo()
 	endif
 enddef
 au vimrc BufNew,BufRead,OptionSet * UpdateRulerBufInfo()
+
+# カーソル以下のmarkdownのチェックボックスの数
+# 本体は.vim/after/ftplugin/markdown.vim
+w:ruler_mdcb = ''
+au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
+
+# ヤンクしたやつを表示するやつ
+g:ruler_yanktext = ''
+def UpdateRulerYankText()
+	var reg = v:event.regcontents
+		->join('↵')
+		->substitute('\t', '›', 'g')
+		->TruncToDisplayWidth(20)
+		->substitute('%', '%%', 'g')
+	g:ruler_yanktext = $'📋%#Cmdheight0Info#{reg}%*'
+enddef
+au vimrc TextYankPost * UpdateRulerYankText()
+
+# 毎時vim起動後45分から15分間休憩しようね
+g:ruler_worktime = '🕛'
+g:ruler_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
+def! g:VimrcTimer60s(timer: any)
+	const hhmm = (localtime() - g:ruler_worktime_open_at) / 60
+	const mm = hhmm % 60
+	#:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
+	g:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
+	if (mm ==# 45)
+		notification#show("       ☕🍴🍰\nHave a break time !")
+	endif
+	if g:ruler_worktime ==# '🍰'
+		g:ruler_worktime = '%#Cmdheight0Warn#' .. g:ruler_worktime .. '%*'
+	endif
+enddef
+timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
+g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+
 # cmdheight0設定
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
@@ -300,7 +301,7 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_reg|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
+g:cmdheight0.format = ' %{b:ruler_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%ruler_yanktext|%}%3l:%-2c:%L%|%{%b:ruler_bufinfo|%}%{%ruler_worktime%} '
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
