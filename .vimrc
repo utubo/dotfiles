@@ -257,14 +257,18 @@ nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 def BB()
-const a = $'git add -A'
-const b = a .. ' -n'
-const c = system(b)
-if c ==# ''
-ec b .. "\nnone."
-elseif input(b .. "\n" .. c .. "execute ? (y/n) > ", 'y') ==# 'y'
-system(a)
+ec 'git add -A -n'
+const a = system('git add -A -n')
+if !a
+ec 'none.'
+return
 endif
+ec a
+echoh Question
+if input("execute ? (y/n) > ", 'y') ==# 'y'
+system("git add -A")
+endif
+echoh Normal
 enddef
 nn <Space>ga <ScriptCmd>BB()<CR>
 nn <Space>gA :<C-u>Git add %

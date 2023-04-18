@@ -333,14 +333,18 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 
 # Git {{{
 def GitAddAll()
-	const cmd = $'git add -A'
-	const cmd_n = cmd .. ' -n'
-	const list = system(cmd_n)
-	if list ==# ''
-		echo cmd_n .. "\nnone."
-	elseif input(cmd_n .. "\n" .. list .. "execute ? (y/n) > ", 'y') ==# 'y'
-		system(cmd)
+	echo 'git add -A -n'
+	const list = system('git add -A -n')
+	if !list
+		echo 'none.'
+		return
 	endif
+	echo list
+	echoh Question
+	if input("execute ? (y/n) > ", 'y') ==# 'y'
+		system("git add -A")
+	endif
+	echoh Normal
 enddef
 nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
 nnoremap <Space>gA :<C-u>Git add %
