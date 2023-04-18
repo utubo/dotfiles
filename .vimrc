@@ -76,7 +76,7 @@ def G(a: string, b: number): string
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
 def g:VFirstLast(): list<number>
-return mode() ==? 'V' ? [line('.'), line('v')]->sort('n') : [line('.'), line('.')]
+return [line('.'), line('v')]->sort('n')
 enddef
 def g:VRange(): list<number>
 const a = g:VFirstLast()
@@ -349,6 +349,13 @@ nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
+nn <Space>ga :<C-u>Git add %
+nn <Space>gc :<C-u>Git commit -m ''<Left>
+nn <Space>gp :<C-u>Git push
+nn <Space>gs <Cmd>Git status -sb<CR>
+nn <Space>gv <Cmd>Gvdiffsplit<CR>
+nn <Space>gd <Cmd>Gdiffsplit<CR>
+nn <Space>gl <Cmd>Git pull<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
@@ -366,12 +373,6 @@ au vimrc VimEnter * silent! NoMatchParen
 nn % <ScriptCmd>call hlpairs#Jump()<CR>
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
-nm <Space>ga :<C-u>Git add %
-nm <Space>gc :<C-u>Git commit -m ''<Left>
-nm <Space>gp :<C-u>Git push
-nn <Space>gv <Cmd>Gvdiffsplit<CR>
-nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
 MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
@@ -775,8 +776,6 @@ nn <Space>l $
 nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-nn <Space>w <C-w>w
-nn <Space>o <C-w>w
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
@@ -829,6 +828,8 @@ au vimrc FileType html,xml,svg {
 nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
 }
+nn <Space>w <C-w>w
+nn <Space>o <C-w>w
 nn <Space>a A
 nm S^ v^S
 nm S$ vg_S
