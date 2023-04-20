@@ -9,7 +9,7 @@ export def VimGrep(keyword: string, ...targets: list<string>)
 		path = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
 	endif
 	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	const use_tab = BufIsSmth() && path !=# '%'
+	const use_tab = (&modified || !empty(bufname())) && path !=# '%'
 	if use_tab
 		tabnew
 	endif

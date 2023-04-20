@@ -116,30 +116,6 @@ def! g:VRange(): list<number>
 	const a = g:VFirstLast()
 	return range(a[0], a[1])
 enddef
-
-def GetVisualSelectionLines(): list<string>
-	var [ay, ax] = getpos('v')[1 : 2]
-	var [by, bx] = getpos('.')[1 : 2]
-	if by < ay
-		[ax, bx] = [bx, ax]
-		[ay, by] = [by, ay]
-	endif
-	var lines = getline(ay, by)
-	if mode() ==# 'V'
-		# nop
-	elseif mode() ==# 'v' && ay !=# by
-		lines[-1] = lines[-1][0 : bx - 1]
-		lines[0] = lines[0][ax - 1 : ]
-	else
-		var [s, e] = [ax - 1, bx - 1]->sort('n')
-		echo $'{s},{e}'
-		for i in range(0, by - ay)
-			lines[i] = lines[i][s : e]
-		endfor
-	endif
-	return lines
-enddef
-
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -975,7 +951,8 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
 # 選択中の文字数をポップアップ
 def PopupVisualLength()
-	var text = GetVisualSelectionLines()->join('')
+	normal "vy
+	var text = @v->substitute('\n', '', 'g')
 	popup_create($'{strlen(text)}chars', {
 		pos: 'botleft',
 		line: 'cursor-1',

@@ -4,6 +4,31 @@ vim9script
 # ボツったけど復活させたくなるかもしれない設定たちの墓場
 #
 
+# ユーティリティ {{{
+def GetVisualSelectionLines(): list<string>
+	var [ay, ax] = getpos('v')[1 : 2]
+	var [by, bx] = getpos('.')[1 : 2]
+	if by < ay
+		[ax, bx] = [bx, ax]
+		[ay, by] = [by, ay]
+	endif
+	var lines = getline(ay, by)
+	if mode() ==# 'V'
+		# nop
+	elseif mode() ==# 'v' && ay !=# by
+		lines[-1] = lines[-1][0 : bx - 1]
+		lines[0] = lines[0][ax - 1 : ]
+	else
+		var [s, e] = [ax - 1, bx - 1]->sort('n')
+		echo $'{s},{e}'
+		for i in range(0, by - ay)
+			lines[i] = lines[i][s : e]
+		endfor
+	endif
+	return lines
+enddef
+#}}}
+
 # 'itchyny/vim-cursorword'の簡易CursorHold版 {{{
 def HiCursorWord()
 	var cword = expand('<cword>')
@@ -20,12 +45,12 @@ def HiCursorWord()
 enddef
 au vimrc CursorHold * HiCursorWord()
 au vimrc ColorScheme * hi CWordMatch cterm=underline gui=underline
-"}}}
+#}}}
 
 # Insertモードのマッピング {{{
 inoremap jjh <C-o>^
 inoremap jjl <C-o>$
-# }}}
+#}}}
 
 # テスト用メソッド {{{
 def! g:EchoErrors()
@@ -87,4 +112,5 @@ enddef
 command! -nargs=* -complete=customlist,GetAllTest RunTest RunTest(<q-args>)
 nnoremap <buffer> <Leader>T <Cmd>call <SID>RunTest()<CR>
 nnoremap <buffer> <Leader>t <Cmd>call <SID>RunTestAtCursor()<CR>
-}}}
+#}}}
+

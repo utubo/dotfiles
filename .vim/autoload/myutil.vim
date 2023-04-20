@@ -4,7 +4,7 @@ var c = join(b, ' ')
 if empty(c)
 c = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
 endif
-const d = BufIsSmth() && c !=# '%'
+const d = (&modified || !empty(bufname())) && c !=# '%'
 if d
 tabnew
 endif
