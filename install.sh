@@ -11,5 +11,6 @@ ln -s ${SCRIPT_DIR}/.zlogout ~
 ln -s ${SCRIPT_DIR}/.zshrc ~
 mkdir -p ~/.vim
 ln -s ${SCRIPT_DIR}/.vim/after ~/.vim
+ln -s ${SCRIPT_DIR}/.vim/autoload ~/.vim
 
 git config --global core.excludesfile ~/.gitignore_global

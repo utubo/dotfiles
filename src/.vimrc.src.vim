@@ -108,11 +108,11 @@ def TruncToDisplayWidth(str: string, width: number): string
 enddef
 
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
-def g:VFirstLast(): list<number>
+def! g:VFirstLast(): list<number>
 	return [line('.'), line('v')]->sort('n')
 enddef
 
-def g:VRange(): list<number>
+def! g:VRange(): list<number>
 	const a = g:VFirstLast()
 	return range(a[0], a[1])
 enddef
@@ -327,7 +327,7 @@ au vimrc FileType fern {
 	nnoremap <buffer> p <Plug>(fern-action-leave)
 }
 nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
-# }}}
+#}}}
 
 # Git {{{
 def GitAddAll()
@@ -352,7 +352,7 @@ nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
-# }}}
+#}}}
 
 # MRU {{{
 nnoremap <F2> <Cmd>MRUToggle<CR>
@@ -386,6 +386,8 @@ MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
 MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
 MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
+# `S${`と被ってしまうけどまぁいいか
+nmap S$ vg_S
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 def FixSandwichPos()
@@ -550,43 +552,8 @@ au vimrc BufReadPost * SetupTabstop()
 
 # ----------------------------------------------------------
 # vimgrep {{{
-def VimGrep(keyword: string, ...targets: list<string>)
-	var path = join(targets, ' ')
-	# パスを省略した場合は、同じ拡張子のファイルから探す
-	if empty(path)
-		path = expand('%:e') ==# '' ? '*' : ($'*.{expand('%:e')}')
-	endif
-	# 適宜タブで開く(ただし明示的に「%」を指定したらカレントで開く)
-	const use_tab = BufIsSmth() && path !=# '%'
-	if use_tab
-		tabnew
-	endif
-	# lvimgrepしてなんやかんやして終わり
-	execute $'silent! lvimgrep {keyword} {path}'
-	if ! empty(getloclist(0))
-		lwindow
-	else
-		echoh ErrorMsg
-		echomsg $'Not found.: {keyword}'
-		echoh None
-		if use_tab
-			tabnext -
-			tabclose +
-		endif
-	endif
-enddef
-command! -nargs=+ -complete=dir VimGrep VimGrep(<f-args>)
+command! -nargs=+ -complete=dir VimGrep myutil#VimGrep(<f-args>)
 nmap <Space>/ :<C-u>VimGrep<Space>
-
-au vimrc FileType qf {
-	nnoremap <buffer> <silent> ; <CR>:silent! normal! zv<CR><C-W>w
-	nnoremap <buffer> <silent> w <C-W><CR>:silent! normal! zv<CR><C-W>w
-	nnoremap <buffer> <silent> t <C-W><CR>:silent! normal! zv<CR><C-W>T
-	nnoremap <buffer> <nowait> q <Cmd>lexpr ''<CR>:q<CR>
-	nnoremap <buffer> f <C-f>
-	nnoremap <buffer> b <C-b>
-	execute $'nnoremap <buffer> T <C-W><CR><C-W>T{tabpagenr()}gt'
-}
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
@@ -651,35 +618,6 @@ au vimrc ColorScheme * {
 	hi! link ALEVirtualTextError ALEErrorSign
 }
 #}}}
-# ホールドマーカーの前にスペース、後ろに改行を入れる {{{
-def Zf()
-	var [firstline, lastline] = VFirstLast()
-	execute ':' firstline 's/\v(\S)?$/\1 /'
-	append(lastline, IndentStr(firstline))
-	cursor([firstline, 1])
-	cursor([lastline + 1, 1])
-	normal! zf
-enddef
-xnoremap zf <ScriptCmd>Zf()<CR>
-#}}}
-# ホールドマーカーを削除したら行末をトリムする {{{
-def Zd()
-	if foldclosed(line('.')) ==# -1
-		normal! zc
-	endif
-	const head = foldclosed(line('.'))
-	const tail = foldclosedend(line('.'))
-	if head ==# -1
-		return
-	endif
-	const org = getpos('.')
-	normal! zd
-	RemoveEmptyLine(tail)
-	RemoveEmptyLine(head)
-	setpos('.', org)
-enddef
-nnoremap zd <ScriptCmd>Zd()<CR>
-#}}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
@@ -688,6 +626,8 @@ nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
 nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
+xnoremap zf <ScriptCmd>myutil#Zf()<CR>
+nnoremap zd <ScriptCmd>myutil#Zd()<CR>
 #}}}
 #}}} -------------------------------------------------------
 
@@ -764,7 +704,7 @@ enddef
 
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
-# }}}
+#}}}
 
 # ----------------------------------------------------------
 # ビジュアルモードあれこれ {{{
@@ -781,7 +721,6 @@ MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
 MultiCmd nmap,xmap ; :
 nnoremap <Space>; ;
 nnoremap <Space>: :
-
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap <C-n> <Down>
@@ -919,23 +858,7 @@ nnoremap q? q?
 
 # ----------------------------------------------------------
 # ファイルを移動して保存 {{{
-def MoveFile(newname: string)
-	const oldpath = expand('%')
-	const newpath = expand(newname)
-	if ! empty(oldpath) && filereadable(oldpath)
-		if filereadable(newpath)
-			echoh Error
-			echo $'file "{newname}" already exists.'
-			echoh None
-			return
-		endif
-		rename(oldpath, newpath)
-	endif
-	execute 'saveas!' newpath
-	# 開き直してMRUに登録
-	edit
-enddef
-command! -nargs=1 -complete=file MoveFile MoveFile(<f-args>)
+command! -nargs=1 -complete=file MoveFile myutil#MoveFile(<f-args>)
 cnoreabbrev mv MoveFile
 #}}}
 
@@ -959,17 +882,7 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
-def ToggleNumber()
-	if &number
-		set nonumber
-	elseif &relativenumber
-		set number norelativenumber
-	else
-		set relativenumber
-	endif
-enddef
-
-nnoremap <F11> <ScriptCmd>ToggleNumber()<CR>
+nnoremap <F11> <ScriptCmd>myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
 cnoremap <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
@@ -1108,7 +1021,6 @@ nnoremap <Space>a A
 
 # sandwich
 nmap S^ v^S
-nmap S$ vg_S
 
 # 最後の選択範囲を現在行の下に移動する
 nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
@@ -1201,7 +1113,7 @@ def OpenLastfile()
 	endif
 enddef
 au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
-# }}}
+#}}}
 
 # ----------------------------------------------------------
 # メモ {{{
