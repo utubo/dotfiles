@@ -42,6 +42,8 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # ^^^ Default ^^^
 # vvv My Config vvv
 
+export LANG="ja_JP.UTF-8"
+
 DIRSTACKSIZE=9
 setopt AUTO_PUSHD
 
