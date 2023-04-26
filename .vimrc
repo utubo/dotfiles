@@ -692,6 +692,8 @@ nn <Space>l $
 nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+nn <Tab><Tab> <ScriptCmd>F('normal! >>')<CR>
+nn <S-Tab><S-Tab> <ScriptCmd>F('normal! <<')<CR>
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
@@ -718,7 +720,7 @@ au vimrc Syntax * BJ()
 au vimrc Syntax javascript,vim CA('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim CA('SpellRare', '\<normal!\@!')
 def CB()
-normal "vy
+normal! "vy
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',

@@ -910,6 +910,9 @@ nnoremap <Space>d "_d
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 
+nnoremap <Tab><Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+nnoremap <S-Tab><S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xnoremap <F10> <ESC>1<C-w>s<C-w>w
@@ -951,7 +954,7 @@ au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
 
 # 選択中の文字数をポップアップ
 def PopupVisualLength()
-	normal "vy
+	normal! "vy
 	var text = @v->substitute('\n', '', 'g')
 	popup_create($'{strlen(text)}chars', {
 		pos: 'botleft',
