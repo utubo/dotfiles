@@ -320,9 +320,13 @@ def GitAddAll()
 	endif
 	echoh Normal
 enddef
+def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
+	return ['feat:', 'fix:', 'docs:', 'refactor:', 'style:', 'test:']
+enddef
+command! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
 nnoremap <Space>gA :<C-u>Git add %
-nnoremap <Space>gc :<C-u>Git commit -m ''<Left>
+nnoremap <Space>gc :<C-u>GitCommit<Space>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>

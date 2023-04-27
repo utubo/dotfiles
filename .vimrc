@@ -247,9 +247,13 @@ system("git add -A")
 endif
 echoh Normal
 enddef
+def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
+return ['feat:', 'fix:', 'docs:', 'refactor:', 'style:', 'test:']
+enddef
+com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 nn <Space>ga <ScriptCmd>J()<CR>
 nn <Space>gA :<C-u>Git add %
-nn <Space>gc :<C-u>Git commit -m ''<Left>
+nn <Space>gc :<C-u>GitCommit<Space>
 nn <Space>gp :<C-u>Git push
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
