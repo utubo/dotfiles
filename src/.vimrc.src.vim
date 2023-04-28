@@ -324,6 +324,11 @@ def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['feat:', 'fix:', 'docs:', 'refactor:', 'style:', 'test:']
 enddef
 command! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
+def GitTagPush(tagname: string)
+	Git tag tagname
+	Git push origin tagname
+enddef
+command! -nargs=1 GitTagPush GitTagPush(<q-args>)
 nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
 nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>GitCommit<Space>
@@ -332,6 +337,7 @@ nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
+nnoremap <Space>gt :<C-u>GitTagPush<Space>
 #}}}
 
 # MRU {{{
