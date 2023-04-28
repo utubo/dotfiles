@@ -252,8 +252,8 @@ return ['feat:', 'fix:', 'docs:', 'refactor:', 'style:', 'test:']
 enddef
 com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def BA(a: string)
-Git tag a
-Git push origin a
+ec system($"git tag '{a}'")
+ec system($"git push origin '{a}'")
 enddef
 com! -nargs=1 GitTagPush BA(<q-args>)
 nn <Space>ga <ScriptCmd>J()<CR>

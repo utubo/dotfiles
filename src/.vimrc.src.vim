@@ -325,8 +325,8 @@ def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 command! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def GitTagPush(tagname: string)
-	Git tag tagname
-	Git push origin tagname
+	echo system($"git tag '{tagname}'")
+	echo system($"git push origin '{tagname}'")
 enddef
 command! -nargs=1 GitTagPush GitTagPush(<q-args>)
 nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
