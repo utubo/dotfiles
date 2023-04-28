@@ -661,10 +661,10 @@ au vimrc FocusLost * @+ = @"
 endif
 nn <F11> <ScriptCmd>myutil#ToggleNumber()<CR>
 nn <F12> <Cmd>set wrap!<CR>
-cno <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
-nn <script> gs :<C-u>%<SID>(rpl)
-nn <script> gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-xn <script> gs :<SID>(rpl)
+nn gs :<C-u>%s///g<Left><Left><Left>
+nn gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+xn gs :s///g<Left><Left><Left>
+xn gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P

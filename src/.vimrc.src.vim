@@ -865,10 +865,10 @@ endif
 nnoremap <F11> <ScriptCmd>myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
-cnoremap <script> <expr> <SID>(rpl) $'s///g \| noh{repeat('<Left>', 9)}'
-nnoremap <script> gs :<C-u>%<SID>(rpl)
-nnoremap <script> gS :<C-u>%<SID>(rpl)<ScriptCmd>feedkeys(expand('<cword>')->escape('^$.*?/\[]'), 'ni')<CR><Right>
-xnoremap <script> gs :<SID>(rpl)
+nnoremap gs :<C-u>%s///g<Left><Left><Left>
+nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+xnoremap gs :s///g<Left><Left><Left>
+xnoremap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
 
 nnoremap Y y$
 nnoremap <Space>p $p
