@@ -170,7 +170,7 @@ var a = []
 if &fenc !=# 'utf-8' && !!&fenc
 a += [&fenc->toupper()]
 endif
-if &ff !=# '' && (has('win32') && &ff !=# 'dos' || !has('win32') && &ff !=# 'unix')
+if &ff !=# '' && (has('win32') && (&ff !=# 'dos') || !has('win32') && (&ff !=# 'unix'))
 a += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
 endif
 if !a

@@ -224,7 +224,8 @@ def UpdateStlBufInfo()
 	if &fenc !=# 'utf-8' && !!&fenc
 		info += [&fenc->toupper()]
 	endif
-	if &ff !=# '' && (has('win32') && &ff !=# 'dos' || !has('win32') && &ff !=# 'unix')
+	# なんか `&ff !=# ...` を括弧でくくらないとType mismatchになる…
+	if &ff !=# '' && (has('win32') && (&ff !=# 'dos') || !has('win32') && (&ff !=# 'unix'))
 		info += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
 	endif
 	if !info
