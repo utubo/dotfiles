@@ -21,7 +21,7 @@ set go-=T
 g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
-g:tabline_term_sign = '▶️'
+g:tabline_term_sign = '≫'
 g:tabline_labelsep = ', '
 g:save_window_file = expand('~/.vimwinpos')
 def B()
