@@ -676,7 +676,7 @@ def! g:MyTablabel(tab: number = 0): string
 		if !name
 			name = '[No Name]'
 		elseif getbufvar(b, '&buftype') ==# 'terminal'
-			name = getbufline(b, '$')[0]
+			name = term_getline(b, '.')->trim()
 		endif
 		name = name->pathshorten()[- g:tabline_maxlen : ]
 		if names->index(name) ==# -1

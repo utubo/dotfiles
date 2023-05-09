@@ -520,7 +520,7 @@ var h = bufname(b)
 if !h
 h = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-h = getbufline(b, '$')[0]
+h = term_getline(b, '.')->trim()
 endif
 h = h->pathshorten()[- g:tabline_maxlen : ]
 if f->index(h) ==# -1
