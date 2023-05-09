@@ -376,44 +376,13 @@ MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 # `S${`と被ってしまうけどまぁいいか
 nmap S$ vg_S
-
-# 改行で挟んだあとタブでインデントされると具合が悪くなるので…
-def FixSandwichPos()
-	var c = g:operator#sandwich#object.cursor
-	if g:fix_sandwich_pos[1] !=# c.inner_head[1]
-		c.inner_head[2] = getline(c.inner_head[1])->match('\S') + 1
-		c.inner_tail[2] = getline(c.inner_tail[1])->match('$') + 1
-	endif
-enddef
+# 微調整
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost FixSandwichPos()
-
-# 囲みを削除したら行末空白と空行も削除
-def RemoveAirBuns()
-	const c = g:operator#sandwich#object.cursor
-	RemoveEmptyLine(c.tail[1])
-	RemoveEmptyLine(c.head[1])
-enddef
-au vimrc User OperatorSandwichDeletePost RemoveAirBuns()
-
+au vimrc User OperatorSandwichAddPost myutil#FixSandwichPos()
+au vimrc User OperatorSandwichDeletePost myutil#RemoveAirBuns()
 # 内側に連続で挟むやつ
-var big_mac_crown = []
-def BigMac(first: bool = true)
-	const c = first ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
-	if first || big_mac_crown !=# c
-		big_mac_crown = c
-		au vimrc User OperatorSandwichAddPost ++once BigMac(false)
-		if first
-			feedkeys('S')
-		else
-			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
-			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-			feedkeys('gvS')
-		endif
-	endif
-enddef
+xnoremap Sm <ScriptCmd>myutil#BigMac()<CR>
 nmap Sm viwSm
-xnoremap Sm <ScriptCmd>BigMac()<CR>
 #}}}
 
 # skk {{{
