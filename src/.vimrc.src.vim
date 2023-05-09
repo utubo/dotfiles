@@ -259,7 +259,7 @@ g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(timer: any)
 	const hhmm = (localtime() - g:stl_worktime_open_at) / 60
 	const mm = hhmm % 60
-	#:ruler_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
+	#:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
 	g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
 	if (mm ==# 45)
 		notification#show("       ☕🍴🍰\nHave a break time !")
@@ -278,7 +278,16 @@ g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sep  = "\ue0c6"
 g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.format = ' %{b:stl_icon}%t%#CmdHeight0Error#%m%*%|%=%|%{w:ruler_mdcb|}%{%g:stl_reg|%}%3l:%-2c:%L%|%{%b:stl_bufinfo|%}%{%g:stl_worktime%} '
+g:cmdheight0.format = ' ' ..   # パディング
+	'%{b:stl_icon}%t' ..        # アイコンとファイル名
+	'%#CmdHeight0Error#%m%*' .. # 編集済みか
+	'%|%=%|' ..                 # 中央
+	'%{w:ruler_mdcb|}' ..       # markdownのチェックボックスの数
+	'%{%g:stl_reg|%}' ..        # レジスタ
+	'%3l:%-2c:%L%|' ..          # カーソル位置
+	'%{%b:stl_bufinfo|%}' ..    # 文字コードと改行コード
+	'%{%g:stl_worktime%}' ..    # 作業時間
+	' '                         # パディング
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 #}}}
