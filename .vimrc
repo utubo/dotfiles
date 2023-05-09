@@ -467,20 +467,18 @@ nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>myutil#Zf()<CR>
 nn zd <ScriptCmd>myutil#Zd()<CR>
-g:tabline_mod_sign = '✏'
+g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
+g:tabline_term_sign = "\uf489"
+g:tabline_labelsep = '|'
 g:tabline_maxlen = 20
-g:tabline_labelsep = has('gui') ? ', ' : '|'
-def BG(a: list<number>, c: string = ''): string
+def BG(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''
-var f = ''
 for b in a
-const h = getbufvar(b, '&filetype')
-if !f && (h ==# 'netrw' || h ==# 'fern')
-f = g:tabline_dir_sign
-endif
+const f = getbufvar(b, '&buftype')
+if f ==# ''
 if !d && getbufvar(b, '&modified')
 d = g:tabline_mod_sign
 endif
@@ -491,8 +489,19 @@ if g
 e = g:tabline_git_sign
 endif
 endif
+endif
+if c
+continue
+endif
+if f ==# 'terminal'
+return g:tabline_term_sign
+endif
+const h = getbufvar(b, '&filetype')
+if h ==# 'netrw' || h ==# 'fern'
+return g:tabline_dir_sign
+endif
 endfor
-return d .. e .. f .. c
+return d .. e
 enddef
 def! g:MyTablabel(a: number = 0): string
 var c = ''
@@ -504,13 +513,18 @@ var i = -1
 for b in d
 i += 1
 if len(f) ==# 2
-f += [BG(d[i : ], '..')]
+f += [(BG(d[i : ], true) .. '..')]
 break
 endif
 var h = bufname(b)
-h = !h ? '[No Name]' : h->pathshorten()[- g:tabline_maxlen : ]
+if !h
+h = '[No Name]'
+elseif getbufvar(b, '&buftype') ==# 'terminal'
+h = getbufline(b, '$')[0]
+endif
+h = h->pathshorten()[- g:tabline_maxlen : ]
 if f->index(h) ==# -1
-f += [BG([b], h)]
+f += [BG([b]) .. h]
 endif
 endfor
 c ..= f->join(g:tabline_labelsep)

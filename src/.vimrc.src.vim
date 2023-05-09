@@ -620,37 +620,46 @@ nnoremap zd <ScriptCmd>myutil#Zd()<CR>
 
 # ----------------------------------------------------------
 # Tabline {{{
-g:tabline_mod_sign = '✏'
+# 例: `current.txt|✏sub.txt|🐙..`(3つめ以降は省略)
+g:tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
+g:tabline_term_sign = "\uf489" # `>_`みたいなアイコン
+g:tabline_labelsep = '|'
 g:tabline_maxlen = 20
-g:tabline_labelsep = has('gui') ? ', ' : '|'
 
-def MyTablabelSign(bufs: list<number>, sufix: string = ''): string
+def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 	var mod = ''
 	var git = ''
-	var dir = ''
 	for b in bufs
-		const ft = getbufvar(b, '&filetype')
-		if !dir && (ft ==# 'netrw' || ft ==# 'fern')
-			dir = g:tabline_dir_sign
-		endif
-		if !mod && getbufvar(b, '&modified')
-			mod = g:tabline_mod_sign
-		endif
-		if !git
-			var g = false
-			silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
-			if g
-				git = g:tabline_git_sign
+		const bt = getbufvar(b, '&buftype')
+		if bt ==# ''
+			if !mod && getbufvar(b, '&modified')
+				mod = g:tabline_mod_sign
+			endif
+			if !git
+				var g = false
+				silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
+				if g
+					git = g:tabline_git_sign
+				endif
 			endif
 		endif
+		if overflow
+			continue
+		endif
+		if bt ==# 'terminal'
+			return g:tabline_term_sign
+		endif
+		const ft = getbufvar(b, '&filetype')
+		if ft ==# 'netrw' || ft ==# 'fern'
+			return g:tabline_dir_sign
+		endif
 	endfor
-	return mod .. git .. dir .. sufix
+	return mod .. git
 enddef
 
 def! g:MyTablabel(tab: number = 0): string
-	# `current.txt|sub.txt|..`(3つめ以降は省略)
 	var label = ''
 	var bufs = tabpagebuflist(tab)
 	const win = tabpagewinnr(tab) - 1
@@ -660,13 +669,18 @@ def! g:MyTablabel(tab: number = 0): string
 	for b in bufs
 		i += 1
 		if len(names) ==# 2
-			names += [MyTablabelSign(bufs[i : ], '..')]
+			names += [(MyTablabelSign(bufs[i : ], true) .. '..')]
 			break
 		endif
 		var name = bufname(b)
-		name = !name ? '[No Name]' : name->pathshorten()[- g:tabline_maxlen : ]
+		if !name
+			name = '[No Name]'
+		elseif getbufvar(b, '&buftype') ==# 'terminal'
+			name = getbufline(b, '$')[0]
+		endif
+		name = name->pathshorten()[- g:tabline_maxlen : ]
 		if names->index(name) ==# -1
-			names += [MyTablabelSign([b], name)]
+			names += [MyTablabelSign([b]) .. name]
 		endif
 	endfor
 	label ..= names->join(g:tabline_labelsep)

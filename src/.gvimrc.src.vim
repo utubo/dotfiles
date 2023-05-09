@@ -29,6 +29,16 @@ set go-=m
 set go-=T
 # }}}
 
+# Tabline {{{
+# gvimのタブにCicaフォントが使えないので
+g:tabline_mod_sign = '✏'
+g:tabline_git_sign = '🐙'
+g:tabline_dir_sign = '📂'
+g:tabline_term_sign = '▶️'
+# gvimのタブだと'|'は見づらかったので
+g:tabline_labelsep = ', '
+# }}}
+
 # ウィンドウ位置記憶 {{{
 # http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
 g:save_window_file = expand('~/.vimwinpos')
