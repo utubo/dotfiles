@@ -240,6 +240,7 @@ if !a
 ec 'none.'
 return
 endif
+echoh DiffAdd
 ec a
 echoh Question
 if input("execute ? (y/n) > ", 'y') ==# 'y'
@@ -664,6 +665,7 @@ nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn qo <Cmd>confirm tabonly<CR>
+nn qa <Cmd>confirm qa<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
@@ -775,7 +777,6 @@ nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A
 nm S^ v^S
-nn <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")

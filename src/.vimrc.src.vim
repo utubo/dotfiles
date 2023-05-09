@@ -314,6 +314,7 @@ def GitAddAll()
 		echo 'none.'
 		return
 	endif
+	echoh DiffAdd
 	echo list
 	echoh Question
 	if input("execute ? (y/n) > ", 'y') ==# 'y'
@@ -852,6 +853,7 @@ nnoremap qn <Cmd>confirm tabclose +<CR>
 nnoremap qp <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qo <Cmd>confirm tabonly<CR>
+nnoremap qa <Cmd>confirm qa<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
@@ -1026,9 +1028,6 @@ nnoremap <Space>a A
 
 # sandwich
 nmap S^ v^S
-
-# 最後の選択範囲を現在行の下に移動する
-nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
 
 #}}} -------------------------------------------------------
 

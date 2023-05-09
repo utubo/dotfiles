@@ -4,6 +4,13 @@ vim9script
 # ボツったけど復活させたくなるかもしれない設定たちの墓場
 #
 
+# 微妙なキーマッピング達 {{{
+
+# 最後の選択範囲を現在行の下に移動する
+nnoremap <expr> <Space>m $'<Cmd>{getpos("'<")[1]},{getpos("'>")[1]}move {getpos('.')[1]}<CR>'
+
+# }}}
+
 # ユーティリティ {{{
 def GetVisualSelectionLines(): list<string>
 	var [ay, ax] = getpos('v')[1 : 2]
