@@ -121,3 +121,10 @@ nnoremap <buffer> <Leader>T <Cmd>call <SID>RunTest()<CR>
 nnoremap <buffer> <Leader>t <Cmd>call <SID>RunTestAtCursor()<CR>
 #}}}
 
+# vsnip タブで選択 {{{
+# タブ区切りのテキスト(ユーザー辞書ファイル)を編集するのに煩わしかった
+for cmd in ['inoremap', 'snoremap']
+	execute cmd "<expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'"
+	execute cmd "<expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'"
+endfor
+#}}}

@@ -336,12 +336,8 @@ call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 Enable g:lexima_accept_pum_with_enter
-for lq in ['inoremap', 'snoremap']
-exe lq "<expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'"
-exe lq "<expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'"
-exe lq "<expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'"
-exe lq "<expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'"
-endfor
+MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
@@ -363,9 +359,9 @@ MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lr = expand($'{lk}/pack/local/opt/*')
-if lr !=# ''
-&runtimepath = $'{substitute(lr, '\n', ',', 'g')},{&runtimepath}'
+const lq = expand($'{lk}/pack/local/opt/*')
+if lq !=# ''
+&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
@@ -700,6 +696,7 @@ nn <Space>l $
 nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+nn <CR> j0
 nn <Tab><Tab> <ScriptCmd>F('normal! >>')<CR>
 nn <S-Tab><S-Tab> <ScriptCmd>F('normal! <<')<CR>
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w

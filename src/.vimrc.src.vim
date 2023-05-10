@@ -431,12 +431,8 @@ call textobj#user#plugin('nonwhitespace', {
 
 # 補完 {{{
 Enable g:lexima_accept_pum_with_enter
-for cmd in ['inoremap', 'snoremap']
-	execute cmd "<expr> JJ      vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'"
-	execute cmd "<expr> <C-l>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'"
-	execute cmd "<expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'"
-	execute cmd "<expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'"
-endfor
+MultiCmd inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 enddef
@@ -914,6 +910,9 @@ nnoremap <Space>l $
 nnoremap <Space>d "_d
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+
+# 辞書ファイル書くときに便利だけどもしかして<CR>ってプレフィックスになりえる？
+nnoremap <CR> j0
 
 nnoremap <Tab><Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 nnoremap <S-Tab><S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
