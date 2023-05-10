@@ -280,6 +280,19 @@ nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
+Enable g:lexima_accept_pum_with_enter
+lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
+lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
+lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
+au vimrc ModeChanged *:c* ++once {
+for lq in ['()', '{}', '""', "''", '``']
+lexima#add_rule({ char: lq[0], input_after: lq[1], mode: 'c' })
+lexima#add_rule({ char: lq[1], at: '\%#' .. lq[1], leave: 1, mode: 'c' })
+endfor
+lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
+}
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -340,19 +353,6 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-Enable g:lexima_accept_pum_with_enter
-lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
-lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
-lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
-lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
-lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
-au vimrc ModeChanged *:c* ++once {
-for lq in ['()', '{}', '""', "''", '``']
-lexima#add_rule({ char: lq[0], input_after: lq[1], mode: 'c' })
-lexima#add_rule({ char: lq[1], at: '\%#' .. lq[1], leave: 1, mode: 'c' })
-endfor
-lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
-}
 MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def BB(a: string, b: list<string>, c: list<string>)

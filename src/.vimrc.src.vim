@@ -358,6 +358,25 @@ nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>gt :<C-u>GitTagPush<Space>
 #}}}
 
+# lexima {{{
+Enable g:lexima_accept_pum_with_enter
+# 正規表現の括弧 `\(\)`と`\{\}`
+lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
+lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
+lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
+# cmdlineでの括弧
+au vimrc ModeChanged *:c* ++once {
+	for pair in ['()', '{}', '""', "''", '``']
+		lexima#add_rule({ char: pair[0], input_after: pair[1], mode: 'c' })
+		lexima#add_rule({ char: pair[1], at: '\%#' .. pair[1], leave: 1, mode: 'c' })
+	endfor
+	# `I'm`を入力できるようにするルール
+	lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
+}
+# }}}
+
 # MRU {{{
 nnoremap <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
@@ -435,25 +454,6 @@ call textobj#user#plugin('nonwhitespace', {
   '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 #}}}
-
-# lexima {{{
-Enable g:lexima_accept_pum_with_enter
-# 正規表現の括弧 `\(\)`と`\{\}`
-lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
-lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
-lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
-lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
-lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
-# cmdlineでの括弧
-au vimrc ModeChanged *:c* ++once {
-	for pair in ['()', '{}', '""', "''", '``']
-		lexima#add_rule({ char: pair[0], input_after: pair[1], mode: 'c' })
-		lexima#add_rule({ char: pair[1], at: '\%#' .. pair[1], leave: 1, mode: 'c' })
-	endfor
-	# `I'm`を入力できるようにするルール
-	lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
-}
-# }}}
 
 # 補完 {{{
 MultiCmd inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
@@ -832,7 +832,7 @@ au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 
 # ----------------------------------------------------------
 # 閉じる {{{
-def Quit(expr: string)
+def QuitWin(expr: string)
 	if winnr() ==# winnr(expr)
 		return
 	endif
@@ -843,7 +843,7 @@ def Quit(expr: string)
 		confirm quit
 	endif
 enddef
-ExeEach h,j,k,l nnoremap q{} <ScriptCmd>Quit('{}')<CR>
+ExeEach h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
 nnoremap qq <Cmd>confirm q<CR>
