@@ -721,14 +721,23 @@ cnoremap <expr> ( matchstr(getcmdline(), '.', getcmdpos() - 2) ==# '\' ? "(\\)\<
 # その他括弧の補完(`lexima#add_rule()`もいいけどcnoremapも簡潔でいいかも)
 cnoremap [ []<Left>
 cnoremap { {}<Left>
-cnoremap < <><Left>
-cnoremap ' ''<Left>
-cnoremap " ""<Left>
 def SkipIfSame(c: string): string
 	return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
 enddef
-cnoremap ' SkipIfSame("'")
-ExeEach ),],},>,",\ cnoremap <expr> {} SkipIfSame('{}')
+ExeEach ),],},",\ cnoremap <expr> {} SkipIfSame('{}')
+# これは`lexima#add_rule()`のほうがいいか…？
+def AutoQuote(c: string): string
+	if matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c
+		return "\<Right>"
+	endif
+	if c ==# "'" && matchstr(getcmdline(), '.', getcmdpos() - 2) =~# '[a-zA-Z]'
+		return c
+	endif
+	return c .. c .. "\<Left>"
+enddef
+cnoremap <expr> " <SID>AutoQuote('"')
+cnoremap <expr> ` <SID>AutoQuote('`')
+cnoremap <expr> ' <SID>AutoQuote("'")
 #}}}
 
 # ----------------------------------------------------------
@@ -959,6 +968,8 @@ inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
+cnoremap qj <Down>
+cnoremap qk <Up>
 
 # syntax固有の追加強調
 def ClearMySyntax()
