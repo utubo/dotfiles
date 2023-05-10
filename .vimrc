@@ -554,7 +554,7 @@ cno { {}<Left>
 def BE(c: string): string
 return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
 enddef
-ExeEach ),],},",\ cnoremap <expr> {} BE('{}')
+ExeEach ),],},\ cnoremap <expr> {} BE('{}')
 def BF(c: string): string
 if matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c
 return "\<Right>"

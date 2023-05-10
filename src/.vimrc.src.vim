@@ -724,7 +724,7 @@ cnoremap { {}<Left>
 def SkipIfSame(c: string): string
 	return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
 enddef
-ExeEach ),],},",\ cnoremap <expr> {} SkipIfSame('{}')
+ExeEach ),],},\ cnoremap <expr> {} SkipIfSame('{}')
 # これは`lexima#add_rule()`のほうがいいか…？
 def AutoQuote(c: string): string
 	if matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c
