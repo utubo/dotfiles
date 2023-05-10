@@ -436,8 +436,26 @@ call textobj#user#plugin('nonwhitespace', {
 })
 #}}}
 
-# 補完 {{{
+# lexima {{{
 Enable g:lexima_accept_pum_with_enter
+# 正規表現の括弧 `\(\)`と`\{\}`
+lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
+lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
+lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
+lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
+# cmdlineでの括弧
+au vimrc ModeChanged *:c* ++once {
+	for pair in ['()', '{}', '""', "''", '``']
+		lexima#add_rule({ char: pair[0], input_after: pair[1], mode: 'c' })
+		lexima#add_rule({ char: pair[1], at: '\%#' .. pair[1], leave: 1, mode: 'c' })
+	endfor
+	# `I'm`を入力できるようにするルール
+	lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
+}
+# }}}
+
+# 補完 {{{
 MultiCmd inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
 MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
@@ -716,28 +734,6 @@ cnoreabbrev cs colorscheme
 cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
-# 正規表現の括弧を補完する `\(\)`
-cnoremap <expr> ( matchstr(getcmdline(), '.', getcmdpos() - 2) ==# '\' ? "(\\)\<Left>\<Left>" : "()\<Left>"
-# その他括弧の補完(`lexima#add_rule()`もいいけどcnoremapも簡潔でいいかも)
-cnoremap [ []<Left>
-cnoremap { {}<Left>
-def SkipIfSame(c: string): string
-	return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
-enddef
-ExeEach ),],},\ cnoremap <expr> {} SkipIfSame('{}')
-# これは`lexima#add_rule()`のほうがいいか…？
-def AutoQuote(c: string): string
-	if matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c
-		return "\<Right>"
-	endif
-	if c ==# "'" && matchstr(getcmdline(), '.', getcmdpos() - 2) =~# '[a-zA-Z]'
-		return c
-	endif
-	return c .. c .. "\<Left>"
-enddef
-cnoremap <expr> " <SID>AutoQuote('"')
-cnoremap <expr> ` <SID>AutoQuote('`')
-cnoremap <expr> ' <SID>AutoQuote("'")
 #}}}
 
 # ----------------------------------------------------------
