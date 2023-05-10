@@ -67,7 +67,7 @@ command! -nargs=* MultiCmd MultiCmd(<q-args>)
 # nnoremap j gj
 # nnoremap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-# ※MultiCmdに統合できそう
+# ※MultiCmdを統合できそう
 # ※やりすぎ感は否めない
 def ExeEach(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
@@ -716,6 +716,19 @@ cnoreabbrev cs colorscheme
 cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
+# 正規表現の括弧を補完する `\(\)`
+cnoremap <expr> ( matchstr(getcmdline(), '.', getcmdpos() - 2) ==# '\' ? "(\\)\<Left>\<Left>" : "()\<Left>"
+# その他括弧の補完(`lexima#add_rule()`もいいけどcnoremapも簡潔でいいかも)
+cnoremap [ []<Left>
+cnoremap { {}<Left>
+cnoremap < <><Left>
+cnoremap ' ''<Left>
+cnoremap " ""<Left>
+def SkipIfSame(c: string): string
+	return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
+enddef
+cnoremap ' SkipIfSame("'")
+ExeEach ),],},>,",\ cnoremap <expr> {} SkipIfSame('{}')
 #}}}
 
 # ----------------------------------------------------------

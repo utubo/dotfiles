@@ -128,7 +128,8 @@ suite.TestMapping = () => {
 		'x  \([S]\)\|' ..
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)\|' ..
-		'n  <SNR>\d_ws.'
+		'n  <SNR>\d_ws.\|' ..
+		'c  j[jk]'
 
 	# ユーザー定義のマッピング
 	var user_map = join([execute('map'), execute('map!')], "\n")

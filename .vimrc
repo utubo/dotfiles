@@ -548,6 +548,17 @@ cnoreabbrev cs colorscheme
 cno jk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
+cno <expr> ( matchstr(getcmdline(), '.', getcmdpos() - 2) ==# '\' ? "(\\)\<Left>\<Left>" : "()\<Left>"
+cno [ []<Left>
+cno { {}<Left>
+cno < <><Left>
+cno ' ''<Left>
+cno " ""<Left>
+def BE(c: string): string
+return matchstr(getcmdline(), '.', getcmdpos() - 1) ==# c ? "\<Right>" : c
+enddef
+cno ' SkipIfSame("'")
+ExeEach ),],},>,",\ cnoremap <expr> {} BE('{}')
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -558,7 +569,7 @@ endif
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-def BE(a: string = '')
+def BF(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -617,7 +628,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def BF()
+def BG()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -626,9 +637,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <script> <C-g> <ScriptCmd>BE()<CR><scriptCmd>BF()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BE('BufNewFile')
-def BG(a: string)
+nn <script> <C-g> <ScriptCmd>BF()<CR><scriptCmd>BG()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * BF('BufNewFile')
+def BH(a: string)
 if a !=# 'q'
 if winnr() ==# winnr(a)
 return
@@ -643,7 +654,7 @@ endif
 enddef
 nn q <Nop>
 nn Q q
-ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>BG('{}')<CR>
+ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>BH('{}')<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
@@ -717,19 +728,19 @@ ino jjk 「」<C-g>U<Left>
 ino jj<Tab> <ScriptCmd>F('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>F('normal! <<')<CR>
 ino <M-x> <ScriptCmd>ToggleCheckBox()<CR>
-def BH()
+def BI()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BI(a: string, b: string)
+def BJ(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BH()
-au vimrc Syntax javascript,vim BI('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim BI('SpellRare', '\<normal!\@!')
-def BJ()
+au vimrc Syntax * BI()
+au vimrc Syntax javascript,vim BJ('SpellRare', '\s[=!]=\s')
+au vimrc Syntax vim BJ('SpellRare', '\<normal!\@!')
+def CA()
 normal! "vy
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -740,8 +751,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BJ()<CR>
-def CA(): string
+xn <C-g> <ScriptCmd>CA()<CR>
+def CB(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}"''`」', c) ==# -1
 return 'll'
@@ -752,7 +763,7 @@ return 'll'
 endif
 return "\<C-o>a"
 enddef
-ino <expr> ll CA()
+ino <expr> ll CB()
 au vimrc FileType html,xml,svg {
 nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
@@ -768,7 +779,7 @@ imapclear
 mapclear
 }
 endif
-def CB()
+def CC()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -778,14 +789,14 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CB()
+au vimrc ColorSchemePre * CC()
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def CC()
+def CD()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -800,8 +811,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CC()
-def CD()
+au vimrc VimEnter,WinEnter * CD()
+def CE()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -809,8 +820,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CD()
-au vimrc BufNew,BufReadPost * silent! CD()
+au vimrc OptionSet list silent! CE()
+au vimrc BufNew,BufReadPost * silent! CE()
 set t_Co=256
 syntax on
 set bg=dark
@@ -818,10 +829,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CE()
+def CF()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !D()|CE()|endif
+au vimrc VimEnter * ++nested if !D()|CF()|endif
