@@ -225,6 +225,11 @@ g:cmdheight0.format = ' ' ..
 ' '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+au vimrc WinEnter * {
+if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
+cmdheight0#ToggleZen(0)
+endif
+}
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first

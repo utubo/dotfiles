@@ -290,6 +290,13 @@ g:cmdheight0.format = ' ' ..   # パディング
 	' '                         # パディング
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+
+# Zenモードでterminalだけになると混乱するので
+au vimrc WinEnter * {
+	if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
+		cmdheight0#ToggleZen(0)
+	endif
+}
 #}}}
 
 # easymotion {{{
