@@ -833,26 +833,25 @@ au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 # ----------------------------------------------------------
 # 閉じる {{{
 def Quit(expr: string)
-	if expr !=# 'q'
-		if winnr() ==# winnr(expr)
-			return
-		endif
-		execute 'wincmd' expr
+	if winnr() ==# winnr(expr)
+		return
 	endif
+	execute 'wincmd' expr
 	if mode() ==# 't'
 		quit!
 	else
 		confirm quit
 	endif
 enddef
+ExeEach h,j,k,l nnoremap q{} <ScriptCmd>Quit('{}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
-ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>Quit('{}')<CR>
+nnoremap qq <Cmd>confirm q<CR>
+nnoremap qa <Cmd>confirm qa<CR>
 nnoremap qn <Cmd>confirm tabclose +<CR>
 nnoremap qp <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qo <Cmd>confirm tabonly<CR>
-nnoremap qa <Cmd>confirm qa<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?

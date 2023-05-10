@@ -641,26 +641,25 @@ enddef
 nn <script> <C-g> <ScriptCmd>BE()<CR><scriptCmd>BF()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * BE('BufNewFile')
 def BG(a: string)
-if a !=# 'q'
 if winnr() ==# winnr(a)
 return
 endif
 exe 'wincmd' a
-endif
 if mode() ==# 't'
 quit!
 else
 confirm quit
 endif
 enddef
+ExeEach h,j,k,l nnoremap q{} <ScriptCmd>BG('{}')<CR>
 nn q <Nop>
 nn Q q
-ExeEach h,j,k,l,q nnoremap q{} <ScriptCmd>BG('{}')<CR>
+nn qq <Cmd>confirm q<CR>
+nn qa <Cmd>confirm qa<CR>
 nn qn <Cmd>confirm tabclose +<CR>
 nn qp <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn qo <Cmd>confirm tabonly<CR>
-nn qa <Cmd>confirm qa<CR>
 nn q: q:
 nn q/ q/
 nn q? q?
