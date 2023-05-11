@@ -899,9 +899,6 @@ nnoremap <Space><Space>P O<Esc>p
 nnoremap <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
 nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 
-# 分割キーボードで右手親指が<CR>になったので
-nmap <CR> <Space>
-
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
@@ -937,6 +934,10 @@ au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 
 # 辞書ファイル書くときに便利だけどもしかして<CR>ってプレフィックスになりえる？
 nnoremap <CR> j0
+
+# ↓キーボードの設定で<CR>を<Space>に切り替えられるようにしたのでもう不要かな…
+## 分割キーボードで右手親指が<CR>になったので
+#nmap <CR> <Space>
 
 nnoremap <Tab><Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 nnoremap <S-Tab><S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>

@@ -688,7 +688,6 @@ nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
 nn <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
 nn <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
-nm <CR> <Space>
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
