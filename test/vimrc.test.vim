@@ -1,5 +1,8 @@
 vim9script
 
+# ----------------------------------------------------------
+# テスト用関数
+
 # テストフレームワーク {{{
 # (諸々のプラグインを読み込んだ状態の動作を確認したいので自作)
 # Github Actionsで以下の通り実行する
@@ -36,8 +39,19 @@ assert.equals = (act: any, exp: any, msg: string = 'assert.equals') => {
 assert.falsy = (act: any, msg: string = 'assert.falsy') => {
 	assert.equals(act, false, msg)
 }
-
 #}}}
+
+# ユーティリティ {{{
+# 正規表現でマッチする文字列を全て抽出する
+def Scan(expr: any, pat: string, index: number = 0): list<string>
+	var scanResult = []
+	substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
+	return scanResult
+enddef
+#}}}
+
+# ----------------------------------------------------------
+# Lint
 
 # Setup {{{
 # Read .vimrc
@@ -53,15 +67,6 @@ const vimrc_sid = scriptnames_output
 	->split("\n")
 	->filter((i, v) => v =~# '/\.vimrc$')[0]
 	->matchstr('\d\+')
-#}}}
-
-# ユーティリティ {{{
-# 正規表現でマッチする文字列を全て抽出する
-def Scan(expr: any, pat: string, index: number = 0): list<string>
-	var scanResult = []
-	substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
-	return scanResult
-enddef
 #}}}
 
 # setが重複してないこと {{{
@@ -210,6 +215,9 @@ suite.TestMapping = () => {
 }
 # }}}
 
+# ----------------------------------------------------------
+# 動作テスト
+
 # マッピングの動作確認 {{{
 
 # ウィンドウサイズ {{{
@@ -249,24 +257,6 @@ suite.TestCmdlinePair = () => {
 }
 # }}}
 
-#}}}
-
-# その他かんたんなテスト {{{
-suite.TestAutocmd = () => {
-	assert.equals(
-		Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), [],
-		'autocmdはすべてvimrcグループに属すること'
-	)
-}
-
-suite.TestIndent = () => {
-	const has_noexpand = vimrc_str->match('\n\t') !=# -1
-	const has_expand = vimrc_str->match('\n ') !=# -1
-	assert.falsy(
-		has_noexpand && has_expand || has_noexpand && !has_expand,
-		'インデントはハードタブかスペースかどちらかであること'
-	)
-}
 #}}}
 
 # ユーティリティのテスト {{{
@@ -310,4 +300,25 @@ suite.TestTruncToDisplayWidth = () => {
 }
 #}}}
 
+# その他かんたんなテスト {{{
+suite.TestAutocmd = () => {
+	assert.equals(
+		Scan(vimrc_str, '\<au\(tocmd\)\{0,1\} \%(vimrc\)\@!'), [],
+		'autocmdはすべてvimrcグループに属すること'
+	)
+}
+
+suite.TestIndent = () => {
+	const has_noexpand = vimrc_str->match('\n\t') !=# -1
+	const has_expand = vimrc_str->match('\n ') !=# -1
+	assert.falsy(
+		has_noexpand && has_expand || has_noexpand && !has_expand,
+		'インデントはハードタブかスペースかどちらかであること'
+	)
+}
+#}}}
+
+# ----------------------------------------------------------
+
 g:RunTests()
+
