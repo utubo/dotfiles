@@ -4,7 +4,7 @@ vim9script
 # (諸々のプラグインを読み込んだ状態の動作を確認したいので自作)
 # Github Actionsで以下の通り実行する
 # cd $GITHUB_WORKSPACE/test
-# vim -S './vimrc.test.vim'
+# vim -S vimrc.test.vim
 
 # `:source %`で実行した場合は終了させない
 var is_manually_run = expand('%:t') ==# 'vimrc.test.vim'
