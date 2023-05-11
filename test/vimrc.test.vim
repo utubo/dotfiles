@@ -245,9 +245,6 @@ suite.TestCmdlinePair = () => {
 
 	feedkeys(":#I'm\<CR>", 'Lx!')
 	assert.equals(@:, "#I'm")
-
-	feedkeys(":#I'm\<CR>", 'Lx!')
-	assert.equals(@:, "#I'z")
 }
 # }}}
 
