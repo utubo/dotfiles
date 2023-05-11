@@ -41,23 +41,14 @@ assert.falsy = (act: any, msg: string = 'assert.falsy') => {
 }
 #}}}
 
-# ユーティリティ {{{
+# テスト用ユーティリティ {{{
 # 正規表現でマッチする文字列を全て抽出する
 def Scan(expr: any, pat: string, index: number = 0): list<string>
 	var scanResult = []
 	substitute(expr, pat, (m) => add(scanResult, m[index])[0], 'g')
 	return scanResult
 enddef
-#}}}
 
-# ----------------------------------------------------------
-# Lint
-
-# Setup {{{
-# Read .vimrc
-const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
-const vimrc_lines = readfile(vimrc_path)
-const vimrc_str = vimrc_lines->join("\n")
 # スクリプトローカルな関数をテストするためにSIDを確保しておく
 var scriptnames_output = ''
 redir => scriptnames_output
@@ -67,6 +58,15 @@ const vimrc_sid = scriptnames_output
 	->split("\n")
 	->filter((i, v) => v =~# '/\.vimrc$')[0]
 	->matchstr('\d\+')
+#}}}
+
+# ----------------------------------------------------------
+# Lint
+
+# .vimrc読み込み {{{
+const vimrc_path = expand('%:p:h:h') .. '/.vimrc'
+const vimrc_lines = readfile(vimrc_path)
+const vimrc_str = vimrc_lines->join("\n")
 #}}}
 
 # setが重複してないこと {{{
