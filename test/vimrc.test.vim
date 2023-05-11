@@ -1,41 +1,42 @@
 vim9script
 
 # テストフレームワーク {{{
-# 諸々のプラグインを読み込んでVimEnter後にテストをしたいので自作するしかなさそう
-#const suite = themis#suite('Test for .vimrc')
-#const assert = themis#helper('assert')
-#execute 'source ' .. vimrc_path
-
+# (諸々のプラグインを読み込んだ状態の動作を確認したいので自作)
 # Github Actionsで以下の通り実行する
 # cd $GITHUB_WORKSPACE/test
-# vim -c 'let $run_with_ci=1|source ./vimrc.test.vim' dummy.vim
+# vim -S './vimrc.test.vim'
 
-# themis like instead of assert_eqaul()
+# `:source %`で実行した場合は終了させない
+var is_manually_run = expand('%:t') ==# 'vimrc.test.vim'
 var suite = {}
 var assert = {}
-g:test_failed = false
+var is_faild = false
+
+def! g:RunTests()
+	is_faild = false
+	for s in suite->keys()
+		echom s
+		suite[s]()
+	endfor
+	echom is_faild ? 'Tests faild.' : 'Tests success.'
+	if !is_manually_run
+		execute is_faild ? 'cq!' : 'q!'
+	endif
+enddef
+
 assert.equals = (act: any, exp: any, msg: string = 'assert.equals') => {
 	if act !=# exp
-		g:test_failed = true
+		is_faild = true
 		echom $'  {msg}'
 		echom $'    act: {act}'
 		echom $'    exp: {exp}'
 	endif
 }
-assert.falsy = (act: any, msg: string = '') => {
+
+assert.falsy = (act: any, msg: string = 'assert.falsy') => {
 	assert.equals(act, false, msg)
 }
-def! g:RunTests()
-	g:test_failed = false
-	for s in suite->keys()
-		echom s
-		suite[s]()
-	endfor
-	echom g:test_failed ? 'Tests faild.' : 'Tests success.'
-	if !!$run_with_ci
-		execute g:test_failed ? 'cq' : 'q'
-	endif
-enddef
+
 #}}}
 
 # Setup {{{

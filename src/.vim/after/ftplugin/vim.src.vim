@@ -37,7 +37,7 @@ def TestVimrc()
 		echo 'Testing ...'
 		test_dump = []
 		job_start(
-			["vim", "-c", "let $run_with_ci=1", "-c", "source ../test/vimrc.test.vim", "dummy.vim"],
+			['vim', '-S', '../test/vimrc.test.vim'],
 			{ exit_cb: g:TestExit, out_cb: g:TestOutput, err_cb: g:TestOutput }
 		)
 	endif
