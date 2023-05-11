@@ -9,22 +9,29 @@ aug END
 nn <buffer> g! <Cmd>update<CR><Cmd>source %<CR>
 nn <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
 nn <buffer> <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
+var k = []
+def g:TestOutput(a: any, b: string)
+k += [b->substitute('\%C', '', 'g')->trim()]
+enddef
 def g:TestExit(a: any, b: number)
 if b ==# 0
 echoh Statement
 ec 'Test Success'
 else
-echoh ErrorMsg
-ec 'Test Error!'
+echoe 'Test Error!'
+for d in k
+echoe d
+endfor
 endif
 echoh Normal
 enddef
 def A()
 if expand('%:t') ==# '.vimrc.src.vim'
 ec 'Testing ...'
+k = []
 job_start(
 ["vim", "-c", "let $run_with_ci=1", "-c", "source ../test/vimrc.test.vim", "dummy.vim"],
-{ exit_cb: g:TestExit }
+{ exit_cb: g:TestExit, out_cb: g:TestOutput, err_cb: g:TestOutput }
 )
 endif
 enddef

@@ -14,7 +14,7 @@ vim9script
 var suite = {}
 var assert = {}
 g:test_failed = false
-assert.equals = (act: any, exp: any, msg: string = '') => {
+assert.equals = (act: any, exp: any, msg: string = 'assert.equals') => {
 	if act !=# exp
 		g:test_failed = true
 		echom $'  {msg}'
@@ -245,6 +245,9 @@ suite.TestCmdlinePair = () => {
 
 	feedkeys(":#I'm\<CR>", 'Lx!')
 	assert.equals(@:, "#I'm")
+
+	feedkeys(":#I'm\<CR>", 'Lx!')
+	assert.equals(@:, "#I'z")
 }
 # }}}
 
