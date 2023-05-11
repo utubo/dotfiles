@@ -210,6 +210,8 @@ suite.TestMapping = () => {
 # }}}
 
 # マッピングの動作確認 {{{
+
+# ウィンドウサイズ {{{
 suite.TestWindowSizeChange = () => {
 	# 高さ
 	split
@@ -228,6 +230,24 @@ suite.TestWindowSizeChange = () => {
 	assert.equals(winwidth(0), w, '<C-w><<でウインドウ幅-2')
 	quit
 }
+# }}}
+
+# cmdlineの括弧 {{{
+suite.TestCmdlinePair = () => {
+	feedkeys(":#\"({'`\<CR>", 'Lx!')
+	assert.equals(@:, '#"({''``''})"')
+
+	feedkeys(":#\\(\<CR>", 'Lx!')
+	assert.equals(@:, '#\(\)')
+
+	feedkeys(":#\\{\<CR>", 'Lx!')
+	assert.equals(@:, '#\{\}')
+
+	feedkeys(":#I'm\<CR>", 'Lx!')
+	assert.equals(@:, "#I'm")
+}
+# }}}
+
 #}}}
 
 # その他かんたんなテスト {{{
