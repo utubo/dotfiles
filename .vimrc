@@ -712,8 +712,12 @@ nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 nn <CR> j0
-nn <Tab><Tab> <ScriptCmd>F('normal! >>')<CR>
-nn <S-Tab><S-Tab> <ScriptCmd>F('normal! <<')<CR>
+nn <Tab> <ScriptCmd>F('normal! >>')<CR>
+nn <S-Tab> <ScriptCmd>F('normal! <<')<CR>
+au vimrc FileType html,xml,svg {
+nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+}
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
@@ -765,10 +769,6 @@ endif
 return "\<C-o>a"
 enddef
 ino <expr> ll CA()
-au vimrc FileType html,xml,svg {
-nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
-}
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A

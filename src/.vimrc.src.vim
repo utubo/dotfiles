@@ -939,8 +939,15 @@ nnoremap <CR> j0
 ## 分割キーボードで右手親指が<CR>になったので
 #nmap <CR> <Space>
 
-nnoremap <Tab><Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-nnoremap <S-Tab><S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+# <Tab>でインデント
+nnoremap <Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+nnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+
+# タグの中に侵入 ↑と競合しちゃってるけどとりあえず様子見
+au vimrc FileType html,xml,svg {
+	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+}
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
@@ -1011,12 +1018,6 @@ def SkipParen(): string
 	return  "\<C-o>a"
 enddef
 inoremap <expr> ll SkipParen()
-
-# タグの中に侵入
-au vimrc FileType html,xml,svg {
-	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
-}
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
