@@ -565,11 +565,18 @@ if getcmdtype() !=# ':'
 return c
 endif
 const a = getcmdline()
-if a =~# '^[^/#]*g$'
-return c ==# '!' ? "!//\<Left>" : $"{c}{c}\<Left>"
+if getcmdpos() !=# a->len() + 1 || a =~# '\s'
+return c
 endif
-if a =~# '^\S*s$'
+const e = a[-1]
+if e ==# 's'
 return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
+endif
+if e ==# 'g' && c ==# '!'
+return "!//\<Left>"
+endif
+if e ==# 'g' || e ==# 'v'
+return $"{c}{c}\<Left>"
 endif
 return c
 enddef

@@ -740,11 +740,18 @@ def CmdlineAutoPair(c: string): string
 		return c
 	endif
 	const cl = getcmdline()
-	if cl =~# '^[^/#]*g$'
-		return c ==# '!' ? "!//\<Left>" : $"{c}{c}\<Left>"
+	if getcmdpos() !=# cl->len() + 1 || cl =~# '\s'
+		return c
 	endif
-	if cl =~# '^\S*s$'
+	const e = cl[-1]
+	if e ==# 's'
 		return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
+	endif
+	if e ==# 'g' && c ==# '!'
+		return "!//\<Left>"
+	endif
+	if e ==# 'g' || e ==# 'v'
+		return $"{c}{c}\<Left>"
 	endif
 	return c
 enddef
