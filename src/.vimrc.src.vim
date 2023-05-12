@@ -734,6 +734,23 @@ cnoreabbrev cs colorscheme
 cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
+# `/`を補完 {{{
+def CmdlineAutoPair(c: string): string
+	if getcmdtype() !=# ':'
+		return c
+	endif
+	const cl = getcmdline()
+	if cl =~# '^\S*g$'
+		return c ==# '!' ? "!//\<Left>" : $"{c}{c}\<Left>"
+	endif
+	if cl =~# '^\S*s$'
+		return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
+	endif
+	return c
+enddef
+# `/`以外も使うかも`%s#foo/bar#buz#g`みたいなかんじ
+ExeEach /,#,! cnoremap <script> <expr> {} CmdlineAutoPair('{}')
+#}}}
 #}}}
 
 # ----------------------------------------------------------
