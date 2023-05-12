@@ -118,3 +118,25 @@ export def BigMac(first: bool = true)
 	endif
 enddef
 #}}}
+
+# `:%g!/re/d` の結果を新規ウインドウに表示 {{{
+# (Buffer Regular Expression Print)
+export def Brep(regex: string, mods: string)
+	var res = []
+	for l in getline(1, '$')
+		if l =~# regex
+			res += [l]
+		endif
+	endfor
+	if empty(res)
+		echoh ErrorMsg
+		echo 'Pattern not found: ' .. regex
+		echoh Normal
+		return
+	endif
+	execute $'{mods} new'
+	append(0, res)
+	setlocal nomodified
+enddef
+#}}}
+

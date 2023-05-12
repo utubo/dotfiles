@@ -1036,6 +1036,10 @@ def SkipParen(): string
 enddef
 inoremap <expr> ll SkipParen()
 
+# `:%g!/re/d` の結果を新規ウインドウに表示
+# (Buffer Regular Expression Print)
+command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 

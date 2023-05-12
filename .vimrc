@@ -783,6 +783,7 @@ endif
 return "\<C-o>a"
 enddef
 ino <expr> ll CB()
+com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A

@@ -95,3 +95,20 @@ feedkeys('gvS')
 endif
 endif
 enddef
+export def Brep(a: string, b: string)
+var c = []
+for l in getline(1, '$')
+if l =~# a
+c += [l]
+endif
+endfor
+if empty(c)
+echoh ErrorMsg
+ec 'Pattern not found: ' .. a
+echoh Normal
+return
+endif
+exe $'{b} new'
+append(0, c)
+setl nomodified
+enddef
