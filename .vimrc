@@ -565,7 +565,7 @@ if getcmdtype() !=# ':'
 return c
 endif
 const a = getcmdline()
-if a =~# '^\S*g$'
+if a =~# '^[^/#]*g$'
 return c ==# '!' ? "!//\<Left>" : $"{c}{c}\<Left>"
 endif
 if a =~# '^\S*s$'
