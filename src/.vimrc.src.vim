@@ -395,6 +395,7 @@ g:sandwich#recipes += [
 	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 	{ buns: ['',   ''  ], input: ['q'] },
 	{ buns: ['「', '」'], input: ['k'] },
+	{ buns: ['【', '】'], input: ['k'] },
 	{ buns: ['{ ', ' }'], input: ['{'] },
 	{ buns: ['${', '}' ], input: ['${'] },
 	{ buns: ['%{', '}' ], input: ['%{'] },
@@ -620,7 +621,7 @@ nnoremap zd <ScriptCmd>myutil#Zd()<CR>
 
 # ----------------------------------------------------------
 # Tabline {{{
-# 例: `current.txt|✏sub.txt|🐙..`(3つめ以降は省略)
+# 例: `current.txt|✏sub.txt|🐙>`(3つめ以降は省略)
 g:tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
@@ -669,7 +670,7 @@ def! g:MyTablabel(tab: number = 0): string
 	for b in bufs
 		i += 1
 		if len(names) ==# 2
-			names += [(MyTablabelSign(bufs[i : ], true) .. '..')]
+			names += [(MyTablabelSign(bufs[i : ], true) .. '>')]
 			break
 		endif
 		var name = bufname(b)
@@ -678,7 +679,10 @@ def! g:MyTablabel(tab: number = 0): string
 		elseif getbufvar(b, '&buftype') ==# 'terminal'
 			name = term_getline(b, '.')->trim()
 		endif
-		name = name->pathshorten()[- g:tabline_maxlen : ]
+		name = name->pathshorten()
+		if g:tabline_maxlen < len(name)
+			name = '<' .. name->matchstr(repeat('.', g:tabline_maxlen - 1) .. '$')
+		endif
 		if names->index(name) ==# -1
 			names += [MyTablabelSign([b]) .. name]
 		endif

@@ -304,6 +304,7 @@ g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
 { buns: ['', '' ], input: ['q'] },
 { buns: ['「', '」'], input: ['k'] },
+{ buns: ['【', '】'], input: ['k'] },
 { buns: ['{ ', ' }'], input: ['{'] },
 { buns: ['${', '}' ], input: ['${'] },
 { buns: ['%{', '}' ], input: ['%{'] },
@@ -509,7 +510,7 @@ var i = -1
 for b in d
 i += 1
 if len(f) ==# 2
-f += [(BD(d[i : ], true) .. '..')]
+f += [(BD(d[i : ], true) .. '>')]
 break
 endif
 var h = bufname(b)
@@ -518,7 +519,10 @@ h = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
 h = term_getline(b, '.')->trim()
 endif
-h = h->pathshorten()[- g:tabline_maxlen : ]
+h = h->pathshorten()
+if g:tabline_maxlen < len(h)
+h = '<' .. h->matchstr(repeat('.', g:tabline_maxlen - 1) .. '$')
+endif
 if f->index(h) ==# -1
 f += [BD([b]) .. h]
 endif
