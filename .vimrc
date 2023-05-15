@@ -23,6 +23,7 @@ set ambw=double
 set bo=all
 set ttm=50
 set wmnu
+set wildcharm=<Tab>
 set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
@@ -263,7 +264,7 @@ endif
 echoh Normal
 enddef
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
-return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:']
+return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '🎉release:']
 enddef
 com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def BA(a: string)
@@ -273,7 +274,7 @@ enddef
 com! -nargs=1 GitTagPush BA(<q-args>)
 nn <Space>ga <ScriptCmd>J()<CR>
 nn <Space>gA :<C-u>Git add %
-nn <Space>gc :<C-u>GitCommit<Space>
+nn <Space>gc :<C-u>GitCommit<Space><Tab>
 nn <Space>gp :<C-u>Git push
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>

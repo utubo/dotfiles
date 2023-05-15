@@ -26,6 +26,7 @@ set ambiwidth=double
 set belloff=all
 set ttimeoutlen=50
 set wildmenu
+set wildcharm=<Tab>
 set autochdir
 set backupskip=/var/tmp/*
 set undodir=~/.vim/undo
@@ -339,7 +340,7 @@ def GitAddAll()
 	echoh Normal
 enddef
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
-	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:']
+	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '🎉release:']
 enddef
 command! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def GitTagPush(tagname: string)
@@ -349,7 +350,7 @@ enddef
 command! -nargs=1 GitTagPush GitTagPush(<q-args>)
 nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
 nnoremap <Space>gA :<C-u>Git add %
-nnoremap <Space>gc :<C-u>GitCommit<Space>
+nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
 nnoremap <Space>gp :<C-u>Git push
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
