@@ -798,6 +798,24 @@ return "\<C-o>a"
 enddef
 ino <expr> ll CB()
 com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
+def CC(): string
+sil! cu <Esc>
+cno h <Left>
+cno l <Right>
+cno x <Delete>
+cno $ <End><Left>
+cno ^ <Home>
+cno <script> <expr> i CD('i')
+cno <script> <expr> a CD('a')
+cm A $a
+return ""
+enddef
+def CD(c: string = 'i'): string
+ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
+cno <script> <expr> <Esc> CC()
+return c ==# 'i' ? '' : "\<Right>"
+enddef
+cno <script> <expr> <C-n> CC()
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A
@@ -809,7 +827,7 @@ imapclear
 mapclear
 }
 endif
-def CC()
+def CE()
 g:rainbow_conf = {
 guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
 ctermfgs: ['105', '117', '120', '228', '212', '177']
@@ -819,14 +837,14 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CC()
+au vimrc ColorSchemePre * CE()
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def CD()
+def CF()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -841,8 +859,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CD()
-def CE()
+au vimrc VimEnter,WinEnter * CF()
+def CG()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -850,8 +868,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CE()
-au vimrc BufNew,BufReadPost * silent! CE()
+au vimrc OptionSet list silent! CG()
+au vimrc BufNew,BufReadPost * silent! CG()
 set t_Co=256
 syntax on
 set bg=dark
@@ -859,10 +877,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CF()
+def CH()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !D()|CF()|endif
+au vimrc VimEnter * ++nested if !D()|CH()|endif

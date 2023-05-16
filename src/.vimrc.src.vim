@@ -1054,6 +1054,27 @@ inoremap <expr> ll SkipParen()
 # (Buffer Regular Expression Print)
 command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 
+# cmdlineでノーマルモードみたいにするやつ
+def CmdToNormal(): string
+	silent! cunmap <Esc>
+	cnoremap h <Left>
+	cnoremap l <Right>
+	cnoremap x <Delete>
+	cnoremap $ <End><Left>
+	cnoremap ^ <Home>
+	cnoremap <script> <expr> i CmdToInsert('i')
+	cnoremap <script> <expr> a CmdToInsert('a')
+	cmap A $a
+	return ""
+enddef
+def CmdToInsert(c: string = 'i'): string
+	ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
+	cnoremap <script> <expr> <Esc> CmdToNormal()
+	return c ==# 'i' ? '' : "\<Right>"
+enddef
+# 怖いのでショートカットを押したら起動
+cnoremap <script> <expr> <C-n> CmdToNormal()
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 

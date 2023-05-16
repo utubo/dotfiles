@@ -128,6 +128,8 @@ suite.TestMapping = () => {
 	# i  [     vim-laxima
 	# i  <Esc> vim-laxima
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
+	# n  \\KK  vim-yomigana
+	# n  \\HH  vim-yomigana
 	var user_ignore = '\C' ..
 		'n  \([qS:]\|<Plug>fugitive:\)\|' ..
 		'v  \([J]\)\|' ..
@@ -135,6 +137,8 @@ suite.TestMapping = () => {
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)\|' ..
 		'n  <SNR>\d_ws.\|' ..
+		'n  \\KK\|' ..
+		'n  \\HH\|' ..
 		'c  j[jk]'
 
 	# ユーザー定義のマッピング
