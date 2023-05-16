@@ -181,6 +181,7 @@ Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-yomigana'
 # 🐶🍚様子見中
 Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-portal-aim'
