@@ -282,6 +282,7 @@ nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
+nn <Space>gC :<C-u>Git checkout %
 Enable g:lexima_accept_pum_with_enter
 lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
 lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })

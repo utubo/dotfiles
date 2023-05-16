@@ -358,6 +358,7 @@ nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>gt :<C-u>GitTagPush<Space>
+nnoremap <Space>gC :<C-u>Git checkout %
 #}}}
 
 # lexima {{{
