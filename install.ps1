@@ -7,6 +7,7 @@ New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vsnip -Path ~/.vsnip
 mkdir -p ~/vimfiles
 New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vim/after -Path ~/vimfiles/after
 New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vim/autoload -Path ~/vimfiles/autoload
+New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vim/scripts.vim -Path ~/vimfiles/scripts.vim
 
 git config --global core.excludesfile ~/.gitignore_global
 
