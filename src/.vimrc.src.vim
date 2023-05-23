@@ -149,7 +149,6 @@ Jetpack 'machakann/vim-sandwich'
 Jetpack 'mattn/ctrlp-matchfuzzy'
 Jetpack 'mattn/vim-notification'
 Jetpack 'matze/vim-move'         # 行移動
-Jetpack 'mechatroner/rainbow_csv'
 Jetpack 'michaeljsmith/vim-indent-object'
 Jetpack 'MTDL9/vim-log-highlighting'
 Jetpack 'obcat/vim-hitspop'
@@ -1107,10 +1106,6 @@ endif
 # 色 {{{
 def DefaultColors()
 	# (メモ)autocmdの{}は行末が`,`だとエラーになる
-	g:rainbow_conf = {
-		guifgs: ['#9999ee', '#99ccee', '#99ee99', '#eeee99', '#ee99cc', '#cc99ee'],
-		ctermfgs: ['105', '117', '120', '228', '212', '177']
-	}
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
