@@ -739,8 +739,8 @@ nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 nn <CR> j0
-nn <Tab> <ScriptCmd>F('normal! >>')<CR>
-nn <S-Tab> <ScriptCmd>F('normal! <<')<CR>
+nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 au vimrc FileType html,xml,svg {
 nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>

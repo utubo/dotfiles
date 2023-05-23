@@ -970,10 +970,12 @@ nnoremap <CR> j0
 #nmap <CR> <Space>
 
 # <Tab>でインデント
-nnoremap <Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-nnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+#nnoremap <Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+#nnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 
-# タグの中に侵入 ↑と競合しちゃってるけどとりあえず様子見
+# <Tab>でtsvとかcsvとかhtmlの次の項目
+nnoremap <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+nnoremap <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 au vimrc FileType html,xml,svg {
 	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
 	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
