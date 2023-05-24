@@ -1059,16 +1059,18 @@ def CmdToNormal(): string
 	cnoremap jk <C-c>
 	cnoremap h <Left>
 	cnoremap l <Right>
-	cnoremap x <Delete>
+	cnoremap b <S-Left>
+	cnoremap w <S-Right>
 	cnoremap $ <End><Left>
 	cnoremap ^ <Home>
+	cnoremap x <Delete>
 	cnoremap <script> <expr> i CmdToInsert('i')
 	cnoremap <script> <expr> a CmdToInsert('a')
 	cmap A $a
 	return ""
 enddef
 def CmdToInsert(c: string = 'i'): string
-	ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
+	ExeEach h,l,b,w,^,$,x,i,a,A silent! cunmap {}
 	cnoremap <script> <expr> jk CmdToNormal()
 	return c ==# 'i' ? '' : "\<Right>"
 enddef

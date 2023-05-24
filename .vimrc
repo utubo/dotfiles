@@ -800,16 +800,18 @@ def CC(): string
 cno jk <C-c>
 cno h <Left>
 cno l <Right>
-cno x <Delete>
+cno b <S-Left>
+cno w <S-Right>
 cno $ <End><Left>
 cno ^ <Home>
+cno x <Delete>
 cno <script> <expr> i CD('i')
 cno <script> <expr> a CD('a')
 cm A $a
 return ""
 enddef
 def CD(c: string = 'i'): string
-ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
+ExeEach h,l,b,w,^,$,x,i,a,A silent! cunmap {}
 cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
