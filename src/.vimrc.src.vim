@@ -735,9 +735,8 @@ cnoremap <C-p> <Up>
 cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
-# 「jj」で<CR>、「jk」はキャンセル
+# 「jj」で<CR>
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap jk <C-c>
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
 # `/`を補完 {{{
@@ -1057,7 +1056,7 @@ command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 
 # cmdlineでノーマルモードみたいにするやつ
 def CmdToNormal(): string
-	silent! cunmap <Esc>
+	cnoremap jk <C-c>
 	cnoremap h <Left>
 	cnoremap l <Right>
 	cnoremap x <Delete>
@@ -1070,11 +1069,12 @@ def CmdToNormal(): string
 enddef
 def CmdToInsert(c: string = 'i'): string
 	ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
-	cnoremap <script> <expr> <Esc> CmdToNormal()
+	cnoremap <script> <expr> jk CmdToNormal()
 	return c ==# 'i' ? '' : "\<Right>"
 enddef
-# 怖いのでショートカットを押したら起動
-cnoremap <script> <expr> <C-n> CmdToNormal()
+au vimrc ModeChanged *:c CmdToInsert()
+# ↓これは無しにしてみる
+#cnoremap jk <C-c>
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------

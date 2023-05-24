@@ -563,7 +563,6 @@ cno <C-p> <Up>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
-cno jk <C-c>
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
 def BE(c: string): string
@@ -798,7 +797,7 @@ enddef
 ino <expr> ll CB()
 com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 def CC(): string
-sil! cu <Esc>
+cno jk <C-c>
 cno h <Left>
 cno l <Right>
 cno x <Delete>
@@ -811,10 +810,10 @@ return ""
 enddef
 def CD(c: string = 'i'): string
 ExeEach h,l,x,^,$,i,a,A silent! cunmap {}
-cno <script> <expr> <Esc> CC()
+cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
-cno <script> <expr> <C-n> CC()
+au vimrc ModeChanged *:c CD()
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A
