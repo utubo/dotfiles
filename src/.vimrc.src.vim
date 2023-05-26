@@ -1078,6 +1078,21 @@ au vimrc ModeChanged *:c CmdToInsert()
 # ↓これは無しにしてみる
 #cnoremap jk <C-c>
 
+# もしかしてcmdwinを1行にすれば同じような使い心地になるかも？
+set cmdwinheight=1
+def ExpandCmdwin()
+	if winheight(0) ==# 1
+		resize 7
+		normal! ggG
+	else
+		normal! k
+	endif
+enddef
+au vimrc CmdwinEnter * {
+	nnoremap <buffer> k <ScriptCmd>ExpandCmdwin()<CR>
+	normal! i
+}
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
@@ -1189,7 +1204,7 @@ au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
 # <F6>
 # <F7>
 # <F8>
-# <F9>
+# <F9> ここまでよんだ
 # <F10> ヘッダ行を表示(あんまり使わない)
 # <F11> 行番号表示切替
 # <F12> 折り返し表示切替

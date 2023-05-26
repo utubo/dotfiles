@@ -816,6 +816,19 @@ cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CD()
+set cmdwinheight=1
+def CE()
+if winheight(0) ==# 1
+resize 7
+normal! ggG
+else
+normal! k
+endif
+enddef
+au vimrc CmdwinEnter * {
+nn <buffer> k <ScriptCmd>CE()<CR>
+normal! i
+}
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>a A
@@ -827,20 +840,20 @@ imapclear
 mapclear
 }
 endif
-def CE()
+def CF()
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 enddef
-au vimrc ColorSchemePre * CE()
+au vimrc ColorSchemePre * CF()
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def CF()
+def CG()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -855,8 +868,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CF()
-def CG()
+au vimrc VimEnter,WinEnter * CG()
+def CH()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -864,8 +877,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CG()
-au vimrc BufNew,BufReadPost * silent! CG()
+au vimrc OptionSet list silent! CH()
+au vimrc BufNew,BufReadPost * silent! CH()
 set t_Co=256
 syntax on
 set bg=dark
@@ -873,10 +886,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CH()
+def CI()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !D()|CH()|endif
+au vimrc VimEnter * ++nested if !D()|CI()|endif
