@@ -840,6 +840,7 @@ imapclear
 mapclear
 }
 endif
+nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 def CF()
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],

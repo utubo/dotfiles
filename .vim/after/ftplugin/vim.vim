@@ -8,7 +8,6 @@ au!
 aug END
 nn <buffer> g! <Cmd>update<CR><Cmd>source %<CR>
 nn <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
-nn <buffer> <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 var k = []
 def g:TestOutput(a: any, b: string)
 k += [b->substitute('\%C', '', 'g')->trim()]

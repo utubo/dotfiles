@@ -1123,6 +1123,7 @@ endif
 
 # ----------------------------------------------------------
 # 色 {{{
+nnoremap <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
 def DefaultColors()
 	# (メモ)autocmdの{}は行末が`,`だとエラーになる
 	g:rcsv_colorpairs = [

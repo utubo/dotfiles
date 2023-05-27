@@ -11,7 +11,6 @@ augroup END
 
 nnoremap <buffer> g! <Cmd>update<CR><Cmd>source %<CR>
 nnoremap <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
-nnoremap <buffer> <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
 
 # .vimrcを保存したらテストを実行する {{{
 var test_dump = []
