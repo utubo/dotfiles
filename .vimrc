@@ -364,9 +364,11 @@ enddef
 BB('omni', ['*'], ['c', 'cpp', 'html'])
 BB('buffer', ['*'], ['go'])
 Enable g:rainbow_active
-g:auto_cursorline_wait_ms = &ut
+Enable g:ctrlp_use_caching
+Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
+g:auto_cursorline_wait_ms = &ut
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
 au vimrc VimEnter * silent! NoMatchParen
