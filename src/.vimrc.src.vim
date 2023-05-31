@@ -546,7 +546,6 @@ au vimrc BufReadPost * SetupTabstop()
 # ----------------------------------------------------------
 # vimgrep {{{
 command! -nargs=+ -complete=dir VimGrep myutil#VimGrep(<f-args>)
-nmap <Space>/ :<C-u>VimGrep<Space>
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
@@ -578,10 +577,8 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 # スマホ用 {{{
 # - キーが小さいので押しにくいものはSpaceへマッピング
 # - スマホでのコーディングは基本的にバグ取り
-nnoremap <Space>zz <Cmd>q!<CR>
 # スタックトレースからyankしてソースの該当箇所を探すのを補助
 nnoremap <Space>e G?\cErr\\|Exception<CR>
-nnoremap <Space>y yiw
 nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 # スマホだと:と/とファンクションキーが遠いので…
 nmap <Space>. :
@@ -926,8 +923,6 @@ xnoremap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap <Space><Space>p o<Esc>P
-nnoremap <Space><Space>P O<Esc>p
 nnoremap <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
 nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 
@@ -935,7 +930,6 @@ nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
-nnoremap TT <Cmd>silent! tabnext #<CR>
 
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
@@ -955,14 +949,16 @@ inoremap （） ()<C-g>U<Left>
 # ----------------------------------------------------------
 # 様子見中 {{{
 # 使わなそうなら削除する
+nnoremap <Space>a A
 xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
 xnoremap P p
-nnoremap <silent> g; g;zO
 nnoremap <Space>h ^
 nnoremap <Space>l $
-nnoremap <Space>d "_d
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+
+# 移動した後折り畳みを展開
+nnoremap <silent> g; g;zO
 
 # 辞書ファイル書くときに便利だけどもしかして<CR>ってプレフィックスになりえる？
 nnoremap <CR> j0
@@ -1102,11 +1098,19 @@ au vimrc CmdwinEnter * {
 # ----------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
+# 存在を忘れる
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
+nnoremap <Space><Space>p o<Esc>P
+nnoremap <Space><Space>P O<Esc>p
+nnoremap <Space>d "_d
 
-nnoremap <Space>a A
+# 使用頻度が低いうえに1ストロークの差
+nnoremap <Space>y yiw
+
+# qqでヨシ
+nnoremap <Space>zz <Cmd>q!<CR>
 
 # sandwich
 nmap S^ v^S

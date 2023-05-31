@@ -418,7 +418,6 @@ setpos('.', b)
 enddef
 au vimrc BufReadPost * BC()
 com! -nargs=+ -complete=dir VimGrep myutil#VimGrep(<f-args>)
-nm <Space>/ :<C-u>VimGrep<Space>
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
@@ -435,9 +434,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-nn <Space>zz <Cmd>q!<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
-nn <Space>y yiw
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
 nm <Space>, /
@@ -713,14 +710,11 @@ xn gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
-nn <Space><Space>p o<Esc>P
-nn <Space><Space>P O<Esc>p
 nn <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
 nn <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
-nn TT <Cmd>silent! tabnext #<CR>
 ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
@@ -732,14 +726,14 @@ ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
 ino （ ()<C-g>U<Left>
 ino （） ()<C-g>U<Left>
+nn <Space>a A
 xn <expr> p $'"_s<C-R>{v:register}<ESC>'
 xn P p
-nn <silent> g; g;zO
 nn <Space>h ^
 nn <Space>l $
-nn <Space>d "_d
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+nn <silent> g; g;zO
 nn <CR> j0
 nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
 nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
@@ -834,7 +828,11 @@ normal! i
 }
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
-nn <Space>a A
+nn <Space><Space>p o<Esc>P
+nn <Space><Space>P O<Esc>p
+nn <Space>d "_d
+nn <Space>y yiw
+nn <Space>zz <Cmd>q!<CR>
 nm S^ v^S
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {
