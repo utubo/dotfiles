@@ -1122,8 +1122,14 @@ nmap S^ v^S
 if strftime('%d') ==# '01'
 	au vimrc VimEnter * {
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
-		imapclear
 		mapclear
+		imapclear
+		xmapclear
+		cmapclear
+		omapclear
+		tmapclear
+		# CursorHoldでfeedkyesしているので…
+		nnoremap <Space>n <Nop>
 	}
 endif
 #}}} -------------------------------------------------------

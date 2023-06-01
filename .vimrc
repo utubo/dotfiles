@@ -837,8 +837,13 @@ nm S^ v^S
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
-imapclear
 mapclear
+imapclear
+xmapclear
+cmapclear
+omapclear
+tmapclear
+nn <Space>n <Nop>
 }
 endif
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
