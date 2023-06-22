@@ -289,18 +289,21 @@ nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
 Enable g:lexima_accept_pum_with_enter
+def g:SetupLexima(a: number)
 lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
 lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
 lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
 lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
 lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
 au vimrc ModeChanged *:c* ++once {
-for lq in ['()', '{}', '""', "''", '``']
-lexima#add_rule({ char: lq[0], input_after: lq[1], mode: 'c' })
-lexima#add_rule({ char: lq[1], at: '\%#' .. lq[1], leave: 1, mode: 'c' })
+for b in ['()', '{}', '""', "''", '``']
+lexima#add_rule({ char: b[0], input_after: b[1], mode: 'c' })
+lexima#add_rule({ char: b[1], at: '\%#' .. b[1], leave: 1, mode: 'c' })
 endfor
 lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
 }
+enddef
+timer_start(1000, g:SetupLexima)
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -387,9 +390,9 @@ MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lr = expand($'{lk}/pack/local/opt/*')
-if lr !=# ''
-&runtimepath = $'{substitute(lr, '\n', ',', 'g')},{&runtimepath}'
+const lq = expand($'{lk}/pack/local/opt/*')
+if lq !=# ''
+&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'

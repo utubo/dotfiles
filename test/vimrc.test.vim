@@ -247,6 +247,7 @@ suite.TestWindowSizeChange = () => {
 
 # cmdlineの括弧 {{{
 suite.TestCmdlinePair = () => {
+	g:SetupLexima(0)
 	feedkeys(":#\"({'`\<CR>", 'Lx!')
 	assert.equals(@:, '#"({''``''})"')
 
