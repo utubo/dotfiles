@@ -755,6 +755,8 @@ xn <F10> <ESC>1<C-w>s<C-w>w
 nn ' "
 nn m '
 nn M m
+nn <F9> my
+nn <S-F9> 'y
 ino jj <C-o>
 ino jje <C-o>e<C-o>a
 ino jj; <C-o>$;<CR>

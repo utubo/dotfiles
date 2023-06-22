@@ -998,6 +998,10 @@ nnoremap ' "
 nnoremap m '
 nnoremap M m
 
+# ここまで読んだ
+nnoremap <F9> my
+nnoremap <S-F9> 'y
+
 # 悪くないけどノーマルモードでjjを誤爆する
 inoremap jj <C-o>
 inoremap jje <C-o>e<C-o>a
