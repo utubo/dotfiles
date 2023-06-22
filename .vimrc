@@ -249,17 +249,23 @@ nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 def J()
+echoh MoreMsg
 ec 'git add -A -n'
 const a = system('git add -A -n')
 if !a
 ec 'none.'
+elseif !!v:shell_error
+echoh ErrorMsg
+ec a
+echoh Normal
 return
-endif
+else
 echoh DiffAdd
 ec a
 echoh Question
 if input("execute ? (y/n) > ", 'y') ==# 'y'
 system("git add -A")
+endif
 endif
 echoh Normal
 enddef
@@ -786,7 +792,7 @@ if !c || stridx(')]}"''`」', c) ==# -1
 return 'll'
 endif
 const a = matchstr(getline('.'), '.', col('.') - 2)
-if stridx('a', a) !=# -1
+if stridx('ae', a) !=# -1
 return 'll'
 endif
 return "\<C-o>a"

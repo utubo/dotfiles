@@ -325,17 +325,23 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 
 # Git {{{
 def GitAddAll()
+	echoh MoreMsg
 	echo 'git add -A -n'
 	const list = system('git add -A -n')
 	if !list
 		echo 'none.'
+	elseif !!v:shell_error
+		echoh ErrorMsg
+		echo list
+		echoh Normal
 		return
-	endif
-	echoh DiffAdd
-	echo list
-	echoh Question
-	if input("execute ? (y/n) > ", 'y') ==# 'y'
-		system("git add -A")
+	else
+		echoh DiffAdd
+		echo list
+		echoh Question
+		if input("execute ? (y/n) > ", 'y') ==# 'y'
+			system("git add -A")
+		endif
 	endif
 	echoh Normal
 enddef
@@ -1042,7 +1048,7 @@ def SkipParen(): string
 	endif
 	# 誤爆防止
 	const a = matchstr(getline('.'), '.', col('.') - 2)
-	if stridx('a', a) !=# -1
+	if stridx('ae', a) !=# -1
 		return 'll'
 	endif
 	return  "\<C-o>a"
