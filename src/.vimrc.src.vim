@@ -134,8 +134,7 @@ packadd vim-jetpack
 jetpack#begin()
 Jetpack 'tani/vim-jetpack', { 'opt': 1 }
 Jetpack 'airblade/vim-gitgutter'
-Jetpack 'ctrlpvim/ctrlp.vim'
-Jetpack 'cohama/lexima.vim'      # 括弧補完
+Jetpack 'cohama/lexima.vim' # 括弧補完
 Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
@@ -144,15 +143,14 @@ Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'LeafCage/vimhelpgenerator'
-Jetpack 'luochen1990/rainbow'    # 虹色括弧
+Jetpack 'luochen1990/rainbow' # 虹色括弧
 Jetpack 'machakann/vim-sandwich'
-Jetpack 'mattn/ctrlp-matchfuzzy'
 Jetpack 'mattn/vim-notification'
-Jetpack 'matze/vim-move'         # 行移動
+Jetpack 'matze/vim-move' # 行移動
 Jetpack 'michaeljsmith/vim-indent-object'
 Jetpack 'MTDL9/vim-log-highlighting'
 Jetpack 'obcat/vim-hitspop'
-Jetpack 'obcat/vim-sclow'
+Jetpack 'obcat/vim-sclow' # スクロールバー
 Jetpack 'osyo-manga/vim-textobj-multiblock'
 Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
@@ -160,9 +158,9 @@ Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
-Jetpack 'tpope/vim-fugitive'      # Gdiffとか
-Jetpack 'tyru/capture.vim'
-Jetpack 'tyru/caw.vim'            # コメント化
+Jetpack 'tpope/vim-fugitive' # Gdiffとか
+Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
+Jetpack 'tyru/caw.vim' # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
 Jetpack 'vim-jp/vital.vim'
@@ -172,6 +170,10 @@ Jetpack 'lambdalisue/fern-git-status.vim'
 Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
 Jetpack 'lambdalisue/fern-hijack.vim'
 Jetpack 'lambdalisue/nerdfont.vim'
+# 👀様子見中
+Jetpack 'ctrlpvim/ctrlp.vim'
+Jetpack 'mattn/ctrlp-matchfuzzy'
+Jetpack 'tani/vim-typo'
 # 🐶🍚
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
