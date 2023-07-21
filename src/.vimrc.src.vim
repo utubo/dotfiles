@@ -156,6 +156,7 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
+Jetpack 'thinca/vim-ambicmd'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive' # Gdiffとか
@@ -173,6 +174,7 @@ Jetpack 'lambdalisue/nerdfont.vim'
 # 👀様子見中
 Jetpack 'ctrlpvim/ctrlp.vim'
 Jetpack 'mattn/ctrlp-matchfuzzy'
+Jetpack 'sheerun/vim-polyglot' # いろんなシンタックスハイライト
 Jetpack 'tani/vim-typo'
 # 🐶🍚
 Jetpack 'utubo/vim-colorscheme-girly'
@@ -494,6 +496,7 @@ nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
+cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w

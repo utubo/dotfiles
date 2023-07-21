@@ -97,6 +97,7 @@ Jetpack 'cohama/lexima.vim'
 Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
+Jetpack 'hrsh7th/vim-eft'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
@@ -115,6 +116,7 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
+Jetpack 'sheerun/vim-polyglot'
 Jetpack 'thinca/vim-ambicmd'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
@@ -131,7 +133,6 @@ Jetpack 'lambdalisue/fern-hijack.vim'
 Jetpack 'lambdalisue/nerdfont.vim'
 Jetpack 'ctrlpvim/ctrlp.vim'
 Jetpack 'mattn/ctrlp-matchfuzzy'
-Jetpack 'sheerun/vim-polyglot'
 Jetpack 'tani/vim-typo'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-hlpairs'
@@ -242,6 +243,21 @@ Disable g:EasyMotion_do_mapping
 g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 g:EasyMotion_prompt = 'EasyMotion: '
 no s <Plug>(easymotion-s)
+nm ; <Plug>(eft-repeat)
+xm ; <Plug>(eft-repeat)
+om ; <Plug>(eft-repeat)
+nm f <Plug>(eft-f)
+xm f <Plug>(eft-f)
+om f <Plug>(eft-f)
+nm F <Plug>(eft-F)
+xm F <Plug>(eft-F)
+om F <Plug>(eft-F)
+nm t <Plug>(eft-t)
+xm t <Plug>(eft-t)
+om t <Plug>(eft-t)
+nm T <Plug>(eft-T)
+xm T <Plug>(eft-T)
+om T <Plug>(eft-T)
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
 au vimrc FileType fern {
