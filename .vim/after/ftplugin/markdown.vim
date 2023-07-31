@@ -25,8 +25,6 @@ endif
 endfor
 enddef
 no <buffer> <Space>x <ScriptCmd>A()<CR>
-nn <buffer> <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
-nn <buffer> <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 ino <buffer> jjx <ScriptCmd>A()<CR>
 def B()
 for l in g:VRange()
@@ -111,3 +109,4 @@ n = 0
 m = timer_start(k, CursorMovedDelayExec)
 enddef
 au after_ftplugin_md CursorMoved <buffer> F()
+ino <buffer> jjo <C-o>o<BS><Space><Space>

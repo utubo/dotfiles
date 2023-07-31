@@ -31,8 +31,6 @@ def ToggleCheckBox()
 	endfor
 enddef
 noremap <buffer> <Space>x <ScriptCmd>ToggleCheckBox()<CR>
-nnoremap <buffer> <expr> o 'o' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
-nnoremap <buffer> <expr> O 'O' .. matchstr(getline('.'), '\(^\s*\)\@<=- \(\[[x* ]]\)\? \?')
 inoremap <buffer> jjx <ScriptCmd>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
@@ -131,5 +129,11 @@ def CursorMovedDelay()
 	cm_delay_timer = timer_start(CM_DELAY_MSEC, CursorMovedDelayExec)
 enddef
 au after_ftplugin_md CursorMoved <buffer> CursorMovedDelay()
+# }}}
+
+# ----------------------------------------------------------
+# その他 {{{
+# リストで改行したときはインデント2にしたいなぁ
+inoremap <buffer> jjo <C-o>o<BS><Space><Space>
 # }}}
 
