@@ -729,6 +729,7 @@ nn <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
+nn TT <Cmd>tabnext #<CR>
 ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
@@ -848,7 +849,6 @@ nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
 nn <Space>d "_d
 nn <Space>y yiw
-nn <Space>zz <Cmd>q!<CR>
 nm S^ v^S
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {

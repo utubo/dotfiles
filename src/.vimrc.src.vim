@@ -945,6 +945,7 @@ nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
+nnoremap TT <Cmd>tabnext #<CR>
 
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
@@ -1125,11 +1126,8 @@ nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
 nnoremap <Space>d "_d
 
-# 使用頻度が低いうえに1ストロークの差
+# 使用頻度が低いうえにストロークの差が1つしかない(スマホで使うかも？)
 nnoremap <Space>y yiw
-
-# qqでヨシ
-nnoremap <Space>zz <Cmd>q!<CR>
 
 # sandwich
 nmap S^ v^S
