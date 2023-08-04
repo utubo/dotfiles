@@ -164,6 +164,7 @@ Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
 Jetpack 'tyru/caw.vim' # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
+Jetpack 'yuki-yano/dedent-yank.vim'
 Jetpack 'vim-jp/vital.vim'
 # Fern
 Jetpack 'lambdalisue/fern.vim'
