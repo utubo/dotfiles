@@ -95,13 +95,17 @@ suite.TestSets = () => {
 suite.TestMapping = () => {
 	# わざとデフォルト(`map`コマンドで取得できないやつ)と被らせてるやつ
 	# n  a  _cc
+	# n  b  vim-smart-word
+	# n  e  vim-smart-word
 	# n  gc vim-caw
+	# n  ge  vim-smart-word
 	# n  g; 折り畳みを開くように修正
 	# n  i  _cc
 	# n  m  '
 	# n  M  m
 	# n  n  vim-cmdheight0
 	# n  o  markdown checkbox
+	# n  w  vim-smart-word
 	# n  A  _cc
 	# n  O  markdown checkbox
 	# n  Q  defaults.vimでgqにしてるけど.vimrcでqへ再マップ
@@ -117,7 +121,7 @@ suite.TestMapping = () => {
 	# i     <C-U> defaults.vim
 	# i     <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([ahijklmnoqsAMOQSTY;''/?:%]\|gc\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 

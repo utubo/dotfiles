@@ -142,6 +142,7 @@ Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
+Jetpack 'kana/vim-smartword'
 Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow' # 虹色括弧
 Jetpack 'machakann/vim-sandwich'
@@ -492,6 +493,7 @@ g:auto_cursorline_wait_ms = &updatetime
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
 au vimrc VimEnter * silent! NoMatchParen
+ExeEach w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
