@@ -277,8 +277,8 @@ suite.TestMultiCmd = () => {
 	vunmap xxx
 }
 
-suite.TestExeEach = () => {
-	ExeEach nmap,vmap {} xxx yyy_{}
+suite.TestEach = () => {
+	Each nmap,vmap {} xxx yyy_{}
 	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyy_nmap")
 	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyy_vmap")
 	nunmap xxx
