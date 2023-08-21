@@ -63,20 +63,20 @@ enddef
 command! -nargs=* MultiCmd MultiCmd(<q-args>)
 
 # こんな感じ
-# ExeEach j,k nnoremap {} g{}
+# Each j,k nnoremap {} g{}
 # ↓
 # nnoremap j gj
 # nnoremap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
 # ※MultiCmdを統合できそう
 # ※やりすぎ感は否めない
-def ExeEach(qargs: string)
+def Each(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
 	for i in items->split(',')
 		execute args->substitute('{}', i, 'g')
 	endfor
 enddef
-command! -nargs=* ExeEach ExeEach(<q-args>)
+command! -nargs=* Each Each(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
@@ -493,7 +493,7 @@ g:auto_cursorline_wait_ms = &updatetime
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
 au vimrc VimEnter * silent! NoMatchParen
-ExeEach w,b,e,ge nnoremap {} <Plug>(smartword-{})
+Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
@@ -531,11 +531,11 @@ inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-ExeEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
+Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-ExeEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
-ExeEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
+Each +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
+Each +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 MultiCmd nmap,tmap <SID>ws <Nop>
 #}}} -------------------------------------------------------
 
@@ -778,7 +778,7 @@ def CmdlineAutoPair(c: string): string
 	return c
 enddef
 # `/`以外も使うかも`%s#foo/bar#buz#g`みたいなかんじ
-ExeEach /,#,! cnoremap <script> <expr> {} CmdlineAutoPair('{}')
+Each /,#,! cnoremap <script> <expr> {} CmdlineAutoPair('{}')
 #}}}
 #}}}
 
@@ -889,7 +889,7 @@ def QuitWin(expr: string)
 		confirm quit
 	endif
 enddef
-ExeEach h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
+Each h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
 nnoremap qq <Cmd>confirm q<CR>
@@ -1091,7 +1091,7 @@ def CmdToNormal(): string
 	return ""
 enddef
 def CmdToInsert(c: string = 'i'): string
-	ExeEach h,l,b,w,^,$,x,i,a,A silent! cunmap {}
+	Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
 	cnoremap <script> <expr> jk CmdToNormal()
 	return c ==# 'i' ? '' : "\<Right>"
 enddef

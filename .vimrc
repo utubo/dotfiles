@@ -53,7 +53,7 @@ for i in b->split(',')
 exe c->substitute('{}', i, 'g')
 endfor
 enddef
-com! -nargs=* ExeEach B(<q-args>)
+com! -nargs=* Each B(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def C(a: number)
@@ -386,7 +386,7 @@ g:auto_cursorline_wait_ms = &ut
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
 au vimrc VimEnter * silent! NoMatchParen
-ExeEach w,b,e,ge nnoremap {} <Plug>(smartword-{})
+Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn % <ScriptCmd>call hlpairs#Jump()<CR>
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
@@ -412,9 +412,9 @@ xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 ino jk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-ExeEach i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
-ExeEach +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
-ExeEach +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
+Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
+Each +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
+Each +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 MultiCmd nmap,tmap <SID>ws <Nop>
 def BC()
 const a = 100
@@ -601,7 +601,7 @@ return $"{c}{c}\<Left>"
 endif
 return c
 enddef
-ExeEach /,#,! cnoremap <script> <expr> {} BE('{}')
+Each /,#,! cnoremap <script> <expr> {} BE('{}')
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -693,7 +693,7 @@ else
 confirm quit
 endif
 enddef
-ExeEach h,j,k,l nnoremap q{} <ScriptCmd>BH('{}')<CR>
+Each h,j,k,l nnoremap q{} <ScriptCmd>BH('{}')<CR>
 nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
@@ -827,7 +827,7 @@ cm A $a
 return ""
 enddef
 def CD(c: string = 'i'): string
-ExeEach h,l,b,w,^,$,x,i,a,A silent! cunmap {}
+Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
 cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
