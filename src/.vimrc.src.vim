@@ -47,10 +47,10 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# MultiCmd nmap,xmap xxx yyy<if-nmap>NNN<if-xmap>VVV<endif>zzz
+# CmdEach nmap,xmap xxx yyy<if-nmap>NNN<if-xmap>VVV<endif>zzz
 # ↓
 # nmap xxx yyyNNNzzz | xmap xxx yyyVVVzzz
-def MultiCmd(qargs: string)
+def CmdEach(qargs: string)
 	const [cmds, args] = qargs->split('^\S*\zs')
 	for cmd in cmds->split(',')
 		const a = args
@@ -60,7 +60,7 @@ def MultiCmd(qargs: string)
 		execute cmd a
 	endfor
 enddef
-command! -nargs=* MultiCmd MultiCmd(<q-args>)
+command! -nargs=* CmdEach CmdEach(<q-args>)
 
 # こんな感じ
 # Each j,k nnoremap {} g{}
@@ -68,7 +68,7 @@ command! -nargs=* MultiCmd MultiCmd(<q-args>)
 # nnoremap j gj
 # nnoremap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-# ※MultiCmdを統合できそう
+# ※CmdEachを統合できそう
 # ※やりすぎ感は否めない
 # ※`{}`を全て置換してしまうのでこのコマンドは重ねられない
 def Each(qargs: string)
@@ -424,9 +424,9 @@ def! g:CommentString(index: number): string
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 # `S${`と被ってしまうけどまぁいいか
 nmap S$ vg_S
@@ -457,8 +457,8 @@ endif
 #}}}
 
 # textobj-user {{{
-MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 	[ "(", ")" ],
 	[ "[", "]" ],
@@ -475,8 +475,8 @@ call textobj#user#plugin('nonwhitespace', {
 #}}}
 
 # 補完 {{{
-MultiCmd inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+CmdEach inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+CmdEach inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 enddef
@@ -501,9 +501,9 @@ nnoremap ]c <Plug>(GitGutterNextHunk)
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 # EasyMotionとどっちを使うか様子見中
 noremap <Space>s <Plug>(jumpcursor-jump)
 #}}}
@@ -535,9 +535,9 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
-Each +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
-MultiCmd nmap,tmap <SID>ws <Nop>
+Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
+Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
+CmdEach nmap,tmap <SID>ws <Nop>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -741,9 +741,9 @@ xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 
 # ----------------------------------------------------------
 # コマンドモードあれこれ {{{
-MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
-MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
-MultiCmd nmap,xmap ; :
+CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
+CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
+CmdEach nmap,xmap ; :
 nnoremap <Space>; ;
 nnoremap <Space>: :
 cnoremap <C-h> <Left>

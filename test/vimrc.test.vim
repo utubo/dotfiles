@@ -269,8 +269,8 @@ suite.TestCmdlinePair = () => {
 #}}}
 
 # ユーティリティのテスト {{{
-suite.TestMultiCmd = () => {
-	MultiCmd nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
+suite.TestCmdEach = () => {
+	CmdEach nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
 	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyyNNNzzz")
 	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyyVVVzzz")
 	nunmap xxx

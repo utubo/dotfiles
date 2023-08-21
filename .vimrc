@@ -46,7 +46,7 @@ const a = d
 exe e a
 endfor
 enddef
-com! -nargs=* MultiCmd A(<q-args>)
+com! -nargs=* CmdEach A(<q-args>)
 def B(a: string)
 const [b, c] = a->split('^\S*\zs')
 for i in b->split(',')
@@ -331,9 +331,9 @@ return &commentstring->split('%s')->get(a, '')
 enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-MultiCmd nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-MultiCmd nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-MultiCmd nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
 nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 nm S$ vg_S
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
@@ -355,8 +355,8 @@ showCandidatesCount: 1,
 })
 map! <C-j> <Plug>(skkeleton-toggle)
 endif
-MultiCmd onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-MultiCmd onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],
 [ "[", "]" ],
@@ -370,8 +370,8 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-MultiCmd inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-MultiCmd inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+CmdEach inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
+CmdEach inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 def BB(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
@@ -393,9 +393,9 @@ nn ]c <Plug>(GitGutterNextHunk)
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
 cno <expr> <Space> ambicmd#expand("\<Space>")
-MultiCmd nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-MultiCmd nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-MultiCmd nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 const lq = expand($'{lk}/pack/local/opt/*')
 if lq !=# ''
@@ -413,9 +413,9 @@ ino jk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
-Each +,-,>,< MultiCmd nmap,tmap <C-w>{} <C-w>{}<SID>ws
-Each +,-,>,< MultiCmd nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
-MultiCmd nmap,tmap <SID>ws <Nop>
+Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
+Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
+CmdEach nmap,tmap <SID>ws <Nop>
 def BC()
 const a = 100
 const b = getpos('.')
@@ -567,9 +567,9 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>F('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>F('normal! <gv')<CR>
-MultiCmd nnoremap,xnoremap / <Cmd>noh<CR>/
-MultiCmd nnoremap,xnoremap ? <Cmd>noh<CR>?
-MultiCmd nmap,xmap ; :
+CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
+CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
+CmdEach nmap,xmap ; :
 nn <Space>; ;
 nn <Space>: :
 cno <C-h> <Left>
