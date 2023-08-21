@@ -70,6 +70,7 @@ command! -nargs=* MultiCmd MultiCmd(<q-args>)
 # ※これ使うよりべたで書いたほうが起動は速い
 # ※MultiCmdを統合できそう
 # ※やりすぎ感は否めない
+# ※`{}`を全て置換してしまうのでこのコマンドは重ねられない
 def Each(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
 	for i in items->split(',')
