@@ -116,7 +116,6 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
-Jetpack 'thinca/vim-ambicmd'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'
@@ -320,7 +319,7 @@ g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
 { buns: ['', '' ], input: ['q'] },
 { buns: ['「', '」'], input: ['k'] },
-{ buns: ['【', '】'], input: ['k'] },
+{ buns: ['【', '】'], input: ['K'] },
 { buns: ['{ ', ' }'], input: ['{'] },
 { buns: ['${', '}' ], input: ['${'] },
 { buns: ['%{', '}' ], input: ['%{'] },
@@ -392,7 +391,6 @@ nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
-cno <expr> <Space> ambicmd#expand("\<Space>")
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w

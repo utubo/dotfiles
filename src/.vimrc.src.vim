@@ -158,7 +158,6 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
-Jetpack 'thinca/vim-ambicmd'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive' # Gdiffとか
@@ -166,7 +165,7 @@ Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
 Jetpack 'tyru/caw.vim' # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/mru'
-Jetpack 'yuki-yano/dedent-yank.vim'
+Jetpack 'yuki-yano/dedent-yank.vim' # yankするときにインデントを除去
 Jetpack 'vim-jp/vital.vim'
 # Fern
 Jetpack 'lambdalisue/fern.vim'
@@ -413,7 +412,7 @@ g:sandwich#recipes += [
 	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 	{ buns: ['',   ''  ], input: ['q'] },
 	{ buns: ['「', '」'], input: ['k'] },
-	{ buns: ['【', '】'], input: ['k'] },
+	{ buns: ['【', '】'], input: ['K'] },
 	{ buns: ['{ ', ' }'], input: ['{'] },
 	{ buns: ['${', '}' ], input: ['${'] },
 	{ buns: ['%{', '}' ], input: ['%{'] },
@@ -500,7 +499,6 @@ nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
