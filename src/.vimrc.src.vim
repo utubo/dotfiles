@@ -1098,21 +1098,6 @@ au vimrc ModeChanged *:c CmdToInsert()
 # ↓これは無しにしてみる
 #cnoremap jk <C-c>
 
-# もしかしてcmdwinを1行にすれば同じような使い心地になるかも？
-set cmdwinheight=1
-def ExpandCmdwin()
-	if winheight(0) ==# 1
-		resize 7
-		normal! ggG
-	else
-		normal! k
-	endif
-enddef
-au vimrc CmdwinEnter * {
-	nnoremap <buffer> k <ScriptCmd>ExpandCmdwin()<CR>
-	normal! i
-}
-
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
