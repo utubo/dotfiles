@@ -187,6 +187,10 @@ enddef
 au vimrc BufNew,BufRead,OptionSet * H()
 w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
+au vimrc Colorscheme * {
+hi! link ChkCountIcon CmdHeight0Warn
+hi! link ChkCountIconOk CmdHeight0Info
+}
 g:stl_reg = ''
 def I()
 var a = v:event.regcontents
@@ -194,20 +198,22 @@ var a = v:event.regcontents
 ->substitute('\t', '›', 'g')
 ->G(20)
 ->substitute('%', '%%', 'g')
-g:stl_reg = $'📋%#Cmdheight0Info#{a}%*'
+g:stl_reg = $'%#Cmdheight0Info#📋%*{a}'
 enddef
 au vimrc TextYankPost * I()
-g:stl_worktime = '🕛'
+g:stl_worktime = '%#Cmdheight0Info#🕛%*'
 g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(a: any)
 const b = (localtime() - g:stl_worktime_open_at) / 60
 const c = b % 60
 g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[c / 5]
-if (c ==# 45)
+if c ==# 45
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 if g:stl_worktime ==# '🍰'
 g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime .. '%*'
+else
+g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime .. '%*'
 endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
@@ -215,14 +221,13 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep = "\ue0c6"
-g:cmdheight0.sub = ["\ue0b9", "\ue0bb"]
+g:cmdheight0.sub = ' '
 g:cmdheight0.horiznr = '─'
 g:cmdheight0.statusline = ' ' ..
-'%{b:stl_icon}%t' ..
+'%{b:stl_icon}%t ' ..
 '%#CmdHeight0Error#%m%*' ..
 '%|%=%|' ..
-'%{w:ruler_mdcb|}' ..
+'%{%w:ruler_mdcb|%}' ..
 '%{%g:stl_reg|%}' ..
 '%3l:%-2c:%L%|' ..
 '%{%b:stl_bufinfo|%}' ..

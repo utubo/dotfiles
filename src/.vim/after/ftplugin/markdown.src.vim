@@ -92,7 +92,8 @@ def CountCheckBoxs(): string
 	if chkd ==# 0 && empty ==# 0
 		return ''
 	else
-		return  $'✅{chkd}/{chkd + empty}{andmore}'
+		var h = empty ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
+		return $'%#{h}#✅%*{chkd}/{chkd + empty}{andmore}'
 	endif
 enddef
 

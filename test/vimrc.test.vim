@@ -115,8 +115,8 @@ suite.TestMapping = () => {
 	# n  ZZ Zenモード
 	# n  %  hlpairsのJump
 	# n  :  <Plug><ahc-switch>:
-	# n <C-f>
-	# n <C-b>
+	# n <C-F>
+	# n <C-B>
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
@@ -124,7 +124,7 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
 		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
-		'n  \(<C-[fb]>\)\|'..
+		'n  \(<C-[FB]>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 

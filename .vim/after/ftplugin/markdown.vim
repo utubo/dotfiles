@@ -64,19 +64,20 @@ e = '+'
 b = a + d
 endif
 var f = 0
-var h = 0
+var i = 0
 for l in range(a, b)
-const i = getline(l)
-if i->match('^\s*- \[x\]') !=# -1
+const j = getline(l)
+if j->match('^\s*- \[x\]') !=# -1
 f += 1
-elseif i->match('^\s*- \[ \]') !=# -1
-h += 1
+elseif j->match('^\s*- \[ \]') !=# -1
+i += 1
 endif
 endfor
-if f ==# 0 && h ==# 0
+if f ==# 0 && i ==# 0
 return ''
 else
-return $'✅{f}/{f + h}{e}'
+var h = i ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
+return $'%#{h}#✅%*{f}/{f + i}{e}'
 endif
 enddef
 def D()

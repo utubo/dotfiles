@@ -247,6 +247,10 @@ au vimrc BufNew,BufRead,OptionSet * UpdateStlBufInfo()
 # 本体は.vim/after/ftplugin/markdown.vim
 w:ruler_mdcb = ''
 au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
+au vimrc Colorscheme * {
+	hi! link ChkCountIcon CmdHeight0Warn
+	hi! link ChkCountIconOk CmdHeight0Info
+}
 
 # ヤンクしたやつを表示するやつ
 g:stl_reg = ''
@@ -256,23 +260,25 @@ def UpdateStlRegister()
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
 		->substitute('%', '%%', 'g')
-	g:stl_reg = $'📋%#Cmdheight0Info#{reg}%*'
+	g:stl_reg = $'%#Cmdheight0Info#📋%*{reg}'
 enddef
 au vimrc TextYankPost * UpdateStlRegister()
 
 # 毎時vim起動後45分から15分間休憩しようね
-g:stl_worktime = '🕛'
+g:stl_worktime = '%#Cmdheight0Info#🕛%*'
 g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(timer: any)
 	const hhmm = (localtime() - g:stl_worktime_open_at) / 60
 	const mm = hhmm % 60
 	#:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
 	g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
-	if (mm ==# 45)
+	if mm ==# 45
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
 	if g:stl_worktime ==# '🍰'
 		g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime .. '%*'
+	else
+		g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime .. '%*'
 	endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
@@ -282,14 +288,15 @@ g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.sep  = "\ue0c6"
-g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
+# g:cmdheight0.sep  = "\ue0c6"
+# g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
+g:cmdheight0.sub = ' '
 g:cmdheight0.horiznr = '─'
-g:cmdheight0.statusline = ' ' ..   # パディング
-	'%{b:stl_icon}%t' ..        # アイコンとファイル名
+g:cmdheight0.statusline = ' ' .. # パディング
+	'%{b:stl_icon}%t ' ..       # アイコンとファイル名
 	'%#CmdHeight0Error#%m%*' .. # 編集済みか
 	'%|%=%|' ..                 # 中央
-	'%{w:ruler_mdcb|}' ..       # markdownのチェックボックスの数
+	'%{%w:ruler_mdcb|%}' ..     # markdownのチェックボックスの数
 	'%{%g:stl_reg|%}' ..        # レジスタ
 	'%3l:%-2c:%L%|' ..          # カーソル位置
 	'%{%b:stl_bufinfo|%}' ..    # 文字コードと改行コード
