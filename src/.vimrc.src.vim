@@ -765,12 +765,15 @@ def CmdlineAutoPair(c: string): string
 		return c
 	endif
 	const e = cl[-1]
+	# :s///g
 	if e ==# 's'
 		return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
 	endif
+	# :g!//
 	if e ==# 'g' && c ==# '!'
 		return "!//\<Left>"
 	endif
+	# :g//
 	if e ==# 'g' || e ==# 'v'
 		return $"{c}{c}\<Left>"
 	endif
