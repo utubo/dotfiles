@@ -115,13 +115,16 @@ suite.TestMapping = () => {
 	# n  ZZ Zenモード
 	# n  %  hlpairsのJump
 	# n  :  <Plug><ahc-switch>:
+	# n <C-f>
+	# n <C-b>
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
-	# i     <C-U> defaults.vim
-	# i     <C-G> 色付きで表示
+	# i  <C-U> defaults.vim
+	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
 		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \(<C-[fb]>\)\|'..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
 

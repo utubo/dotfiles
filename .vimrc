@@ -830,6 +830,9 @@ cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CD()
+Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
+Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
+nm <SID>(hold-ctrl) <Nop>
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space><Space>p o<Esc>P

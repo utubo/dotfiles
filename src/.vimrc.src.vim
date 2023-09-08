@@ -1098,6 +1098,11 @@ au vimrc ModeChanged *:c CmdToInsert()
 # ↓これは無しにしてみる
 #cnoremap jk <C-c>
 
+# <C-f>と<C-b>、CTRLおしっぱがつらいので…
+Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
+Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
+nmap <SID>(hold-ctrl) <Nop>
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
