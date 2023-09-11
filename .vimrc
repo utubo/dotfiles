@@ -279,7 +279,7 @@ endif
 echoh Normal
 enddef
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
-return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '🔧chore', '🎉release:']
+return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
 enddef
 com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def BA(a: string)
