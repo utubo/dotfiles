@@ -95,6 +95,10 @@ export def FixSandwichPos()
 enddef
 
 # 囲みを削除したら行末空白と空行も削除
+def RemoveEmptyLine(line: number)
+	silent! execute ':' line 's/\s\+$//'
+	silent! execute ':' line 's/^\s*\n//'
+enddef
 export def RemoveAirBuns()
 	const c = g:operator#sandwich#object.cursor
 	RemoveEmptyLine(c.tail[1])

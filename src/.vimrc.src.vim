@@ -83,11 +83,6 @@ command! -nargs=* Each Each(<q-args>)
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-def RemoveEmptyLine(line: number)
-	silent! execute ':' line 's/\s\+$//'
-	silent! execute ':' line 's/^\s*\n//'
-enddef
-
 def BufIsSmth(): bool
 	return &modified || ! empty(bufname())
 enddef
