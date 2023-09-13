@@ -1150,14 +1150,12 @@ endif
 # ----------------------------------------------------------
 # 色 {{{
 nnoremap <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
-def DefaultColors()
-	# (メモ)autocmdの{}は行末が`,`だとエラーになる
+au vimrc ColorSchemePre * {
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
-enddef
-au vimrc ColorSchemePre * DefaultColors()
+}
 au vimrc ColorScheme * {
 	hi! link CmdHeight0Horiz TabLineFill
 	hi! link ALEVirtualTextWarning ALEStyleWarningSign

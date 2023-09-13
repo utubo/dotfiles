@@ -854,20 +854,19 @@ nn <Space>n <Nop>
 }
 endif
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
-def CD()
+au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
-enddef
-au vimrc ColorSchemePre * CD()
+}
 au vimrc ColorScheme * {
 hi! link CmdHeight0Horiz TabLineFill
 hi! link ALEVirtualTextWarning ALEStyleWarningSign
 hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
 }
-def CE()
+def CD()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -882,8 +881,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CE()
-def CF()
+au vimrc VimEnter,WinEnter * CD()
+def CE()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -891,8 +890,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CF()
-au vimrc BufNew,BufReadPost * silent! CF()
+au vimrc OptionSet list silent! CE()
+au vimrc BufNew,BufReadPost * silent! CE()
 set t_Co=256
 syntax on
 set bg=dark
@@ -900,10 +899,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CG()
+def CF()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CG()|endif
+au vimrc VimEnter * ++nested if !C()|CF()|endif
