@@ -254,25 +254,31 @@ nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 def I()
+const a = getcwd()
+try
+chdir(expand('%:p:h'))
 echoh MoreMsg
 ec 'git add -A -n'
-const a = system('git add -A -n')
-if !a
+const b = system('git add -A -n')
+if !b
 ec 'none.'
 elseif !!v:shell_error
 echoh ErrorMsg
-ec a
+ec b
 echoh Normal
 return
 else
 echoh DiffAdd
-ec a
+ec b
 echoh Question
 if input("execute ? (y/n) > ", 'y') ==# 'y'
 system("git add -A")
 endif
 endif
 echoh Normal
+finally
+chdir(a)
+endtry
 enddef
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']

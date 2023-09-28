@@ -333,25 +333,31 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 
 # Git {{{
 def GitAddAll()
-	echoh MoreMsg
-	echo 'git add -A -n'
-	const list = system('git add -A -n')
-	if !list
-		echo 'none.'
-	elseif !!v:shell_error
-		echoh ErrorMsg
-		echo list
-		echoh Normal
-		return
-	else
-		echoh DiffAdd
-		echo list
-		echoh Question
-		if input("execute ? (y/n) > ", 'y') ==# 'y'
-			system("git add -A")
+	const current_dir = getcwd()
+	try
+		chdir(expand('%:p:h'))
+		echoh MoreMsg
+		echo 'git add -A -n'
+		const list = system('git add -A -n')
+		if !list
+			echo 'none.'
+		elseif !!v:shell_error
+			echoh ErrorMsg
+			echo list
+			echoh Normal
+			return
+		else
+			echoh DiffAdd
+			echo list
+			echoh Question
+			if input("execute ? (y/n) > ", 'y') ==# 'y'
+				system("git add -A")
+			endif
 		endif
-	endif
-	echoh Normal
+		echoh Normal
+	finally
+		chdir(current_dir)
+	endtry
 enddef
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
