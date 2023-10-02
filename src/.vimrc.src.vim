@@ -347,8 +347,10 @@ def GitAdd(args: string)
 			echoh Normal
 			return
 		else
-			echoh DiffAdd
-			echo list
+			for item in split(list, '\n')
+				execute 'echoh' (item =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
+				echo item
+			endfor
 			echoh Question
 			if input('execute ? (y/n) > ', 'y') ==# 'y'
 				system('git add ' .. args)
@@ -359,7 +361,7 @@ def GitAdd(args: string)
 		chdir(current_dir)
 	endtry
 enddef
-command! -nargs=* GitAdd GitAdd(<f-args>)
+command! -nargs=* GitAdd GitAdd(<q-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
 enddef

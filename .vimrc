@@ -268,8 +268,10 @@ ec c
 echoh Normal
 return
 else
-echoh DiffAdd
-ec c
+for d in split(c, '\n')
+exe 'echoh' (d =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
+ec d
+endfor
 echoh Question
 if input('execute ? (y/n) > ', 'y') ==# 'y'
 system('git add ' .. a)
@@ -280,7 +282,7 @@ finally
 chdir(b)
 endtry
 enddef
-com! -nargs=* GitAdd I(<f-args>)
+com! -nargs=* GitAdd I(<q-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
 enddef
