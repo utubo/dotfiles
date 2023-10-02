@@ -290,7 +290,7 @@ ec system($"git tag '{a}'")
 ec system($"git push origin '{a}'")
 enddef
 com! -nargs=1 GitTagPush J(<q-args>)
-nn <Space>ga <ScriptCmd>I('-A')<CR>
+nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
 nn <Space>gp :<C-u>Git push

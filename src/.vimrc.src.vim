@@ -369,7 +369,7 @@ def GitTagPush(tagname: string)
 	echo system($"git push origin '{tagname}'")
 enddef
 command! -nargs=1 GitTagPush GitTagPush(<q-args>)
-nnoremap <Space>ga <ScriptCmd>GitAdd('-A')<CR>
+nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
 nnoremap <Space>gp :<C-u>Git push
