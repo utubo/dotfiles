@@ -260,14 +260,15 @@ chdir(expand('%:p:h'))
 echoh MoreMsg
 ec 'git add --dry-run ' .. a
 const c = system('git add --dry-run ' .. a)
-if !c
-ec 'none.'
-elseif !!v:shell_error
+if !!v:shell_error
 echoh ErrorMsg
 ec c
-echoh Normal
 return
-else
+endif
+if !c
+ec 'none.'
+return
+endif
 for d in split(c, '\n')
 exe 'echoh' (d =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
 ec d
@@ -276,9 +277,8 @@ echoh Question
 if input('execute ? (y/n) > ', 'y') ==# 'y'
 system('git add ' .. a)
 endif
-endif
-echoh Normal
 finally
+echoh Normal
 chdir(b)
 endtry
 enddef

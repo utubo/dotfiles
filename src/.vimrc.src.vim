@@ -339,25 +339,25 @@ def GitAdd(args: string)
 		echoh MoreMsg
 		echo 'git add --dry-run ' .. args
 		const list = system('git add --dry-run ' .. args)
-		if !list
-			echo 'none.'
-		elseif !!v:shell_error
+		if !!v:shell_error
 			echoh ErrorMsg
 			echo list
-			echoh Normal
 			return
-		else
-			for item in split(list, '\n')
-				execute 'echoh' (item =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
-				echo item
-			endfor
-			echoh Question
-			if input('execute ? (y/n) > ', 'y') ==# 'y'
-				system('git add ' .. args)
-			endif
 		endif
-		echoh Normal
+		if !list
+			echo 'none.'
+			return
+		endif
+		for item in split(list, '\n')
+			execute 'echoh' (item =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
+			echo item
+		endfor
+		echoh Question
+		if input('execute ? (y/n) > ', 'y') ==# 'y'
+			system('git add ' .. args)
+		endif
 	finally
+		echoh Normal
 		chdir(current_dir)
 	endtry
 enddef
