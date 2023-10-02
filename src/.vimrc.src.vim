@@ -337,8 +337,8 @@ def GitAdd(args: string)
 	try
 		chdir(expand('%:p:h'))
 		echoh MoreMsg
-		echo 'git add -n ' .. args
-		const list = system('git add -n ' .. args)
+		echo 'git add --dry-run ' .. args
+		const list = system('git add --dry-run ' .. args)
 		if !list
 			echo 'none.'
 		elseif !!v:shell_error

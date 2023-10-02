@@ -258,8 +258,8 @@ const b = getcwd()
 try
 chdir(expand('%:p:h'))
 echoh MoreMsg
-ec 'git add -n ' .. a
-const c = system('git add -n ' .. a)
+ec 'git add --dry-run ' .. a
+const c = system('git add --dry-run ' .. a)
 if !c
 ec 'none.'
 elseif !!v:shell_error
