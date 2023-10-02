@@ -332,13 +332,13 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
 #}}}
 
 # Git {{{
-def GitAddAll()
+def GitAdd(args: string)
 	const current_dir = getcwd()
 	try
 		chdir(expand('%:p:h'))
 		echoh MoreMsg
-		echo 'git add -A -n'
-		const list = system('git add -A -n')
+		echo 'git add -n ' .. args
+		const list = system('git add -n ' .. args)
 		if !list
 			echo 'none.'
 		elseif !!v:shell_error
@@ -350,8 +350,8 @@ def GitAddAll()
 			echoh DiffAdd
 			echo list
 			echoh Question
-			if input("execute ? (y/n) > ", 'y') ==# 'y'
-				system("git add -A")
+			if input('execute ? (y/n) > ', 'y') ==# 'y'
+				system('git add ' .. args)
 			endif
 		endif
 		echoh Normal
@@ -359,6 +359,7 @@ def GitAddAll()
 		chdir(current_dir)
 	endtry
 enddef
+command! -nargs=* GitAdd GitAdd(<f-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
 enddef
@@ -368,7 +369,7 @@ def GitTagPush(tagname: string)
 	echo system($"git push origin '{tagname}'")
 enddef
 command! -nargs=1 GitTagPush GitTagPush(<q-args>)
-nnoremap <Space>ga <ScriptCmd>GitAddAll()<CR>
+nnoremap <Space>ga <ScriptCmd>GitAdd('-A')<CR>
 nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
 nnoremap <Space>gp :<C-u>Git push

@@ -253,33 +253,34 @@ nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
-def I()
-const a = getcwd()
+def I(a: string)
+const b = getcwd()
 try
 chdir(expand('%:p:h'))
 echoh MoreMsg
-ec 'git add -A -n'
-const b = system('git add -A -n')
-if !b
+ec 'git add -n ' .. a
+const c = system('git add -n ' .. a)
+if !c
 ec 'none.'
 elseif !!v:shell_error
 echoh ErrorMsg
-ec b
+ec c
 echoh Normal
 return
 else
 echoh DiffAdd
-ec b
+ec c
 echoh Question
-if input("execute ? (y/n) > ", 'y') ==# 'y'
-system("git add -A")
+if input('execute ? (y/n) > ', 'y') ==# 'y'
+system('git add ' .. a)
 endif
 endif
 echoh Normal
 finally
-chdir(a)
+chdir(b)
 endtry
 enddef
+com! -nargs=* GitAdd I(<f-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
 enddef
@@ -289,7 +290,7 @@ ec system($"git tag '{a}'")
 ec system($"git push origin '{a}'")
 enddef
 com! -nargs=1 GitTagPush J(<q-args>)
-nn <Space>ga <ScriptCmd>I()<CR>
+nn <Space>ga <ScriptCmd>I('-A')<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
 nn <Space>gp :<C-u>Git push
