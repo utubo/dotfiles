@@ -112,6 +112,7 @@ Jetpack 'othree/html5.vim'
 Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
+Jetpack 'skanehira/gh.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive'
@@ -302,6 +303,12 @@ nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
+au vimrc FileType gh-issues {
+nn <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
+}
+au vimrc FileType gh-issue-comments {
+nn <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
+}
 Enable g:lexima_accept_pum_with_enter
 def g:SetupLexima(a: number)
 lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
