@@ -386,12 +386,17 @@ nnoremap <Space>gC :<C-u>Git checkout %
 
 # gh {{{
 # ftpluginにすると定義がバラバラになって見通し悪くなるかな
+au vimrc FileType gh-repos {
+	nnoremap <buffer> i <ScriptCmd>execute 'edit!' ['gh:/', getline('.')->matchstr('\S\+'), 'issues']->join('/')<CR>
+}
 au vimrc FileType gh-issues {
 	nnoremap <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
+	nnoremap <buffer> r <ScriptCmd>execute 'edit!' expand('%:h:h') .. '/repos'<CR>
 }
 au vimrc FileType gh-issue-comments {
 	nnoremap <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
 }
+nnoremap <Space>gh <Cmd>tabe gh://utubo/repos<CR>
 # }}}
 
 # lexima {{{
@@ -942,7 +947,7 @@ nnoremap <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
 xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>gh $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
+nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim
 #}}}
 
