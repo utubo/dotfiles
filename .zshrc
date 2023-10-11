@@ -104,3 +104,10 @@ linux)
 	;;
 esac
 
+# https://zenn.dev/vim_jp/articles/5fdad17d336c6d
+if [ -n "$VIM_TERMINAL" ]; then
+	function drop() {
+		echo "\e]51;[\"call\", \"Tapi_drop\", [\"$(pwd)\", \"$1\", \"$2\"]]\x07"
+	}
+fi
+
