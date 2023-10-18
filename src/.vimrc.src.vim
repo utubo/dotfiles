@@ -176,6 +176,7 @@ Jetpack 'sheerun/vim-polyglot' # いろんなシンタックスハイライト
 Jetpack 'tani/vim-typo'
 # 🐶🍚
 Jetpack 'utubo/vim-colorscheme-girly'
+Jetpack 'utubo/vim-colorscheme-softgreen'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
