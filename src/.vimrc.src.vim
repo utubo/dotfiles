@@ -186,6 +186,7 @@ Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-yomigana'
 # 🐶🍚様子見中
 Jetpack 'utubo/jumpcursor.vim'
+Jetpack 'utubo/vim-ddgv'
 Jetpack 'utubo/vim-portal-aim'
 Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
