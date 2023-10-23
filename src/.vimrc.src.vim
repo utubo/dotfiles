@@ -139,6 +139,7 @@ Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
 Jetpack 'kana/vim-textobj-user'
 Jetpack 'kana/vim-smartword'
+Jetpack 'KentoOgata/vim-vimscript-gd'
 Jetpack 'LeafCage/vimhelpgenerator'
 Jetpack 'luochen1990/rainbow' # 虹色括弧
 Jetpack 'machakann/vim-sandwich'
