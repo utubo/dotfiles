@@ -98,6 +98,7 @@ suite.TestMapping = () => {
 	# n  b  vim-smart-word
 	# n  e  vim-smart-word
 	# n  gc vim-caw
+	# n  gd vim-vimscript-gd
 	# n  ge  vim-smart-word
 	# n  g; 折り畳みを開くように修正
 	# n  i  _cc
@@ -123,7 +124,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|gd\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'n  \(<C-[FB]>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
@@ -300,7 +301,7 @@ suite.TestEnableDisable = () => {
 suite.TestTruncToDisplayWidth = () => {
 	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
 	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
-	const F = function($'<SNR>{vimrc_sid}_F')
+	const F = function($'<SNR>{vimrc_sid}_E')
 	assert.equals(F('123',  3), '123')
 	assert.equals(F('1234', 3), '12>')
 	assert.equals(F('あいう',  6), 'あいう')
