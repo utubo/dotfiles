@@ -87,7 +87,7 @@ def BufIsSmth(): bool
 	return &modified || ! empty(bufname())
 enddef
 
-def IndentStr(expr: any): string
+def g:IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 

@@ -57,9 +57,9 @@ enddef
 
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 export def Zf()
-	var [firstline, lastline] = VFirstLast()
+	var [firstline, lastline] = g:VFirstLast()
 	execute ':' firstline 's/\v(\S)?$/\1 /'
-	append(lastline, IndentStr(firstline))
+	append(lastline, g:IndentStr(firstline))
 	cursor([firstline, 1])
 	cursor([lastline + 1, 1])
 	normal! zf

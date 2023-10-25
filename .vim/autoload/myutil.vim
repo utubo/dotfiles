@@ -46,9 +46,9 @@ set relativenumber
 endif
 enddef
 export def Zf()
-var [a, b] = VFirstLast()
+var [a, b] = g:VFirstLast()
 exe ':' a 's/\v(\S)?$/\1 /'
-append(b, IndentStr(a))
+append(b, g:IndentStr(a))
 cursor([a, 1])
 cursor([b + 1, 1])
 normal! zf
