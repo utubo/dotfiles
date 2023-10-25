@@ -1160,6 +1160,9 @@ Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
+CmdEach onoremap,xnoremap A <Plug>(textobj-twochars-a)
+CmdEach onoremap,xnoremap I <Plug>(textobj-twochars-i)
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
