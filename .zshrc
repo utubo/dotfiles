@@ -111,3 +111,5 @@ if [ -n "$VIM_TERMINAL" ]; then
 	}
 fi
 
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
