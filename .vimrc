@@ -875,8 +875,8 @@ au vimrc ModeChanged *:c CB()
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
-CmdEach onoremap,xnoremap A <Plug>(textobj-twochars-a)
-CmdEach onoremap,xnoremap I <Plug>(textobj-twochars-i)
+CmdEach onoremap A <Plug>(textobj-twochars-a)
+CmdEach onoremap I <Plug>(textobj-twochars-i)
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space><Space>p o<Esc>P
