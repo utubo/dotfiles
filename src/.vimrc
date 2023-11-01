@@ -409,8 +409,8 @@ g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &ut
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
+au vimrc VimEnter * silent! NoMatchParen
 au vimrc VimEnter * nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
-nn <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
@@ -884,7 +884,7 @@ nn <Space><Space>P O<Esc>p
 nn <Space>d "_d
 nn <Space>y yiw
 nm S^ v^S
-if strftime('%d') ==# '01'
+if strftime('%d') ==# '91'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 mapclear

@@ -522,9 +522,9 @@ g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
 g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
-au vimrc VimEnter * silent! NoMatchParen
+au vimrc VimEnter * nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
+nnoremap <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
-nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
