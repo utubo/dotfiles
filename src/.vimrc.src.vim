@@ -520,7 +520,6 @@ Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
-g:hlairs = { delay: 250 }
 g:loaded_matchparen = 1
 au vimrc VimEnter * nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nnoremap <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
