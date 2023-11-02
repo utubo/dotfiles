@@ -917,7 +917,7 @@ const v = synIDattr(a, b)
 if has('gui')
 return v =~# '^[0-9]*$' ? 'NONE' : v
 else
-return v !~# '^[0-9]*$' ? 'NONE' : v
+return v !~# '^[0-9]\+$' ? 'NONE' : v
 endif
 enddef
 def CD(a: string): any

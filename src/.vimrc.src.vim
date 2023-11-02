@@ -1227,7 +1227,7 @@ def GetAttr(id: number, name: string): string
 	if has('gui')
 		return v =~# '^[0-9]*$' ? 'NONE' : v
 	else
-		return v !~# '^[0-9]*$' ? 'NONE' : v
+		return v !~# '^[0-9]\+$' ? 'NONE' : v
 	endif
 enddef
 
