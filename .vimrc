@@ -169,7 +169,7 @@ endif
 if !a
 b:stl_bufinfo = ''
 else
-b:stl_bufinfo = '%#Cmdheight0Warn#' .. a->join(',') .. '%*'
+b:stl_bufinfo = '%#Cmdheight0Warn#' .. a->join(',') .. '%#CmdHeight0#'
 endif
 enddef
 au vimrc BufNew,BufRead,OptionSet * F()
@@ -186,10 +186,10 @@ var a = v:event.regcontents
 ->substitute('\t', '›', 'g')
 ->E(20)
 ->substitute('%', '%%', 'g')
-g:stl_reg = $'%#Cmdheight0Info#📋%*{a}'
+g:stl_reg = $'%#Cmdheight0Info#📋%#CmdHeight0#{a}'
 enddef
 au vimrc TextYankPost * G()
-g:stl_worktime = '%#Cmdheight0Info#🕛%*'
+g:stl_worktime = '%#Cmdheight0Info#🕛'
 g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(a: any)
 const b = (localtime() - g:stl_worktime_open_at) / 60
@@ -199,9 +199,9 @@ if c ==# 45
 notification#show("       ☕🍴🍰\nHave a break time !")
 endif
 if g:stl_worktime ==# '🍰'
-g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime .. '%*'
+g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime
 else
-g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime .. '%*'
+g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime
 endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
@@ -218,8 +218,8 @@ g:cmdheight0.statusline = ' ' ..
 '%{%w:ruler_mdcb|%}' ..
 '%{%g:stl_reg|%}' ..
 '%3l:%-2c:%L%|' ..
-'%{%b:stl_bufinfo|%}' ..
-'%{%g:stl_worktime%}' ..
+'%{%b:stl_bufinfo|%}%*' ..
+'%{%g:stl_worktime%}%*' ..
 ' '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>

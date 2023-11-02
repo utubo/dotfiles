@@ -222,7 +222,7 @@ def UpdateStlBufInfo()
 	if !info
 		b:stl_bufinfo = ''
 	else
-		b:stl_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%*'
+		b:stl_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%#CmdHeight0#'
 	endif
 enddef
 au vimrc BufNew,BufRead,OptionSet * UpdateStlBufInfo()
@@ -244,12 +244,12 @@ def UpdateStlRegister()
 		->substitute('\t', '›', 'g')
 		->TruncToDisplayWidth(20)
 		->substitute('%', '%%', 'g')
-	g:stl_reg = $'%#Cmdheight0Info#📋%*{reg}'
+	g:stl_reg = $'%#Cmdheight0Info#📋%#CmdHeight0#{reg}'
 enddef
 au vimrc TextYankPost * UpdateStlRegister()
 
 # 毎時vim起動後45分から15分間休憩しようね
-g:stl_worktime = '%#Cmdheight0Info#🕛%*'
+g:stl_worktime = '%#Cmdheight0Info#🕛'
 g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
 def! g:VimrcTimer60s(timer: any)
 	const hhmm = (localtime() - g:stl_worktime_open_at) / 60
@@ -260,9 +260,9 @@ def! g:VimrcTimer60s(timer: any)
 		notification#show("       ☕🍴🍰\nHave a break time !")
 	endif
 	if g:stl_worktime ==# '🍰'
-		g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime .. '%*'
+		g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime
 	else
-		g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime .. '%*'
+		g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime
 	endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
@@ -283,8 +283,8 @@ g:cmdheight0.statusline = ' ' .. # パディング
 	'%{%w:ruler_mdcb|%}' ..     # markdownのチェックボックスの数
 	'%{%g:stl_reg|%}' ..        # レジスタ
 	'%3l:%-2c:%L%|' ..          # カーソル位置
-	'%{%b:stl_bufinfo|%}' ..    # 文字コードと改行コード
-	'%{%g:stl_worktime%}' ..    # 作業時間
+	'%{%b:stl_bufinfo|%}%*' ..  # 文字コードと改行コード
+	'%{%g:stl_worktime%}%*' ..  # 作業時間
 	' '                         # パディング
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
