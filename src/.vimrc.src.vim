@@ -419,18 +419,13 @@ var lspOptions = {
 	showDiagWithVirtualText: true,
 	diagVirtualTextAlign: 'after',
 }
+const commandExt = has('win32') ? '.cmd' : ''
 var lspServers = [{
 	name: 'typescriptlang',
 	filetype: ['javascript', 'typescript'],
-	path: 'typescript-language-server',
+	path: $'typescript-language-server{commandExt}',
 	args: ['--stdio'],
 }]
-if has('win32')
-	for s in lspServers
-		s.args = ['/c', s.path]->extend(s.args)
-		s.path = 'cmd'
-	endfor
-endif
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
 #}}}

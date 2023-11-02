@@ -329,18 +329,13 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
+const lq = has('win32') ? '.cmd' : ''
 var lspServers = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: 'typescript-language-server',
+path: $'typescript-language-server{lq}',
 args: ['--stdio'],
 }]
-if has('win32')
-for s in lspServers
-s.args = ['/c', s.path]->extend(s.args)
-s.path = 'cmd'
-endfor
-endif
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
 nn <F2> <Cmd>MRUToggle<CR>
@@ -429,9 +424,9 @@ CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lq = expand($'{lk}/pack/local/opt/*')
-if lq !=# ''
-&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
+const lr = expand($'{lk}/pack/local/opt/*')
+if lr !=# ''
+&runtimepath = $'{substitute(lr, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
