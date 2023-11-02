@@ -425,6 +425,12 @@ var lspServers = [{
 	path: 'typescript-language-server',
 	args: ['--stdio'],
 }]
+if has('win32')
+	for s in lspServers
+		s.args = ['/c', s.path]->extend(s.args)
+		s.path = 'cmd'
+	endfor
+endif
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
 #}}}
@@ -1216,11 +1222,18 @@ au vimrc ColorSchemePre * {
 	]
 }
 
+def GetAttr(id: number, name: string): string
+	const v = synIDattr(id, name)
+	if has('gui')
+		return v =~# '^[0-9]*$' ? 'NONE' : v
+	else
+		return v !~# '^[0-9]*$' ? 'NONE' : v
+	endif
+enddef
+
 def GetHl(name: string): any
 	const id = hlID(name)->synIDtrans()
-	const fg = synIDattr(id, 'fg#')
-	const bg = synIDattr(id, 'bg#')
-	return { fg: !fg ? 'NONE' : fg, bg: !bg ? 'NONE' : bg }
+	return { fg: GetAttr(id, 'fg'), bg: GetAttr(id, 'bg') }
 enddef
 
 def MyHighlight()
@@ -1234,7 +1247,7 @@ def MyHighlight()
 	execute $'hi LspDiagSignWarningText {x}bg={signBg} {x}fg={GetHl("WarningMsg").fg}'
 enddef
 
-au vimrc ColorScheme * MyHighlight()
+au vimrc VimEnter,ColorScheme * MyHighlight()
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
@@ -1271,8 +1284,8 @@ au vimrc OptionSet list silent! HiTail()
 # matchaddはウィンドウ単位だが、`setlocal list`を考慮してBuf...イベントで実行する
 au vimrc BufNew,BufReadPost * silent! HiTail()
 
+silent! syntax enable
 set t_Co=256
-syntax on
 set background=dark
 silent! colorscheme girly
 #}}} -------------------------------------------------------

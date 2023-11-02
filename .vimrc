@@ -335,6 +335,12 @@ filetype: ['javascript', 'typescript'],
 path: 'typescript-language-server',
 args: ['--stdio'],
 }]
+if has('win32')
+for s in lspServers
+s.args = ['/c', s.path]->extend(s.args)
+s.path = 'cmd'
+endfor
+endif
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
 nn <F2> <Cmd>MRUToggle<CR>
@@ -906,24 +912,30 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def CC(a: string): any
-const b = hlID(a)->synIDtrans()
-const c = synIDattr(b, 'fg#')
-const d = synIDattr(b, 'bg#')
-return { fg: !c ? 'NONE' : c, bg: !d ? 'NONE' : d }
+def CC(a: number, b: string): string
+const v = synIDattr(a, b)
+if has('gui')
+return v =~# '^[0-9]*$' ? 'NONE' : v
+else
+return v !~# '^[0-9]*$' ? 'NONE' : v
+endif
 enddef
-def CD()
+def CD(a: string): any
+const b = hlID(a)->synIDtrans()
+return { fg: CC(b, 'fg'), bg: CC(b, 'bg') }
+enddef
+def CE()
 hi! link CmdHeight0Horiz TabLineFill
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = CC('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CC("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CC("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CC("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CC("WarningMsg").fg}'
+const a = CD('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CD("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CD("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CD("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CD("WarningMsg").fg}'
 enddef
-au vimrc ColorScheme * CD()
-def CE()
+au vimrc VimEnter,ColorScheme * CE()
+def CF()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -938,8 +950,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CE()
-def CF()
+au vimrc VimEnter,WinEnter * CF()
+def CG()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -947,19 +959,19 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CF()
-au vimrc BufNew,BufReadPost * silent! CF()
+au vimrc OptionSet list silent! CG()
+au vimrc BufNew,BufReadPost * silent! CG()
+sil! syntax enable
 set t_Co=256
-syntax on
 set bg=dark
 sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CG()
+def CH()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CG()|endif
+au vimrc VimEnter * ++nested if !C()|CH()|endif
