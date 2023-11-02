@@ -91,7 +91,6 @@ Jetpack 'tani/vim-jetpack', { 'opt': 1 }
 Jetpack 'airblade/vim-gitgutter'
 Jetpack 'cohama/lexima.vim'
 Jetpack 'delphinus/vim-auto-cursorline'
-Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
@@ -120,6 +119,7 @@ Jetpack 'tpope/vim-fugitive'
 Jetpack 'tyru/capture.vim'
 Jetpack 'tyru/caw.vim'
 Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/lsp'
 Jetpack 'yegappan/mru'
 Jetpack 'yuki-yano/dedent-yank.vim'
 Jetpack 'vim-jp/vital.vim'
@@ -156,18 +156,6 @@ jetpack#end()
 if ! lo
 jetpack#sync()
 endif
-Enable g:ale_fix_on_save
-Enable g:ale_set_quickfix
-Disable g:ale_echo_cursor
-Disable g:ale_lint_on_insert_leave
-Disable g:ale_set_loclist
-g:ale_sign_error = '🐞'
-g:ale_sign_warning = '🐝'
-g:ale_linters = { javascript: ['eslint'] }
-g:ale_fixers = { typescript: ['deno'] }
-g:ale_lint_delay = &ut
-nn <silent> [a <Plug>(ale_previous_wrap)
-nn <silent> ]a <Plug>(ale_next_wrap)
 au vimrc WinNew,FileType * b:stl_icon = nerdfont#find()
 b:stl_bufinfo = ''
 def F()
@@ -333,6 +321,22 @@ lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
 }
 enddef
 timer_start(1000, g:SetupLexima)
+var lspOptions = {
+diagSignErrorText: '🐞',
+diagSignHintText: '💡',
+diagSignInfoText: '💠',
+diagSignWarningText: '🐝',
+showDiagWithVirtualText: true,
+diagVirtualTextAlign: 'after',
+}
+var lspServers = [{
+name: 'typescriptlang',
+filetype: ['javascript', 'typescript'],
+path: 'typescript-language-server',
+args: ['--stdio'],
+}]
+au vimrc VimEnter * call LspOptionsSet(lspOptions)
+au vimrc VimEnter * call LspAddServer(lspServers)
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -883,7 +887,7 @@ nn <Space><Space>P O<Esc>p
 nn <Space>d "_d
 nn <Space>y yiw
 nm S^ v^S
-if strftime('%d') ==# '01'
+if strftime('%d') ==# '91'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 mapclear
@@ -902,13 +906,24 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-au vimrc ColorScheme * {
+def CC(a: string): any
+const b = hlID(a)->synIDtrans()
+const c = synIDattr(b, 'fg#')
+const d = synIDattr(b, 'bg#')
+return { fg: !c ? 'NONE' : c, bg: !d ? 'NONE' : d }
+enddef
+def CD()
 hi! link CmdHeight0Horiz TabLineFill
-hi! link ALEVirtualTextWarning ALEStyleWarningSign
-hi! link ALEVirtualTextError ALEStyleErrorSign
 hi! link CmdHeight0Horiz MoreMsg
-}
-def CC()
+const x = has('gui') ? 'gui' : 'cterm'
+const a = CC('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CC("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CC("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CC("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CC("WarningMsg").fg}'
+enddef
+au vimrc ColorScheme * CD()
+def CE()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -923,8 +938,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CC()
-def CD()
+au vimrc VimEnter,WinEnter * CE()
+def CF()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -932,8 +947,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CD()
-au vimrc BufNew,BufReadPost * silent! CD()
+au vimrc OptionSet list silent! CF()
+au vimrc BufNew,BufReadPost * silent! CF()
 set t_Co=256
 syntax on
 set bg=dark
@@ -941,10 +956,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CE()
+def CG()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CE()|endif
+au vimrc VimEnter * ++nested if !C()|CG()|endif

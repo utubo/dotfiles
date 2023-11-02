@@ -132,7 +132,6 @@ Jetpack 'tani/vim-jetpack', { 'opt': 1 }
 Jetpack 'airblade/vim-gitgutter'
 Jetpack 'cohama/lexima.vim' # 括弧補完
 Jetpack 'delphinus/vim-auto-cursorline'
-Jetpack 'dense-analysis/ale'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
@@ -161,6 +160,7 @@ Jetpack 'tpope/vim-fugitive' # Gdiffとか
 Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
 Jetpack 'tyru/caw.vim' # コメント化
 Jetpack 'yami-beta/asyncomplete-omni.vim'
+Jetpack 'yegappan/lsp'
 Jetpack 'yegappan/mru'
 Jetpack 'yuki-yano/dedent-yank.vim' # yankするときにインデントを除去
 Jetpack 'vim-jp/vital.vim'
@@ -202,21 +202,6 @@ jetpack#end()
 if ! has_jetpack
 	jetpack#sync()
 endif
-#}}}
-
-# ALE {{{
-Enable  g:ale_fix_on_save
-Enable  g:ale_set_quickfix
-Disable g:ale_echo_cursor
-Disable g:ale_lint_on_insert_leave
-Disable g:ale_set_loclist
-g:ale_sign_error = '🐞'
-g:ale_sign_warning = '🐝'
-g:ale_linters = { javascript: ['eslint'] }
-g:ale_fixers = { typescript: ['deno'] }
-g:ale_lint_delay = &updatetime
-nnoremap <silent> [a <Plug>(ale_previous_wrap)
-nnoremap <silent> ]a <Plug>(ale_next_wrap)
 #}}}
 
 # cmdheight0, statusline {{{
@@ -423,6 +408,26 @@ def g:SetupLexima(timer: number)
 enddef
 timer_start(1000, g:SetupLexima)
 # }}}
+
+# LSP {{{
+# minviml:fixed=lspOptions,lspServers
+var lspOptions = {
+	diagSignErrorText: '🐞',
+	diagSignHintText: '💡',
+	diagSignInfoText: '💠',
+	diagSignWarningText: '🐝',
+	showDiagWithVirtualText: true,
+	diagVirtualTextAlign: 'after',
+}
+var lspServers = [{
+	name: 'typescriptlang',
+	filetype: ['javascript', 'typescript'],
+	path: 'typescript-language-server',
+	args: ['--stdio'],
+}]
+au vimrc VimEnter * call LspOptionsSet(lspOptions)
+au vimrc VimEnter * call LspAddServer(lspServers)
+#}}}
 
 # MRU {{{
 nnoremap <F2> <Cmd>MRUToggle<CR>
@@ -1186,7 +1191,7 @@ nmap S^ v^S
 
 # ----------------------------------------------------------
 # デフォルトマッピングデー {{{
-if strftime('%d') ==# '01'
+if strftime('%d') ==# '91'
 	au vimrc VimEnter * {
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		mapclear
@@ -1210,12 +1215,26 @@ au vimrc ColorSchemePre * {
 		['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 	]
 }
-au vimrc ColorScheme * {
+
+def GetHl(name: string): any
+	const id = hlID(name)->synIDtrans()
+	const fg = synIDattr(id, 'fg#')
+	const bg = synIDattr(id, 'bg#')
+	return { fg: !fg ? 'NONE' : fg, bg: !bg ? 'NONE' : bg }
+enddef
+
+def MyHighlight()
 	hi! link CmdHeight0Horiz TabLineFill
-	hi! link ALEVirtualTextWarning ALEStyleWarningSign
-	hi! link ALEVirtualTextError ALEStyleErrorSign
 	hi! link CmdHeight0Horiz MoreMsg
-}
+	const x = has('gui') ? 'gui' : 'cterm'
+	const signBg = GetHl('LineNr').bg
+	execute $'hi LspDiagSignErrorText   {x}bg={signBg} {x}fg={GetHl("ErrorMsg").fg}'
+	execute $'hi LspDiagSignHintText    {x}bg={signBg} {x}fg={GetHl("Question").fg}'
+	execute $'hi LspDiagSignInfoText    {x}bg={signBg} {x}fg={GetHl("Pmenu").fg}'
+	execute $'hi LspDiagSignWarningText {x}bg={signBg} {x}fg={GetHl("WarningMsg").fg}'
+enddef
+
+au vimrc ColorScheme * MyHighlight()
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ
