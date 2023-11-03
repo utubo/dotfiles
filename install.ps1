@@ -11,3 +11,17 @@ New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vim/scripts.vim -Path ~/vi
 
 git config --global core.excludesfile ~/.gitignore_global
 
+# choco
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# npm
+choco install -y --force nodejs-lts
+npm install -g npm
+$node_modules = (npm prefix) + "AppData\Roaming\npm"
+$systemPath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+$systemPath += ";" + $node_modules
+[System.Environment]::SetEnvironmentVariable("Path", $systemPath, "Machine")
+
+# node_modules
+npm install -g typescript-language-server
+
