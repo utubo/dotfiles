@@ -425,6 +425,11 @@ var lspServers = [{
 	filetype: ['javascript', 'typescript'],
 	path: $'typescript-language-server{commandExt}',
 	args: ['--stdio'],
+}, {
+	name: 'vimscriptlang',
+	filetype: ['vim'],
+	path: $'vimscript-language-server{commandExt}',
+	args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)

@@ -15,3 +15,11 @@ ln -s ${SCRIPT_DIR}/.vim/autoload ~/.vim
 ln -s ${SCRIPT_DIR}/.vim/scripts.vim ~/.vim
 
 git config --global core.excludesfile ~/.gitignore_global
+
+# npm
+npm install -g npm
+
+# node_modules
+npm install -g typescript-language-server
+npm install -g vim-language-server
+

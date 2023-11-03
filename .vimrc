@@ -335,6 +335,11 @@ name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
 path: $'typescript-language-server{lq}',
 args: ['--stdio'],
+}, {
+name: 'vimscriptlang',
+filetype: ['vim'],
+path: $'vimscript-language-server{lq}',
+args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
