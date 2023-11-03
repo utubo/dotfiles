@@ -13,6 +13,8 @@ var f = split(&guifont, ':h')
 enddef
 nn <silent> <M-S-k> <Cmd>call <SID>A(v:count1)<CR>
 nn <silent> <M-S-j> <Cmd>call <SID>A(-v:count1)<CR>
+nn <silent> <C-ScrollWheelUp> <Cmd>call <SID>A(v:count1)<CR>
+nn <silent> <C-ScrollWheelDown> <Cmd>call <SID>A(-v:count1)<CR>
 nn <silent> <Esc> <Cmd>set go-=m<Bar>set go-=T<CR>
 nn <silent> <M-m> <Cmd>if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
 nn <silent> <M-t> <Cmd>if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
@@ -30,6 +32,7 @@ var a = [
 'colorscheme ' .. g:colors_name,
 'set columns=' .. &columns,
 'set lines=' .. &lines,
+'set guifont=' .. &guifont,
 'winpos ' .. getwinposx() .. ' ' .. getwinposy(),
 ]
 writefile(a, g:save_window_file)

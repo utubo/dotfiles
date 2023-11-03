@@ -19,6 +19,9 @@ def IncFontSize(d: number)
 enddef
 nnoremap <silent> <M-S-k> <Cmd>call <SID>IncFontSize(v:count1)<CR>
 nnoremap <silent> <M-S-j> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
+# 禁断の🖱 (拡大縮小はこっちのほうが馴染みがあるから…)
+nnoremap <silent> <C-ScrollWheelUp> <Cmd>call <SID>IncFontSize(v:count1)<CR>
+nnoremap <silent> <C-ScrollWheelDown> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
 # }}}
 
 # guioptions {{{
@@ -44,11 +47,12 @@ g:tabline_labelsep = ', '
 g:save_window_file = expand('~/.vimwinpos')
 def SaveWindow()
 	var options = [
-	  'set background=' .. &background,
-	  'colorscheme ' .. g:colors_name,
-	  'set columns=' .. &columns,
-	  'set lines=' .. &lines,
-	  'winpos ' .. getwinposx() .. ' ' .. getwinposy(),
+		'set background=' .. &background,
+		'colorscheme ' .. g:colors_name,
+		'set columns=' .. &columns,
+		'set lines=' .. &lines,
+		'set guifont=' .. &guifont,
+		'winpos ' .. getwinposx() .. ' ' .. getwinposy(),
 	]
 	writefile(options, g:save_window_file)
 enddef
