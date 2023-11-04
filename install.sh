@@ -22,4 +22,6 @@ npm install -g npm
 # node_modules
 npm install -g typescript-language-server
 npm install -g vim-language-server
+npm install -g vscode-html-languageserver
+npm install -g vscode-json-languageserver
 

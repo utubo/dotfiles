@@ -426,9 +426,19 @@ var lspServers = [{
 	path: $'typescript-language-server{commandExt}',
 	args: ['--stdio'],
 }, {
-	name: 'vimscriptlang',
+	name: 'vimlang',
 	filetype: ['vim'],
-	path: $'vimscript-language-server{commandExt}',
+	path: $'vim-language-server{commandExt}',
+	args: ['--stdio'],
+}, {
+	name: 'htmllang',
+	filetype: ['html'],
+	path: $'html-languageserver{commandExt}',
+	args: ['--stdio'],
+}, {
+	name: 'jsonlang',
+	filetype: ['json'],
+	path: $'vscode-json-languageserver{commandExt}',
 	args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
