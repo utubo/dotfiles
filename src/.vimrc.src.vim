@@ -149,8 +149,6 @@ Jetpack 'MTDL9/vim-log-highlighting'
 Jetpack 'obcat/vim-hitspop'
 Jetpack 'obcat/vim-sclow' # スクロールバー
 Jetpack 'osyo-manga/vim-textobj-multiblock'
-Jetpack 'othree/html5.vim'
-Jetpack 'othree/yajs.vim'
 Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
 Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'skanehira/gh.vim'
