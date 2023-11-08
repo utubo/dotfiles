@@ -527,8 +527,8 @@ call textobj#user#plugin('nonwhitespace', {
 #}}}
 
 # 補完 {{{
-CmdEach inoremap,snoremap <expr> JJ    vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-CmdEach inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
 enddef
@@ -550,8 +550,6 @@ nnoremap <Space>% <ScriptCmd>call hlpairs#ReturnCursor()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 # 🐶🍚
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>

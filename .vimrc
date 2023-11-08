@@ -416,8 +416,8 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-CmdEach inoremap,snoremap <expr> JJ vsnip#expandable() ? '<Plug>(vsnip-expand)' : 'JJ'
-CmdEach inoremap,snoremap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 def J(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
@@ -436,8 +436,6 @@ nn <Space>% <ScriptCmd>call hlpairs#ReturnCursor()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
-CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
