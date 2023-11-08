@@ -353,6 +353,8 @@ args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
+nn [l <Cmd>LspDiagPrev<CR>
+nn ]l <Cmd>LspDiagNext<CR>
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
@@ -433,9 +435,11 @@ nn <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)

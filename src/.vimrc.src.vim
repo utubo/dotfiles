@@ -443,6 +443,8 @@ var lspServers = [{
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
 au vimrc VimEnter * call LspAddServer(lspServers)
+nnoremap [l <Cmd>LspDiagPrev<CR>
+nnoremap ]l <Cmd>LspDiagNext<CR>
 #}}}
 
 # MRU {{{
@@ -547,12 +549,14 @@ nnoremap <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+# 🐶🍚
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
-# EasyMotionとどっちを使うか様子見中
 noremap <Space>s <Plug>(jumpcursor-jump)
 #}}}
 
