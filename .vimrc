@@ -432,6 +432,7 @@ g:auto_cursorline_wait_ms = &ut
 g:loaded_matchparen = 1
 au vimrc VimEnter * nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
 nn <Leader>% <ScriptCmd>call hlpairs#HighlightOuter()<CR>
+nn <Space>% <ScriptCmd>call hlpairs#ReturnCursor()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
