@@ -939,7 +939,6 @@ const b = hlID(a)->synIDtrans()
 return { fg: CC(b, 'fg'), bg: CC(b, 'bg') }
 enddef
 def CE()
-hi! link CmdHeight0Horiz TabLineFill
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
 const a = CD('LineNr').bg
