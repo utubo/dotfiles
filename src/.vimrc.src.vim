@@ -542,12 +542,13 @@ g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
 g:loaded_matchparen = 1
-au vimrc VimEnter * nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
-au vimrc VimEnter * nnoremap ]% <Cmd>call hlpairs#Jump('f')<CR>
-au vimrc VimEnter * nnoremap [% <Cmd>call hlpairs#Jump('b')<CR>
-au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+g:loaded_matchit = 1
+nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
+nnoremap ]% <Cmd>call hlpairs#Jump('f')<CR>
+nnoremap [% <Cmd>call hlpairs#Jump('b')<CR>
 nnoremap <Leader>% <Cmd>call hlpairs#HighlightOuter()<CR>
 nnoremap <Space>% <Cmd>call hlpairs#ReturnCursor()<CR>
+au vimrc VimEnter * hlpairs#TextObjUserMap('%')
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
