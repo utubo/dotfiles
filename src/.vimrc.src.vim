@@ -1036,6 +1036,7 @@ nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><L
 xnoremap gs :s///g<Left><Left><Left>
 xnoremap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
 
+nnoremap <CR> j0
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
@@ -1055,6 +1056,8 @@ xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xnoremap J j
 xnoremap K k
+xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
+xnoremap P p
 
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<C-g>U<Left>
@@ -1073,21 +1076,8 @@ nnoremap M m
 # 様子見中 使わなそうなら削除する {{{
 nnoremap g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
 nnoremap g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
-xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
-xnoremap P p
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-
-# 辞書ファイル書くときに便利だけどもしかして<CR>ってプレフィックスになりえる？
-nnoremap <CR> j0
-
-# ↓キーボードの設定で<CR>を<Space>に切り替えられるようにしたのでもう不要かな…
-## 分割キーボードで右手親指が<CR>になったので
-#nmap <CR> <Space>
-
-# <Tab>でインデント
-#nnoremap <Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-#nnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 
 # <Tab>でtsvとかcsvとかhtmlの次の項目
 nnoremap <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
@@ -1113,12 +1103,8 @@ inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<C-g>U<Left>
 inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
-# 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
-# そもそも`q`が押しにくいか…
-cnoremap qj <Down>
-cnoremap qk <Up>
 
-# syntax固有の追加強調
+# syntax固有の追加強調 {{{
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
 		matchdelete(id)
@@ -1138,8 +1124,9 @@ au vimrc Syntax vim {
 	AddMySyntax('SpellBad', '\s[=!]==\s')
 	AddMySyntax('SpellRare', '\<normal!\@!')
 }
+#}}}
 
-# yankした文字をポップアップ
+# yankした文字をポップアップ {{{
 def PopupYankText()
 	const text = ('📋 ' .. @")
 		->substitute('\t', '›', 'g')
@@ -1156,8 +1143,9 @@ def PopupYankText()
 	win_execute(winid, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef
 au vimrc TextYankPost * PopupYankText()
+#}}}
 
-# 選択中の文字数をポップアップ
+# 選択中の文字数をポップアップ {{{
 def PopupVisualLength()
 	normal! "vy
 	var text = @v->substitute('\n', '', 'g')
@@ -1170,12 +1158,9 @@ def PopupVisualLength()
 	})
 enddef
 xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
+#}}}
 
-# `:%g!/re/d` の結果を新規ウインドウに表示
-# (Buffer Regular Expression Print)
-command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
-
-# cmdlineでノーマルモードみたいにするやつ
+# cmdlineでノーマルモードみたいにするやつ {{{
 def CmdToNormal(): string
 	cnoremap jk <C-c>
 	cnoremap h <Left>
@@ -1198,6 +1183,11 @@ enddef
 au vimrc ModeChanged *:c CmdToInsert()
 # ↓これは無しにしてみる
 #cnoremap jk <C-c>
+#}}}
+
+# `:%g!/re/d` の結果を新規ウインドウに表示
+# (Buffer Regular Expression Print)
+command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 
 # <C-f>と<C-b>、CTRLおしっぱがつらいので…
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)

@@ -803,6 +803,7 @@ nn gs :<C-u>%s///g<Left><Left><Left>
 nn gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
 xn gs :s///g<Left><Left><Left>
 xn gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
+nn <CR> j0
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
@@ -818,6 +819,8 @@ xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
+xn <expr> p $'"_s<C-R>{v:register}<ESC>'
+xn P p
 ino ｋｊ <Esc>`^
 ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
@@ -828,11 +831,8 @@ nn m '
 nn M m
 nn g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
 nn g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
-xn <expr> p $'"_s<C-R>{v:register}<ESC>'
-xn P p
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-nn <CR> j0
 nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
 nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 au vimrc FileType html,xml,svg {
@@ -850,8 +850,6 @@ ino jj<Space> <C-o>$<CR>
 ino jjk 「」<C-g>U<Left>
 ino jj<Tab> <ScriptCmd>D('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>D('normal! <<')<CR>
-cno qj <Down>
-cno qk <Up>
 def BH()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
@@ -898,7 +896,6 @@ padding: [1, 1, 1, 1],
 })
 enddef
 xn <C-g> <ScriptCmd>CA()<CR>
-com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 def CB(): string
 cno jk <C-c>
 cno h <Left>
@@ -919,6 +916,7 @@ cno <script> <expr> jk CB()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CC()
+com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
