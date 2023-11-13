@@ -829,8 +829,8 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-nn g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
-nn g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
+nn <Space><Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
+nn <Space><Tab>l <Cmd>call recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>

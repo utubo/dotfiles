@@ -1074,8 +1074,8 @@ nnoremap M m
 
 # ----------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
-nnoremap g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
-nnoremap g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
+nnoremap <Space><Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
+nnoremap <Space><Tab>l <Cmd>call recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 

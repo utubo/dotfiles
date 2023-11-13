@@ -21,11 +21,11 @@ export def ShowMostRecentlyClosedTabs()
   new
   set bufhidden=hide
   append(0, g:most_recently_closed)
-  $delete
+  :$delete
   autocmd WinClosed <buffer> bwipeout!
   nnoremap <buffer> q <Cmd>bwipeout!<CR>
   nnoremap <buffer> <ESC> <Cmd>bwipeout!<CR>
-  nnoremap <buffer> dd <Cmd>call remove(g:most_recently_closed, line('.') - 1) | delete<CR>
+  nnoremap <buffer> dd <Cmd>call remove(g:most_recently_closed, line('.') - 1)<CR><Cmd>delete<CR>
   nnoremap <buffer> <CR> <Cmd>execute 'tabnew ' .. remove(g:most_recently_closed, line('.') - 1)<CR>
 enddef
 
