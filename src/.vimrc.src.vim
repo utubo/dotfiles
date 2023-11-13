@@ -125,8 +125,8 @@ enddef
 const jetpackfile = expand( $'{rtproot}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
 const has_jetpack = filereadable(jetpackfile)
 if ! has_jetpack
-  const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-  system($'curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
+	const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+	system($'curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
 endif
 
 packadd vim-jetpack
@@ -523,7 +523,7 @@ g:textobj_multiblock_blocks = [
 	[ "「", "」", 1 ],
 ]
 call textobj#user#plugin('nonwhitespace', {
-  '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
+	'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 #}}}
 
