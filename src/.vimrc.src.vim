@@ -1141,11 +1141,11 @@ au vimrc Syntax vim {
 
 # yankした文字をポップアップ
 def PopupYankText()
-	var text = ('📋 ' .. @")
+	const text = ('📋 ' .. @")
 		->substitute('\t', '›', 'g')
-		->substitute('\n', '⏎', 'g')
-		->TruncToDisplayWidth(winwidth(0) - 10)
-	call popup_create(text, {
+		->substitute('\n', '↵', 'g')
+	const truncated = text->TruncToDisplayWidth(winwidth(0) - 10)
+	const winid = popup_create(truncated, {
 		line: 'cursor-1',
 		col: 'cursor+1',
 		pos: 'topleft',
@@ -1153,6 +1153,7 @@ def PopupYankText()
 		fixed: true,
 		moved: 'any',
 	})
+	win_execute(winid, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef
 au vimrc TextYankPost * PopupYankText()
 

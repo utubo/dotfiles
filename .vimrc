@@ -871,11 +871,11 @@ BI('SpellBad', '\s[=!]==\s')
 BI('SpellRare', '\<normal!\@!')
 }
 def BJ()
-var a = ('📋 ' .. @")
+const a = ('📋 ' .. @")
 ->substitute('\t', '›', 'g')
-->substitute('\n', '⏎', 'g')
-->E(winwidth(0) - 10)
-call popup_create(a, {
+->substitute('\n', '↵', 'g')
+const b = a->E(winwidth(0) - 10)
+const c = popup_create(b, {
 line: 'cursor-1',
 col: 'cursor+1',
 pos: 'topleft',
@@ -883,6 +883,7 @@ padding: [0, 1, 0, 1],
 fixed: true,
 moved: 'any',
 })
+win_execute(c, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef
 au vimrc TextYankPost * BJ()
 def CA()
