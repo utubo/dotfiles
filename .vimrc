@@ -866,6 +866,7 @@ BI('SpellRare', '\s[=!]=\s')
 au vimrc Syntax vim {
 BI('SpellRare', '\s[=!]=\s')
 BI('SpellBad', '\s[=!]==\s')
+BI('SpellBad', '\s\~[=!][=#]\?\s')
 BI('SpellRare', '\<normal!\@!')
 }
 def BJ()

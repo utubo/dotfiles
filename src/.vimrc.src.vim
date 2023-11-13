@@ -1122,6 +1122,7 @@ au vimrc Syntax javascript {
 au vimrc Syntax vim {
 	AddMySyntax('SpellRare', '\s[=!]=\s')
 	AddMySyntax('SpellBad', '\s[=!]==\s')
+	AddMySyntax('SpellBad', '\s\~[=!][=#]\?\s')
 	AddMySyntax('SpellRare', '\<normal!\@!')
 }
 #}}}
