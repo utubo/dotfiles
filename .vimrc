@@ -35,7 +35,7 @@ aug vimrc
 au!
 aug End
 const lk = has('win32') ? '~/vimfiles' : '~/.vim'
-const lm = executable('deno')
+const ll = executable('deno')
 def A(b: string)
 const [c, d] = b->split('^\S*\zs')
 for e in c->split(',')
@@ -70,6 +70,9 @@ c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
 def E(a: string, b: number): string
+if b <= 0
+return ''
+endif
 return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
 enddef
 def! g:VFirstLast(): list<number>
@@ -79,11 +82,11 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-const ln = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-const lo = filereadable(ln)
-if ! lo
-const lp = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system($'curl -fsSLo {ln} --create-dirs {lp}')
+const lm = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
+const ln = filereadable(lm)
+if ! ln
+const lo = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
+system($'curl -fsSLo {lm} --create-dirs {lo}')
 endif
 packadd vim-jetpack
 jetpack#begin()
@@ -146,12 +149,12 @@ Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-textobj-twochars'
-if lm
+if ll
 Jetpack 'vim-denops/denops.vim'
 Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
-if ! lo
+if ! ln
 jetpack#sync()
 endif
 au vimrc WinNew,FileType * b:stl_icon = nerdfont#find()
@@ -327,26 +330,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const lq = has('win32') ? '.cmd' : ''
+const lp = has('win32') ? '.cmd' : ''
 var lspServers = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{lq}',
+path: $'typescript-language-server{lp}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{lq}',
+path: $'vim-language-server{lp}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{lq}',
+path: $'html-languageserver{lp}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{lq}',
+path: $'vscode-json-languageserver{lp}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -385,7 +388,7 @@ au vimrc User OperatorSandwichAddPost myutil#FixSandwichPos()
 au vimrc User OperatorSandwichDeletePost myutil#RemoveAirBuns()
 xn Sm <ScriptCmd>myutil#BigMac()<CR>
 nm Sm viwSm
-if lm
+if ll
 if ! empty($SKK_JISYO_DIR)
 skkeleton#config({
 globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
@@ -414,13 +417,21 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+def J(): string
+const c = matchstr(getline('.'), '.', col('.') - 1)
+if !c || stridx(')]}>"''`」', c) ==# -1
+return "\<Tab>"
+else
+return "\<C-o>a"
+endif
+enddef
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : J()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-def J(a: string, b: list<string>, c: list<string>)
+def BA(a: string, b: list<string>, c: list<string>)
 exe printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", a, a, b, c, a)
 enddef
-J('omni', ['*'], ['c', 'cpp', 'html'])
-J('buffer', ['*'], ['go'])
+BA('omni', ['*'], ['c', 'cpp', 'html'])
+BA('buffer', ['*'], ['go'])
 Enable g:rainbow_active
 Enable g:ctrlp_use_caching
 Disable g:ctrlp_clear_cache_on_exit
@@ -444,9 +455,9 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lr = expand($'{lk}/pack/local/opt/*')
-if lr !=# ''
-&runtimepath = $'{substitute(lr, '\n', ',', 'g')},{&runtimepath}'
+const lq = expand($'{lk}/pack/local/opt/*')
+if lq !=# ''
+&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
@@ -463,7 +474,7 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
-def BA()
+def BB()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -479,7 +490,7 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BA()
+au vimrc BufReadPost * BB()
 com! -nargs=+ -complete=dir VimGrep myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -507,6 +518,10 @@ exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
 nm <Space><Space>1 <F11>
 nm <Space><Space>2 <F12>
+nn <Space>a A
+nn <Space>h ^
+nn <Space>l $
+nn <Space>y yiw
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -529,13 +544,14 @@ nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>myutil#Zf()<CR>
 nn zd <ScriptCmd>myutil#Zd()<CR>
+nn <silent> g; g;zO
 g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
 g:tabline_term_sign = "\uf489"
 g:tabline_labelsep = '|'
 g:tabline_maxlen = 20
-def BB(a: list<number>, c: bool = false): string
+def BC(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''
 for b in a
@@ -575,7 +591,7 @@ var i = -1
 for b in d
 i += 1
 if len(f) ==# 2
-f += [(BB(d[i : ], true) .. '>')]
+f += [(BC(d[i : ], true) .. '>')]
 break
 endif
 var h = bufname(b)
@@ -589,7 +605,7 @@ if g:tabline_maxlen < len(h)
 h = '<' .. h->matchstr(repeat('.', g:tabline_maxlen - 1) .. '$')
 endif
 if f->index(h) ==# -1
-f += [BB([b]) .. h]
+f += [BC([b]) .. h]
 endif
 endfor
 c ..= f->join(g:tabline_labelsep)
@@ -628,7 +644,7 @@ cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cnoreabbrev cs colorscheme
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
-def BC(c: string): string
+def BD(c: string): string
 if getcmdtype() !=# ':'
 return c
 endif
@@ -648,7 +664,7 @@ return $"{c}{c}\<Left>"
 endif
 return c
 enddef
-Each /,#,! cnoremap <script> <expr> {} BC('{}')
+Each /,#,! cnoremap <script> <expr> {} BD('{}')
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -676,7 +692,7 @@ e = 'drop'
 endif
 exe e fnameescape(f)
 enddef
-def BD(a: string = '')
+def BE(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -735,7 +751,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def BE()
+def BF()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -744,9 +760,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <script> <C-g> <ScriptCmd>BD()<CR><scriptCmd>BE()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BD('BufNewFile')
-def BF(a: string)
+nn <script> <C-g> <ScriptCmd>BE()<CR><scriptCmd>BF()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * BE('BufNewFile')
+def BG(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -757,7 +773,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{} <ScriptCmd>BF('{}')<CR>
+Each h,j,k,l nnoremap q{} <ScriptCmd>BG('{}')<CR>
 nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
@@ -807,16 +823,15 @@ ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
 ino （ ()<C-g>U<Left>
 ino （） ()<C-g>U<Left>
+nn ' "
+nn m '
+nn M m
 nn g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
 nn g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
-nn <Space>a A
 xn <expr> p $'"_s<C-R>{v:register}<ESC>'
 xn P p
-nn <Space>h ^
-nn <Space>l $
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-nn <silent> g; g;zO
 nn <CR> j0
 nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
 nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
@@ -826,9 +841,6 @@ nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>',
 }
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
-nn ' "
-nn m '
-nn M m
 nn <F9> my
 nn <S-F9> 'y
 ino jj <C-o>
@@ -838,22 +850,42 @@ ino jj<Space> <C-o>$<CR>
 ino jjk 「」<C-g>U<Left>
 ino jj<Tab> <ScriptCmd>D('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>D('normal! <<')<CR>
-ino <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 cno qj <Down>
 cno qk <Up>
-def BG()
+def BH()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BH(a: string, b: string)
+def BI(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BG()
-au vimrc Syntax javascript,vim BH('SpellRare', '\s[=!]=\s')
-au vimrc Syntax vim BH('SpellRare', '\<normal!\@!')
-def BI()
+au vimrc Syntax * BH()
+au vimrc Syntax javascript {
+BI('SpellRare', '\s[=!]=\s')
+}
+au vimrc Syntax vim {
+BI('SpellRare', '\s[=!]=\s')
+BI('SpellBad', '\s[=!]==\s')
+BI('SpellRare', '\<normal!\@!')
+}
+def BJ()
+var a = ('📋 ' .. @")
+->substitute('\t', '›', 'g')
+->substitute('\n', '⏎', 'g')
+->E(winwidth(0) - 10)
+call popup_create(a, {
+line: 'cursor-1',
+col: 'cursor+1',
+pos: 'topleft',
+padding: [0, 1, 0, 1],
+fixed: true,
+moved: 'any',
+})
+enddef
+au vimrc TextYankPost * BJ()
+def CA()
 normal! "vy
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -864,21 +896,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BI()<CR>
-def BJ(): string
-const c = matchstr(getline('.'), '.', col('.') - 1)
-if !c || stridx(')]}"''`」', c) ==# -1
-return 'll'
-endif
-const a = matchstr(getline('.'), '.', col('.') - 2)
-if stridx('ae', a) !=# -1
-return 'll'
-endif
-return "\<C-o>a"
-enddef
-ino <expr> ll BJ()
+xn <C-g> <ScriptCmd>CA()<CR>
 com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
-def CA(): string
+def CB(): string
 cno jk <C-c>
 cno h <Left>
 cno l <Right>
@@ -887,17 +907,17 @@ cno w <S-Right>
 cno $ <End><Left>
 cno ^ <Home>
 cno x <Delete>
-cno <script> <expr> i CB('i')
-cno <script> <expr> a CB('a')
+cno <script> <expr> i CC('i')
+cno <script> <expr> a CC('a')
 cm A $a
 return ""
 enddef
-def CB(c: string = 'i'): string
+def CC(c: string = 'i'): string
 Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-cno <script> <expr> jk CA()
+cno <script> <expr> jk CB()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
-au vimrc ModeChanged *:c CB()
+au vimrc ModeChanged *:c CC()
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
@@ -908,8 +928,6 @@ nn <Space>o <C-w>w
 nn <Space><Space>p o<Esc>P
 nn <Space><Space>P O<Esc>p
 nn <Space>d "_d
-nn <Space>y yiw
-nm S^ v^S
 if strftime('%d') ==# '91'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
@@ -929,7 +947,7 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def CC(a: number, b: string): string
+def CD(a: number, b: string): string
 const v = synIDattr(a, b)
 if has('gui')
 return v =~# '^[0-9]*$' ? 'NONE' : v
@@ -937,21 +955,21 @@ else
 return v !~# '^[0-9]\+$' ? 'NONE' : v
 endif
 enddef
-def CD(a: string): any
+def CE(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: CC(b, 'fg'), bg: CC(b, 'bg') }
+return { fg: CD(b, 'fg'), bg: CD(b, 'bg') }
 enddef
-def CE()
+def CF()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = CD('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CD("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CD("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CD("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CD("WarningMsg").fg}'
+const a = CE('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CE("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CE("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CE("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CE("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * CE()
-def CF()
+au vimrc VimEnter,ColorScheme * CF()
+def CG()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -966,8 +984,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CF()
-def CG()
+au vimrc VimEnter,WinEnter * CG()
+def CH()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -975,8 +993,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CG()
-au vimrc BufNew,BufReadPost * silent! CG()
+au vimrc OptionSet list silent! CH()
+au vimrc BufNew,BufReadPost * silent! CH()
 sil! syntax enable
 set t_Co=256
 set bg=dark
@@ -984,10 +1002,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CH()
+def CI()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CH()|endif
+au vimrc VimEnter * ++nested if !C()|CI()|endif

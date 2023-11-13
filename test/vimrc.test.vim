@@ -136,6 +136,7 @@ suite.TestMapping = () => {
 	# i  [     vim-laxima
 	# i  <Esc> vim-laxima
 	#    <SNR>XX_(save-cursor-pos) vim-textobj
+	# i  (     vim-laximaとlsp
 	# n  \\KK  vim-yomigana
 	# n  \\HH  vim-yomigana
 	var user_ignore = '\C' ..
@@ -144,6 +145,7 @@ suite.TestMapping = () => {
 		'x  \([S]\)\|' ..
 		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)\|' ..
+		'i  (\|' ..
 		'n  <SNR>\d_ws.\|' ..
 		'n  \\KK\|' ..
 		'n  \\HH\|' ..
@@ -307,6 +309,8 @@ suite.TestTruncToDisplayWidth = () => {
 	assert.equals(F('あいう',  6), 'あいう')
 	assert.equals(F('あいう1', 6), 'あい>')
 	assert.equals(F('あいう',  5), 'あい>')
+	assert.equals(F('', -1), '')
+	assert.equals(F('', 0), '')
 	assert.equals(F('', 1), '')
 	assert.equals(F('>', 1), '>')
 	assert.equals(F('あ', 1), '>')

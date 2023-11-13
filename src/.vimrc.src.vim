@@ -101,6 +101,9 @@ enddef
 
 # 指定幅以上なら'>'で省略する
 def TruncToDisplayWidth(str: string, width: number): string
+	if width <= 0
+		return ''
+	endif
 	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
 enddef
 
@@ -525,7 +528,16 @@ call textobj#user#plugin('nonwhitespace', {
 #}}}
 
 # 補完 {{{
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : '<Tab>'
+def SkipParen(): string
+	# 閉じ括弧の間にTAB文字入れることはないだろう…
+	const c = matchstr(getline('.'), '.', col('.') - 1)
+	if !c || stridx(')]}>"''`」', c) ==# -1
+		return "\<Tab>"
+	else
+		return  "\<C-o>a"
+	endif
+enddef
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
 	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
@@ -660,6 +672,11 @@ for i in range(1, 10)
 endfor
 nmap <Space><Space>1 <F11>
 nmap <Space><Space>2 <F12>
+# その他
+nnoremap <Space>a A
+nnoremap <Space>h ^
+nnoremap <Space>l $
+nnoremap <Space>y yiw
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -689,6 +706,7 @@ nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 xnoremap zf <ScriptCmd>myutil#Zf()<CR>
 nnoremap zd <ScriptCmd>myutil#Zd()<CR>
+nnoremap <silent> g; g;zO
 #}}}
 #}}} -------------------------------------------------------
 
@@ -1043,23 +1061,22 @@ inoremap 「 「」<C-g>U<Left>
 inoremap 「」 「」<C-g>U<Left>
 inoremap （ ()<C-g>U<Left>
 inoremap （） ()<C-g>U<Left>
+
+# US配列→「"」押しにくい、JIS配列→「'」押しにくい
+# デフォルトのMはあまり使わないかなぁ…
+nnoremap ' "
+nnoremap m '
+nnoremap M m
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
-# 様子見中 {{{
-# 使わなそうなら削除する
+# 様子見中 使わなそうなら削除する {{{
 nnoremap g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
 nnoremap g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
-nnoremap <Space>a A
 xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
 xnoremap P p
-nnoremap <Space>h ^
-nnoremap <Space>l $
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-
-# 移動した後折り畳みを展開
-nnoremap <silent> g; g;zO
 
 # 辞書ファイル書くときに便利だけどもしかして<CR>ってプレフィックスになりえる？
 nnoremap <CR> j0
@@ -1084,13 +1101,7 @@ au vimrc FileType html,xml,svg {
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xnoremap <F10> <ESC>1<C-w>s<C-w>w
 
-# US→「"」押しにくい、JIS→「'」押しにくい
-# デフォルトのMはあまり使わないかなぁ…
-nnoremap ' "
-nnoremap m '
-nnoremap M m
-
-# ここまで読んだ
+# ここまで読(y)んだ
 nnoremap <F9> my
 nnoremap <S-F9> 'y
 
@@ -1102,8 +1113,6 @@ inoremap jj<Space> <C-o>$<CR>
 inoremap jjk 「」<C-g>U<Left>
 inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
-# これはちょっと押しにくい(自分のキーボードだと)
-inoremap <M-x> <ScriptCmd>ToggleCheckBox()<CR>
 # 英単語は`q`のあとは必ず`u`だから`q`をプレフィックスにする手もありか？
 # そもそも`q`が押しにくいか…
 cnoremap qj <Down>
@@ -1120,10 +1129,32 @@ def AddMySyntax(group: string, pattern: string)
 	w:my_syntax->add(matchadd(group, pattern))
 enddef
 au vimrc Syntax * ClearMySyntax()
-# 「==#」とかの存在を忘れないように
-au vimrc Syntax javascript,vim AddMySyntax('SpellRare', '\s[=!]=\s')
-# 基本的にnormalは再マッピングさせないように「!」を付ける
-au vimrc Syntax vim AddMySyntax('SpellRare', '\<normal!\@!')
+# やりがちなミスにハイライトを付ける
+au vimrc Syntax javascript {
+	AddMySyntax('SpellRare', '\s[=!]=\s')
+}
+au vimrc Syntax vim {
+	AddMySyntax('SpellRare', '\s[=!]=\s')
+	AddMySyntax('SpellBad', '\s[=!]==\s')
+	AddMySyntax('SpellRare', '\<normal!\@!')
+}
+
+# yankした文字をポップアップ
+def PopupYankText()
+	var text = ('📋 ' .. @")
+		->substitute('\t', '›', 'g')
+		->substitute('\n', '⏎', 'g')
+		->TruncToDisplayWidth(winwidth(0) - 10)
+	call popup_create(text, {
+		line: 'cursor-1',
+		col: 'cursor+1',
+		pos: 'topleft',
+		padding: [0, 1, 0, 1],
+		fixed: true,
+		moved: 'any',
+	})
+enddef
+au vimrc TextYankPost * PopupYankText()
 
 # 選択中の文字数をポップアップ
 def PopupVisualLength()
@@ -1138,21 +1169,6 @@ def PopupVisualLength()
 	})
 enddef
 xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
-
-# これは誤爆しそう…例えば`all`とか`call`とか
-def SkipParen(): string
-	const c = matchstr(getline('.'), '.', col('.') - 1)
-	if !c || stridx(')]}"''`」', c) ==# -1
-		return 'll'
-	endif
-	# 誤爆防止
-	const a = matchstr(getline('.'), '.', col('.') - 2)
-	if stridx('ae', a) !=# -1
-		return 'll'
-	endif
-	return  "\<C-o>a"
-enddef
-inoremap <expr> ll SkipParen()
 
 # `:%g!/re/d` の結果を新規ウインドウに表示
 # (Buffer Regular Expression Print)
@@ -1187,6 +1203,7 @@ Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
+# 🐶🍚
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
 
@@ -1203,12 +1220,6 @@ nnoremap <Space>o <C-w>w
 nnoremap <Space><Space>p o<Esc>P
 nnoremap <Space><Space>P O<Esc>p
 nnoremap <Space>d "_d
-
-# 使用頻度が低いうえにストロークの差が1つしかない(スマホで使うかも？)
-nnoremap <Space>y yiw
-
-# sandwich
-nmap S^ v^S
 
 #}}} -------------------------------------------------------
 
