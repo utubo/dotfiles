@@ -1129,7 +1129,7 @@ au vimrc Syntax vim {
 
 # yankした文字をポップアップ {{{
 def PopupYankText()
-	const text = ('📋 ' .. @")
+	const text = ('📋 ' .. @"[0 : winwidth(0)])
 		->substitute('\t', '›', 'g')
 		->substitute('\n', '↵', 'g')
 	const truncated = text->TruncToDisplayWidth(winwidth(0) - 10)

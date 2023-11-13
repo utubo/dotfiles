@@ -870,7 +870,7 @@ BI('SpellBad', '\s\~[=!][=#]\?\s')
 BI('SpellRare', '\<normal!\@!')
 }
 def BJ()
-const a = ('📋 ' .. @")
+const a = ('📋 ' .. @"[0 : winwidth(0)])
 ->substitute('\t', '›', 'g')
 ->substitute('\n', '↵', 'g')
 const b = a->E(winwidth(0) - 10)
