@@ -1048,6 +1048,8 @@ inoremap （） ()<C-g>U<Left>
 # ----------------------------------------------------------
 # 様子見中 {{{
 # 使わなそうなら削除する
+nnoremap g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
+nnoremap g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
 nnoremap <Space>a A
 xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
 xnoremap P p

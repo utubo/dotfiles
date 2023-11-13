@@ -807,6 +807,8 @@ ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
 ino （ ()<C-g>U<Left>
 ino （） ()<C-g>U<Left>
+nn g<Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
+nn g<Tab>u <Cmd>call ShowMostRecentlyClosedTabs()<CR>
 nn <Space>a A
 xn <expr> p $'"_s<C-R>{v:register}<ESC>'
 xn P p
