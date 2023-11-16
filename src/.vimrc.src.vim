@@ -186,6 +186,7 @@ Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-yomigana'
+Jetpack 'utubo/vim-vim9skk'
 # 🐶🍚様子見中
 Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-ddgv'
@@ -197,7 +198,6 @@ Jetpack 'utubo/vim-textobj-twochars'
 
 if has_deno
 	Jetpack 'vim-denops/denops.vim'
-	Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
 if ! has_jetpack
@@ -285,10 +285,12 @@ g:cmdheight0.statusline = ' ' .. # パディング
 	'%{%g:stl_reg|%}' ..        # レジスタ
 	'%3l:%-2c:%L%|' ..          # カーソル位置
 	'%{%b:stl_bufinfo|%}%*' ..  # 文字コードと改行コード
+	'%{g:vim9skk_mode}%*' ..    # vim9skk
 	'%{%g:stl_worktime%}%*' ..  # 作業時間
 	' '                         # パディング
 g:cmdheight0.laststatus = 0
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
 
 # Zenモードでterminalだけになると混乱するので
 au vimrc WinEnter * {
@@ -492,21 +494,11 @@ xnoremap Sm <ScriptCmd>myutil#BigMac()<CR>
 nmap Sm viwSm
 #}}}
 
-# skk {{{
-if has_deno
-	if ! empty($SKK_JISYO_DIR)
-		skkeleton#config({
-		globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
-			userJisyo: expand($'{$SKK_JISYO_DIR}.skkeleton'),
-		})
-	endif
-	skkeleton#config({
-		eggLikeNewline: true,
-		keepState: true,
-		showCandidatesCount: 1,
-	})
-	map! <C-j> <Plug>(skkeleton-toggle)
-endif
+# vim9skk {{{
+g:vim9skk = {
+	space: ' '
+}
+g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 #}}}
 
 # textobj-user {{{
@@ -1134,7 +1126,7 @@ def PopupYankText()
 		->substitute('\n', '↵', 'g')
 	const truncated = text->TruncToDisplayWidth(winwidth(0) - 10)
 	const winid = popup_create(truncated, {
-		line: 'cursor-1',
+		line: 'cursor+1',
 		col: 'cursor+1',
 		pos: 'topleft',
 		padding: [0, 1, 0, 1],

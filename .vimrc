@@ -142,6 +142,7 @@ Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-tabtoslash'
 Jetpack 'utubo/vim-yomigana'
+Jetpack 'utubo/vim-vim9skk'
 Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-ddgv'
 Jetpack 'utubo/vim-portal-aim'
@@ -151,7 +152,6 @@ Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-textobj-twochars'
 if ll
 Jetpack 'vim-denops/denops.vim'
-Jetpack 'vim-skk/skkeleton'
 endif
 jetpack#end()
 if ! ln
@@ -220,10 +220,12 @@ g:cmdheight0.statusline = ' ' ..
 '%{%g:stl_reg|%}' ..
 '%3l:%-2c:%L%|' ..
 '%{%b:stl_bufinfo|%}%*' ..
+'%{g:vim9skk_mode}%*' ..
 '%{%g:stl_worktime%}%*' ..
 ' '
 g:cmdheight0.laststatus = 0
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
+au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
 au vimrc WinEnter * {
 if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
 cmdheight0#ToggleZen(0)
@@ -388,20 +390,10 @@ au vimrc User OperatorSandwichAddPost myutil#FixSandwichPos()
 au vimrc User OperatorSandwichDeletePost myutil#RemoveAirBuns()
 xn Sm <ScriptCmd>myutil#BigMac()<CR>
 nm Sm viwSm
-if ll
-if ! empty($SKK_JISYO_DIR)
-skkeleton#config({
-globalJisyo: expand($'{$SKK_JISYO_DIR}SKK-JISYO.L'),
-userJisyo: expand($'{$SKK_JISYO_DIR}.skkeleton'),
-})
-endif
-skkeleton#config({
-eggLikeNewline: true,
-keepState: true,
-showCandidatesCount: 1,
-})
-map! <C-j> <Plug>(skkeleton-toggle)
-endif
+g:vim9skk = {
+space: ' '
+}
+g:vim9skk_mode = ''
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
@@ -875,7 +867,7 @@ const a = ('📋 ' .. @"[0 : winwidth(0)])
 ->substitute('\n', '↵', 'g')
 const b = a->E(winwidth(0) - 10)
 const c = popup_create(b, {
-line: 'cursor-1',
+line: 'cursor+1',
 col: 'cursor+1',
 pos: 'topleft',
 padding: [0, 1, 0, 1],
