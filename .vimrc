@@ -206,7 +206,7 @@ g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime
 endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0))
-g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+g:vimrc_timer_60s = timer_start(60000, 'g:VimrcTimer60s', { repeat: -1 })
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"

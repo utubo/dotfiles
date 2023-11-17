@@ -267,7 +267,7 @@ def! g:VimrcTimer60s(timer: any)
 	endif
 enddef
 timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
-g:vimrc_timer_60s = timer_start(60000, 'VimrcTimer60s', { repeat: -1 })
+g:vimrc_timer_60s = timer_start(60000, 'g:VimrcTimer60s', { repeat: -1 })
 
 # cmdheight0設定
 g:cmdheight0 = {}
