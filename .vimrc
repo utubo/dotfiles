@@ -432,12 +432,13 @@ g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &ut
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-nn % <ScriptCmd>call hlpairs#Jump()<CR>
-nn ]% <Cmd>call hlpairs#Jump('f')<CR>
-nn [% <Cmd>call hlpairs#Jump('b')<CR>
-nn <Leader>% <Cmd>call hlpairs#HighlightOuter()<CR>
-nn <Space>% <Cmd>call hlpairs#ReturnCursor()<CR>
-au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+nn % <ScriptCmd>hlpairs#Jump()<CR>
+nn ]% <ScriptCmd>hlpairs#Jump('f')<CR>
+nn [% <ScriptCmd>hlpairs#Jump('b')<CR>
+ono a% <ScriptCmd>hlpairs#TextObj(true)<CR>
+ono i% <ScriptCmd>hlpairs#TextObj(false)<CR>
+nn <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
+nn <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
@@ -873,6 +874,7 @@ pos: 'topleft',
 padding: [0, 1, 0, 1],
 fixed: true,
 moved: 'any',
+time: 2000,
 })
 win_execute(c, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef

@@ -547,12 +547,13 @@ g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-nnoremap % <ScriptCmd>call hlpairs#Jump()<CR>
-nnoremap ]% <Cmd>call hlpairs#Jump('f')<CR>
-nnoremap [% <Cmd>call hlpairs#Jump('b')<CR>
-nnoremap <Leader>% <Cmd>call hlpairs#HighlightOuter()<CR>
-nnoremap <Space>% <Cmd>call hlpairs#ReturnCursor()<CR>
-au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+nnoremap % <ScriptCmd>hlpairs#Jump()<CR>
+nnoremap ]% <ScriptCmd>hlpairs#Jump('f')<CR>
+nnoremap [% <ScriptCmd>hlpairs#Jump('b')<CR>
+onoremap a% <ScriptCmd>hlpairs#TextObj(true)<CR>
+onoremap i% <ScriptCmd>hlpairs#TextObj(false)<CR>
+nnoremap <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
+nnoremap <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
@@ -1132,6 +1133,7 @@ def PopupYankText()
 		padding: [0, 1, 0, 1],
 		fixed: true,
 		moved: 'any',
+		time: 2000,
 	})
 	win_execute(winid, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef
