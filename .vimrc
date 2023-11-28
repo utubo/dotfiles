@@ -518,8 +518,12 @@ nn <Space>y yiw
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
-const c = &fdm ==# 'indent' ? '' : a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
+if &fdm ==# 'indent'
+return $'{b}📁 {v:foldend - v:foldstart + 1}lines'
+else
+const c = a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
 return $'{b}{c} 📁'
+endif
 enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 

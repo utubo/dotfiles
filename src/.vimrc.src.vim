@@ -678,8 +678,12 @@ nnoremap <Space>y yiw
 def! g:MyFoldText(): string
 	const src = getline(v:foldstart)
 	const indent = repeat(' ', indent(v:foldstart))
-	const text = &foldmethod ==# 'indent' ? '' : src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
-	return $'{indent}{text} 📁'
+	if &foldmethod ==# 'indent'
+		return $'{indent}📁 {v:foldend - v:foldstart + 1}lines'
+	else
+		const text = src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
+		return $'{indent}{text} 📁'
+	endif
 enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
