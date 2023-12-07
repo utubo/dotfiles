@@ -211,7 +211,6 @@ g:cmdheight0 = {}
 g:cmdheight0.delay = -1
 g:cmdheight0.tail = "\ue0c6"
 g:cmdheight0.sub = ' '
-g:cmdheight0.horiznr = '─'
 g:cmdheight0.statusline = ' ' ..
 '%{b:stl_icon}%t ' ..
 '%#CmdHeight0Error#%m%*' ..

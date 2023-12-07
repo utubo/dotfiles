@@ -276,7 +276,6 @@ g:cmdheight0.tail = "\ue0c6"
 # g:cmdheight0.sep  = "\ue0c6"
 # g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.sub = ' '
-g:cmdheight0.horiznr = '─'
 g:cmdheight0.statusline = ' ' .. # パディング
 	'%{b:stl_icon}%t ' ..       # アイコンとファイル名
 	'%#CmdHeight0Error#%m%*' .. # 編集済みか
