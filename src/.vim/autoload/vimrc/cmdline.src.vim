@@ -1,7 +1,7 @@
 vim9script
 
 # `s:///g`を補完 {{{
-export def CmdlineautoSlash(c: string): string
+export def CmdlineAutoSlash(c: string): string
 	if getcmdtype() !=# ':'
 		return c
 	endif
@@ -63,7 +63,7 @@ export def ApplySettings()
 	cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 	cnoremap <expr> <Space> MyAbbrev()
-	Each /,#,! cnoremap <script> <expr> {} vimrc#cmdline#CmdlineautoSlash('{}')
+	Each /,#,! cnoremap <script> <expr> {} vimrc#cmdline#CmdlineAutoSlash('{}')
 	command! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
 enddef
 

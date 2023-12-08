@@ -1,6 +1,42 @@
 vim9script
 
-# vim-sandwich拡張
+# vim-sandwich
+
+# `S`をprefixにしているので`nmap S`や`xmap S`をトリガーにして設定する
+export def ApplySettings(prefix: string)
+	execute $'nunmap {prefix}'
+	execute $'xunmap {prefix}'
+	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+	g:sandwich#recipes += [
+		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
+		{ buns: ['',   ''  ], input: ['q'] },
+		{ buns: ['「', '」'], input: ['k'] },
+		{ buns: ['【', '】'], input: ['K'] },
+		{ buns: ['{ ', ' }'], input: ['{'] },
+		{ buns: ['${', '}' ], input: ['${'] },
+		{ buns: ['%{', '}' ], input: ['%{'] },
+		{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
+	]
+	CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
+	CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
+	CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+	nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
+	# `S${`と被ってしまうけどまぁいいか
+	nmap S$ vg_S
+	# 微調整
+	au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
+	au vimrc User OperatorSandwichAddPost vimrc#sandwich#FixSandwichPos()
+	au vimrc User OperatorSandwichDeletePost vimrc#sandwich#RemoveAirBuns()
+	# 内側に連続で挟むやつ
+	xnoremap Sm <ScriptCmd>vimrc#sandwich#BigMac()<CR>
+	nmap Sm viwSm
+	feedkeys(prefix, 'it')
+enddef
+
+# `<!-- -->`とかを返す
+def! g:CommentString(index: number): string
+	return &commentstring->split('%s')->get(index, '')
+enddef
 
 # 改行で挟んだあとタブでインデントされると具合が悪くなるので…
 export def FixSandwichPos()
@@ -25,6 +61,11 @@ enddef
 # 内側に連続で挟むやつ
 var big_mac_crown = []
 export def BigMac(first: bool = true)
+	popup_create('🍔', {
+		col: 'cursor',
+		line: 'cursor+1',
+		moved: 'any',
+	})
 	const c = first ? [] : g:operator#sandwich#object.cursor.inner_head[1 : 2]
 	if first || big_mac_crown !=# c
 		big_mac_crown = c

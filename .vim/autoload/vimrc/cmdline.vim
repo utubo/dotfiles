@@ -1,5 +1,5 @@
 vim9script
-export def CmdlineautoSlash(c: string): string
+export def CmdlineAutoSlash(c: string): string
 if getcmdtype() !=# ':'
 return c
 endif
@@ -49,6 +49,6 @@ cno <C-p> <Up>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cno <expr> <Space> A()
-Each /,#,! cnoremap <script> <expr> {} vimrc#cmdline#CmdlineautoSlash('{}')
+Each /,#,! cnoremap <script> <expr> {} vimrc#cmdline#CmdlineAutoSlash('{}')
 com! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
 enddef

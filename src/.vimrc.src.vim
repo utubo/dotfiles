@@ -453,6 +453,7 @@ nnoremap ]l <Cmd>LspDiagNext<CR>
 # MRU {{{
 nnoremap <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
+# MRUに関してのその他の設定は.vim/after/ftplugin/mru.src.vimで指定している
 #}}}
 
 # Portal {{{
@@ -463,41 +464,13 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 #}}}
 
 # sandwich {{{
-g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-g:sandwich#recipes += [
-	{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
-	{ buns: ['',   ''  ], input: ['q'] },
-	{ buns: ['「', '」'], input: ['k'] },
-	{ buns: ['【', '】'], input: ['K'] },
-	{ buns: ['{ ', ' }'], input: ['{'] },
-	{ buns: ['${', '}' ], input: ['${'] },
-	{ buns: ['%{', '}' ], input: ['%{'] },
-	{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
-]
-def! g:CommentString(index: number): string
-	return &commentstring->split('%s')->get(index, '')
-enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
-# `S${`と被ってしまうけどまぁいいか
-nmap S$ vg_S
-# 微調整
-au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost vimrc#sandwich#FixSandwichPos()
-au vimrc User OperatorSandwichDeletePost vimrc#sandwich#RemoveAirBuns()
-# 内側に連続で挟むやつ
-xnoremap Sm <ScriptCmd>vimrc#myutil#BigMac()<CR>
-nmap Sm viwSm
+CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 #}}}
 
 # vim9skk {{{
-g:vim9skk = {
-	space: ' '
-}
+g:vim9skk = {} # vimrc_localで設定しやすいように空で定義しておく
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 #}}}
 
@@ -521,8 +494,8 @@ call textobj#user#plugin('nonwhitespace', {
 
 # 補完 {{{
 def SkipParen(): string
-	# 閉じ括弧の間にTAB文字入れることはないだろう…
 	const c = matchstr(getline('.'), '.', col('.') - 1)
+	# 閉じ括弧の間にTAB文字を入れることはないだろう…
 	if !c || stridx(')]}>"''`」', c) ==# -1
 		return "\<Tab>"
 	else
@@ -545,6 +518,11 @@ Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
+Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
+nnoremap [c <Plug>(GitGutterPrevHunk)
+nnoremap ]c <Plug>(GitGutterNextHunk)
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+# 🐶🍚
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 nnoremap % <ScriptCmd>hlpairs#Jump()<CR>
@@ -554,11 +532,6 @@ onoremap a% <ScriptCmd>hlpairs#TextObj(true)<CR>
 onoremap i% <ScriptCmd>hlpairs#TextObj(false)<CR>
 nnoremap <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nnoremap <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
-Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
-nnoremap [c <Plug>(GitGutterPrevHunk)
-nnoremap ]c <Plug>(GitGutterNextHunk)
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-# 🐶🍚
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w

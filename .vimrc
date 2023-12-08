@@ -364,35 +364,10 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
-g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-g:sandwich#recipes += [
-{ buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
-{ buns: ['', '' ], input: ['q'] },
-{ buns: ['「', '」'], input: ['k'] },
-{ buns: ['【', '】'], input: ['K'] },
-{ buns: ['{ ', ' }'], input: ['{'] },
-{ buns: ['${', '}' ], input: ['${'] },
-{ buns: ['%{', '}' ], input: ['%{'] },
-{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
-]
-def! g:CommentString(a: number): string
-return &commentstring->split('%s')->get(a, '')
-enddef
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
-nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
-nm S$ vg_S
-au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost vimrc#sandwich#FixSandwichPos()
-au vimrc User OperatorSandwichDeletePost vimrc#sandwich#RemoveAirBuns()
-xn Sm <ScriptCmd>vimrc#myutil#BigMac()<CR>
-nm Sm viwSm
-g:vim9skk = {
-space: ' '
-}
+CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
+g:vim9skk = {}
 g:vim9skk_mode = ''
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
@@ -430,6 +405,10 @@ Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &ut
+Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
+nn [c <Plug>(GitGutterPrevHunk)
+nn ]c <Plug>(GitGutterNextHunk)
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 nn % <ScriptCmd>hlpairs#Jump()<CR>
@@ -439,10 +418,6 @@ ono a% <ScriptCmd>hlpairs#TextObj(true)<CR>
 ono i% <ScriptCmd>hlpairs#TextObj(false)<CR>
 nn <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nn <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
-Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
-nn [c <Plug>(GitGutterPrevHunk)
-nn ]c <Plug>(GitGutterNextHunk)
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
