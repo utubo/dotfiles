@@ -820,13 +820,19 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-cnoreabbrev cs colorscheme
+def MyAbbrev(): string
+	return {
+		cs: "\<C-u>colorscheme ",
+		sb: "\<C-u>set background=\<Tab>"
+	}->get(getcmdline(), ' ')
+enddef
+cnoremap <expr> <Space> MyAbbrev()
 # 「jj」で<CR>
 # ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
 cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 inoremap ;jj <Esc>`^<Cmd>update<CR>
 # `/`を補完 {{{
-def CmdlineAutoPair(c: string): string
+def CmdlineautoSlash(c: string): string
 	if getcmdtype() !=# ':'
 		return c
 	endif
@@ -850,7 +856,7 @@ def CmdlineAutoPair(c: string): string
 	return c
 enddef
 # `/`以外も使うかも`%s#foo/bar#buz#g`みたいなかんじ
-Each /,#,! cnoremap <script> <expr> {} CmdlineAutoPair('{}')
+Each /,#,! cnoremap <script> <expr> {} CmdlineautoSlash('{}')
 #}}}
 #}}}
 

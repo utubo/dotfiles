@@ -638,10 +638,16 @@ cno <C-n> <Down>
 cno <C-p> <Up>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-cnoreabbrev cs colorscheme
+def BD(): string
+return {
+cs: "\<C-u>colorscheme ",
+sb: "\<C-u>set background=\<Tab>"
+}->get(getcmdline(), ' ')
+enddef
+cno <expr> <Space> BD()
 cno <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
 ino ;jj <Esc>`^<Cmd>update<CR>
-def BD(c: string): string
+def BE(c: string): string
 if getcmdtype() !=# ':'
 return c
 endif
@@ -661,7 +667,7 @@ return $"{c}{c}\<Left>"
 endif
 return c
 enddef
-Each /,#,! cnoremap <script> <expr> {} BD('{}')
+Each /,#,! cnoremap <script> <expr> {} BE('{}')
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -689,7 +695,7 @@ e = 'drop'
 endif
 exe e fnameescape(f)
 enddef
-def BE(a: string = '')
+def BF(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -748,7 +754,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def BF()
+def BG()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -757,9 +763,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <script> <C-g> <ScriptCmd>BE()<CR><scriptCmd>BF()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BE('BufNewFile')
-def BG(a: string)
+nn <script> <C-g> <ScriptCmd>BF()<CR><scriptCmd>BG()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * BF('BufNewFile')
+def BH(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -770,7 +776,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{} <ScriptCmd>BG('{}')<CR>
+Each h,j,k,l nnoremap q{} <ScriptCmd>BH('{}')<CR>
 nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
@@ -847,26 +853,26 @@ ino jj<Space> <C-o>$<CR>
 ino jjk 「」<C-g>U<Left>
 ino jj<Tab> <ScriptCmd>D('normal! >>')<CR>
 ino jj<S-Tab> <ScriptCmd>D('normal! <<')<CR>
-def BH()
+def BI()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BI(a: string, b: string)
+def BJ(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BH()
+au vimrc Syntax * BI()
 au vimrc Syntax javascript {
-BI('SpellRare', '\s[=!]=\s')
+BJ('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BI('SpellRare', '\s[=!]=\s')
-BI('SpellBad', '\s[=!]==\s')
-BI('SpellBad', '\s\~[=!][=#]\?\s')
-BI('SpellRare', '\<normal!\@!')
+BJ('SpellRare', '\s[=!]=\s')
+BJ('SpellBad', '\s[=!]==\s')
+BJ('SpellBad', '\s\~[=!][=#]\?\s')
+BJ('SpellRare', '\<normal!\@!')
 }
-def BJ()
+def CA()
 const a = ('📋 ' .. @"[0 : winwidth(0)])
 ->substitute('\t', '›', 'g')
 ->substitute('\n', '↵', 'g')
@@ -882,8 +888,8 @@ time: 2000,
 })
 win_execute(c, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
 enddef
-au vimrc TextYankPost * BJ()
-def CA()
+au vimrc TextYankPost * CA()
+def CB()
 normal! "vy
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -894,8 +900,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>CA()<CR>
-def CB(): string
+xn <C-g> <ScriptCmd>CB()<CR>
+def CC(): string
 cno jk <C-c>
 cno h <Left>
 cno l <Right>
@@ -904,17 +910,17 @@ cno w <S-Right>
 cno $ <End><Left>
 cno ^ <Home>
 cno x <Delete>
-cno <script> <expr> i CC('i')
-cno <script> <expr> a CC('a')
+cno <script> <expr> i CD('i')
+cno <script> <expr> a CD('a')
 cm A $a
 return ""
 enddef
-def CC(c: string = 'i'): string
+def CD(c: string = 'i'): string
 Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-cno <script> <expr> jk CB()
+cno <script> <expr> jk CC()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
-au vimrc ModeChanged *:c CC()
+au vimrc ModeChanged *:c CD()
 com! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
@@ -945,25 +951,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def CD(a: number, b: string): string
+def CE(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def CE(a: string): any
+def CF(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: CD(b, 'fg'), bg: CD(b, 'bg') }
+return { fg: CE(b, 'fg'), bg: CE(b, 'bg') }
 enddef
-def CF()
+def CG()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = CE('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CE("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CE("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CE("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CE("WarningMsg").fg}'
+const a = CF('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CF("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CF("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CF("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CF("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * CF()
-def CG()
+au vimrc VimEnter,ColorScheme * CG()
+def CH()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -978,8 +984,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CG()
-def CH()
+au vimrc VimEnter,WinEnter * CH()
+def CI()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -987,8 +993,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CH()
-au vimrc BufNew,BufReadPost * silent! CH()
+au vimrc OptionSet list silent! CI()
+au vimrc BufNew,BufReadPost * silent! CI()
 sil! syntax enable
 set t_Co=256
 set bg=dark
@@ -996,10 +1002,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CI()
+def CJ()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CI()|endif
+au vimrc VimEnter * ++nested if !C()|CJ()|endif

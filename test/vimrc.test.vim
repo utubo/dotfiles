@@ -72,7 +72,7 @@ const vimrc_str = vimrc_lines->join("\n")
 # setが重複してないこと {{{
 suite.TestSets = () => {
 	var sets = []
-	const ignore_names = 'fcs\|foldmethod' # 想定内なので無視する名前s
+	const ignore_names = 'fcs\|foldmethod\|background' # 想定内なので無視する名前s
 	for line in vimrc_lines
 		var m = matchlist(line, '\<set\s\+\(\w\+\)')
 		if len(m) == 0
