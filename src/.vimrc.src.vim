@@ -285,6 +285,7 @@ g:cmdheight0.statusline = ' ' .. # パディング
 	'%3l:%-2c:%L%|' ..          # カーソル位置
 	'%{%b:stl_bufinfo|%}%*' ..  # 文字コードと改行コード
 	'%{g:vim9skk_mode}%*' ..    # vim9skk
+	' ' ..                      # パディング
 	'%{%g:stl_worktime%}%*' ..  # 作業時間
 	' '                         # パディング
 g:cmdheight0.laststatus = 0
@@ -1240,12 +1241,8 @@ au vimrc ColorSchemePre * {
 }
 
 def GetAttr(id: number, name: string): string
-	const v = synIDattr(id, name)
-	if has('gui')
-		return v =~# '^[0-9]*$' ? 'NONE' : v
-	else
-		return v !~# '^[0-9]\+$' ? 'NONE' : v
-	endif
+	const v = synIDattr(id, name)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
+	return !v ? 'NONE' : v
 enddef
 
 def GetHl(name: string): any

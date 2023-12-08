@@ -220,6 +220,7 @@ g:cmdheight0.statusline = ' ' ..
 '%3l:%-2c:%L%|' ..
 '%{%b:stl_bufinfo|%}%*' ..
 '%{g:vim9skk_mode}%*' ..
+' ' ..
 '%{%g:stl_worktime%}%*' ..
 ' '
 g:cmdheight0.laststatus = 0
@@ -945,12 +946,8 @@ g:rcsv_colorpairs = [
 ]
 }
 def CD(a: number, b: string): string
-const v = synIDattr(a, b)
-if has('gui')
-return v =~# '^[0-9]*$' ? 'NONE' : v
-else
-return v !~# '^[0-9]\+$' ? 'NONE' : v
-endif
+const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
+return !v ? 'NONE' : v
 enddef
 def CE(a: string): any
 const b = hlID(a)->synIDtrans()
