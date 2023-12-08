@@ -487,10 +487,10 @@ nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'S
 nmap S$ vg_S
 # 微調整
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')
-au vimrc User OperatorSandwichAddPost myutil#FixSandwichPos()
-au vimrc User OperatorSandwichDeletePost myutil#RemoveAirBuns()
+au vimrc User OperatorSandwichAddPost vimrc#sandwich#FixSandwichPos()
+au vimrc User OperatorSandwichDeletePost vimrc#sandwich#RemoveAirBuns()
 # 内側に連続で挟むやつ
-xnoremap Sm <ScriptCmd>myutil#BigMac()<CR>
+xnoremap Sm <ScriptCmd>vimrc#myutil#BigMac()<CR>
 nmap Sm viwSm
 #}}}
 
@@ -621,7 +621,7 @@ au vimrc BufReadPost * SetupTabstop()
 
 # ------------------------------------------------------
 # vimgrep {{{
-command! -nargs=+ -complete=dir VimGrep myutil#VimGrep(<f-args>)
+command! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 #}}} -------------------------------------------------------
 
@@ -701,8 +701,8 @@ nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
 nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
-xnoremap zf <ScriptCmd>myutil#Zf()<CR>
-nnoremap zd <ScriptCmd>myutil#Zd()<CR>
+xnoremap zf <ScriptCmd>vimrc#myutil#Zf()<CR>
+nnoremap zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nnoremap <silent> g; g;zO
 #}}}
 #}}} -------------------------------------------------------
@@ -809,59 +809,20 @@ xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
+nnoremap <Space>; ;
+CmdEach nmap,xmap ; :
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
-CmdEach nmap,xmap ; :
-nnoremap <Space>; ;
-nnoremap <Space>: :
-cnoremap <C-h> <Left>
-cnoremap <C-l> <Right>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
-cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
-cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-def MyAbbrev(): string
-	return {
-		cs: "\<C-u>colorscheme ",
-		sb: "\<C-u>set background=\<Tab>"
-	}->get(getcmdline(), ' ')
-enddef
-cnoremap <expr> <Space> MyAbbrev()
-# 「jj」で<CR>
-# ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap <expr> jj (empty(getcmdline()) && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>')
+# 「jj」で<CR>、ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
+cnoremap <expr> jj !getcmdline() && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>'
 inoremap ;jj <Esc>`^<Cmd>update<CR>
-# `/`を補完 {{{
-def CmdlineautoSlash(c: string): string
-	if getcmdtype() !=# ':'
-		return c
-	endif
-	const cl = getcmdline()
-	if getcmdpos() !=# cl->len() + 1 || cl =~# '\s'
-		return c
-	endif
-	const e = cl[-1]
-	# :s///g
-	if e ==# 's'
-		return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
-	endif
-	# :g!//
-	if e ==# 'g' && c ==# '!'
-		return "!//\<Left>"
-	endif
-	# :g//
-	if e ==# 'g' || e ==# 'v'
-		return $"{c}{c}\<Left>"
-	endif
-	return c
-enddef
-# `/`以外も使うかも`%s#foo/bar#buz#g`みたいなかんじ
-Each /,#,! cnoremap <script> <expr> {} CmdlineautoSlash('{}')
-#}}}
+# その他の設定
+au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 #}}}
 
 # ------------------------------------------------------
 # terminalとか {{{
+# `SH`で開く
 if has('win32')
 	command! Powershell :bo terminal ++close pwsh
 	nnoremap SH <Cmd>Powershell<CR>
@@ -869,32 +830,12 @@ if has('win32')
 else
 	nnoremap SH <Cmd>bo terminal<CR>
 endif
-tnoremap <C-w>; <C-w>:
-tnoremap <C-w><C-w> <C-w>w
-tnoremap <C-w><C-q> exit<CR>
-
-# https://zenn.dev/vim_jp/articles/5fdad17d336c6d
-# (`-t`でタブで開けるように改造)
+# `drop`コマンドでterminalからvimで開く
 def g:Tapi_drop(bufnr: number, arglist: list<string>)
-	const cwd = arglist[0]
-	var index = 1
-	var opencmd = 'split'
-	if arglist[1] ==# '-t'
-		# -tオプションが指定された場合はタブで開く
-		opencmd = 'tabe'
-		index += 1
-	endif
-	var filepath = arglist[index]
-	if !isabsolutepath(filepath)
-		# 絶対パスでない時は絶対パスに変換する
-		filepath = fnamemodify(cwd, ':p') .. filepath
-	endif
-	if bufwinnr(bufnr(filepath)) !=# -1
-		# ファイルがすでに開かれていればそのウインドウに移動する
-		opencmd = 'drop'
-	endif
-	execute opencmd fnameescape(filepath)
+	 vimrc#terminal#Tapi_drop(bufnr, arglist)
 enddef
+# その他の設定
+au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 
 #}}} -------------------------------------------------------
 
@@ -1006,12 +947,6 @@ nnoremap q? q?
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
-# ファイルを移動して保存 {{{
-command! -nargs=1 -complete=file MoveFile myutil#MoveFile(<f-args>)
-cnoreabbrev mv MoveFile
-#}}}
-
-# ------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
@@ -1031,7 +966,7 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
-nnoremap <F11> <ScriptCmd>myutil#ToggleNumber()<CR>
+nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
 nnoremap gs :<C-u>%s///g<Left><Left><Left>
@@ -1077,8 +1012,8 @@ nnoremap M m
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
-nnoremap <Space><Tab>u <Cmd>call recentlytabs#ReopenRecentlyTab()<CR>
-nnoremap <Space><Tab>l <Cmd>call recentlytabs#ShowMostRecentlyClosedTabs()<CR>
+nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
+nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 
@@ -1192,7 +1127,7 @@ au vimrc ModeChanged *:c CmdToInsert()
 
 # `:%g!/re/d` の結果を新規ウインドウに表示
 # (Buffer Regular Expression Print)
-command! -nargs=1 Brep myutil#Brep(<q-args>, <q-mods>)
+command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 
 # <C-f>と<C-b>、CTRLおしっぱがつらいので…
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
