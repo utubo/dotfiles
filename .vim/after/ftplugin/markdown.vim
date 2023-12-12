@@ -25,7 +25,7 @@ endif
 endfor
 enddef
 no <buffer> <Space>x <ScriptCmd>A()<CR>
-ino <buffer> jjx <ScriptCmd>A()<CR>
+ino <buffer> ;x <ScriptCmd>A()<CR>
 def B()
 for l in g:VRange()
 const a = getline(l)

@@ -470,8 +470,13 @@ CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 #}}}
 
 # vim9skk {{{
-g:vim9skk = {} # vimrc_localで設定しやすいように空で定義しておく
+g:vim9skk = {
+	keymap: {
+		midasi: [':', 'Q']
+	}
+}
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
+noremap! ;j <Plug>(vim9skk-toggle)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
 #}}}
@@ -560,7 +565,6 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
-inoremap jk <Esc>`^
 inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
@@ -571,6 +575,8 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
+nmap <ESC>j <A-j>
+nmap <ESC>k <A-k>
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
@@ -783,14 +789,32 @@ xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
 #}}}
 
 # ------------------------------------------------------
-# コマンドモードあれこれ {{{
+# セミコロン {{{
+# インサートモードでも使うプレフィックス
+inoremap ;<CR> ;<CR>
+inoremap ;<Esc> ;<Esc>
+inoremap ;<Space> ;<Space>
+noremap! ;; <Esc>`^
+inoremap ;e <C-o>e<C-o>a
+inoremap ;k 「」<C-g>U<Left>
+inoremap ;l <C-g>R<Right>
+inoremap ;u <C-o>u
+nnoremap ;v <C-v>
+CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+CmdEach nnoremap,xnoremap ;; <Esc>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nnoremap <Space>; ;
-CmdEach nmap,xmap ; :
+# }}}
+
+# ------------------------------------------------------
+# コマンドモードあれこれ {{{
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
-# 「jj」で<CR>、ただし保存は片手で「;jj」でもOK(「;wjj」じゃなくていい)
-cnoremap <expr> jj !getcmdline() && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>'
-inoremap ;jj <Esc>`^<Cmd>update<CR>
+# 考え中
+CmdEach nnoremap,xnoremap + :
+CmdEach nnoremap,xnoremap , :
+CmdEach nnoremap,xnoremap <Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 #}}}
@@ -1008,15 +1032,6 @@ xnoremap <F10> <ESC>1<C-w>s<C-w>w
 nnoremap <F9> my
 nnoremap <S-F9> 'y
 
-# 悪くないけどノーマルモードでjjを誤爆する
-inoremap jj <C-o>
-inoremap jje <C-o>e<C-o>a
-inoremap jj; <C-o>$;<CR>
-inoremap jj<Space> <C-o>$<CR>
-inoremap jjk 「」<C-g>U<Left>
-inoremap jj<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-inoremap jj<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
-
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
@@ -1077,7 +1092,7 @@ xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 
 # cmdlineでノーマルモードみたいにするやつ {{{
 def CmdToNormal(): string
-	cnoremap jk <C-c>
+	cnoremap ;; <C-c>
 	cnoremap h <Left>
 	cnoremap l <Right>
 	cnoremap b <S-Left>
@@ -1092,12 +1107,10 @@ def CmdToNormal(): string
 enddef
 def CmdToInsert(c: string = 'i'): string
 	Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-	cnoremap <script> <expr> jk CmdToNormal()
+	cnoremap <script> <expr> ;; CmdToNormal()
 	return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CmdToInsert()
-# ↓これは無しにしてみる
-#cnoremap jk <C-c>
 #}}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示

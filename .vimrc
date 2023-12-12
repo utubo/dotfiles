@@ -367,8 +367,13 @@ nn <Leader>r <Cmd>PortalReset<CR>
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
-g:vim9skk = {}
+g:vim9skk = {
+keymap: {
+midasi: [':', 'Q']
+}
+}
 g:vim9skk_mode = ''
+no! ;j <Plug>(vim9skk-toggle)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
@@ -437,13 +442,14 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
-ino jk <Esc>`^
 ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
+nm <ESC>j <A-j>
+nm <ESC>k <A-k>
 def BB()
 const a = 100
 const b = getpos('.')
@@ -604,12 +610,25 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
+ino ;<CR> ;<CR>
+ino ;<Esc> ;<Esc>
+ino ;<Space> ;<Space>
+no! ;; <Esc>`^
+ino ;e <C-o>e<C-o>a
+ino ;k 「」<C-g>U<Left>
+ino ;l <C-g>R<Right>
+ino ;u <C-o>u
+nn ;v <C-v>
+CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>D('normal! >>')<CR>
+CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
+CmdEach nnoremap,xnoremap ;; <Esc>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nn <Space>; ;
-CmdEach nmap,xmap ; :
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
-cno <expr> jj !getcmdline() && getcmdtype() ==# ':' ? 'update<CR>' : '<CR>'
-ino ;jj <Esc>`^<Cmd>update<CR>
+CmdEach nnoremap,xnoremap + :
+CmdEach nnoremap,xnoremap , :
+CmdEach nnoremap,xnoremap <Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
@@ -771,13 +790,6 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <S-F9> 'y
-ino jj <C-o>
-ino jje <C-o>e<C-o>a
-ino jj; <C-o>$;<CR>
-ino jj<Space> <C-o>$<CR>
-ino jjk 「」<C-g>U<Left>
-ino jj<Tab> <ScriptCmd>D('normal! >>')<CR>
-ino jj<S-Tab> <ScriptCmd>D('normal! <<')<CR>
 def BG()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
@@ -827,7 +839,7 @@ padding: [1, 1, 1, 1],
 enddef
 xn <C-g> <ScriptCmd>BJ()<CR>
 def CA(): string
-cno jk <C-c>
+cno ;; <C-c>
 cno h <Left>
 cno l <Right>
 cno b <S-Left>
@@ -842,7 +854,7 @@ return ""
 enddef
 def CB(c: string = 'i'): string
 Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-cno <script> <expr> jk CA()
+cno <script> <expr> ;; CA()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CB()

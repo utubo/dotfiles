@@ -116,6 +116,8 @@ suite.TestMapping = () => {
 	# n  ZZ Zenモード
 	# n  %  hlpairsのJump
 	# n  :  <Plug><ahc-switch>:
+	# n  ,  :
+	# n  +  :
 	# n <C-F>
 	# n <C-B>
 	# v  :  <Plug><ahc-switch>:
@@ -124,7 +126,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([abehijklmnoqswAMOQSTY;''/?:%]\|gc\|gd\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([abehijklmnoqswAMOQSTY;''/?:%,+]\|gc\|gd\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'n  \(<C-[FB]>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'
@@ -143,7 +145,7 @@ suite.TestMapping = () => {
 		'n  \([qS:]\|<Plug>fugitive:\)\|' ..
 		'v  \([J]\)\|' ..
 		'x  \([S]\)\|' ..
-		'i  \(<Esc>\|[「（\[{]\|jj\)\|' ..
+		'i  \(<Esc>\|[「（\[{;]\)\|' ..
 		'   <SNR>\d\+_(save-cursor-pos)\|' ..
 		'i  (\|' ..
 		'n  <SNR>\d_ws.\|' ..
