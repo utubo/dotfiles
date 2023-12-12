@@ -472,6 +472,8 @@ CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 # vim9skk {{{
 g:vim9skk = {} # vimrc_localで設定しやすいように空で定義しておく
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
+au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
+au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
 #}}}
 
 # textobj-user {{{
