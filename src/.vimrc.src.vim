@@ -478,6 +478,7 @@ g:vim9skk = {
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 noremap! ;j <Plug>(vim9skk-toggle)
+nnoremap ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
 #}}}
@@ -796,6 +797,10 @@ CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nnoremap <Space>; ;
+# `;h`+`h`連打で<BS>
+map! <script> ;h <BS><SID>bs
+noremap! <script> <SID>bsh <BS><SID>bs
+map! <script> <SID>bs <Nop>
 # }}}
 
 # ------------------------------------------------------

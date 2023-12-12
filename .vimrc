@@ -375,6 +375,7 @@ midasi: [':', 'Q']
 }
 g:vim9skk_mode = ''
 no! ;j <Plug>(vim9skk-toggle)
+nn ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
@@ -619,6 +620,9 @@ CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nn <Space>; ;
+map! <script> ;h <BS><SID>bs
+no! <script> <SID>bsh <BS><SID>bs
+map! <script> <SID>bs <Nop>
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
