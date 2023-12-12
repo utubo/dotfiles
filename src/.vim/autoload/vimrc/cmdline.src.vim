@@ -55,11 +55,26 @@ def MyAbbrev(): string
 enddef
 #}}}
 
+# 端末でAltキー使う {{{
+g:alt_flg = false
+def AltKey()
+	g:alt_flg = true
+	Each h,j,k,l cmap {} <ScriptCmd>g:alt_flg = false<Cr><A-{}>
+	timer_start(10, (t: number) => {
+		Each h,j,k,l cunmap {}
+		if g:alt_flg
+			feedkeys("\<ESC>", 'nit')
+		endif
+	})
+enddef
+cnoremap <script> <ESC> <ScriptCmd>AltKey()<CR>
+#}}}
+
 export def ApplySettings()
-	cnoremap <C-h> <Left>
-	cnoremap <C-l> <Right>
-	cnoremap <C-n> <Down>
-	cnoremap <C-p> <Up>
+	cnoremap <A-h> <Left>
+	cnoremap <A-p> <Up>
+	cnoremap <A-n> <Down>
+	cnoremap <A-l> <Right>
 	cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 	cnoremap <expr> <Space> MyAbbrev()
