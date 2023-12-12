@@ -133,6 +133,7 @@ Jetpack 'ctrlpvim/ctrlp.vim'
 Jetpack 'mattn/ctrlp-matchfuzzy'
 Jetpack 'sheerun/vim-polyglot'
 Jetpack 'tani/vim-typo'
+Jetpack 'utubo/vim-altkey-in-term'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-colorscheme-softgreen'
 Jetpack 'utubo/vim-hlpairs'
@@ -448,8 +449,6 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
-nm <ESC>j <A-j>
-nm <ESC>k <A-k>
 def BB()
 const a = 100
 const b = getpos('.')
@@ -606,10 +605,6 @@ return a
 enddef
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
-xn u <ScriptCmd>undo\|normal! gv<CR>
-xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
-xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
 ino ;<CR> ;<CR>
 ino ;<Esc> ;<Esc>
 ino ;<Space> ;<Space>
@@ -624,6 +619,10 @@ CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nn <Space>; ;
+xn u <ScriptCmd>undo\|normal! gv<CR>
+xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
+xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
 CmdEach nnoremap,xnoremap + :

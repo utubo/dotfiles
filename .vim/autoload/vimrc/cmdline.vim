@@ -41,22 +41,10 @@ sb: "\<C-u>set background=\<Tab>",
 mv: "\<C-u>MoveFile ",
 }->get(getcmdline(), ' ')
 enddef
-g:alt_flg = false
-def B()
-g:alt_flg = true
-Each h,j,k,l cmap {} <ScriptCmd>g:alt_flg = false<Cr><A-{}>
-timer_start(10, (t: number) => {
-Each h,j,k,l cunmap {}
-if g:alt_flg
-feedkeys("\<ESC>", 'nit')
-endif
-})
-enddef
-cno <script> <ESC> <ScriptCmd>B()<CR>
 export def ApplySettings()
 cno <A-h> <Left>
-cno <A-p> <Up>
-cno <A-n> <Down>
+cno <A-j> <Up>
+cno <A-k> <Down>
 cno <A-l> <Right>
 cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')

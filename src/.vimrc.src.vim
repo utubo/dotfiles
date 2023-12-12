@@ -177,6 +177,7 @@ Jetpack 'mattn/ctrlp-matchfuzzy'
 Jetpack 'sheerun/vim-polyglot' # いろんなシンタックスハイライト
 Jetpack 'tani/vim-typo'
 # 🐶🍚
+Jetpack 'utubo/vim-altkey-in-term'
 Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-colorscheme-softgreen'
 Jetpack 'utubo/vim-hlpairs'
@@ -575,8 +576,6 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
-nmap <ESC>j <A-j>
-nmap <ESC>k <A-k>
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
@@ -781,14 +780,6 @@ set guitablabel=%{g:MyTablabel()}
 #}}}
 
 # ------------------------------------------------------
-# ビジュアルモードあれこれ {{{
-xnoremap u <ScriptCmd>undo\|normal! gv<CR>
-xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
-#}}}
-
-# ------------------------------------------------------
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
 inoremap ;<CR> ;<CR>
@@ -806,6 +797,14 @@ CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nnoremap <Space>; ;
 # }}}
+
+# ------------------------------------------------------
+# ビジュアルモードあれこれ {{{
+xnoremap u <ScriptCmd>undo\|normal! gv<CR>
+xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
+#}}}
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
