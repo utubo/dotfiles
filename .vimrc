@@ -614,19 +614,22 @@ ino ;e <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>
 ino ;l <C-g>R<Right>
 ino ;u <C-o>u
-nn ;v <C-v>
+nn ;r <C-r>
+nn ;v V
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>D('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nn <Space>; ;
-map! <script> ;h <BS><SID>bs
-no! <script> <SID>bsh <BS><SID>bs
-map! <script> <SID>bs <Nop>
+map! <script> <SID>bs_ <Nop>
+map! <script> ;h <SID>bs_h
+no! <script> <SID>bs_h <BS><SID>bs_
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
+const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
+xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
 CmdEach nnoremap,xnoremap + :
@@ -857,7 +860,7 @@ return ""
 enddef
 def CB(c: string = 'i'): string
 Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-cno <script> <expr> ;; CA()
+cno <script> <expr> ;n CA()
 return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CB()

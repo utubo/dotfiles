@@ -791,16 +791,17 @@ inoremap ;e <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
 inoremap ;l <C-g>R<Right>
 inoremap ;u <C-o>u
-nnoremap ;v <C-v>
+nnoremap ;r <C-r>
+nnoremap ;v V
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
 CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
-map! <script> ;h <BS><SID>bs
-noremap! <script> <SID>bsh <BS><SID>bs
-map! <script> <SID>bs <Nop>
+map! <script> <SID>bs_ <Nop>
+map! <script> ;h <SID>bs_h
+noremap! <script> <SID>bs_h <BS><SID>bs_
 # }}}
 
 # ------------------------------------------------------
@@ -809,6 +810,8 @@ xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
+const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
+xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 #}}}
 
 # ------------------------------------------------------
@@ -1111,7 +1114,7 @@ def CmdToNormal(): string
 enddef
 def CmdToInsert(c: string = 'i'): string
 	Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-	cnoremap <script> <expr> ;; CmdToNormal()
+	cnoremap <script> <expr> ;n CmdToNormal()
 	return c ==# 'i' ? '' : "\<Right>"
 enddef
 au vimrc ModeChanged *:c CmdToInsert()
