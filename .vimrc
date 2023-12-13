@@ -609,7 +609,8 @@ set guitablabel=%{g:MyTablabel()}
 ino ;<CR> ;<CR>
 ino ;<Esc> ;<Esc>
 ino ;<Space> ;<Space>
-no! ;; <Esc>`^
+ino ;; <Esc>`^
+cno ;; <C-c>
 ino ;e <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>
 ino ;l <C-g>R<Right>
@@ -632,6 +633,8 @@ const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
+CmdEach nnoremap,xnoremap ;c :
+CmdEach nnoremap,xnoremap ;s <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap + :
 CmdEach nnoremap,xnoremap , :
 CmdEach nnoremap,xnoremap <Space>, ,

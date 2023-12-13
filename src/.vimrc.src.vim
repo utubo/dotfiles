@@ -786,7 +786,8 @@ set guitablabel=%{g:MyTablabel()}
 inoremap ;<CR> ;<CR>
 inoremap ;<Esc> ;<Esc>
 inoremap ;<Space> ;<Space>
-noremap! ;; <Esc>`^
+inoremap ;; <Esc>`^
+cnoremap ;; <C-c>
 inoremap ;e <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
 inoremap ;l <C-g>R<Right>
@@ -819,6 +820,8 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
 # 考え中
+CmdEach nnoremap,xnoremap ;c :
+CmdEach nnoremap,xnoremap ;s <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap + :
 CmdEach nnoremap,xnoremap , :
 CmdEach nnoremap,xnoremap <Space>, ,
