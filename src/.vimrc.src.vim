@@ -474,7 +474,20 @@ CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 g:vim9skk = {
 	keymap: {
 		midasi: [':', 'Q']
-	}
+	},
+	roman_table: {
+		# AZIK
+		kn: 'かん', sn: 'さん', tn: 'たん', nz: 'なん', hn: 'はん', fn: 'ふぁん', mn: 'まん', yn: 'やん', rn: 'らん', wn: 'わん',
+		kz: 'きん', sk: 'しん', tk: 'ちん', nk: 'にん', hk: 'ひん', fk: 'ふぃん', mk: 'みん', rk: 'りん', wk: 'うぃん',
+		kj: 'くん', sj: 'すん', tj: 'つん', nj: 'ぬん', hj: 'ふん', fj: 'ふん', mj: 'むん', yj: 'ゆん', rj: 'るん',
+		kd: 'けん', sd: 'せん', td: 'てん', nd: 'ねん', hd: 'へん', fd: 'ふぇん', md: 'めん', rd: 'れん',
+		kl: 'こん', sl: 'そん', tl: 'とん', nl: 'のん', hl: 'ほん', fl: 'ふぉん', ml: 'もん', yl: 'よん', rl: 'ろん',
+		kq: 'かい', sq: 'さい', tq: 'たい', nq: 'ない', hq: 'はい', fq: 'ふぇい', mq: 'まい', yq: 'やい', rq: 'らい', wq: 'わい',
+		kh: 'くう', sh: 'すう', th: 'つう', nh: 'ぬう', hh: 'ふう', fh: 'ふぉう', mh: 'むう', yh: 'ゆう', rh: 'るう',
+		kw: 'けい', sw: 'せい', tw: 'てい', nw: 'ねい', hw: 'へい', fw: 'ふぇい', mw: 'めい', rw: 'れい',
+		kp: 'こう', sp: 'そう', tp: 'とう', np: 'のう', hp: 'ほう', fp: 'ふぉう', mp: 'もう', yp: 'よう', rp: 'ろう',
+		# 全部入れるの大変だ…とりあえずこれだけ入れて様子見
+	},
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 noremap! ;j <Plug>(vim9skk-toggle)

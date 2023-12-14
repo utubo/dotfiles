@@ -325,7 +325,7 @@ lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
 }
 enddef
 timer_start(1000, g:SetupLexima)
-var lspOptions = {
+var lp = {
 diagSignErrorText: '🐞',
 diagSignHintText: '💡',
 diagSignInfoText: '💠',
@@ -333,26 +333,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const lp = has('win32') ? '.cmd' : ''
-var lspServers = [{
+const lq = has('win32') ? '.cmd' : ''
+var lr = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{lp}',
+path: $'typescript-language-server{lq}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{lp}',
+path: $'vim-language-server{lq}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{lp}',
+path: $'html-languageserver{lq}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{lp}',
+path: $'vscode-json-languageserver{lq}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -444,9 +444,9 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lq = expand($'{lk}/pack/local/opt/*')
-if lq !=# ''
-&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
+const ls = expand($'{lk}/pack/local/opt/*')
+if ls !=# ''
+&runtimepath = $'{substitute(ls, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
@@ -641,7 +641,7 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
+const lt = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
