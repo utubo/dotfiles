@@ -185,7 +185,7 @@ Jetpack 'utubo/vim-minviml'
 Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-tabtoslash'
+Jetpack 'utubo/vim-skipslash'
 Jetpack 'utubo/vim-yomigana'
 Jetpack 'utubo/vim-vim9skk'
 # 🐶🍚様子見中
@@ -545,7 +545,7 @@ nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 # 🐶🍚
-g:tabtoslash_autocomplete = 1
+g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 nnoremap % <ScriptCmd>hlpairs#Jump()<CR>
