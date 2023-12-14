@@ -797,7 +797,7 @@ nnoremap ;v V
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
-CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>

@@ -620,7 +620,7 @@ nn ;v V
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>D('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
 CmdEach nnoremap,xnoremap ;; <Esc>
-CmdEach nnoremap,inoremap ;n <Cmd>update<CR>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 nn <Space>; ;
 map! <script> <SID>bs_ <Nop>
 map! <script> ;h <SID>bs_h
