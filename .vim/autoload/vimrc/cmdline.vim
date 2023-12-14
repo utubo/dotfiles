@@ -42,6 +42,8 @@ mv: "\<C-u>MoveFile ",
 }->get(getcmdline(), ' ')
 enddef
 export def ApplySettings()
+cno jj <CR>
+cno kk <C-c>
 cno <A-h> <Left>
 cno <A-j> <Up>
 cno <A-k> <Down>

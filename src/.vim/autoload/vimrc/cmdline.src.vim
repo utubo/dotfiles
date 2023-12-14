@@ -56,6 +56,8 @@ enddef
 #}}}
 
 export def ApplySettings()
+	cnoremap jj <CR>
+	cnoremap kk <C-c>
 	cnoremap <A-h> <Left>
 	cnoremap <A-j> <Up>
 	cnoremap <A-k> <Down>
