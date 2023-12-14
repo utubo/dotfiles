@@ -31,7 +31,7 @@ enddef
 
 export def ApplySettings()
 	cnoremap jj <CR>
-	cnoremap kk <C-c>
+	cnoremap jk <C-c>
 	cnoremap <A-h> <Left>
 	cnoremap <A-j> <Up>
 	cnoremap <A-k> <Down>
