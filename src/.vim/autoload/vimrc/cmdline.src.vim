@@ -1,31 +1,5 @@
 vim9script
 
-# `s:///g`を補完 {{{
-export def CmdlineAutoSlash(c: string): string
-	if getcmdtype() !=# ':'
-		return c
-	endif
-	const cl = getcmdline()
-	if getcmdpos() !=# cl->len() + 1 || cl =~# '\s'
-		return c
-	endif
-	const e = cl[-1]
-	# :s///g
-	if e ==# 's'
-		return $"{c}{c}{c}g\<Left>\<Left>\<Left>"
-	endif
-	# :g!//
-	if e ==# 'g' && c ==# '!'
-		return "!//\<Left>"
-	endif
-	# :g//
-	if e ==# 'g' || e ==# 'v'
-		return $"{c}{c}\<Left>"
-	endif
-	return c
-enddef
-#}}}
-
 # ファイルを移動して保存 {{{
 export def MoveFile(newname: string)
 	const oldpath = expand('%')
@@ -65,7 +39,6 @@ export def ApplySettings()
 	cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 	cnoremap <expr> <Space> MyAbbrev()
-	Each /,#,! cnoremap <script> <expr> {} vimrc#cmdline#CmdlineAutoSlash('{}')
 	command! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
 enddef
 

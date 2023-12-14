@@ -532,6 +532,7 @@ nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 # 🐶🍚
+g:tabtoslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 nnoremap % <ScriptCmd>hlpairs#Jump()<CR>

@@ -418,6 +418,7 @@ Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+g:tabtoslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 nn % <ScriptCmd>hlpairs#Jump()<CR>
