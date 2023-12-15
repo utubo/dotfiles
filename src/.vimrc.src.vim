@@ -273,9 +273,10 @@ g:vimrc_timer_60s = timer_start(60000, 'g:VimrcTimer60s', { repeat: -1 })
 # cmdheight0設定
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
-g:cmdheight0.tail = "\ue0c6"
-# g:cmdheight0.sep  = "\ue0c6"
-# g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
+#g:cmdheight0.tail = "\ue0c6"
+g:cmdheight0.tail = "\ue0b8"
+g:cmdheight0.sep  = "\ue0b8"
+#g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
 g:cmdheight0.sub = ' '
 g:cmdheight0.statusline = ' ' .. # パディング
 	'%{b:stl_icon}%t ' ..       # アイコンとファイル名
