@@ -46,5 +46,6 @@ export def ApplySettings()
 		nb: 'ねば', bt: 'びと', gr: 'がら', gt: 'ごと',
 		nt: 'にち', dt: 'だち', wr: 'われ',
 		sm: 'しま',
+		'_h': '←', '_j': '↓', '_k': '↑', '_l': '→',
 	})
 enddef
