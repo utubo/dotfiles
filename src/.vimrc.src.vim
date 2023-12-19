@@ -357,7 +357,7 @@ def GitAdd(args: string)
 enddef
 command! -nargs=* GitAdd GitAdd(<q-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
-	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore', '🎉release:']
+	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 command! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
 def GitTagPush(tagname: string)
