@@ -467,6 +467,8 @@ elseif !!search('^    \S', 'nc', a)
 setl et
 setl ts=4
 endif
+&sw = &ts
+&st = &ts
 setpos('.', b)
 enddef
 au vimrc BufReadPost * BB()
@@ -640,7 +642,7 @@ CmdEach nnoremap,xnoremap ;c :
 CmdEach nnoremap,xnoremap ;s <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap + :
 CmdEach nnoremap,xnoremap , :
-CmdEach nnoremap,xnoremap <Space>, ,
+CmdEach nnoremap,xnoremap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 if has('win32')
 com! Powershell :bo terminal ++close pwsh

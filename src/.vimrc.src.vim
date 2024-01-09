@@ -599,6 +599,8 @@ def SetupTabstop()
 		setlocal expandtab
 		setlocal tabstop=4
 	endif
+	&shiftwidth = &tabstop
+	&softtabstop = &tabstop
 	setpos('.', org)
 enddef
 au vimrc BufReadPost * SetupTabstop()
@@ -828,7 +830,7 @@ CmdEach nnoremap,xnoremap ;c :
 CmdEach nnoremap,xnoremap ;s <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap + :
 CmdEach nnoremap,xnoremap , :
-CmdEach nnoremap,xnoremap <Space>, ,
+CmdEach nnoremap,xnoremap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 #}}}
