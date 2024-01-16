@@ -27,7 +27,6 @@ def GetVisualSelectionLines(): list<string>
 		lines[0] = lines[0][ax - 1 : ]
 	else
 		var [s, e] = [ax - 1, bx - 1]->sort('n')
-		echo $'{s},{e}'
 		for i in range(0, by - ay)
 			lines[i] = lines[i][s : e]
 		endfor
