@@ -482,6 +482,8 @@ g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設
 nnoremap ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
+# 見出しモードでスタートする
+au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}

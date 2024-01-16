@@ -379,6 +379,7 @@ g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
 au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
+au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
