@@ -16,6 +16,11 @@ ln -s ${SCRIPT_DIR}/.vim/scripts.vim ~/.vim
 
 git config --global core.excludesfile ~/.gitignore_global
 
+# skk
+cd ~
+wget http://openlab.jp/skk/dic/SKK-JISYO.L.gz
+gunzip SKK-JISYO.L.gz
+
 # npm
 sudo npm install -g npm
 
