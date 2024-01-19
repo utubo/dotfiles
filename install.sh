@@ -17,11 +17,11 @@ ln -s ${SCRIPT_DIR}/.vim/scripts.vim ~/.vim
 git config --global core.excludesfile ~/.gitignore_global
 
 # npm
-npm install -g npm
+sudo npm install -g npm
 
 # node_modules
-npm install -g typescript-language-server
-npm install -g vim-language-server
-npm install -g vscode-html-languageserver-bin
-npm install -g vscode-json-languageserver
+sudo npm install -g typescript-language-server
+sudo npm install -g vim-language-server
+sudo npm install -g vscode-html-languageserver-bin
+sudo npm install -g vscode-json-languageserver
 
