@@ -21,7 +21,19 @@ cd ~
 wget http://openlab.jp/skk/dic/SKK-JISYO.L.gz
 gunzip SKK-JISYO.L.gz
 
-# npm
+# nodejs
+if type npm > /dev/null 2>&1; then
+	# OK
+else
+	if type apt > /dev/null 2>&1; then
+		apt install -y nodejs
+	elif type yum > /dev/null 2>&1; then
+		yum install -y nodejs
+	else
+		echo "nodejsをインストールできません"
+		exit 1
+	fi
+fi
 sudo npm install -g npm
 
 # node_modules
