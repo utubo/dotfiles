@@ -19,7 +19,7 @@ git config --global core.excludesfile ~/.gitignore_global
 # skk
 cd ~
 wget http://openlab.jp/skk/dic/SKK-JISYO.L.gz
-gunzip SKK-JISYO.L.gz
+gunzip -f SKK-JISYO.L.gz
 
 # nodejs
 if type npm > /dev/null 2>&1; then
