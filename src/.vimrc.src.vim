@@ -136,6 +136,8 @@ Jetpack 'airblade/vim-gitgutter'
 Jetpack 'cohama/lexima.vim' # 括弧補完
 Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'easymotion/vim-easymotion'
+Jetpack 'girishji/vimcomplete'
+Jetpack 'girishji/autosuggest.vim'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
@@ -152,15 +154,12 @@ Jetpack 'MTDL9/vim-log-highlighting'
 Jetpack 'obcat/vim-hitspop'
 Jetpack 'obcat/vim-sclow' # スクロールバー
 Jetpack 'osyo-manga/vim-textobj-multiblock'
-Jetpack 'prabirshrestha/asyncomplete-buffer.vim'
-Jetpack 'prabirshrestha/asyncomplete.vim'
 Jetpack 'skanehira/gh.vim'
 Jetpack 'thinca/vim-portal'
 Jetpack 'thinca/vim-themis'
 Jetpack 'tpope/vim-fugitive' # Gdiffとか
 Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
 Jetpack 'tyru/caw.vim' # コメント化
-Jetpack 'yami-beta/asyncomplete-omni.vim'
 Jetpack 'yegappan/lsp'
 Jetpack 'yegappan/mru'
 Jetpack 'yuki-yano/dedent-yank.vim' # yankするときにインデントを除去
@@ -480,8 +479,8 @@ g:vim9skk = {
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
-au vimrc User Vim9skkEnter g:asyncomplete_auto_popup = 0
-au vimrc User Vim9skkLeave g:asyncomplete_auto_popup = 1
+au vimrc User Vim9skkEnter AutoSuggestDisable
+au vimrc User Vim9skkLeave AutoSuggestEnable
 # 見出しモードでスタートする
 au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
@@ -518,11 +517,6 @@ def SkipParen(): string
 enddef
 CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-def RegisterAsyncompSource(name: string, white: list<string>, black: list<string>)
-	execute printf("asyncomplete#register_source(asyncomplete#sources#%s#get_source_options({ name: '%s', whitelist: %s, blacklist: %s, completor: asyncomplete#sources#%s#completor }))", name, name, white, black, name)
-enddef
-RegisterAsyncompSource('omni', ['*'], ['c', 'cpp', 'html'])
-RegisterAsyncompSource('buffer', ['*'], ['go'])
 #}}}
 
 # その他 {{{
