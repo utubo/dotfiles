@@ -52,7 +52,7 @@ def ToggleListMark()
 	endfor
 enddef
 nnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
-inoremap <buffer> jj- <ScriptCmd>ToggleListMark()<CR>
+inoremap <buffer> ;- <ScriptCmd>ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -133,8 +133,15 @@ au after_ftplugin_md CursorMoved <buffer> CursorMovedDelay()
 # }}}
 
 # ----------------------------------------------------------
-# その他 {{{
-# リストで改行したときはインデント2にしたいなぁ
-inoremap <buffer> jjo <C-o>o<BS><Space><Space>
-# }}}
+# リスト項目内で改行 {{{
+def ElaseListMark()
+	for l in g:VRange()
+		const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
+		setline(l, a)
+	endfor
+enddef
+inoremap <buffer> ;m <CR><ScriptCmd>ElaseListMark()<CR>
+nnoremap <buffer> ;m <ScriptCmd>ElaseListMark()<CR>
+vnoremap <buffer> ;m <ScriptCmd>ElaseListMark()<CR>
+#}}} -------------------------------------------------------
 

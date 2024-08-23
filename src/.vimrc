@@ -97,6 +97,7 @@ Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'girishji/vimcomplete'
 Jetpack 'girishji/autosuggest.vim'
+Jetpack 'github/copilot.vim'
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
@@ -309,9 +310,7 @@ au vimrc FileType gh-issue-comments {
 nn <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
 }
 nn <Space>gh <Cmd>tabe gh://utubo/repos<CR>
-Enable g:lexima_no_default_rules
-lexima#set_default_rules()
-ino <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
+Enable g:lexima_accept_pum_with_enter
 def g:SetupLexima(a: number)
 lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
 lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
@@ -327,7 +326,7 @@ lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
 }
 enddef
 timer_start(1000, g:SetupLexima)
-var lspOptions = {
+var lp = {
 diagSignErrorText: '🐞',
 diagSignHintText: '💡',
 diagSignInfoText: '💠',
@@ -335,26 +334,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const lp = has('win32') ? '.cmd' : ''
-var lspServers = [{
+const lq = has('win32') ? '.cmd' : ''
+var lr = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{lp}',
+path: $'typescript-language-server{lq}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{lp}',
+path: $'vim-language-server{lq}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{lp}',
+path: $'html-languageserver{lq}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{lp}',
+path: $'vscode-json-languageserver{lq}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -407,6 +406,9 @@ endif
 enddef
 CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : J()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+g:copilot_no_tab_map = true
+im <silent> <script> <expr> ;c copilot#Accept("\<CR>")
+au vimrc VimEnter * Copilot disable
 Enable g:rainbow_active
 Enable g:ctrlp_use_caching
 Disable g:ctrlp_clear_cache_on_exit
@@ -432,9 +434,9 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lq = expand($'{lk}/pack/local/opt/*')
-if lq !=# ''
-&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
+const ls = expand($'{lk}/pack/local/opt/*')
+if ls !=# ''
+&runtimepath = $'{substitute(ls, '\n', ',', 'g')},{&runtimepath}'
 endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
@@ -444,6 +446,7 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+ino <CR> <CR><C-g>u
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
@@ -630,7 +633,7 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>D('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>D('normal! <gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
+const lt = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
 CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
@@ -786,7 +789,6 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-au vimrc User InputCR feedkeys("\<C-g>u", 'n')
 nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nn <Space>n <Cmd>nohlsearch<CR>

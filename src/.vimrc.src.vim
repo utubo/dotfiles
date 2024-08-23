@@ -138,6 +138,7 @@ Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'girishji/vimcomplete'
 Jetpack 'girishji/autosuggest.vim'
+#Jetpack 'github/copilot.vim' #重い
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
 Jetpack 'itchyny/calendar.vim'
@@ -392,7 +393,11 @@ nnoremap <Space>gh <Cmd>tabe gh://utubo/repos<CR>
 # }}}
 
 # lexima {{{
-Enable g:lexima_accept_pum_with_enter
+#Enable g:lexima_accept_pum_with_enter
+Enable g:lexima_no_default_rules
+lexima#set_default_rules()
+inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
+
 # 正規表現の括弧 `\(\)`と`\{\}`
 def g:SetupLexima(timer: number)
 	lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
@@ -517,6 +522,10 @@ def SkipParen(): string
 enddef
 CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+# Copilotは様子見
+#g:copilot_no_tab_map = true
+#imap <silent> <script> <expr> ;c copilot#Accept("\<CR>")
+#au vimrc VimEnter * Copilot disable
 #}}}
 
 # その他 {{{
@@ -567,7 +576,6 @@ filetype plugin indent on
 au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
-inoremap <CR> <CR><C-g>u
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
@@ -1023,6 +1031,8 @@ nnoremap M m
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
+au vimrc User InputCR feedkeys("\<C-g>u", 'n')
+
 nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nnoremap <Space>n <Cmd>nohlsearch<CR>

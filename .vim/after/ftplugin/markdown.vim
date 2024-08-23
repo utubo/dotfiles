@@ -42,7 +42,7 @@ endif
 endfor
 enddef
 nn <buffer> <Space>- <ScriptCmd>B()<CR>
-ino <buffer> jj- <ScriptCmd>B()<CR>
+ino <buffer> ;- <ScriptCmd>B()<CR>
 def C(): string
 var [a, b] = g:VFirstLast()
 if mode() ==? 'V'
@@ -91,23 +91,31 @@ sil! cmdheight0#Invalidate()
 endif
 enddef
 const k = 300
-var m = 0
 var n = 0
+var o = 0
 def CursorMovedDelayExec(a: any = 0)
-m = 0
-if n !=# 0
 n = 0
+if o !=# 0
+o = 0
 D()
 endif
 enddef
 def F()
-if m !=# 0
-n += 1
+if n !=# 0
+o += 1
 return
 endif
 D()
-n = 0
-m = timer_start(k, CursorMovedDelayExec)
+o = 0
+n = timer_start(k, CursorMovedDelayExec)
 enddef
 au after_ftplugin_md CursorMoved <buffer> F()
-ino <buffer> jjo <C-o>o<BS><Space><Space>
+def G()
+for l in g:VRange()
+const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
+setline(l, a)
+endfor
+enddef
+ino <buffer> ;m <CR><ScriptCmd>G()<CR>
+nn <buffer> ;m <ScriptCmd>G()<CR>
+vn <buffer> ;m <ScriptCmd>G()<CR>
