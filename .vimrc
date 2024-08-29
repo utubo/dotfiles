@@ -157,74 +157,10 @@ jetpack#end()
 if ! ln
 jetpack#sync()
 endif
-au vimrc WinNew,FileType * b:stl_icon = nerdfont#find()
-b:stl_bufinfo = ''
-def F()
-var a = []
-if &fenc !=# 'utf-8' && !!&fenc
-a += [&fenc->toupper()]
-endif
-if &ff !=# '' && (has('win32') && (&ff !=# 'dos') || !has('win32') && (&ff !=# 'unix'))
-a += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
-endif
-if !a
-b:stl_bufinfo = ''
-else
-b:stl_bufinfo = '%#Cmdheight0Warn#' .. a->join(',') .. '%#CmdHeight0#'
-endif
-enddef
-au vimrc BufNew,BufRead,OptionSet * F()
-w:ruler_mdcb = ''
-au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-au vimrc Colorscheme * {
-hi! link ChkCountIcon CmdHeight0Warn
-hi! link ChkCountIconOk CmdHeight0Info
-}
-g:stl_reg = ''
-def G()
-var a = v:event.regcontents
-->join('↵')
-->substitute('\t', '›', 'g')
-->E(20)
-->substitute('%', '%%', 'g')
-g:stl_reg = $'%#Cmdheight0Info#📋%#CmdHeight0#{a}'
-enddef
-au vimrc TextYankPost * G()
-g:stl_worktime = '%#Cmdheight0Info#🕛'
-g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
-def! g:VimrcTimer60s(a: any)
-const b = (localtime() - g:stl_worktime_open_at) / 60
-const c = b % 60
-g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[c / 5]
-if c ==# 45
-notification#show("       ☕🍴🍰\nHave a break time !")
-endif
-if g:stl_worktime ==# '🍰'
-g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime
-else
-g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime
-endif
-enddef
-timer_stop(get(g:, 'vimrc_timer_60s', 0))
-g:vimrc_timer_60s = timer_start(60000, 'g:VimrcTimer60s', { repeat: -1 })
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
-g:cmdheight0.tail = "\ue0b8"
-g:cmdheight0.sep = "\ue0b8"
-g:cmdheight0.sub = ' '
-g:cmdheight0.statusline = ' ' ..
-'%{b:stl_icon}%t ' ..
-'%#CmdHeight0Error#%m%*' ..
-'%|%=%|' ..
-'%{%w:ruler_mdcb|%}' ..
-'%{%g:stl_reg|%}' ..
-'%3l:%-2c:%L%|' ..
-'%{%b:stl_bufinfo|%}%*' ..
-'%{g:vim9skk_mode}%*' ..
-' ' ..
-'%{%g:stl_worktime%}%*' ..
-' '
 g:cmdheight0.laststatus = 0
+g:cmdheight0.only_bottom = true
 nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
 au vimrc WinEnter * {
@@ -249,7 +185,7 @@ nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
-def H(a: string)
+def F(a: string)
 const b = getcwd()
 try
 chdir(expand('%:p:h'))
@@ -278,16 +214,16 @@ echoh Normal
 chdir(b)
 endtry
 enddef
-com! -nargs=* GitAdd H(<q-args>)
+com! -nargs=* GitAdd F(<q-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
-def I(a: string)
+def G(a: string)
 ec system($"git tag '{a}'")
 ec system($"git push origin '{a}'")
 enddef
-com! -nargs=1 GitTagPush I(<q-args>)
+com! -nargs=1 GitTagPush G(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
@@ -397,7 +333,7 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-def J(): string
+def H(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>"''`」', c) ==# -1
 return "\<Tab>"
@@ -405,7 +341,7 @@ else
 return "\<C-o>a"
 endif
 enddef
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : J()
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : H()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:rainbow_active
 Enable g:ctrlp_use_caching
@@ -449,7 +385,7 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
-def BA()
+def I()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -467,7 +403,7 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-au vimrc BufReadPost * BA()
+au vimrc BufReadPost * I()
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -526,6 +462,53 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn <silent> g; g;zO
+nn gn <Cmd>bnext<CR>
+nn gp <Cmd>bprevious<CR>
+var lr = []
+def J()
+lr = []
+for a in execute('ls')->split("\n")
+const m = a->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
+if !m->empty()
+const c = m[2]->stridx('%') !=# -1
+var b = { nr: m[1], name: m[3]->pathshorten(), current: c }
+b.width = strdisplaywidth($'{b.nr}{b.name} ')
+lr += [b]
+endif
+endfor
+g:cmdheight0.enabled = lr->len() <= 1
+BA()
+enddef
+def BA()
+if g:cmdheight0.enabled
+return
+endif
+redraw
+var w = 0
+for b in lr
+if &columns - 1 < w + b.width
+break
+endif
+w += b.width
+if b.current
+echoh StatusLineTermNC
+echon b.nr
+else
+echoh StatusLineNC
+echon b.nr
+endif
+echoh StatusLine
+echon $'{b.name} '
+endfor
+const a = &columns - 1 - w
+if 0 < a
+echon repeat(' ', &columns - 1 - w)
+endif
+echoh Normal
+enddef
+au vimrc BufAdd,BufEnter * J()
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once J()
+au vimrc CursorMoved * BA()
 g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
@@ -737,10 +720,12 @@ nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
 nn qa <Cmd>confirm qa<CR>
-nn qn <Cmd>confirm tabclose +<CR>
-nn qp <Cmd>confirm tabclose -<CR>
+nn qt <Cmd>confirm tabclose +<CR>
+nn qT <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn qo <Cmd>confirm tabonly<CR>
+nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
+nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nn q: q:
 nn q/ q/
 nn q? q?

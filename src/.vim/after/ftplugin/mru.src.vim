@@ -34,7 +34,9 @@ setlocal cursorline
 nnoremap <buffer> w <ScriptCmd>MRUwithNumKey(!b:use_tab)<CR>
 nnoremap <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR><Cmd>setlocal number<CR>
 nnoremap <buffer> <Esc> <Cmd>q!<CR>
-MRUwithNumKey(BufIsSmth())
+# タブを卒業したい
+#MRUwithNumKey(BufIsSmth()) # 編集済みならタブで開く
+MRUwithNumKey(false)
 
 hi link MruFileName Directory
 au vimrc ColorScheme <buffer> hi link MruFileName Directory

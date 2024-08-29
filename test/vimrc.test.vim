@@ -100,6 +100,8 @@ suite.TestMapping = () => {
 	# n  gc vim-caw
 	# n  gd vim-vimscript-gd
 	# n  ge  vim-smart-word
+	# n  gn バッファ移動
+	# n  gp バッファ移動
 	# n  g; 折り畳みを開くように修正
 	# n  i  _cc
 	# n  m  '
@@ -126,7 +128,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([abehijklmnoqswAMOQSTY;''/?:%,+]\|gc\|gd\|ge\|gs\|g;\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([abehijklmnoqswAMOQSTY;''/?:%,+]\|g[cdesnp;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'n  \(<C-[FB]>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'

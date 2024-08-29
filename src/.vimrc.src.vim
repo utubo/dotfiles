@@ -206,94 +206,13 @@ if ! has_jetpack
 endif
 #}}}
 
-# cmdheight0, statusline {{{
-# アイコン
-au vimrc WinNew,FileType * b:stl_icon = nerdfont#find()
-
-# 文字コードと改行コード
-b:stl_bufinfo = ''
-def UpdateStlBufInfo()
-	var info = []
-	if &fenc !=# 'utf-8' && !!&fenc
-		info += [&fenc->toupper()]
-	endif
-	# なんか `&ff !=# ...` を括弧でくくらないとType mismatchになる…
-	if &ff !=# '' && (has('win32') && (&ff !=# 'dos') || !has('win32') && (&ff !=# 'unix'))
-		info += [&ff ==# 'dos' ? 'CRLF' : &ff ==# 'unix' ? 'LF' : 'CR']
-	endif
-	if !info
-		b:stl_bufinfo = ''
-	else
-		b:stl_bufinfo = '%#Cmdheight0Warn#' .. info->join(',') .. '%#CmdHeight0#'
-	endif
-enddef
-au vimrc BufNew,BufRead,OptionSet * UpdateStlBufInfo()
-
-# カーソル以下のmarkdownのチェックボックスの数
-# 本体は.vim/after/ftplugin/markdown.vim
-w:ruler_mdcb = ''
-au vimrc VimEnter,WinNew * w:ruler_mdcb = ''
-au vimrc Colorscheme * {
-	hi! link ChkCountIcon CmdHeight0Warn
-	hi! link ChkCountIconOk CmdHeight0Info
-}
-
-# ヤンクしたやつを表示するやつ
-g:stl_reg = ''
-def UpdateStlRegister()
-	var reg = v:event.regcontents
-		->join('↵')
-		->substitute('\t', '›', 'g')
-		->TruncToDisplayWidth(20)
-		->substitute('%', '%%', 'g')
-	g:stl_reg = $'%#Cmdheight0Info#📋%#CmdHeight0#{reg}'
-enddef
-au vimrc TextYankPost * UpdateStlRegister()
-
-# 毎時vim起動後45分から15分間休憩しようね
-g:stl_worktime = '%#Cmdheight0Info#🕛'
-g:stl_worktime_open_at = get(g:, 'ruler_worktime_open_at', localtime())
-def! g:VimrcTimer60s(timer: any)
-	const hhmm = (localtime() - g:stl_worktime_open_at) / 60
-	const mm = hhmm % 60
-	#:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚'[mm / 5]
-	g:stl_worktime = '🕛🕐🕑🕒🕓🕔🕕🕖🕗🍰🍰🍰'[mm / 5]
-	if mm ==# 45
-		notification#show("       ☕🍴🍰\nHave a break time !")
-	endif
-	if g:stl_worktime ==# '🍰'
-		g:stl_worktime = '%#Cmdheight0Warn#' .. g:stl_worktime
-	else
-		g:stl_worktime = '%#Cmdheight0Info#' .. g:stl_worktime
-	endif
-enddef
-timer_stop(get(g:, 'vimrc_timer_60s', 0)) # .vimrc再実行を考慮してタイマーをストップ
-g:vimrc_timer_60s = timer_start(60000, 'g:VimrcTimer60s', { repeat: -1 })
-
-# cmdheight0設定
+# cmdheight0 {{{
 g:cmdheight0 = {}
 g:cmdheight0.delay = -1
-#g:cmdheight0.tail = "\ue0c6"
-g:cmdheight0.tail = "\ue0b8"
-g:cmdheight0.sep  = "\ue0b8"
-#g:cmdheight0.sub  = ["\ue0b9", "\ue0bb"]
-g:cmdheight0.sub = ' '
-g:cmdheight0.statusline = ' ' .. # パディング
-	'%{b:stl_icon}%t ' ..       # アイコンとファイル名
-	'%#CmdHeight0Error#%m%*' .. # 編集済みか
-	'%|%=%|' ..                 # 中央
-	'%{%w:ruler_mdcb|%}' ..     # markdownのチェックボックスの数
-	'%{%g:stl_reg|%}' ..        # レジスタ
-	'%3l:%-2c:%L%|' ..          # カーソル位置
-	'%{%b:stl_bufinfo|%}%*' ..  # 文字コードと改行コード
-	'%{g:vim9skk_mode}%*' ..    # vim9skk
-	' ' ..                      # パディング
-	'%{%g:stl_worktime%}%*' ..  # 作業時間
-	' '                         # パディング
 g:cmdheight0.laststatus = 0
+g:cmdheight0.only_bottom = true
 nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
 au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
-
 # Zenモードでterminalだけになると混乱するので
 au vimrc WinEnter * {
 	if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
@@ -699,6 +618,59 @@ nnoremap <silent> g; g;zO
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
+# バッファ操作 {{{
+nnoremap gn <Cmd>bnext<CR>
+nnoremap gp <Cmd>bprevious<CR>
+
+# 複数開いているときだけ自作buflineを表示する
+var bufline = []
+def RefreshBufList()
+	bufline = []
+	for ls in execute('ls')->split("\n")
+		const m = ls->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
+		if !m->empty()
+			const current = m[2]->stridx('%') !=# -1
+			var b = { nr: m[1], name: m[3]->pathshorten(), current: current }
+			b.width = strdisplaywidth($'{b.nr}{b.name} ')
+			bufline += [b]
+		endif
+	endfor
+	g:cmdheight0.enabled = bufline->len() <= 1
+	EchoBufLine()
+enddef
+def EchoBufLine()
+	if g:cmdheight0.enabled
+		return
+	endif
+	redraw
+	var w = 0
+	for b in bufline
+		if &columns - 1 < w + b.width
+			break
+		endif
+		w += b.width
+		if b.current
+			echohl StatusLineTermNC
+			echon b.nr
+		else
+			echohl StatusLineNC
+			echon b.nr
+		endif
+		echohl StatusLine
+		echon $'{b.name} '
+	endfor
+	const pad = &columns - 1 - w
+	if 0 < pad
+		echon repeat(' ', &columns - 1 - w)
+	endif
+	echohl Normal
+enddef
+au vimrc BufAdd,BufEnter * RefreshBufList()
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once RefreshBufList()
+au vimrc CursorMoved * EchoBufLine()
+#}}}
+
+# ------------------------------------------------------
 # Tabline {{{
 # 例: `current.txt|✏sub.txt|🐙>`(3つめ以降は省略)
 g:tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
@@ -956,10 +928,12 @@ nnoremap q <Nop>
 nnoremap Q q
 nnoremap qq <Cmd>confirm q<CR>
 nnoremap qa <Cmd>confirm qa<CR>
-nnoremap qn <Cmd>confirm tabclose +<CR>
-nnoremap qp <Cmd>confirm tabclose -<CR>
+nnoremap qt <Cmd>confirm tabclose +<CR>
+nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qo <Cmd>confirm tabonly<CR>
+nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
+nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?

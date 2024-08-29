@@ -28,6 +28,6 @@ setl cursorline
 nn <buffer> w <ScriptCmd>B(!b:use_tab)<CR>
 nn <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR><Cmd>setlocal number<CR>
 nn <buffer> <Esc> <Cmd>q!<CR>
-B(A())
+B(false)
 hi link MruFileName Directory
 au vimrc ColorScheme <buffer> hi link MruFileName Directory
