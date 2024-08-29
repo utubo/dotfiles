@@ -182,12 +182,12 @@ Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-colorscheme-softgreen'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-skipslash'
 Jetpack 'utubo/vim-yomigana'
 Jetpack 'utubo/vim-vim9skk'
+Jetpack 'utubo/vim-zenmode'
 # 🐶🍚様子見中
 Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-ddgv'
@@ -196,6 +196,8 @@ Jetpack 'utubo/vim-shrink'
 Jetpack 'utubo/vim-tablist'
 Jetpack 'utubo/vim-tabpopupmenu'
 Jetpack 'utubo/vim-textobj-twochars'
+# 🐶✋🍚
+#Jetpack 'utubo/vim-cmdheight0'
 
 if has_deno
 	Jetpack 'vim-denops/denops.vim'
@@ -206,19 +208,9 @@ if ! has_jetpack
 endif
 #}}}
 
-# cmdheight0 {{{
-g:cmdheight0 = {}
-g:cmdheight0.delay = -1
-g:cmdheight0.laststatus = 0
-g:cmdheight0.only_bottom = true
-nnoremap ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
-au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
-# Zenモードでterminalだけになると混乱するので
-au vimrc WinEnter * {
-	if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
-		cmdheight0#ToggleZen(0)
-	endif
-}
+# zenmode {{{
+g:zenmode = {}
+au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 #}}}
 
 # easymotion {{{
@@ -623,28 +615,28 @@ nnoremap gn <Cmd>bnext<CR>
 nnoremap gp <Cmd>bprevious<CR>
 
 # 複数開いているときだけ自作buflineを表示する
-var bufline = []
+var bufitems = []
 def RefreshBufList()
-	bufline = []
+	bufitems = []
 	for ls in execute('ls')->split("\n")
 		const m = ls->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
 		if !m->empty()
 			const current = m[2]->stridx('%') !=# -1
 			var b = { nr: m[1], name: m[3]->pathshorten(), current: current }
 			b.width = strdisplaywidth($'{b.nr}{b.name} ')
-			bufline += [b]
+			bufitems += [b]
 		endif
 	endfor
-	g:cmdheight0.enabled = bufline->len() <= 1
+	g:zenmode.preventEcho = bufitems->len() > 1
 	EchoBufLine()
 enddef
 def EchoBufLine()
-	if g:cmdheight0.enabled
+	if bufitems->len() <= 1
 		return
 	endif
 	redraw
 	var w = 0
-	for b in bufline
+	for b in bufitems
 		if &columns - 1 < w + b.width
 			break
 		endif

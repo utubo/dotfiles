@@ -137,12 +137,12 @@ Jetpack 'utubo/vim-colorscheme-girly'
 Jetpack 'utubo/vim-colorscheme-softgreen'
 Jetpack 'utubo/vim-hlpairs'
 Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-cmdheight0'
 Jetpack 'utubo/vim-registers-lite'
 Jetpack 'utubo/vim-reformatdate'
 Jetpack 'utubo/vim-skipslash'
 Jetpack 'utubo/vim-yomigana'
 Jetpack 'utubo/vim-vim9skk'
+Jetpack 'utubo/vim-zenmode'
 Jetpack 'utubo/jumpcursor.vim'
 Jetpack 'utubo/vim-ddgv'
 Jetpack 'utubo/vim-portal-aim'
@@ -157,17 +157,8 @@ jetpack#end()
 if ! ln
 jetpack#sync()
 endif
-g:cmdheight0 = {}
-g:cmdheight0.delay = -1
-g:cmdheight0.laststatus = 0
-g:cmdheight0.only_bottom = true
-nn ZZ <ScriptCmd>cmdheight0#ToggleZen()<CR>
-au vimrc User Vim9skkModeChanged cmdheight0#Invalidate()
-au vimrc WinEnter * {
-if winnr('$') ==# 1 && tabpagenr('$') ==# 1 && &buftype ==# 'terminal'
-cmdheight0#ToggleZen(0)
-endif
-}
+g:zenmode = {}
+au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 Enable g:EasyMotion_smartcase
 Enable g:EasyMotion_use_migemo
 Enable g:EasyMotion_enter_jump_first
@@ -476,11 +467,11 @@ b.width = strdisplaywidth($'{b.nr}{b.name} ')
 lr += [b]
 endif
 endfor
-g:cmdheight0.enabled = lr->len() <= 1
+g:zenmode.preventEcho = lr->len() > 1
 BA()
 enddef
 def BA()
-if g:cmdheight0.enabled
+if lr->len() <= 1
 return
 endif
 redraw
