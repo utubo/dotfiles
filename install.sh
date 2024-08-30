@@ -29,6 +29,8 @@ else
 		apt install -y nodejs
 	elif type yum > /dev/null 2>&1; then
 		yum install -y nodejs
+	elif type apk > /dev/null 2>&1; then
+		sudo apk install -y nodejs
 	else
 		echo "nodejsをインストールできません"
 		exit 1
