@@ -467,8 +467,8 @@ lr += [b]
 b.width = strdisplaywidth($'{b.nr}{b.name} ')
 endif
 endfor
-g:zenmode.preventEcho = lr->len() > 1
 BA()
+g:zenmode.preventEcho = lr->len() > 1
 enddef
 def BA()
 if lr->len() <= 1

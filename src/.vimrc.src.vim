@@ -627,8 +627,8 @@ def RefreshBufList()
 			b.width = strdisplaywidth($'{b.nr}{b.name} ')
 		endif
 	endfor
-	g:zenmode.preventEcho = bufitems->len() > 1
 	EchoBufLine()
+	g:zenmode.preventEcho = bufitems->len() > 1
 enddef
 def EchoBufLine()
 	if bufitems->len() <= 1
