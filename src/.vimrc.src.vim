@@ -623,8 +623,8 @@ def RefreshBufList()
 		if !m->empty()
 			const current = m[2]->stridx('%') !=# -1
 			var b = { nr: m[1], name: m[3]->pathshorten(), current: current }
-			b.width = strdisplaywidth($'{b.nr}{b.name} ')
 			bufitems += [b]
+			b.width = strdisplaywidth($'{b.nr}{b.name} ')
 		endif
 	endfor
 	g:zenmode.preventEcho = bufitems->len() > 1
@@ -635,11 +635,35 @@ def EchoBufLine()
 		return
 	endif
 	redraw
+	var s = 0
+	var e = 0
 	var w = 0
+	var hasNext = false
+	var hasPrev = false
+	var containCurrent = false
 	for b in bufitems
-		if &columns - 1 < w + b.width
-			break
+		w += b.width
+		if &columns - 5 < w
+			if containCurrent
+				e -= 1
+				hasNext = true
+				break
+			endif
+			s += 1
+			hasPrev = true
 		endif
+		if b.current
+			containCurrent = true
+		endif
+		e += 1
+	endfor
+	w = 0
+	if hasPrev
+		echohl StatusLineNC
+		echon '< '
+		w += 2
+	endif
+	for b in bufitems[s : e]
 		w += b.width
 		if b.current
 			echohl StatusLineTermNC
@@ -651,6 +675,11 @@ def EchoBufLine()
 		echohl StatusLine
 		echon $'{b.name} '
 	endfor
+	if hasNext
+		echohl StatusLineNC
+		echon '>'
+		w += 1
+	endif
 	const pad = &columns - 1 - w
 	if 0 < pad
 		echon repeat(' ', &columns - 1 - w)

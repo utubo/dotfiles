@@ -463,8 +463,8 @@ const m = a->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
 const c = m[2]->stridx('%') !=# -1
 var b = { nr: m[1], name: m[3]->pathshorten(), current: c }
-b.width = strdisplaywidth($'{b.nr}{b.name} ')
 lr += [b]
+b.width = strdisplaywidth($'{b.nr}{b.name} ')
 endif
 endfor
 g:zenmode.preventEcho = lr->len() > 1
@@ -475,11 +475,35 @@ if lr->len() <= 1
 return
 endif
 redraw
+var s = 0
+var e = 0
 var w = 0
+var a = false
+var c = false
+var d = false
 for b in lr
-if &columns - 1 < w + b.width
+w += b.width
+if &columns - 5 < w
+if d
+e -= 1
+a = true
 break
 endif
+s += 1
+c = true
+endif
+if b.current
+d = true
+endif
+e += 1
+endfor
+w = 0
+if c
+echoh StatusLineNC
+echon '< '
+w += 2
+endif
+for b in lr[s : e]
 w += b.width
 if b.current
 echoh StatusLineTermNC
@@ -491,8 +515,13 @@ endif
 echoh StatusLine
 echon $'{b.name} '
 endfor
-const a = &columns - 1 - w
-if 0 < a
+if a
+echoh StatusLineNC
+echon '>'
+w += 1
+endif
+const f = &columns - 1 - w
+if 0 < f
 echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
