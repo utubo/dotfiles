@@ -924,6 +924,7 @@ nnoremap qt <Cmd>confirm tabclose +<CR>
 nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qo <Cmd>confirm tabonly<CR>
+nnoremap qb <Cmd>confirm bd<CR>
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nnoremap q: q:
