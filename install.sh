@@ -22,14 +22,14 @@ wget http://openlab.jp/skk/dic/SKK-JISYO.L.gz
 gunzip -f SKK-JISYO.L.gz
 
 # nodejs
-if type npm > /dev/null 2>&1; then
+if type npm &> /dev/null; then
 	: # OK
 else
-	if type apt > /dev/null 2>&1; then
-		apt install -y nodejs
-	elif type yum > /dev/null 2>&1; then
-		yum install -y nodejs
-	elif type apk > /dev/null 2>&1; then
+	if type apt &> /dev/null; then
+		sudo apt install -y nodejs
+	elif type yum &> /dev/null; then
+		sudo yum install -y nodejs
+	elif type apk &> /dev/null; then
 		sudo apk install -y nodejs
 	else
 		echo "nodejsをインストールできません"
