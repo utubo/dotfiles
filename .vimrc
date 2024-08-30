@@ -740,10 +740,11 @@ nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
 nn qa <Cmd>confirm qa<CR>
+nn qo <Cmd>confirm only<CR>
 nn qt <Cmd>confirm tabclose +<CR>
 nn qT <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
-nn qo <Cmd>confirm tabonly<CR>
+nn qO <Cmd>confirm tabonly<CR>
 nn qb <Cmd>confirm bd<CR>
 nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>

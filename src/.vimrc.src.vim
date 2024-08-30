@@ -947,15 +947,20 @@ enddef
 Each h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
+# ウィンドウ
 nnoremap qq <Cmd>confirm q<CR>
 nnoremap qa <Cmd>confirm qa<CR>
+nnoremap qo <Cmd>confirm only<CR>
+# タブ
 nnoremap qt <Cmd>confirm tabclose +<CR>
 nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
-nnoremap qo <Cmd>confirm tabonly<CR>
+nnoremap qO <Cmd>confirm tabonly<CR>
 nnoremap qb <Cmd>confirm bd<CR>
+# バッファ
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
+# デフォルト動作を保持
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
