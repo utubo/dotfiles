@@ -175,7 +175,7 @@ setl cursorline
 nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
-nn <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
+nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 def F(a: string)
 const b = getcwd()
 try

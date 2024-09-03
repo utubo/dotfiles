@@ -233,7 +233,7 @@ au vimrc FileType fern {
 	nnoremap <buffer> <F1> <Cmd>:q!<CR>
 	nnoremap <buffer> p <Plug>(fern-action-leave)
 }
-nnoremap <F1> <Cmd>Fern . -reveal=% -opener=split<CR>
+nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 #}}}
 
 # Git {{{
