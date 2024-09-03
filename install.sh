@@ -30,7 +30,7 @@ else
 	elif command -v yum &> /dev/null; then
 		sudo yum install -y nodejs
 	elif command -v apk &> /dev/null; then
-		sudo apk install -y nodejs
+		sudo apk add nodejs
 	else
 		echo "nodejsをインストールできませんでした。lspが動かないかも" >&2
 		exit 0
