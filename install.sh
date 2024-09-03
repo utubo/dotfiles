@@ -26,11 +26,11 @@ if command -v npm &> /dev/null; then
 	: # OK
 else
 	if command -v apt &> /dev/null; then
-		sudo apt install -y nodejs
+		sudo apt install -y nodejs npm
 	elif command -v yum &> /dev/null; then
-		sudo yum install -y nodejs
+		sudo yum install -y nodejs npm
 	elif command -v apk &> /dev/null; then
-		sudo apk add nodejs
+		sudo apk add nodejs npm
 	else
 		echo "nodejsをインストールできませんでした。lspが動かないかも" >&2
 		exit 0
