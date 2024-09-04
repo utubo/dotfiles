@@ -469,10 +469,6 @@ noremap <Space>s <Plug>(jumpcursor-jump)
 #}}}
 
 # 開発用 {{{
-const localplugins = expand($'{rtproot}/pack/local/opt/*')
-if localplugins !=# ''
-	&runtimepath = $'{substitute(localplugins, '\n', ',', 'g')},{&runtimepath}'
-endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
