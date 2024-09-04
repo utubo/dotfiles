@@ -2,7 +2,7 @@
 Example
 ```sh
 docker build . -t utubo-dotfiles
-docker run run -it utubo-dotfiles
+docker run -it utubo-dotfiles
 ```
 
 If you want open the source of .vimrc
