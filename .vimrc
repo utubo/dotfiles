@@ -359,10 +359,6 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-const lq = expand($'{lk}/pack/local/opt/*')
-if lq !=# ''
-&runtimepath = $'{substitute(lq, '\n', ',', 'g')},{&runtimepath}'
-endif
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
@@ -455,23 +451,23 @@ nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn <silent> g; g;zO
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
-var lr = []
+var lq = []
 def J()
-lr = []
+lq = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
 const c = m[2]->stridx('%') !=# -1
 var b = { nr: m[1], name: m[3]->pathshorten(), current: c }
-lr += [b]
+lq += [b]
 b.width = strdisplaywidth($'{b.nr}{b.name} ')
 endif
 endfor
 BA()
-g:zenmode.preventEcho = lr->len() > 1
+g:zenmode.preventEcho = lq->len() > 1
 enddef
 def BA()
-if lr->len() <= 1
+if lq->len() <= 1
 return
 endif
 redraw
@@ -481,7 +477,7 @@ var w = 0
 var a = false
 var c = false
 var d = false
-for b in lr
+for b in lq
 w += b.width
 if &columns - 5 < w
 if d
@@ -503,7 +499,7 @@ echoh StatusLineNC
 echon '< '
 w += 2
 endif
-for b in lr[s : e]
+for b in lq[s : e]
 w += b.width
 if b.current
 echoh StatusLineTermNC
@@ -740,15 +736,15 @@ nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
 nn qa <Cmd>confirm qa<CR>
-nn qo <Cmd>confirm only<CR>
+nn qOw <Cmd>confirm only<CR>
 nn qt <Cmd>confirm tabclose +<CR>
 nn qT <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
-nn qO <Cmd>confirm tabonly<CR>
+nn qOt <Cmd>confirm tabonly<CR>
 nn qb <Cmd>confirm bd<CR>
 nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>
-nn <expr> qo $"\<Cmd>silent vim9cmd bd {range(last_buffer_nr())->filter((b, i) => b !=# bufnr())}\<CR>"
+nn <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"
 nn q: q:
 nn q/ q/
 nn q? q?

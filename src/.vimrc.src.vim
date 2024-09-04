@@ -946,17 +946,17 @@ nnoremap Q q
 # ウィンドウ
 nnoremap qq <Cmd>confirm q<CR>
 nnoremap qa <Cmd>confirm qa<CR>
-nnoremap qo <Cmd>confirm only<CR>
+nnoremap qOw <Cmd>confirm only<CR>
 # タブ
 nnoremap qt <Cmd>confirm tabclose +<CR>
 nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
-nnoremap qO <Cmd>confirm tabonly<CR>
+nnoremap qOt <Cmd>confirm tabonly<CR>
 nnoremap qb <Cmd>confirm bd<CR>
 # バッファ
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
-nnoremap <expr> qo $"\<Cmd>silent vim9cmd bd {range(last_buffer_nr())->filter((b, i) => b !=# bufnr())}\<CR>"
+nnoremap <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"
 # デフォルト動作を保持
 nnoremap q: q:
 nnoremap q/ q/
