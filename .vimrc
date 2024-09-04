@@ -763,9 +763,9 @@ au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
 if has('vim_starting')
-&t_SI .= "\e[6 q"
-&t_EI .= "\e[2 q"
-&t_SR .= "\e[4 q"
+&t_SI = "\e[6 q"
+&t_EI = "\e[2 q"
+&t_SR = "\e[4 q"
 endif
 nn <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nn <F12> <Cmd>set wrap!<CR>
