@@ -748,6 +748,7 @@ nn qO <Cmd>confirm tabonly<CR>
 nn qb <Cmd>confirm bd<CR>
 nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>
+nn <expr> qo $"\<Cmd>silent vim9cmd bd {range(last_buffer_nr())->filter((b, i) => b !=# bufnr())}\<CR>"
 nn q: q:
 nn q/ q/
 nn q? q?
@@ -760,6 +761,11 @@ nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')-
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
+endif
+if has('vim_starting')
+&t_SI .= "\e[6 q"
+&t_EI .= "\e[2 q"
+&t_SR .= "\e[4 q"
 endif
 nn <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nn <F12> <Cmd>set wrap!<CR>

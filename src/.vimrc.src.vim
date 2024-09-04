@@ -960,6 +960,7 @@ nnoremap qb <Cmd>confirm bd<CR>
 # バッファ
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
+nnoremap <expr> qo $"\<Cmd>silent vim9cmd bd {range(last_buffer_nr())->filter((b, i) => b !=# bufnr())}\<CR>"
 # デフォルト動作を保持
 nnoremap q: q:
 nnoremap q/ q/
@@ -984,6 +985,13 @@ nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('n
 if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"
+endif
+
+# カーソルの形
+if has('vim_starting')
+	&t_SI .= "\e[6 q"
+	&t_EI .= "\e[2 q"
+	&t_SR .= "\e[4 q"
 endif
 
 nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
