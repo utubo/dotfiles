@@ -17,7 +17,7 @@ ENV HOME /home/$USER
 RUN addgroup -S $USER && \
     adduser -S -u 1000 -G $USER $USER && \
     chown -R $USER:$USER $HOME
-RUN echo "dotfile ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "$USER ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER $USER
 
 WORKDIR $HOME
