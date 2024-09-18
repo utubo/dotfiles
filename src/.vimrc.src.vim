@@ -492,6 +492,13 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
+# 感謝
+# https://zenn.dev/vim_jp/articles/43d021f461f3a4
+nnoremap <A-J> <Cmd>copy.<CR>
+nnoremap <A-K> <Cmd>copy-1<CR>
+xnoremap <A-J> :copy'<-1<CR>gv
+xnoremap <A-K> :copy'>+0<CR>gv
+
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------

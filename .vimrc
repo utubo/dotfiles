@@ -372,6 +372,10 @@ Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
 Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
 CmdEach nmap,tmap <SID>ws <Nop>
+nn <A-J> <Cmd>copy.<CR>
+nn <A-K> <Cmd>copy-1<CR>
+xn <A-J> :copy'<-1<CR>gv
+xn <A-K> :copy'>+0<CR>gv
 def I()
 const a = 100
 const b = getpos('.')
