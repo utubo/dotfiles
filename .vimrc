@@ -785,7 +785,7 @@ xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
-xn <expr> p $'"_s<C-R>{v:register}<ESC>'
+xn p P
 xn P p
 ino ｋｊ <Esc>`^
 ino 「 「」<C-g>U<Left>

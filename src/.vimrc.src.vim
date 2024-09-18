@@ -1018,7 +1018,7 @@ xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xnoremap J j
 xnoremap K k
-xnoremap <expr> p $'"_s<C-R>{v:register}<ESC>'
+xnoremap p P
 xnoremap P p
 
 inoremap ｋｊ <Esc>`^
