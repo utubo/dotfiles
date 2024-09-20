@@ -108,9 +108,11 @@ suite.TestMapping = () => {
 	# n  M  m
 	# n  n  vim-cmdheight0
 	# n  o  markdown checkbox
+	# n  p  行単位p
 	# n  w  vim-smart-word
 	# n  A  _cc
 	# n  O  markdown checkbox
+	# n  P  行単位P
 	# n  Q  defaults.vimでgqにしてるけど.vimrcでqへ再マップ
 	# n  S  Sandwich
 	# n  T  タブ関係
@@ -128,7 +130,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' ..
-		'n  \([abehijklmnoqswAMOQSTY;''/?:%,+]\|g[cdesnp;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
+		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesnp;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
 		'n  \(<C-[FB]>\)\|' ..
 		'v  \([*/?:]\)\|' ..
 		'i  \(<C-U>\)'

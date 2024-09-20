@@ -1160,6 +1160,10 @@ nmap <SID>(hold-ctrl) <Nop>
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
 
+# 改行を含む文字列を貼り付けるときはだいたい行単位を求めている
+nnoremap <expr> p @"->matchstr('\r\|\n') ? "o\<Esc>p" : 'p'
+nnoremap <expr> P @"->matchstr('\r\|\n') ? "O\<Esc>p" : 'P'
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
@@ -1170,8 +1174,6 @@ CmdEach onoremap I <Plug>(textobj-twochars-i)
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
-nnoremap <Space><Space>p o<Esc>P
-nnoremap <Space><Space>P O<Esc>p
 nnoremap <Space>d "_d
 
 #}}} -------------------------------------------------------

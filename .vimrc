@@ -888,10 +888,10 @@ Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
+nn <expr> p @"->matchstr('\r\|\n') ? "o\<Esc>p" : 'p'
+nn <expr> P @"->matchstr('\r\|\n') ? "O\<Esc>p" : 'P'
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
-nn <Space><Space>p o<Esc>P
-nn <Space><Space>P O<Esc>p
 nn <Space>d "_d
 if strftime('%d') ==# '91'
 au vimrc VimEnter * {
