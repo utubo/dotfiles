@@ -800,20 +800,12 @@ nn ' "
 nn m '
 nn M m
 au vimrc User InputCR feedkeys("\<C-g>u", 'n')
-nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
-nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
-nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
-au vimrc FileType html,xml,svg {
-nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
-}
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
-nn <S-F9> 'y
+nn <Space><F9> 'y
 def BF()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
@@ -833,25 +825,27 @@ BG('SpellBad', '\s[=!]==\s')
 BG('SpellBad', '\s\~[=!][=#]\?\s')
 BG('SpellRare', '\<normal!\@!')
 }
-def BH()
-const a = ('📋 ' .. @"[0 : winwidth(0)])
+set report=9999
+def g:EchoYankText(t: number)
+const a = 'yanked: '
+const b = @"[0 : winwidth(0)]
 ->substitute('\t', '›', 'g')
 ->substitute('\n', '↵', 'g')
-const b = a->E(winwidth(0) - 10)
-const c = popup_create(b, {
-line: 'cursor+1',
-col: 'cursor+1',
-pos: 'topleft',
-padding: [0, 1, 0, 1],
-fixed: true,
-moved: 'any',
-time: 2000,
-})
-win_execute(c, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
+echoh WarningMsg
+ec 'yanked: '
+for c in b->E(winwidth(0) - a->len())
+if c ==# '›' || c ==# '↵'
+echoh MoreMsg
+else
+echoh MsgArea
+endif
+echon c
+endfor
+echoh MsgArea
 enddef
-au vimrc TextYankPost * BH()
-def BI()
-normal! "vy
+au vimrc TextYankPost * timer_start(1, g:EchoYankText)
+def BH()
+normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -861,38 +855,24 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BI()<CR>
-def BJ(): string
-cno ;; <C-c>
-cno h <Left>
-cno l <Right>
-cno b <S-Left>
-cno w <S-Right>
-cno $ <End><Left>
-cno ^ <Home>
-cno x <Delete>
-cno <script> <expr> i CA('i')
-cno <script> <expr> a CA('a')
-cm A $a
-return ""
-enddef
-def CA(c: string = 'i'): string
-Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-cno <script> <expr> ;n BJ()
-return c ==# 'i' ? '' : "\<Right>"
-enddef
-au vimrc ModeChanged *:c CA()
+xn <C-g> <ScriptCmd>BH()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
-nn <expr> p @"->match('\n') ==# - 1 ? 'p' : "o\<Esc>p"
-nn <expr> P @"->match('\n') ==# - 1 ? 'p' : "O\<Esc>p"
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
+nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
+au vimrc FileType html,xml,svg {
+nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+}
+nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
+nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 if strftime('%d') ==# '91'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
@@ -912,25 +892,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def CB(a: number, b: string): string
+def BI(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def CC(a: string): any
+def BJ(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: CB(b, 'fg'), bg: CB(b, 'bg') }
+return { fg: BI(b, 'fg'), bg: BI(b, 'bg') }
 enddef
-def CD()
+def CA()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = CC('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={CC("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={CC("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={CC("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={CC("WarningMsg").fg}'
+const a = BJ('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BJ("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BJ("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BJ("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BJ("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * CD()
-def CE()
+au vimrc VimEnter,ColorScheme * CA()
+def CB()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -945,8 +925,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CE()
-def CF()
+au vimrc VimEnter,WinEnter * CB()
+def CC()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -954,8 +934,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CF()
-au vimrc BufNew,BufReadPost * silent! CF()
+au vimrc OptionSet list silent! CC()
+au vimrc BufNew,BufReadPost * silent! CC()
 sil! syntax enable
 set t_Co=256
 set bg=dark
@@ -963,10 +943,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CG()
+def CD()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CG()|endif
+au vimrc VimEnter * ++nested if !C()|CD()|endif

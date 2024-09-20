@@ -1045,18 +1045,8 @@ nnoremap M m
 # 様子見中 使わなそうなら削除する {{{
 au vimrc User InputCR feedkeys("\<C-g>u", 'n')
 
-nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
-nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
-
-# <Tab>でtsvとかcsvとかhtmlの次の項目
-nnoremap <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
-nnoremap <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
-au vimrc FileType html,xml,svg {
-	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
-}
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
@@ -1064,7 +1054,7 @@ xnoremap <F10> <ESC>1<C-w>s<C-w>w
 
 # ここまで読(y)んだ
 nnoremap <F9> my
-nnoremap <S-F9> 'y
+nnoremap <Space><F9> 'y
 
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
@@ -1089,29 +1079,32 @@ au vimrc Syntax vim {
 }
 #}}}
 
-# yankした文字をポップアップ {{{
-def PopupYankText()
-	const text = ('📋 ' .. @"[0 : winwidth(0)])
+# yankした文字をecho {{{
+set report=9999
+def g:EchoYankText(t: number)
+	const title = 'yanked: '
+	const  text = @"[0 : winwidth(0)]
 		->substitute('\t', '›', 'g')
 		->substitute('\n', '↵', 'g')
-	const truncated = text->TruncToDisplayWidth(winwidth(0) - 10)
-	const winid = popup_create(truncated, {
-		line: 'cursor+1',
-		col: 'cursor+1',
-		pos: 'topleft',
-		padding: [0, 1, 0, 1],
-		fixed: true,
-		moved: 'any',
-		time: 2000,
-	})
-	win_execute(winid, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
+	echoh WarningMsg
+	echo 'yanked: '
+	for c in text->TruncToDisplayWidth(winwidth(0) - title->len())
+		if c ==# '›' || c ==# '↵'
+			echoh MoreMsg
+		else
+			echoh MsgArea
+		endif
+		echon c
+	endfor
+	echoh MsgArea
 enddef
-au vimrc TextYankPost * PopupYankText()
+# 他のプラグインと競合するのでタイマーで遅延させる
+au vimrc TextYankPost * timer_start(1, g:EchoYankText)
+#
 #}}}
-
 # 選択中の文字数をポップアップ {{{
 def PopupVisualLength()
-	normal! "vy
+	normal! "vygv
 	var text = @v->substitute('\n', '', 'g')
 	popup_create($'{strlen(text)}chars', {
 		pos: 'botleft',
@@ -1122,29 +1115,6 @@ def PopupVisualLength()
 	})
 enddef
 xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
-#}}}
-
-# cmdlineでノーマルモードみたいにするやつ {{{
-def CmdToNormal(): string
-	cnoremap ;; <C-c>
-	cnoremap h <Left>
-	cnoremap l <Right>
-	cnoremap b <S-Left>
-	cnoremap w <S-Right>
-	cnoremap $ <End><Left>
-	cnoremap ^ <Home>
-	cnoremap x <Delete>
-	cnoremap <script> <expr> i CmdToInsert('i')
-	cnoremap <script> <expr> a CmdToInsert('a')
-	cmap A $a
-	return ""
-enddef
-def CmdToInsert(c: string = 'i'): string
-	Each h,l,b,w,^,$,x,i,a,A silent! cunmap {}
-	cnoremap <script> <expr> ;n CmdToNormal()
-	return c ==# 'i' ? '' : "\<Right>"
-enddef
-au vimrc ModeChanged *:c CmdToInsert()
 #}}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示
@@ -1160,21 +1130,28 @@ nmap <SID>(hold-ctrl) <Nop>
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
 
-# 改行を含む文字列を貼り付けるときはだいたい行単位を求めている
-nnoremap <expr> p @"->match('\n') ==# - 1 ? 'p' : "o\<Esc>p"
-nnoremap <expr> P @"->match('\n') ==# - 1 ? 'p' : "O\<Esc>p"
-
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
 
-# 存在を忘れる
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
 nnoremap <Space>d "_d
+
+# <Tab>でtsvとかcsvとかhtmlの次の項目に移動
+nnoremap <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+nnoremap <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
+au vimrc FileType html,xml,svg {
+	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
+	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+}
+
+# タブは卒業！
+nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
+nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 
 #}}} -------------------------------------------------------
 

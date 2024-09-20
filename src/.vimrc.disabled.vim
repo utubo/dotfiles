@@ -168,3 +168,23 @@ au vimrc CmdwinEnter * {
 	normal! i
 }
 #}}}
+
+# yankした文字をポップアップ {{{
+def PopupYankText()
+	const text = ('📋 ' .. @"[0 : winwidth(0)])
+		->substitute('\t', '›', 'g')
+		->substitute('\n', '↵', 'g')
+	const truncated = text->TruncToDisplayWidth(winwidth(0) - 10)
+	const winid = popup_create(truncated, {
+		line: 'cursor+1',
+		col: 'cursor+1',
+		pos: 'topleft',
+		padding: [0, 1, 0, 1],
+		fixed: true,
+		moved: 'any',
+		time: 2000,
+	})
+	win_execute(winid, 'syntax match PmenuExtra /[›↵]\|.\@<=>$/')
+enddef
+au vimrc TextYankPost * PopupYankText()
+#}}}
