@@ -1161,8 +1161,8 @@ CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
 
 # 改行を含む文字列を貼り付けるときはだいたい行単位を求めている
-nnoremap <expr> p @"->matchstr('\n') ==# - 1 ? 'p' : "o\<Esc>p"
-nnoremap <expr> P @"->matchstr('\n') ==# - 1 ? 'p' : "O\<Esc>p"
+nnoremap <expr> p @"->match('\n') ==# - 1 ? 'p' : "o\<Esc>p"
+nnoremap <expr> P @"->match('\n') ==# - 1 ? 'p' : "O\<Esc>p"
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------

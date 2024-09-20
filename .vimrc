@@ -888,8 +888,8 @@ Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 CmdEach onoremap A <Plug>(textobj-twochars-a)
 CmdEach onoremap I <Plug>(textobj-twochars-i)
-nn <expr> p @"->matchstr('\n') ==# - 1 ? 'p' : "o\<Esc>p"
-nn <expr> P @"->matchstr('\n') ==# - 1 ? 'p' : "O\<Esc>p"
+nn <expr> p @"->match('\n') ==# - 1 ? 'p' : "o\<Esc>p"
+nn <expr> P @"->match('\n') ==# - 1 ? 'p' : "O\<Esc>p"
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
