@@ -279,7 +279,8 @@ command! -nargs=1 GitTagPush GitTagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
-nnoremap <Space>gp :<C-u>Git push
+# なんかvim-fugitiveのAutoCompleteが壊れてる？
+nnoremap <Space>gp :<C-u>push<Home>Git <End>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
