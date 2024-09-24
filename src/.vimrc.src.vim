@@ -1241,7 +1241,7 @@ au vimrc BufNew,BufReadPost * silent! HiTail()
 
 silent! syntax enable
 set t_Co=256
-set background=dark
+set background=light
 silent! colorscheme girly
 #}}} -------------------------------------------------------
 

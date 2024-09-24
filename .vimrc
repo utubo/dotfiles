@@ -938,7 +938,7 @@ au vimrc OptionSet list silent! CC()
 au vimrc BufNew,BufReadPost * silent! CC()
 sil! syntax enable
 set t_Co=256
-set bg=dark
+set bg=light
 sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
