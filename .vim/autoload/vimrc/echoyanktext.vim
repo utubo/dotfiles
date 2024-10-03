@@ -1,24 +1,32 @@
 vim9script
-def A(a: string, b: number): string
-if b <= 0
-return ''
-endif
-return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
-enddef
 export def EchoYankText()
-const a = 'yanked: '
-const b = @"[0 : winwidth(0)]
-->substitute('\t', '›', 'g')
-->substitute('\n', '↵', 'g')
-echoh WarningMsg
-ec 'yanked: '
-for c in b->A(winwidth(0) - a->len())
-if c ==# '›' || c ==# '↵'
-echoh MoreMsg
-else
-echoh MsgArea
+const a = get(g:, 'echo_yank_text_title', 'yanked: ')
+const b = {
+"\<Tab>": get(g:, 'echo_yank_text_tab', '›'),
+"\<CR>": get(g:, 'echo_yank_text_cr', '↵')
+}
+const d = {
+"\<Tab>": 'MoreMsg',
+"\<CR>": 'MoreMsg'
+}
+const e = winwidth(0) - 1
+if e <= strdisplaywidth(a)
+return
 endif
-echon c
+echoh WarningMsg
+ec a
+var w = 0
+for c in @"[0 : winwidth(0)]->substitute('\n', "\<CR>", 'g')
+var f = get(b, c, c)
+w += strdisplaywidth(f)
+if e <= w
+echoh MoreMsg
+echon '>'
+echoh MsgArea
+return
+endif
+exe 'echohl' get(d, c, 'MsgArea')
+echon f
 endfor
 echoh MsgArea
 enddef

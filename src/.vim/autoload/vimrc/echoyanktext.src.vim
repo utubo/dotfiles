@@ -1,26 +1,33 @@
 vim9script
 
-def TruncToDisplayWidth(str: string, width: number): string
-	if width <= 0
-		return ''
-	endif
-	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
-enddef
-
 export def EchoYankText()
-	const title = 'yanked: '
-	const  text = @"[0 : winwidth(0)]
-		->substitute('\t', '›', 'g')
-		->substitute('\n', '↵', 'g')
+	const title = get(g:, 'echo_yank_text_title', 'yanked: ')
+	const chars = {
+		"\<Tab>": get(g:, 'echo_yank_text_tab', '›'),
+		"\<CR>": get(g:, 'echo_yank_text_cr', '↵')
+	}
+	const hls = {
+		"\<Tab>": 'MoreMsg',
+		"\<CR>": 'MoreMsg'
+	}
+	const width = winwidth(0) - 1
+	if width <= strdisplaywidth(title)
+		return
+	endif
 	echoh WarningMsg
-	echo 'yanked: '
-	for c in text->TruncToDisplayWidth(winwidth(0) - title->len())
-		if c ==# '›' || c ==# '↵'
+	echo title
+	var w = 0
+	for c in @"[0 : winwidth(0)]->substitute('\n', "\<CR>", 'g')
+		var cc = get(chars, c, c)
+		w += strdisplaywidth(cc)
+		if width <= w
 			echoh MoreMsg
-		else
+			echon '>'
 			echoh MsgArea
+			return
 		endif
-		echon c
+		execute 'echohl' get(hls, c, 'MsgArea')
+		echon cc
 	endfor
 	echoh MsgArea
 enddef
