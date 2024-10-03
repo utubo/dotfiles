@@ -99,14 +99,6 @@ def StayCurPos(expr: string)
 	setpos('.', cur)
 enddef
 
-# 指定幅以上なら'>'で省略する
-def TruncToDisplayWidth(str: string, width: number): string
-	if width <= 0
-		return ''
-	endif
-	return strdisplaywidth(str) <= width ? str : $'{str->matchstr($'.*\%<{width + 1}v')}>'
-enddef
-
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
 def! g:VFirstLast(): list<number>
 	return [line('.'), line('v')]->sort('n')
@@ -1082,24 +1074,10 @@ au vimrc Syntax vim {
 
 # yankした文字をecho {{{
 set report=9999
-def g:EchoYankText(t: number)
-	const title = 'yanked: '
-	const  text = @"[0 : winwidth(0)]
-		->substitute('\t', '›', 'g')
-		->substitute('\n', '↵', 'g')
-	echoh WarningMsg
-	echo 'yanked: '
-	for c in text->TruncToDisplayWidth(winwidth(0) - title->len())
-		if c ==# '›' || c ==# '↵'
-			echoh MoreMsg
-		else
-			echoh MsgArea
-		endif
-		echon c
-	endfor
-	echoh MsgArea
-enddef
 # 他のプラグインと競合するのでタイマーで遅延させる
+def g:EchoYankText(t: number)
+	vimrc#echoyanktext#EchoYankText()
+enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 #
 #}}}

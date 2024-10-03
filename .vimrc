@@ -69,12 +69,6 @@ exe a
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-def E(a: string, b: number): string
-if b <= 0
-return ''
-endif
-return strdisplaywidth(a) <= b ? a : $'{a->matchstr($'.*\%<{b + 1}v')}>'
-enddef
 def! g:VFirstLast(): list<number>
 return [line('.'), line('v')]->sort('n')
 enddef
@@ -176,7 +170,7 @@ nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
 nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
-def F(a: string)
+def E(a: string)
 const b = getcwd()
 try
 chdir(expand('%:p:h'))
@@ -205,16 +199,16 @@ echoh Normal
 chdir(b)
 endtry
 enddef
-com! -nargs=* GitAdd F(<q-args>)
+com! -nargs=* GitAdd E(<q-args>)
 def! g:ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 com! -nargs=1 -complete=customlist,g:ConventionalCommits GitCommit Git commit -m <q-args>
-def G(a: string)
+def F(a: string)
 ec system($"git tag '{a}'")
 ec system($"git push origin '{a}'")
 enddef
-com! -nargs=1 GitTagPush G(<q-args>)
+com! -nargs=1 GitTagPush F(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
@@ -324,7 +318,7 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-def H(): string
+def G(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>"''`」', c) ==# -1
 return "\<Tab>"
@@ -332,7 +326,7 @@ else
 return "\<C-o>a"
 endif
 enddef
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : H()
+CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : G()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 Enable g:rainbow_active
 Enable g:ctrlp_use_caching
@@ -376,7 +370,7 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def I()
+def H()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -394,7 +388,7 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-au vimrc BufReadPost * I()
+au vimrc BufReadPost * H()
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -456,7 +450,7 @@ nn <silent> g; g;zO
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
 var lq = []
-def J()
+def I()
 lq = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
@@ -467,10 +461,10 @@ lq += [b]
 b.width = strdisplaywidth($'{b.nr}{b.name} ')
 endif
 endfor
-BA()
+J()
 g:zenmode.preventEcho = lq->len() > 1
 enddef
-def BA()
+def J()
 if lq->len() <= 1
 return
 endif
@@ -526,16 +520,16 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter * J()
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once J()
-au vimrc CursorMoved * BA()
+au vimrc BufAdd,BufEnter * I()
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once I()
+au vimrc CursorMoved * J()
 g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
 g:tabline_term_sign = "\uf489"
 g:tabline_labelsep = '|'
 g:tabline_maxlen = 20
-def BB(a: list<number>, c: bool = false): string
+def BA(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''
 for b in a
@@ -575,7 +569,7 @@ var i = -1
 for b in d
 i += 1
 if len(f) ==# 2
-f += [(BB(d[i : ], true) .. '>')]
+f += [(BA(d[i : ], true) .. '>')]
 break
 endif
 var h = bufname(b)
@@ -589,7 +583,7 @@ if g:tabline_maxlen < len(h)
 h = '<' .. h->matchstr(repeat('.', g:tabline_maxlen - 1) .. '$')
 endif
 if f->index(h) ==# -1
-f += [BB([b]) .. h]
+f += [BA([b]) .. h]
 endif
 endfor
 c ..= f->join(g:tabline_labelsep)
@@ -654,7 +648,7 @@ def g:Tapi_drop(a: number, b: list<string>)
 vimrc#terminal#Tapi_drop(a, b)
 enddef
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-def BC(a: string = '')
+def BB(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -713,7 +707,7 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-def BD()
+def BC()
 popup_create($' {line(".")}:{col(".")} ', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -722,9 +716,9 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-nn <script> <C-g> <ScriptCmd>BC()<CR><scriptCmd>BD()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BC('BufNewFile')
-def BE(a: string)
+nn <script> <C-g> <ScriptCmd>BB()<CR><scriptCmd>BC()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * BB('BufNewFile')
+def BD(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -735,7 +729,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{} <ScriptCmd>BE('{}')<CR>
+Each h,j,k,l nnoremap q{} <ScriptCmd>BD('{}')<CR>
 nn q <Nop>
 nn Q q
 nn qq <Cmd>confirm q<CR>
@@ -806,45 +800,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def BF()
+def BE()
 for a in get(w:, 'my_syntax', [])
 matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BG(a: string, b: string)
+def BF(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BF()
+au vimrc Syntax * BE()
 au vimrc Syntax javascript {
-BG('SpellRare', '\s[=!]=\s')
+BF('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BG('SpellRare', '\s[=!]=\s')
-BG('SpellBad', '\s[=!]==\s')
-BG('SpellBad', '\s\~[=!][=#]\?\s')
-BG('SpellRare', '\<normal!\@!')
+BF('SpellRare', '\s[=!]=\s')
+BF('SpellBad', '\s[=!]==\s')
+BF('SpellBad', '\s\~[=!][=#]\?\s')
+BF('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
-const a = 'yanked: '
-const b = @"[0 : winwidth(0)]
-->substitute('\t', '›', 'g')
-->substitute('\n', '↵', 'g')
-echoh WarningMsg
-ec 'yanked: '
-for c in b->E(winwidth(0) - a->len())
-if c ==# '›' || c ==# '↵'
-echoh MoreMsg
-else
-echoh MsgArea
-endif
-echon c
-endfor
-echoh MsgArea
+vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def BH()
+def BG()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -855,7 +835,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BH()<CR>
+xn <C-g> <ScriptCmd>BG()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
@@ -892,25 +872,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def BI(a: number, b: string): string
+def BH(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def BJ(a: string): any
+def BI(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: BI(b, 'fg'), bg: BI(b, 'bg') }
+return { fg: BH(b, 'fg'), bg: BH(b, 'bg') }
 enddef
-def CA()
+def BJ()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = BJ('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BJ("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BJ("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BJ("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BJ("WarningMsg").fg}'
+const a = BI('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BI("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BI("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BI("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BI("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * CA()
-def CB()
+au vimrc VimEnter,ColorScheme * BJ()
+def CA()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -925,8 +905,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * CB()
-def CC()
+au vimrc VimEnter,WinEnter * CA()
+def CB()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -934,8 +914,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! CC()
-au vimrc BufNew,BufReadPost * silent! CC()
+au vimrc OptionSet list silent! CB()
+au vimrc BufNew,BufReadPost * silent! CB()
 sil! syntax enable
 set t_Co=256
 set bg=light
@@ -943,10 +923,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CD()
+def CC()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !C()|CD()|endif
+au vimrc VimEnter * ++nested if !C()|CC()|endif
