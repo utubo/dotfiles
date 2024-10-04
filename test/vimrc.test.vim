@@ -129,11 +129,12 @@ suite.TestMapping = () => {
 	# v  ?  <Plug><ahc-switch>?
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
-	var default_ignore = '\C' ..
-		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesnp;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)\|' ..
-		'n  \(<C-[FB]>\)\|' ..
-		'v  \([*/?:]\)\|' ..
-		'i  \(<C-U>\)'
+	var default_ignore = '\C' .. [
+		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesnp;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
+		'n  \(<C-[FB]>\)',
+		'v  \([*/?:]\)',
+		'i  \(<C-U>\)',
+	]->join('\|')
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
 	# 概ねプラグイン内で被ってる
@@ -145,17 +146,20 @@ suite.TestMapping = () => {
 	# i  (     vim-laximaとlsp
 	# n  \\KK  vim-yomigana
 	# n  \\HH  vim-yomigana
-	var user_ignore = '\C' ..
-		'n  \([qS:]\|<Plug>fugitive:\)\|' ..
-		'v  \([J]\)\|' ..
-		'x  \([S]\)\|' ..
-		'i  \(<Esc>\|[「（\[{;]\)\|' ..
-		'   <SNR>\d\+_(save-cursor-pos)\|' ..
-		'i  (\|' ..
-		'n  <SNR>\d_ws.\|' ..
-		'n  \\KK\|' ..
-		'n  \\HH\|' ..
-		'c  j[jk]'
+	var user_ignore = '\C' .. [
+		'n  \([qS:]\|<Plug>fugitive:\)',
+		'v  \([J]\)',
+		'x  \([S]\)',
+		'i  \(<Esc>\|[「（\[{;]\)',
+		'   <SNR>\d\+_(save-cursor-pos)',
+		'i  (',
+		'n  <SNR>\d_ws.',
+		'n  \\KK',
+		'n  \\HH',
+		'c  j[jk]',
+		'n  ;r\+',
+		'c  ;r\+',
+	]->join('\|')
 
 	# ユーザー定義のマッピング
 	var user_map = join([execute('map'), execute('map!')], "\n")

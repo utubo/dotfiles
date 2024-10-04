@@ -36,8 +36,9 @@ export def ApplySettings()
 	cnoremap <A-j> <Up>
 	cnoremap <A-k> <Down>
 	cnoremap <A-l> <Right>
-	cnoremap <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
-	cnoremap <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
+	cnoremap ;r <C-r>
+	cnoremap <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
+	cnoremap <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 	cnoremap <expr> <Space> MyAbbrev()
 	command! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
 enddef

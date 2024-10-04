@@ -521,7 +521,7 @@ endif
 echoh Normal
 enddef
 au vimrc BufAdd,BufEnter * I()
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once I()
+au vimrc BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once I()
 au vimrc CursorMoved * J()
 g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
@@ -604,21 +604,21 @@ return a
 enddef
 set tabline=%!g:MyTabline()
 set guitablabel=%{g:MyTablabel()}
-ino ;<CR> ;<CR>
-ino ;<Esc> ;<Esc>
-ino ;<Space> ;<Space>
-ino ;; <Esc>`^
-cno ;; <C-c>
-ino ;e <C-o>e<C-o>a
+CmdEach map,map! ;m <SID>(cancel)
+CmdEach map,map! ;f <SID>(cancel)
+ino <SID>(cancel) <Esc>`^
+CmdEach noremap,cnoremap <SID>(cancel) <Esc>
+cno ;n <CR>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+ino ;v ;<CR>
+ino ;w <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>
 ino ;l <C-g>R<Right>
-ino ;u <C-o>u
-nn ;r <C-r>
-nn ;v V
+ino ;u <Esc>u
+nn ;r "
+nn ;rr "0p
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>D('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>D('normal! <<')<CR>
-CmdEach nnoremap,xnoremap ;; <Esc>
-CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 nn <Space>; ;
 map! <script> <SID>bs_ <Nop>
 map! <script> ;h <SID>bs_h

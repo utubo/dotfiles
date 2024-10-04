@@ -683,7 +683,7 @@ def EchoBufLine()
 	echohl Normal
 enddef
 au vimrc BufAdd,BufEnter * RefreshBufList()
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once RefreshBufList()
+au vimrc BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once RefreshBufList()
 au vimrc CursorMoved * EchoBufLine()
 #}}}
 
@@ -782,21 +782,22 @@ set guitablabel=%{g:MyTablabel()}
 # ------------------------------------------------------
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
-inoremap ;<CR> ;<CR>
-inoremap ;<Esc> ;<Esc>
-inoremap ;<Space> ;<Space>
-inoremap ;; <Esc>`^
-cnoremap ;; <C-c>
-inoremap ;e <C-o>e<C-o>a
+# `;m`ちょっと押しにくいな…`;f`はどうかな？
+CmdEach map,map! ;m <SID>(cancel)
+CmdEach map,map! ;f <SID>(cancel)
+inoremap <SID>(cancel) <Esc>`^
+CmdEach noremap,cnoremap <SID>(cancel) <Esc>
+cnoremap ;n <CR>
+CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+inoremap ;v ;<CR>
+inoremap ;w <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
 inoremap ;l <C-g>R<Right>
-inoremap ;u <C-o>u
-nnoremap ;r <C-r>
-nnoremap ;v V
+inoremap ;u <Esc>u
+nnoremap ;r "
+nnoremap ;rr "0p
 CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
 CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
-CmdEach nnoremap,xnoremap ;; <Esc>
-CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>

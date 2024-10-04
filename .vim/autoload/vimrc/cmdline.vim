@@ -28,8 +28,9 @@ cno <A-h> <Left>
 cno <A-j> <Up>
 cno <A-k> <Down>
 cno <A-l> <Right>
-cno <expr> <C-r><C-r> trim(@")->substitute('\n', ' \| ', 'g')
-cno <expr> <C-r><C-e> escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
+cno ;r <C-r>
+cno <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
+cno <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 cno <expr> <Space> A()
 com! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
 enddef
