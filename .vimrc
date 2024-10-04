@@ -732,7 +732,7 @@ enddef
 Each h,j,k,l nnoremap q{} <ScriptCmd>BD('{}')<CR>
 nn q <Nop>
 nn Q q
-nn qq <Cmd>confirm q<CR>
+nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
 nn qa <Cmd>confirm qa<CR>
 nn qOw <Cmd>confirm only<CR>
 nn qt <Cmd>confirm tabclose +<CR>
@@ -746,6 +746,7 @@ nn <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, 
 nn q: q:
 nn q/ q/
 nn q? q?
+nn qQ <Cmd>e #<1<CR>
 cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nn <script> g: :<C-u><SID>(exec_line)
 nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)

@@ -943,8 +943,9 @@ enddef
 Each h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
+# 閉じる
+nnoremap <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
 # ウィンドウ
-nnoremap qq <Cmd>confirm q<CR>
 nnoremap qa <Cmd>confirm qa<CR>
 nnoremap qOw <Cmd>confirm only<CR>
 # タブ
@@ -952,8 +953,8 @@ nnoremap qt <Cmd>confirm tabclose +<CR>
 nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qOt <Cmd>confirm tabonly<CR>
-nnoremap qb <Cmd>confirm bd<CR>
 # バッファ
+nnoremap qb <Cmd>confirm bd<CR>
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nnoremap <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"
@@ -961,6 +962,8 @@ nnoremap <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filte
 nnoremap q: q:
 nnoremap q/ q/
 nnoremap q? q?
+# 開きなおす
+nnoremap qQ <Cmd>e #<1<CR>
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
