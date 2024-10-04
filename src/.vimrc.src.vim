@@ -1052,7 +1052,7 @@ nnoremap <Space><F9> 'y
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
-		matchdelete(id)
+		silent! matchdelete(id)
 	endfor
 	w:my_syntax = []
 enddef

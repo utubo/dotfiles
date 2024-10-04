@@ -802,7 +802,7 @@ nn <F9> my
 nn <Space><F9> 'y
 def BE()
 for a in get(w:, 'my_syntax', [])
-matchdelete(a)
+sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
