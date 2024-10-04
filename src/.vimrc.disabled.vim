@@ -188,3 +188,21 @@ def PopupYankText()
 enddef
 au vimrc TextYankPost * PopupYankText()
 #}}}
+
+# TruncToDisplayWidthのテスト {{{
+suite.TestTruncToDisplayWidth = () => {
+	# minifyしたからテストしづらい！ちくしょう誰がこんなことを…
+	#var F = function($'<SNR>{vimrc_sid}_TruncToDisplayWidth')
+	const F = function($'<SNR>{vimrc_sid}_E')
+	assert.equals(F('123',  3), '123')
+	assert.equals(F('1234', 3), '12>')
+	assert.equals(F('あいう',  6), 'あいう')
+	assert.equals(F('あいう1', 6), 'あい>')
+	assert.equals(F('あいう',  5), 'あい>')
+	assert.equals(F('', -1), '')
+	assert.equals(F('', 0), '')
+	assert.equals(F('', 1), '')
+	assert.equals(F('>', 1), '>')
+	assert.equals(F('あ', 1), '>')
+}
+# }}}
