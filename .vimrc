@@ -298,8 +298,6 @@ midasi: [':', 'Q'],
 }
 g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
-au vimrc User Vim9skkEnter AutoSuggestDisable
-au vimrc User Vim9skkLeave AutoSuggestEnable
 au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
@@ -451,10 +449,13 @@ var lq = []
 def I()
 lq = []
 for a in execute('ls')->split("\n")
-const m = a->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
+const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
-const c = m[2]->stridx('%') !=# -1
-var b = { nr: m[1], name: m[3]->pathshorten(), current: c }
+var b = {
+nr: m[1],
+name: m[2][2] !=# ' ' ? '[Term]' : m[3]->pathshorten(),
+current: m[2][0] ==# '%',
+}
 lq += [b]
 b.width = strdisplaywidth($'{b.nr}{b.name} ')
 endif

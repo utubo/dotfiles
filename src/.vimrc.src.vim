@@ -387,8 +387,6 @@ g:vim9skk = {
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
-au vimrc User Vim9skkEnter AutoSuggestDisable
-au vimrc User Vim9skkLeave AutoSuggestEnable
 # 見出しモードでスタートする
 au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
@@ -615,10 +613,13 @@ var bufitems = []
 def RefreshBufList()
 	bufitems = []
 	for ls in execute('ls')->split("\n")
-		const m = ls->matchlist('^ *\([0-9]\+\)\([^"]*\)"\(.*\)" \+line [0-9]\+')
+		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 		if !m->empty()
-			const current = m[2]->stridx('%') !=# -1
-			var b = { nr: m[1], name: m[3]->pathshorten(), current: current }
+			var b = {
+				nr: m[1],
+				name: m[2][2] !=# ' ' ? '[Term]' : m[3]->pathshorten(),
+				current: m[2][0] ==# '%',
+			}
 			bufitems += [b]
 			b.width = strdisplaywidth($'{b.nr}{b.name} ')
 		endif
