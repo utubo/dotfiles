@@ -334,8 +334,6 @@ g:loaded_matchit = 1
 nn % <ScriptCmd>hlpairs#Jump()<CR>
 nn ]% <ScriptCmd>hlpairs#Jump('f')<CR>
 nn [% <ScriptCmd>hlpairs#Jump('b')<CR>
-ono a% <ScriptCmd>hlpairs#TextObj(true)<CR>
-ono i% <ScriptCmd>hlpairs#TextObj(false)<CR>
 nn <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nn <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
