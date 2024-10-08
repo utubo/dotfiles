@@ -129,7 +129,7 @@ Jetpack 'cohama/lexima.vim' # 括弧補完
 Jetpack 'delphinus/vim-auto-cursorline'
 Jetpack 'easymotion/vim-easymotion'
 Jetpack 'girishji/vimcomplete'
-Jetpack 'girishji/autosuggest.vim'
+#Jetpack 'girishji/autosuggest.vim' ちょっとWindowsで動きが怪しい
 #Jetpack 'github/copilot.vim' #重い
 Jetpack 'hrsh7th/vim-vsnip'
 Jetpack 'hrsh7th/vim-vsnip-integ'
