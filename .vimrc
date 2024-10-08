@@ -453,7 +453,7 @@ const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
 var b = {
 nr: m[1],
-name: m[2][2] !=# ' ' ? '[Term]' : m[3]->pathshorten(),
+name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
 lq += [b]
