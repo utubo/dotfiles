@@ -25,11 +25,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          version: nightly
       - name: Initialize
         run: |
           sudo apt-get update
-          sudo add-apt-repository ppa:jonathonf/vim
-          sudo apt-get install -y vim git
+          sudo apt-get install -y git
           ln -s $GITHUB_WORKSPACE/.vimrc ~/.vimrc
           vim -c JetpackSync -c qa!
       - name: Run tests
