@@ -467,6 +467,9 @@ def J()
 if lq->len() <= 1
 return
 endif
+if mode() ==# 'c'
+return
+endif
 redraw
 var s = 0
 var e = 0
