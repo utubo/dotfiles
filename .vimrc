@@ -328,16 +328,6 @@ endif
 enddef
 CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : G()
 CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
-Enable g:rainbow_active
-Enable g:ctrlp_use_caching
-Disable g:ctrlp_clear_cache_on_exit
-g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-g:ctrlp_cmd = 'CtrlPMixed'
-g:auto_cursorline_wait_ms = &ut
-Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
-nn [c <Plug>(GitGutterPrevHunk)
-nn ]c <Plug>(GitGutterNextHunk)
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
@@ -353,6 +343,17 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
+au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+Enable g:rainbow_active
+Enable g:ctrlp_use_caching
+Disable g:ctrlp_clear_cache_on_exit
+g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+g:ctrlp_cmd = 'CtrlPMixed'
+g:auto_cursorline_wait_ms = &ut
+Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
+nn [c <Plug>(GitGutterPrevHunk)
+nn ]c <Plug>(GitGutterNextHunk)
+CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
