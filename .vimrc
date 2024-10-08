@@ -212,7 +212,7 @@ com! -nargs=1 GitTagPush F(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
-nn <Space>gp :<C-u>push<Home>Git <End>
+nn <Space>gp :<C-u>Git push<End>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
