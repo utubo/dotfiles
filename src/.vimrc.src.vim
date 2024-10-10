@@ -50,7 +50,7 @@ const has_deno = executable('deno')
 #   Each nmap,xmap j gj
 #   → nmap j gj | xmap j gj
 # 先頭以外に差し込んだりネストしたい場合はこう
-#   Each j,k Each nmap,xmap {1} g{0}
+#   Each j,k Each nmap,xmap {1} {0} g{0}
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
 var nestOfEach = 0
