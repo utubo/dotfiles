@@ -607,6 +607,9 @@ nnoremap <silent> g; g;zO
 # バッファ操作 {{{
 nnoremap gn <Cmd>bnext<CR>
 nnoremap gp <Cmd>bprevious<CR>
+g:recentBufnr = 0
+au vimrc BufLeave * g:recentBufnr = bufnr()
+nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 
 # 複数開いているときだけ自作buflineを表示する
 var bufitems = []

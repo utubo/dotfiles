@@ -445,6 +445,9 @@ nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn <silent> g; g;zO
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
+g:recentBufnr = 0
+au vimrc BufLeave * g:recentBufnr = bufnr()
+nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 var lq = []
 def I()
 lq = []
