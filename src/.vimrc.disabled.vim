@@ -33,6 +33,30 @@ def GetVisualSelectionLines(): list<string>
 	endif
 	return lines
 enddef
+
+# こんな感じ
+# CmdEach nmap,xmap xxx yyy<if-nmap>NNN<if-xmap>VVV<endif>zzz
+# ↓
+# nmap xxx yyyNNNzzz | xmap xxx yyyVVVzzz
+def CmdEach(qargs: string)
+	const [cmds, args] = qargs->split('^\S*\zs')
+	for cmd in cmds->split(',')
+		const a = args
+			->substitute($'<if-{cmd}>', '<endif>', 'g')
+			->substitute('<if-[^>]\+>.\{-1,}\(<endif>\|$\)', '', 'g')
+			->substitute('<endif>', '', 'g')
+		execute cmd a
+	endfor
+enddef
+command! -nargs=* CmdEach CmdEach(<q-args>)
+suite.TestCmdEach = () => {
+	CmdEach nmap,vmap xxx yyy<if-nmap>NNN<if-vmap>VVV<endif>zzz
+	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyyNNNzzz")
+	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyyVVVzzz")
+	nunmap xxx
+	vunmap xxx
+}
+
 #}}}
 
 # 'itchyny/vim-cursorword'の簡易CursorHold版 {{{

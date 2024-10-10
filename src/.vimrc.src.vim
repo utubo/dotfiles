@@ -47,35 +47,22 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# CmdEach nmap,xmap xxx yyy<if-nmap>NNN<if-xmap>VVV<endif>zzz
-# ↓
-# nmap xxx yyyNNNzzz | xmap xxx yyyVVVzzz
-def CmdEach(qargs: string)
-	const [cmds, args] = qargs->split('^\S*\zs')
-	for cmd in cmds->split(',')
-		const a = args
-			->substitute($'<if-{cmd}>', '<endif>', 'g')
-			->substitute('<if-[^>]\+>.\{-1,}\(<endif>\|$\)', '', 'g')
-			->substitute('<endif>', '', 'g')
-		execute cmd a
-	endfor
-enddef
-command! -nargs=* CmdEach CmdEach(<q-args>)
-
-# こんな感じ
 # Each j,k nnoremap {} g{}
 # ↓
 # nnoremap j gj
 # nnoremap k gk
+# ネストしたい場合はこう
+# Each j,k Each nnoremap,xnoremap {1} g{0}
 # ※これ使うよりべたで書いたほうが起動は速い
-# ※CmdEachを統合できそう
 # ※やりすぎ感は否めない
-# ※`{}`を全て置換してしまうのでこのコマンドは重ねられない
+var nestOfEach = 0
 def Each(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
+	nestOfEach += 1
 	for i in items->split(',')
-		execute args->substitute('{}', i, 'g')
+		execute args->substitute('{0\?}', i, 'g')->substitute($"\{{nestOfEach}\}", '{}', 'g')
 	endfor
+	nestOfEach -= 1
 enddef
 command! -nargs=* Each Each(<q-args>)
 
@@ -375,7 +362,7 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # sandwich {{{
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-CmdEach nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
+Each nmap,xmap {} S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 #}}}
 
 # vim9skk {{{
@@ -394,8 +381,8 @@ au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}
 
 # textobj-user {{{
-CmdEach onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-CmdEach onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+Each onoremap,xnoremap {} ab <Plug>(textobj-multiblock-a)
+Each onoremap,xnoremap {} ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 	[ "(", ")" ],
 	[ "[", "]" ],
@@ -421,8 +408,8 @@ def SkipParen(): string
 		return  "\<C-o>a"
 	endif
 enddef
-CmdEach imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
-CmdEach imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+Each imap,smap {} <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
+Each imap,smap {} <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 # Copilotは様子見
 #g:copilot_no_tab_map = true
 #imap <silent> <script> <expr> ;c copilot#Accept("\<CR>")
@@ -440,8 +427,8 @@ nnoremap <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nnoremap <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-CmdEach nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-CmdEach nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+Each nnoremap,tnoremap {} <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+Each nnoremap,tnoremap {} <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
 au vimrc VimEnter * hlpairs#TextObjUserMap('%')
 # }}}
@@ -456,7 +443,7 @@ g:auto_cursorline_wait_ms = &updatetime
 Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
-CmdEach nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+Each nnoremap,xnoremap {} <Space>c <Plug>(caw:hatpos:toggle)
 #}}}
 
 # 開発用 {{{
@@ -480,9 +467,9 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each +,-,>,< CmdEach nmap,tmap <C-w>{} <C-w>{}<SID>ws
-Each +,-,>,< CmdEach nnoremap,tnoremap <script> <SID>ws{} <C-w>{}<SID>ws
-CmdEach nmap,tmap <SID>ws <Nop>
+Each +,-,>,< Each nmap,tmap {1} <C-w>{0} <C-w>{0}<SID>ws
+Each +,-,>,< Each nnoremap,tnoremap {1} <script> <SID>ws{0} <C-w>{0}<SID>ws
+Each nmap,tmap {} <SID>ws <Nop>
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
 nnoremap <A-J> <Cmd>copy.<CR>
@@ -703,12 +690,12 @@ set guitablabel=%{vimrc#tabline#MyTablabel()}
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
 # `;m`ちょっと押しにくいな…`;f`はどうかな？
-CmdEach map,map! ;m <SID>(cancel)
-CmdEach map,map! ;f <SID>(cancel)
+Each map,map! {} ;m <SID>(cancel)
+Each map,map! {} ;f <SID>(cancel)
 inoremap <SID>(cancel) <Esc>`^
-CmdEach noremap,cnoremap <SID>(cancel) <Esc>
+Each noremap,cnoremap {} <SID>(cancel) <Esc>
 cnoremap ;n <CR>
-CmdEach nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap {} ;n <Cmd>update<CR><Esc>
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
@@ -716,8 +703,8 @@ inoremap ;l <C-g>R<Right>
 inoremap ;u <Esc>u
 nnoremap ;r "
 nnoremap ;rr "0p
-CmdEach nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-CmdEach nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+Each nnoremap,inoremap {} ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap {} ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>
@@ -737,14 +724,14 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
-CmdEach nnoremap,xnoremap / <Cmd>noh<CR>/
-CmdEach nnoremap,xnoremap ? <Cmd>noh<CR>?
+Each nnoremap,xnoremap {} / <Cmd>noh<CR>/
+Each nnoremap,xnoremap {} ? <Cmd>noh<CR>?
 # 考え中
-CmdEach nnoremap,xnoremap ;c :
-CmdEach nnoremap,xnoremap ;s <Cmd>noh<CR>/
-CmdEach nnoremap,xnoremap + :
-CmdEach nnoremap,xnoremap , :
-CmdEach nnoremap,xnoremap <Space><Space>, ,
+Each nnoremap,xnoremap {} ;c :
+Each nnoremap,xnoremap {} ;s <Cmd>noh<CR>/
+Each nnoremap,xnoremap {} + :
+Each nnoremap,xnoremap {} , :
+Each nnoremap,xnoremap {} <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 #}}}
@@ -1030,8 +1017,8 @@ Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
 # 🐶🍚
-CmdEach onoremap A <Plug>(textobj-twochars-a)
-CmdEach onoremap I <Plug>(textobj-twochars-i)
+onoremap A <Plug>(textobj-twochars-a)
+onoremap I <Plug>(textobj-twochars-i)
 
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
