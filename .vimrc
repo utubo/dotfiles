@@ -525,8 +525,7 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter * I()
-au vimrc BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once I()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once I()
 au vimrc CursorMoved * J()
 g:tabline_mod_sign = "\uf040"
 g:tabline_git_sign = '🐙'
