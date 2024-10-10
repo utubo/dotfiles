@@ -37,11 +37,15 @@ aug End
 const lk = has('win32') ? '~/vimfiles' : '~/.vim'
 const ll = executable('deno')
 var lm = 0
-def A(a: string)
-const [b, c] = a->split('^\S*\zs')
+def A(b: string)
+const [c, d] = b->split('^\S*\zs')
 lm += 1
-for i in b->split(',')
-exe c->substitute('{0\?}', i, 'g')->substitute($"\{{lm}\}", '{}', 'g')
+for i in c->split(',')
+var a = d->substitute('{0\?}', i, 'g')
+if a ==# d
+a = $'{i} {a}'
+endif
+exe a->substitute($"\{{lm}\}", '{}', 'g')
 endfor
 lm -= 1
 enddef
@@ -281,7 +285,7 @@ nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-Each nmap,xmap {} S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
+Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 g:vim9skk = {
 keymap: {
 toggle: ['<C-j>', ';j'],
@@ -292,8 +296,8 @@ g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-Each onoremap,xnoremap {} ab <Plug>(textobj-multiblock-a)
-Each onoremap,xnoremap {} ib <Plug>(textobj-multiblock-i)
+Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],
 [ "[", "]" ],
@@ -315,8 +319,8 @@ else
 return "\<C-o>a"
 endif
 enddef
-Each imap,smap {} <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : F()
-Each imap,smap {} <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : F()
+Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
@@ -327,8 +331,8 @@ nn <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nn <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
-Each nnoremap,tnoremap {} <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-Each nnoremap,tnoremap {} <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 au vimrc VimEnter * hlpairs#TextObjUserMap('%')
 Enable g:rainbow_active
@@ -337,10 +341,10 @@ Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &ut
-Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
+Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
-Each nnoremap,xnoremap {} <Space>c <Plug>(caw:hatpos:toggle)
+Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
@@ -350,10 +354,10 @@ au vimrc InsertLeave * set nopaste
 au vimrc BufReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
-Each +,-,>,< Each nmap,tmap {1} <C-w>{0} <C-w>{0}<SID>ws
-Each +,-,>,< Each nnoremap,tnoremap {1} <script> <SID>ws{0} <C-w>{0}<SID>ws
-Each nmap,tmap {} <SID>ws <Nop>
+Each i,a,A nnoremap <expr> {0} !empty(getline('.')) ? '{0}' : '"_cc'
+Each +,-,>,< Each nmap,tmap <C-w>{0} <C-w>{0}<SID>ws
+Each +,-,>,< Each nnoremap,tnoremap <script> <SID>ws{0} <C-w>{0}<SID>ws
+Each nmap,tmap <SID>ws <Nop>
 nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
@@ -521,12 +525,12 @@ au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once
 au vimrc CursorMoved * I()
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
-Each map,map! {} ;m <SID>(cancel)
-Each map,map! {} ;f <SID>(cancel)
+Each map,map! ;m <SID>(cancel)
+Each map,map! ;f <SID>(cancel)
 ino <SID>(cancel) <Esc>`^
-Each noremap,cnoremap {} <SID>(cancel) <Esc>
+Each noremap,cnoremap <SID>(cancel) <Esc>
 cno ;n <CR>
-Each nnoremap,inoremap {} ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 ino ;v ;<CR>
 ino ;w <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>
@@ -534,8 +538,8 @@ ino ;l <C-g>R<Right>
 ino ;u <Esc>u
 nn ;r "
 nn ;rr "0p
-Each nnoremap,inoremap {} ;<Tab> <ScriptCmd>C('normal! >>')<CR>
-Each nnoremap,inoremap {} ;<S-Tab> <ScriptCmd>C('normal! <<')<CR>
+Each nnoremap,inoremap ;<Tab> <ScriptCmd>C('normal! >>')<CR>
+Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>C('normal! <<')<CR>
 nn <Space>; ;
 map! <script> <SID>bs_ <Nop>
 map! <script> ;h <SID>bs_h
@@ -546,13 +550,13 @@ xn <Tab> <ScriptCmd>C('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>C('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nnoremap,xnoremap {} / <Cmd>noh<CR>/
-Each nnoremap,xnoremap {} ? <Cmd>noh<CR>?
-Each nnoremap,xnoremap {} ;c :
-Each nnoremap,xnoremap {} ;s <Cmd>noh<CR>/
-Each nnoremap,xnoremap {} + :
-Each nnoremap,xnoremap {} , :
-Each nnoremap,xnoremap {} <Space><Space>, ,
+Each nnoremap,xnoremap / <Cmd>noh<CR>/
+Each nnoremap,xnoremap ? <Cmd>noh<CR>?
+Each nnoremap,xnoremap ;c :
+Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
+Each nnoremap,xnoremap + :
+Each nnoremap,xnoremap , :
+Each nnoremap,xnoremap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
@@ -646,7 +650,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{} <ScriptCmd>BB('{}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>BB('{0}')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -755,8 +759,8 @@ padding: [1, 1, 1, 1],
 enddef
 xn <C-g> <ScriptCmd>BE()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
-Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
+Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
+Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)

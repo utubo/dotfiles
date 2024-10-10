@@ -47,20 +47,22 @@ const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
 const has_deno = executable('deno')
 
 # こんな感じ
-# Each j,k nnoremap {} g{}
-# ↓
-# nnoremap j gj
-# nnoremap k gk
-# ネストしたい場合はこう
-# Each j,k Each nnoremap,xnoremap {1} g{0}
+#   Each nmap,xmap j gj
+#   → nmap j gj | xmap j gj
+# 先頭以外に差し込んだりネストしたい場合はこう
+#   Each j,k Each nmap,xmap {1} g{0}
+#   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-# ※やりすぎ感は否めない
 var nestOfEach = 0
 def Each(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
 	nestOfEach += 1
 	for i in items->split(',')
-		execute args->substitute('{0\?}', i, 'g')->substitute($"\{{nestOfEach}\}", '{}', 'g')
+		var a = args->substitute('{0\?}', i, 'g')
+		if a ==# args
+			a = $'{i} {a}'
+		endif
+		execute a->substitute($"\{{nestOfEach}\}", '{}', 'g')
 	endfor
 	nestOfEach -= 1
 enddef
@@ -362,7 +364,7 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # sandwich {{{
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
-Each nmap,xmap {} S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
+Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 #}}}
 
 # vim9skk {{{
@@ -381,8 +383,8 @@ au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}
 
 # textobj-user {{{
-Each onoremap,xnoremap {} ab <Plug>(textobj-multiblock-a)
-Each onoremap,xnoremap {} ib <Plug>(textobj-multiblock-i)
+Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 	[ "(", ")" ],
 	[ "[", "]" ],
@@ -408,8 +410,8 @@ def SkipParen(): string
 		return  "\<C-o>a"
 	endif
 enddef
-Each imap,smap {} <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
-Each imap,smap {} <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
+Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
+Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 # Copilotは様子見
 #g:copilot_no_tab_map = true
 #imap <silent> <script> <expr> ;c copilot#Accept("\<CR>")
@@ -427,8 +429,8 @@ nnoremap <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
 nnoremap <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-Each nnoremap,tnoremap {} <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-Each nnoremap,tnoremap {} <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
+Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
 au vimrc VimEnter * hlpairs#TextObjUserMap('%')
 # }}}
@@ -440,10 +442,10 @@ Disable g:ctrlp_clear_cache_on_exit
 g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
-Each w,b,e,ge nnoremap {} <Plug>(smartword-{})
+Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
-Each nnoremap,xnoremap {} <Space>c <Plug>(caw:hatpos:toggle)
+Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 #}}}
 
 # 開発用 {{{
@@ -464,12 +466,12 @@ xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-Each i,a,A nnoremap <expr> {} !empty(getline('.')) ? '{}' : '"_cc'
+Each i,a,A nnoremap <expr> {0} !empty(getline('.')) ? '{0}' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each +,-,>,< Each nmap,tmap {1} <C-w>{0} <C-w>{0}<SID>ws
-Each +,-,>,< Each nnoremap,tnoremap {1} <script> <SID>ws{0} <C-w>{0}<SID>ws
-Each nmap,tmap {} <SID>ws <Nop>
+Each +,-,>,< Each nmap,tmap <C-w>{0} <C-w>{0}<SID>ws
+Each +,-,>,< Each nnoremap,tnoremap <script> <SID>ws{0} <C-w>{0}<SID>ws
+Each nmap,tmap <SID>ws <Nop>
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
 nnoremap <A-J> <Cmd>copy.<CR>
@@ -690,12 +692,12 @@ set guitablabel=%{vimrc#tabline#MyTablabel()}
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
 # `;m`ちょっと押しにくいな…`;f`はどうかな？
-Each map,map! {} ;m <SID>(cancel)
-Each map,map! {} ;f <SID>(cancel)
+Each map,map! ;m <SID>(cancel)
+Each map,map! ;f <SID>(cancel)
 inoremap <SID>(cancel) <Esc>`^
-Each noremap,cnoremap {} <SID>(cancel) <Esc>
+Each noremap,cnoremap <SID>(cancel) <Esc>
 cnoremap ;n <CR>
-Each nnoremap,inoremap {} ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
@@ -703,8 +705,8 @@ inoremap ;l <C-g>R<Right>
 inoremap ;u <Esc>u
 nnoremap ;r "
 nnoremap ;rr "0p
-Each nnoremap,inoremap {} ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap {} ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+Each nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>
@@ -724,14 +726,14 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
-Each nnoremap,xnoremap {} / <Cmd>noh<CR>/
-Each nnoremap,xnoremap {} ? <Cmd>noh<CR>?
+Each nnoremap,xnoremap / <Cmd>noh<CR>/
+Each nnoremap,xnoremap ? <Cmd>noh<CR>?
 # 考え中
-Each nnoremap,xnoremap {} ;c :
-Each nnoremap,xnoremap {} ;s <Cmd>noh<CR>/
-Each nnoremap,xnoremap {} + :
-Each nnoremap,xnoremap {} , :
-Each nnoremap,xnoremap {} <Space><Space>, ,
+Each nnoremap,xnoremap ;c :
+Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
+Each nnoremap,xnoremap + :
+Each nnoremap,xnoremap , :
+Each nnoremap,xnoremap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
 #}}}
@@ -848,7 +850,7 @@ def QuitWin(expr: string)
 		confirm quit
 	endif
 enddef
-Each h,j,k,l nnoremap q{} <ScriptCmd>QuitWin('{}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>QuitWin('{0}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
 # 閉じる
@@ -1012,8 +1014,8 @@ xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 
 # <C-f>と<C-b>、CTRLおしっぱがつらいので…
-Each f,b nmap <C-{}> <C-{}><SID>(hold-ctrl)
-Each f,b nnoremap <script> <SID>(hold-ctrl){} <C-{}><SID>(hold-ctrl)
+Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
+Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
 # 🐶🍚
