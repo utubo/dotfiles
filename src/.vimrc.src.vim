@@ -624,7 +624,7 @@ def RefreshBufList()
 				current: m[2][0] ==# '%',
 			}
 			bufitems += [b]
-			b.width = strdisplaywidth($'{b.nr}{b.name} ')
+			b.width = strdisplaywidth($' {b.nr}{b.name} ')
 		endif
 	endfor
 	EchoBufLine()
@@ -660,31 +660,31 @@ def EchoBufLine()
 		endif
 		e += 1
 	endfor
-	w = 0
+	w = getwininfo(win_getid(1))[0].textoff
+	echohl TablineFill
+	echon repeat(' ', w)
 	if hasPrev
-		echohl StatusLineNC
+		echohl Tabline
 		echon '< '
 		w += 2
 	endif
 	for b in bufitems[s : e]
 		w += b.width
 		if b.current
-			echohl StatusLineTermNC
-			echon b.nr
+			echohl TablineSel
 		else
-			echohl StatusLineNC
-			echon b.nr
+			echohl Tabline
 		endif
-		echohl StatusLine
-		echon $'{b.name} '
+		echon $'{b.nr} {b.name} '
 	endfor
 	if hasNext
-		echohl StatusLineNC
+		echohl Tabline
 		echon '>'
 		w += 1
 	endif
 	const pad = &columns - 1 - w
 	if 0 < pad
+		echohl TablineFill
 		echon repeat(' ', &columns - 1 - w)
 	endif
 	echohl Normal

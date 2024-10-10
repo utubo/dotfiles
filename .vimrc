@@ -460,7 +460,7 @@ name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
 lq += [b]
-b.width = strdisplaywidth($'{b.nr}{b.name} ')
+b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
 J()
@@ -496,31 +496,31 @@ d = true
 endif
 e += 1
 endfor
-w = 0
+w = getwininfo(win_getid(1))[0].textoff
+echoh TablineFill
+echon repeat(' ', w)
 if c
-echoh StatusLineNC
+echoh Tabline
 echon '< '
 w += 2
 endif
 for b in lq[s : e]
 w += b.width
 if b.current
-echoh StatusLineTermNC
-echon b.nr
+echoh TablineSel
 else
-echoh StatusLineNC
-echon b.nr
+echoh Tabline
 endif
-echoh StatusLine
-echon $'{b.name} '
+echon $'{b.nr} {b.name} '
 endfor
 if a
-echoh StatusLineNC
+echoh Tabline
 echon '>'
 w += 1
 endif
 const f = &columns - 1 - w
 if 0 < f
+echoh TablineFill
 echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
