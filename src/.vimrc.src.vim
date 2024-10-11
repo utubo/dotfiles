@@ -478,6 +478,14 @@ nnoremap <A-J> <Cmd>copy.<CR>
 nnoremap <A-K> <Cmd>copy-1<CR>
 xnoremap <A-J> :copy'<-1<CR>gv
 xnoremap <A-K> :copy'>+0<CR>gv
+# https://zenn.dev/vim_jp/articles/2024-10-07-vim-insert-uppercase
+def ToupperPrevWord(): string
+  const col = getpos('.')[2]
+  const substring = getline('.')[0 : col - 1]
+  const word = matchstr(substring, '\v<(\k(<)@!)*$')
+  return toupper(word)
+enddef
+inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
 
 #}}} -------------------------------------------------------
 
@@ -701,7 +709,6 @@ Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
-inoremap ;l <C-g>R<Right>
 inoremap ;u <Esc>u
 nnoremap ;r "
 nnoremap ;rr "0p
