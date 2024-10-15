@@ -2,7 +2,8 @@ vim9script
 export def ApplySettings(a: string)
 exe $'nunmap {a}'
 exe $'xunmap {a}'
-g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+g:sandwich = get(g:, 'sandwich', {})
+g:sandwich#recipes = deepcopy(get(g:sandwich, 'default_receipes', []))
 g:sandwich#recipes += [
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
 { buns: ['', '' ], input: ['q'] },
@@ -13,9 +14,12 @@ g:sandwich#recipes += [
 { buns: ['%{', '}' ], input: ['%{'] },
 { buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 ]
-CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+nm Sd <Plug>(operator-sandwich-delete)ab
+xm Sd <Plug>(operator-sandwich-delete)
+nm Sr <Plug>(operator-sandwich-replace)ab
+xm Sr <Plug>(operator-sandwich-replace)
+nn S <Plug>(operator-sandwich-add)iw
+xn S <Plug>(operator-sandwich-add)
 nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 nm S$ vg_S
 au vimrc User OperatorSandwichAddPre g:fix_sandwich_pos = getpos('.')

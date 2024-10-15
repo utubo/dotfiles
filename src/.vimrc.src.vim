@@ -686,7 +686,7 @@ def EchoBufLine()
 	endif
 	echohl Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeStateAgain * ++once RefreshBufList()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once RefreshBufList()
 au vimrc CursorMoved * EchoBufLine()
 #}}}
 

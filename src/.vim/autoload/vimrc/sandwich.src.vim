@@ -6,7 +6,8 @@ vim9script
 export def ApplySettings(prefix: string)
 	execute $'nunmap {prefix}'
 	execute $'xunmap {prefix}'
-	g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+	g:sandwich = get(g:, 'sandwich', {})
+	g:sandwich#recipes = deepcopy(get(g:sandwich, 'default_receipes', []))
 	g:sandwich#recipes += [
 		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 		{ buns: ['',   ''  ], input: ['q'] },
@@ -17,9 +18,12 @@ export def ApplySettings(prefix: string)
 		{ buns: ['%{', '}' ], input: ['%{'] },
 		{ buns: ['CommentString(0)', 'CommentString(1)'], expr: 1, input: ['c'] },
 	]
-	CmdEach nmap,xmap Sd <Plug>(operator-sandwich-delete)<if-nmap>ab
-	CmdEach nmap,xmap Sr <Plug>(operator-sandwich-replace)<if-nmap>ab
-	CmdEach nnoremap,xnoremap S <Plug>(operator-sandwich-add)<if-nnoremap>iw
+	nmap Sd <Plug>(operator-sandwich-delete)ab
+	xmap Sd <Plug>(operator-sandwich-delete)
+	nmap Sr <Plug>(operator-sandwich-replace)ab
+	xmap Sr <Plug>(operator-sandwich-replace)
+	nnoremap S <Plug>(operator-sandwich-add)iw
+	xnoremap S <Plug>(operator-sandwich-add)
 	nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 	# `S${`と被ってしまうけどまぁいいか
 	nmap S$ vg_S

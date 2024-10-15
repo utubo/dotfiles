@@ -30,8 +30,7 @@ def ToggleCheckBox()
 		endif
 	endfor
 enddef
-noremap <buffer> <Space>x <ScriptCmd>ToggleCheckBox()<CR>
-inoremap <buffer> ;x <ScriptCmd>ToggleCheckBox()<CR>
+Each inoremap,noremap <buffer> ;x <ScriptCmd>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
