@@ -532,12 +532,11 @@ au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once I()
 au vimrc CursorMoved * J()
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
-Each map,map! ;m <SID>(cancel)
-Each map,map! ;f <SID>(cancel)
-ino <SID>(cancel) <Esc>`^
-Each noremap,cnoremap <SID>(cancel) <Esc>
 cno ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap {0} ;n <Cmd>update<CR><Esc>
+Each ;m inoremap {0} <Esc>`^
+Each ;m cnoremap {0} <C-c>
+Each ;m noremap {0} <Esc>
 ino ;v ;<CR>
 ino ;w <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>

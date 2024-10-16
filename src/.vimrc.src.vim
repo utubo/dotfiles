@@ -53,6 +53,7 @@ const has_deno = executable('deno')
 #   Each j,k Each nmap,xmap {1} {0} g{0}
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
+# ※スクリプトスコープがこのファイルになってしまう問題あり
 var nestOfEach = 0
 def Each(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
@@ -699,13 +700,14 @@ set guitablabel=%{vimrc#tabline#MyTablabel()}
 # ------------------------------------------------------
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
-# `;m`ちょっと押しにくいな…`;f`はどうかな？
-Each map,map! ;m <SID>(cancel)
-Each map,map! ;f <SID>(cancel)
-inoremap <SID>(cancel) <Esc>`^
-Each noremap,cnoremap <SID>(cancel) <Esc>
+# 気づいたらコロンをセミコロンにマッピングしてなかった…
+# ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap {0} ;n <Cmd>update<CR><Esc>
+Each ;m inoremap {0} <Esc>`^
+Each ;m cnoremap {0} <C-c>
+Each ;m noremap  {0} <Esc>
+# その他
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a
 inoremap ;k 「」<C-g>U<Left>
