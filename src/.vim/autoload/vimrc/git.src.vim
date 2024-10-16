@@ -34,6 +34,10 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 
+export def GitCommit(args: string)
+	system('git commit -m ' .. args)
+enddef
+
 export def GitTagPush(tagname: string)
 	echo system($"git tag '{tagname}'")
 	echo system($"git push origin '{tagname}'")
@@ -41,6 +45,6 @@ enddef
 
 # 以下はvimrcで定義する
 # command! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
-# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
+# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#GitCommit(<q-args>)
 # command! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
 
