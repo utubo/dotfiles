@@ -24,8 +24,8 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> ;;n <ScriptCmd>A()<CR>
-ino <buffer> ;;n <ScriptCmd>A()<CR>
+no <buffer> ;o <ScriptCmd>A()<CR>
+ino <buffer> ;o <ScriptCmd>A()<CR>
 def B()
 for l in g:VRange()
 const a = getline(l)
@@ -91,23 +91,23 @@ sil! cmdheight0#Invalidate()
 endif
 enddef
 const k = 300
-var o = 0
+var n = 0
 var p = 0
 def CursorMovedDelayExec(a: any = 0)
-o = 0
+n = 0
 if p !=# 0
 p = 0
 D()
 endif
 enddef
 def F()
-if o !=# 0
+if n !=# 0
 p += 1
 return
 endif
 D()
 p = 0
-o = timer_start(k, CursorMovedDelayExec)
+n = timer_start(k, CursorMovedDelayExec)
 enddef
 au after_ftplugin_md CursorMoved <buffer> F()
 def G()
