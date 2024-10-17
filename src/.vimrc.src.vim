@@ -667,10 +667,10 @@ set guitablabel=%{vimrc#tabline#MyTablabel()}
 # 気づいたらコロンをセミコロンにマッピングしてなかった…
 # ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
-Each nnoremap,inoremap {0} ;n <Cmd>update<CR><Esc>
-Each ;m inoremap {0} <Esc>`^
-Each ;m cnoremap {0} <C-c>
-Each ;m noremap  {0} <Esc>
+Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+inoremap ;m <Esc>`^
+cnoremap ;m <C-c>
+noremap  ;m <Esc>
 # その他
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a
