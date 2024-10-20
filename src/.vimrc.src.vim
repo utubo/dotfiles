@@ -743,6 +743,8 @@ def ShowBufInfo(event: string = '')
 		return
 	endif
 
+	const ruler = $' {line(".")}:{col(".")}'
+
 	var msg = []
 	add(msg, ['Title', $'"{bufname()}"'])
 	add(msg, ['Normal', ' '])
@@ -770,7 +772,7 @@ def ShowBufInfo(event: string = '')
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
 	var msglen = 0
-	const maxlen = &columns - 2
+	const maxlen = &columns - len(ruler) - 1
 	for i in reverse(range(0, len(msg) - 1))
 		var s = msg[i][1]
 		var d = strdisplaywidth(s)
@@ -786,6 +788,7 @@ def ShowBufInfo(event: string = '')
 			break
 		endif
 	endfor
+	add(msg, ['Normal', repeat(' ', maxlen - msglen) .. ruler])
 	redraw
 	echo ''
 	for m in msg
@@ -795,18 +798,7 @@ def ShowBufInfo(event: string = '')
 	echohl Normal
 enddef
 
-# Zenモードで位置が分からなくなるのでPOPUPで現在位置を表示
-def PopupCursorPos()
-	popup_create($' {line(".")}:{col(".")} ', {
-		pos: 'botleft',
-		line: 'cursor-1',
-		col: 'cursor+1',
-		moved: 'any',
-		padding: [1, 1, 1, 1],
-	})
-enddef
-
-nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><scriptCmd>PopupCursorPos()<CR>
+nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 

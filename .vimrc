@@ -546,69 +546,62 @@ var b = a ==# 'BufReadPost'
 if b && !filereadable(expand('%'))
 return
 endif
-var c = []
-add(c, ['Title', $'"{bufname()}"'])
-add(c, ['Normal', ' '])
+const c = $' {line(".")}:{col(".")}'
+var e = []
+add(e, ['Title', $'"{bufname()}"'])
+add(e, ['Normal', ' '])
 if &modified
-add(c, ['Delimiter', '[+]'])
-add(c, ['Normal', ' '])
+add(e, ['Delimiter', '[+]'])
+add(e, ['Normal', ' '])
 endif
 if !b && !filereadable(expand('%'))
-add(c, ['Tag', '[New]'])
-add(c, ['Normal', ' '])
+add(e, ['Tag', '[New]'])
+add(e, ['Normal', ' '])
 endif
 if &readonly
-add(c, ['WarningMsg', '[RO]'])
-add(c, ['Normal', ' '])
+add(e, ['WarningMsg', '[RO]'])
+add(e, ['Normal', ' '])
 endif
 const w = wordcount()
 if b || w.bytes !=# 0
-add(c, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-add(c, ['Normal', ' '])
+add(e, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
+add(e, ['Normal', ' '])
 endif
-add(c, ['MoreMsg', &ff])
-add(c, ['Normal', ' '])
-const e = empty(&fenc) ? &enc : &fenc
-add(c, [e ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', e])
-add(c, ['Normal', ' '])
-add(c, ['MoreMsg', &ft])
-var f = 0
-const g = &columns - 2
-for i in reverse(range(0, len(c) - 1))
-var s = c[i][1]
+add(e, ['MoreMsg', &ff])
+add(e, ['Normal', ' '])
+const f = empty(&fenc) ? &enc : &fenc
+add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
+add(e, ['Normal', ' '])
+add(e, ['MoreMsg', &ft])
+var g = 0
+const h = &columns - len(c) - 1
+for i in reverse(range(0, len(e) - 1))
+var s = e[i][1]
 var d = strdisplaywidth(s)
-f += d
-if g < f
-const l = g - f + d
+g += d
+if h < g
+const l = h - g + d
 while !empty(s) && l < strdisplaywidth(s)
 s = s[1 :]
 endwhile
-c[i][1] = s
-c = c[i : ]
-insert(c, ['SpecialKey', '<'], 0)
+e[i][1] = s
+e = e[i : ]
+insert(e, ['SpecialKey', '<'], 0)
 break
 endif
 endfor
+add(e, ['Normal', repeat(' ', h - g) .. c])
 redraw
 ec ''
-for m in c
+for m in e
 exe 'echohl' m[0]
 echon m[1]
 endfor
 echoh Normal
 enddef
-def J()
-popup_create($' {line(".")}:{col(".")} ', {
-pos: 'botleft',
-line: 'cursor-1',
-col: 'cursor+1',
-moved: 'any',
-padding: [1, 1, 1, 1],
-})
-enddef
-nn <script> <C-g> <ScriptCmd>I()<CR><scriptCmd>J()<CR>
+nn <script> <C-g> <ScriptCmd>I()<CR>
 au vimrc BufNewFile,BufReadPost,BufWritePost * I('BufNewFile')
-def BA(a: string)
+def J(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -619,7 +612,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>BA('{0}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>J('{0}')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -691,31 +684,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def BB()
+def BA()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BC(a: string, b: string)
+def BB(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BB()
+au vimrc Syntax * BA()
 au vimrc Syntax javascript {
-BC('SpellRare', '\s[=!]=\s')
+BB('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BC('SpellRare', '\s[=!]=\s')
-BC('SpellBad', '\s[=!]==\s')
-BC('SpellBad', '\s\~[=!][=#]\?\s')
-BC('SpellRare', '\<normal!\@!')
+BB('SpellRare', '\s[=!]=\s')
+BB('SpellBad', '\s[=!]==\s')
+BB('SpellBad', '\s\~[=!][=#]\?\s')
+BB('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def BD()
+def BC()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -726,7 +719,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BD()<CR>
+xn <C-g> <ScriptCmd>BC()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
@@ -763,25 +756,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def BE(a: number, b: string): string
+def BD(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def BF(a: string): any
+def BE(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: BE(b, 'fg'), bg: BE(b, 'bg') }
+return { fg: BD(b, 'fg'), bg: BD(b, 'bg') }
 enddef
-def BG()
+def BF()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = BF('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BF("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BF("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BF("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BF("WarningMsg").fg}'
+const a = BE('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BE("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BE("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BE("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BE("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * BG()
-def BH()
+au vimrc VimEnter,ColorScheme * BF()
+def BG()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -796,8 +789,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * BH()
-def BI()
+au vimrc VimEnter,WinEnter * BG()
+def BH()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -805,8 +798,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! BI()
-au vimrc BufNew,BufReadPost * silent! BI()
+au vimrc OptionSet list silent! BH()
+au vimrc BufNew,BufReadPost * silent! BH()
 sil! syntax enable
 set t_Co=256
 set bg=light
@@ -814,10 +807,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def BJ()
+def BI()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !B()|BJ()|endif
+au vimrc VimEnter * ++nested if !B()|BI()|endif
