@@ -1,10 +1,7 @@
 vim9script
-
 packadd vim-ezpack
-command! -nargs=* Ezpack ezpack#Ezpack(<f-args>)
 
-ezpack#Init()
-
+EzpackInit
 Ezpack airblade/vim-gitgutter
 Ezpack cohama/lexima.vim # 括弧補完
 Ezpack delphinus/vim-auto-cursorline
