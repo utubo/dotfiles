@@ -47,7 +47,7 @@ exe a->substitute($"\{{lk}\}", '{}', 'g')
 endfor
 lk -= 1
 enddef
-com! -keepscript -nargs=* Each A(<q-args>)
+com! -nargs=* Each A(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def B(): bool

@@ -65,7 +65,7 @@ def Each(qargs: string)
 	endfor
 	nestOfEach -= 1
 enddef
-command! -keepscript -nargs=* Each Each(<q-args>)
+command! -nargs=* Each Each(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
