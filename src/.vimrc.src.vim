@@ -52,20 +52,20 @@ augroup End
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
 # ※スクリプトスコープがこのファイルになってしまう問題あり
-var nestOfEach = 0
-def Each(qargs: string)
+g:util_each_nest = 0
+def! g:UtilEach(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
-	nestOfEach += 1
+	g:util_each_nest += 1
 	for i in items->split(',')
 		var a = args->substitute('{0\?}', i, 'g')
 		if a ==# args
 			a = $'{i} {a}'
 		endif
-		execute a->substitute($"\{{nestOfEach}\}", '{}', 'g')
+		execute a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
 	endfor
-	nestOfEach -= 1
+	g:util_each_nest -= 1
 enddef
-command! -nargs=* Each Each(<q-args>)
+command! -keepscript -nargs=* Each g:UtilEach(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
