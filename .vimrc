@@ -70,8 +70,7 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-com! EzpackInstall packadd vim-ezpack|ezpack#Install()
-au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
+com! EzpackInstall vimrc#ezpack#Install()
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')

@@ -1,6 +1,6 @@
 vim9script
+packadd vim-ezpack
 com! -nargs=* Ezpack ezpack#Ezpack(<f-args>)
-export def ListPlugins()
 ezpack#Init()
 Ezpack airblade/vim-gitgutter
 Ezpack cohama/lexima.vim
@@ -61,4 +61,6 @@ Ezpack utubo/vim-shrink
 Ezpack utubo/vim-tablist
 Ezpack utubo/vim-tabpopupmenu
 Ezpack utubo/vim-textobj-twochars
+export def Install()
+ezpack#Install()
 enddef
