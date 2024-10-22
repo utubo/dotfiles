@@ -30,8 +30,6 @@ jobs:
           version: nightly
       - name: Initialize
         run: |
-          sudo apt-get update
-          sudo apt-get install -y git
           ln -s $GITHUB_WORKSPACE/.vimrc ~/.vimrc
           vim -c EzpackInstall -c qa!
       - name: Run tests
