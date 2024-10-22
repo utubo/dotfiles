@@ -45,6 +45,7 @@ Ezpack tani/vim-typo
 Ezpack utubo/vim-altkey-in-term
 Ezpack utubo/vim-colorscheme-girly
 Ezpack utubo/vim-colorscheme-softgreen
+Ezpack utubo/vim-ezpack
 Ezpack utubo/vim-hlpairs
 Ezpack utubo/vim-minviml
 Ezpack utubo/vim-registers-lite
