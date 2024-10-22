@@ -7,8 +7,10 @@ export def ApplySettings(prefix: string)
 	execute $'nunmap {prefix}'
 	execute $'xunmap {prefix}'
 	g:sandwich = get(g:, 'sandwich', {})
-	g:sandwich#recipes = deepcopy(get(g:sandwich, 'default_receipes', []))
-	g:sandwich#recipes += [
+	g:sandwich#recipes = [
+		{ buns: ['(',  ')' ], input: ['(', ')'] },
+		{ buns: ['<',  '>' ], input: ['<', '>'] },
+		{ buns: ['{',  '}' ], input: ['}'] },
 		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 		{ buns: ['',   ''  ], input: ['q'] },
 		{ buns: ['「', '」'], input: ['k'] },
