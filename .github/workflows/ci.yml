@@ -31,6 +31,7 @@ jobs:
       - name: Initialize
         run: |
           ln -s $GITHUB_WORKSPACE/.vimrc ~/.vimrc
+          mkdir $GITHUB_WORKSPACE/.vim
           ln -s $GITHUB_WORKSPACE/.vim/after ~/.vim/after
           ln -s $GITHUB_WORKSPACE/.vim/autoload ~/.vim/autoload
           ln -s $GITHUB_WORKSPACE/.vim/scripts.vim ~/.vim/scripts.vim
