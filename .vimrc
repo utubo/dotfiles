@@ -76,7 +76,6 @@ com! EzpackInstall packadd vim-ezpack|ezpack#Install()
 au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
 g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
 if !isdirectory(g:ezpack_home)
-const ln = '{g:ezpack_home}/opt/vim-ezpack/autoload/ezpack.vim'
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
 EzpackInstall
 endif
@@ -149,26 +148,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const lo = has('win32') ? '.cmd' : ''
+const ln = has('win32') ? '.cmd' : ''
 var lspServers = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{lo}',
+path: $'typescript-language-server{ln}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{lo}',
+path: $'vim-language-server{ln}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{lo}',
+path: $'html-languageserver{ln}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{lo}',
+path: $'vscode-json-languageserver{ln}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -349,9 +348,9 @@ nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-var lp = []
+var lo = []
 def G()
-lp = []
+lo = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
@@ -360,15 +359,15 @@ nr: m[1],
 name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
-lp += [b]
+lo += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
 H()
-g:zenmode.preventEcho = lp->len() > 1
+g:zenmode.preventEcho = lo->len() > 1
 enddef
 def H()
-if lp->len() <= 1
+if lo->len() <= 1
 return
 endif
 if mode() ==# 'c'
@@ -381,7 +380,7 @@ var w = 0
 var a = false
 var c = false
 var d = false
-for b in lp
+for b in lo
 w += b.width
 if &columns - 5 < w
 if d
@@ -405,7 +404,7 @@ echoh Tabline
 echon '< '
 w += 2
 endif
-for b in lp[s : e]
+for b in lo[s : e]
 w += b.width
 if b.current
 echoh TablineSel

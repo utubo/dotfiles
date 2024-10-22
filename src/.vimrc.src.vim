@@ -108,7 +108,6 @@ command! EzpackInstall packadd vim-ezpack|ezpack#Install()
 au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
 g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
 if !isdirectory(g:ezpack_home)
-  const path = '{g:ezpack_home}/opt/vim-ezpack/autoload/ezpack.vim'
   system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
   EzpackInstall
 endif
