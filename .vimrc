@@ -34,20 +34,18 @@ set hls
 aug vimrc
 au!
 aug End
-const lk = has('win32') ? '~/vimfiles' : '~/.vim'
-const ll = executable('deno')
-var lm = 0
+var lk = 0
 def A(b: string)
 const [c, d] = b->split('^\S*\zs')
-lm += 1
+lk += 1
 for i in c->split(',')
 var a = d->substitute('{0\?}', i, 'g')
 if a ==# d
 a = $'{i} {a}'
 endif
-exe a->substitute($"\{{lm}\}", '{}', 'g')
+exe a->substitute($"\{{lk}\}", '{}', 'g')
 endfor
-lm -= 1
+lk -= 1
 enddef
 com! -keepscript -nargs=* Each A(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
@@ -74,7 +72,7 @@ return range(a[0], a[1])
 enddef
 com! EzpackInstall packadd vim-ezpack|ezpack#Install()
 au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
-g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
+g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
 EzpackInstall
@@ -148,26 +146,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const ln = has('win32') ? '.cmd' : ''
+const ll = has('win32') ? '.cmd' : ''
 var lspServers = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{ln}',
+path: $'typescript-language-server{ll}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{ln}',
+path: $'vim-language-server{ll}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{ln}',
+path: $'html-languageserver{ll}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{ln}',
+path: $'vscode-json-languageserver{ll}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -348,9 +346,9 @@ nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-var lo = []
+var lm = []
 def G()
-lo = []
+lm = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
@@ -359,15 +357,15 @@ nr: m[1],
 name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
-lo += [b]
+lm += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
 H()
-g:zenmode.preventEcho = lo->len() > 1
+g:zenmode.preventEcho = lm->len() > 1
 enddef
 def H()
-if lo->len() <= 1
+if lm->len() <= 1
 return
 endif
 if mode() ==# 'c'
@@ -380,7 +378,7 @@ var w = 0
 var a = false
 var c = false
 var d = false
-for b in lo
+for b in lm
 w += b.width
 if &columns - 5 < w
 if d
@@ -404,7 +402,7 @@ echoh Tabline
 echon '< '
 w += 2
 endif
-for b in lo[s : e]
+for b in lm[s : e]
 w += b.width
 if b.current
 echoh TablineSel

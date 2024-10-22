@@ -43,8 +43,6 @@ augroup End
 
 # ------------------------------------------------------
 # ユーティリティ {{{
-const rtproot = has('win32') ? '~/vimfiles' : '~/.vim'
-const has_deno = executable('deno')
 
 # こんな感じ
 #   Each nmap,xmap j gj
@@ -106,7 +104,7 @@ enddef
 # 自作マネージャ {{{
 command! EzpackInstall packadd vim-ezpack|ezpack#Install()
 au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
-g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
+g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
   system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
   EzpackInstall
