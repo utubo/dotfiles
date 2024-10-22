@@ -51,7 +51,6 @@ augroup End
 #   Each j,k Each nmap,xmap {1} {0} g{0}
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-# ※スクリプトスコープがこのファイルになってしまう問題あり
 g:util_each_nest = 0
 def! g:UtilEach(qargs: string)
 	const [items, args] = qargs->split('^\S*\zs')
