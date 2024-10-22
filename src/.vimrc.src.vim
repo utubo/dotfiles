@@ -67,7 +67,7 @@ def Each(qargs: string)
 	endfor
 	nestOfEach -= 1
 enddef
-command! -nargs=* Each Each(<q-args>)
+command! -keepscript -nargs=* Each Each(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
@@ -103,92 +103,16 @@ enddef
 # ------------------------------------------------------
 # プラグイン {{{
 
-# jetpack {{{
-const jetpackfile = expand( $'{rtproot}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-const has_jetpack = filereadable(jetpackfile)
-if ! has_jetpack
-	const jetpackurl = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-	system($'curl -fsSLo {jetpackfile} --create-dirs {jetpackurl}')
+# 自作マネージャ {{{
+command! EzpackInstall packadd vim-ezpack|ezpack#Install()
+au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
+g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
+if !isdirectory(g:ezpack_home)
+  const path = '{g:ezpack_home}/opt/vim-ezpack/autoload/ezpack.vim'
+  system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
+  EzpackInstall
 endif
-
-packadd vim-jetpack
-jetpack#begin()
-Jetpack 'tani/vim-jetpack', { 'opt': 1 }
-Jetpack 'airblade/vim-gitgutter'
-Jetpack 'cohama/lexima.vim' # 括弧補完
-Jetpack 'delphinus/vim-auto-cursorline'
-Jetpack 'easymotion/vim-easymotion'
-Jetpack 'girishji/vimcomplete'
-#Jetpack 'girishji/autosuggest.vim' ちょっとWindowsで動きが怪しい
-#Jetpack 'github/copilot.vim' #重い
-Jetpack 'hrsh7th/vim-vsnip'
-Jetpack 'hrsh7th/vim-vsnip-integ'
-Jetpack 'itchyny/calendar.vim'
-Jetpack 'kana/vim-textobj-user'
-Jetpack 'kana/vim-smartword'
-Jetpack 'KentoOgata/vim-vimscript-gd'
-Jetpack 'LeafCage/vimhelpgenerator'
-Jetpack 'luochen1990/rainbow' # 虹色括弧
-Jetpack 'machakann/vim-sandwich'
-Jetpack 'mattn/vim-notification'
-Jetpack 'matze/vim-move' # 行移動
-Jetpack 'michaeljsmith/vim-indent-object'
-Jetpack 'MTDL9/vim-log-highlighting'
-Jetpack 'obcat/vim-hitspop'
-Jetpack 'obcat/vim-sclow' # スクロールバー
-Jetpack 'osyo-manga/vim-textobj-multiblock'
-Jetpack 'skanehira/gh.vim'
-Jetpack 'thinca/vim-portal'
-Jetpack 'thinca/vim-themis'
-Jetpack 'tpope/vim-fugitive' # Gdiffとか
-Jetpack 'tyru/capture.vim' # 実行結果をバッファにキャプチャ
-Jetpack 'tyru/caw.vim' # コメント化
-Jetpack 'yegappan/lsp'
-Jetpack 'yegappan/mru'
-Jetpack 'yuki-yano/dedent-yank.vim' # yankするときにインデントを除去
-Jetpack 'vim-jp/vital.vim'
-# Fern
-Jetpack 'lambdalisue/fern.vim'
-Jetpack 'lambdalisue/fern-git-status.vim'
-Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
-Jetpack 'lambdalisue/fern-hijack.vim'
-Jetpack 'lambdalisue/nerdfont.vim'
-# 👀様子見中
-Jetpack 'ctrlpvim/ctrlp.vim'
-Jetpack 'mattn/ctrlp-matchfuzzy'
-Jetpack 'sheerun/vim-polyglot' # いろんなシンタックスハイライト
-Jetpack 'tani/vim-typo'
-# 🐶🍚
-Jetpack 'utubo/vim-altkey-in-term'
-Jetpack 'utubo/vim-colorscheme-girly'
-Jetpack 'utubo/vim-colorscheme-softgreen'
-Jetpack 'utubo/vim-hlpairs'
-Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-registers-lite'
-Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-skipslash'
-Jetpack 'utubo/vim-yomigana'
-Jetpack 'utubo/vim-vim9skk'
-Jetpack 'utubo/vim-zenmode'
-# 🐶🍚様子見中
-Jetpack 'utubo/jumpcursor.vim'
-Jetpack 'utubo/vim-ddgv'
-Jetpack 'utubo/vim-portal-aim'
-Jetpack 'utubo/vim-shrink'
-Jetpack 'utubo/vim-tablist'
-Jetpack 'utubo/vim-tabpopupmenu'
-Jetpack 'utubo/vim-textobj-twochars'
-# 🐶✋🍚
-#Jetpack 'utubo/vim-cmdheight0'
-
-if has_deno
-	Jetpack 'vim-denops/denops.vim'
-endif
-jetpack#end()
-if ! has_jetpack
-	jetpack#sync()
-endif
-#}}}
+# }}}
 
 # zenmode {{{
 g:zenmode = {}

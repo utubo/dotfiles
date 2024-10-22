@@ -49,7 +49,7 @@ exe a->substitute($"\{{lm}\}", '{}', 'g')
 endfor
 lm -= 1
 enddef
-com! -nargs=* Each A(<q-args>)
+com! -keepscript -nargs=* Each A(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def B(): bool
@@ -72,79 +72,13 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-const ln = expand( $'{lk}/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim')
-const lo = filereadable(ln)
-if ! lo
-const lp = 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim'
-system($'curl -fsSLo {ln} --create-dirs {lp}')
-endif
-packadd vim-jetpack
-jetpack#begin()
-Jetpack 'tani/vim-jetpack', { 'opt': 1 }
-Jetpack 'airblade/vim-gitgutter'
-Jetpack 'cohama/lexima.vim'
-Jetpack 'delphinus/vim-auto-cursorline'
-Jetpack 'easymotion/vim-easymotion'
-Jetpack 'girishji/vimcomplete'
-Jetpack 'hrsh7th/vim-vsnip'
-Jetpack 'hrsh7th/vim-vsnip-integ'
-Jetpack 'itchyny/calendar.vim'
-Jetpack 'kana/vim-textobj-user'
-Jetpack 'kana/vim-smartword'
-Jetpack 'KentoOgata/vim-vimscript-gd'
-Jetpack 'LeafCage/vimhelpgenerator'
-Jetpack 'luochen1990/rainbow'
-Jetpack 'machakann/vim-sandwich'
-Jetpack 'mattn/vim-notification'
-Jetpack 'matze/vim-move'
-Jetpack 'michaeljsmith/vim-indent-object'
-Jetpack 'MTDL9/vim-log-highlighting'
-Jetpack 'obcat/vim-hitspop'
-Jetpack 'obcat/vim-sclow'
-Jetpack 'osyo-manga/vim-textobj-multiblock'
-Jetpack 'skanehira/gh.vim'
-Jetpack 'thinca/vim-portal'
-Jetpack 'thinca/vim-themis'
-Jetpack 'tpope/vim-fugitive'
-Jetpack 'tyru/capture.vim'
-Jetpack 'tyru/caw.vim'
-Jetpack 'yegappan/lsp'
-Jetpack 'yegappan/mru'
-Jetpack 'yuki-yano/dedent-yank.vim'
-Jetpack 'vim-jp/vital.vim'
-Jetpack 'lambdalisue/fern.vim'
-Jetpack 'lambdalisue/fern-git-status.vim'
-Jetpack 'lambdalisue/fern-renderer-nerdfont.vim'
-Jetpack 'lambdalisue/fern-hijack.vim'
-Jetpack 'lambdalisue/nerdfont.vim'
-Jetpack 'ctrlpvim/ctrlp.vim'
-Jetpack 'mattn/ctrlp-matchfuzzy'
-Jetpack 'sheerun/vim-polyglot'
-Jetpack 'tani/vim-typo'
-Jetpack 'utubo/vim-altkey-in-term'
-Jetpack 'utubo/vim-colorscheme-girly'
-Jetpack 'utubo/vim-colorscheme-softgreen'
-Jetpack 'utubo/vim-hlpairs'
-Jetpack 'utubo/vim-minviml'
-Jetpack 'utubo/vim-registers-lite'
-Jetpack 'utubo/vim-reformatdate'
-Jetpack 'utubo/vim-skipslash'
-Jetpack 'utubo/vim-yomigana'
-Jetpack 'utubo/vim-vim9skk'
-Jetpack 'utubo/vim-zenmode'
-Jetpack 'utubo/jumpcursor.vim'
-Jetpack 'utubo/vim-ddgv'
-Jetpack 'utubo/vim-portal-aim'
-Jetpack 'utubo/vim-shrink'
-Jetpack 'utubo/vim-tablist'
-Jetpack 'utubo/vim-tabpopupmenu'
-Jetpack 'utubo/vim-textobj-twochars'
-if ll
-Jetpack 'vim-denops/denops.vim'
-endif
-jetpack#end()
-if ! lo
-jetpack#sync()
+com! EzpackInstall packadd vim-ezpack|ezpack#Install()
+au vimrc User EzpackInstallPre vimrc#ezpack#ListPlugins()
+g:ezpack_home = expand($"{has('win32') ? '~/vimfiles' : '~/.vim'}/pack/ezpack")
+if !isdirectory(g:ezpack_home)
+const ln = '{g:ezpack_home}/opt/vim-ezpack/autoload/ezpack.vim'
+system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
+EzpackInstall
 endif
 g:zenmode = {}
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
@@ -215,26 +149,26 @@ diagSignWarningText: '🐝',
 showDiagWithVirtualText: true,
 diagVirtualTextAlign: 'after',
 }
-const lq = has('win32') ? '.cmd' : ''
+const lo = has('win32') ? '.cmd' : ''
 var lspServers = [{
 name: 'typescriptlang',
 filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{lq}',
+path: $'typescript-language-server{lo}',
 args: ['--stdio'],
 }, {
 name: 'vimlang',
 filetype: ['vim'],
-path: $'vim-language-server{lq}',
+path: $'vim-language-server{lo}',
 args: ['--stdio'],
 }, {
 name: 'htmllang',
 filetype: ['html'],
-path: $'html-languageserver{lq}',
+path: $'html-languageserver{lo}',
 args: ['--stdio'],
 }, {
 name: 'jsonlang',
 filetype: ['json'],
-path: $'vscode-json-languageserver{lq}',
+path: $'vscode-json-languageserver{lo}',
 args: ['--stdio'],
 }]
 au vimrc VimEnter * call LspOptionsSet(lspOptions)
@@ -415,9 +349,9 @@ nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-var lr = []
+var lp = []
 def G()
-lr = []
+lp = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
@@ -426,15 +360,15 @@ nr: m[1],
 name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
-lr += [b]
+lp += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
 H()
-g:zenmode.preventEcho = lr->len() > 1
+g:zenmode.preventEcho = lp->len() > 1
 enddef
 def H()
-if lr->len() <= 1
+if lp->len() <= 1
 return
 endif
 if mode() ==# 'c'
@@ -447,7 +381,7 @@ var w = 0
 var a = false
 var c = false
 var d = false
-for b in lr
+for b in lp
 w += b.width
 if &columns - 5 < w
 if d
@@ -471,7 +405,7 @@ echoh Tabline
 echon '< '
 w += 2
 endif
-for b in lr[s : e]
+for b in lp[s : e]
 w += b.width
 if b.current
 echoh TablineSel
