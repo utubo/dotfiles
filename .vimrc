@@ -70,12 +70,13 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-com! EzpackInstall vimrc#ezpack#Install()
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
-EzpackInstall
+vimrc#ezpack#Install()
 endif
+com! EzpackInstall vimrc#ezpack#Install()
+com! EzpackCleanUp vimrc#ezpack#CleanUp()
 g:zenmode = {}
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 Enable g:EasyMotion_smartcase

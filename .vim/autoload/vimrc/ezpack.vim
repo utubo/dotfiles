@@ -63,3 +63,6 @@ Ezpack utubo/vim-textobj-twochars
 export def Install()
 ezpack#Install()
 enddef
+export def CleanUp()
+ezpack#CleanUp()
+enddef

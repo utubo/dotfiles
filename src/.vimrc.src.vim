@@ -101,12 +101,13 @@ enddef
 # プラグイン {{{
 
 # 自作マネージャ {{{
-command! EzpackInstall vimrc#ezpack#Install()
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
-  system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
-  EzpackInstall
+	system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
+	vimrc#ezpack#Install()
 endif
+command! EzpackInstall vimrc#ezpack#Install()
+command! EzpackCleanUp vimrc#ezpack#CleanUp()
 # }}}
 
 # zenmode {{{
