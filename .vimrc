@@ -505,7 +505,7 @@ add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
 add(e, ['Normal', ' '])
 add(e, ['MoreMsg', &ft])
 var g = 0
-const h = &columns - len(c) - 1
+const h = &columns - len(c) - 2
 for i in reverse(range(0, len(e) - 1))
 var s = e[i][1]
 var d = strdisplaywidth(s)

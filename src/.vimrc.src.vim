@@ -692,7 +692,7 @@ def ShowBufInfo(event: string = '')
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
 	var msglen = 0
-	const maxlen = &columns - len(ruler) - 1
+	const maxlen = &columns - len(ruler) - 2
 	for i in reverse(range(0, len(msg) - 1))
 		var s = msg[i][1]
 		var d = strdisplaywidth(s)
