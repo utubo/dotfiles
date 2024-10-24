@@ -132,7 +132,7 @@ nnoremap s <Cmd>call <SID>LoadEazyMotion()<CR>
 #}}}
 
 # fern {{{
-def LoadFern()
+def LoadFern(qargs: string)
 	Enable g:fern#default_hidden
 	g:fern#renderer = "nerdfont"
 	au vimrc FileType fern {
@@ -141,15 +141,15 @@ def LoadFern()
 		nnoremap <buffer> <F1> <Cmd>:q!<CR>
 		nnoremap <buffer> p <Plug>(fern-action-leave)
 	}
-	nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 	packadd fern.vim
 	packadd fern-git-status.vim
 	packadd fern-renderer-nerdfont.vim
 	packadd fern-hijack.vim
 	packadd nerdfont.vim
-	feedkeys("\<F1>", 'm')
+	execute 'Fern' qargs
 enddef
-nnoremap <F1> <Cmd>call <SID>LoadFern()<CR>
+command -nargs=* Fern LoadFern(<q-args>)
+nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 #}}}
 
 # Git {{{

@@ -92,7 +92,7 @@ packadd vim-easymotion
 feedkeys('s', 'm')
 enddef
 nn s <Cmd>call <SID>C()<CR>
-def D()
+def D(a: string)
 Enable g:fern#default_hidden
 g:fern#renderer = "nerdfont"
 au vimrc FileType fern {
@@ -101,15 +101,15 @@ setl cursorline
 nn <buffer> <F1> <Cmd>:q!<CR>
 nn <buffer> p <Plug>(fern-action-leave)
 }
-nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 packadd fern.vim
 packadd fern-git-status.vim
 packadd fern-renderer-nerdfont.vim
 packadd fern-hijack.vim
 packadd nerdfont.vim
-feedkeys("\<F1>", 'm')
+exe 'Fern' a
 enddef
-nn <F1> <Cmd>call <SID>D()<CR>
+com -nargs=* Fern D(<q-args>)
+nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 com! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
 com! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
