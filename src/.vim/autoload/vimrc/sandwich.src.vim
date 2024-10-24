@@ -10,6 +10,7 @@ export def ApplySettings(prefix: string)
 	g:sandwich#recipes = [
 		{ buns: ['(',  ')' ], input: ['(', ')'] },
 		{ buns: ['<',  '>' ], input: ['<', '>'] },
+		{ buns: ['[',  ']' ], input: ['[', ']'] },
 		{ buns: ['{',  '}' ], input: ['}'] },
 		{ buns: ["\r", ''  ], input: ["\r"], command: ["normal! a\r"] },
 		{ buns: ['',   ''  ], input: ['q'] },

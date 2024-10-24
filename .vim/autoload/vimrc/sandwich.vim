@@ -6,6 +6,7 @@ g:sandwich = get(g:, 'sandwich', {})
 g:sandwich#recipes = [
 { buns: ['(', ')' ], input: ['(', ')'] },
 { buns: ['<', '>' ], input: ['<', '>'] },
+{ buns: ['[', ']' ], input: ['[', ']'] },
 { buns: ['{', '}' ], input: ['}'] },
 { buns: ["\r", '' ], input: ["\r"], command: ["normal! a\r"] },
 { buns: ['', '' ], input: ['q'] },
