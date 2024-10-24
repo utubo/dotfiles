@@ -116,26 +116,40 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 #}}}
 
 # easymotion {{{
-Enable  g:EasyMotion_smartcase
-Enable  g:EasyMotion_use_migemo
-Enable  g:EasyMotion_enter_jump_first
-Disable g:EasyMotion_verbose
-Disable g:EasyMotion_do_mapping
-g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-g:EasyMotion_prompt = 'EasyMotion: '
-noremap s <Plug>(easymotion-s)
+def LoadEazyMotion()
+	Enable  g:EasyMotion_smartcase
+	Enable  g:EasyMotion_use_migemo
+	Enable  g:EasyMotion_enter_jump_first
+	Disable g:EasyMotion_verbose
+	Disable g:EasyMotion_do_mapping
+	g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
+	g:EasyMotion_prompt = 'EasyMotion: '
+	noremap s <Plug>(easymotion-s)
+	packadd vim-easymotion
+	feedkeys('s', 'm')
+enddef
+nnoremap s <Cmd>call <SID>LoadEazyMotion()<CR>
 #}}}
 
 # fern {{{
-Enable g:fern#default_hidden
-g:fern#renderer = "nerdfont"
-au vimrc FileType fern {
-	Enable b:auto_cursorline_disabled
-	setlocal cursorline
-	nnoremap <buffer> <F1> <Cmd>:q!<CR>
-	nnoremap <buffer> p <Plug>(fern-action-leave)
-}
-nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
+def LoadFern()
+	Enable g:fern#default_hidden
+	g:fern#renderer = "nerdfont"
+	au vimrc FileType fern {
+		Enable b:auto_cursorline_disabled
+		setlocal cursorline
+		nnoremap <buffer> <F1> <Cmd>:q!<CR>
+		nnoremap <buffer> p <Plug>(fern-action-leave)
+	}
+	nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
+	packadd fern.vim
+	packadd fern-git-status.vim
+	packadd fern-renderer-nerdfont.vim
+	packadd fern-hijack.vim
+	packadd nerdfont.vim
+	feedkeys("\<F1>", 'm')
+enddef
+nnoremap <F1> <Cmd>call <SID>LoadFern()<CR>
 #}}}
 
 # Git {{{
@@ -171,12 +185,13 @@ nnoremap <Space>gh <Cmd>tabe gh://utubo/repos<CR>
 
 # lexima {{{
 #Enable g:lexima_accept_pum_with_enter
-Enable g:lexima_no_default_rules
-lexima#set_default_rules()
-inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
 
-# 正規表現の括弧 `\(\)`と`\{\}`
 def g:SetupLexima(timer: number)
+	packadd lexima.vim
+	Enable g:lexima_no_default_rules
+	lexima#set_default_rules()
+	inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
+	# 正規表現の括弧 `\(\)`と`\{\}`
 	lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })
 	lexima#add_rule({ char: '{', at: '\\\%#', input_after: '\}', mode: 'ic' })
 	lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
@@ -227,8 +242,9 @@ var lspServers = [{
 	path: $'vscode-json-languageserver{commandExt}',
 	args: ['--stdio'],
 }]
-au vimrc VimEnter * call LspOptionsSet(lspOptions)
-au vimrc VimEnter * call LspAddServer(lspServers)
+au vimrc SafeStateAgain * ++once packadd lsp
+au vimrc SafeStateAgain * ++once call LspOptionsSet(lspOptions)
+au vimrc SafeStateAgain * ++once call LspAddServer(lspServers)
 nnoremap [l <Cmd>LspDiagPrev<CR>
 nnoremap ]l <Cmd>LspDiagNext<CR>
 #}}}

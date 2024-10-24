@@ -1,13 +1,13 @@
 vim9script
 packadd vim-ezpack
 EzpackInit
-Ezpack airblade/vim-gitgutter
-Ezpack cohama/lexima.vim
+Ezpack airblade/vim-gitgutter <on> SafeStateAgain *
+Ezpack cohama/lexima.vim <opt>
 Ezpack delphinus/vim-auto-cursorline
-Ezpack easymotion/vim-easymotion
+Ezpack easymotion/vim-easymotion <opt>
 Ezpack girishji/vimcomplete
-Ezpack hrsh7th/vim-vsnip
-Ezpack hrsh7th/vim-vsnip-integ
+Ezpack hrsh7th/vim-vsnip <on> SafeStateAgain *
+Ezpack hrsh7th/vim-vsnip-integ <on> SafeStateAgain *
 Ezpack itchyny/calendar.vim
 Ezpack kana/vim-textobj-user
 Ezpack kana/vim-smartword
@@ -25,21 +25,21 @@ Ezpack osyo-manga/vim-textobj-multiblock
 Ezpack skanehira/gh.vim
 Ezpack thinca/vim-portal
 Ezpack thinca/vim-themis
-Ezpack tpope/vim-fugitive
+Ezpack tpope/vim-fugitive <on> SafeStateAgain *
 Ezpack tyru/capture.vim
-Ezpack tyru/caw.vim
-Ezpack yegappan/lsp
+Ezpack tyru/caw.vim <on> SafeStateAgain *
+Ezpack yegappan/lsp <opt>
 Ezpack yegappan/mru
 Ezpack yuki-yano/dedent-yank.vim
 Ezpack vim-jp/vital.vim
-Ezpack lambdalisue/fern.vim
-Ezpack lambdalisue/fern-git-status.vim
-Ezpack lambdalisue/fern-renderer-nerdfont.vim
-Ezpack lambdalisue/fern-hijack.vim
-Ezpack lambdalisue/nerdfont.vim
+Ezpack lambdalisue/fern.vim <opt>
+Ezpack lambdalisue/fern-git-status.vim <opt>
+Ezpack lambdalisue/fern-renderer-nerdfont.vim <opt>
+Ezpack lambdalisue/fern-hijack.vim <opt>
+Ezpack lambdalisue/nerdfont.vim <opt>
 Ezpack ctrlpvim/ctrlp.vim
 Ezpack mattn/ctrlp-matchfuzzy
-Ezpack sheerun/vim-polyglot
+Ezpack sheerun/vim-polyglot <on> SafeStateAgain *
 Ezpack tani/vim-typo
 Ezpack utubo/vim-altkey-in-term
 Ezpack utubo/vim-colorscheme-girly
