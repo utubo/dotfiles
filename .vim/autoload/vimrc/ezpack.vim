@@ -22,14 +22,14 @@ Ezpack MTDL9/vim-log-highlighting
 Ezpack obcat/vim-hitspop
 Ezpack obcat/vim-sclow
 Ezpack osyo-manga/vim-textobj-multiblock
-Ezpack skanehira/gh.vim
+Ezpack skanehira/gh.vim <on> SafeStateAgain *
 Ezpack thinca/vim-portal
 Ezpack thinca/vim-themis
 Ezpack tpope/vim-fugitive <on> SafeStateAgain *
 Ezpack tyru/capture.vim
 Ezpack tyru/caw.vim <on> SafeStateAgain *
 Ezpack yegappan/lsp <opt>
-Ezpack yegappan/mru
+Ezpack yegappan/mru <on> SafeStateAgain *
 Ezpack yuki-yano/dedent-yank.vim
 Ezpack vim-jp/vital.vim
 Ezpack lambdalisue/fern.vim <opt>
@@ -37,8 +37,8 @@ Ezpack lambdalisue/fern-git-status.vim <opt>
 Ezpack lambdalisue/fern-renderer-nerdfont.vim <opt>
 Ezpack lambdalisue/fern-hijack.vim <opt>
 Ezpack lambdalisue/nerdfont.vim <opt>
-Ezpack ctrlpvim/ctrlp.vim
-Ezpack mattn/ctrlp-matchfuzzy
+Ezpack ctrlpvim/ctrlp.vim <opt>
+Ezpack mattn/ctrlp-matchfuzzy <opt>
 Ezpack sheerun/vim-polyglot <on> SafeStateAgain *
 Ezpack tani/vim-typo
 Ezpack utubo/vim-altkey-in-term

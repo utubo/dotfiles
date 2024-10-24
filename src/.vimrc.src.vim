@@ -126,9 +126,8 @@ def LoadEazyMotion()
 	g:EasyMotion_prompt = 'EasyMotion: '
 	noremap s <Plug>(easymotion-s)
 	packadd vim-easymotion
-	feedkeys('s', 'm')
 enddef
-nnoremap s <Cmd>call <SID>LoadEazyMotion()<CR>
+nmap s <ScriptCmd>LoadEazyMotion()<CR>s
 #}}}
 
 # fern {{{
@@ -301,6 +300,18 @@ call textobj#user#plugin('nonwhitespace', {
 })
 #}}}
 
+# ctrlP {{{
+def LoadCtrlP()
+	Enable  g:ctrlp_use_caching
+	Disable g:ctrlp_clear_cache_on_exit
+	g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+	g:ctrlp_cmd = 'CtrlPMixed'
+	packadd ctrlp.vim
+	packadd ctrlp-matchfuzzy
+enddef
+nmap <C-p> <ScriptCmd>LoadCtrlP()<CR><C-p>
+# }}}
+
 # 補完 {{{
 def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
@@ -338,10 +349,6 @@ au vimrc VimEnter * hlpairs#TextObjUserMap('%')
 
 # その他 {{{
 Enable g:rainbow_active
-Enable  g:ctrlp_use_caching
-Disable g:ctrlp_clear_cache_on_exit
-g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-g:ctrlp_cmd = 'CtrlPMixed'
 g:auto_cursorline_wait_ms = &updatetime
 Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
 nnoremap [c <Plug>(GitGutterPrevHunk)
@@ -530,6 +537,9 @@ def RefreshBufList()
 enddef
 def EchoBufLine()
 	if bufitems->len() <= 1
+		return
+	endif
+	if ['ControlP']->index(bufname('%')) !=# -1
 		return
 	endif
 	if mode() ==# 'c'

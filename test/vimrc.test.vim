@@ -125,6 +125,7 @@ suite.TestMapping = () => {
 	# n  +  :
 	# n <C-F>
 	# n <C-B>
+	# n <C-P> ctrlP
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
@@ -132,7 +133,7 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesnpr;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
-		'n  \(<C-[FB]>\)',
+		'n  \(<C-[FBP]>\)',
 		'v  \([*/?:]\)',
 		'i  \(<C-U>\)',
 	]->join('\|')
