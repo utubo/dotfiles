@@ -152,29 +152,6 @@ filetype plugin indent on
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
-# タブ幅やタブ展開を自動設定 {{{
-def SetupTabstop()
-	const limit = 100
-	const org = getpos('.')
-	cursor(1, 1)
-	if !!search('^\t', 'nc', limit)
-		setlocal noexpandtab
-		setlocal tabstop=3 # 意外とありな気がしてきた…
-	elseif !!search('^  \S', 'nc', limit)
-		setlocal expandtab
-		setlocal tabstop=2
-	elseif !!search('^    \S', 'nc', limit)
-		setlocal expandtab
-		setlocal tabstop=4
-	endif
-	&shiftwidth = &tabstop
-	&softtabstop = &tabstop
-	setpos('.', org)
-enddef
-au vimrc BufReadPost * SetupTabstop()
-#}}} -------------------------------------------------------
-
-# ------------------------------------------------------
 # 折り畳み {{{
 # こんなかんじでインデントに合わせて表示📁 {{{
 def! g:MyFoldText(): string
@@ -207,78 +184,6 @@ xnoremap zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nnoremap zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nnoremap <silent> g; g;zO
 #}}}
-#}}} -------------------------------------------------------
-
-# ------------------------------------------------------
-# バッファの情報を色付きで表示 {{{
-def ShowBufInfo(event: string = '')
-	if &ft ==# 'qf'
-		return
-	endif
-
-	var isReadPost = event ==# 'BufReadPost'
-	if isReadPost && !filereadable(expand('%'))
-		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
-		return
-	endif
-
-	const ruler = $' {line(".")}:{col(".")}'
-
-	var msg = []
-	add(msg, ['Title', $'"{bufname()}"'])
-	add(msg, ['Normal', ' '])
-	if &modified
-		add(msg, ['Delimiter', '[+]'])
-		add(msg, ['Normal', ' '])
-	endif
-	if !isReadPost && !filereadable(expand('%'))
-		add(msg, ['Tag', '[New]'])
-		add(msg, ['Normal', ' '])
-	endif
-	if &readonly
-		add(msg, ['WarningMsg', '[RO]'])
-		add(msg, ['Normal', ' '])
-	endif
-	const w = wordcount()
-	if isReadPost || w.bytes !=# 0
-		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-		add(msg, ['Normal', ' '])
-	endif
-	add(msg, ['MoreMsg', &ff])
-	add(msg, ['Normal', ' '])
-	const enc = empty(&fenc) ? &encoding : &fenc
-	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])
-	add(msg, ['Normal', ' '])
-	add(msg, ['MoreMsg', &ft])
-	var msglen = 0
-	const maxlen = &columns - len(ruler) - 2
-	for i in reverse(range(0, len(msg) - 1))
-		var s = msg[i][1]
-		var d = strdisplaywidth(s)
-		msglen += d
-		if maxlen < msglen
-			const l = maxlen - msglen + d
-			while !empty(s) && l < strdisplaywidth(s)
-				s = s[1 :]
-			endwhile
-			msg[i][1] = s
-			msg = msg[i : ]
-			insert(msg, ['SpecialKey', '<'], 0)
-			break
-		endif
-	endfor
-	add(msg, ['Normal', repeat(' ', maxlen - msglen) .. ruler])
-	redraw
-	echo ''
-	for m in msg
-		execute 'echohl' m[0]
-		echon m[1]
-	endfor
-	echohl Normal
-enddef
-
-nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------

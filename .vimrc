@@ -105,25 +105,6 @@ call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 filetype plugin indent on
-def C()
-const a = 100
-const b = getpos('.')
-cursor(1, 1)
-if !!search('^\t', 'nc', a)
-setl noet
-setl ts=3
-elseif !!search('^  \S', 'nc', a)
-setl et
-setl ts=2
-elseif !!search('^    \S', 'nc', a)
-setl et
-setl ts=4
-endif
-&sw = &ts
-&st = &ts
-setpos('.', b)
-enddef
-au vimrc BufReadPost * C()
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
@@ -151,69 +132,6 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn <silent> g; g;zO
-def D(a: string = '')
-if &ft ==# 'qf'
-return
-endif
-var b = a ==# 'BufReadPost'
-if b && !filereadable(expand('%'))
-return
-endif
-const c = $' {line(".")}:{col(".")}'
-var e = []
-add(e, ['Title', $'"{bufname()}"'])
-add(e, ['Normal', ' '])
-if &modified
-add(e, ['Delimiter', '[+]'])
-add(e, ['Normal', ' '])
-endif
-if !b && !filereadable(expand('%'))
-add(e, ['Tag', '[New]'])
-add(e, ['Normal', ' '])
-endif
-if &readonly
-add(e, ['WarningMsg', '[RO]'])
-add(e, ['Normal', ' '])
-endif
-const w = wordcount()
-if b || w.bytes !=# 0
-add(e, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-add(e, ['Normal', ' '])
-endif
-add(e, ['MoreMsg', &ff])
-add(e, ['Normal', ' '])
-const f = empty(&fenc) ? &enc : &fenc
-add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
-add(e, ['Normal', ' '])
-add(e, ['MoreMsg', &ft])
-var g = 0
-const h = &columns - len(c) - 2
-for i in reverse(range(0, len(e) - 1))
-var s = e[i][1]
-var d = strdisplaywidth(s)
-g += d
-if h < g
-const l = h - g + d
-while !empty(s) && l < strdisplaywidth(s)
-s = s[1 :]
-endwhile
-e[i][1] = s
-e = e[i : ]
-insert(e, ['SpecialKey', '<'], 0)
-break
-endif
-endfor
-add(e, ['Normal', repeat(' ', h - g) .. c])
-redraw
-ec ''
-for m in e
-exe 'echohl' m[0]
-echon m[1]
-endfor
-echoh Normal
-enddef
-nn <script> <C-g> <ScriptCmd>D()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * D('BufNewFile')
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [
@@ -221,25 +139,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def E(a: number, b: string): string
+def C(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def F(a: string): any
+def D(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: E(b, 'fg'), bg: E(b, 'bg') }
+return { fg: C(b, 'fg'), bg: C(b, 'bg') }
 enddef
-def G()
+def E()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = F('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={F("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={F("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={F("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={F("WarningMsg").fg}'
+const a = D('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={D("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={D("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={D("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={D("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * G()
-def H()
+au vimrc VimEnter,ColorScheme * E()
+def F()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -254,8 +172,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * H()
-def I()
+au vimrc VimEnter,WinEnter * F()
+def G()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -263,8 +181,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! I()
-au vimrc BufNew,BufReadPost * silent! I()
+au vimrc OptionSet list silent! G()
+au vimrc BufNew,BufReadPost * silent! G()
 sil! syntax enable
 set t_Co=256
 set bg=light
@@ -272,11 +190,11 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def J()
+def H()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !A()|J()|endif
+au vimrc VimEnter * ++nested if !A()|H()|endif
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()

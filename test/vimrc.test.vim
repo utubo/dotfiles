@@ -334,5 +334,6 @@ suite.TestIndent = () => {
 
 # ----------------------------------------------------------
 
+doautocmd SafeStateAgain *
 g:RunTests()
 

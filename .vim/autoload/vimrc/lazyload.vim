@@ -137,27 +137,33 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-nn <Space>e G?\cErr\\|Exception<CR>
-nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
-nm <Space>. :
-nm <Space>, /
-nm g<Space> g;
-for i in range(1, 10)
-exe $'nmap <Space>{i % 10} <F{i}>'
-endfor
-nm <Space><Space>1 <F11>
-nm <Space><Space>2 <F12>
-nn <Space>a A
-nn <Space>h ^
-nn <Space>l $
-nn <Space>y yiw
+def C()
+const a = 100
+const b = getpos('.')
+cursor(1, 1)
+if !!search('^\t', 'nc', a)
+setl noet
+setl ts=3
+elseif !!search('^  \S', 'nc', a)
+setl et
+setl ts=2
+elseif !!search('^    \S', 'nc', a)
+setl et
+setl ts=4
+endif
+&sw = &ts
+&st = &ts
+setpos('.', b)
+enddef
+au vimrc BufReadPost * C()
+C()
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 var ln = []
-def C()
+def D()
 ln = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
@@ -171,10 +177,10 @@ ln += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
-D()
+E()
 g:zenmode.preventEcho = ln->len() > 1
 enddef
-def D()
+def E()
 if ln->len() <= 1
 return
 endif
@@ -236,11 +242,87 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once C()
-au vimrc CursorMoved * D()
-D()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once D()
+au vimrc CursorMoved * E()
+def F(a: string = '')
+if &ft ==# 'qf'
+return
+endif
+var b = a ==# 'BufReadPost'
+if b && !filereadable(expand('%'))
+return
+endif
+const c = $' {line(".")}:{col(".")}'
+var e = []
+add(e, ['Title', $'"{bufname()}"'])
+add(e, ['Normal', ' '])
+if &modified
+add(e, ['Delimiter', '[+]'])
+add(e, ['Normal', ' '])
+endif
+if !b && !filereadable(expand('%'))
+add(e, ['Tag', '[New]'])
+add(e, ['Normal', ' '])
+endif
+if &readonly
+add(e, ['WarningMsg', '[RO]'])
+add(e, ['Normal', ' '])
+endif
+const w = wordcount()
+if b || w.bytes !=# 0
+add(e, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
+add(e, ['Normal', ' '])
+endif
+add(e, ['MoreMsg', &ff])
+add(e, ['Normal', ' '])
+const f = empty(&fenc) ? &enc : &fenc
+add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
+add(e, ['Normal', ' '])
+add(e, ['MoreMsg', &ft])
+var g = 0
+const h = &columns - len(c) - 2
+for i in reverse(range(0, len(e) - 1))
+var s = e[i][1]
+var d = strdisplaywidth(s)
+g += d
+if h < g
+const l = h - g + d
+while !empty(s) && l < strdisplaywidth(s)
+s = s[1 :]
+endwhile
+e[i][1] = s
+e = e[i : ]
+insert(e, ['SpecialKey', '<'], 0)
+break
+endif
+endfor
+add(e, ['Normal', repeat(' ', h - g) .. c])
+redraw
+ec ''
+for m in e
+exe 'echohl' m[0]
+echon m[1]
+endfor
+echoh Normal
+enddef
+nn <script> <C-g> <ScriptCmd>F()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * F('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
+nn <Space>e G?\cErr\\|Exception<CR>
+nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
+nm <Space>. :
+nm <Space>, /
+nm g<Space> g;
+for i in range(1, 10)
+exe $'nmap <Space>{i % 10} <F{i}>'
+endfor
+nm <Space><Space>1 <F11>
+nm <Space><Space>2 <F12>
+nn <Space>a A
+nn <Space>h ^
+nn <Space>l $
+nn <Space>y yiw
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
 ino ;m <Esc>`^
@@ -283,7 +365,7 @@ def g:Tapi_drop(a: number, b: list<string>)
 vimrc#terminal#Tapi_drop(a, b)
 enddef
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-def E(a: string)
+def G(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -294,7 +376,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>E('{0}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>G('{0}')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -366,31 +448,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def F()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def G(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * F()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-G('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-G('SpellRare', '\s[=!]=\s')
-G('SpellBad', '\s[=!]==\s')
-G('SpellBad', '\s\~[=!][=#]\?\s')
-G('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def H()
+def J()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -401,7 +483,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>H()<CR>
+xn <C-g> <ScriptCmd>J()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
