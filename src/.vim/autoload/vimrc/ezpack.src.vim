@@ -1,7 +1,7 @@
 vim9script
 packadd vim-ezpack
 
-# start
+# start(default)
 command! -nargs=* EzpackS execute $'Ezpack {<q-args>}'
 # opt
 command! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
