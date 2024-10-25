@@ -129,7 +129,7 @@ vimrc#hlpairs#LazyLoad()
 # 遅延読み込みもの {{{
 nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
-command -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
 nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 # }}}
 

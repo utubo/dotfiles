@@ -89,7 +89,7 @@ no <Space>s <Plug>(jumpcursor-jump)
 vimrc#hlpairs#LazyLoad()
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
-com -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
 nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
