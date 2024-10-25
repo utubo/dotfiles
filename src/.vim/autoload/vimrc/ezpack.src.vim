@@ -20,14 +20,13 @@ EzpackL hrsh7th/vim-vsnip
 EzpackL hrsh7th/vim-vsnip-integ
 EzpackL itchyny/calendar.vim
 EzpackS kana/vim-textobj-user
-EzpackS kana/vim-smartword
-EzpackS KentoOgata/vim-vimscript-gd
+EzpackL kana/vim-smartword
 EzpackL LeafCage/vimhelpgenerator
-EzpackS luochen1990/rainbow
+EzpackL luochen1990/rainbow
 EzpackS machakann/vim-sandwich
 EzpackS mattn/vim-notification
 EzpackL matze/vim-move
-EzpackS michaeljsmith/vim-indent-object
+EzpackL michaeljsmith/vim-indent-object
 EzpackS MTDL9/vim-log-highlighting
 EzpackL obcat/vim-hitspop
 EzpackS obcat/vim-sclow
