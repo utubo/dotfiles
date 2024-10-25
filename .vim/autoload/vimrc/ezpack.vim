@@ -1,65 +1,68 @@
 vim9script
 packadd vim-ezpack
+com! -nargs=* EzpackS execute $'Ezpack {<q-args>}'
+com! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
+com! -nargs=* EzpackL execute $'Ezpack {<q-args>} <lazy>'
 EzpackInit
-Ezpack airblade/vim-gitgutter <on> SafeStateAgain *
-Ezpack cohama/lexima.vim <opt>
-Ezpack delphinus/vim-auto-cursorline
-Ezpack easymotion/vim-easymotion <opt>
-Ezpack girishji/vimcomplete
-Ezpack hrsh7th/vim-vsnip <on> SafeStateAgain *
-Ezpack hrsh7th/vim-vsnip-integ <on> SafeStateAgain *
-Ezpack itchyny/calendar.vim
-Ezpack kana/vim-textobj-user
-Ezpack kana/vim-smartword
-Ezpack KentoOgata/vim-vimscript-gd
-Ezpack LeafCage/vimhelpgenerator
-Ezpack luochen1990/rainbow
-Ezpack machakann/vim-sandwich
-Ezpack mattn/vim-notification
-Ezpack matze/vim-move
-Ezpack michaeljsmith/vim-indent-object
-Ezpack MTDL9/vim-log-highlighting
-Ezpack obcat/vim-hitspop
-Ezpack obcat/vim-sclow
-Ezpack osyo-manga/vim-textobj-multiblock
-Ezpack skanehira/gh.vim <on> SafeStateAgain *
-Ezpack thinca/vim-portal
-Ezpack thinca/vim-themis
-Ezpack tpope/vim-fugitive <on> SafeStateAgain *
-Ezpack tyru/capture.vim
-Ezpack tyru/caw.vim <on> SafeStateAgain *
-Ezpack yegappan/lsp <opt>
-Ezpack yegappan/mru <on> SafeStateAgain *
-Ezpack yuki-yano/dedent-yank.vim
-Ezpack vim-jp/vital.vim
-Ezpack lambdalisue/fern.vim <opt>
-Ezpack lambdalisue/fern-git-status.vim <opt>
-Ezpack lambdalisue/fern-renderer-nerdfont.vim <opt>
-Ezpack lambdalisue/fern-hijack.vim <opt>
-Ezpack lambdalisue/nerdfont.vim <opt>
-Ezpack ctrlpvim/ctrlp.vim <opt>
-Ezpack mattn/ctrlp-matchfuzzy <opt>
-Ezpack sheerun/vim-polyglot <on> SafeStateAgain *
-Ezpack tani/vim-typo
-Ezpack utubo/vim-altkey-in-term
-Ezpack utubo/vim-colorscheme-girly
-Ezpack utubo/vim-colorscheme-softgreen
-Ezpack utubo/vim-ezpack <opt>
-Ezpack utubo/vim-hlpairs
-Ezpack utubo/vim-minviml
-Ezpack utubo/vim-registers-lite
-Ezpack utubo/vim-reformatdate
-Ezpack utubo/vim-skipslash
-Ezpack utubo/vim-yomigana
-Ezpack utubo/vim-vim9skk
-Ezpack utubo/vim-zenmode
-Ezpack utubo/jumpcursor.vim
-Ezpack utubo/vim-ddgv
-Ezpack utubo/vim-portal-aim
-Ezpack utubo/vim-shrink
-Ezpack utubo/vim-tablist
-Ezpack utubo/vim-tabpopupmenu
-Ezpack utubo/vim-textobj-twochars
+EzpackL airblade/vim-gitgutter
+EzpackO cohama/lexima.vim
+EzpackS delphinus/vim-auto-cursorline
+EzpackO easymotion/vim-easymotion
+EzpackL girishji/vimcomplete
+EzpackL hrsh7th/vim-vsnip
+EzpackL hrsh7th/vim-vsnip-integ
+EzpackS itchyny/calendar.vim
+EzpackS kana/vim-textobj-user
+EzpackS kana/vim-smartword
+EzpackS KentoOgata/vim-vimscript-gd
+EzpackS LeafCage/vimhelpgenerator
+EzpackS luochen1990/rainbow
+EzpackS machakann/vim-sandwich
+EzpackS mattn/vim-notification
+EzpackL matze/vim-move
+EzpackS michaeljsmith/vim-indent-object
+EzpackS MTDL9/vim-log-highlighting
+EzpackL obcat/vim-hitspop
+EzpackS obcat/vim-sclow
+EzpackL osyo-manga/vim-textobj-multiblock
+EzpackL skanehira/gh.vim
+EzpackS thinca/vim-portal
+EzpackS thinca/vim-themis
+EzpackL tpope/vim-fugitive
+EzpackS tyru/capture.vim
+EzpackL tyru/caw.vim
+EzpackO yegappan/lsp
+EzpackL yegappan/mru
+EzpackS yuki-yano/dedent-yank.vim
+EzpackS vim-jp/vital.vim
+EzpackO lambdalisue/fern.vim
+EzpackO lambdalisue/fern-git-status.vim
+EzpackO lambdalisue/fern-renderer-nerdfont.vim
+EzpackO lambdalisue/fern-hijack.vim
+EzpackO lambdalisue/nerdfont.vim
+EzpackO ctrlpvim/ctrlp.vim
+EzpackO mattn/ctrlp-matchfuzzy
+EzpackL sheerun/vim-polyglot
+EzpackS tani/vim-typo
+EzpackS utubo/vim-altkey-in-term
+EzpackS utubo/vim-colorscheme-girly
+EzpackS utubo/vim-colorscheme-softgreen
+EzpackO utubo/vim-ezpack
+EzpackL utubo/vim-hlpairs
+EzpackS utubo/vim-minviml
+EzpackS utubo/vim-registers-lite
+EzpackS utubo/vim-reformatdate
+EzpackS utubo/vim-skipslash
+EzpackS utubo/vim-yomigana
+EzpackS utubo/vim-vim9skk
+EzpackS utubo/vim-zenmode
+EzpackL utubo/jumpcursor.vim
+EzpackL utubo/vim-ddgv
+EzpackL utubo/vim-portal-aim
+EzpackL utubo/vim-shrink
+EzpackL utubo/vim-tablist
+EzpackL utubo/vim-tabpopupmenu
+EzpackL utubo/vim-textobj-twochars
 export def Install()
 ezpack#Install()
 enddef

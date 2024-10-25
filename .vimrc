@@ -204,17 +204,12 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-nn % <ScriptCmd>hlpairs#Jump()<CR>
-nn ]% <ScriptCmd>hlpairs#Jump('f')<CR>
-nn [% <ScriptCmd>hlpairs#Jump('b')<CR>
-nn <Leader>% <ScriptCmd>hlpairs#HighlightOuter()<CR>
-nn <Space>% <ScriptCmd>hlpairs#ReturnCursor()<CR>
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
 Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+au vimrc SafeStateAgain * ++once vimrc#hlpairs#LazyLoad()
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 com -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
