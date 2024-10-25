@@ -79,36 +79,6 @@ com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
 g:zenmode = {}
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-def C()
-Enable g:EasyMotion_smartcase
-Enable g:EasyMotion_use_migemo
-Enable g:EasyMotion_enter_jump_first
-Disable g:EasyMotion_verbose
-Disable g:EasyMotion_do_mapping
-g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-g:EasyMotion_prompt = 'EasyMotion: '
-no s <Plug>(easymotion-s)
-packadd vim-easymotion
-enddef
-nm s <ScriptCmd>C()<CR>s
-def D(a: string)
-Enable g:fern#default_hidden
-g:fern#renderer = "nerdfont"
-au vimrc FileType fern {
-Enable b:auto_cursorline_disabled
-setl cursorline
-nn <buffer> <F1> <Cmd>:q!<CR>
-nn <buffer> p <Plug>(fern-action-leave)
-}
-packadd fern.vim
-packadd fern-git-status.vim
-packadd fern-renderer-nerdfont.vim
-packadd fern-hijack.vim
-packadd nerdfont.vim
-exe 'Fern' a
-enddef
-com -nargs=* Fern D(<q-args>)
-nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 com! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
 com! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
@@ -221,16 +191,7 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-def E()
-Enable g:ctrlp_use_caching
-Disable g:ctrlp_clear_cache_on_exit
-g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-g:ctrlp_cmd = 'CtrlPMixed'
-packadd ctrlp.vim
-packadd ctrlp-matchfuzzy
-enddef
-nm <C-p> <ScriptCmd>E()<CR><C-p>
-def F(): string
+def C(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>"''`」', c) ==# -1
 return "\<Tab>"
@@ -238,7 +199,7 @@ else
 return "\<C-o>a"
 endif
 enddef
-Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : F()
+Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : C()
 Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
@@ -254,6 +215,10 @@ Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
+nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
+com -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
@@ -277,14 +242,14 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def G(): string
+def D(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{G()}"
-def H()
+ino <expr> ;l $"<C-w>{D()}"
+def E()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -302,7 +267,7 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-au vimrc BufReadPost * H()
+au vimrc BufReadPost * E()
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -367,7 +332,7 @@ g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 var ll = []
-def I()
+def F()
 ll = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
@@ -381,10 +346,10 @@ ll += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
-J()
+G()
 g:zenmode.preventEcho = ll->len() > 1
 enddef
-def J()
+def G()
 if ll->len() <= 1
 return
 endif
@@ -446,8 +411,8 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once I()
-au vimrc CursorMoved * J()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once F()
+au vimrc CursorMoved * G()
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 cno ;n <CR>
@@ -492,7 +457,7 @@ def g:Tapi_drop(a: number, b: list<string>)
 vimrc#terminal#Tapi_drop(a, b)
 enddef
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-def BA(a: string = '')
+def H(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -553,9 +518,9 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <script> <C-g> <ScriptCmd>BA()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * BA('BufNewFile')
-def BB(a: string)
+nn <script> <C-g> <ScriptCmd>H()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * H('BufNewFile')
+def I(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -566,7 +531,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>BB('{0}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>I('{0}')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -638,31 +603,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def BC()
+def J()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BD(a: string, b: string)
+def BA(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BC()
+au vimrc Syntax * J()
 au vimrc Syntax javascript {
-BD('SpellRare', '\s[=!]=\s')
+BA('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BD('SpellRare', '\s[=!]=\s')
-BD('SpellBad', '\s[=!]==\s')
-BD('SpellBad', '\s\~[=!][=#]\?\s')
-BD('SpellRare', '\<normal!\@!')
+BA('SpellRare', '\s[=!]=\s')
+BA('SpellBad', '\s[=!]==\s')
+BA('SpellBad', '\s\~[=!][=#]\?\s')
+BA('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def BE()
+def BB()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -673,7 +638,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BE()<CR>
+xn <C-g> <ScriptCmd>BB()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
@@ -710,25 +675,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def BF(a: number, b: string): string
+def BC(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def BG(a: string): any
+def BD(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: BF(b, 'fg'), bg: BF(b, 'bg') }
+return { fg: BC(b, 'fg'), bg: BC(b, 'bg') }
 enddef
-def BH()
+def BE()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = BG('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BG("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BG("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BG("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BG("WarningMsg").fg}'
+const a = BD('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={BD("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={BD("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={BD("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={BD("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * BH()
-def BI()
+au vimrc VimEnter,ColorScheme * BE()
+def BF()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -743,8 +708,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * BI()
-def BJ()
+au vimrc VimEnter,WinEnter * BF()
+def BG()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -752,8 +717,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! BJ()
-au vimrc BufNew,BufReadPost * silent! BJ()
+au vimrc OptionSet list silent! BG()
+au vimrc BufNew,BufReadPost * silent! BG()
 sil! syntax enable
 set t_Co=256
 set bg=light
@@ -761,10 +726,10 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def CA()
+def BH()
 var a = get(v:oldfiles, 0, '')->expand()
 if a->filereadable()
 exe 'edit' a
 endif
 enddef
-au vimrc VimEnter * ++nested if !A()|CA()|endif
+au vimrc VimEnter * ++nested if !A()|BH()|endif

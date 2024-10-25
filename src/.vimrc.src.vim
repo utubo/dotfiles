@@ -115,42 +115,6 @@ g:zenmode = {}
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 #}}}
 
-# easymotion {{{
-def LoadEazyMotion()
-	Enable  g:EasyMotion_smartcase
-	Enable  g:EasyMotion_use_migemo
-	Enable  g:EasyMotion_enter_jump_first
-	Disable g:EasyMotion_verbose
-	Disable g:EasyMotion_do_mapping
-	g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
-	g:EasyMotion_prompt = 'EasyMotion: '
-	noremap s <Plug>(easymotion-s)
-	packadd vim-easymotion
-enddef
-nmap s <ScriptCmd>LoadEazyMotion()<CR>s
-#}}}
-
-# fern {{{
-def LoadFern(qargs: string)
-	Enable g:fern#default_hidden
-	g:fern#renderer = "nerdfont"
-	au vimrc FileType fern {
-		Enable b:auto_cursorline_disabled
-		setlocal cursorline
-		nnoremap <buffer> <F1> <Cmd>:q!<CR>
-		nnoremap <buffer> p <Plug>(fern-action-leave)
-	}
-	packadd fern.vim
-	packadd fern-git-status.vim
-	packadd fern-renderer-nerdfont.vim
-	packadd fern-hijack.vim
-	packadd nerdfont.vim
-	execute 'Fern' qargs
-enddef
-command -nargs=* Fern LoadFern(<q-args>)
-nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
-#}}}
-
 # Git {{{
 command! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
@@ -300,18 +264,6 @@ call textobj#user#plugin('nonwhitespace', {
 })
 #}}}
 
-# ctrlP {{{
-def LoadCtrlP()
-	Enable  g:ctrlp_use_caching
-	Disable g:ctrlp_clear_cache_on_exit
-	g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-	g:ctrlp_cmd = 'CtrlPMixed'
-	packadd ctrlp.vim
-	packadd ctrlp-matchfuzzy
-enddef
-nmap <C-p> <ScriptCmd>LoadCtrlP()<CR><C-p>
-# }}}
-
 # 補完 {{{
 def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
@@ -345,6 +297,13 @@ Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
 au vimrc VimEnter * hlpairs#TextObjUserMap('%')
+# }}}
+
+# 遅延読み込みもの {{{
+nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
+nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
+command -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
 # }}}
 
 # その他 {{{
