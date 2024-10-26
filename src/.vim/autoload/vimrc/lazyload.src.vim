@@ -710,7 +710,7 @@ nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()
 
 # ------------------------------------------------------
 # デフォルトマッピングデー {{{
-if strftime('%d') ==# '91'
+if strftime('%d') ==# '01'
 	au vimrc VimEnter * {
 		notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 		mapclear

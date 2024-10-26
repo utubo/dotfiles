@@ -501,7 +501,7 @@ nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>',
 }
 nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
-if strftime('%d') ==# '91'
+if strftime('%d') ==# '01'
 au vimrc VimEnter * {
 notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
 mapclear
