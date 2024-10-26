@@ -242,9 +242,16 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once C()
+def E()
+C()
+if ln->len() <= 1
+zenmode#RedrawNow()
+endif
+au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once C()
+enddef
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once E()
 au vimrc CursorMoved * D()
-def E(a: string = '')
+def F(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -305,8 +312,8 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <script> <C-g> <ScriptCmd>E()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * E('BufNewFile')
+nn <script> <C-g> <ScriptCmd>F()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * F('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -448,31 +455,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def F()
+def G()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def G(a: string, b: string)
+def H(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * F()
+au vimrc Syntax * G()
 au vimrc Syntax javascript {
-G('SpellRare', '\s[=!]=\s')
+H('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-G('SpellRare', '\s[=!]=\s')
-G('SpellBad', '\s[=!]==\s')
-G('SpellBad', '\s\~[=!][=#]\?\s')
-G('SpellRare', '\<normal!\@!')
+H('SpellRare', '\s[=!]=\s')
+H('SpellBad', '\s[=!]==\s')
+H('SpellBad', '\s\~[=!][=#]\?\s')
+H('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def H()
+def I()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -483,7 +490,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>H()<CR>
+xn <C-g> <ScriptCmd>I()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)

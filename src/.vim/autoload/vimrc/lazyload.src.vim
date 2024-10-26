@@ -324,7 +324,14 @@ def EchoBufLine()
 	endif
 	echohl Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once RefreshBufList()
+def OnBufDelete()
+	RefreshBufList()
+	if bufitems->len() <= 1
+		zenmode#RedrawNow()
+	endif
+	au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once RefreshBufList()
+enddef
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once OnBufDelete()
 au vimrc CursorMoved * EchoBufLine()
 #}}}
 
