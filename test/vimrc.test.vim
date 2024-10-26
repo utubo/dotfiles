@@ -23,6 +23,7 @@ def! g:RunTests()
 	endfor
 	echom is_faild ? 'Tests faild.' : 'Tests success.'
 	if !is_manually_run
+		feedkeys("\<CR>") # prevent hit-enter
 		execute is_faild ? 'cq!' : 'q!'
 	endif
 enddef
@@ -156,7 +157,7 @@ suite.TestMapping = () => {
 		'c  ;r\+',
 		'n  \(s\|srb\)',
 		'[noxv]  [ai]sb', # sandwitch
-		'n  [[]]c[@*]<Plug>(GitGutter.*', # GitGutter
+		'n  [\[\]]c[@*]<Plug>(GitGutter.*', # GitGutter
 	]->join('\|')
 
 	# ユーザー定義のマッピング
