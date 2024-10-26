@@ -157,7 +157,8 @@ suite.TestMapping = () => {
 		'c  ;r\+',
 		'n  \(s\|srb\)',
 		'[noxv]  [ai]sb', # sandwitch
-		'n  [\[\]]c[@*]<Plug>(GitGutter.*', # GitGutter
+		'n  [c.*', # GitGutter
+		'n  ]c.*', # GitGutter
 	]->join('\|')
 
 	# ユーザー定義のマッピング
