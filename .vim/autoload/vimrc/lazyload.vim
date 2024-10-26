@@ -365,7 +365,7 @@ def g:Tapi_drop(a: number, b: list<string>)
 vimrc#terminal#Tapi_drop(a, b)
 enddef
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-def G(a: string)
+def g:QuitWin(a: string)
 if winnr() ==# winnr(a)
 return
 endif
@@ -376,7 +376,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>G('{0}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>g:QuitWin('{0}')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -448,31 +448,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def H()
+def G()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def I(a: string, b: string)
+def H(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * H()
+au vimrc Syntax * G()
 au vimrc Syntax javascript {
-I('SpellRare', '\s[=!]=\s')
+H('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-I('SpellRare', '\s[=!]=\s')
-I('SpellBad', '\s[=!]==\s')
-I('SpellBad', '\s\~[=!][=#]\?\s')
-I('SpellRare', '\<normal!\@!')
+H('SpellRare', '\s[=!]=\s')
+H('SpellBad', '\s[=!]==\s')
+H('SpellBad', '\s\~[=!][=#]\?\s')
+H('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def J()
+def I()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -483,7 +483,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>J()<CR>
+xn <C-g> <ScriptCmd>I()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)

@@ -500,7 +500,7 @@ au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 
 # ------------------------------------------------------
 # 閉じる {{{
-def QuitWin(expr: string)
+def g:QuitWin(expr: string) # TODO: minifyするとばぐる？
 	if winnr() ==# winnr(expr)
 		return
 	endif
@@ -511,7 +511,7 @@ def QuitWin(expr: string)
 		confirm quit
 	endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>QuitWin('{0}')<CR>
+Each h,j,k,l nnoremap q{0} <ScriptCmd>g:QuitWin('{0}')<CR>
 nnoremap q <Nop>
 nnoremap Q q
 # 閉じる
