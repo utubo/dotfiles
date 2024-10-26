@@ -151,7 +151,7 @@ suite.TestMapping = () => {
 	var user_ignore = '\C' .. [
 		'n  \([qS:]\|<Plug>fugitive:\)',
 		'v  \([J]\)',
-		'x  \([S]\)',
+		'x  S',
 		'i  \(<Esc>\|[「（\[{;]\)',
 		'   <SNR>\d\+_(save-cursor-pos)',
 		'i  (',
@@ -161,6 +161,8 @@ suite.TestMapping = () => {
 		'c  j[jk]',
 		'n  ;r\+',
 		'c  ;r\+',
+		'n  \(s\|srb\)',
+		'[noxv]  [ai]sb',
 	]->join('\|')
 
 	# ユーザー定義のマッピング
@@ -269,6 +271,7 @@ suite.TestWindowSizeChange = () => {
 
 # cmdlineの括弧 {{{
 suite.TestCmdlinePair = () => {
+	vimrc#lexima#LazyLoad()
 	feedkeys(":#\"({'`\<CR>", 'Lx!')
 	assert.equals(@:, '#"({''``''})"')
 
