@@ -51,7 +51,7 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
-EzpackL tani/vim-typo
+#EzpackL tani/vim-typo  # OmniSyntaxListが何故か重い
 # 🐶🍚
 EzpackL utubo/vim-altkey-in-term
 EzpackS utubo/vim-colorscheme-girly

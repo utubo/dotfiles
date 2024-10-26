@@ -42,7 +42,6 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
-EzpackL tani/vim-typo
 EzpackL utubo/vim-altkey-in-term
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
