@@ -63,7 +63,7 @@ EzpackL utubo/vim-registers-lite
 EzpackS utubo/vim-reformatdate
 Ezpack  utubo/vim-skipslash <on> ModeChanged *:c
 EzpackL utubo/vim-yomigana
-Ezpack  utubo/vim-vim9skk <on> ModeChanged *
+Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic]
 EzpackS utubo/vim-zenmode
 # 🐶🍚様子見中
 EzpackL utubo/jumpcursor.vim
