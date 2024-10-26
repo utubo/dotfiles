@@ -140,29 +140,23 @@ suite.TestMapping = () => {
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
 	# 概ねプラグイン内で被ってる
-	# n  <Plug>fugitive:
-	# i  {     vim-laxima
-	# i  [     vim-laxima
-	# i  <Esc> vim-laxima
-	#    <SNR>XX_(save-cursor-pos) vim-textobj
-	# i  (     vim-laximaとlsp
-	# n  \\KK  vim-yomigana
-	# n  \\HH  vim-yomigana
 	var user_ignore = '\C' .. [
 		'n  \([qS:]\|<Plug>fugitive:\)',
-		'v  \([J]\)',
+		'v  J',
 		'x  S',
-		'i  \(<Esc>\|[「（\[{;]\)',
-		'   <SNR>\d\+_(save-cursor-pos)',
-		'i  (',
+		'i  <Esc>',
+		'i  [「（\[{;]', # vim-lexima
+		'   <SNR>\d\+_(save-cursor-pos)', # vim-textobj
+		'i  (', # vim-laximaとlsp
 		'n  <SNR>\d_ws.',
-		'n  \\KK',
-		'n  \\HH',
+		'n  \\KK', # vim-yomigana
+		'n  \\HH', # vim-yomigana
 		'c  j[jk]',
 		'n  ;r\+',
 		'c  ;r\+',
 		'n  \(s\|srb\)',
-		'[noxv]  [ai]sb',
+		'[noxv]  [ai]sb', # sandwitch
+		'n  [[]]c@', # GitGutter
 	]->join('\|')
 
 	# ユーザー定義のマッピング
