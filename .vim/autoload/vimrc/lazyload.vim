@@ -68,7 +68,7 @@ nn <Leader>r <Cmd>PortalReset<CR>
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
-def A(): string
+export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
 return "\<Tab>"
@@ -76,7 +76,7 @@ else
 return "\<C-o>a"
 endif
 enddef
-Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : A()
+Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : vimrc#lazyload#SkipParen()
 Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 g:skipslash_autocomplete = 1
 g:loaded_matchparen = 1
@@ -113,13 +113,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def B(): string
+def A(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{B()}"
+ino <expr> ;l $"<C-w>{A()}"
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -137,7 +137,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def C()
+def B()
 const a = 100
 const b = getpos('.')
 cursor(1, 1)
@@ -155,15 +155,15 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-au vimrc BufReadPost * C()
-C()
+au vimrc BufReadPost * B()
+B()
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 var ln = []
-def D()
+def C()
 ln = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
@@ -177,10 +177,10 @@ ln += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
-E()
+D()
 g:zenmode.preventEcho = ln->len() > 1
 enddef
-def E()
+def D()
 if ln->len() <= 1
 return
 endif
@@ -242,9 +242,9 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once D()
-au vimrc CursorMoved * E()
-def F(a: string = '')
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once C()
+au vimrc CursorMoved * D()
+def E(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -305,8 +305,8 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <script> <C-g> <ScriptCmd>F()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * F('BufNewFile')
+nn <script> <C-g> <ScriptCmd>E()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * E('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -448,31 +448,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def G()
+def F()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def H(a: string, b: string)
+def G(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * G()
+au vimrc Syntax * F()
 au vimrc Syntax javascript {
-H('SpellRare', '\s[=!]=\s')
+G('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-H('SpellRare', '\s[=!]=\s')
-H('SpellBad', '\s[=!]==\s')
-H('SpellBad', '\s\~[=!][=#]\?\s')
-H('SpellRare', '\<normal!\@!')
+G('SpellRare', '\s[=!]=\s')
+G('SpellBad', '\s[=!]==\s')
+G('SpellBad', '\s\~[=!][=#]\?\s')
+G('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def I()
+def H()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -483,7 +483,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>I()<CR>
+xn <C-g> <ScriptCmd>H()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)

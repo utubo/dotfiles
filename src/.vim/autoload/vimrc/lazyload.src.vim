@@ -97,7 +97,7 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 #}}}
 
 # 補完 {{{
-def SkipParen(): string
+export def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
 	# 閉じ括弧の間にTAB文字を入れることはないだろう…
 	if !c || stridx(')]}>\''`」', c) ==# -1
@@ -106,7 +106,7 @@ def SkipParen(): string
 		return  "\<C-o>a"
 	endif
 enddef
-Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : SkipParen()
+Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : vimrc#lazyload#SkipParen()
 Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 # Copilotは様子見
 #g:copilot_no_tab_map = true
