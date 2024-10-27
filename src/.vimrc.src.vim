@@ -221,6 +221,19 @@ endif
 #}}}
 
 # ------------------------------------------------------
+# 起動時に前回のファイルを開く {{{
+au vimrc VimEnter * {
+	if empty(bufname())
+		var lastfile = get(v:oldfiles, 0, '')->expand()
+		if lastfile->filereadable()
+			execute 'edit' lastfile
+			filetype detect
+		endif
+	endif
+}
+# }}}
+
+# ------------------------------------------------------
 # 初期表示後の設定 {{{
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
 #}}}

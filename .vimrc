@@ -160,4 +160,13 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
+au vimrc VimEnter * {
+if empty(bufname())
+var k = get(v:oldfiles, 0, '')->expand()
+if k->filereadable()
+exe 'edit' k
+filetype detect
+endif
+endif
+}
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
