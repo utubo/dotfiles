@@ -2,6 +2,44 @@ vim9script
 
 # ------------------------------------------------------
 # プラグイン {{{
+
+# zenmode {{{
+au vimrc User Vim9skkModeChanged zenmode#Invalidate()
+#}}}
+
+# vim9skk {{{
+g:vim9skk = {
+	keymap: {
+		toggle: ['<C-j>', ';j'],
+		midasi: [':', 'Q'],
+	}
+}
+g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
+nnoremap ;j i<Plug>(vim9skk-enable)
+# 見出しモードでスタートする
+au vimrc User Vim9skkEnter feedkeys('Q')
+# AZIKライクな設定とか
+au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
+#}}}
+
+# textobj-user {{{
+Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+g:textobj_multiblock_blocks = [
+	[ "(", ")" ],
+	[ "[", "]" ],
+	[ "{", "}" ],
+	[ '<', '>' ],
+	[ '"', '"', 1 ],
+	[ "'", "'", 1 ],
+	[ ">", "<", 1 ],
+	[ "「", "」", 1 ],
+]
+call textobj#user#plugin('nonwhitespace', {
+	'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
+})
+#}}}
+
 # Git {{{
 command! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>

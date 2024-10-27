@@ -77,33 +77,6 @@ vimrc#ezpack#Install()
 endif
 com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
-g:zenmode = {}
-au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-g:vim9skk = {
-keymap: {
-toggle: ['<C-j>', ';j'],
-midasi: [':', 'Q'],
-}
-}
-g:vim9skk_mode = ''
-nn ;j i<Plug>(vim9skk-enable)
-au vimrc User Vim9skkEnter feedkeys('Q')
-au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
-g:textobj_multiblock_blocks = [
-[ "(", ")" ],
-[ "[", "]" ],
-[ "{", "}" ],
-[ '<', '>' ],
-[ '"', '"', 1 ],
-[ "'", "'", 1 ],
-[ ">", "<", 1 ],
-[ "「", "」", 1 ],
-]
-call textobj#user#plugin('nonwhitespace', {
-'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
-})
 filetype plugin indent on
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)

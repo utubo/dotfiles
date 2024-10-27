@@ -1,4 +1,30 @@
 vim9script
+au vimrc User Vim9skkModeChanged zenmode#Invalidate()
+g:vim9skk = {
+keymap: {
+toggle: ['<C-j>', ';j'],
+midasi: [':', 'Q'],
+}
+}
+g:vim9skk_mode = ''
+nn ;j i<Plug>(vim9skk-enable)
+au vimrc User Vim9skkEnter feedkeys('Q')
+au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
+Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
+Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+g:textobj_multiblock_blocks = [
+[ "(", ")" ],
+[ "[", "]" ],
+[ "{", "}" ],
+[ '<', '>' ],
+[ '"', '"', 1 ],
+[ "'", "'", 1 ],
+[ ">", "<", 1 ],
+[ "「", "」", 1 ],
+]
+call textobj#user#plugin('nonwhitespace', {
+'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
+})
 com! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
 com! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
