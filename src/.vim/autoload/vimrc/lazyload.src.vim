@@ -770,17 +770,18 @@ if strftime('%d') ==# '01'
 endif
 #}}} -------------------------------------------------------
 
-export def LazyLoad()
-	# nop
-enddef
-
 # ------------------------------------------------------
 # 前回のファイルを開く {{{
 if empty(bufname())
 	var lastfile = get(v:oldfiles, 0, '')->expand()
 	if lastfile->filereadable()
 		execute 'edit' lastfile
+		filetype detect
 	endif
 endif
 # }}}
+
+export def LazyLoad()
+	# nop
+enddef
 
