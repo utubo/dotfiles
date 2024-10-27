@@ -156,7 +156,7 @@ au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
 set bg=light
-sil! colorscheme girly
+sil! colorscheme girly.min
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif

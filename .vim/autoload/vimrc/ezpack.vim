@@ -28,7 +28,7 @@ EzpackL skanehira/gh.vim
 EzpackL thinca/vim-portal
 EzpackL thinca/vim-themis
 EzpackL tpope/vim-fugitive
-EzpackS tyru/capture.vim
+EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
 EzpackL yegappan/mru
