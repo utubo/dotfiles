@@ -183,15 +183,18 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-au vimrc BufReadPost * B()
-B()
+def C()
+au vimrc SafeState * ++once B()
+enddef
+au vimrc BufReadPost * C()
+C()
 nn gn <Cmd>bnext<CR>
 nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 var ln = []
-def C()
+def D()
 ln = []
 for a in execute('ls')->split("\n")
 const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
@@ -205,10 +208,10 @@ ln += [b]
 b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
-D()
+E()
 g:zenmode.preventEcho = ln->len() > 1
 enddef
-def D()
+def E()
 if ln->len() <= 1
 return
 endif
@@ -270,16 +273,16 @@ echon repeat(' ', &columns - 1 - w)
 endif
 echoh Normal
 enddef
-def E()
-C()
+def F()
+D()
 if ln->len() <= 1
 zenmode#RedrawNow()
 endif
-au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once C()
+au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once D()
 enddef
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once E()
-au vimrc CursorMoved * D()
-def F(a: string = '')
+au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once F()
+au vimrc CursorMoved * E()
+def G(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -340,8 +343,8 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <script> <C-g> <ScriptCmd>F()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * F('BufNewFile')
+nn <script> <C-g> <ScriptCmd>G()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * G('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -484,31 +487,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def G()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def H(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * G()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-H('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-H('SpellRare', '\s[=!]=\s')
-H('SpellBad', '\s[=!]==\s')
-H('SpellBad', '\s\~[=!][=#]\?\s')
-H('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def I()
+def J()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -519,7 +522,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>I()<CR>
+xn <C-g> <ScriptCmd>J()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)

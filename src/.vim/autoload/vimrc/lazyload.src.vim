@@ -272,8 +272,13 @@ def SetupTabstop()
 	&softtabstop = &tabstop
 	setpos('.', org)
 enddef
-au vimrc BufReadPost * SetupTabstop()
-SetupTabstop()
+def SetupTabstopLazy()
+	# filetype indent on が終わってから判定する
+	au vimrc SafeState * ++once SetupTabstop()
+enddef
+# ft ==# ''でも実行したいのでFileTypeではなくBufReadPost
+au vimrc BufReadPost * SetupTabstopLazy()
+SetupTabstopLazy()
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
