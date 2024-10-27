@@ -34,6 +34,7 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
+filetype plugin indent on
 
 augroup vimrc
 	# 新しい自由
@@ -94,8 +95,6 @@ enddef
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
-# プラグイン {{{
-
 # 自作マネージャ {{{
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
@@ -104,9 +103,6 @@ if !isdirectory(g:ezpack_home)
 endif
 command! EzpackInstall vimrc#ezpack#Install()
 command! EzpackCleanUp vimrc#ezpack#CleanUp()
-# }}}
-
-filetype plugin indent on
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
@@ -218,10 +214,14 @@ silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
-# 終わりに {{{
+# ローカル設定 {{{
 if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local
 endif
+#}}}
+
+# ------------------------------------------------------
+# 初期表示後の設定 {{{
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
 #}}}
 

@@ -31,6 +31,7 @@ set udf
 set ut=2000
 set is
 set hls
+filetype plugin indent on
 aug vimrc
 au!
 aug End
@@ -74,7 +75,6 @@ vimrc#ezpack#Install()
 endif
 com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
-filetype plugin indent on
 def! g:MyFoldText(): string
 const a = getline(v:foldstart)
 const b = repeat(' ', indent(v:foldstart))
