@@ -548,3 +548,9 @@ nn <Space>n <Nop>
 endif
 export def LazyLoad()
 enddef
+if empty(bufname())
+var lo = get(v:oldfiles, 0, '')->expand()
+if lo->filereadable()
+exe 'edit' lo
+endif
+endif

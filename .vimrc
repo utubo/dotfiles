@@ -50,13 +50,10 @@ enddef
 com! -keepscript -nargs=* Each g:UtilEach(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def A(): bool
-return &modified || ! empty(bufname())
-enddef
 def g:IndentStr(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
-def B(a: string)
+def A(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe a
@@ -112,25 +109,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def C(a: number, b: string): string
+def B(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def D(a: string): any
+def C(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: C(b, 'fg'), bg: C(b, 'bg') }
+return { fg: B(b, 'fg'), bg: B(b, 'bg') }
 enddef
-def E()
+def D()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = D('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={D("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={D("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={D("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={D("WarningMsg").fg}'
+const a = C('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={C("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={C("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={C("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={C("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * E()
-def F()
+au vimrc VimEnter,ColorScheme * D()
+def E()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -145,8 +142,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * F()
-def G()
+au vimrc VimEnter,WinEnter * E()
+def F()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -154,8 +151,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! G()
-au vimrc BufNew,BufReadPost * silent! G()
+au vimrc OptionSet list silent! F()
+au vimrc BufNew,BufReadPost * silent! F()
 sil! syntax enable
 set t_Co=256
 set bg=light
@@ -163,11 +160,4 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-def H()
-var a = get(v:oldfiles, 0, '')->expand()
-if a->filereadable()
-exe 'edit' a
-endif
-enddef
-au vimrc VimEnter * ++nested if !A()|H()|endif
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()

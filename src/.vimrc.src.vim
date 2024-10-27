@@ -70,10 +70,6 @@ command! -keepscript -nargs=* Each g:UtilEach(<q-args>)
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-def BufIsSmth(): bool
-	return &modified || ! empty(bufname())
-enddef
-
 def g:IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
@@ -226,14 +222,6 @@ silent! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local
 endif
-
-def OpenLastfile()
-	var lastfile = get(v:oldfiles, 0, '')->expand()
-	if lastfile->filereadable()
-		execute 'edit' lastfile
-	endif
-enddef
-au vimrc VimEnter * ++nested if !BufIsSmth() | OpenLastfile() | endif
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
 #}}}
 
