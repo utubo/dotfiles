@@ -166,6 +166,9 @@ nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 def B()
+if &ft ==# 'help'
+return
+endif
 const a = 100
 const b = getpos('.')
 cursor(1, 1)

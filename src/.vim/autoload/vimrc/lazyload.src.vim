@@ -255,6 +255,9 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 # ------------------------------------------------------
 # タブ幅やタブ展開を自動設定 {{{
 def SetupTabstop()
+	if &ft ==# 'help'
+		return
+	endif
 	const limit = 100
 	const org = getpos('.')
 	cursor(1, 1)
