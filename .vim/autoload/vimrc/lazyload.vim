@@ -479,7 +479,7 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-com! -nargs=1 Help vimrc#myutil#Help(<q-args>)
+com! -nargs=1 -complete=customlist,vimrc#myutil#HelpList Help vimrc#myutil#Help(<q-args>)
 au vimrc User InputCR feedkeys("\<C-g>u", 'n')
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)

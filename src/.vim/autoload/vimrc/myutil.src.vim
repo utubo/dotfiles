@@ -93,8 +93,16 @@ enddef
 #}}}
 
 # helpがoptを見てくれない… {{{
+export def HelpList(a: any, l: string, p: number): list<string>
+	var ls = []
+	globpath(&rtp, $'doc/*.txt')->split("\n")->foreach((i, v) => {
+		add(ls, v->fnamemodify(':t:r'))
+	})
+	return ls
+enddef
+
 export def Help(name: string)
-	var f = globpath(&rtp, $'doc/{name}.txt')
+	const f = globpath(&rtp, $'doc/{name}.txt')
 	if filereadable(f)
 		execute 'edit' f
 	else

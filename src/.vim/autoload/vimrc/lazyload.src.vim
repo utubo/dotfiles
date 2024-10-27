@@ -660,7 +660,7 @@ nnoremap ' "
 nnoremap m '
 nnoremap M m
 
-command! -nargs=1 Help vimrc#myutil#Help(<q-args>)
+command! -nargs=1  -complete=customlist,vimrc#myutil#HelpList Help vimrc#myutil#Help(<q-args>)
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
