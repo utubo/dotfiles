@@ -2,6 +2,7 @@ vim9script
 export def LazyLoad()
 packadd lexima.vim
 Enable g:lexima_no_default_rules
+g:lexima_map_escape = ''
 lexima#set_default_rules()
 ino <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
 lexima#add_rule({ char: '(', at: '\\\%#', input_after: '\)', mode: 'ic' })

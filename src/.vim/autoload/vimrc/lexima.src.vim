@@ -2,8 +2,8 @@ vim9script
 
 export def LazyLoad()
 	packadd lexima.vim
-	#Enable g:lexima_accept_pum_with_enter
 	Enable g:lexima_no_default_rules
+	g:lexima_map_escape = ''
 	lexima#set_default_rules()
 	inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : (lexima#expand('<CR>', 'i') .. "\<ScriptCmd>doau User InputCR\<CR>")
 	# 正規表現の括弧 `\(\)`と`\{\}`
