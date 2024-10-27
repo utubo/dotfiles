@@ -70,3 +70,13 @@ exe $'{b} new'
 append(0, c)
 setl nomodified
 enddef
+export def Help(a: string)
+var f = globpath(&rtp, $'doc/{a}.txt')
+if filereadable(f)
+exe 'edit' f
+else
+echoh ErrorMsg
+ec 'Not Found.'
+echoh Normal
+endif
+enddef

@@ -4,7 +4,8 @@ g:vim9skk = {
 keymap: {
 toggle: ['<C-j>', ';j'],
 midasi: [':', 'Q'],
-}
+},
+mode_label_timeout: 500,
 }
 g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
@@ -475,6 +476,7 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
+com! -nargs=1 Help vimrc#myutil#Help(<q-args>)
 au vimrc User InputCR feedkeys("\<C-g>u", 'n')
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)

@@ -12,7 +12,8 @@ g:vim9skk = {
 	keymap: {
 		toggle: ['<C-j>', ';j'],
 		midasi: [':', 'Q'],
-	}
+	},
+	mode_label_timeout: 500,
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
@@ -653,6 +654,8 @@ inoremap （） ()<C-g>U<Left>
 nnoremap ' "
 nnoremap m '
 nnoremap M m
+
+command! -nargs=1 Help vimrc#myutil#Help(<q-args>)
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------

@@ -92,3 +92,15 @@ export def Brep(regex: string, mods: string)
 enddef
 #}}}
 
+# helpがoptを見てくれない… {{{
+export def Help(name: string)
+	var f = globpath(&rtp, $'doc/{name}.txt')
+	if filereadable(f)
+		execute 'edit' f
+	else
+		echoh ErrorMsg
+		echo 'Not Found.'
+		echoh Normal
+	endif
+enddef
+# }}}
