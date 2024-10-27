@@ -75,7 +75,12 @@ var b = []
 globpath(&rtp, $'doc/*.txt')->split("\n")->foreach((i, v) => {
 add(b, v->fnamemodify(':t:r'))
 })
+const c = l->substitute('^Help \+', '', '')
+if !c
 return b
+else
+return b->matchfuzzy(c)
+endif
 enddef
 export def Help(a: string)
 const f = globpath(&rtp, $'doc/{a}.txt')

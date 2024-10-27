@@ -98,7 +98,12 @@ export def HelpList(a: any, l: string, p: number): list<string>
 	globpath(&rtp, $'doc/*.txt')->split("\n")->foreach((i, v) => {
 		add(ls, v->fnamemodify(':t:r'))
 	})
-	return ls
+	const name = l->substitute('^Help \+', '', '')
+	if !name
+		return ls
+	else
+		return ls->matchfuzzy(name)
+	endif
 enddef
 
 export def Help(name: string)
