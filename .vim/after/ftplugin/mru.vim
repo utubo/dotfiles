@@ -6,11 +6,6 @@ b:did_my_after_ftplugin = 1
 def A(): bool
 return &modified || ! empty(bufname())
 enddef
-g:MRU_Filename_Format = {
-formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
-parser: '> \zs.*',
-syntax: '^.\{-}\ze >'
-}
 def B(a: bool)
 b:use_tab = a
 setl number
@@ -29,5 +24,14 @@ nn <buffer> w <ScriptCmd>B(!b:use_tab)<CR>
 nn <buffer> R <Cmd>MruRefresh<CR><Cmd>MRU<CR><Cmd>setlocal number<CR>
 nn <buffer> <Esc> <Cmd>q!<CR>
 B(false)
+if exists("g:did_my_after_ftplugin_mru")
+finish
+endif
+g:did_my_after_ftplugin_mru = 1
+g:MRU_Filename_Format = {
+formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
+parser: '> \zs.*',
+syntax: '^.\{-}\ze >'
+}
 hi link MruFileName Directory
-au vimrc ColorScheme <buffer> hi link MruFileName Directory
+au vimrc ColorScheme hi link MruFileName Directory

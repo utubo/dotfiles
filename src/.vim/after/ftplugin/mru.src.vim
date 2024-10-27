@@ -9,12 +9,6 @@ def BufIsSmth(): bool
 	return &modified || ! empty(bufname())
 enddef
 
-# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない">"を区切りにする
-g:MRU_Filename_Format = {
-	formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
-	parser: '> \zs.*',
-	syntax: '^.\{-}\ze >'
-}
 # 数字キーで開く
 def MRUwithNumKey(use_tab: bool)
 	b:use_tab = use_tab
@@ -38,6 +32,18 @@ nnoremap <buffer> <Esc> <Cmd>q!<CR>
 #MRUwithNumKey(BufIsSmth()) # 編集済みならタブで開く
 MRUwithNumKey(false)
 
+if exists("g:did_my_after_ftplugin_mru")
+	finish
+endif
+g:did_my_after_ftplugin_mru = 1
+
+# デフォルト設定(括弧内にフルパス)だとパスに括弧が含まれているファイルが開けないので、パスに使用されない">"を区切りにする
+g:MRU_Filename_Format = {
+	formatter: 'fnamemodify(v:val, ":t") . " > " . v:val',
+	parser: '> \zs.*',
+	syntax: '^.\{-}\ze >'
+}
+
 hi link MruFileName Directory
-au vimrc ColorScheme <buffer> hi link MruFileName Directory
+au vimrc ColorScheme hi link MruFileName Directory
 

@@ -12,6 +12,11 @@ augroup END
 nnoremap <buffer> g! <Cmd>update<CR><Cmd>source %<CR>
 nnoremap <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
 
+if exists("g:did_my_after_ftplugin_vim")
+	finish
+endif
+g:did_my_after_ftplugin_vim = 1
+
 # .vimrcを保存したらテストを実行する {{{
 var test_dump = []
 def g:TestOutput(ch: any, msg: string)

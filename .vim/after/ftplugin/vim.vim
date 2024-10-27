@@ -8,6 +8,10 @@ au!
 aug END
 nn <buffer> g! <Cmd>update<CR><Cmd>source %<CR>
 nn <buffer> <expr> ZC $"<Cmd>update<CR><Cmd>colorscheme {expand('%:r')}<CR>"
+if exists("g:did_my_after_ftplugin_vim")
+finish
+endif
+g:did_my_after_ftplugin_vim = 1
 var k = []
 def g:TestOutput(a: any, b: string)
 k += [b->substitute('\%C', '', 'g')->trim()]
