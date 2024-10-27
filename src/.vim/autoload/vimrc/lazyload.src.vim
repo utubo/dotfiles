@@ -494,8 +494,8 @@ inoremap ;k 「」<C-g>U<Left>
 inoremap ;u <Esc>u
 nnoremap ;r "
 nnoremap ;rr "0p
-Each nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 nnoremap <Space>; ;
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>
@@ -507,8 +507,8 @@ noremap! <script> <SID>bs_h <BS><SID>bs_
 # ビジュアルモードあれこれ {{{
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
+xnoremap <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
 xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 #}}}

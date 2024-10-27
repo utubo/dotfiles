@@ -75,7 +75,7 @@ def g:IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
-def StayCurPos(expr: string)
+def g:StayCurPos(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
 	execute expr

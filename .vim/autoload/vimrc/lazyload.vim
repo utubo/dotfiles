@@ -369,16 +369,16 @@ ino ;k 「」<C-g>U<Left>
 ino ;u <Esc>u
 nn ;r "
 nn ;rr "0p
-Each nnoremap,inoremap ;<Tab> <ScriptCmd>StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>StayCurPos('normal! <<')<CR>
+Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 nn <Space>; ;
 map! <script> <SID>bs_ <Nop>
 map! <script> ;h <SID>bs_h
 no! <script> <SID>bs_h <BS><SID>bs_
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>StayCurPos('normal! >gv')<CR>
-xn <S-Tab> <ScriptCmd>StayCurPos('normal! <gv')<CR>
+xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
+xn <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 Each nnoremap,xnoremap / <Cmd>noh<CR>/

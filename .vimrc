@@ -54,7 +54,7 @@ com! -nargs=1 -complete=var Disable <args> = 0
 def g:IndentStr(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
-def A(a: string)
+def g:StayCurPos(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe a
@@ -109,25 +109,25 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def B(a: number, b: string): string
+def A(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def C(a: string): any
+def B(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: B(b, 'fg'), bg: B(b, 'bg') }
+return { fg: A(b, 'fg'), bg: A(b, 'bg') }
 enddef
-def D()
+def C()
 hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
-const a = C('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={C("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={C("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={C("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={C("WarningMsg").fg}'
+const a = B('LineNr').bg
+exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={B("ErrorMsg").fg}'
+exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={B("Question").fg}'
+exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={B("Pmenu").fg}'
+exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={B("WarningMsg").fg}'
 enddef
-au vimrc VimEnter,ColorScheme * D()
-def E()
+au vimrc VimEnter,ColorScheme * C()
+def D()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -142,8 +142,8 @@ matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 matchadd('SpellBad', 'stlye')
 enddef
-au vimrc VimEnter,WinEnter * E()
-def F()
+au vimrc VimEnter,WinEnter * D()
+def E()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -151,8 +151,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! F()
-au vimrc BufNew,BufReadPost * silent! F()
+au vimrc OptionSet list silent! E()
+au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
 set bg=light
