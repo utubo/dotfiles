@@ -224,7 +224,7 @@ endif
 redraw
 var s = 0
 var e = 0
-w = getwininfo(win_getid(1))[0].textoff
+var w = getwininfo(win_getid(1))[0].textoff
 var a = false
 var c = false
 var d = false

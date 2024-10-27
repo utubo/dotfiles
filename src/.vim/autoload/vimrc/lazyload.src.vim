@@ -321,7 +321,7 @@ def EchoBufLine()
 	redraw
 	var s = 0
 	var e = 0
-	w = getwininfo(win_getid(1))[0].textoff
+	var w = getwininfo(win_getid(1))[0].textoff
 	var hasNext = false
 	var hasPrev = false
 	var containCurrent = false
