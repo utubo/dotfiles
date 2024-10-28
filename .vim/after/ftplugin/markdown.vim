@@ -44,7 +44,7 @@ enddef
 nn <buffer> <Space>- <ScriptCmd>B()<CR>
 ino <buffer> ;- <ScriptCmd>B()<CR>
 def C(): string
-var [a, b] = g:VFirstLast()
+var [a, b] = [line('.'), line('v')]->sort('n')
 if mode() ==? 'V'
 elseif &ft !=# 'markdown'
 return ''
@@ -64,20 +64,20 @@ e = '+'
 b = a + d
 endif
 var f = 0
-var i = 0
+var g = 0
 for l in range(a, b)
-const j = getline(l)
-if j->match('^\s*- \[x\]') !=# -1
+const i = getline(l)
+if i->match('^\s*- \[x\]') !=# -1
 f += 1
-elseif j->match('^\s*- \[ \]') !=# -1
-i += 1
+elseif i->match('^\s*- \[ \]') !=# -1
+g += 1
 endif
 endfor
-if f ==# 0 && i ==# 0
+if f ==# 0 && g ==# 0
 return ''
 else
-var h = i ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
-return $'%#{h}#✅%*{f}/{f + i}{e}'
+var h = g ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
+return $'%#{h}#✅%*{f}/{f + g}{e}'
 endif
 enddef
 def D()

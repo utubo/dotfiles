@@ -58,7 +58,7 @@ inoremap <buffer> ;- <ScriptCmd>ToggleListMark()<CR>
 # ----------------------------------------------------------
 # チェックボックスの数をカウント {{{
 def CountCheckBoxs(): string
-	var [firstline, lastline] = g:VFirstLast()
+	var [firstline, lastline] = [line('.'), line('v')]->sort('n')
 	if mode() ==? 'V'
 		# OK
 	elseif &ft !=# 'markdown'
