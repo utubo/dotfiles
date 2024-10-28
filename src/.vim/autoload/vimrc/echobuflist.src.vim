@@ -65,8 +65,8 @@ def EchoBufList()
 	if r !=# right
 		r = r->substitute('.$', '>', '')
 	endif
-	# 右パディング
 	w -= strdisplaywidth(r)
+	# 右パディング
 	w = max([0, w])
 	# 表示
 	redraw
