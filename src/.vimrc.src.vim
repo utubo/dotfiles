@@ -173,7 +173,7 @@ endif
 def RestorePos()
 	const n = line('''"')
 	if 1 <= n && n <= line('$')
-		silent! normal! g`"zO
+		silent! normal! g`"zOzz
 	endif
 enddef
 au vimrc BufRead * RestorePos()

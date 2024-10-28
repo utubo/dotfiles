@@ -129,7 +129,7 @@ endif
 def F()
 const n = line('''"')
 if 1 <= n && n <= line('$')
-sil! normal! g`"zO
+sil! normal! g`"zOzz
 endif
 enddef
 au vimrc BufRead * F()
