@@ -61,14 +61,13 @@ hi! link ALEVirtualTextError ALEErrorSign
 }
 set fdm=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
-au vimrc BufReadPost * :silent! normal! zO
 nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
-nn <silent> g; g;zO
+nn g; <ScriptCmd>silent! normal! g;zO<CR>
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [
@@ -127,13 +126,22 @@ sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
-au vimrc VimEnter * {
+def F()
+const n = line('''"')
+if 1 <= n && n <= line('$')
+sil! normal! g`"zO
+endif
+enddef
+au vimrc BufRead * F()
+def G()
 if empty(bufname())
-var k = get(v:oldfiles, 0, '')->expand()
-if k->filereadable()
-exe 'edit' k
+const a = get(v:oldfiles, 0, '')->expand()
+if a->filereadable()
+exe 'edit' a
 filetype detect
+F()
 endif
 endif
-}
+enddef
+au vimrc VimEnter * G()
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()

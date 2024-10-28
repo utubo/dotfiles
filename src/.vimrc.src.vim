@@ -77,14 +77,13 @@ au vimrc ColorScheme * {
 # その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
-au vimrc BufReadPost * :silent! normal! zO
 nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
 nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 xnoremap zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nnoremap zd <ScriptCmd>vimrc#myutil#Zd()<CR>
-nnoremap <silent> g; g;zO
+nnoremap g; <ScriptCmd>silent! normal! g;zO<CR>
 #}}}
 #}}} -------------------------------------------------------
 
@@ -169,16 +168,35 @@ endif
 #}}}
 
 # ------------------------------------------------------
+# ファイルを開いたらカーソル位置を復元する {{{
+# http://advweb.seesaa.net/article/13443981.html
+def RestorePos()
+	const n = line('''"')
+	if 1 <= n && n <= line('$')
+		silent! normal! g`"zO
+	endif
+enddef
+au vimrc BufRead * RestorePos()
+# }}}
+
+# ------------------------------------------------------
 # 起動時に前回のファイルを開く {{{
-au vimrc VimEnter * {
+def ReadLastFile()
 	if empty(bufname())
-		var lastfile = get(v:oldfiles, 0, '')->expand()
+		# Note: defではなく
+		# au vimrc VimEnter * {
+		#   ...
+		# }
+		# の形式で書くと、無名関数中で宣言した変数がスクリプトローカルになっちゃう
+		const lastfile = get(v:oldfiles, 0, '')->expand()
 		if lastfile->filereadable()
 			execute 'edit' lastfile
 			filetype detect
+			RestorePos()
 		endif
 	endif
-}
+enddef
+au vimrc VimEnter * ReadLastFile()
 # }}}
 
 # ------------------------------------------------------
