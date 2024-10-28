@@ -345,9 +345,9 @@ au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 
 # bufの一覧を画面下部に表示する
+vimrc#echobuflist#Setup()
 au vimrc User EchoBufListShow g:zenmode.preventEcho = true
 au vimrc User EchoBufListHide g:zenmode.preventEcho = false
-vimrc#echobuflist#Setup()
 #}}}
 
 # ------------------------------------------------------
