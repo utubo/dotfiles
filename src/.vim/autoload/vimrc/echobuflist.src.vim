@@ -50,7 +50,7 @@ def EchoBufList()
 	endif
 	var w = v:echospace
 	# 左オフセット
-	var o = getwininfo(win_getid(1))[0].textoff
+	const o = getwininfo(win_getid(1))[0].textoff
 	w -= o
 	# 選択バッファ
 	const s = select->substitute($'\%{w}v.*', '', '')

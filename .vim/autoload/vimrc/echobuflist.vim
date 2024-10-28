@@ -45,7 +45,7 @@ if mode() ==# 'c'
 return
 endif
 var w = v:echospace
-var o = getwininfo(win_getid(1))[0].textoff
+const o = getwininfo(win_getid(1))[0].textoff
 w -= o
 const s = q->substitute($'\%{w}v.*', '', '')
 w -= strdisplaywidth(s)
