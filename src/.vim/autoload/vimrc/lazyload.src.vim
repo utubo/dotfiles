@@ -1,6 +1,58 @@
 vim9script
 
 # ------------------------------------------------------
+# ユーティリティ {{{
+
+# こんな感じ
+#   Each nmap,xmap j gj
+#   → nmap j gj | xmap j gj
+# 先頭以外に差し込んだりネストしたい場合はこう
+#   Each j,k Each nmap,xmap {1} {0} g{0}
+#   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
+# ※これ使うよりべたで書いたほうが起動は速い
+g:util_each_nest = 0
+def! g:UtilEach(qargs: string)
+	const [items, args] = qargs->split('^\S*\zs')
+	g:util_each_nest += 1
+	for i in items->split(',')
+		var a = args->substitute('{0\?}', i, 'g')
+		if a ==# args
+			a = $'{i} {a}'
+		endif
+		execute a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
+	endfor
+	g:util_each_nest -= 1
+enddef
+command! -keepscript -nargs=* Each g:UtilEach(<q-args>)
+
+# その他
+command! -nargs=1 -complete=var Enable  <args> = 1
+command! -nargs=1 -complete=var Disable <args> = 0
+
+def g:IndentStr(expr: any): string
+	return matchstr(getline(expr), '^\s*')
+enddef
+
+def g:StayCurPos(expr: string)
+	const len = getline('.')->len()
+	var cur = getcurpos()
+	execute expr
+	cur[2] += getline('.')->len() - len
+	setpos('.', cur)
+enddef
+
+# <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
+def! g:VFirstLast(): list<number>
+	return [line('.'), line('v')]->sort('n')
+enddef
+
+def! g:VRange(): list<number>
+	const a = g:VFirstLast()
+	return range(a[0], a[1])
+enddef
+#}}} -------------------------------------------------------
+
+# ------------------------------------------------------
 # プラグイン {{{
 
 # zenmode {{{

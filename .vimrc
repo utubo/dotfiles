@@ -35,39 +35,6 @@ filetype plugin indent on
 aug vimrc
 au!
 aug End
-g:util_each_nest = 0
-def! g:UtilEach(b: string)
-const [c, d] = b->split('^\S*\zs')
-g:util_each_nest += 1
-for i in c->split(',')
-var a = d->substitute('{0\?}', i, 'g')
-if a ==# d
-a = $'{i} {a}'
-endif
-exe a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
-endfor
-g:util_each_nest -= 1
-enddef
-com! -keepscript -nargs=* Each g:UtilEach(<q-args>)
-com! -nargs=1 -complete=var Enable <args> = 1
-com! -nargs=1 -complete=var Disable <args> = 0
-def g:IndentStr(a: any): string
-return matchstr(getline(a), '^\s*')
-enddef
-def g:StayCurPos(a: string)
-const b = getline('.')->len()
-var c = getcurpos()
-exe a
-c[2] += getline('.')->len() - b
-setpos('.', c)
-enddef
-def! g:VFirstLast(): list<number>
-return [line('.'), line('v')]->sort('n')
-enddef
-def! g:VRange(): list<number>
-const a = g:VFirstLast()
-return range(a[0], a[1])
-enddef
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
