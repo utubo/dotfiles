@@ -27,8 +27,14 @@ def RefreshBufList()
 	endfor
 	right = bufs->join(' ')
 	EchoBufList()
-	visible = !!right || !!left
-	g:zenmode.preventEcho = visible
+	const v = !!right || !!left
+	if v !=# visible
+		visible = v
+		const ev = v ? 'EchoBufListShow' : 'EchoBufListHide'
+		if exists($'#User#{ev}')
+			execute 'doautocmd User' ev
+		endif
+	endif
 enddef
 
 def EchoBufList()
@@ -77,15 +83,7 @@ def EchoBufList()
 	echoh Normal
 enddef
 
-def OnBufDelete()
-	RefreshBufList()
-	if !visible
-		zenmode#RedrawNow()
-	endif
-enddef
-
-au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once RefreshBufList()
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once OnBufDelete()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once RefreshBufList()
 au vimrc CursorMoved * EchoBufList()
 
 export def Setup()

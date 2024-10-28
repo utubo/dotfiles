@@ -24,8 +24,14 @@ endif
 endfor
 q = a->join(' ')
 B()
-k = !!q || !!n
-g:zenmode.preventEcho = k
+const v = !!q || !!n
+if v !=# k
+k = v
+const g = v ? 'EchoBufListShow' : 'EchoBufListHide'
+if exists($'#User#{g}')
+exe 'doautocmd User' g
+endif
+endif
 enddef
 def B()
 if !k
@@ -66,14 +72,7 @@ echoh TabLineFill
 echon repeat(' ', w)
 echoh Normal
 enddef
-def C()
-A()
-if !k
-zenmode#RedrawNow()
-endif
-enddef
-au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once A()
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once C()
+au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once A()
 au vimrc CursorMoved * B()
 export def Setup()
 enddef
