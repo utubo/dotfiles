@@ -169,7 +169,6 @@ if '~/.vimrc_local'->expand()->filereadable()
 endif
 #}}}
 
-
 # ------------------------------------------------------
 # 色(ローカル設定後) {{{
 if !exists('g:colors_name')
