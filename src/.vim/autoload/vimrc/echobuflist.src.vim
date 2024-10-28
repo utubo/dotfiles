@@ -59,7 +59,7 @@ def EchoBufList()
 	if r !=# right
 		r = r->substitute('.$', '>', '')
 	endif
-	# 右オフセット
+	# 右パディング
 	w -= strdisplaywidth(r)
 	w = max([0, w])
 	# 表示
