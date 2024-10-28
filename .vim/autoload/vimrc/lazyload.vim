@@ -229,96 +229,8 @@ nn gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-var ln = []
-def D()
-ln = []
-for a in execute('ls')->split("\n")
-const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
-if !m->empty()
-var b = {
-nr: m[1],
-name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
-current: m[2][0] ==# '%',
-}
-ln += [b]
-b.width = strdisplaywidth($' {b.nr}{b.name} ')
-endif
-endfor
-E()
-g:zenmode.preventEcho = ln->len() > 1
-enddef
-def E()
-if ln->len() <= 1
-return
-endif
-if ['ControlP']->index(bufname('%')) !=# -1
-return
-endif
-if mode() ==# 'c'
-return
-endif
-redraw
-var s = 0
-var e = 0
-var w = getwininfo(win_getid(1))[0].textoff
-var a = false
-var c = false
-var d = false
-for b in ln
-w += b.width
-if &columns - 5 < w
-if d
-e -= 1
-a = true
-break
-endif
-s += 1
-c = true
-endif
-if b.current
-d = true
-endif
-e += 1
-endfor
-w = getwininfo(win_getid(1))[0].textoff
-echoh TablineFill
-echon repeat(' ', w)
-if c
-echoh Tabline
-echon '< '
-w += 2
-endif
-for b in ln[s : e]
-w += b.width
-if b.current
-echoh TablineSel
-else
-echoh Tabline
-endif
-echon $'{b.nr} {b.name} '
-endfor
-if a
-echoh Tabline
-echon '>'
-w += 1
-endif
-const f = &columns - 1 - w
-if 0 < f
-echoh TablineFill
-echon repeat(' ', &columns - 1 - w)
-endif
-echoh Normal
-enddef
-def F()
-D()
-if ln->len() <= 1
-zenmode#RedrawNow()
-endif
-au vimrc BufAdd,BufEnter * au vimrc SafeState * ++once D()
-enddef
-au vimrc BufDelete,BufWipeout * au vimrc SafeState * ++once F()
-au vimrc CursorMoved * E()
-def G(a: string = '')
+vimrc#echobuflist#Setup()
+def D(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -379,8 +291,8 @@ echon m[1]
 endfor
 echoh Normal
 enddef
-nn <script> <C-g> <ScriptCmd>G()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * G('BufNewFile')
+nn <script> <C-g> <ScriptCmd>D()<CR>
+au vimrc BufNewFile,BufReadPost,BufWritePost * D('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -523,31 +435,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def H()
+def E()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def I(a: string, b: string)
+def F(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * H()
+au vimrc Syntax * E()
 au vimrc Syntax javascript {
-I('SpellRare', '\s[=!]=\s')
+F('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-I('SpellRare', '\s[=!]=\s')
-I('SpellBad', '\s[=!]==\s')
-I('SpellBad', '\s\~[=!][=#]\?\s')
-I('SpellRare', '\<normal!\@!')
+F('SpellRare', '\s[=!]=\s')
+F('SpellBad', '\s[=!]==\s')
+F('SpellBad', '\s\~[=!][=#]\?\s')
+F('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def J()
+def G()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -558,7 +470,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>J()<CR>
+xn <C-g> <ScriptCmd>G()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
