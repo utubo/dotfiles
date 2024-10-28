@@ -133,15 +133,14 @@ sil! normal! g`"zO
 endif
 enddef
 au vimrc BufRead * F()
-def G()
+au vimrc VimEnter * {
 if empty(bufname())
-const a = get(v:oldfiles, 0, '')->expand()
-if a->filereadable()
-exe 'edit' a
+const k = get(v:oldfiles, 0, '')->expand()
+if k->filereadable()
+exe 'edit' k
 filetype detect
 F()
 endif
 endif
-enddef
-au vimrc VimEnter * G()
+}
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()

@@ -181,13 +181,8 @@ au vimrc BufRead * RestorePos()
 
 # ------------------------------------------------------
 # 起動時に前回のファイルを開く {{{
-def ReadLastFile()
+au vimrc VimEnter * {
 	if empty(bufname())
-		# Note: defではなく
-		# au vimrc VimEnter * {
-		#   ...
-		# }
-		# の形式で書くと、無名関数中で宣言した変数がスクリプトローカルになっちゃう
 		const lastfile = get(v:oldfiles, 0, '')->expand()
 		if lastfile->filereadable()
 			execute 'edit' lastfile
@@ -195,8 +190,7 @@ def ReadLastFile()
 			RestorePos()
 		endif
 	endif
-enddef
-au vimrc VimEnter * ReadLastFile()
+}
 # }}}
 
 # ------------------------------------------------------
