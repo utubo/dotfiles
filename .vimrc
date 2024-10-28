@@ -31,6 +31,7 @@ set udf
 set ut=2000
 set is
 set hls
+set shortmess+=F
 filetype plugin indent on
 aug vimrc
 au!

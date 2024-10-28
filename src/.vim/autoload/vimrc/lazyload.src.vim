@@ -416,7 +416,6 @@ def ShowBufInfo(event: string = '')
 enddef
 
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * ShowBufInfo('BufNewFile')
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------

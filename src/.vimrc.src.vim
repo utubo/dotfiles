@@ -34,6 +34,7 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
+set shortmess+=F
 filetype plugin indent on
 
 augroup vimrc

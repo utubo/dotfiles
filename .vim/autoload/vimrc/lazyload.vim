@@ -292,7 +292,6 @@ endfor
 echoh Normal
 enddef
 nn <script> <C-g> <ScriptCmd>D()<CR>
-au vimrc BufNewFile,BufReadPost,BufWritePost * D('BufNewFile')
 set tabline=%!vimrc#tabline#MyTabline()
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>

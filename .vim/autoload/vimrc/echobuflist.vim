@@ -10,8 +10,9 @@ nr: m[1],
 name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
 current: m[2][0] ==# '%',
 }
+b.label = $'{b.nr}:{b.name} '
+b.width = strdisplaywidth(b.label)
 k += [b]
-b.width = strdisplaywidth($' {b.nr}{b.name} ')
 endif
 endfor
 B()
@@ -65,7 +66,7 @@ echoh TablineSel
 else
 echoh Tabline
 endif
-echon $'{b.nr} {b.name} '
+echon b.label
 endfor
 if a
 echoh Tabline
