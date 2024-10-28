@@ -41,7 +41,6 @@ def EchoBufList()
 	if mode() ==# 'c'
 		return
 	endif
-	redraw
 	var w = v:echospace
 	# 左オフセット
 	var o = getwininfo(win_getid(1))[0].textoff
@@ -64,6 +63,7 @@ def EchoBufList()
 	w -= strdisplaywidth(r)
 	w = max([0, w])
 	# 表示
+	redraw
 	echoh TabLineFill
 	echon repeat(' ', o)
 	echoh TabLine

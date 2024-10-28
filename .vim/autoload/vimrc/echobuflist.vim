@@ -37,7 +37,6 @@ endif
 if mode() ==# 'c'
 return
 endif
-redraw
 var w = v:echospace
 var o = getwininfo(win_getid(1))[0].textoff
 w -= o
@@ -54,6 +53,7 @@ r = r->substitute('.$', '>', '')
 endif
 w -= strdisplaywidth(r)
 w = max([0, w])
+redraw
 echoh TabLineFill
 echon repeat(' ', o)
 echoh TabLine
