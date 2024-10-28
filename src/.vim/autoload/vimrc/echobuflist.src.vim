@@ -11,18 +11,19 @@ def RefreshBufList()
 	var bufs = []
 	for ls in execute('ls')->split("\n")
 		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
-		if !m->empty()
-			const nr = m[1]
-			const name = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
-			const current = m[2][0] ==# '%'
-			const label = $'{nr}:{name}'
-			if current
-				left = bufs->join(' ')
-				select = (!left ? '' : ' ') .. label .. ' '
-				bufs = []
-			else
-				add(bufs, label)
-			endif
+		if m->empty()
+			continue
+		endif
+		const nr = m[1]
+		const name = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
+		const label = $'{nr}:{name}'
+		const current = m[2][0] ==# '%'
+		if current
+			left = bufs->join(' ')
+			select = (!left ? '' : ' ') .. label .. ' '
+			bufs = []
+		else
+			add(bufs, label)
 		endif
 	endfor
 	right = bufs->join(' ')
@@ -67,7 +68,7 @@ def EchoBufList()
 	endif
 	w -= strdisplaywidth(r)
 	# 右パディング
-	w = max([0, w])
+	const p = max([0, w])
 	# 表示
 	redraw
 	echoh TabLineFill
@@ -79,7 +80,7 @@ def EchoBufList()
 	echoh TabLine
 	echon r
 	echoh TabLineFill
-	echon repeat(' ', w)
+	echon repeat(' ', p)
 	echoh Normal
 enddef
 

@@ -1,30 +1,31 @@
 vim9script
 var k = false
 var n = ''
-var p = ''
 var q = ''
+var t = ''
 def A()
-p = ''
+q = ''
 var a = []
 for b in execute('ls')->split("\n")
 const m = b->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
-if !m->empty()
+if m->empty()
+continue
+endif
 const c = m[1]
 const d = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
-const e = m[2][0] ==# '%'
-const f = $'{c}:{d}'
-if e
+const e = $'{c}:{d}'
+const f = m[2][0] ==# '%'
+if f
 n = a->join(' ')
-p = (!n ? '' : ' ') .. f .. ' '
+q = (!n ? '' : ' ') .. e .. ' '
 a = []
 else
-add(a, f)
-endif
+add(a, e)
 endif
 endfor
-q = a->join(' ')
+t = a->join(' ')
 B()
-const v = !!q || !!n
+const v = !!t || !!n
 if v !=# k
 k = v
 const g = v ? 'EchoBufListShow' : 'EchoBufListHide'
@@ -46,19 +47,19 @@ endif
 var w = v:echospace
 var o = getwininfo(win_getid(1))[0].textoff
 w -= o
-const s = p->substitute($'\%{w}v.*', '', '')
+const s = q->substitute($'\%{w}v.*', '', '')
 w -= strdisplaywidth(s)
 var l = n->reverse()->substitute($'\%{w}v.*', '', '')->reverse()
 if l !=# n
 l = l->substitute('^.', '<', '')
 endif
 w -= strdisplaywidth(l)
-var r = q->substitute($'\%{w}v.*', '', '')
-if r !=# q
+var r = t->substitute($'\%{w}v.*', '', '')
+if r !=# t
 r = r->substitute('.$', '>', '')
 endif
 w -= strdisplaywidth(r)
-w = max([0, w])
+const p = max([0, w])
 redraw
 echoh TabLineFill
 echon repeat(' ', o)
@@ -69,7 +70,7 @@ echon s
 echoh TabLine
 echon r
 echoh TabLineFill
-echon repeat(' ', w)
+echon repeat(' ', p)
 echoh Normal
 enddef
 au vimrc BufAdd,BufEnter,BufDelete,BufWipeout * au vimrc SafeState * ++once A()
