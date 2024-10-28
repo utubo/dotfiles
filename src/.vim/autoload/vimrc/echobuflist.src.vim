@@ -2,28 +2,37 @@ vim9script
 
 # 複数bufを開いている場合、一覧を画面下部に表示する
 
-var buflist = []
+var visible = false
+var left = ''
+var select = ''
+var right = ''
 def RefreshBufList()
-	buflist = []
+	select = ''
+	var bufs = []
 	for ls in execute('ls')->split("\n")
 		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 		if !m->empty()
-			var b = {
-				nr: m[1],
-				name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
-				current: m[2][0] ==# '%',
-			}
-			b.label = $'{b.nr}:{b.name} '
-			b.width = strdisplaywidth(b.label)
-			buflist += [b]
+			const nr = m[1]
+			const name = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
+			const current = m[2][0] ==# '%'
+			const label = $'{nr}:{name}'
+			if current
+				left = bufs->join(' ')
+				select = (!left ? '' : ' ') .. label .. ' '
+				bufs = []
+			else
+				add(bufs, label)
+			endif
 		endif
 	endfor
+	right = bufs->join(' ')
 	EchoBufList()
-	g:zenmode.preventEcho = buflist->len() > 1
+	visible = !!right || !!left
+	g:zenmode.preventEcho = visible
 enddef
 
 def EchoBufList()
-	if buflist->len() <= 1
+	if !visible
 		return
 	endif
 	if ['ControlP']->index(bufname('%')) !=# -1
@@ -33,61 +42,44 @@ def EchoBufList()
 		return
 	endif
 	redraw
-	var s = 0
-	var e = 0
-	var w = getwininfo(win_getid(1))[0].textoff
-	var hasNext = false
-	var hasPrev = false
-	var containCurrent = false
-	for b in buflist
-		w += b.width
-		if &columns - 5 < w
-			if containCurrent
-				e -= 1
-				hasNext = true
-				break
-			endif
-			s += 1
-			hasPrev = true
-		endif
-		if b.current
-			containCurrent = true
-		endif
-		e += 1
-	endfor
-	w = getwininfo(win_getid(1))[0].textoff
-	echohl TablineFill
+	var w = v:echospace
+	# 左オフセット
+	var o = getwininfo(win_getid(1))[0].textoff
+	w -= o
+	# 選択バッファ
+	const s = select->substitute($'\%{w}v.*', '', '')
+	w -= strdisplaywidth(s)
+	# 選択より左側
+	var l = left->reverse()->substitute($'\%{w}v.*', '', '')->reverse()
+	if l !=# left
+		l = l->substitute('^.', '<', '')
+	endif
+	w -= strdisplaywidth(l)
+	# 選択より右側
+	var r = right->substitute($'\%{w}v.*', '', '')
+	if r !=# right
+		r = r->substitute('.$', '>', '')
+	endif
+	# 右オフセット
+	w -= strdisplaywidth(r)
+	w = max([0, w])
+	# 表示
+	echoh TabLineFill
+	echon repeat(' ', o)
+	echoh TabLine
+	echon l
+	echoh TabLineSel
+	echon s
+	echoh TabLine
+	echon r
+	echoh TabLineFill
 	echon repeat(' ', w)
-	if hasPrev
-		echohl Tabline
-		echon '< '
-		w += 2
-	endif
-	for b in buflist[s : e]
-		w += b.width
-		if b.current
-			echohl TablineSel
-		else
-			echohl Tabline
-		endif
-		echon b.label
-	endfor
-	if hasNext
-		echohl Tabline
-		echon '>'
-		w += 1
-	endif
-	const pad = &columns - 1 - w
-	if 0 < pad
-		echohl TablineFill
-		echon repeat(' ', &columns - 1 - w)
-	endif
-	echohl Normal
+	echoh Normal
 enddef
 
 def OnBufDelete()
 	RefreshBufList()
-	if buflist->len() <= 1
+	if !visible
 		zenmode#RedrawNow()
 	endif
 enddef

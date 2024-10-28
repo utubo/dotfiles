@@ -1,25 +1,34 @@
 vim9script
-var k = []
+var k = false
+var n = ''
+var p = ''
+var q = ''
 def A()
-k = []
-for a in execute('ls')->split("\n")
-const m = a->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
+p = ''
+var a = []
+for b in execute('ls')->split("\n")
+const m = b->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
 if !m->empty()
-var b = {
-nr: m[1],
-name: m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten(),
-current: m[2][0] ==# '%',
-}
-b.label = $'{b.nr}:{b.name} '
-b.width = strdisplaywidth(b.label)
-k += [b]
+const c = m[1]
+const d = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
+const e = m[2][0] ==# '%'
+const f = $'{c}:{d}'
+if e
+n = a->join(' ')
+p = (!n ? '' : ' ') .. f .. ' '
+a = []
+else
+add(a, f)
+endif
 endif
 endfor
+q = a->join(' ')
 B()
-g:zenmode.preventEcho = k->len() > 1
+k = !!q || !!n
+g:zenmode.preventEcho = k
 enddef
 def B()
-if k->len() <= 1
+if !k
 return
 endif
 if ['ControlP']->index(bufname('%')) !=# -1
@@ -29,60 +38,37 @@ if mode() ==# 'c'
 return
 endif
 redraw
-var s = 0
-var e = 0
-var w = getwininfo(win_getid(1))[0].textoff
-var a = false
-var c = false
-var d = false
-for b in k
-w += b.width
-if &columns - 5 < w
-if d
-e -= 1
-a = true
-break
+var w = v:echospace
+var o = getwininfo(win_getid(1))[0].textoff
+w -= o
+const s = p->substitute($'\%{w}v.*', '', '')
+w -= strdisplaywidth(s)
+var l = n->reverse()->substitute($'\%{w}v.*', '', '')->reverse()
+if l !=# n
+l = l->substitute('^.', '<', '')
 endif
-s += 1
-c = true
+w -= strdisplaywidth(l)
+var r = q->substitute($'\%{w}v.*', '', '')
+if r !=# q
+r = r->substitute('.$', '>', '')
 endif
-if b.current
-d = true
-endif
-e += 1
-endfor
-w = getwininfo(win_getid(1))[0].textoff
-echoh TablineFill
+w -= strdisplaywidth(r)
+w = max([0, w])
+echoh TabLineFill
+echon repeat(' ', o)
+echoh TabLine
+echon l
+echoh TabLineSel
+echon s
+echoh TabLine
+echon r
+echoh TabLineFill
 echon repeat(' ', w)
-if c
-echoh Tabline
-echon '< '
-w += 2
-endif
-for b in k[s : e]
-w += b.width
-if b.current
-echoh TablineSel
-else
-echoh Tabline
-endif
-echon b.label
-endfor
-if a
-echoh Tabline
-echon '>'
-w += 1
-endif
-const f = &columns - 1 - w
-if 0 < f
-echoh TablineFill
-echon repeat(' ', &columns - 1 - w)
-endif
 echoh Normal
 enddef
 def C()
 A()
-if k->len() <= 1
+if !k
 zenmode#RedrawNow()
 endif
 enddef
