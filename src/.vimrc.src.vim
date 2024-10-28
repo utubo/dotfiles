@@ -157,8 +157,9 @@ au vimrc BufNew,BufReadPost * silent! HiTail()
 
 silent! syntax enable
 set t_Co=256
-set background=light
-silent! colorscheme girly
+# 以下はローカル設定後にやる
+# set background=light
+# silent! colorscheme girly
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
@@ -167,6 +168,15 @@ if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local
 endif
 #}}}
+
+
+# ------------------------------------------------------
+# 色(ローカル設定後) {{{
+if !exists('g:colors_name')
+  set background=light
+  silent! colorscheme girly
+endif
+# }}}
 
 # ------------------------------------------------------
 # ファイルを開いたらカーソル位置を復元する {{{

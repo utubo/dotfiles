@@ -122,10 +122,12 @@ au vimrc OptionSet list silent! E()
 au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
-set bg=light
-sil! colorscheme girly
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
+endif
+if !exists('g:colors_name')
+set bg=light
+sil! colorscheme girly
 endif
 def F()
 const n = line('''"')
