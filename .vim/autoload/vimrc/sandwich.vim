@@ -1,7 +1,8 @@
 vim9script
-export def ApplySettings(a: string)
-exe $'nunmap {a}'
-exe $'xunmap {a}'
+export def LazyLoad(a: string)
+Enable g:sandwich_no_default_key_mappings
+Enable g:operator_sandwich_no_default_key_mappings
+packadd vim-sandwich
 g:sandwich = get(g:, 'sandwich', {})
 g:sandwich#recipes = [
 { buns: ['(', ')' ], input: ['(', ')'] },

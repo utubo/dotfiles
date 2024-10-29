@@ -1,11 +1,9 @@
 vim9script
 
-# vim-sandwich
-
-# `S`をprefixにしているので`nmap S`や`xmap S`をトリガーにして設定する
-export def ApplySettings(prefix: string)
-	execute $'nunmap {prefix}'
-	execute $'xunmap {prefix}'
+export def LazyLoad(prefix: string)
+	Enable g:sandwich_no_default_key_mappings
+	Enable g:operator_sandwich_no_default_key_mappings
+	packadd vim-sandwich
 	g:sandwich = get(g:, 'sandwich', {})
 	g:sandwich#recipes = [
 		{ buns: ['(',  ')' ], input: ['(', ')'] },

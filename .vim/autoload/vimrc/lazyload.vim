@@ -35,7 +35,6 @@ enddef
 packadd lsp
 packadd vim-notification
 packadd vim-reformatdate
-packadd vim-sandwich
 packadd vim-textobj-user
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
@@ -130,9 +129,6 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
-Enable g:sandwich_no_default_key_mappings
-Enable g:operator_sandwich_no_default_key_mappings
-Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
@@ -152,6 +148,7 @@ Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 vimrc#hlpairs#LazyLoad()
+Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)

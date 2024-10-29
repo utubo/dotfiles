@@ -59,7 +59,6 @@ enddef
 packadd lsp
 packadd vim-notification
 packadd vim-reformatdate
-packadd vim-sandwich
 packadd vim-textobj-user
 # }}}
 
@@ -190,12 +189,6 @@ nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
 #}}}
 
-# sandwich {{{
-Enable g:sandwich_no_default_key_mappings
-Enable g:operator_sandwich_no_default_key_mappings
-Each nmap,xmap S <ScriptCmd>vimrc#sandwich#ApplySettings('S')<CR>
-#}}}
-
 # 補完 {{{
 export def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
@@ -227,6 +220,7 @@ vimrc#hlpairs#LazyLoad()
 # }}}
 
 # 遅延読み込みもの {{{
+Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
