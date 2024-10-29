@@ -62,6 +62,13 @@ const vimrc_sid = scriptnames_output
 #}}}
 
 # ----------------------------------------------------------
+# 初期表示後の設定を実行
+doautocmd SafeStateAgain *
+#if !is_manually_run
+#	#vimrc#lazyload#LazyLoad()
+#endif
+
+# ----------------------------------------------------------
 # Lint
 
 # .vimrc読み込み {{{
@@ -332,6 +339,5 @@ suite.TestIndent = () => {
 
 # ----------------------------------------------------------
 
-doautocmd SafeStateAgain *
 g:RunTests()
 
