@@ -231,7 +231,7 @@ au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 vimrc#echobuflist#Setup()
 au vimrc User EchoBufListShow g:zenmode.preventEcho = true
-au vimrc User EchoBufListHide g:zenmode.preventEcho = false
+au vimrc User EchoBufListHide g:zenmode.preventEcho = false|zenmode#RedrawNow()
 def D(a: string = '')
 if &ft ==# 'qf'
 return
