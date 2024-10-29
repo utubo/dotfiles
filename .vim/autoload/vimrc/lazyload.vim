@@ -32,10 +32,11 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
-packadd vim-textobj-user
+packadd lsp
+packadd vim-notification
 packadd vim-reformatdate
 packadd vim-sandwich
-packadd vim-notification
+packadd vim-textobj-user
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
@@ -121,7 +122,6 @@ filetype: ['json'],
 path: $'vscode-json-languageserver{ll}',
 args: ['--stdio'],
 }]
-packadd lsp
 g:LspOptionsSet(lk)
 g:LspAddServer(lm)
 nn [l <Cmd>LspDiagPrev<CR>

@@ -56,10 +56,11 @@ enddef
 # プラグイン {{{
 
 # このスクリプト内で必要となるプラグイン {{{
-packadd vim-textobj-user
+packadd lsp
+packadd vim-notification
 packadd vim-reformatdate
 packadd vim-sandwich
-packadd vim-notification
+packadd vim-textobj-user
 # }}}
 
 # zenmode {{{
@@ -176,7 +177,6 @@ var lspServers = [{
 	path: $'vscode-json-languageserver{commandExt}',
 	args: ['--stdio'],
 }]
-packadd lsp
 g:LspOptionsSet(lspOptions)
 g:LspAddServer(lspServers)
 nnoremap [l <Cmd>LspDiagPrev<CR>
