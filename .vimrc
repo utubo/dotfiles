@@ -136,16 +136,12 @@ sil! normal! g`"zOzz
 endif
 enddef
 au vimrc BufRead * F()
-au vimrc VimEnter * {
+au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
-if k->fnamemodify(':e') == 'log'
-packadd vim-log-highlighting
-endif
 if k->filereadable()
+packadd vim-log-highlighting
 exe 'edit' k
-filetype detect
-F()
 endif
 endif
 }

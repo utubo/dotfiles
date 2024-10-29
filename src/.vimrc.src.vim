@@ -191,16 +191,12 @@ au vimrc BufRead * RestorePos()
 
 # ------------------------------------------------------
 # 起動時に前回のファイルを開く {{{
-au vimrc VimEnter * {
+au vimrc VimEnter * ++nested {
 	if empty(bufname())
 		const lastfile = get(v:oldfiles, 0, '')->expand()
-		if lastfile->fnamemodify(':e') == 'log'
-			packadd vim-log-highlighting
-		endif
 		if lastfile->filereadable()
+			packadd vim-log-highlighting
 			execute 'edit' lastfile
-			filetype detect
-			RestorePos()
 		endif
 	endif
 }
