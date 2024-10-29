@@ -103,9 +103,9 @@ call textobj#user#plugin('nonwhitespace', {
 #}}}
 
 # Git {{{
-command! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
-command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit Git commit -m <q-args>
-command! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
+command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
+command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gA :<C-u>Git add %
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>

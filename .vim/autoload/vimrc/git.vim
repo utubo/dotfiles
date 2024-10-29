@@ -1,5 +1,5 @@
 vim9script
-export def GitAdd(a: string)
+export def Add(a: string)
 const b = getcwd()
 try
 chdir(expand('%:p:h'))
@@ -31,10 +31,10 @@ enddef
 export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
-export def GitCommit(a: string)
+export def Commit(a: string)
 system('git commit -m ' .. a)
 enddef
-export def GitTagPush(a: string)
+export def TagPush(a: string)
 ec system($"git tag '{a}'")
 ec system($"git push origin '{a}'")
 enddef

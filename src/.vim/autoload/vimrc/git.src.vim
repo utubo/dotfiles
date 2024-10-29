@@ -1,6 +1,6 @@
 vim9script
 
-export def GitAdd(args: string)
+export def Add(args: string)
 	const current_dir = getcwd()
 	try
 		chdir(expand('%:p:h'))
@@ -34,17 +34,17 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 
-export def GitCommit(args: string)
+export def Commit(args: string)
 	system('git commit -m ' .. args)
 enddef
 
-export def GitTagPush(tagname: string)
+export def TagPush(tagname: string)
 	echo system($"git tag '{tagname}'")
 	echo system($"git push origin '{tagname}'")
 enddef
 
 # 以下はvimrcで定義する
-# command! -nargs=* GitAdd vimrc#git#GitAdd(<q-args>)
-# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#GitCommit(<q-args>)
-# command! -nargs=1 GitTagPush vimrc#git#GitTagPush(<q-args>)
+# command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
+# command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 
