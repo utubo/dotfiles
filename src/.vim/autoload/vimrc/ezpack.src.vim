@@ -9,6 +9,13 @@ command! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
 command! -nargs=* EzpackL execute $'Ezpack {<q-args>} <lazy>'
 
 EzpackInit
+# 初期表示で使うプラグイン
+EzpackS obcat/vim-sclow
+EzpackS vim-jp/vital.vim
+EzpackS utubo/vim-colorscheme-girly
+EzpackS utubo/vim-colorscheme-softgreen
+
+# あとは全部opt行き
 EzpackL airblade/vim-gitgutter
 EzpackO cohama/lexima.vim
 EzpackL delphinus/vim-auto-cursorline
@@ -19,17 +26,16 @@ EzpackL girishji/vimcomplete
 EzpackL hrsh7th/vim-vsnip
 EzpackL hrsh7th/vim-vsnip-integ
 EzpackL itchyny/calendar.vim
-EzpackS kana/vim-textobj-user
+EzpackO kana/vim-textobj-user
 EzpackL kana/vim-smartword
 EzpackL LeafCage/vimhelpgenerator
 EzpackL luochen1990/rainbow
-EzpackS machakann/vim-sandwich
-EzpackS mattn/vim-notification
+EzpackO machakann/vim-sandwich
+EzpackO mattn/vim-notification
 EzpackL matze/vim-move
 EzpackL michaeljsmith/vim-indent-object
-EzpackS MTDL9/vim-log-highlighting
+Ezpack  MTDL9/vim-log-highlighting <on> Filetype log
 EzpackL obcat/vim-hitspop
-EzpackS obcat/vim-sclow
 EzpackL osyo-manga/vim-textobj-multiblock
 EzpackL skanehira/gh.vim
 EzpackL thinca/vim-portal
@@ -40,7 +46,6 @@ EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
 EzpackL yegappan/mru
 EzpackL yuki-yano/dedent-yank.vim
-EzpackS vim-jp/vital.vim
 # Fern
 EzpackO lambdalisue/fern.vim
 EzpackO lambdalisue/fern-git-status.vim
@@ -54,13 +59,11 @@ EzpackL sheerun/vim-polyglot
 #EzpackL tani/vim-typo  # OmniSyntaxListが何故か重い
 # 🐶🍚
 EzpackL utubo/vim-altkey-in-term
-EzpackS utubo/vim-colorscheme-girly
-EzpackS utubo/vim-colorscheme-softgreen
 EzpackO utubo/vim-ezpack
 EzpackL utubo/vim-hlpairs
 EzpackL utubo/vim-minviml
+EzpackO utubo/vim-reformatdate
 EzpackL utubo/vim-registers-lite
-EzpackS utubo/vim-reformatdate
 Ezpack  utubo/vim-skipslash <on> ModeChanged *:c
 EzpackL utubo/vim-yomigana
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic]

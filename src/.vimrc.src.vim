@@ -194,6 +194,9 @@ au vimrc BufRead * RestorePos()
 au vimrc VimEnter * {
 	if empty(bufname())
 		const lastfile = get(v:oldfiles, 0, '')->expand()
+		if lastfile->fnamemodify(':e') == 'log'
+			packadd vim-log-highlighting
+		endif
 		if lastfile->filereadable()
 			execute 'edit' lastfile
 			filetype detect
@@ -207,20 +210,4 @@ au vimrc VimEnter * {
 # 初期表示後の設定 {{{
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
 #}}}
-
-# ------------------------------------------------------
-# メモ {{{
-# <F1> fern <S-F1>でフォルダを開く(win32)
-# <F2> MRU
-# <F3>
-# <F4>
-# <F5> 日付関係
-# <F6>
-# <F7>
-# <F8>
-# <F9> ここまでよんだ
-# <F10> ヘッダ行を表示(あんまり使わない)
-# <F11> 行番号表示切替
-# <F12> 折り返し表示切替
-#}}} -------------------------------------------------------
 

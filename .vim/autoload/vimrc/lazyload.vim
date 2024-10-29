@@ -32,6 +32,10 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
+packadd vim-textobj-user
+packadd vim-reformatdate
+packadd vim-sandwich
+packadd vim-notification
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {

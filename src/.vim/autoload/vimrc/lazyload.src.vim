@@ -55,6 +55,13 @@ enddef
 # ------------------------------------------------------
 # プラグイン {{{
 
+# このスクリプト内で必要となるプラグイン {{{
+packadd vim-textobj-user
+packadd vim-reformatdate
+packadd vim-sandwich
+packadd vim-notification
+# }}}
+
 # zenmode {{{
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 #}}}
@@ -748,7 +755,22 @@ if strftime('%d') ==# '01'
 endif
 #}}} -------------------------------------------------------
 
+# ------------------------------------------------------
+# メモ {{{
+# <F1> fern <S-F1>でフォルダを開く(win32)
+# <F2> MRU
+# <F3>
+# <F4>
+# <F5> 日付関係
+# <F6>
+# <F7>
+# <F8>
+# <F9> ここまでよんだ
+# <F10> ヘッダ行を表示(あんまり使わない)
+# <F11> 行番号表示切替
+# <F12> 折り返し表示切替
+#}}} -------------------------------------------------------
+
 export def LazyLoad()
 	# nop
 enddef
-

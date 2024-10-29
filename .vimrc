@@ -139,6 +139,9 @@ au vimrc BufRead * F()
 au vimrc VimEnter * {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
+if k->fnamemodify(':e') == 'log'
+packadd vim-log-highlighting
+endif
 if k->filereadable()
 exe 'edit' k
 filetype detect
