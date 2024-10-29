@@ -8,6 +8,7 @@ EzpackS obcat/vim-sclow
 EzpackS vim-jp/vital.vim
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
+EzpackS utubo/vim-zenmode
 EzpackL airblade/vim-gitgutter
 EzpackO cohama/lexima.vim
 EzpackL delphinus/vim-auto-cursorline
@@ -53,7 +54,6 @@ EzpackL utubo/vim-registers-lite
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c
 EzpackL utubo/vim-yomigana
 Ezpack utubo/vim-vim9skk <on> ModeChanged *:[ic]
-EzpackS utubo/vim-zenmode
 EzpackL utubo/jumpcursor.vim
 EzpackL utubo/vim-ddgv
 EzpackL utubo/vim-portal-aim

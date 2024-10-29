@@ -14,6 +14,7 @@ EzpackS obcat/vim-sclow
 EzpackS vim-jp/vital.vim
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
+EzpackS utubo/vim-zenmode
 
 # あとは全部opt行き
 EzpackL airblade/vim-gitgutter
@@ -67,7 +68,6 @@ EzpackL utubo/vim-registers-lite
 Ezpack  utubo/vim-skipslash <on> ModeChanged *:c
 EzpackL utubo/vim-yomigana
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic]
-EzpackS utubo/vim-zenmode
 # 🐶🍚様子見中
 EzpackL utubo/jumpcursor.vim
 EzpackL utubo/vim-ddgv
