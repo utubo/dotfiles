@@ -31,7 +31,7 @@ set udf
 set ut=2000
 set is
 set hls
-set shortmess+=F
+set shortmess+=FI
 filetype plugin indent on
 aug vimrc
 au!
@@ -140,9 +140,15 @@ au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
 if k->filereadable()
+packadd lsp
+packadd vim-gitgutter
 packadd vim-log-highlighting
+packadd vim-polyglot
 exe 'edit' k
 endif
+endif
+if empty(bufname())
+intro
 endif
 }
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()

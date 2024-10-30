@@ -79,11 +79,8 @@ suite.TestSets = () => {
 	var sets = []
 	const ignore_names = 'fcs\|foldmethod\|background' # 想定内なので無視する名前s
 	for line in vimrc_lines
-		var m = matchlist(line, '\<set\s\+\(\w\+\)')
-		if len(m) == 0
-			m = matchlist(line, '\<&\(\w\+\)\s*=')
-		endif
-		if len(m) == 0
+		var m = matchlist(line, '\<set\s\+\([a-z]\+\)\s*\([+^~]\)\?=\?')
+		if !m || !!m[2]
 			continue
 		endif
 		const name = m[1]

@@ -34,7 +34,7 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
-set shortmess+=F
+set shortmess+=FI # 後で:introする
 filetype plugin indent on
 
 augroup vimrc
@@ -195,9 +195,16 @@ au vimrc VimEnter * ++nested {
 	if empty(bufname())
 		const lastfile = get(v:oldfiles, 0, '')->expand()
 		if lastfile->filereadable()
+			# 読み込み重いけどこのタイミングでpackaddするしかない…
+			packadd lsp
+			packadd vim-gitgutter
 			packadd vim-log-highlighting
+			packadd vim-polyglot
 			execute 'edit' lastfile
 		endif
+	endif
+	if empty(bufname())
+		intro
 	endif
 }
 # }}}
