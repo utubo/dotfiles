@@ -90,41 +90,6 @@ nn <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matc
 nn <Space>gh <Cmd>tabe gh://utubo/repos<CR>
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-vimrc#lexima#LazyLoad()
-var lk = {
-diagSignErrorText: '🐞',
-diagSignHintText: '💡',
-diagSignInfoText: '💠',
-diagSignWarningText: '🐝',
-showDiagWithVirtualText: true,
-diagVirtualTextAlign: 'after',
-}
-const ll = has('win32') ? '.cmd' : ''
-var lm = [{
-name: 'typescriptlang',
-filetype: ['javascript', 'typescript'],
-path: $'typescript-language-server{ll}',
-args: ['--stdio'],
-}, {
-name: 'vimlang',
-filetype: ['vim'],
-path: $'vim-language-server{ll}',
-args: ['--stdio'],
-}, {
-name: 'htmllang',
-filetype: ['html'],
-path: $'html-languageserver{ll}',
-args: ['--stdio'],
-}, {
-name: 'jsonlang',
-filetype: ['json'],
-path: $'vscode-json-languageserver{ll}',
-args: ['--stdio'],
-}]
-g:LspOptionsSet(lk)
-g:LspAddServer(lm)
-nn [l <Cmd>LspDiagPrev<CR>
-nn ]l <Cmd>LspDiagNext<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
@@ -148,6 +113,8 @@ Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 vimrc#hlpairs#LazyLoad()
+vimrc#lexima#LazyLoad()
+vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s

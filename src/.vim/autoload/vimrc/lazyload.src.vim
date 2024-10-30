@@ -139,49 +139,6 @@ g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 # MRUに関してのその他の設定は.vim/after/ftplugin/mru.src.vimで指定している
 #}}}
 
-# lexima {{{
-# 最初のInsertEnterが動かないなぁ
-# au vimrc InsertEnterPre,CmdEnterPre ++once vimrc#lexima#LazyLoad()
-vimrc#lexima#LazyLoad()
-# }}}
-
-# LSP {{{
-var lspOptions = {
-	diagSignErrorText: '🐞',
-	diagSignHintText: '💡',
-	diagSignInfoText: '💠',
-	diagSignWarningText: '🐝',
-	showDiagWithVirtualText: true,
-	diagVirtualTextAlign: 'after',
-}
-const commandExt = has('win32') ? '.cmd' : ''
-var lspServers = [{
-	name: 'typescriptlang',
-	filetype: ['javascript', 'typescript'],
-	path: $'typescript-language-server{commandExt}',
-	args: ['--stdio'],
-}, {
-	name: 'vimlang',
-	filetype: ['vim'],
-	path: $'vim-language-server{commandExt}',
-	args: ['--stdio'],
-}, {
-	name: 'htmllang',
-	filetype: ['html'],
-	path: $'html-languageserver{commandExt}',
-	args: ['--stdio'],
-}, {
-	name: 'jsonlang',
-	filetype: ['json'],
-	path: $'vscode-json-languageserver{commandExt}',
-	args: ['--stdio'],
-}]
-g:LspOptionsSet(lspOptions)
-g:LspAddServer(lspServers)
-nnoremap [l <Cmd>LspDiagPrev<CR>
-nnoremap ]l <Cmd>LspDiagNext<CR>
-#}}}
-
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
@@ -217,6 +174,11 @@ Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
 vimrc#hlpairs#LazyLoad()
+# }}}
+
+# 設定が膨らんできたので別ファイルで定義 {{{
+vimrc#lexima#LazyLoad()
+vimrc#lsp#LazyLoad()
 # }}}
 
 # 遅延読み込みもの {{{

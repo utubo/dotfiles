@@ -140,10 +140,10 @@ au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
 if k->filereadable()
-packadd lsp
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
+vimrc#lsp#LazyLoad()
 exe 'edit' k
 endif
 endif
