@@ -35,7 +35,7 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(args: string)
-	echo system('git commit -m ' .. args)
+	echo system($"git commit -m '{args}'")
 enddef
 
 export def TagPush(tagname: string)

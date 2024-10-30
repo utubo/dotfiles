@@ -32,7 +32,7 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 export def Commit(a: string)
-ec system('git commit -m ' .. a)
+ec system($"git commit -m '{a}'")
 enddef
 export def TagPush(a: string)
 ec system($"git tag '{a}'")
