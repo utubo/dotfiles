@@ -386,7 +386,7 @@ def ShowBufInfo(event: string = '')
 		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 		add(msg, ['Normal', ' '])
 	endif
-	add(msg, ['MoreMsg', &ff])
+	add(msg, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
 	add(msg, ['Normal', ' '])
 	const enc = empty(&fenc) ? &encoding : &fenc
 	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])

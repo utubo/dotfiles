@@ -262,7 +262,7 @@ if b || w.bytes !=# 0
 add(e, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
 add(e, ['Normal', ' '])
 endif
-add(e, ['MoreMsg', &ff])
+add(e, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
 add(e, ['Normal', ' '])
 const f = empty(&fenc) ? &enc : &fenc
 add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
