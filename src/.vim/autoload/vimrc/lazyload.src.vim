@@ -186,7 +186,7 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
-nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
+nnoremap <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener=edit\<CR>"
 # }}}
 
 # その他 {{{

@@ -119,7 +119,7 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
-nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener={!bufname() && !&mod ? 'edit' : 'split'}\<CR>"
+nn <expr> <F1> $"\<Cmd>Fern . -reveal=% -opener=edit\<CR>"
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
