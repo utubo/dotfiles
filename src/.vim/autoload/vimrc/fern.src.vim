@@ -6,7 +6,7 @@ export def LazyLoad(qargs: string)
 	au vimrc FileType fern {
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
-		nnoremap <buffer> <F1> <Cmd>:q!<CR>
+		nnoremap <buffer> <F1> <C-o>
 		nnoremap <buffer> p <Plug>(fern-action-leave)
 	}
 	packadd fern.vim
