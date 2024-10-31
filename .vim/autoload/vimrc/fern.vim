@@ -6,7 +6,12 @@ au vimrc FileType fern {
 Enable b:auto_cursorline_disabled
 setl cursorline
 nn <buffer> <F1> <C-o>
-nn <buffer> p <Plug>(fern-action-leave)
+setl numberwidth=1
+setl number
+nn <buffer> 1 <Plug>(fern-action-leave)
+for i in range(2, 9)
+exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
+endfor
 }
 packadd fern.vim
 packadd fern-git-status.vim

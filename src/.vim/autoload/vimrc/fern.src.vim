@@ -7,7 +7,13 @@ export def LazyLoad(qargs: string)
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
 		nnoremap <buffer> <F1> <C-o>
-		nnoremap <buffer> p <Plug>(fern-action-leave)
+		# 数字キーで開く
+		setlocal numberwidth=1
+		setlocal number
+		nnoremap <buffer> 1 <Plug>(fern-action-leave)
+		for i in range(2, 9)
+			execute $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
+		endfor
 	}
 	packadd fern.vim
 	packadd fern-git-status.vim
