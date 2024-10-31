@@ -8,13 +8,14 @@ setl cursorline
 nn <buffer> <F1> <C-o>
 setl numberwidth=1
 setl number
-nn <buffer> 1 <Plug>(fern-action-leave)
-for i in range(2, 9)
+nn <buffer> 0 <Plug>(fern-action-leave)
+for i in range(2, 19)
 exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
 endfor
 }
 packadd fern.vim
 packadd fern-git-status.vim
+nn <buffer> 1 <Plug>(fern-action-leave)
 packadd fern-renderer-nerdfont.vim
 packadd fern-hijack.vim
 packadd nerdfont.vim
