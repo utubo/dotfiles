@@ -35,7 +35,7 @@ set shortmess+=FI
 filetype plugin indent on
 aug vimrc
 au!
-aug End
+aug END
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
