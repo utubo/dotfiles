@@ -15,7 +15,6 @@ endfor
 }
 packadd fern.vim
 packadd fern-git-status.vim
-nn <buffer> 1 <Plug>(fern-action-leave)
 packadd fern-renderer-nerdfont.vim
 packadd fern-hijack.vim
 packadd nerdfont.vim

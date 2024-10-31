@@ -17,7 +17,6 @@ export def LazyLoad(qargs: string)
 	}
 	packadd fern.vim
 	packadd fern-git-status.vim
-		nnoremap <buffer> 1 <Plug>(fern-action-leave)
 	packadd fern-renderer-nerdfont.vim
 	packadd fern-hijack.vim
 	packadd nerdfont.vim
