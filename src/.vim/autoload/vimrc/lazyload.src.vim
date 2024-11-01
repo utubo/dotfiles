@@ -414,12 +414,46 @@ nnoremap <Space>y yiw
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
+# ファイル名を勝手につけて保存 {{{
+def AutoNameAndSave()
+	if !!bufname()
+		update
+		return
+	endif
+	const dt = strftime('%Y%m%d')
+	var title = getline(1)
+		->matchlist('^.\{0,10\}')[0]
+		->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
+	var ext = &ft
+	if &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+		title = getline(1)
+			->substitute('- \[.\]', '', 'g')
+			->substitute('^[ -#]*', '', 'g')
+		ext = 'md'
+	elseif getline(1) =~# '^vim9script\>.*'
+		ext = 'vim'
+		title = ''
+	elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
+		ext = 'txt'
+	endif
+	const name = $'{dt}{!title ? '' : '_'}{title}.{ext}'
+	timer_start(1, (t: number) => {
+		const iname = input($"{getcwd()}\n:sav ", $'{name}{repeat("\<Left>", len(ext) + 1)}')
+		if !!iname
+			execute 'sav' iname
+		endif
+	})
+enddef
+command! AutoNameAndSave AutoNameAndSave()
+# }}}
+
+# ------------------------------------------------------
 # セミコロン {{{
 # インサートモードでも使うプレフィックス
 # 気づいたらコロンをセミコロンにマッピングしてなかった…
 # ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>AutoNameAndSave<CR><Esc>
 inoremap ;m <Esc>`^
 cnoremap ;m <C-c>
 noremap  ;m <Esc>

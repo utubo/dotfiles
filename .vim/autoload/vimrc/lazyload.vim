@@ -278,8 +278,38 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
+def E()
+if !!bufname()
+update
+return
+endif
+const a = strftime('%Y%m%d')
+var b = getline(1)
+->matchlist('^.\{0,10\}')[0]
+->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
+var c = &ft
+if &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+b = getline(1)
+->substitute('- \[.\]', '', 'g')
+->substitute('^[ -#]*', '', 'g')
+c = 'md'
+elseif getline(1) =~# '^vim9script\>.*'
+c = 'vim'
+b = ''
+elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
+c = 'txt'
+endif
+const d = $'{a}{!b ? '' : '_'}{b}.{c}'
+timer_start(1, (t: number) => {
+const e = input($"{getcwd()}\n:sav ", $'{d}{repeat("\<Left>", len(c) + 1)}')
+if !!e
+exe 'sav' e
+endif
+})
+enddef
+com! AutoNameAndSave E()
 cno ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>update<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>AutoNameAndSave<CR><Esc>
 ino ;m <Esc>`^
 cno ;m <C-c>
 no ;m <Esc>
@@ -404,31 +434,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def E()
+def F()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def F(a: string, b: string)
+def G(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * E()
+au vimrc Syntax * F()
 au vimrc Syntax javascript {
-F('SpellRare', '\s[=!]=\s')
+G('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-F('SpellRare', '\s[=!]=\s')
-F('SpellBad', '\s[=!]==\s')
-F('SpellBad', '\s\~[=!][=#]\?\s')
-F('SpellRare', '\<normal!\@!')
+G('SpellRare', '\s[=!]=\s')
+G('SpellBad', '\s[=!]==\s')
+G('SpellBad', '\s\~[=!][=#]\?\s')
+G('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def G()
+def H()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -439,7 +469,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>G()<CR>
+xn <C-g> <ScriptCmd>H()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
