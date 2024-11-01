@@ -415,7 +415,7 @@ nnoremap <Space>y yiw
 
 # ------------------------------------------------------
 # ファイル名を勝手につけて保存 {{{
-def AutoNameAndSave()
+def AutoNamingAndSave()
 	if !!bufname()
 		update
 		return
@@ -444,7 +444,7 @@ def AutoNameAndSave()
 		endif
 	})
 enddef
-command! AutoNameAndSave AutoNameAndSave()
+command! AutoNamingAndSave AutoNamingAndSave()
 # }}}
 
 # ------------------------------------------------------
@@ -453,7 +453,7 @@ command! AutoNameAndSave AutoNameAndSave()
 # 気づいたらコロンをセミコロンにマッピングしてなかった…
 # ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>AutoNameAndSave<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>AutoNamingAndSave<CR><Esc>
 inoremap ;m <Esc>`^
 cnoremap ;m <C-c>
 noremap  ;m <Esc>

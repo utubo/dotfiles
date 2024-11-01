@@ -307,9 +307,9 @@ exe 'sav' e
 endif
 })
 enddef
-com! AutoNameAndSave E()
+com! AutoNamingAndSave E()
 cno ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>AutoNameAndSave<CR><Esc>
+Each nnoremap,inoremap ;n <Cmd>AutoNamingAndSave<CR><Esc>
 ino ;m <Esc>`^
 cno ;m <C-c>
 no ;m <Esc>
