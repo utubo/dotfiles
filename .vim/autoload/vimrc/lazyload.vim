@@ -307,7 +307,7 @@ endif
 enddef
 com! AutoNamingAndSave E()
 cno ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>AutoNamingAndSave<CR><Esc>
+Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 ino ;m <Esc>`^
 cno ;m <C-c>
 no ;m <Esc>

@@ -451,7 +451,7 @@ command! AutoNamingAndSave AutoNamingAndSave()
 # 気づいたらコロンをセミコロンにマッピングしてなかった…
 # ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Cmd>AutoNamingAndSave<CR><Esc>
+Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 inoremap ;m <Esc>`^
 cnoremap ;m <C-c>
 noremap  ;m <Esc>
