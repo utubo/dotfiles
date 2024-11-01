@@ -300,12 +300,10 @@ elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
 c = 'txt'
 endif
 const d = $'{a}{!b ? '' : '_'}{b}.{c}'
-timer_start(1, (t: number) => {
 const e = input($"{getcwd()}\n:sav ", $'{d}{repeat("\<Left>", len(c) + 1)}')
 if !!e
 exe 'sav' e
 endif
-})
 enddef
 com! AutoNamingAndSave E()
 cno ;n <CR>

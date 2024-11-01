@@ -437,12 +437,10 @@ def AutoNamingAndSave()
 		ext = 'txt'
 	endif
 	const name = $'{dt}{!title ? '' : '_'}{title}.{ext}'
-	timer_start(1, (t: number) => {
-		const iname = input($"{getcwd()}\n:sav ", $'{name}{repeat("\<Left>", len(ext) + 1)}')
-		if !!iname
-			execute 'sav' iname
-		endif
-	})
+	const iname = input($"{getcwd()}\n:sav ", $'{name}{repeat("\<Left>", len(ext) + 1)}')
+	if !!iname
+		execute 'sav' iname
+	endif
 enddef
 command! AutoNamingAndSave AutoNamingAndSave()
 # }}}
