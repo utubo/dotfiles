@@ -288,14 +288,22 @@ var b = getline(1)
 ->matchlist('^.\{0,10\}')[0]
 ->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
 var c = &ft
-if &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+if getline(1) =~# '^vim9script\>.*'
+c = 'vim'
+b = ''
+elseif &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
 b = getline(1)
 ->substitute('- \[.\]', '', 'g')
 ->substitute('^[ -#]*', '', 'g')
 c = 'md'
-elseif getline(1) =~# '^vim9script\>.*'
-c = 'vim'
-b = ''
+elseif &ft ==# 'javascript'
+c = 'js'
+elseif &ft ==# 'python'
+c = 'py'
+elseif &ft ==# 'ruby'
+c = 'rb'
+elseif &ft ==# 'typescript'
+c = 'ts'
 elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
 c = 'txt'
 endif

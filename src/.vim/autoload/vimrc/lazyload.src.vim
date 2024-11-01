@@ -425,14 +425,22 @@ def AutoNamingAndSave()
 		->matchlist('^.\{0,10\}')[0]
 		->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
 	var ext = &ft
-	if &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+	if getline(1) =~# '^vim9script\>.*'
+		ext = 'vim'
+		title = ''
+	elseif &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
 		title = getline(1)
 			->substitute('- \[.\]', '', 'g')
 			->substitute('^[ -#]*', '', 'g')
 		ext = 'md'
-	elseif getline(1) =~# '^vim9script\>.*'
-		ext = 'vim'
-		title = ''
+	elseif &ft ==# 'javascript'
+		ext = 'js'
+	elseif &ft ==# 'python'
+		ext = 'py'
+	elseif &ft ==# 'ruby'
+		ext = 'rb'
+	elseif &ft ==# 'typescript'
+		ext = 'ts'
 	elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
 		ext = 'txt'
 	endif
