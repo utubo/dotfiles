@@ -7,7 +7,7 @@ def A()
 q = ''
 var a = []
 for b in execute('ls')->split("\n")
-const m = b->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
+const m = b->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 if m->empty()
 continue
 endif

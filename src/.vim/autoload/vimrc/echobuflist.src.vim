@@ -10,7 +10,7 @@ def RefreshBufList()
 	select = ''
 	var bufs = []
 	for ls in execute('ls')->split("\n")
-		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" \+line [0-9]\+')
+		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 		if m->empty()
 			continue
 		endif
