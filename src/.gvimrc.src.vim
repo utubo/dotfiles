@@ -17,9 +17,9 @@ def IncFontSize(d: number)
 	var f = split(&guifont, ':h')
 	&guifont = f[0] .. ':h' .. (str2nr(f[1]) + d)
 enddef
-nnoremap <silent> <M-S-k> <Cmd>call <SID>IncFontSize(v:count1)<CR>
-nnoremap <silent> <M-S-j> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
-# 禁断の🖱 (拡大縮小はこっちのほうが馴染みがあるから…)
+nnoremap <silent> <M-C-k> <Cmd>call <SID>IncFontSize(v:count1)<CR>
+nnoremap <silent> <M-C-j> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
+# 禁断のマウス操作 (拡大縮小はこっちのほうが馴染みがあるから…)
 nnoremap <silent> <C-ScrollWheelUp> <Cmd>call <SID>IncFontSize(v:count1)<CR>
 nnoremap <silent> <C-ScrollWheelDown> <Cmd>call <SID>IncFontSize(-v:count1)<CR>
 # }}}
