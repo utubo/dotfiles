@@ -436,8 +436,8 @@ def AutoNamingAndSave()
 	elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
 		ext = 'txt'
 	endif
-	const name = $'{dt}{!title ? '' : '_'}{title}.{ext}'
-	const iname = input($"{getcwd()}\n:sav ", $'{name}{repeat("\<Left>", len(ext) + 1)}')
+	const fname = $'{dt}{!title ? '' : '_'}{title}.{ext}'
+	const iname = input($"{getcwd()}\n:sav ", $'{fname}{repeat("\<Left>", len(ext) + 1)}')
 	if !!iname
 		execute 'sav' iname
 	endif
