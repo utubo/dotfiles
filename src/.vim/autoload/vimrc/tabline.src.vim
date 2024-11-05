@@ -1,12 +1,12 @@
 vim9script
 
 # 例: `current.txt|✏sub.txt|🐙>`(3つめ以降は省略)
-const tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
-const tabline_git_sign = '🐙'
-const tabline_dir_sign = '📂'
-const tabline_term_sign = "\uf489" # `>_`みたいなアイコン
-const tabline_labelsep = '|'
-const tabline_right_text = '...................$'
+g:tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
+g:tabline_git_sign = '🐙'
+g:tabline_dir_sign = '📂'
+g:tabline_term_sign = "\uf489" # `>_`みたいなアイコン
+g:tabline_labelsep = '|'
+g:tabline_max_len = 20
 
 export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 	var mod = ''
@@ -15,13 +15,13 @@ export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 		const bt = getbufvar(b, '&buftype')
 		if bt ==# ''
 			if !mod && getbufvar(b, '&modified')
-				mod = tabline_mod_sign
+				mod = g:tabline_mod_sign
 			endif
 			if !git
 				var g = false
 				silent! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
 				if g
-					git = tabline_git_sign
+					git = g:tabline_git_sign
 				endif
 			endif
 		endif
@@ -29,11 +29,11 @@ export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 			continue
 		endif
 		if bt ==# 'terminal'
-			return tabline_term_sign
+			return g:tabline_term_sign
 		endif
 		const ft = getbufvar(b, '&filetype')
 		if ft ==# 'netrw' || ft ==# 'fern'
-			return tabline_dir_sign
+			return g:tabline_dir_sign
 		endif
 	endfor
 	return mod .. git
@@ -59,14 +59,15 @@ export def MyTablabel(tab: number = 0): string
 			name = term_getline(b, '.')->trim()
 		endif
 		name = name->pathshorten()
-		if len(tabline_right_text) < len(name)
-			name = '<' .. name->matchstr(tabline_right_text)
+		const l = len(name)
+		if g:tabline_max_len < l
+			name = '<' .. name->strcharpart(l - g:tabline_max_len)
 		endif
 		if names->index(name) ==# -1
 			names += [MyTablabelSign([b]) .. name]
 		endif
 	endfor
-	label ..= names->join(tabline_labelsep)
+	label ..= names->join(g:tabline_labelsep)
 	return label
 enddef
 

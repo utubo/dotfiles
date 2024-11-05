@@ -1,10 +1,10 @@
 vim9script
-const k = "\uf040"
-const l = '🐙'
-const m = '📂'
-const n = "\uf489"
-const o = '|'
-const p = '...................$'
+g:tabline_mod_sign = "\uf040"
+g:tabline_git_sign = '🐙'
+g:tabline_dir_sign = '📂'
+g:tabline_term_sign = "\uf489"
+g:tabline_labelsep = '|'
+g:tabline_max_len = 20
 export def MyTablabelSign(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''
@@ -12,13 +12,13 @@ for b in a
 const f = getbufvar(b, '&buftype')
 if f ==# ''
 if !d && getbufvar(b, '&modified')
-d = k
+d = g:tabline_mod_sign
 endif
 if !e
 var g = false
 sil! g = len(getbufvar(b, 'gitgutter', {'hunks': []}).hunks) !=# 0
 if g
-e = l
+e = g:tabline_git_sign
 endif
 endif
 endif
@@ -26,11 +26,11 @@ if c
 continue
 endif
 if f ==# 'terminal'
-return n
+return g:tabline_term_sign
 endif
 const h = getbufvar(b, '&filetype')
 if h ==# 'netrw' || h ==# 'fern'
-return m
+return g:tabline_dir_sign
 endif
 endfor
 return d .. e
@@ -48,21 +48,22 @@ if len(f) ==# 2
 f += [(MyTablabelSign(d[i : ], true) .. '>')]
 break
 endif
-var g = bufname(b)
-if !g
-g = '[No Name]'
+var h = bufname(b)
+if !h
+h = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-g = term_getline(b, '.')->trim()
+h = term_getline(b, '.')->trim()
 endif
-g = g->pathshorten()
-if len(p) < len(g)
-g = '<' .. g->matchstr(p)
+h = h->pathshorten()
+const l = len(h)
+if g:tabline_max_len < l
+h = '<' .. h->strcharpart(l - g:tabline_max_len)
 endif
-if f->index(g) ==# -1
-f += [MyTablabelSign([b]) .. g]
+if f->index(h) ==# -1
+f += [MyTablabelSign([b]) .. h]
 endif
 endfor
-c ..= f->join(o)
+c ..= f->join(g:tabline_labelsep)
 return c
 enddef
 export def MyTabline(): string
