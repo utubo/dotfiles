@@ -40,6 +40,7 @@ g:tabline_dir_sign = '📂'
 g:tabline_term_sign = '≫'
 # gvimのタブだと'|'は見づらかったので
 g:tabline_labelsep = ', '
+set guitablabel=%{vimrc#tabline#MyTablabel()}
 # }}}
 
 # ウィンドウ位置記憶 {{{

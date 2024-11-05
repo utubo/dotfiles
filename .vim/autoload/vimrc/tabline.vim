@@ -4,7 +4,7 @@ const l = '🐙'
 const m = '📂'
 const n = "\uf489"
 const o = '|'
-const p = 20
+const p = '...................$'
 export def MyTablabelSign(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''
@@ -55,8 +55,8 @@ elseif getbufvar(b, '&buftype') ==# 'terminal'
 g = term_getline(b, '.')->trim()
 endif
 g = g->pathshorten()
-if p < len(g)
-g = '<' .. g->matchstr(repeat('.', p - 1) .. '$')
+if len(p) < len(g)
+g = '<' .. g->matchstr(p)
 endif
 if f->index(g) ==# -1
 f += [MyTablabelSign([b]) .. g]

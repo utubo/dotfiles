@@ -6,7 +6,7 @@ const tabline_git_sign = '🐙'
 const tabline_dir_sign = '📂'
 const tabline_term_sign = "\uf489" # `>_`みたいなアイコン
 const tabline_labelsep = '|'
-const tabline_maxlen = 20
+const tabline_right_text = '...................$'
 
 export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 	var mod = ''
@@ -39,7 +39,7 @@ export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 	return mod .. git
 enddef
 
-export def! MyTablabel(tab: number = 0): string
+export def MyTablabel(tab: number = 0): string
 	var label = ''
 	var bufs = tabpagebuflist(tab)
 	const win = tabpagewinnr(tab) - 1
@@ -59,8 +59,8 @@ export def! MyTablabel(tab: number = 0): string
 			name = term_getline(b, '.')->trim()
 		endif
 		name = name->pathshorten()
-		if tabline_maxlen < len(name)
-			name = '<' .. name->matchstr(repeat('.', tabline_maxlen - 1) .. '$')
+		if len(tabline_right_text) < len(name)
+			name = '<' .. name->matchstr(tabline_right_text)
 		endif
 		if names->index(name) ==# -1
 			names += [MyTablabelSign([b]) .. name]

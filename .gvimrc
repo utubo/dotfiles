@@ -25,6 +25,7 @@ g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
 g:tabline_term_sign = '≫'
 g:tabline_labelsep = ', '
+set guitablabel=%{vimrc#tabline#MyTablabel()}
 g:save_window_file = expand('~/.vimwinpos')
 def B()
 var a = [

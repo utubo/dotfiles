@@ -263,7 +263,6 @@ echoh Normal
 enddef
 nn <script> <C-g> <ScriptCmd>D()<CR>
 set tabline=%!vimrc#tabline#MyTabline()
-set guitablabel=%{vimrc#tabline#MyTablabel()}
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :

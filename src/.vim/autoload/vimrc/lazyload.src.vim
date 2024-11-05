@@ -290,8 +290,8 @@ def SetupTabstop()
 	&softtabstop = &tabstop
 	setpos('.', org)
 enddef
+# filetype indent on が終わってから判定する
 def SetupTabstopLazy()
-	# filetype indent on が終わってから判定する
 	au vimrc SafeState * ++once SetupTabstop()
 enddef
 # ft ==# ''でも実行したいのでFileTypeではなくBufReadPost
@@ -387,7 +387,6 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
 # ------------------------------------------------------
 # Tabline {{{
 set tabline=%!vimrc#tabline#MyTabline()
-set guitablabel=%{vimrc#tabline#MyTablabel()}
 #}}}
 
 # ------------------------------------------------------
