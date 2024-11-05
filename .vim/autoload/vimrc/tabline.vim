@@ -1,10 +1,10 @@
 vim9script
-g:tabline_mod_sign = "\uf040"
-g:tabline_git_sign = '🐙'
-g:tabline_dir_sign = '📂'
-g:tabline_term_sign = "\uf489"
-g:tabline_labelsep = '|'
-g:tabline_max_len = 20
+g:tabline_mod_sign = get(g:, 'tabline_mod_sign', "\uf040")
+g:tabline_git_sign = get(g:, 'tabline_git_sign', '🐙')
+g:tabline_dir_sign = get(g:, 'tabline_dir_sign', '📂')
+g:tabline_term_sign = get(g:, 'tabline_term_sign', "\uf489")
+g:tabline_labelsep = get(g:, 'tabline_labelsep', '|')
+g:tabline_max_len = get(g:, 'tabline_max_len', 20)
 export def MyTablabelSign(a: list<number>, c: bool = false): string
 var d = ''
 var e = ''

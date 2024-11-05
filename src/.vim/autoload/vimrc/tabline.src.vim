@@ -1,12 +1,12 @@
 vim9script
 
 # 例: `current.txt|✏sub.txt|🐙>`(3つめ以降は省略)
-g:tabline_mod_sign = "\uf040" # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
-g:tabline_git_sign = '🐙'
-g:tabline_dir_sign = '📂'
-g:tabline_term_sign = "\uf489" # `>_`みたいなアイコン
-g:tabline_labelsep = '|'
-g:tabline_max_len = 20
+g:tabline_mod_sign  = get(g:, 'tabline_mod_sign',  "\uf040") # 鉛筆アイコン(Cicaの絵文字だと半角幅になってしまう)
+g:tabline_git_sign  = get(g:, 'tabline_git_sign',  '🐙')
+g:tabline_dir_sign  = get(g:, 'tabline_dir_sign',  '📂')
+g:tabline_term_sign = get(g:, 'tabline_term_sign', "\uf489") # `>_`みたいなアイコン
+g:tabline_labelsep  = get(g:, 'tabline_labelsep',  '|')
+g:tabline_max_len   = get(g:, 'tabline_max_len',   20)
 
 export def MyTablabelSign(bufs: list<number>, overflow: bool = false): string
 	var mod = ''
