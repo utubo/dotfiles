@@ -38,8 +38,7 @@ g:tabline_mod_sign = '✏'
 g:tabline_git_sign = '🐙'
 g:tabline_dir_sign = '📂'
 g:tabline_term_sign = '⚡'
-# gvimのタブだと'|'は見づらかったので
-g:tabline_labelsep = ', '
+g:tabline_max_len = 40
 set guitablabel=%{vimrc#tabline#MyTablabel()}
 # }}}
 
