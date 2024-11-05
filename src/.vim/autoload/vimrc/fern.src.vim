@@ -15,6 +15,7 @@ export def LazyLoad(qargs: string)
 			execute $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
 		endfor
 	}
+	silent! unlet g:loaded_fern # TODO: 初回cloneのときfern.vimが先行実行されちゃうので…
 	packadd fern.vim
 	packadd fern-git-status.vim
 	packadd fern-renderer-nerdfont.vim

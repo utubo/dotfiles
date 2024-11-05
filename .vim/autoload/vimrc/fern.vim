@@ -13,6 +13,7 @@ for i in range(2, 19)
 exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
 endfor
 }
+sil! unlet g:loaded_fern
 packadd fern.vim
 packadd fern-git-status.vim
 packadd fern-renderer-nerdfont.vim
