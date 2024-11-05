@@ -20,7 +20,7 @@ if m[2][2] =~# '[RF?]'
 f = g:buflist_term_sign ..
 term_getline(str2nr(e), '.')
 ->trim()
-->substitute(' [%#>]$', '', '')
+->substitute('[%#>]$', '', '')
 endif
 f = f->pathshorten()
 const l = len(f)

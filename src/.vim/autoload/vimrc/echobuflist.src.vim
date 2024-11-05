@@ -25,7 +25,7 @@ def RefreshBufList()
 			name = g:buflist_term_sign ..
 				term_getline(str2nr(nr), '.')
 					->trim()
-					->substitute(' [%#>]$', '', '')
+					->substitute('[%#>]$', '', '')
 		endif
 		name = name->pathshorten()
 		const l = len(name)
