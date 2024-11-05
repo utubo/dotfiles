@@ -1,4 +1,6 @@
 vim9script
+g:buflist_term_sign = get(g:, 'tabline_term_sign', "\uf489")
+g:buflist_max_len = 20
 var k = false
 var n = ''
 var q = ''
@@ -12,7 +14,14 @@ if m->empty()
 continue
 endif
 const c = m[1]
-const d = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
+var d = m[3]->pathshorten()
+if m[2][2] =~# '[RF?]'
+d = g:buflist_term_sign .. term_getline(str2nr(c), '.')->trim()->pathshorten()
+endif
+const l = len(d)
+if g:buflist_max_len < l
+d = '<' .. d->strcharpart(l - g:buflist_max_len)
+endif
 const e = $'{c}:{d}'
 const f = m[2][0] ==# '%'
 if f
@@ -28,9 +37,9 @@ B()
 const v = !!t || !!n
 if v !=# k
 k = v
-const g = v ? 'EchoBufListShow' : 'EchoBufListHide'
-if exists($'#User#{g}')
-exe 'doautocmd User' g
+const h = v ? 'EchoBufListShow' : 'EchoBufListHide'
+if exists($'#User#{h}')
+exe 'doautocmd User' h
 endif
 endif
 enddef

@@ -2,6 +2,9 @@ vim9script
 
 # 複数bufを開いている場合、一覧を画面下部に表示する
 
+g:buflist_term_sign = get(g:, 'tabline_term_sign', "\uf489") # `>_`みたいなアイコン
+g:buflist_max_len = 20
+
 var visible = false
 var left = ''
 var select = ''
@@ -15,7 +18,14 @@ def RefreshBufList()
 			continue
 		endif
 		const nr = m[1]
-		const name = m[2][2] =~# '[RF?]' ? '[Term]' : m[3]->pathshorten()
+		var name = m[3]->pathshorten()
+		if m[2][2] =~# '[RF?]'
+			name = g:buflist_term_sign .. term_getline(str2nr(nr), '.')->trim()->pathshorten()
+		endif
+		const l = len(name)
+		if g:buflist_max_len < l
+			name = '<' .. name->strcharpart(l - g:buflist_max_len)
+		endif
 		const label = $'{nr}:{name}'
 		const current = m[2][0] ==# '%'
 		if current
