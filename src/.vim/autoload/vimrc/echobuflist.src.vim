@@ -2,8 +2,8 @@ vim9script
 
 # 複数bufを開いている場合、一覧を画面下部に表示する
 
-g:buflist_term_sign = get(g:, 'tabline_term_sign', "\uf489") # `>_`みたいなアイコン
-g:buflist_max_len = 20
+# `>_`みたいなアイコン
+g:buflist_term_sign = get(g:, 'buflist_term_sign', "\uf489")
 
 var visible = false
 var left = ''
@@ -12,19 +12,25 @@ var right = ''
 def RefreshBufList()
 	select = ''
 	var bufs = []
-	for ls in execute('ls')->split("\n")
+	const ls_result = execute('ls')->split("\n")
+	const max_len = &columns / len(ls_result)
+	for ls in ls_result
 		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 		if m->empty()
 			continue
 		endif
 		const nr = m[1]
-		var name = m[3]->pathshorten()
+		var name = m[3]
 		if m[2][2] =~# '[RF?]'
-			name = g:buflist_term_sign .. term_getline(str2nr(nr), '.')->trim()->pathshorten()
+			name = g:buflist_term_sign ..
+				term_getline(str2nr(nr), '.')
+					->trim()
+					->substitute(' [%#>]$', '', '')
 		endif
+		name = name->pathshorten()
 		const l = len(name)
-		if g:buflist_max_len < l
-			name = '<' .. name->strcharpart(l - g:buflist_max_len)
+		if max_len < l
+			name = '<' .. name->strcharpart(l - max_len)
 		endif
 		const label = $'{nr}:{name}'
 		const current = m[2][0] ==# '%'

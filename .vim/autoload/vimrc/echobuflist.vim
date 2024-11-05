@@ -1,6 +1,5 @@
 vim9script
-g:buflist_term_sign = get(g:, 'tabline_term_sign', "\uf489")
-g:buflist_max_len = 20
+g:buflist_term_sign = get(g:, 'buflist_term_sign', "\uf489")
 var k = false
 var n = ''
 var q = ''
@@ -8,28 +7,34 @@ var t = ''
 def A()
 q = ''
 var a = []
-for b in execute('ls')->split("\n")
-const m = b->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
+const b = execute('ls')->split("\n")
+const c = &columns / len(b)
+for d in b
+const m = d->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 if m->empty()
 continue
 endif
-const c = m[1]
-var d = m[3]->pathshorten()
+const e = m[1]
+var f = m[3]
 if m[2][2] =~# '[RF?]'
-d = g:buflist_term_sign .. term_getline(str2nr(c), '.')->trim()->pathshorten()
+f = g:buflist_term_sign ..
+term_getline(str2nr(e), '.')
+->trim()
+->substitute(' [%#>]$', '', '')
 endif
-const l = len(d)
-if g:buflist_max_len < l
-d = '<' .. d->strcharpart(l - g:buflist_max_len)
+f = f->pathshorten()
+const l = len(f)
+if c < l
+f = '<' .. f->strcharpart(l - c)
 endif
-const e = $'{c}:{d}'
-const f = m[2][0] ==# '%'
-if f
+const h = $'{e}:{f}'
+const i = m[2][0] ==# '%'
+if i
 n = a->join(' ')
-q = (!n ? '' : ' ') .. e .. ' '
+q = (!n ? '' : ' ') .. h .. ' '
 a = []
 else
-add(a, e)
+add(a, h)
 endif
 endfor
 t = a->join(' ')
@@ -37,9 +42,9 @@ B()
 const v = !!t || !!n
 if v !=# k
 k = v
-const h = v ? 'EchoBufListShow' : 'EchoBufListHide'
-if exists($'#User#{h}')
-exe 'doautocmd User' h
+const j = v ? 'EchoBufListShow' : 'EchoBufListHide'
+if exists($'#User#{j}')
+exe 'doautocmd User' j
 endif
 endif
 enddef
