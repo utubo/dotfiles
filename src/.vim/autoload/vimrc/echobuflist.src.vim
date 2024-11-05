@@ -24,8 +24,7 @@ def RefreshBufList()
 		if m[2][2] =~# '[RF?]'
 			name = g:buflist_term_sign ..
 				term_getline(str2nr(nr), '.')
-					->trim()
-					->substitute('[%#>]$', '', '')
+					->substitute('[%#>$]\s*$', '', '')
 		endif
 		name = name->pathshorten()
 		const l = len(name)
