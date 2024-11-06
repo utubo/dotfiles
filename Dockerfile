@@ -20,11 +20,11 @@ RUN addgroup -S $USER && \
 RUN echo "$USER ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER $USER
 
-RUN sudo npm install -g npm
-RUN sudo npm install -g typescript-language-server
-RUN sudo npm install -g vim-language-server
-RUN sudo npm install -g vscode-html-languageserver-bin
-RUN sudo npm install -g vscode-json-languageserver
+RUN sudo npm install -g --omit=optional npm
+RUN sudo npm install -g --omit=optional typescript-language-server
+RUN sudo npm install -g --omit=optional vim-language-server
+RUN sudo npm install -g --omit=optional vscode-html-languageserver-bin
+RUN sudo npm install -g --omit=optional vscode-json-languageserver
 
 WORKDIR $HOME
 

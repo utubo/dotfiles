@@ -36,7 +36,7 @@ else
 		exit 0
 	fi
 fi
-sudo npm install -g npm
+sudo npm install -g --omit=optional npm
 
 # node_modules
 sudo npm install -g --omit=optional typescript-language-server
