@@ -20,6 +20,12 @@ RUN addgroup -S $USER && \
 RUN echo "$USER ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER $USER
 
+RUN sudo npm install -g npm
+RUN sudo npm install -g typescript-language-server
+RUN sudo npm install -g vim-language-server
+RUN sudo npm install -g vscode-html-languageserver-bin
+RUN sudo npm install -g vscode-json-languageserver
+
 WORKDIR $HOME
 
 ADD https://api.github.com/repos/utubo/dotfiles/git/refs/heads/master version.json
