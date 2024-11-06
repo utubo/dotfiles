@@ -8,7 +8,7 @@ def A()
 q = ''
 var a = []
 const b = execute('ls')->split("\n")
-const c = &columns / len(b)
+const c = &columns / (len(b) || 1)
 for d in b
 const m = d->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 if m->empty()

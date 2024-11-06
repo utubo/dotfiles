@@ -13,7 +13,7 @@ def RefreshBufList()
 	select = ''
 	var bufs = []
 	const ls_result = execute('ls')->split("\n")
-	const max_len = &columns / len(ls_result)
+	const max_len = &columns / (len(ls_result) || 1)
 	for ls in ls_result
 		const m = ls->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 		if m->empty()
