@@ -39,8 +39,8 @@ fi
 sudo npm install -g npm
 
 # node_modules
-sudo npm install -g typescript-language-server
-sudo npm install -g vim-language-server
-sudo npm install -g vscode-html-languageserver-bin
-sudo npm install -g vscode-json-languageserver
+sudo npm install -g --omit=optional typescript-language-server
+sudo npm install -g --omit=optional vim-language-server
+sudo npm install -g --omit=optional vscode-html-languageserver-bin
+sudo npm install -g --omit=optional vscode-json-languageserver
 

@@ -1,4 +1,4 @@
-FROM thinca/vim:latest
+FROM thinca/vim:v9.1.0842
 
 RUN apk update && \
     apk --no-cache add \
@@ -12,7 +12,7 @@ RUN apk update && \
 ENV SHELL /bin/zsh
 RUN zsh
 
-ENV USER dotfile
+ENV USER alice
 ENV HOME /home/$USER
 RUN addgroup -S $USER && \
     adduser -S -u 1000 -G $USER $USER && \
