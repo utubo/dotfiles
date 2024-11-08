@@ -17,3 +17,6 @@ If it is bright
 :colorscheme softgreen
 ```
 
+vim-plugins I use.  
+[src/.vim/autoload/vimrc/ezpack.src.vim](src/.vim/autoload/vimrc/ezpack.src.vim)
+
