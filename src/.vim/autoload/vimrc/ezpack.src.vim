@@ -70,7 +70,7 @@ EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ
 EzpackL utubo/vim-hlpairs          # 括弧をハイライト強化版
 EzpackL utubo/vim-minviml          # vimscriptをminify
 EzpackO utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
-EzpackL utubo/vim-registers-lite   # rigsters.nvimライクなプラグイン
+EzpackL utubo/vim-registers-lite   # registers.nvimライクなプラグイン
 Ezpack  utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
 EzpackL utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic] # vim9scriptで作ったskk
