@@ -1,8 +1,8 @@
 vim9script
 packadd vim-ezpack
 com! -nargs=* EzpackS execute $'Ezpack {<q-args>}'
-com! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
-com! -nargs=* EzpackL execute $'Ezpack {<q-args>} <lazy>'
+com! -nargs=* EzpackO execute $'Ezpack <opt> {<q-args>}'
+com! -nargs=* EzpackL execute $'Ezpack <lazy> {<q-args>}'
 EzpackInit
 EzpackS vim-jp/vital.vim
 EzpackS obcat/vim-sclow

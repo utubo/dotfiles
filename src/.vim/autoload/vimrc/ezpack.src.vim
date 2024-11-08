@@ -1,14 +1,12 @@
 vim9script
 packadd vim-ezpack
 
-# TODO: これminifyでコメントが削除されてるから上手く動いてるだけだ…
-# 本来は<q-args>からコメント取り除かなきゃ
 # start(default)
 command! -nargs=* EzpackS execute $'Ezpack {<q-args>}'
 # opt
-command! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
+command! -nargs=* EzpackO execute $'Ezpack <opt> {<q-args>}'
 # lazy
-command! -nargs=* EzpackL execute $'Ezpack {<q-args>} <lazy>'
+command! -nargs=* EzpackL execute $'Ezpack <lazy> {<q-args>}'
 
 EzpackInit
 
