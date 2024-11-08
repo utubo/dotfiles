@@ -4,8 +4,8 @@ com! -nargs=* EzpackS execute $'Ezpack {<q-args>}'
 com! -nargs=* EzpackO execute $'Ezpack {<q-args>} <opt>'
 com! -nargs=* EzpackL execute $'Ezpack {<q-args>} <lazy>'
 EzpackInit
-EzpackS obcat/vim-sclow
 EzpackS vim-jp/vital.vim
+EzpackS obcat/vim-sclow
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
 EzpackS utubo/vim-zenmode
@@ -58,9 +58,10 @@ EzpackL utubo/jumpcursor.vim
 Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackL utubo/vim-portal-aim
 EzpackL utubo/vim-shrink
-EzpackL utubo/vim-tablist
-EzpackL utubo/vim-tabpopupmenu
 EzpackL utubo/vim-textobj-twochars
+EzpackO utubo/vim-cmdheight0 <disable>
+EzpackO utubo/vim-tablist <disable>
+EzpackO utubo/vim-tabpopupmenu <disable>
 export def Install()
 ezpack#Install()
 enddef
