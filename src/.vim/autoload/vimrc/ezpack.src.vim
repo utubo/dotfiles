@@ -59,7 +59,7 @@ EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 
-# 気になるけど断念中
+# 気になるけど断念中(原因は殆どおま環)
 # EzpackL girishji/autosuggest.vim # ちょっとWindowsで動きが怪しい
 # EzpackL github/copilot.vim       # 重い
 # EzpackL tani/vim-typo            # OmniSyntaxListが何故か重い
