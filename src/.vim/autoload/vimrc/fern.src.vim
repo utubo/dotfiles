@@ -6,7 +6,8 @@ export def LazyLoad(qargs: string)
 	au vimrc FileType fern {
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
-		nnoremap <buffer> <F1> <C-o>
+		# <F1>でfernを閉じる
+		nnoremap <buffer> <F1> <C-o><Cmd>if &ft ==# 'fern'<Bar>normal<Space><F1><Bar>endif<CR>
 		# 数字キーで開く
 		setlocal numberwidth=1
 		setlocal number

@@ -5,7 +5,7 @@ g:fern#renderer = "nerdfont"
 au vimrc FileType fern {
 Enable b:auto_cursorline_disabled
 setl cursorline
-nn <buffer> <F1> <C-o>
+nn <buffer> <F1> <C-o><Cmd>if &ft ==# 'fern'<Bar>normal<Space><F1><Bar>endif<CR>
 setl numberwidth=1
 setl number
 nn <buffer> 0 <Plug>(fern-action-leave)
