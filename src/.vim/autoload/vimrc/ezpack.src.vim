@@ -75,7 +75,7 @@ Ezpack  utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>�
 EzpackL utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic] # vim9scriptで作ったskk
 
-# 🐶🍚様子見中
+# 🐶💬🍚作ったけど使用頻度が低い
 EzpackL utubo/jumpcursor.vim       # jumpcursorのvim対応版
 Ezpack  utubo/vim-ddgv <cmd> DDGV  # duckduckGo検索
 EzpackL utubo/vim-portal-aim       # vim-portalを狙った場所に撃てるようにする
