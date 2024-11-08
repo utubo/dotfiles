@@ -109,7 +109,6 @@ def GetHl(name: string): any
 enddef
 
 def MyHighlight()
-	hi! link CmdHeight0Horiz MoreMsg
 	const x = has('gui') ? 'gui' : 'cterm'
 	const signBg = GetHl('LineNr').bg
 	execute $'hi LspDiagSignErrorText   {x}bg={signBg} {x}fg={GetHl("ErrorMsg").fg}'

@@ -85,7 +85,6 @@ const b = hlID(a)->synIDtrans()
 return { fg: A(b, 'fg'), bg: A(b, 'bg') }
 enddef
 def C()
-hi! link CmdHeight0Horiz MoreMsg
 const x = has('gui') ? 'gui' : 'cterm'
 const a = B('LineNr').bg
 exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={B("ErrorMsg").fg}'

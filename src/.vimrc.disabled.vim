@@ -230,3 +230,12 @@ suite.TestTruncToDisplayWidth = () => {
 	assert.equals(F('あ', 1), '>')
 }
 # }}}
+
+# 色関係 {{{
+# vim-cmdheight0の設定
+hi! link CmdHeight0Horiz MoreMsg
+
+# ポータルは水色とオレンジにしたい…
+hi Portal_blue ctermbg=45 guibg=#00d7ff
+hi Portal_orange ctermbg=214 guibg=#ffaf00
+# }}}
