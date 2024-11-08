@@ -70,7 +70,7 @@ EzpackL utubo/vim-yomigana
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic]
 # 🐶🍚様子見中
 EzpackL utubo/jumpcursor.vim
-EzpackL utubo/vim-ddgv
+Ezpack  utubo/vim-ddgv <cmd> DDGV
 EzpackL utubo/vim-portal-aim
 EzpackL utubo/vim-shrink
 EzpackL utubo/vim-tablist
