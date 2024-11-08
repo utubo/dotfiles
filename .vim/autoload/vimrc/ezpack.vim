@@ -59,9 +59,9 @@ Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackL utubo/vim-portal-aim
 EzpackL utubo/vim-shrink
 EzpackL utubo/vim-textobj-twochars
-EzpackO utubo/vim-cmdheight0 <disable>
-EzpackO utubo/vim-tablist <disable>
-EzpackO utubo/vim-tabpopupmenu <disable>
+EzpackO utubo/vim-cmdheight0
+EzpackO utubo/vim-tablist
+EzpackO utubo/vim-tabpopupmenu
 export def Install()
 ezpack#Install()
 enddef

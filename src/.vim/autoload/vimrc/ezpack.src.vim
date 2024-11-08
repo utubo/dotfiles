@@ -82,10 +82,10 @@ EzpackL utubo/vim-portal-aim       # vim-portalを狙った場所に撃てるよ
 EzpackL utubo/vim-shrink           # ウィンドウ移動時にいい感じにサイズ縮小
 EzpackL utubo/vim-textobj-twochars # 指定した2つの文字で挟まれるtextobj
 
-# 🐶✋🍚
-EzpackO utubo/vim-cmdheight0   <disable> # cmdheight=0エミュレータ(statuslineに対応)
-EzpackO utubo/vim-tablist      <disable> # タブ一覧を表示する
-EzpackO utubo/vim-tabpopupmenu <disable> # タブ操作関係のメニュー
+# 🐶✋🍚作ったけど使わなくなった。optに入れておいて修正したいときに手でpackaddする
+EzpackO utubo/vim-cmdheight0       # cmdheight=0エミュレータ(statuslineに対応)
+EzpackO utubo/vim-tablist          # タブ一覧を表示する
+EzpackO utubo/vim-tabpopupmenu     # タブ操作関係のメニュー
 
 export def Install()
   ezpack#Install()
