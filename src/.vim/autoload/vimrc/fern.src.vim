@@ -7,7 +7,7 @@ export def LazyLoad(qargs: string)
 		Enable b:auto_cursorline_disabled
 		setlocal cursorline
 		# <F1>でfernを閉じる
-		nnoremap <buffer> <F1> <C-o><Cmd>if &ft ==# 'fern'<Bar>normal<Space><F1><Bar>endif<CR>
+		nnoremap <buffer> <F1> <C-o><Cmd>if &ft ==# 'fern'<Bar>normal <F1><Bar>endif<CR>
 		# 数字キーで開く
 		setlocal numberwidth=1
 		setlocal number
