@@ -101,7 +101,8 @@ suite.TestMapping = () => {
 	# n  e  vim-smart-word
 	# n  gc vim-caw
 	# n  gd vim-vimscript-gd
-	# n  ge  vim-smart-word
+	# n  ge vim-smart-word
+	# n  gi textobjの先頭に移動
 	# n  gn バッファ移動
 	# n  gp バッファ移動
 	# n  gr バッファ移動
@@ -134,7 +135,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
-		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesnpr;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
+		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[cdesinpr;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
 		'n  \(<C-[FBP]>\)',
 		'v  \([*/?:]\)',
 		'i  \(<C-U>\)',

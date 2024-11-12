@@ -705,6 +705,19 @@ nmap <SID>(hold-ctrl) <Nop>
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 
+# テキストオブジェクトの先頭に移動
+def ToHead(type: string)
+	const p = getpos("'[")
+	g:p = p
+	setpos('.', p)
+	if p[2] <= 1
+		normal ^
+	endif
+enddef
+noremap <SID>(ToHead) <ScriptCmd>set operatorfunc=ToHead<CR>g@
+nmap gi <SID>(ToHead)i
+nmap g% gi%
+
 #noremap <F1> <Cmd>smile<CR>
 #}}} -------------------------------------------------------
 
