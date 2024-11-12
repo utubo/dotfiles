@@ -478,7 +478,7 @@ Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
-def I(a: string)
+export def ToHead(a: string)
 const p = getpos("'[")
 g:p = p
 setpos('.', p)
@@ -486,7 +486,7 @@ if p[2] <= 1
 normal ^
 endif
 enddef
-no <SID>(ToHead) <ScriptCmd>set operatorfunc=ToHead<CR>g@
+no <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
 nm gi <SID>(ToHead)i
 nm g% gi%
 nn <Space>w <C-w>w

@@ -706,7 +706,7 @@ onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 
 # テキストオブジェクトの先頭に移動
-def ToHead(type: string)
+export def ToHead(type: string)
 	const p = getpos("'[")
 	g:p = p
 	setpos('.', p)
@@ -714,7 +714,7 @@ def ToHead(type: string)
 		normal ^
 	endif
 enddef
-noremap <SID>(ToHead) <ScriptCmd>set operatorfunc=ToHead<CR>g@
+noremap <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
 nmap gi <SID>(ToHead)i
 nmap g% gi%
 
