@@ -35,12 +35,12 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(args: string)
-	echo system($"git commit -m '{args}'")
+	echo system($'git commit -m "{args}"')
 enddef
 
 export def TagPush(tagname: string)
-	echo system($"git tag '{tagname}'")
-	echo system($"git push origin '{tagname}'")
+	echo system($'git tag "{tagname}"')
+	echo system($'git push origin "{tagname}"')
 enddef
 
 # 以下はvimrcで定義する
