@@ -9,6 +9,7 @@ EzpackS obcat/vim-sclow
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
 EzpackS utubo/vim-zenmode
+EzpackL yegappan/mru
 EzpackL airblade/vim-gitgutter
 EzpackO cohama/lexima.vim
 EzpackL delphinus/vim-auto-cursorline
@@ -35,7 +36,6 @@ EzpackL tpope/vim-fugitive
 EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
-EzpackL yegappan/mru
 EzpackL yuki-yano/dedent-yank.vim
 EzpackO lambdalisue/fern.vim
 EzpackO lambdalisue/fern-git-status.vim

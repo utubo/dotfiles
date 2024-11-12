@@ -17,6 +17,9 @@ EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
 EzpackS utubo/vim-zenmode # cmdheight=0エミュレータ(statuslineも非表示)
 
+# ちょっとだけ早めに読み込んでほしい
+EzpackL yegappan/mru
+
 # あとは全部opt行き
 EzpackL airblade/vim-gitgutter # gitの差分を表示する
 EzpackO cohama/lexima.vim
@@ -44,7 +47,6 @@ EzpackL tpope/vim-fugitive # `:Git`コマンド
 EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
-EzpackL yegappan/mru
 EzpackL yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 
 # Fern
