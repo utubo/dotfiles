@@ -166,8 +166,6 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 
 # 🐶🍚 {{{
 g:skipslash_autocomplete = 1
-g:loaded_matchparen = 1
-g:loaded_matchit = 1
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w

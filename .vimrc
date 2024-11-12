@@ -121,6 +121,8 @@ au vimrc OptionSet list silent! E()
 au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
+g:loaded_matchparen = 1
+g:loaded_matchit = 1
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
