@@ -110,7 +110,6 @@ nn <Space>T <ScriptCmd>tablist#Show()<CR>
 Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
-vimrc#hlpairs#LazyLoad()
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>

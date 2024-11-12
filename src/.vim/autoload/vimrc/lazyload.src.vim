@@ -171,7 +171,6 @@ nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
 Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
 Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
-vimrc#hlpairs#LazyLoad()
 # }}}
 
 # 設定が膨らんできたので別ファイルで定義 {{{
