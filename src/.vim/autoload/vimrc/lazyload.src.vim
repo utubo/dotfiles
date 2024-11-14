@@ -75,15 +75,16 @@ g:vim9skk = {
 	marker_midasi: '',
 	marker_select: '',
 	mode_label: {
-		midasi: '▽'
-	}
+		midasi: '▽',
+	},
+	mode_label_timeout: -1,
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
 # インサートモードが終わったらオフにする
 au vimrc ModeChanged [ic]:* au SafeState * ++once vim9skk#Disable()
-# 見出しモードでスタートする
-au vimrc User Vim9skkEnter feedkeys('Q')
+## 見出しモードでスタートする
+#au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}
