@@ -13,8 +13,8 @@ EzpackInit
 # 初期表示で使うプラグイン
 EzpackS vim-jp/vital.vim
 EzpackS obcat/vim-sclow
-EzpackS utubo/vim-colorscheme-girly
-EzpackS utubo/vim-colorscheme-softgreen
+EzpackS utubo/vim-colorscheme-girly # うちのvimが一番kawaii!
+EzpackS utubo/vim-colorscheme-softgreen # 緑がかって目に優しめを目指しました
 EzpackS utubo/vim-zenmode # cmdheight=0エミュレータ(statuslineも非表示)
 
 # あとは全部opt行き
