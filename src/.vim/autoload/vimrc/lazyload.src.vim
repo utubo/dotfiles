@@ -72,7 +72,11 @@ g:vim9skk = {
 		toggle: ['<C-j>', ';j'],
 		midasi: [':', 'Q'],
 	},
-	mode_label_timeout: 500,
+	marker_midasi: '',
+	marker_select: '',
+	mode_label: {
+		midasi: '▽'
+	}
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
