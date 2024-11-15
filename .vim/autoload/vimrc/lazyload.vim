@@ -42,11 +42,6 @@ keymap: {
 toggle: ['<C-j>', ';j'],
 midasi: [':', 'Q'],
 },
-marker_midasi: '',
-marker_select: '',
-mode_label: {
-midasi: '▽',
-},
 mode_label_timeout: -1,
 }
 g:vim9skk_mode = ''
