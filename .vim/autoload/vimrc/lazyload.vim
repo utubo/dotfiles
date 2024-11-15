@@ -42,7 +42,6 @@ keymap: {
 toggle: ['<C-j>', ';j'],
 midasi: [':', 'Q'],
 },
-mode_label_timeout: -1,
 }
 g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
