@@ -45,7 +45,6 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
-EzpackL utubo/vim-altkey-in-term
 EzpackO utubo/vim-ezpack
 EzpackL utubo/vim-hlpairs
 EzpackL utubo/vim-minviml
@@ -62,6 +61,7 @@ EzpackL utubo/vim-textobj-twochars
 EzpackO utubo/vim-cmdheight0
 EzpackO utubo/vim-tablist
 EzpackO utubo/vim-tabpopupmenu
+EzpackL utubo/vim-altkey-in-term
 export def Install()
 ezpack#Install()
 enddef
