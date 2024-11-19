@@ -85,7 +85,7 @@ EzpackL utubo/vim-textobj-twochars # 指定した2つの文字で挟まれるtex
 EzpackO utubo/vim-cmdheight0       # cmdheight=0エミュレータ(statuslineに対応)
 EzpackO utubo/vim-tablist          # タブ一覧を表示する
 EzpackO utubo/vim-tabpopupmenu     # タブ操作関係のメニュー
-EzpackL utubo/vim-altkey-in-term   # `<Esc>k`を`<A-k>`に(クライアントの設定でAltをそのまま送ればいいので不要)
+EzpackO utubo/vim-altkey-in-term   # `<Esc>k`を`<A-k>`に(クライアントの設定でAltをそのまま送ればいいので不要)
 
 export def Install()
   ezpack#Install()

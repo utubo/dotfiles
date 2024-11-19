@@ -61,7 +61,7 @@ EzpackL utubo/vim-textobj-twochars
 EzpackO utubo/vim-cmdheight0
 EzpackO utubo/vim-tablist
 EzpackO utubo/vim-tabpopupmenu
-EzpackL utubo/vim-altkey-in-term
+EzpackO utubo/vim-altkey-in-term
 export def Install()
 ezpack#Install()
 enddef
