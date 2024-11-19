@@ -118,18 +118,10 @@ nnoremap <Space>gC :<C-u>Git checkout %
 #}}}
 
 # gh {{{
-# ftpluginにすると定義がバラバラになって見通し悪くなるかな
-au vimrc FileType gh-repos {
-	nnoremap <buffer> i <ScriptCmd>execute 'edit!' ['gh:/', getline('.')->matchstr('\S\+'), 'issues']->join('/')<CR>
-}
-au vimrc FileType gh-issues {
-	nnoremap <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
-	nnoremap <buffer> r <ScriptCmd>execute 'edit!' expand('%:h:h') .. '/repos'<CR>
-}
-au vimrc FileType gh-issue-comments {
-	nnoremap <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
-}
-nnoremap <Space>gh <Cmd>tabe gh://utubo/repos<CR>
+nnoremap <Space>gh <Cmd>e gh://utubo/repos<CR>
+au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
+au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
+au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # }}}
 
 # MRU {{{

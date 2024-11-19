@@ -75,17 +75,10 @@ nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
-au vimrc FileType gh-repos {
-nn <buffer> i <ScriptCmd>execute 'edit!' ['gh:/', getline('.')->matchstr('\S\+'), 'issues']->join('/')<CR>
-}
-au vimrc FileType gh-issues {
-nn <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
-nn <buffer> r <ScriptCmd>execute 'edit!' expand('%:h:h') .. '/repos'<CR>
-}
-au vimrc FileType gh-issue-comments {
-nn <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
-}
-nn <Space>gh <Cmd>tabe gh://utubo/repos<CR>
+nn <Space>gh <Cmd>e gh://utubo/repos<CR>
+au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
+au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
+au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 nn <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
