@@ -568,13 +568,6 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
-# カーソルの形
-if has('vim_starting')
-	&t_SI = "\e[6 q"
-	&t_EI = "\e[2 q"
-	&t_SR = "\e[4 q"
-endif
-
 nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 

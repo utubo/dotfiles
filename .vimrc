@@ -123,6 +123,11 @@ sil! syntax enable
 set t_Co=256
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
+if has('vim_starting')
+&t_SI = "\e[0 q"
+&t_EI = "\e[2 q"
+&t_SR = "\e[4 q"
+endif
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
