@@ -411,7 +411,7 @@ def AutoNamingAndSave()
 	const dt = strftime('%Y%m%d')
 	var title = getline(1)
 		->matchlist('^.\{0,10\}')[0]
-		->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
+		->substitute("[ \t\n*?[{`$\\%#'\"|!<>]", '_', 'g')
 	var ext = &ft
 	if getline(1) =~# '^vim9script\>.*'
 		ext = 'vim'
@@ -697,10 +697,14 @@ export def ToHead(type: string)
 	setpos('.', p)
 	if p[2] <= 1
 		normal ^
+	elseif getline(p[1])->len() <= p[2]
+		normal j^
 	endif
 enddef
 noremap <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
+nmap ga <SID>(ToHead)a
 nmap gi <SID>(ToHead)i
+noremap <Leader>ga ga
 nmap g% gi%
 
 #noremap <F1> <Cmd>smile<CR>

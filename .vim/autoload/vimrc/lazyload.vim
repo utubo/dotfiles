@@ -274,7 +274,7 @@ endif
 const a = strftime('%Y%m%d')
 var b = getline(1)
 ->matchlist('^.\{0,10\}')[0]
-->substitute("[ \t\n*?[{`$\\%#'\"|!<]", '_', 'g')
+->substitute("[ \t\n*?[{`$\\%#'\"|!<>]", '_', 'g')
 var c = &ft
 if getline(1) =~# '^vim9script\>.*'
 c = 'vim'
@@ -471,10 +471,14 @@ g:p = p
 setpos('.', p)
 if p[2] <= 1
 normal ^
+elseif getline(p[1])->len() <= p[2]
+normal j^
 endif
 enddef
 no <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
+nm ga <SID>(ToHead)a
 nm gi <SID>(ToHead)i
+no <Leader>ga ga
 nm g% gi%
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
