@@ -693,7 +693,6 @@ onoremap I <Plug>(textobj-twochars-i)
 # テキストオブジェクトの先頭に移動
 export def ToHead(type: string)
 	const p = getpos("'[")
-	g:p = p
 	setpos('.', p)
 	if p[2] <= 1
 		normal ^

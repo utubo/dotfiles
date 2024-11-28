@@ -467,7 +467,6 @@ ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
 export def ToHead(a: string)
 const p = getpos("'[")
-g:p = p
 setpos('.', p)
 if p[2] <= 1
 normal ^
