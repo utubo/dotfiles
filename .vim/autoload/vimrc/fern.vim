@@ -14,6 +14,7 @@ exe $'nmap <buffer> <silent> {i} :<C-u>{i}<CR><CR>'
 endfor
 }
 sil! unlet g:loaded_fern
+sil! delcommand Fern
 packadd fern.vim
 packadd fern-git-status.vim
 packadd fern-renderer-nerdfont.vim
