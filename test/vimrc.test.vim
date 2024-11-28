@@ -136,7 +136,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
-		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[acdesinpr;]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
+		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\|g[acdesinpr;]\|G[ai]\|zd\|zf\|ZZ\|<C-[AWXG]>\|<Esc>\)',
 		'n  \(<C-[FBP]>\)',
 		'v  \([*/?:]\)',
 		'i  \(<C-U>\)',
