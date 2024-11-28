@@ -34,13 +34,13 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
 enddef
 
-export def Commit(args: string)
-	echo system($'git commit -m "{args}"')
+export def Commit(msg: string)
+	echo system($'git commit -m {shellescape(msg)}')
 enddef
 
 export def TagPush(tagname: string)
 	echo system($'git tag "{tagname}"')
-	echo system($'git push origin "{tagname}"')
+	echo system($'git push origin "{shellescape(tagname)}"')
 enddef
 
 # 以下はvimrcで定義する
