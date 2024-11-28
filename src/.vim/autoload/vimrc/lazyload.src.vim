@@ -367,6 +367,7 @@ def ShowBufInfo(event: string = '')
 		echon m[1]
 	endfor
 	echohl Normal
+	echow expand('%:p:h')
 enddef
 
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>

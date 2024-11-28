@@ -248,6 +248,7 @@ exe 'echohl' m[0]
 echon m[1]
 endfor
 echoh Normal
+echow expand('%:p:h')
 enddef
 nn <script> <C-g> <ScriptCmd>D()<CR>
 set tabline=%!vimrc#tabline#MyTabline()
