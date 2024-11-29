@@ -39,7 +39,7 @@ export def Commit(msg: string)
 enddef
 
 export def TagPush(tagname: string)
-	echo system($'git tag "{tagname}"')
+	echo system($'git tag "{shellescape(tagname)}"')
 	echo system($'git push origin "{shellescape(tagname)}"')
 enddef
 

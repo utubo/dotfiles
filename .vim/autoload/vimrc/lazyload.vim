@@ -119,7 +119,7 @@ g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 au vimrc InsertLeave * set nopaste
-au vimrc BufReadPost *.log* normal! G
+au vimrc FileReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each i,a,A nnoremap <expr> {0} !empty(getline('.')) ? '{0}' : '"_cc'

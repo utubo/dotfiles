@@ -35,6 +35,6 @@ export def Commit(a: string)
 ec system($'git commit -m {shellescape(a)}')
 enddef
 export def TagPush(a: string)
-ec system($'git tag "{a}"')
+ec system($'git tag "{shellescape(a)}"')
 ec system($'git push origin "{shellescape(a)}"')
 enddef

@@ -197,7 +197,7 @@ g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 # ------------------------------------------------------
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
-au vimrc BufReadPost *.log* normal! G
+au vimrc FileReadPost *.log* normal! G
 xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
