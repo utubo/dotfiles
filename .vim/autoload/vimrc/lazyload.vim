@@ -64,10 +64,12 @@ call textobj#user#plugin('nonwhitespace', {
 })
 com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
+com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gA :<C-u>Git add %
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
+nn <Space>gf :<C-u>GitAmend<Space><C-r>=vimrc#git#GetLastCommitMessage()<CR>
 nn <Space>gp :<C-u>Git push<End>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>

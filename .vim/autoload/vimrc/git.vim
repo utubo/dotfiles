@@ -29,10 +29,16 @@ chdir(b)
 endtry
 enddef
 export def ConventionalCommits(a: any, l: string, p: number): list<string>
-return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:']
+return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
 ec system($'git commit -m {shellescape(a)}')
+enddef
+export def Amend(a: string)
+ec system($'git commit --amend -m {shellescape(a)}')
+enddef
+export def GetLastCommitMessage(): string
+return system($'git log -1 --pretty=%B')->trim()
 enddef
 export def TagPush(a: string)
 ec system($'git tag {shellescape(a)}')
