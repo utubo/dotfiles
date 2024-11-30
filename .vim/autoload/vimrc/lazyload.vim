@@ -45,7 +45,7 @@ midasi: [':', 'Q'],
 }
 g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
-au vimrc ModeChanged [ic]:* au SafeState * ++once vim9skk#Disable()
+au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
 Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)

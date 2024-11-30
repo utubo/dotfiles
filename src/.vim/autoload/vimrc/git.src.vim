@@ -39,8 +39,8 @@ export def Commit(msg: string)
 enddef
 
 export def TagPush(tagname: string)
-	echo system($'git tag "{shellescape(tagname)}"')
-	echo system($'git push origin "{shellescape(tagname)}"')
+	echo system($'git tag {shellescape(tagname)}')
+	echo system($'git push origin {shellescape(tagname)}')
 enddef
 
 # 以下はvimrcで定義する
