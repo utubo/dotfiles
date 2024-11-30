@@ -40,7 +40,7 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
 toggle: ['<C-j>', ';j'],
-complete: ['<CR>', ';'],
+complete: ['<CR>', ';;'],
 },
 }
 g:vim9skk_mode = ''
