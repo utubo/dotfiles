@@ -296,14 +296,8 @@ nnoremap gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-def BufList()
-	echo execute('ls')
-	const n = input('bufnr: ')
-	if !!n
-		execute($"normal :\<C-u>b{n}\<CR>")
-	endif
-enddef
-nnoremap B <ScriptCmd>BufList()<CR>
+command! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
+nnoremap B <ScriptCmd>CtrlPBuffer<CR>
 #}}}
 
 # ------------------------------------------------------
