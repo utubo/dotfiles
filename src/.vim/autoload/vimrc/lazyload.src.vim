@@ -296,11 +296,14 @@ nnoremap gp <Cmd>bprevious<CR>
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-
-# bufの一覧を画面下部に表示する
-vimrc#echobuflist#Setup()
-au vimrc User EchoBufListShow g:zenmode.preventEcho = true
-au vimrc User EchoBufListHide g:zenmode.preventEcho = false|zenmode#RedrawNow()
+def BufList()
+	echo execute('ls')
+	const n = input('bufnr: ')
+	if !!n
+		execute($"normal :\<C-u>b{n}\<CR>")
+	endif
+enddef
+nnoremap B <ScriptCmd>BufList()<CR>
 #}}}
 
 # ------------------------------------------------------

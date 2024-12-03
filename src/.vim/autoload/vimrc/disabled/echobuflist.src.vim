@@ -1,6 +1,12 @@
 vim9script
 
 # 複数bufを開いている場合、一覧を画面下部に表示する
+#
+# vimrc等で以下のように設定する
+# vimrc#echobuflist#Setup() # ←パスは配置場所に合わせて適宜
+# # vim-zenmode用設定
+# au vimrc User EchoBufListShow g:zenmode.preventEcho = true
+# au vimrc User EchoBufListHide g:zenmode.preventEcho = false|zenmode#RedrawNow()
 
 # `>_`みたいなアイコン
 g:buflist_term_sign = get(g:, 'buflist_term_sign', "\uf489")
