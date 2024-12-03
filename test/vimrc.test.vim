@@ -108,6 +108,8 @@ suite.TestMapping = () => {
 	# n  gn バッファ移動
 	# n  gp バッファ移動
 	# n  gr バッファ移動
+	# n  gt タブ移動
+	# n  gT タブ移動
 	# n  g; 折り畳みを開くように修正
 	# n  i  _cc
 	# n  m  '
@@ -138,7 +140,7 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  \([abBehijklmnopqswAMOPQSTY;''/?:%,+]\)',
-		'n  \(g[acdesinpr;]\)',
+		'n  \(g[acdesinprtT;]\)',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  \(G[ai%]\)',
 		'n  \(<C-[AWXG]>\)',

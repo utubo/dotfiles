@@ -292,10 +292,7 @@ SetupTabstopLazy()
 # ------------------------------------------------------
 # バッファ操作 {{{
 # gnとgpで移動
-nmap <SID>(buf)n <Cmd>bnext<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
-nmap <SID>(buf)p <Cmd>bprevious<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
-nmap gn <SID>(buf)n
-nmap gp <SID>(buf)p
+Each n,p nmap g{} <SID>(buf)n|nmap <SID>(buf){} <Cmd>b{}<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
 # grで直前のバッファ
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()

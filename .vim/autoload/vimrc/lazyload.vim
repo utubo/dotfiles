@@ -182,10 +182,7 @@ au vimrc SafeState * ++once B()
 enddef
 au vimrc BufReadPost * C()
 C()
-nm <SID>(buf)n <Cmd>bnext<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
-nm <SID>(buf)p <Cmd>bprevious<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
-nm gn <SID>(buf)n
-nm gp <SID>(buf)p
+Each n,p nmap g{} <SID>(buf)n|nm <SID>(buf){} <Cmd>b{}<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
