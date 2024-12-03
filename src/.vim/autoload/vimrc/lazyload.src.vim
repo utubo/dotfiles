@@ -381,12 +381,12 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
 # Tabline {{{
 set tabline=%!vimrc#tabline#MyTabline()
 set showtabline=0
-def TabNP(t: string)
+def ShowTab(t: string)
 	set showtabline=1
 	execute $'normal! g{t}'
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each t,T nmap g{} <SID>(tab){}|nmap <SID>(tab){} <ScriptCmd>TabNP('{}')<CR><SID>(tab)
+Each t,T nmap g{} <SID>(tab){}|nmap <SID>(tab){} <ScriptCmd>ShowTab('{}')<CR><SID>(tab)
 #}}}
 
 # ------------------------------------------------------
