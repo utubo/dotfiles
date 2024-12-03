@@ -182,8 +182,8 @@ au vimrc SafeState * ++once B()
 enddef
 au vimrc BufReadPost * C()
 C()
-nm <SID>(buf)n <Cmd>bnext<CR><SID>(buf)
-nm <SID>(buf)p <Cmd>bprevious<CR><SID>(buf)
+nm <SID>(buf)n <Cmd>bnext<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
+nm <SID>(buf)p <Cmd>bprevious<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
 nm gn <SID>(buf)n
 nm gp <SID>(buf)p
 g:recentBufnr = 0
@@ -255,6 +255,13 @@ echow expand('%:p:h')
 enddef
 nn <script> <C-g> <ScriptCmd>D()<CR>
 set tabline=%!vimrc#tabline#MyTabline()
+set showtabline=0
+def E(t: string)
+set showtabline=1
+exe $'normal! g{t}'
+au SafeState * ++once au CursorMoved * ++once set showtabline=0
+enddef
+Each t,T nmap g{} <SID>(tab){}|nm <SID>(tab){} <ScriptCmd>E('{}')<CR><SID>(tab)
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -269,7 +276,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def E()
+def F()
 if !!bufname()
 update
 return
@@ -304,7 +311,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! AutoNamingAndSave E()
+com! AutoNamingAndSave F()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 ino ;m <Esc>`^
@@ -449,31 +456,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def F()
+def G()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def G(a: string, b: string)
+def H(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * F()
+au vimrc Syntax * G()
 au vimrc Syntax javascript {
-G('SpellRare', '\s[=!]=\s')
+H('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-G('SpellRare', '\s[=!]=\s')
-G('SpellBad', '\s[=!]==\s')
-G('SpellBad', '\s\~[=!][=#]\?\s')
-G('SpellRare', '\<normal!\@!')
+H('SpellRare', '\s[=!]=\s')
+H('SpellBad', '\s[=!]==\s')
+H('SpellBad', '\s\~[=!][=#]\?\s')
+H('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def H()
+def I()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -484,7 +491,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>H()<CR>
+xn <C-g> <ScriptCmd>I()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
