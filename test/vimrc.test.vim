@@ -98,6 +98,7 @@ suite.TestMapping = () => {
 	# わざとデフォルト(`map`コマンドで取得できないやつ)と被らせてるやつ
 	# n  a  _cc
 	# n  b  vim-smart-word
+	# n  B  CtrlPBuffer
 	# n  e  vim-smart-word
 	# n  ga textobjの先頭に移動
 	# n  gc vim-caw
@@ -136,10 +137,10 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
-		'n  \([abehijklmnopqswAMOPQSTY;''/?:%,+]\)',
+		'n  \([abBehijklmnopqswAMOPQSTY;''/?:%,+]\)',
 		'n  \(g[acdesinpr;]\)',
 		'n  \(zd\|zf\|ZZ\)',
-		'n  \(G[ai]\)',
+		'n  \(G[ai%]\)',
 		'n  \(<C-[AWXG]>\)',
 		'n  \(<Esc>\)',
 		'n  \(<C-[FBP]>\)',
