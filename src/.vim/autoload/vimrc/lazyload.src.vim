@@ -586,6 +586,7 @@ nmap ga <SID>(ToHead)a
 nmap gi <SID>(ToHead)i
 noremap <Leader>ga ga
 nmap g% gi%
+nmap G% Gi%
 # }}}
 
 # ------------------------------------------------------

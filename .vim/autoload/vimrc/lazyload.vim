@@ -402,6 +402,7 @@ nm ga <SID>(ToHead)a
 nm gi <SID>(ToHead)i
 no <Leader>ga ga
 nm g% gi%
+nm G% Gi%
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
