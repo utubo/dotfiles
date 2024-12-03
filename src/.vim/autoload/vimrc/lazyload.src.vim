@@ -291,8 +291,10 @@ SetupTabstopLazy()
 
 # ------------------------------------------------------
 # バッファ操作 {{{
-nnoremap gn <Cmd>bnext<CR>
-nnoremap gp <Cmd>bprevious<CR>
+nmap <SID>(buf)n <Cmd>bnext<CR><SID>(buf)
+nmap <SID>(buf)p <Cmd>bprevious<CR><SID>(buf)
+nmap gn <SID>(buf)n
+nmap gp <SID>(buf)p
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
