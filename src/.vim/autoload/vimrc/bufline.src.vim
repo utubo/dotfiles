@@ -5,7 +5,6 @@ vim9script
 # `>_`みたいなアイコン
 g:buflist_term_sign = get(g:, 'buflist_term_sign', "\uf489")
 
-var pum = 0
 var left = ''
 var select = ''
 var right = ''
@@ -44,64 +43,9 @@ def RefreshBufList()
 	right = bufs->join(' ')
 enddef
 
-export def Popup()
-	if !left && !right
-		return
-	endif
-	var w = &columns
-	# 左オフセット
-	const o = getwininfo(win_getid(1))[0].textoff
-	w -= o
-	# 選択バッファ
-	const s = select->substitute($'\%{w}v.*', '', '')
-	w -= strdisplaywidth(s)
-	# 選択より左側
-	var l = left->reverse()->substitute($'\%{w}v.*', '', '')->reverse()
-	if l !=# left
-		l = l->substitute('^.', '<', '')
-	endif
-	w -= strdisplaywidth(l)
-	# 選択より右側
-	var r = right->substitute($'\%{w}v.*', '', '')
-	if r !=# right
-		r = r->substitute('.$', '>', '')
-	endif
-	w -= strdisplaywidth(r)
-	# 右パディング
-	const p = max([0, w])
-	# 表示
-	#redraw
-	var newpum = popup_create($'{l}{s}{r}', {
-		line: 1,
-		col: 1,
-		fixed: true,
-		highlight: 'TabLine',
-		padding: [0, p, 0, o],
-		moved: 'any',
-	})
-	#echoh TabLineFill
-	#echon repeat(' ', o)
-	#echoh TabLine
-	#echon l
-	#echoh TabLineSel
-	#echon s
-	#echoh TabLine
-	#echon r
-	#echoh TabLineFill
-	#echon repeat(' ', p)
-	#echoh Normal
-	if !!pum
-		popup_close(pum)
-	endif
-	pum = newpum
-enddef
-
-export def Show()
+export def MyBufline(): string
 	RefreshBufList()
-	Popup()
-enddef
-
-export def Setup()
-	# nop
+	const o = getwininfo(win_getid(1))[0].textoff
+	return $'{repeat(' ', o)}{left}%#TabLineSel#{select}%#TabLine#{right}'
 enddef
 

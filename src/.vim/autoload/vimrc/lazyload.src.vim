@@ -291,8 +291,6 @@ SetupTabstopLazy()
 
 # ------------------------------------------------------
 # バッファ操作 {{{
-# gnとgpで移動
-Each n,p nmap g{} <SID>(buf)n|nmap <SID>(buf){} <Cmd>b{}<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
 # grで直前のバッファ
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
@@ -375,15 +373,25 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
 #}}} -------------------------------------------------------
 
 # ------------------------------------------------------
-# Tabline {{{
-set tabline=%!vimrc#tabline#MyTabline()
+# TablineとBufline {{{
+# gt, gTしたときだけtablineを表示する(thx:kawarimidollさん)
 set showtabline=0
-def ShowTab(t: string)
-	set showtabline=1
-	execute $'normal! g{t}'
+def ShowTab(a: string)
+	set tabline=%!vimrc#tabline#MyTabline()
+	set showtabline=2
+	execute $'normal! g{a}'
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each t,T nmap g{} <SID>(tab){}|nmap <SID>(tab){} <ScriptCmd>ShowTab('{}')<CR><SID>(tab)
+Each t,T nmap g{} <SID>(tab){} | nmap <SID>(tab){} <ScriptCmd>ShowTab('{}')<CR><SID>(tab)
+
+# gnとgpでバッファ移動
+def ShowBuf(a: string)
+	set tabline=%!vimrc#bufline#MyBufline()
+	set showtabline=2
+	execute $'b{a}'
+	au SafeState * ++once au CursorMoved * ++once set showtabline=0
+enddef
+Each n,p nmap g{} <SID>(buf){} | nmap <SID>(buf){} <ScriptCmd>ShowBuf('{}')<CR><SID>(buf)
 #}}}
 
 # ------------------------------------------------------

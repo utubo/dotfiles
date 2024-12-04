@@ -182,7 +182,6 @@ au vimrc SafeState * ++once B()
 enddef
 au vimrc BufReadPost * C()
 C()
-Each n,p nmap g{} <SID>(buf)n|nm <SID>(buf){} <Cmd>b{}<CR><Cmd>call vimrc#bufline#Show()<CR><SID>(buf)
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
@@ -251,14 +250,21 @@ echoh Normal
 echow expand('%:p:h')
 enddef
 nn <script> <C-g> <ScriptCmd>D()<CR>
-set tabline=%!vimrc#tabline#MyTabline()
 set showtabline=0
-def E(t: string)
-set showtabline=1
-exe $'normal! g{t}'
+def E(a: string)
+set tabline=%!vimrc#tabline#MyTabline()
+set showtabline=2
+exe $'normal! g{a}'
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
 Each t,T nmap g{} <SID>(tab){}|nm <SID>(tab){} <ScriptCmd>E('{}')<CR><SID>(tab)
+def F(a: string)
+set tabline=%!vimrc#bufline#MyBufline()
+set showtabline=2
+exe $'b{a}'
+au SafeState * ++once au CursorMoved * ++once set showtabline=0
+enddef
+Each n,p nmap g{} <SID>(buf){}|nm <SID>(buf){} <ScriptCmd>F('{}')<CR><SID>(buf)
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -273,7 +279,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def F()
+def G()
 if !!bufname()
 update
 return
@@ -308,7 +314,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! AutoNamingAndSave F()
+com! AutoNamingAndSave G()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 ino ;m <Esc>`^
@@ -453,31 +459,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def G()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def H(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * G()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-H('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-H('SpellRare', '\s[=!]=\s')
-H('SpellBad', '\s[=!]==\s')
-H('SpellBad', '\s\~[=!][=#]\?\s')
-H('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def I()
+def J()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -488,7 +494,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>I()<CR>
+xn <C-g> <ScriptCmd>J()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
