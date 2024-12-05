@@ -127,7 +127,7 @@ def PullDotfiles()
 	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')
 	const cwd = getcwd()
 	execute 'cd' dotfilespath
-	echo system($'git pull {dotfilespath}')
+	echo system($'git pull')
 	execute 'cd' cwd
 	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 	EzpackInstall
