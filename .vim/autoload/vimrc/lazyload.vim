@@ -77,6 +77,14 @@ nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gl <Cmd>Git pull<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
+def A()
+const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
+const b = a->expand()->resolve()->fnamemodify(':h')
+ec system($'git pull {b}')
+exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
+EzpackInstall
+enddef
+nn <Space>GL <ScriptCmd>A()<CR>
 nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
@@ -132,13 +140,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def A(): string
+def B(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{A()}"
+ino <expr> ;l $"<C-w>{B()}"
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -156,7 +164,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def B()
+def C()
 if &ft ==# 'help'
 return
 endif
@@ -177,17 +185,17 @@ endif
 &st = &ts
 setpos('.', b)
 enddef
-def C()
-au vimrc SafeState * ++once B()
+def D()
+au vimrc SafeState * ++once C()
 enddef
-au vimrc BufReadPost * C()
-C()
+au vimrc BufReadPost * D()
+D()
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 com! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
 nn B <ScriptCmd>CtrlPBuffer<CR>
-def D(a: string = '')
+def E(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -249,22 +257,22 @@ endfor
 echoh Normal
 echow expand('%:p:h')
 enddef
-nn <script> <C-g> <ScriptCmd>D()<CR>
+nn <script> <C-g> <ScriptCmd>E()<CR>
 set showtabline=0
-def E(a: string)
+def F(a: string)
 set tabline=%!vimrc#tabline#MyTabline()
 set showtabline=2
 exe $'normal! g{a}'
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each t,T nmap g{} <SID>(tab){}|nm <SID>(tab){} <ScriptCmd>E('{}')<CR><SID>(tab)
-def F(a: string)
+Each t,T nmap g{} <SID>(tab){}|nm <SID>(tab){} <ScriptCmd>F('{}')<CR><SID>(tab)
+def G(a: string)
 set tabline=%!vimrc#bufline#MyBufline()
 set showtabline=2
 exe $'b{a}'
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each n,p nmap g{} <SID>(buf){}|nm <SID>(buf){} <ScriptCmd>F('{}')<CR><SID>(buf)
+Each n,p nmap g{} <SID>(buf){}|nm <SID>(buf){} <ScriptCmd>G('{}')<CR><SID>(buf)
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -279,7 +287,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def G()
+def H()
 if !!bufname()
 update
 return
@@ -314,7 +322,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! AutoNamingAndSave G()
+com! AutoNamingAndSave H()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 ino ;m <Esc>`^
@@ -459,31 +467,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def H()
+def I()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def I(a: string, b: string)
+def J(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * H()
+au vimrc Syntax * I()
 au vimrc Syntax javascript {
-I('SpellRare', '\s[=!]=\s')
+J('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-I('SpellRare', '\s[=!]=\s')
-I('SpellBad', '\s[=!]==\s')
-I('SpellBad', '\s\~[=!][=#]\?\s')
-I('SpellRare', '\<normal!\@!')
+J('SpellRare', '\s[=!]=\s')
+J('SpellBad', '\s[=!]==\s')
+J('SpellBad', '\s\~[=!][=#]\?\s')
+J('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def J()
+def BA()
 normal! "vygv
 var a = @v->substitute('\n', '', 'g')
 popup_create($'{strlen(a)}chars', {
@@ -494,7 +502,7 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>J()<CR>
+xn <C-g> <ScriptCmd>BA()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
 Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)

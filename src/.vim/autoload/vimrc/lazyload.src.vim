@@ -117,6 +117,14 @@ nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Git pull<CR>
 nnoremap <Space>gt :<C-u>GitTagPush<Space>
 nnoremap <Space>gC :<C-u>Git checkout %
+def PullDotfiles()
+	const vimrcpath = has('win32') ? '~/_vimrc' : '~/.vimrc'
+	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')
+	echo system($'git pull {dotfilespath}')
+	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
+	EzpackInstall
+enddef
+nnoremap <Space>GL <ScriptCmd>PullDotfiles()<CR>
 #}}}
 
 # gh {{{
