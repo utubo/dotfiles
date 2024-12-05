@@ -125,7 +125,10 @@ nnoremap <Space>gC :<C-u>Git checkout %
 def PullDotfiles()
 	const vimrcpath = has('win32') ? '~/_vimrc' : '~/.vimrc'
 	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')
+	const cwd = getcwd()
+	execute 'cd' dotfilespath
 	echo system($'git pull {dotfilespath}')
+	execute 'cd' cwd
 	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 	EzpackInstall
 enddef

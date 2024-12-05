@@ -83,7 +83,10 @@ nn <Space>gC :<C-u>Git checkout %
 def A()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
+const c = getcwd()
+exe 'cd' b
 ec system($'git pull {b}')
+exe 'cd' c
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
