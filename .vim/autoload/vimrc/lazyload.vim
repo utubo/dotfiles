@@ -1,10 +1,14 @@
 vim9script
 g:util_each_nest = 0
 def! g:UtilEach(b: string)
-const [c, d] = b->split('^\S*\zs')
+var [c, d] = b->split('^\S*\zs')
 g:util_each_nest += 1
-for i in c->split(',')
-var a = d->substitute('{0\?}', i, 'g')
+var e = c->split(',')
+const f = e[0]->split('=')
+const k = len(f) ==# 1 ? '{0\?}' : f[0]
+e[0] = f[-1]
+for i in e
+var a = d->substitute(k, i, 'g')
 if a ==# d
 a = $'{i} {a}'
 endif
@@ -47,8 +51,7 @@ g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],
 [ "[", "]" ],
@@ -108,8 +111,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 g:skipslash_autocomplete = 1
 nn <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nn <Space>T <ScriptCmd>tablist#Show()<CR>
-Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 no <Space>s <Plug>(jumpcursor-jump)
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
@@ -120,7 +122,7 @@ com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
 nn <F1> <Cmd>Fern . -reveal=% -opener=edit<CR>
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
-Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
+Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
@@ -132,9 +134,9 @@ au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
 xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-Each i,a,A nnoremap <expr> {0} !empty(getline('.')) ? '{0}' : '"_cc'
-Each +,-,>,< Each nmap,tmap <C-w>{0} <C-w>{0}<SID>ws
-Each +,-,>,< Each nnoremap,tnoremap <script> <SID>ws{0} <C-w>{0}<SID>ws
+Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
+Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
+Each X=+,-,>,< Each nnoremap,tnoremap <script> <SID>wsX <C-w>X<SID>ws
 Each nmap,tmap <SID>ws <Nop>
 nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
@@ -265,14 +267,14 @@ set showtabline=2
 exe $'normal! g{a}'
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each t,T nmap g{} <SID>(tab){}|nm <SID>(tab){} <ScriptCmd>F('{}')<CR><SID>(tab)
+Each X=t,T nmap gX <SID>(tab)X|nm <SID>(tab)X <ScriptCmd>F('X')<CR><SID>(tab)
 def G(a: string)
 set tabline=%!vimrc#bufline#MyBufline()
 set showtabline=2
 exe $'b{a}'
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each n,p nmap g{} <SID>(buf){}|nm <SID>(buf){} <ScriptCmd>G('{}')<CR><SID>(buf)
+Each X=n,p nmap gX <SID>(buf)X|nm <SID>(buf)X <ScriptCmd>G('X')<CR><SID>(buf)
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -376,7 +378,7 @@ else
 confirm quit
 endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>g:QuitWin('{0}')<CR>
+Each X=h,j,k,l nnoremap qX <ScriptCmd>g:QuitWin('X')<CR>
 nn q <Nop>
 nn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
@@ -504,8 +506,8 @@ padding: [1, 1, 1, 1],
 enddef
 xn <C-g> <ScriptCmd>BA()<CR>
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
-Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
+Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
+Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)

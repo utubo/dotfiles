@@ -9,13 +9,19 @@ vim9script
 # 先頭以外に差し込んだりネストしたい場合はこう
 #   Each j,k Each nmap,xmap {1} {0} g{0}
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
+# 名前をつけたい場合はこう
+#   Each X=j,k Each cmd=nmap,xmap cmd X gX
 # ※これ使うよりべたで書いたほうが起動は速い
 g:util_each_nest = 0
 def! g:UtilEach(qargs: string)
-	const [items, args] = qargs->split('^\S*\zs')
+	var [items, args] = qargs->split('^\S*\zs')
 	g:util_each_nest += 1
-	for i in items->split(',')
-		var a = args->substitute('{0\?}', i, 'g')
+	var values =  items->split(',')
+	const kv = values[0]->split('=')
+	const k = len(kv) ==# 1 ? '{0\?}' : kv[0]
+	values[0] = kv[-1]
+	for i in values
+		var a = args->substitute(k, i, 'g')
 		if a ==# args
 			a = $'{i} {a}'
 		endif
@@ -84,8 +90,7 @@ au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}
 
 # textobj-user {{{
-Each onoremap,xnoremap ab <Plug>(textobj-multiblock-a)
-Each onoremap,xnoremap ib <Plug>(textobj-multiblock-i)
+Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
 	[ "(", ")" ],
 	[ "[", "]" ],
@@ -169,8 +174,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 g:skipslash_autocomplete = 1
 nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
 nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
-Each nnoremap,tnoremap <silent> <C-w><C-s> <Plug>(shrink-height)<C-w>w
-Each nnoremap,tnoremap <silent> <C-w><C-h> <Plug>(shrink-width)<C-w>w
+Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 noremap <Space>s <Plug>(jumpcursor-jump)
 # }}}
 
@@ -190,7 +194,7 @@ nnoremap <F1> <Cmd>Fern . -reveal=% -opener=edit<CR>
 # その他 {{{
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
-Each w,b,e,ge nnoremap {0} <Plug>(smartword-{0})
+Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
@@ -212,11 +216,11 @@ xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-Each i,a,A nnoremap <expr> {0} !empty(getline('.')) ? '{0}' : '"_cc'
+Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each +,-,>,< Each nmap,tmap <C-w>{0} <C-w>{0}<SID>ws
-Each +,-,>,< Each nnoremap,tnoremap <script> <SID>ws{0} <C-w>{0}<SID>ws
+Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
+Each X=+,-,>,< Each nnoremap,tnoremap <script> <SID>wsX <C-w>X<SID>ws
 Each nmap,tmap <SID>ws <Nop>
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
@@ -390,7 +394,7 @@ def ShowTab(a: string)
 	execute $'normal! g{a}'
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each t,T nmap g{} <SID>(tab){} | nmap <SID>(tab){} <ScriptCmd>ShowTab('{}')<CR><SID>(tab)
+Each X=t,T nmap gX <SID>(tab)X | nmap <SID>(tab)X <ScriptCmd>ShowTab('X')<CR><SID>(tab)
 
 # gnとgpでバッファ移動
 def ShowBuf(a: string)
@@ -399,7 +403,7 @@ def ShowBuf(a: string)
 	execute $'b{a}'
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
-Each n,p nmap g{} <SID>(buf){} | nmap <SID>(buf){} <ScriptCmd>ShowBuf('{}')<CR><SID>(buf)
+Each X=n,p nmap gX <SID>(buf)X | nmap <SID>(buf)X <ScriptCmd>ShowBuf('X')<CR><SID>(buf)
 #}}}
 
 # ------------------------------------------------------
@@ -547,7 +551,7 @@ def g:QuitWin(expr: string) # TODO: minifyするとばぐる？
 		confirm quit
 	endif
 enddef
-Each h,j,k,l nnoremap q{0} <ScriptCmd>g:QuitWin('{0}')<CR>
+Each X=h,j,k,l nnoremap qX <ScriptCmd>g:QuitWin('X')<CR>
 nnoremap q <Nop>
 nnoremap Q q
 # 閉じる
@@ -734,8 +738,8 @@ xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 
 # <C-f>と<C-b>、CTRLおしっぱがつらいので…
-Each f,b nmap <C-{0}> <C-{0}><SID>(hold-ctrl)
-Each f,b nnoremap <script> <SID>(hold-ctrl){0} <C-{0}><SID>(hold-ctrl)
+Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
+Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
 # 🐶🍚
