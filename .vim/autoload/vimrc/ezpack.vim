@@ -29,6 +29,7 @@ Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 EzpackL obcat/vim-hitspop
 EzpackL osyo-manga/vim-textobj-multiblock
 EzpackL rhysd/vim-gfm-syntax
+EzpackL PProvost/vim-ps1
 EzpackL skanehira/gh.vim
 EzpackL thinca/vim-portal
 EzpackL thinca/vim-themis
