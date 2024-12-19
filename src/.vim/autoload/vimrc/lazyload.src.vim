@@ -596,8 +596,7 @@ nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('n
 # ------------------------------------------------------
 # テキストオブジェクトの末尾や先頭に移動 {{{
 export def ToTail(type: string)
-	const p = getpos("']")
-	setpos('.', p)
+	getpos("']")->setpos('.')
 enddef
 noremap <SID>(ToTail) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToTail<CR>g@
 nmap Ga <SID>(ToTail)a

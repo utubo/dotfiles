@@ -406,8 +406,7 @@ xn g: "vy:<C-u><C-r>=@v<CR><CR>
 xn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 export def ToTail(a: string)
-const p = getpos("']")
-setpos('.', p)
+getpos("']")->setpos('.')
 enddef
 no <SID>(ToTail) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToTail<CR>g@
 nm Ga <SID>(ToTail)a
