@@ -68,6 +68,7 @@ EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 
 # 🐶🍚
 EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ
+EzpackL utubo/vim-headtail         # Textobjの先頭や末尾に移動
 EzpackL utubo/vim-hlpairs          # 括弧をハイライト強化版
 EzpackL utubo/vim-minviml          # vimscriptをminify
 EzpackO utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか

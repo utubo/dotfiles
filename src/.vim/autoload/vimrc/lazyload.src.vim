@@ -595,29 +595,11 @@ nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('n
 
 # ------------------------------------------------------
 # テキストオブジェクトの末尾や先頭に移動 {{{
-export def ToTail(type: string)
-	getpos("']")->setpos('.')
-enddef
-noremap <SID>(ToTail) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToTail<CR>g@
-nmap Ga <SID>(ToTail)a
-nmap Gi <SID>(ToTail)i
-noremap GG G
-
-export def ToHead(type: string)
-	const p = getpos("'[")
-	setpos('.', p)
-	if p[2] <= 1
-		normal ^
-	elseif getline(p[1])->len() <= p[2]
-		normal j^
-	endif
-enddef
-noremap <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
-nmap ga <SID>(ToHead)a
-nmap gi <SID>(ToHead)i
 noremap <Leader>ga ga
-nmap g% gi%
-nmap G% Gi%
+packadd vim-headtail
+HeadTailMap g G
+Each nmap,xmap g% gi%
+Each nmap,xmap G% Gi%
 # }}}
 
 # ------------------------------------------------------

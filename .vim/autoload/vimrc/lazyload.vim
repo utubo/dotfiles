@@ -405,28 +405,11 @@ nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xn g: "vy:<C-u><C-r>=@v<CR><CR>
 xn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
-export def ToTail(a: string)
-getpos("']")->setpos('.')
-enddef
-no <SID>(ToTail) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToTail<CR>g@
-nm Ga <SID>(ToTail)a
-nm Gi <SID>(ToTail)i
-no GG G
-export def ToHead(a: string)
-const p = getpos("'[")
-setpos('.', p)
-if p[2] <= 1
-normal ^
-elseif getline(p[1])->len() <= p[2]
-normal j^
-endif
-enddef
-no <SID>(ToHead) <ScriptCmd>set operatorfunc=vimrc#lazyload#ToHead<CR>g@
-nm ga <SID>(ToHead)a
-nm gi <SID>(ToHead)i
 no <Leader>ga ga
-nm g% gi%
-nm G% Gi%
+packadd vim-headtail
+HeadTailMap g G
+Each nmap,xmap g% gi%
+Each nmap,xmap G% Gi%
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"

@@ -48,6 +48,7 @@ EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
 EzpackO utubo/vim-ezpack
+EzpackL utubo/vim-headtail
 EzpackL utubo/vim-hlpairs
 EzpackL utubo/vim-minviml
 EzpackO utubo/vim-reformatdate
