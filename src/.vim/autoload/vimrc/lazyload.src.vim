@@ -403,7 +403,14 @@ Each X=t,T nmap gX <SID>(tab)X | nmap <SID>(tab)X <ScriptCmd>ShowTab('X')<CR><SI
 def ShowBuf(a: string)
 	set tabline=%!vimrc#bufline#MyBufline()
 	set showtabline=2
-	execute $'b{a}'
+	const b = bufnr()
+	while true
+		execute $'b{a}'
+		# terminalに移動すると混乱するのでスキップする || 無限ループ防止
+		if &buftype !=# 'terminal' || bufnr() ==# b
+			break
+		endif
+	endwhile
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
 Each X=n,p nmap gX <SID>(buf)X | nmap <SID>(buf)X <ScriptCmd>ShowBuf('X')<CR><SID>(buf)

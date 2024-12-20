@@ -274,7 +274,13 @@ Each X=t,T nmap gX <SID>(tab)X|nm <SID>(tab)X <ScriptCmd>F('X')<CR><SID>(tab)
 def G(a: string)
 set tabline=%!vimrc#bufline#MyBufline()
 set showtabline=2
+const b = bufnr()
+while true
 exe $'b{a}'
+if &buftype !=# 'terminal' || bufnr() ==# b
+break
+endif
+endwhile
 au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
 Each X=n,p nmap gX <SID>(buf)X|nm <SID>(buf)X <ScriptCmd>G('X')<CR><SID>(buf)
