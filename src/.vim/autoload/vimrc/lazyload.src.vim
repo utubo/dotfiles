@@ -56,7 +56,7 @@ def! g:VRange(): list<number>
 	const a = g:VFirstLast()
 	return range(a[0], a[1])
 enddef
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # プラグイン {{{
@@ -70,7 +70,7 @@ packadd vim-textobj-user
 
 # zenmode {{{
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-#}}}
+# }}}
 
 # vim9skk {{{
 g:vim9skk = {
@@ -87,7 +87,7 @@ au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 #au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-#}}}
+# }}}
 
 # headtail {{{
 noremap <Leader>ga ga
@@ -112,7 +112,7 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 	'-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-#}}}
+# }}}
 
 # Git {{{
 command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
@@ -141,7 +141,7 @@ def PullDotfiles()
 	EzpackInstall
 enddef
 nnoremap <Space>GL <ScriptCmd>PullDotfiles()<CR>
-#}}}
+# }}}
 
 # gh {{{
 nnoremap <Space>gh <Cmd>e gh://utubo/repos<CR>
@@ -154,14 +154,14 @@ au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 nnoremap <F2> <Cmd>MRUToggle<CR>
 g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 # MRUに関してのその他の設定は.vim/after/ftplugin/mru.src.vimで指定している
-#}}}
+# }}}
 
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
 nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
-#}}}
+# }}}
 
 # 補完 {{{
 export def SkipParen(): string
@@ -179,7 +179,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 #g:copilot_no_tab_map = true
 #imap <silent> <script> <expr> ;c copilot#Accept("\<CR>")
 #au vimrc VimEnter * Copilot disable
-#}}}
+# }}}
 
 # 🐶🍚 {{{
 g:skipslash_autocomplete = 1
@@ -209,14 +209,14 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-#}}}
+# }}}
 
 # 開発用 {{{
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:vimhelpgenerator_uri = 'https://github.com/utubo/'
-#}}}
+# }}}
 # }}}
 
 # ------------------------------------------------------
@@ -248,13 +248,13 @@ def ToupperPrevWord(): string
 enddef
 inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
 
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # vimgrep {{{
 command! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # diff {{{
@@ -262,7 +262,7 @@ set splitright
 set fillchars+=diff:\ # 削除行は空白文字で埋める
 # diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # 日付関係 {{{
@@ -278,7 +278,7 @@ nnoremap <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nnoremap <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nnoremap <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # タブ幅やタブ展開を自動設定 {{{
@@ -310,7 +310,7 @@ enddef
 # ft ==# ''でも実行したいのでFileTypeではなくBufReadPost
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # バッファ操作 {{{
@@ -321,7 +321,7 @@ nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
 # BでCtrlpBuffer
 command! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
 nnoremap B <ScriptCmd>CtrlPBuffer<CR>
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # バッファの情報を色付きで表示 {{{
@@ -396,7 +396,7 @@ def ShowBufInfo(event: string = '')
 enddef
 
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # TablineとBufline {{{
@@ -425,7 +425,7 @@ def ShowBuf(a: string)
 	au SafeState * ++once au CursorMoved * ++once set showtabline=0
 enddef
 Each X=n,p nmap gX <SID>(buf)X | nmap <SID>(buf)X <ScriptCmd>ShowBuf('X')<CR><SID>(buf)
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # スマホ用 {{{
@@ -448,7 +448,7 @@ nnoremap <Space>a A
 nnoremap <Space>h ^
 nnoremap <Space>l $
 nnoremap <Space>y yiw
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # ファイル名を勝手につけて保存 {{{
@@ -524,7 +524,7 @@ xnoremap <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
 xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
@@ -538,7 +538,7 @@ Each nnoremap,xnoremap , :
 Each nnoremap,xnoremap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # terminalとか {{{
@@ -557,7 +557,7 @@ enddef
 # その他の設定
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # 閉じる {{{
@@ -596,7 +596,7 @@ nnoremap q/ q/
 nnoremap q? q?
 # 開きなおす
 nnoremap qQ <Cmd>e #<1<CR>
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
@@ -609,7 +609,7 @@ xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # その他細々したの {{{
@@ -662,7 +662,7 @@ nnoremap m '
 nnoremap M m
 
 command! -nargs=1  -complete=customlist,vimrc#myutil#HelpList Help vimrc#myutil#Help(<q-args>)
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
@@ -700,7 +700,7 @@ au vimrc Syntax vim {
 	AddMySyntax('SpellBad', '\s\~[=!][=#]\?\s')
 	AddMySyntax('SpellRare', '\<normal!\@!')
 }
-#}}}
+# }}}
 
 # yankした文字をecho {{{
 set report=9999
@@ -710,7 +710,7 @@ def g:EchoYankText(t: number)
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 #
-#}}}
+# }}}
 # 選択中の文字数をポップアップ {{{
 def PopupVisualLength()
 	normal! "vygv
@@ -724,7 +724,7 @@ def PopupVisualLength()
 	})
 enddef
 xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
-#}}}
+# }}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示
 # (Buffer Regular Expression Print)
@@ -740,7 +740,7 @@ onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 
 #noremap <F1> <Cmd>smile<CR>
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
@@ -762,7 +762,7 @@ au vimrc FileType html,xml,svg {
 nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # デフォルトマッピングデー {{{
@@ -779,7 +779,7 @@ if strftime('%d') ==# '01'
 		nnoremap <Space>n <Nop>
 	}
 endif
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # メモ {{{
@@ -795,7 +795,7 @@ endif
 # <F10> ヘッダ行を表示(あんまり使わない)
 # <F11> 行番号表示切替
 # <F12> 折り返し表示切替
-#}}} -------------------------------------------------------
+# }}}
 
 export def LazyLoad()
 	# nop
