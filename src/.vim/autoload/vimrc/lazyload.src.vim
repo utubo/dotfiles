@@ -356,6 +356,8 @@ def ShowBufInfo(event: string = '')
 	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
+	add(msg, ['Normal', ' '])
+	add(msg, ['WarningMsg', system('git branch')->trim()[2 :]])
 	var msglen = 0
 	const maxlen = &columns - len(ruler) - 2
 	for i in reverse(range(0, len(msg) - 1))

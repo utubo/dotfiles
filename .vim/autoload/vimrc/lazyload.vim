@@ -235,6 +235,8 @@ const f = empty(&fenc) ? &enc : &fenc
 add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
 add(e, ['Normal', ' '])
 add(e, ['MoreMsg', &ft])
+add(e, ['Normal', ' '])
+add(e, ['WarningMsg', system('git branch')->trim()[2 :]])
 var g = 0
 const h = &columns - len(c) - 2
 for i in reverse(range(0, len(e) - 1))
