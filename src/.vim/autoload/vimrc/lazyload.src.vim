@@ -217,7 +217,7 @@ g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'
 g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 #}}}
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # コピペ寄せ集め色々 {{{
