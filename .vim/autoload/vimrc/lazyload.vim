@@ -51,6 +51,11 @@ g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
+no <Leader>ga ga
+packadd vim-headtail
+HeadTailMap g G
+Each nmap,xmap g% gi%
+Each nmap,xmap G% Gi%
 Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],
@@ -414,11 +419,6 @@ nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xn g: "vy:<C-u><C-r>=@v<CR><CR>
 xn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
-no <Leader>ga ga
-packadd vim-headtail
-HeadTailMap g G
-Each nmap,xmap g% gi%
-Each nmap,xmap G% Gi%
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"

@@ -89,6 +89,14 @@ au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 #}}}
 
+# headtail {{{
+noremap <Leader>ga ga
+packadd vim-headtail
+HeadTailMap g G
+Each nmap,xmap g% gi%
+Each nmap,xmap G% Gi%
+# }}}
+
 # textobj-user {{{
 Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
@@ -602,15 +610,6 @@ xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
 nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim
 #}}}
-
-# ------------------------------------------------------
-# テキストオブジェクトの末尾や先頭に移動 {{{
-noremap <Leader>ga ga
-packadd vim-headtail
-HeadTailMap g G
-Each nmap,xmap g% gi%
-Each nmap,xmap G% Gi%
-# }}}
 
 # ------------------------------------------------------
 # その他細々したの {{{
