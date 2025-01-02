@@ -18,6 +18,7 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
+set hidden
 set cmdheight=1
 set noshowcmd
 set noshowmode

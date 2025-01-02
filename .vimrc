@@ -15,6 +15,7 @@ set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
+set hidden
 set cmdheight=1
 set noshowcmd
 set noshowmode
