@@ -70,6 +70,14 @@ xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zO<CR>
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
+au vimrc ColorScheme default {
+hi MatchParen ctermbg=7 ctermfg=13 cterm=bold
+hi Search ctermbg=12 ctermfg=7
+hi TODO ctermbg=7 ctermfg=14
+hi String ctermbg=7
+hi WildMenu ctermbg=7
+hi DiffText ctermbg=227
+}
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [
 ['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],

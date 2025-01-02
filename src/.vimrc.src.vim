@@ -91,6 +91,17 @@ nnoremap g; <ScriptCmd>silent! normal! g;zO<CR>
 # ------------------------------------------------------
 # 色 {{{
 nnoremap <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
+
+# defaultも悪くない
+au vimrc ColorScheme default {
+	hi MatchParen ctermbg=7 ctermfg=13 cterm=bold
+	hi Search ctermbg=12 ctermfg=7
+	hi TODO ctermbg=7 ctermfg=14
+	hi String ctermbg=7
+	hi WildMenu ctermbg=7
+	hi DiffText ctermbg=227
+}
+
 au vimrc ColorSchemePre * {
 	g:rcsv_colorpairs = [
 		['105', '#9999ee'], ['117', '#99ccee'], ['120', '#99ee99'],
@@ -116,7 +127,6 @@ def MyHighlight()
 	execute $'hi LspDiagSignInfoText    {x}bg={signBg} {x}fg={GetHl("Pmenu").fg}'
 	execute $'hi LspDiagSignWarningText {x}bg={signBg} {x}fg={GetHl("WarningMsg").fg}'
 enddef
-
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
 # 好みでハイライト
