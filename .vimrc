@@ -75,6 +75,8 @@ hi MatchParen ctermbg=7 ctermfg=13 cterm=bold
 hi Search ctermbg=12 ctermfg=7
 hi TODO ctermbg=7 ctermfg=14
 hi String ctermbg=7
+hi SignColumn ctermbg=7
+hi FoldColumn ctermbg=7
 hi WildMenu ctermbg=7
 hi DiffText ctermbg=227
 }
