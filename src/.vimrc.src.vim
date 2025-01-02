@@ -41,7 +41,7 @@ augroup vimrc
 	# 新しい自由
 	au!
 augroup END
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # 自作マネージャ {{{
@@ -52,7 +52,7 @@ if !isdirectory(g:ezpack_home)
 endif
 command! EzpackInstall vimrc#ezpack#Install()
 command! EzpackCleanUp vimrc#ezpack#CleanUp()
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # 折り畳み {{{
@@ -74,7 +74,7 @@ au vimrc ColorScheme * {
 	hi! link ALEVirtualTextWarning ALEWarningSign
 	hi! link ALEVirtualTextError ALEErrorSign
 }
-#}}}
+# }}}
 # その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
@@ -85,24 +85,12 @@ nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 xnoremap zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nnoremap zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nnoremap g; <ScriptCmd>silent! normal! g;zO<CR>
-#}}}
-#}}} -------------------------------------------------------
+# }}}
+# }}}
 
 # ------------------------------------------------------
 # 色 {{{
 nnoremap <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
-
-# defaultも悪くない
-au vimrc ColorScheme default {
-	hi MatchParen ctermbg=7 ctermfg=13 cterm=bold
-	hi Search ctermbg=12 ctermfg=7
-	hi TODO ctermbg=7 ctermfg=14
-	hi String ctermbg=7
-	hi SignColumn ctermbg=7
-	hi FoldColumn ctermbg=7
-	hi WildMenu ctermbg=7
-	hi DiffText ctermbg=227
-}
 
 au vimrc ColorSchemePre * {
 	g:rcsv_colorpairs = [
@@ -171,7 +159,7 @@ set t_Co=256
 # 以下はローカル設定後にやる
 # set background=light
 # silent! colorscheme girly
-#}}} -------------------------------------------------------
+# }}}
 
 # ------------------------------------------------------
 # その他 {{{
@@ -191,7 +179,7 @@ endif
 if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local
 endif
-#}}}
+# }}}
 
 # ------------------------------------------------------
 # 色(ローカル設定後) {{{
@@ -236,5 +224,5 @@ au vimrc VimEnter * ++nested {
 # ------------------------------------------------------
 # 初期表示後の設定 {{{
 au vimrc SafeStateAgain * ++once vimrc#lazyload#LazyLoad()
-#}}}
+# }}}
 

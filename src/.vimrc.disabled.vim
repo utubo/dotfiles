@@ -238,4 +238,16 @@ hi! link CmdHeight0Horiz MoreMsg
 # ポータルは水色とオレンジにしたい…
 hi Portal_blue ctermbg=45 guibg=#00d7ff
 hi Portal_orange ctermbg=214 guibg=#ffaf00
+
+# defaultも悪くない
+au vimrc ColorScheme default {
+	hi MatchParen ctermbg=7 ctermfg=13 cterm=bold
+	hi Search ctermbg=12 ctermfg=7
+	hi TODO ctermbg=7 ctermfg=14
+	hi String ctermbg=7
+	hi SignColumn ctermbg=7
+	hi FoldColumn ctermbg=7
+	hi WildMenu ctermbg=7
+	hi DiffText ctermbg=227
+}
 # }}}
