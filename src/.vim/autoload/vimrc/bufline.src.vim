@@ -46,6 +46,6 @@ enddef
 export def MyBufline(): string
 	RefreshBufList()
 	const o = getwininfo(win_getid(1))[0].textoff
-	return $'{repeat(' ', o)}{left}%#TabLineSel#{select}%#TabLine#{right}'
+	return $'%#TabLine#{repeat(' ', o)}{left}%#TabLineSel#{select}%#TabLine#{right}'
 enddef
 
