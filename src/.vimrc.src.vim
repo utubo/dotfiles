@@ -57,21 +57,29 @@ command! EzpackCleanUp vimrc#ezpack#CleanUp()
 
 # ------------------------------------------------------
 # 折り畳み {{{
-# こんなかんじでインデントに合わせて表示📁 {{{
 def! g:MyFoldText(): string
 	const indent = repeat(' ', indent(v:foldstart))
 	if &foldmethod !=# 'indent'
+		# こんなかんじ
+		# ああああ 📁 lines 3
 		const text = getline(v:foldstart)
 			->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 			->trim()
 		return $'{indent}{text} 📁'
 	endif
+	# こんなかんじ
+	# 📁 lines 3
 	const text = $'{indent}📁 {v:foldend - v:foldstart + 1}lines'
 	if &ft !=# 'markdown'
 		return text
 	endif
+	# こんなかんじでマークダウンのチェックボックスの数を表示
+	# 📁 lines 3 [1/3]
 	var checkbox = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
 	const total = checkbox->len()
+	if total ==# 0
+		return text
+	endif
 	const checked = checkbox
 		->filter((index, value) => value.text[-2 : -2] !=# ' ')
 		->len()

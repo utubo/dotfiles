@@ -58,6 +58,9 @@ return b
 endif
 var c = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
 const d = c->len()
+if d ==# 0
+return b
+endif
 const e = c
 ->filter((index, value) => value.text[-2 : -2] !=# ' ')
 ->len()
