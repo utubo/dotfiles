@@ -45,14 +45,23 @@ endif
 com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
 def! g:MyFoldText(): string
-const a = getline(v:foldstart)
-const b = repeat(' ', indent(v:foldstart))
-if &fdm ==# 'indent'
-return $'{b}📁 {v:foldend - v:foldstart + 1}lines'
-else
-const c = a->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
-return $'{b}{c} 📁'
+const a = repeat(' ', indent(v:foldstart))
+if &fdm !=# 'indent'
+const b = getline(v:foldstart)
+->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
+->trim()
+return $'{a}{b} 📁'
 endif
+const b = $'{a}📁 {v:foldend - v:foldstart + 1}lines'
+if &ft !=# 'markdown'
+return b
+endif
+var c = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
+const d = c->len()
+const e = c
+->filter((index, value) => value.text[-2 : -2] !=# ' ')
+->len()
+return $'{b} [{e}/{d}]'
 enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 

@@ -59,14 +59,23 @@ command! EzpackCleanUp vimrc#ezpack#CleanUp()
 # 折り畳み {{{
 # こんなかんじでインデントに合わせて表示📁 {{{
 def! g:MyFoldText(): string
-	const src = getline(v:foldstart)
 	const indent = repeat(' ', indent(v:foldstart))
-	if &foldmethod ==# 'indent'
-		return $'{indent}📁 {v:foldend - v:foldstart + 1}lines'
-	else
-		const text = src->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')->trim()
+	if &foldmethod !=# 'indent'
+		const text = getline(v:foldstart)
+			->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
+			->trim()
 		return $'{indent}{text} 📁'
 	endif
+	const text = $'{indent}📁 {v:foldend - v:foldstart + 1}lines'
+	if &ft !=# 'markdown'
+		return text
+	endif
+	var checkbox = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
+	const total = checkbox->len()
+	const checked = checkbox
+		->filter((index, value) => value.text[-2 : -2] !=# ' ')
+		->len()
+	return $'{text} [{checked}/{total}]'
 enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
