@@ -91,29 +91,3 @@ export def Brep(regex: string, mods: string)
 	setlocal nomodified
 enddef
 #}}}
-
-# helpがoptを見てくれない… {{{
-export def HelpList(a: any, l: string, p: number): list<string>
-	var ls = []
-	globpath(&rtp, $'doc/*.txt')->split("\n")->foreach((i, v) => {
-		add(ls, v->fnamemodify(':t:r'))
-	})
-	const name = l->substitute('^Help \+', '', '')
-	if !name
-		return ls
-	else
-		return ls->matchfuzzy(name)
-	endif
-enddef
-
-export def Help(name: string)
-	const f = globpath(&rtp, $'doc/{name}.txt')
-	if filereadable(f)
-		execute 'edit' f
-	else
-		echoh ErrorMsg
-		echo 'Not Found.'
-		echoh Normal
-	endif
-enddef
-# }}}
