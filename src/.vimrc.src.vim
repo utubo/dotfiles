@@ -87,13 +87,13 @@ def! g:MyFoldText(): string
 enddef
 set foldtext=g:MyFoldText()
 set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
+
+# その他折りたたみ関係 {{{
 au vimrc ColorScheme * {
 	hi! link Folded Delimiter
 	hi! link ALEVirtualTextWarning ALEWarningSign
 	hi! link ALEVirtualTextError ALEErrorSign
 }
-# }}}
-# その他折りたたみ関係 {{{
 set foldmethod=marker
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
