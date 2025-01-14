@@ -61,7 +61,7 @@ def! g:MyFoldText(): string
 	const indent = repeat(' ', indent(v:foldstart))
 	if &foldmethod !=# 'indent'
 		# こんなかんじ
-		# ああああ 📁 lines 3
+		# ああああ 📁
 		const text = getline(v:foldstart)
 			->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 			->trim()
