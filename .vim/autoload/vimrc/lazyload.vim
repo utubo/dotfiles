@@ -49,7 +49,6 @@ complete: ['<CR>', ';;'],
 }
 g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
-au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 no <Leader>ga ga
 packadd vim-headtail

@@ -81,12 +81,13 @@ g:vim9skk = {
 }
 g:vim9skk_mode = '' # statuslineでエラーにならないように念の為設定しておく
 nnoremap ;j i<Plug>(vim9skk-enable)
-# インサートモードが終わったらオフにする
-au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
-## 見出しモードでスタートする
-#au vimrc User Vim9skkEnter feedkeys('Q')
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
+# ↓やっぱ微妙かも
+## インサートモードが終わったらオフにする
+# au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
+## 見出しモードでスタートする
+#au vimrc User Vim9skkEnter feedkeys('Q')
 # }}}
 
 # headtail {{{
