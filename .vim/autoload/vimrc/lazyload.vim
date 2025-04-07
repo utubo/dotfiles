@@ -29,6 +29,21 @@ exe a
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
+def g:System(a: string): string
+if !has('win32')
+return system(a)
+endif
+var b = []
+var c = job_start(a, {
+out_cb: (j, s) => {
+b = b + [s]
+}
+})
+while job_status(c) ==# 'run'
+sleep 10m
+endwhile
+return join(b, "\n")
+enddef
 def! g:VFirstLast(): list<number>
 return [line('.'), line('v')]->sort('n')
 enddef
@@ -88,7 +103,7 @@ const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
 const c = getcwd()
 chdir(b)
-ec system($'git pull')
+ec g:System($'git pull')
 chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
@@ -239,16 +254,16 @@ add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
 add(e, ['Normal', ' '])
 add(e, ['MoreMsg', &ft])
 add(e, ['Normal', ' '])
-const g = system('git branch')->trim()->matchstr('\w\+$')
-add(e, ['WarningMsg', g])
-var h = 0
-const j = &columns - len(c) - 2
+const h = g:System('git branch')->trim()->matchstr('\w\+$')
+add(e, ['WarningMsg', h])
+var j = 0
+const ba = &columns - len(c) - 2
 for i in reverse(range(0, len(e) - 1))
 var s = e[i][1]
 var d = strdisplaywidth(s)
-h += d
-if j < h
-const l = j - h + d
+j += d
+if ba < j
+const l = ba - j + d
 while !empty(s) && l < strdisplaywidth(s)
 s = s[1 :]
 endwhile
@@ -258,7 +273,7 @@ insert(e, ['SpecialKey', '<'], 0)
 break
 endif
 endfor
-add(e, ['Normal', repeat(' ', j - h) .. c])
+add(e, ['Normal', repeat(' ', ba - j) .. c])
 redraw
 ec ''
 for m in e

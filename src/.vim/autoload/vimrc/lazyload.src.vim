@@ -47,6 +47,22 @@ def g:StayCurPos(expr: string)
 	setpos('.', cur)
 enddef
 
+def g:System(cmd: string): string
+	if !has('win32')
+		return system(cmd)
+	endif
+	var result = []
+	var job = job_start(cmd, {
+		out_cb: (j, s) => {
+			result = result + [s]
+		}
+	})
+	while job_status(job) ==# 'run'
+		sleep 10m
+	endwhile
+	return join(result, "\n")
+enddef
+
 # <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
 def! g:VFirstLast(): list<number>
 	return [line('.'), line('v')]->sort('n')
@@ -135,7 +151,7 @@ def PullDotfiles()
 	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')
 	const cwd = getcwd()
 	chdir(dotfilespath)
-	echo system($'git pull')
+	echo g:System($'git pull')
 	chdir(cwd)
 	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 	EzpackInstall
@@ -365,7 +381,7 @@ def ShowBufInfo(event: string = '')
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
 	add(msg, ['Normal', ' '])
-	const branch = system('git branch')->trim()->matchstr('\w\+$')
+	const branch = g:System('git branch')->trim()->matchstr('\w\+$')
 	add(msg, ['WarningMsg', branch])
 	var msglen = 0
 	const maxlen = &columns - len(ruler) - 2
