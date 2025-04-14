@@ -281,7 +281,7 @@ exe 'echohl' m[0]
 echon m[1]
 endfor
 echoh Normal
-echow expand('%:p:h')
+popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 nn <script> <C-g> <ScriptCmd>E()<CR>
 set showtabline=0
