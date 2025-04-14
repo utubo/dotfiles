@@ -20,8 +20,15 @@ exe 'echoh' (d =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
 ec d
 endfor
 echoh Question
-if input('execute ? (y/n) > ', 'y') ==# 'y'
-system('git add ' .. a)
+ec 'execute ? (Y/n) > '
+var e = nr2char(getchar())
+if e ==# 'y' || e ==# "\r"
+echoh Normal
+ec system('git add ' .. a)
+else
+echoh Normal
+redraw
+ec 'canceled.'
 endif
 finally
 echoh Normal

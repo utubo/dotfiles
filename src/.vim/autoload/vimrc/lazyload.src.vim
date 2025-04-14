@@ -225,6 +225,25 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
+packadd cmdline
+
+def g:MyCmdline(timer: number = 0)
+	if mode() !=# 'c'
+		return
+	endif
+	var c = getwininfo()[0].textoff
+	cmdline#set_option({
+		col: c + 1,
+		width: &columns - c - 2,
+		highlight_prompt: 'PMenuKind',
+		highlight_window: 'PMenu',
+		border: 'none',
+	})
+	call cmdline#enable()
+enddef
+# まだダメ
+# au vimrc CmdlineEnter * au SafeState * ++once call g:MyCmdline()
+
 # }}}
 
 # 開発用 {{{

@@ -60,6 +60,7 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
+EzpackO Shougo/cmdline.vim
 
 # 気になるけど断念中(原因は殆どおま環)
 # EzpackL girishji/autosuggest.vim # ちょっとWindowsで動きが怪しい

@@ -21,8 +21,15 @@ export def Add(args: string)
 			echo item
 		endfor
 		echoh Question
-		if input('execute ? (y/n) > ', 'y') ==# 'y'
-			system('git add ' .. args)
+		echo 'execute ? (Y/n) > '
+		var yn = nr2char(getchar())
+		if yn ==# 'y' || yn ==# "\r"
+			echoh Normal
+			echo system('git add ' .. args)
+		else
+			echoh Normal
+			redraw
+			echo 'canceled.'
 		endif
 	finally
 		echoh Normal
