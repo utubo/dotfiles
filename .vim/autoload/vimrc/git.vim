@@ -24,7 +24,9 @@ ec 'execute ? (Y/n) > '
 var e = nr2char(getchar())
 if e ==# 'y' || e ==# "\r"
 echoh Normal
-ec system('git add ' .. a)
+system('git add ' .. a)
+redraw
+ec 'done.'
 else
 echoh Normal
 redraw

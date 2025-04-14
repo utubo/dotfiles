@@ -147,15 +147,11 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-packadd cmdline
-def g:MyCmdline(a: number = 0)
-if mode() !=# 'c'
-return
-endif
+def g:MyCmdline()
 var c = getwininfo()[0].textoff
 cmdline#set_option({
-col: c + 1,
-width: &columns - c - 2,
+col: c + 3,
+width: &columns - c - 6,
 highlight_prompt: 'PMenuKind',
 highlight_window: 'PMenu',
 border: 'none',
@@ -393,8 +389,6 @@ xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nnoremap,xnoremap / <Cmd>noh<CR>/
-Each nnoremap,xnoremap ? <Cmd>noh<CR>?
 Each nnoremap,xnoremap ;c :
 Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
 Each nnoremap,xnoremap + :
@@ -453,10 +447,10 @@ au vimrc FocusLost * @+ = @"
 endif
 nn <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nn <F12> <Cmd>set wrap!<CR>
-nn gs :<C-u>%s///g<Left><Left><Left>
-nn gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
-xn gs :s///g<Left><Left><Left>
-xn gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
+nm gs :<C-u>%s///g<Left><Left><Left>
+nm gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+xm gs :s///g<Left><Left><Left>
+xm gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
 nn <CR> j0
 nn Y y$
 nn <Space>p $p

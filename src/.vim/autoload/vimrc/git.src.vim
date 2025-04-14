@@ -25,7 +25,9 @@ export def Add(args: string)
 		var yn = nr2char(getchar())
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
-			echo system('git add ' .. args)
+			system('git add ' .. args)
+			redraw
+			echo 'done.'
 		else
 			echoh Normal
 			redraw

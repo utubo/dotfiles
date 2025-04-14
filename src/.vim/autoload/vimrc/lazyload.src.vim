@@ -225,25 +225,22 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-packadd cmdline
 
-def g:MyCmdline(timer: number = 0)
-	if mode() !=# 'c'
-		return
-	endif
+def g:MyCmdline()
 	var c = getwininfo()[0].textoff
 	cmdline#set_option({
-		col: c + 1,
-		width: &columns - c - 2,
+		col: c + 3,
+		width: &columns - c - 6,
 		highlight_prompt: 'PMenuKind',
 		highlight_window: 'PMenu',
 		border: 'none',
 	})
 	call cmdline#enable()
 enddef
-# まだダメ
-# au vimrc CmdlineEnter * au SafeState * ++once call g:MyCmdline()
-
+# 様子見中
+# packadd cmdline
+# nnoremap : <Cmd>call g:MyCmdline()<CR>:
+# Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 # }}}
 
 # 開発用 {{{
@@ -563,8 +560,8 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
-Each nnoremap,xnoremap / <Cmd>noh<CR>/
-Each nnoremap,xnoremap ? <Cmd>noh<CR>?
+# Each nnoremap,xnoremap / <Cmd>noh<CR>/
+# Each nnoremap,xnoremap ? <Cmd>noh<CR>?
 # 考え中
 Each nnoremap,xnoremap ;c :
 Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
@@ -656,10 +653,10 @@ endif
 nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
-nnoremap gs :<C-u>%s///g<Left><Left><Left>
-nnoremap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
-xnoremap gs :s///g<Left><Left><Left>
-xnoremap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
+nmap gs :<C-u>%s///g<Left><Left><Left>
+nmap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+xmap gs :s///g<Left><Left><Left>
+xmap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
 
 nnoremap <CR> j0
 nnoremap Y y$
