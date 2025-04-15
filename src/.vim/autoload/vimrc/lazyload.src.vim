@@ -182,14 +182,20 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # cmdline {{{
 def g:MyCmdline()
 	packadd cmdline.vim
-	var c = getwininfo()[0].textoff
+	var x = getwininfo()[0].textoff
 	cmdline#set_option({
-		col: c + 3,
-		width: &columns - c - 6,
+		col: x + 3,
+		width: &columns - x - 6,
 		highlight_prompt: 'PMenuKind',
 		highlight_window: 'PMenu',
 		border: 'none',
 	})
+	# cmdline.vimがCursorを隠すので疑似カーソルに使うlCursorのリンクをはずしておく
+	if get(hlget('lCursor')[0], 'linksto', '') ==# 'Cursor'
+		var c = hlget('Cursor')[0]
+		c.name = 'lCursor'
+		hlset([c])
+	endif
 	call cmdline#enable()
 	# カーソルが動いてzenmodeのechoが動いてしまうのを防ぐ
 	g:zenmode.preventEcho = true
