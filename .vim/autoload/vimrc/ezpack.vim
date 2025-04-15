@@ -47,7 +47,7 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
-EzpackO Shougo/cmdline.vim
+EzpackO utubo/cmdline.vim
 EzpackO utubo/vim-ezpack
 EzpackL utubo/vim-headtail
 EzpackL utubo/vim-hlpairs

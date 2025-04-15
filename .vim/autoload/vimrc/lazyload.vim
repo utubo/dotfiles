@@ -119,6 +119,20 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
+def g:MyCmdline()
+packadd cmdline.vim
+var c = getwininfo()[0].textoff
+cmdline#set_option({
+col: c + 3,
+width: &columns - c - 6,
+highlight_prompt: 'PMenuKind',
+highlight_window: 'PMenu',
+border: 'none',
+})
+call cmdline#enable()
+enddef
+nn : <Cmd>call g:MyCmdline()<CR>:
+Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
@@ -147,17 +161,6 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-def g:MyCmdline()
-var c = getwininfo()[0].textoff
-cmdline#set_option({
-col: c + 3,
-width: &columns - c - 6,
-highlight_prompt: 'PMenuKind',
-highlight_window: 'PMenu',
-border: 'none',
-})
-call cmdline#enable()
-enddef
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'

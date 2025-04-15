@@ -179,6 +179,23 @@ nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
 # }}}
 
+# cmdline {{{
+def g:MyCmdline()
+	packadd cmdline.vim
+	var c = getwininfo()[0].textoff
+	cmdline#set_option({
+		col: c + 3,
+		width: &columns - c - 6,
+		highlight_prompt: 'PMenuKind',
+		highlight_window: 'PMenu',
+		border: 'none',
+	})
+	call cmdline#enable()
+enddef
+nnoremap : <Cmd>call g:MyCmdline()<CR>:
+Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
+# }}}
+
 # 補完 {{{
 export def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
@@ -225,22 +242,6 @@ Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
 Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
-
-def g:MyCmdline()
-	var c = getwininfo()[0].textoff
-	cmdline#set_option({
-		col: c + 3,
-		width: &columns - c - 6,
-		highlight_prompt: 'PMenuKind',
-		highlight_window: 'PMenu',
-		border: 'none',
-	})
-	call cmdline#enable()
-enddef
-# 様子見中
-# packadd cmdline
-# nnoremap : <Cmd>call g:MyCmdline()<CR>:
-# Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 # }}}
 
 # 開発用 {{{
