@@ -191,6 +191,11 @@ def g:MyCmdline()
 		border: 'none',
 	})
 	call cmdline#enable()
+	# カーソルが動いてechoがzenmodeが動いてしまうのを防ぐ
+	g:zenmode.preventEcho = true
+	au ModeChanged c:* ++once timer_start(0, (_) => {
+		g:zenmode.preventEcho = false
+	})
 enddef
 nnoremap : <Cmd>call g:MyCmdline()<CR>:
 Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
