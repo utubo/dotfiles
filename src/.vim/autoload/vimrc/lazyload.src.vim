@@ -182,15 +182,18 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # cmdline {{{
 def g:MyCmdline()
 	packadd cmdline.vim
-	var x = getwininfo()[0].textoff
+	var p = screenpos(0, line('.'), col('.'))
+	var o = getwininfo()[0].textoff
+	var w = min([10, &columns - o - p.col - 1])
 	# hi link lCursor Cursorなカラースキームだとカーソルが表示されないので
 	g:hi_cursor = hlget('Cursor')[0]
 	g:hi_cursor.name = 'cmdlineCursor'
 	hlset([g:hi_cursor])
 	au CmdlineEnter * ++once au SafeState * ++once hlset([g:hi_cursor])
 	cmdline#set_option({
-		col: x + 3,
-		width: &columns - x - 6,
+		col: max([o, p.col - 3]),
+		row: p.row,
+		width: w,
 		highlight_prompt: 'PMenuKind',
 		highlight_window: 'PMenu',
 		highlight_cursor: 'cmdlineCursor',
