@@ -122,9 +122,10 @@ nn <Leader>r <Cmd>PortalReset<CR>
 def g:MyCmdline()
 packadd cmdline.vim
 var x = getwininfo()[0].textoff
-var a = hlget('Cursor')[0]
-a.name = 'cmdlineCursor'
-hlset([a])
+g:hi_cursor = hlget('Cursor')[0]
+g:hi_cursor.name = 'cmdlineCursor'
+hlset([g:hi_cursor])
+au CmdlineEnter * ++once au SafeState * ++once hlset([g:hi_cursor])
 cmdline#set_option({
 col: x + 3,
 width: &columns - x - 6,
