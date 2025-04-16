@@ -183,19 +183,17 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 def g:MyCmdline()
 	packadd cmdline.vim
 	var x = getwininfo()[0].textoff
+	# hi link lCursor Cursorなカラースキームだとカーソルが表示されないので
+	var cursor = hlget('Cursor')[0]
+	cursor.name = 'cmdlineCursor'
 	cmdline#set_option({
 		col: x + 3,
 		width: &columns - x - 6,
 		highlight_prompt: 'PMenuKind',
 		highlight_window: 'PMenu',
+		highlight_cursor: 'cmdlineCursor',
 		border: 'none',
 	})
-	# cmdline.vimがCursorを隠すので疑似カーソルに使うlCursorのリンクをはずしておく
-	if get(hlget('lCursor')[0], 'linksto', '') ==# 'Cursor'
-		var c = hlget('Cursor')[0]
-		c.name = 'lCursor'
-		hlset([c])
-	endif
 	call cmdline#enable()
 	# カーソルが動いてzenmodeのechoが動いてしまうのを防ぐ
 	g:zenmode.preventEcho = true

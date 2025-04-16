@@ -122,18 +122,16 @@ nn <Leader>r <Cmd>PortalReset<CR>
 def g:MyCmdline()
 packadd cmdline.vim
 var x = getwininfo()[0].textoff
+var a = hlget('Cursor')[0]
+a.name = 'cmdlineCursor'
 cmdline#set_option({
 col: x + 3,
 width: &columns - x - 6,
 highlight_prompt: 'PMenuKind',
 highlight_window: 'PMenu',
+highlight_cursor: 'cmdlineCursor',
 border: 'none',
 })
-if get(hlget('lCursor')[0], 'linksto', '') ==# 'Cursor'
-var c = hlget('Cursor')[0]
-c.name = 'lCursor'
-hlset([c])
-endif
 call cmdline#enable()
 g:zenmode.preventEcho = true
 au ModeChanged c:* ++once timer_start(0, (_) => {
