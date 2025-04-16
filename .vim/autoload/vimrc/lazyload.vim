@@ -134,10 +134,6 @@ highlight_cursor: 'cmdlineCursor',
 border: 'none',
 })
 call cmdline#enable()
-g:zenmode.preventEcho = true
-au ModeChanged c:* ++once timer_start(0, (_) => {
-g:zenmode.preventEcho = false
-})
 enddef
 nn : <Cmd>call g:MyCmdline()<CR>:
 Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
