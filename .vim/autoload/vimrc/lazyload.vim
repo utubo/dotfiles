@@ -124,6 +124,7 @@ packadd cmdline.vim
 var x = getwininfo()[0].textoff
 var a = hlget('Cursor')[0]
 a.name = 'cmdlineCursor'
+hlset([a])
 cmdline#set_option({
 col: x + 3,
 width: &columns - x - 6,

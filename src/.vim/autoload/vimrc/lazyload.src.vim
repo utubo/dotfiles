@@ -184,8 +184,9 @@ def g:MyCmdline()
 	packadd cmdline.vim
 	var x = getwininfo()[0].textoff
 	# hi link lCursor Cursorなカラースキームだとカーソルが表示されないので
-	var cursor = hlget('Cursor')[0]
-	cursor.name = 'cmdlineCursor'
+	var hi_cursor = hlget('Cursor')[0]
+	hi_cursor.name = 'cmdlineCursor'
+	hlset([hi_cursor])
 	cmdline#set_option({
 		col: x + 3,
 		width: &columns - x - 6,
