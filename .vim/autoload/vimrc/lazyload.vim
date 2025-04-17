@@ -127,7 +127,8 @@ endif
 packadd cmdline.vim
 var p = screenpos(0, line('.'), col('.'))
 var o = getwininfo()[0].textoff
-var x = [o, p.col - 3, &columns - w]->sort()[1]
+g:x = [o, p.col - 3, &columns - w]
+var x = [o, p.col - 3, &columns - w]->sort('n')[1]
 g:hi_cursor = hlget('Cursor')[0]
 g:hi_cursor.name = 'cmdlineCursor'
 hlset([g:hi_cursor])
