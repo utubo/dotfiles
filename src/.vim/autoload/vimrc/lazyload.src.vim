@@ -91,6 +91,7 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # vim9skk {{{
 g:vim9skk = {
 	keymap: {
+    	midasi: ';',
 		toggle: ['<C-j>', ';j'],
 		complete: ['<CR>', ';;'],
 	},

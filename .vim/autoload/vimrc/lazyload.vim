@@ -58,6 +58,7 @@ packadd vim-textobj-user
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
+midasi: ';',
 toggle: ['<C-j>', ';j'],
 complete: ['<CR>', ';;'],
 },
