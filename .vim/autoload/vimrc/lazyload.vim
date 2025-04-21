@@ -91,7 +91,8 @@ com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
-nn <Space>gA :<C-u>GitAmend<Space><C-r>=vimrc#git#GetLastCommitMessage()<CR>
+" NOTE: cmdline.vimだと<C-r>=が遅いのでsetcmdlineを使う
+nn <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 nn <Space>gp :<C-u>Git push<End>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
@@ -176,7 +177,7 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
-xn * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xn * <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join('\n')}'<CR><Esc>/<CR>
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
@@ -450,8 +451,8 @@ nn qQ <Cmd>e #<1<CR>
 cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nn <script> g: :<C-u><SID>(exec_line)
 nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
-xn g: "vy:<C-u><C-r>=@v<CR><CR>
-xn g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+xn g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
+xn g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
 nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
@@ -460,9 +461,9 @@ endif
 nn <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nn <F12> <Cmd>set wrap!<CR>
 nm gs :<C-u>%s///g<Left><Left><Left>
-nm gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+nm gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
 xm gs :s///g<Left><Left><Left>
-xm gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
+xm gS "vy:<C-u><Cmd>call setcmdline(<QQQ_292>escape(@v,'^$.*?/\[]')->substitute("\n",'\\n','g')}//g')<CR><Left><Left>
 nn <CR> j0
 nn Y y$
 nn <Space>p $p

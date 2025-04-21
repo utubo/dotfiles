@@ -139,7 +139,8 @@ command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vi
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
-nnoremap <Space>gA :<C-u>GitAmend<Space><C-r>=vimrc#git#GetLastCommitMessage()<CR>
+" NOTE: cmdline.vimだと<C-r>=が遅いのでsetcmdlineを使う
+nnoremap <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 nnoremap <Space>gp :<C-u>Git push<End>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
@@ -265,7 +266,7 @@ g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
-xnoremap * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+xnoremap * <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join('\n')}'<CR><Esc>/<CR>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
@@ -646,8 +647,8 @@ nnoremap qQ <Cmd>e #<1<CR>
 cnoremap <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nnoremap <script> g: :<C-u><SID>(exec_line)
 nnoremap <script> g9 :<C-u>vim9cmd <SID>(exec_line)
-xnoremap g: "vy:<C-u><C-r>=@v<CR><CR>
-xnoremap g9 "vy:<C-u>vim9cmd <C-r>=@v<CR><CR>
+xnoremap g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
+xnoremap g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
 # カーソル位置のハイライトを確認するやつ
 nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim
@@ -664,9 +665,9 @@ nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
 nmap gs :<C-u>%s///g<Left><Left><Left>
-nmap gS :<C-u>%s/<C-r>=escape(expand('<cword>'), '^$.*?/\[]')<CR>//g<Left><Left>
+nmap gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
 xmap gs :s///g<Left><Left><Left>
-xmap gS "vy:<C-u>%s/<C-r>=substitute(escape(@v,'^$.*?/\[]'),"\n",'\\n','g')<CR>//g<Left><Left>
+xmap gS "vy:<C-u><Cmd>call setcmdline($'%s/{escape(@v,'^$.*?/\[]')->substitute("\n",'\\n','g')}//g')<CR><Left><Left>
 
 nnoremap <CR> j0
 nnoremap Y y$
