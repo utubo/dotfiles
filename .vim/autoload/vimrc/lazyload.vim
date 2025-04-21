@@ -140,7 +140,7 @@ border: 'none',
 })
 call cmdline#enable()
 enddef
-nn : <Cmd>call g:MyCmdline()<CR>:
+Each n,v {}noremap : <Cmd>call g:MyCmdline()<CR>:
 Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)

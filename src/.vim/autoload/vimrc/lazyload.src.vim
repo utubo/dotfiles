@@ -201,7 +201,7 @@ def g:MyCmdline()
 	})
 	call cmdline#enable()
 enddef
-nnoremap : <Cmd>call g:MyCmdline()<CR>:
+Each n,v {}noremap : <Cmd>call g:MyCmdline()<CR>:
 Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 # }}}
 
