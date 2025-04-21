@@ -305,7 +305,7 @@ endfor
 echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
-nn <script> <C-g> <ScriptCmd>E()<CR>
+nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BB()<CR>
 set showtabline=0
 def F(a: string)
 set tabline=%!vimrc#tabline#MyTabline()
@@ -522,8 +522,7 @@ vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 def BA()
-normal! "vygv
-var a = @v->substitute('\n', '', 'g')
+var a = getregion(getpos('v'), getpos('.'))->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
 line: 'cursor-1',
@@ -533,6 +532,16 @@ padding: [1, 1, 1, 1],
 })
 enddef
 xn <C-g> <ScriptCmd>BA()<CR>
+def BB()
+var p = getcurpos()
+popup_create($'{p[1]}, {p[2]}', {
+pos: 'botleft',
+line: 'cursor-1',
+col: 'cursor+1',
+moved: 'any',
+padding: [1, 1, 1, 1],
+})
+enddef
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
 Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)

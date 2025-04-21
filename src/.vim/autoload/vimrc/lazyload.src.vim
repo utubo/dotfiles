@@ -437,7 +437,7 @@ def ShowBufInfo(event: string = '')
 	popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 
-nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR>
+nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<CR>
 # }}}
 
 # ------------------------------------------------------
@@ -755,8 +755,7 @@ au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 # }}}
 # 選択中の文字数をポップアップ {{{
 def PopupVisualLength()
-	normal! "vygv
-	var text = @v->substitute('\n', '', 'g')
+	var text = getregion(getpos('v'), getpos('.'))->join('')
 	popup_create($'{strlen(text)}chars', {
 		pos: 'botleft',
 		line: 'cursor-1',
@@ -766,6 +765,20 @@ def PopupVisualLength()
 	})
 enddef
 xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
+# }}}
+#
+# カーソル位置をポップアップ {{{
+def PopupCursorPos()
+	var p = getcurpos()
+	popup_create($'{p[1]}, {p[2]}', {
+		pos: 'botleft',
+		line: 'cursor-1',
+		col: 'cursor+1',
+		moved: 'any',
+		padding: [1, 1, 1, 1],
+	})
+enddef
+#nnoremap <C-g> <ScriptCmd>PopupCursorPos()<CR>
 # }}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示
