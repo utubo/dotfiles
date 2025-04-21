@@ -139,7 +139,7 @@ command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vi
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
-" NOTE: cmdline.vimだと<C-r>=が遅いのでsetcmdlineを使う
+# NOTE: cmdline.vimだと<C-r>=が遅いのでsetcmdlineを使う
 nnoremap <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 nnoremap <Space>gp :<C-u>Git push<End>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
