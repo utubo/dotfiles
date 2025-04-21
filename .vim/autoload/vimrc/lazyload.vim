@@ -176,7 +176,6 @@ g:vimhelpgenerator_defaultlanguage = 'en'
 g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
-xn * <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join('\n')}'<CR><Esc>/<CR>
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
@@ -462,7 +461,9 @@ nn <F12> <Cmd>set wrap!<CR>
 nm gs :<C-u>%s///g<Left><Left><Left>
 nm gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
 xm gs :s///g<Left><Left><Left>
-xm gS "vy:<C-u><Cmd>call setcmdline(<QQQ_292>escape(@v,'^$.*?/\[]')->substitute("\n",'\\n','g')}//g')<CR><Left><Left>
+xn <SID>(setup-region-to-search) <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join("\n")->escape('\')->substitute("\n", '\n', 'g')}'<CR>
+xm gS <SID>(setup-region-to-search)<Esc>:<C-u><Cmd>call setcmdline($'%s/{@/}//g')<CR><Left><Left>
+xm * <SID>(setup-region-to-search)<Esc>/<CR>
 nn <CR> j0
 nn Y y$
 nn <Space>p $p

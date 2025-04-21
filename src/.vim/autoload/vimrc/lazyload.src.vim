@@ -266,7 +266,6 @@ g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 # コピペ寄せ集め色々 {{{
 au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
-xnoremap * <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join('\n')}'<CR><Esc>/<CR>
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
@@ -667,7 +666,9 @@ nnoremap <F12> <Cmd>set wrap!<CR>
 nmap gs :<C-u>%s///g<Left><Left><Left>
 nmap gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
 xmap gs :s///g<Left><Left><Left>
-xmap gS "vy:<C-u><Cmd>call setcmdline($'%s/{escape(@v,'^$.*?/\[]')->substitute("\n",'\\n','g')}//g')<CR><Left><Left>
+xnoremap <SID>(setup-region-to-search) <Cmd>let @/ = $'\V{getregion(getpos('v'), getpos('.'))->join("\n")->escape('\')->substitute("\n", '\n', 'g')}'<CR>
+xmap gS <SID>(setup-region-to-search)<Esc>:<C-u><Cmd>call setcmdline($'%s/{@/}//g')<CR><Left><Left>
+xmap * <SID>(setup-region-to-search)<Esc>/<CR>
 
 nnoremap <CR> j0
 nnoremap Y y$
