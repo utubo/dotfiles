@@ -130,17 +130,12 @@ var p = screenpos(0, line('.'), col('.'))
 var o = getwininfo()[0].textoff
 g:x = [o, p.col - 3, &columns - w]
 var x = [o, p.col - 3, &columns - w]->sort('n')[1]
-g:hi_cursor = hlget('Cursor')[0]
-g:hi_cursor.name = 'cmdlineCursor'
-hlset([g:hi_cursor])
-au CmdlineEnter * ++once au SafeState * ++once hlset([g:hi_cursor])
 cmdline#set_option({
 col: x,
 row: p.row,
 width: w,
 highlight_prompt: 'PMenuKind',
 highlight_window: 'PMenu',
-highlight_cursor: 'cmdlineCursor',
 border: 'none',
 })
 call cmdline#enable()
