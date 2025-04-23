@@ -380,7 +380,7 @@ com! AutoNamingAndSave H()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 ino ;m <Esc>`^
-cno ;m <Esc>
+cno ;m <C-c>
 no ;m <Esc>
 ino ;v ;<CR>
 ino ;w <C-o>e<C-o>a

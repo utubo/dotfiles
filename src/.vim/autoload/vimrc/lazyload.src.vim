@@ -540,7 +540,7 @@ command! AutoNamingAndSave AutoNamingAndSave()
 cnoremap ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 inoremap ;m <Esc>`^
-cnoremap ;m <Esc>
+cnoremap ;m <C-c>
 noremap  ;m <Esc>
 # その他
 inoremap ;v ;<CR>
