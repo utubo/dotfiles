@@ -12,7 +12,6 @@ EzpackInit
 
 # 初期表示で使うプラグイン
 EzpackS vim-jp/vital.vim
-# EzpackS obcat/vim-sclow # たまにエラーになるのでちょっと無効にしておく
 EzpackS utubo/vim-colorscheme-girly # うちのvimが一番kawaii!
 EzpackS utubo/vim-colorscheme-softgreen # 緑がかって目に優しめを目指しました
 EzpackS utubo/vim-zenmode # cmdheight=0エミュレータ(statuslineも非表示)
@@ -63,10 +62,11 @@ EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 # EzpackO Shougo/cmdline.vim フォークして少し調整
 EzpackO utubo/cmdline.vim <branch> develop
 
-# 気になるけど断念中(原因は殆どおま環)
-# EzpackL girishji/autosuggest.vim # ちょっとWindowsで動きが怪しい
-# EzpackL github/copilot.vim       # 重い
+# 気になるけど、おま環で断念中
+# EzpackL girishji/autosuggest.vim # ちょっとうちのWindowsで動きが怪しい
+# EzpackL github/copilot.vim
 # EzpackL tani/vim-typo            # OmniSyntaxListが何故か重い
+# EzpackS obcat/vim-sclow          # たまにエラーになる調査中
 
 # 🐶🍚
 EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ
