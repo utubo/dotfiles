@@ -541,8 +541,8 @@ cnoremap ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 noremap  ;m <Esc>
 inoremap ;m <Esc>`^
-# cmdline.vimが<C-c>1回で閉じないので…
-cnoremap ;m <C-c><C-c>
+# <Esc>はコマンドが実行されちゃう、<C-c>は副作用が大きい
+cnoremap ;m <Cmd>call feedkeys("\<LT>Esc>", 'nt')<CR>
 # その他
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a

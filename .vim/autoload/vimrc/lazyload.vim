@@ -381,7 +381,7 @@ cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 no ;m <Esc>
 ino ;m <Esc>`^
-cno ;m <C-c><C-c>
+cno ;m <Cmd>call feedkeys("\<LT>Esc>", 'nt')<CR>
 ino ;v ;<CR>
 ino ;w <C-o>e<C-o>a
 ino ;k 「」<C-g>U<Left>
