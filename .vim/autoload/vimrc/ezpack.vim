@@ -5,7 +5,6 @@ com! -nargs=* EzpackO execute $'Ezpack <opt> {<q-args>}'
 com! -nargs=* EzpackL execute $'Ezpack <lazy> {<q-args>}'
 EzpackInit
 EzpackS vim-jp/vital.vim
-EzpackS obcat/vim-sclow
 EzpackS utubo/vim-colorscheme-girly
 EzpackS utubo/vim-colorscheme-softgreen
 EzpackS utubo/vim-zenmode
