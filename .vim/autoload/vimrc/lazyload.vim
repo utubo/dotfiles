@@ -561,7 +561,7 @@ nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {
-notification#show("✨ Today, Let's enjoy the default key mapping ! ✨")
+echow "✨ Today, Let's enjoy the default key mapping ! ✨"
 mapclear
 imapclear
 xmapclear

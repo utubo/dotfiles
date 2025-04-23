@@ -31,7 +31,6 @@ EzpackL kana/vim-smartword # wとかのモーションをいい感じにする
 EzpackL LeafCage/vimhelpgenerator
 EzpackL luochen1990/rainbow
 EzpackO machakann/vim-sandwich
-EzpackO mattn/vim-notification
 EzpackL matze/vim-move
 EzpackL michaeljsmith/vim-indent-object
 Ezpack  MTDL9/vim-log-highlighting <on> Filetype log
