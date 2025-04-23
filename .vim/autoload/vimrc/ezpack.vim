@@ -12,7 +12,7 @@ EzpackS utubo/vim-zenmode
 EzpackL airblade/vim-gitgutter
 EzpackO cohama/lexima.vim
 EzpackL delphinus/vim-auto-cursorline
-EzpackO easymotion/vim-easymotion
+EzpackO utubo/vim-easymotion <branch> develop
 EzpackL girishji/vimcomplete
 EzpackL hrsh7th/vim-vsnip
 EzpackL hrsh7th/vim-vsnip-integ

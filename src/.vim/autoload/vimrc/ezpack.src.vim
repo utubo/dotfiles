@@ -21,7 +21,8 @@ EzpackS utubo/vim-zenmode # cmdheight=0エミュレータ(statuslineも非表示
 EzpackL airblade/vim-gitgutter # gitの差分を表示する
 EzpackO cohama/lexima.vim
 EzpackL delphinus/vim-auto-cursorline
-EzpackO easymotion/vim-easymotion
+# EzpackO easymotion/vim-easymotion
+EzpackO utubo/vim-easymotion <branch> develop
 EzpackL girishji/vimcomplete
 EzpackL hrsh7th/vim-vsnip
 EzpackL hrsh7th/vim-vsnip-integ
