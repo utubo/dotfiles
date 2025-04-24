@@ -30,40 +30,65 @@ enddef
 #}}}
 
 # カーソル付近にポップアップ {{{
+# NOTE: colorschme defualtで微妙だけど知らない！
 # NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
-# cmdlineを抜けるまでポップアップのゴーストが残るのでcallback等では解決できない
-var popupwin = 0
-var popuptimer = 0
+#       cmdlineを抜けるまでポップアップのゴーストが残るので
+#       callback等では解決できない
+var popup = {
+	win: 0,
+	timer: 0,
+	cover: 0,
+	blink: false,
+	blinktimer: 0,
+	curpos: 0,
+}
 export def Popup()
-	popupwin = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
-	setbufvar(winbufnr(popupwin), '&filetype', 'vim')
-	win_execute(popupwin, $'syntax match PMenuKind /^./')
+	popup.cover = popup_create('', { zindex: 1 })
+	setwinvar(popup.cover, '&wincolor', 'Normal')
+	UpdatePopupCover()
+	popup.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
+	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
+	win_execute(popup.win, $'syntax match PMenuKind /^./')
+	set t_ve=
 	augroup vimrc_cmdline_popup
 		au!
 		au ModeChanged c:[^c] ClosePopup()
+		au WinScrolled * UpdatePopupCover()
+		au VimLeavePre * set t_ve&
 	augroup END
-	popuptimer = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
+	popup.blinktimer = timer_start(500, vimrc#cmdline#BlinkPopupCursor, { repeat: -1 })
+	popup.timer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
 enddef
 
 def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
-	if popuptimer !=# 0
-		timer_stop(popuptimer)
-		popuptimer = 0
+	if popup.timer !=# 0
+		timer_stop(popup.timer)
+		popup.timer = 0
 	endif
-	if popupwin !=# 0
-		popup_close(popupwin)
-		popupwin = 0
+	if popup.blinktimer !=# 0
+		timer_stop(popup.blinktimer)
+		popup.blinktimer = 0
 	endif
+	if popup.win !=# 0
+		popup_close(popup.win)
+		popup.win = 0
+	endif
+	if popup.cover !=# 0
+		popup_close(popup.cover)
+		popup.cover = 0
+		redraw
+	endif
+ 	set t_ve&
 enddef
 
-export def RedrawPopup(timer: number)
-	if popupwin ==# 0
+export def UpdatePopup(timer: number)
+	if popup.win ==# 0
 		return
 	endif
-	if popup_list()->index(popupwin) ==# -1
+	if popup_list()->index(popup.win) ==# -1
 		# ここに来るのは<C-c>などで強引にポップアップを閉じられたとき
 		# まずは内部的な変数をリセットする
 		ClosePopup()
@@ -79,10 +104,29 @@ export def RedrawPopup(timer: number)
 		redraw
 		return
 	endif
-	popup_settext(popupwin, text)
-	win_execute(popupwin, $'call clearmatches()')
-	const c = getcmdscreenpos()
-	win_execute(popupwin, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+	popup_settext(popup.win, text)
+	ShowPopupCursor()
+enddef
+
+def ShowPopupCursor()
+	win_execute(popup.win, 'call clearmatches()')
+	var c = getcmdscreenpos()
+	if c !=# popup.curpos
+		popup.blink = true
+		popup.curpos = c
+	endif
+	if popup.blink
+		win_execute(popup.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+	endif
+enddef
+
+export def BlinkPopupCursor(timer: number)
+	popup.blink = !popup.blink
+enddef
+
+def UpdatePopupCover()
+	popup_move(popup.cover, { col: 1, line: &lines, zindex: 1 })
+	popup_settext(popup.cover, repeat(' ', &columns))
 enddef
 # }}}
 
