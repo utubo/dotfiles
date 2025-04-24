@@ -514,7 +514,7 @@ Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
 noremap  ;m <Esc>
 inoremap ;m <Esc>`^
 # <Esc>はコマンドが実行されちゃうし<C-c>は副作用が大きい
-cnoremap ;m <Cmd>call feedkeys("\<LT>Esc>", 'nt')<CR>
+cnoremap ;m <Cmd>call feedkeys("\e", 'nt')<CR>
 # その他
 inoremap ;v ;<CR>
 inoremap ;w <C-o>e<C-o>a

@@ -31,6 +31,10 @@ curpos: 0,
 curhl: [],
 }
 export def Popup()
+if m.win !=# 0
+echoerr 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
+return
+endif
 m.cover = popup_create('', { zindex: 1 })
 setwinvar(m.cover, '&wincolor', 'Normal')
 E()
@@ -38,8 +42,8 @@ m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
 set t_ve=
-m.curhl = hlget('Cursor')
-hlset([m.curhl[0]->copy()->extend({ name: 'vimrc_cmdline_Cursor' })])
+m.curhl = 'Cursor'->hlget()
+[m.curhl[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
 hi Cursor NONE
 aug vimrc_cmdline_popup
 au!
@@ -54,30 +58,19 @@ def B()
 aug vimrc_cmdline_popup
 au!
 aug END
-if m.updatetimer !=# 0
+D()
 timer_stop(m.updatetimer)
 m.updatetimer = 0
-endif
-if m.blinktimer !=# 0
 timer_stop(m.blinktimer)
 m.blinktimer = 0
-endif
-if m.win !=# 0
 popup_close(m.win)
 m.win = 0
-endif
-if m.cover !=# 0
 popup_close(m.cover)
 m.cover = 0
 redraw
-endif
-D()
 enddef
 export def UpdatePopup(a: number)
-if m.win ==# 0
-return
-endif
-if popup_list()->index(m.win) ==# -1
+if m.win ==# 0 || mode() !=# 'c' || popup_list()->index(m.win) ==# -1
 B()
 if mode() ==# 'c'
 feedkeys("\<Esc>", 'nt')
@@ -101,7 +94,7 @@ m.blink = true
 m.curpos = c
 endif
 if m.blink
-win_execute(m.win, $'echo matchadd("vimrc_cmdline_Cursor", "\\%1l\\%{c}v.")')
+win_execute(m.win, $'echo matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 endif
 enddef
 export def BlinkPopupCursor(a: number)

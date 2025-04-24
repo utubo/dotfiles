@@ -45,6 +45,10 @@ var popup = {
 	curhl: [],
 }
 export def Popup()
+	if popup.win !=# 0
+		echoerr 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
+		return
+	endif
 	# cmdlineを隠すwindow
 	popup.cover = popup_create('', { zindex: 1 })
 	setwinvar(popup.cover, '&wincolor', 'Normal')
@@ -55,8 +59,8 @@ export def Popup()
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
 	# カーソル関係
 	set t_ve=
-	popup.curhl = hlget('Cursor')
-	hlset([popup.curhl[0]->copy()->extend({ name: 'vimrc_cmdline_Cursor' })])
+	popup.curhl = 'Cursor'->hlget()
+	[popup.curhl[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
 	hi Cursor NONE
 	# イベント等
 	augroup vimrc_cmdline_popup
@@ -73,32 +77,22 @@ def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
-	if popup.updatetimer !=# 0
-		timer_stop(popup.updatetimer)
-		popup.updatetimer = 0
-	endif
-	if popup.blinktimer !=# 0
-		timer_stop(popup.blinktimer)
-		popup.blinktimer = 0
-	endif
-	if popup.win !=# 0
-		popup_close(popup.win)
-		popup.win = 0
-	endif
-	if popup.cover !=# 0
-		popup_close(popup.cover)
-		popup.cover = 0
-		redraw
-	endif
 	RestoreCursor()
+	timer_stop(popup.updatetimer)
+	popup.updatetimer = 0
+	timer_stop(popup.blinktimer)
+	popup.blinktimer = 0
+	popup_close(popup.win)
+	popup.win = 0
+	popup_close(popup.cover)
+	popup.cover = 0
+	redraw
 enddef
 
 export def UpdatePopup(timer: number)
-	if popup.win ==# 0
-		return
-	endif
-	if popup_list()->index(popup.win) ==# -1
-		# ここに来るのは<C-c>などで強引にポップアップを閉じられたとき
+	if popup.win ==# 0 || mode() !=# 'c' || popup_list()->index(popup.win) ==# -1
+		# ここに来るのはポップアップが意図せず残留したとき
+		# または<C-c>などで強引にポップアップを閉じられたとき
 		# まずは内部的な変数をリセットする
 		ClosePopup()
 		# <Esc>でcmdlineを抜けちゃう。副作用は知らない！出たらその時考える！
@@ -125,7 +119,7 @@ def ShowPopupCursor()
 		popup.curpos = c
 	endif
 	if popup.blink
-		win_execute(popup.win, $'echo matchadd("vimrc_cmdline_Cursor", "\\%1l\\%{c}v.")')
+		win_execute(popup.win, $'echo matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 	endif
 enddef
 
@@ -135,7 +129,7 @@ enddef
 
 def RestoreCursor()
 	hlset(popup.curhl)
- 	set t_ve&
+	set t_ve&
 enddef
 
 def UpdatePopupCover()
