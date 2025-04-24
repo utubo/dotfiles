@@ -1,4 +1,7 @@
 ## Test vim in a docker container
+
+(This hasn't been maintained in a long time, so it might not work.)
+
 Example
 ```sh
 docker build . -t utubo-dotfiles
