@@ -41,32 +41,40 @@ var popup = {
 	blink: false,
 	blinktimer: 0,
 	curpos: 0,
+	curhl: [],
 }
 export def Popup()
+	# cmdlineを隠すwindow
 	popup.cover = popup_create('', { zindex: 1 })
 	setwinvar(popup.cover, '&wincolor', 'Normal')
 	UpdatePopupCover()
+	# cmdline
 	popup.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
+	# カーソル関係
 	set t_ve=
+	popup.curhl = hlget('Cursor')
+	hlset([popup.curhl[0]->copy()->extend({ name: 'vimrc_cmdline_Cursor' })])
+	hi Cursor NONE
+	# イベント等
 	augroup vimrc_cmdline_popup
 		au!
 		au ModeChanged c:[^c] ClosePopup()
 		au WinScrolled * UpdatePopupCover()
-		au VimLeavePre * set t_ve&
+		au VimLeavePre * RestoreCursor()
 	augroup END
 	popup.blinktimer = timer_start(500, vimrc#cmdline#BlinkPopupCursor, { repeat: -1 })
-	popup.timer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
+	popup.updatetimer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
 enddef
 
 def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
-	if popup.timer !=# 0
-		timer_stop(popup.timer)
-		popup.timer = 0
+	if popup.updatetimer !=# 0
+		timer_stop(popup.updatetimer)
+		popup.updatetimer = 0
 	endif
 	if popup.blinktimer !=# 0
 		timer_stop(popup.blinktimer)
@@ -81,7 +89,7 @@ def ClosePopup()
 		popup.cover = 0
 		redraw
 	endif
- 	set t_ve&
+	RestoreCursor()
 enddef
 
 export def UpdatePopup(timer: number)
@@ -116,12 +124,17 @@ def ShowPopupCursor()
 		popup.curpos = c
 	endif
 	if popup.blink
-		win_execute(popup.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+		win_execute(popup.win, $'echo matchadd("vimrc_cmdline_Cursor", "\\%1l\\%{c}v.")')
 	endif
 enddef
 
 export def BlinkPopupCursor(timer: number)
 	popup.blink = !popup.blink
+enddef
+
+def RestoreCursor()
+	hlset(popup.curhl)
+ 	set t_ve&
 enddef
 
 def UpdatePopupCover()

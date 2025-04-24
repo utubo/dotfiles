@@ -28,31 +28,35 @@ cover: 0,
 blink: false,
 blinktimer: 0,
 curpos: 0,
+curhl: [],
 }
 export def Popup()
 m.cover = popup_create('', { zindex: 1 })
 setwinvar(m.cover, '&wincolor', 'Normal')
-D()
+E()
 m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
 set t_ve=
+m.curhl = hlget('Cursor')
+hlset([m.curhl[0]->copy()->extend({ name: 'vimrc_cmdline_Cursor' })])
+hi Cursor NONE
 aug vimrc_cmdline_popup
 au!
 au ModeChanged c:[^c] B()
-au WinScrolled * D()
-au VimLeavePre * set t_ve&
+au WinScrolled * E()
+au VimLeavePre * D()
 aug END
 m.blinktimer = timer_start(500, vimrc#cmdline#BlinkPopupCursor, { repeat: -1 })
-m.timer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
+m.updatetimer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
 enddef
 def B()
 aug vimrc_cmdline_popup
 au!
 aug END
-if m.timer !=# 0
-timer_stop(m.timer)
-m.timer = 0
+if m.updatetimer !=# 0
+timer_stop(m.updatetimer)
+m.updatetimer = 0
 endif
 if m.blinktimer !=# 0
 timer_stop(m.blinktimer)
@@ -67,7 +71,7 @@ popup_close(m.cover)
 m.cover = 0
 redraw
 endif
-set t_ve&
+D()
 enddef
 export def UpdatePopup(a: number)
 if m.win ==# 0
@@ -97,13 +101,17 @@ m.blink = true
 m.curpos = c
 endif
 if m.blink
-win_execute(m.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+win_execute(m.win, $'echo matchadd("vimrc_cmdline_Cursor", "\\%1l\\%{c}v.")')
 endif
 enddef
 export def BlinkPopupCursor(a: number)
 m.blink = !m.blink
 enddef
 def D()
+hlset(m.curhl)
+set t_ve&
+enddef
+def E()
 popup_move(m.cover, { col: 1, line: &lines, zindex: 1 })
 popup_settext(m.cover, repeat(' ', &columns))
 enddef
