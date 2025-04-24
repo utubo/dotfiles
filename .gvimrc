@@ -42,7 +42,6 @@ au gvimrc VimLeavePre * B()
 if filereadable(g:save_window_file)
 exe 'source' g:save_window_file
 endif
-SclowDisable
 if has('win32')
 no <silent> <M-Space> <Cmd>simalt ~<CR>
 nn <S-F2> :<C-u>!winscp_upload.bat <C-r>=expand("%:p")<CR>

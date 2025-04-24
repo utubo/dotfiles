@@ -63,7 +63,6 @@ endif
 # }}}
 
 # プラグイン設定 {{{
-SclowDisable
 # }}}
 
 # Windows {{{
