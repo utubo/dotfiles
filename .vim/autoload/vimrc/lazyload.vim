@@ -58,14 +58,14 @@ packadd vim-textobj-user
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
-midasi: ';',
+midasi: ['Q', '; '],
 toggle: ['<C-j>', ';j'],
 complete: ['<CR>', ';;'],
 },
 }
-g:vim9skk_mode = ''
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
+au vimrc User Vim9skkEnter feedkeys('Q')
 no <Leader>ga ga
 packadd vim-headtail
 HeadTailMap g G
