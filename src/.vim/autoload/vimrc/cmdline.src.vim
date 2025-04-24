@@ -34,6 +34,7 @@ enddef
 # NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
 #       cmdlineを抜けるまでポップアップのゴーストが残るので
 #       callback等では解決できない
+# TODO: wildmenumode=fuzzyを使いたいけどgetcmdline()に反映されない
 var popup = {
 	win: 0,
 	timer: 0,
