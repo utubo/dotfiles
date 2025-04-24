@@ -21,38 +21,36 @@ sb: "\<C-u>set background=\<Tab>",
 mv: "\<C-u>MoveFile ",
 }->get(getcmdline(), ' ')
 enddef
-var m = {
-win: 0,
-timer: 0,
-}
+var m = 0
+var n = 0
 export def Popup()
-m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
-setbufvar(winbufnr(m.win), '&filetype', 'vim')
-win_execute(m.win, $'syntax match PMenuKind /^./')
+m = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
+setbufvar(winbufnr(m), '&filetype', 'vim')
+win_execute(m, $'syntax match PMenuKind /^./')
 aug vimrc_cmdline_popup
 au!
 au ModeChanged c:[^c] B()
 aug END
-m.timer = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
+n = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
 enddef
 def B()
 aug vimrc_cmdline_popup
 au!
 aug END
-if m.timer !=# 0
-timer_stop(m.timer)
-m.timer = 0
+if n !=# 0
+timer_stop(n)
+n = 0
 endif
-if m.win !=# 0
-popup_close(m.win)
-m.win = 0
+if m !=# 0
+popup_close(m)
+m = 0
 endif
 enddef
 export def RedrawPopup(a: number)
-if m.win ==# 0
+if m ==# 0
 return
 endif
-if popup_list()->index(m.win) ==# -1
+if popup_list()->index(m) ==# -1
 B()
 if mode() ==# 'c'
 feedkeys("\<Esc>", 'nt')
@@ -65,10 +63,10 @@ B()
 redraw
 return
 endif
-popup_settext(m.win, b)
-win_execute(m.win, $'call clearmatches()')
+popup_settext(m, b)
+win_execute(m, $'call clearmatches()')
 const c = getcmdscreenpos()
-win_execute(m.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+win_execute(m, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
 enddef
 export def ApplySettings()
 cno jj <CR>

@@ -32,40 +32,38 @@ enddef
 # カーソル付近にポップアップ {{{
 # NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
 # cmdlineを抜けるまでポップアップのゴーストが残るのでcallback等では解決できない
-var popup = {
-	win: 0,
-	timer: 0,
-}
+var popupwin = 0
+var popuptimer = 0
 export def Popup()
-	popup.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
-	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
-	win_execute(popup.win, $'syntax match PMenuKind /^./')
+	popupwin = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
+	setbufvar(winbufnr(popupwin), '&filetype', 'vim')
+	win_execute(popupwin, $'syntax match PMenuKind /^./')
 	augroup vimrc_cmdline_popup
 		au!
 		au ModeChanged c:[^c] ClosePopup()
 	augroup END
-	popup.timer = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
+	popuptimer = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
 enddef
 
 def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
-	if popup.timer !=# 0
-		timer_stop(popup.timer)
-		popup.timer = 0
+	if popuptimer !=# 0
+		timer_stop(popuptimer)
+		popuptimer = 0
 	endif
-	if popup.win !=# 0
-		popup_close(popup.win)
-		popup.win = 0
+	if popupwin !=# 0
+		popup_close(popupwin)
+		popupwin = 0
 	endif
 enddef
 
 export def RedrawPopup(timer: number)
-	if popup.win ==# 0
+	if popupwin ==# 0
 		return
 	endif
-	if popup_list()->index(popup.win) ==# -1
+	if popup_list()->index(popupwin) ==# -1
 		# ここに来るのは<C-c>などで強引にポップアップを閉じられたとき
 		# まずは内部的な変数をリセットする
 		ClosePopup()
@@ -81,10 +79,10 @@ export def RedrawPopup(timer: number)
 		redraw
 		return
 	endif
-	popup_settext(popup.win, text)
-	win_execute(popup.win, $'call clearmatches()')
+	popup_settext(popupwin, text)
+	win_execute(popupwin, $'call clearmatches()')
 	const c = getcmdscreenpos()
-	win_execute(popup.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+	win_execute(popupwin, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
 enddef
 # }}}
 
