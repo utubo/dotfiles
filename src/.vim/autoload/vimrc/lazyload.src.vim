@@ -190,7 +190,6 @@ def g:MyCmdline()
 	packadd cmdline.vim
 	var p = screenpos(0, line('.'), col('.'))
 	var o = getwininfo()[0].textoff
-	g:x = [o, p.col - 3, &columns - w]
 	var x = [o, p.col - 3, &columns - w]->sort('n')[1]
 	cmdline#set_option({
 		col: x,
