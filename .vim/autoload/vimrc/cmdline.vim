@@ -21,6 +21,55 @@ sb: "\<C-u>set background=\<Tab>",
 mv: "\<C-u>MoveFile ",
 }->get(getcmdline(), ' ')
 enddef
+var m = {
+win: 0,
+timer: 0,
+}
+export def Popup()
+m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', })
+setbufvar(winbufnr(m.win), '&filetype', 'vim')
+win_execute(m.win, $'syntax match PMenuKind /^./')
+aug vimrc_cmdline_popup
+au!
+au ModeChanged c:[^c] B()
+aug END
+m.timer = timer_start(16, vimrc#cmdline#RedrawPopup, { repeat: -1 })
+enddef
+def B()
+aug vimrc_cmdline_popup
+au!
+aug END
+if m.timer !=# 0
+timer_stop(m.timer)
+m.timer = 0
+endif
+if m.win !=# 0
+popup_close(m.win)
+m.win = 0
+endif
+enddef
+export def RedrawPopup(a: number)
+if m.win ==# 0
+return
+endif
+if popup_list()->index(m.win) ==# -1
+B()
+if mode() ==# 'c'
+feedkeys("\<Esc>", 'nt')
+endif
+return
+endif
+const b = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
+if &columns < strdisplaywidth(b)
+B()
+redraw
+return
+endif
+popup_settext(m.win, b)
+win_execute(m.win, $'call clearmatches()')
+const c = getcmdscreenpos()
+win_execute(m.win, $'echo matchadd("Cursor", "\\%1l\\%{c}v.")')
+enddef
 export def ApplySettings()
 cno jj <CR>
 cno jk <C-c>

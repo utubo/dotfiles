@@ -59,14 +59,14 @@ EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
-# EzpackO Shougo/cmdline.vim フォークして少し調整
-EzpackO utubo/cmdline.vim <branch> develop
 
-# 気になるけど、おま環で断念中
-# EzpackL girishji/autosuggest.vim # ちょっとうちのWindowsで動きが怪しい
+# おま環で断念中
+# EzpackL girishji/autosuggest.vim # うちのWindows環境で動きが怪しい
 # EzpackL github/copilot.vim
 # EzpackL tani/vim-typo            # OmniSyntaxListが何故か重い
-# EzpackS obcat/vim-sclow          # たまにエラーになる調査中
+# EzpackS obcat/vim-sclow          # 調査中
+# EzpackO Shougo/cmdline.vim
+# EzpackO utubo/cmdline.vim <branch> develop
 
 # 🐶🍚
 EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ

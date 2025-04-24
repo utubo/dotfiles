@@ -139,7 +139,6 @@ command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vi
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
-# NOTE: cmdline.vimだと<C-r>=が遅いのでsetcmdlineを使う
 nnoremap <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 nnoremap <Space>gp :<C-u>Git push<End>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
@@ -179,30 +178,6 @@ nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
 nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
-# }}}
-
-# cmdline {{{
-def g:MyCmdline()
-	var w = 10
-	if &columns < w
-		return
-	endif
-	packadd cmdline.vim
-	var p = screenpos(0, line('.'), col('.'))
-	var o = getwininfo()[0].textoff
-	var x = [o, p.col - 3, &columns - w]->sort('n')[1]
-	cmdline#set_option({
-		col: x,
-		row: p.row,
-		width: w,
-		highlight_prompt: 'PMenuKind',
-		highlight_window: 'PMenu',
-		border: 'none',
-	})
-	call cmdline#enable()
-enddef
-Each n,v {}noremap : <Cmd>call g:MyCmdline()<CR>:
-Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 # }}}
 
 # 補完 {{{
@@ -580,6 +555,8 @@ Each nnoremap,xnoremap , :
 Each nnoremap,xnoremap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
+Each n,v {}noremap : <Cmd>call vimrc#cmdline#Popup()<CR>:
+Each /,? nnoremap {} <Cmd>call vimrc#cmdline#Popup()<CR><Cmd>noh<CR>{}
 # }}}
 
 # ------------------------------------------------------

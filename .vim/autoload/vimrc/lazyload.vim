@@ -120,27 +120,6 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
-def g:MyCmdline()
-var w = 10
-if &columns < w
-return
-endif
-packadd cmdline.vim
-var p = screenpos(0, line('.'), col('.'))
-var o = getwininfo()[0].textoff
-var x = [o, p.col - 3, &columns - w]->sort('n')[1]
-cmdline#set_option({
-col: x,
-row: p.row,
-width: w,
-highlight_prompt: 'PMenuKind',
-highlight_window: 'PMenu',
-border: 'none',
-})
-call cmdline#enable()
-enddef
-Each n,v {}noremap : <Cmd>call g:MyCmdline()<CR>:
-Each /,? nnoremap {} <Cmd>call g:MyCmdline()<CR><Cmd>noh<CR>{}
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
@@ -405,6 +384,8 @@ Each nnoremap,xnoremap + :
 Each nnoremap,xnoremap , :
 Each nnoremap,xnoremap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
+Each n,v {}noremap : <Cmd>call vimrc#cmdline#Popup()<CR>:
+Each /,? nnoremap {} <Cmd>call vimrc#cmdline#Popup()<CR><Cmd>noh<CR>{}
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
