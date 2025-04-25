@@ -29,7 +29,7 @@ def MyAbbrev(): string
 enddef
 #}}}
 
-# カーソル付近にポップアップ {{{
+# カーソル付近にポップアップ(like cmdline.vim) {{{
 # NOTE: colorschme defualtで微妙だけど知らない！
 # NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
 #       cmdlineを抜けるまでポップアップのゴーストが残るので
