@@ -18,16 +18,17 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
+set cursorline
 set hidden
 set cmdheight=1
 set noshowcmd
 set noshowmode
+set wildmenu
+set wildcharm=<Tab>
 set display=lastline
 set ambiwidth=double
 set belloff=all
 set ttimeoutlen=50
-set wildmenu
-set wildcharm=<Tab>
 set autochdir
 set backupskip=/var/tmp/*
 set undodir=~/.vim/undo

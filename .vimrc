@@ -15,16 +15,17 @@ set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fcs=
+set cursorline
 set hidden
 set cmdheight=1
 set noshowcmd
 set noshowmode
+set wmnu
+set wildcharm=<Tab>
 set dy=lastline
 set ambw=double
 set bo=all
 set ttm=50
-set wmnu
-set wildcharm=<Tab>
 set acd
 set bsk=/var/tmp/*
 set udir=~/.vim/undo
