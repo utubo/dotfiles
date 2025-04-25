@@ -82,6 +82,7 @@ alias rm=rm\ -i
 alias v=vim
 alias vi=vim
 alias vw=view
+alias vn='vim -N -u NONE -i NONE --noplugin'
 alias :q=exit
 alias gsb='git status -sb'
 alias gd='git diff'
