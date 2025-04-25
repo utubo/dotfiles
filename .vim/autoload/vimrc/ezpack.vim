@@ -10,7 +10,6 @@ EzpackS utubo/vim-colorscheme-softgreen
 EzpackS utubo/vim-zenmode
 EzpackL airblade/vim-gitgutter
 EzpackO cohama/lexima.vim
-EzpackL delphinus/vim-auto-cursorline
 EzpackO utubo/vim-easymotion <branch> develop
 EzpackL girishji/vimcomplete
 EzpackL hrsh7th/vim-vsnip
