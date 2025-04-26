@@ -157,6 +157,7 @@ def PullDotfiles()
 	EzpackInstall
 enddef
 nnoremap <Space>GL <ScriptCmd>PullDotfiles()<CR>
+au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 # }}}
 
 # gh {{{
@@ -506,8 +507,7 @@ command! AutoNamingAndSave AutoNamingAndSave()
 # }}}
 
 # ------------------------------------------------------
-# セミコロン {{{
-# インサートモードでも使うプレフィックス
+# セミコロンをプレフィックスに {{{
 # ;nで決定、;mでキャンセル(;bにしたいが分割キーボードだと遠い…)
 cnoremap ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
@@ -522,6 +522,9 @@ inoremap ;k 「」<C-g>U<Left>
 inoremap ;u <Esc>u
 nnoremap ;r "
 nnoremap ;rr "0p
+cnoremap ;r <C-r>
+cnoremap <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
+cnoremap <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
 Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 nnoremap <Space>; ;

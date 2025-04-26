@@ -110,6 +110,7 @@ exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
 nn <Space>GL <ScriptCmd>A()<CR>
+au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
@@ -366,6 +367,9 @@ ino ;k 「」<C-g>U<Left>
 ino ;u <Esc>u
 nn ;r "
 nn ;rr "0p
+cno ;r <C-r>
+cno <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
+cno <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
 Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 nn <Space>; ;

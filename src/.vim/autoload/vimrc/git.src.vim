@@ -13,7 +13,7 @@ export def Add(args: string)
 			return
 		endif
 		if !list
-			echo 'none.'
+			echo 'Nothing specified, nothing added.'
 			return
 		endif
 		for item in split(list, '\n')
@@ -21,8 +21,7 @@ export def Add(args: string)
 			echo item
 		endfor
 		echoh Question
-		echo 'execute ? (Y/n) > '
-		var yn = nr2char(getchar())
+		const yn = input('execute ? (Y/n) > ', 'y')
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
 			system('git add ' .. args)

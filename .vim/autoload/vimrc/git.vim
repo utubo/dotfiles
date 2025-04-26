@@ -12,7 +12,7 @@ ec c
 return
 endif
 if !c
-ec 'none.'
+ec 'Nothing specified, nothing added.'
 return
 endif
 for d in split(c, '\n')
@@ -20,8 +20,7 @@ exe 'echoh' (d =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
 ec d
 endfor
 echoh Question
-ec 'execute ? (Y/n) > '
-var e = nr2char(getchar())
+const e = input('execute ? (Y/n) > ', 'y')
 if e ==# 'y' || e ==# "\r"
 echoh Normal
 system('git add ' .. a)
