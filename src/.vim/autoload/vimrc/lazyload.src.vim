@@ -686,8 +686,6 @@ nnoremap M m
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
-au vimrc User InputCR feedkeys("\<C-g>u", 'n')
-
 nnoremap <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 

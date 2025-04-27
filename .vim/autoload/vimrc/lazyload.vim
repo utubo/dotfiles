@@ -474,7 +474,6 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-au vimrc User InputCR feedkeys("\<C-g>u", 'n')
 nn <Space>n <Cmd>nohlsearch<CR>
 au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
