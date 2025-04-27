@@ -355,9 +355,9 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! AutoNamingAndSave H()
+com! Sav H()
 cno ;n <CR>
-Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
+Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 no ;m <Esc>
 ino ;m <Esc>`^
 cno ;m <Cmd>call feedkeys("\e", 'nt')<CR>

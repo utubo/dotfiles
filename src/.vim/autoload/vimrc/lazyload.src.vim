@@ -468,7 +468,7 @@ nnoremap <Space>y yiw
 
 # ------------------------------------------------------
 # ファイル名を勝手につけて保存 {{{
-def AutoNamingAndSave()
+def Sav()
 	if !!bufname()
 		update
 		return
@@ -503,14 +503,14 @@ def AutoNamingAndSave()
 		execute 'sav' iname
 	endif
 enddef
-command! AutoNamingAndSave AutoNamingAndSave()
+command! Sav Sav()
 # }}}
 
 # ------------------------------------------------------
 # セミコロンをプレフィックスに {{{
 # ;nで決定、;mでキャンセル(;bにしたいが分割キーボードだと遠い…)
 cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Esc><Cmd>AutoNamingAndSave<CR>
+Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 noremap  ;m <Esc>
 inoremap ;m <Esc>`^
 # <Esc>はコマンドが実行されちゃうし<C-c>は副作用が大きい
