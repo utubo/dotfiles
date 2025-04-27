@@ -53,12 +53,12 @@ EzpackL utubo/vim-registers-lite
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c
 EzpackL utubo/vim-yomigana
 Ezpack utubo/vim-vim9skk <on> ModeChanged *:[ic]
-EzpackL utubo/jumpcursor.vim
 Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackL utubo/vim-portal-aim
 EzpackL utubo/vim-shrink
 EzpackL utubo/vim-textobj-twochars
 EzpackO utubo/vim-cmdheight0
+EzpackO utubo/jumpcursor.vim
 EzpackO utubo/vim-tablist
 EzpackO utubo/vim-tabpopupmenu
 EzpackO utubo/vim-altkey-in-term

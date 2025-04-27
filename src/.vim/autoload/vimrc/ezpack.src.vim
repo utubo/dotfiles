@@ -79,7 +79,6 @@ EzpackL utubo/vim-yomigana         # 漢字やひらがなをカタカナに変�
 Ezpack  utubo/vim-vim9skk <on> ModeChanged *:[ic] # vim9scriptで作ったskk
 
 # 🐶💬🍚作ったけど使用頻度が低い
-EzpackL utubo/jumpcursor.vim       # jumpcursorのvim対応版
 Ezpack  utubo/vim-ddgv <cmd> DDGV  # duckduckGo検索
 EzpackL utubo/vim-portal-aim       # vim-portalを狙った場所に撃てるようにする
 EzpackL utubo/vim-shrink           # ウィンドウ移動時にいい感じにサイズ縮小
@@ -87,6 +86,7 @@ EzpackL utubo/vim-textobj-twochars # 指定した2つの文字で挟まれるtex
 
 # 🐶✋🍚作ったけど使わなくなった。optに入れておいて修正したいときに手でpackaddする
 EzpackO utubo/vim-cmdheight0       # cmdheight=0エミュレータ(statuslineに対応)
+EzpackO utubo/jumpcursor.vim       # jumpcursorのvim対応版
 EzpackO utubo/vim-tablist          # タブ一覧を表示する
 EzpackO utubo/vim-tabpopupmenu     # タブ操作関係のメニュー
 EzpackO utubo/vim-altkey-in-term   # `<Esc>k`を`<A-k>`に(クライアントの設定でAltをそのまま送ればいいので不要)

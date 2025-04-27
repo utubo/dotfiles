@@ -199,11 +199,9 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 # }}}
 
 # 🐶🍚 {{{
-g:skipslash_autocomplete = 1
-nnoremap <Space>t <ScriptCmd>tabpopupmenu#popup()<CR>
-nnoremap <Space>T <ScriptCmd>tablist#Show()<CR>
+g:registerslite_max_width = 30
+Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
-noremap <Space>s <Plug>(jumpcursor-jump)
 # }}}
 
 # 設定が膨らんできたので別ファイルで定義 {{{
@@ -806,7 +804,7 @@ if strftime('%d') ==# '01'
 		cmapclear
 		omapclear
 		tmapclear
-		# CursorHoldでfeedkyesしているので…
+		# CursorHoldでfeedkeysしているので…
 		nnoremap <Space>n <Nop>
 	}
 endif
