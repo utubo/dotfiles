@@ -60,9 +60,14 @@ command! EzpackCleanUp vimrc#ezpack#CleanUp()
 # 折り畳み {{{
 def! g:MyFoldText(): string
 	const indent = repeat(' ', indent(v:foldstart))
-	if &foldmethod !=# 'indent'
+	if &foldmethod ==# 'syntax'
 		# こんなかんじ
 		# ああああ 📁
+		const text = getline(v:foldstart)->trim()
+		return $'{indent}{text} 📁'
+	endif
+	if &foldmethod ==# 'marker'
+		# syntaxと同じfoldmarkerは削除
 		const text = getline(v:foldstart)
 			->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 			->trim()

@@ -47,7 +47,11 @@ com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
 def! g:MyFoldText(): string
 const a = repeat(' ', indent(v:foldstart))
-if &fdm !=# 'indent'
+if &fdm ==# 'syntax'
+const b = getline(v:foldstart)->trim()
+return $'{a}{b} 📁'
+endif
+if &fdm ==# 'marker'
 const b = getline(v:foldstart)
 ->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 ->trim()
