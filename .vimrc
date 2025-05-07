@@ -74,8 +74,9 @@ hi! link Folded Delimiter
 hi! link ALEVirtualTextWarning ALEWarningSign
 hi! link ALEVirtualTextError ALEErrorSign
 }
-set fdm=marker
+set fdm=syntax
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
+au vimrc FileType vim setlocal foldmethod=marker
 nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
@@ -152,7 +153,7 @@ endif
 def F()
 const n = line('''"')
 if 1 <= n && n <= line('$')
-sil! normal! g`"zOzz
+au vimrc SafeState * ++once silent! normal! g`"zvzz
 endif
 enddef
 au vimrc BufRead * F()

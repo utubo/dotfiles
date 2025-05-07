@@ -95,8 +95,9 @@ au vimrc ColorScheme * {
 	hi! link ALEVirtualTextWarning ALEWarningSign
 	hi! link ALEVirtualTextError ALEErrorSign
 }
-set foldmethod=marker
+set foldmethod=syntax
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
+au vimrc FileType vim setlocal foldmethod=marker
 nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>
 nnoremap Z{ <Cmd>set foldmethod=marker<CR>
@@ -214,7 +215,8 @@ endif
 def RestorePos()
 	const n = line('''"')
 	if 1 <= n && n <= line('$')
-		silent! normal! g`"zOzz
+		# FileTypeでfoldmethodを指定したあとにzvしたいのでSafeState後に実行する
+		au vimrc SafeState * ++once silent! normal! g`"zvzz
 	endif
 enddef
 au vimrc BufRead * RestorePos()
