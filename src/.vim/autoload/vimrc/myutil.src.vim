@@ -91,3 +91,17 @@ export def Brep(regex: string, mods: string)
 	setlocal nomodified
 enddef
 #}}}
+
+# packadd前のプラグインについてもヘルプを表示したい {{{
+export def HelpPlugins(name: string)
+	const txt = globpath(&rtp, $'**/{name}/doc/*.txt')
+	g:a = txt
+	if txt !=# ''
+		execute 'edit' txt
+	endif
+	const readme = globpath(&rtp, $'**/{name}/README.md')
+	if readme !=# ''
+		execute 'edit' readme
+	endif
+enddef
+#}}}

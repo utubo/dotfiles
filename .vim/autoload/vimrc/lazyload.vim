@@ -526,6 +526,7 @@ com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
 Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
 nm <SID>(hold-ctrl) <Nop>
+com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
 nn <Space>w <C-w>w

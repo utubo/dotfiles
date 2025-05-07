@@ -763,6 +763,8 @@ Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
 Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
 nmap <SID>(hold-ctrl) <Nop>
 
+command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
+
 # 🐶🍚
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
