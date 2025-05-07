@@ -684,7 +684,8 @@ nnoremap M m
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
 nnoremap <Space>n <Cmd>nohlsearch<CR>
-au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+# nohlsearchはautocmdでは動かない(:help noh)
+nnoremap <CursorHold> <Cmd>nohlsearch<CR>
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
@@ -805,8 +806,6 @@ if strftime('%d') ==# '01'
 		cmapclear
 		omapclear
 		tmapclear
-		# CursorHoldでfeedkeysしているので…
-		nnoremap <Space>n <Nop>
 	}
 endif
 # }}}

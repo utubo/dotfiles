@@ -472,7 +472,7 @@ nn ' "
 nn m '
 nn M m
 nn <Space>n <Cmd>nohlsearch<CR>
-au vimrc CursorHold * feedkeys(' n') # nohはauで動かない(:help noh)
+nn <CursorHold> <Cmd>nohlsearch<CR>
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
@@ -549,7 +549,6 @@ xmapclear
 cmapclear
 omapclear
 tmapclear
-nn <Space>n <Nop>
 }
 endif
 export def LazyLoad()
