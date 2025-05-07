@@ -683,8 +683,9 @@ nnoremap M m
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
-nnoremap <Space>n <Cmd>nohlsearch<CR>
+# CursorHoldでnoholsearchする
 # nohlsearchはautocmdでは動かない(:help noh)
+# 誰かがautocmd CursorHoldしてれば定期的に<CursorHold>キーがストロークされる
 nnoremap <CursorHold> <Cmd>nohlsearch<CR>
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…

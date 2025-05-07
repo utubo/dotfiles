@@ -471,7 +471,6 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-nn <Space>n <Cmd>nohlsearch<CR>
 nn <CursorHold> <Cmd>nohlsearch<CR>
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
