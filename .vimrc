@@ -83,7 +83,7 @@ nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
-nn g; <ScriptCmd>silent! normal! g;zO<CR>
+nn g; <ScriptCmd>silent! normal! g;zv<CR>
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [

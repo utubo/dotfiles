@@ -104,7 +104,7 @@ nnoremap Z{ <Cmd>set foldmethod=marker<CR>
 nnoremap Zy <Cmd>set foldmethod=syntax<CR>
 xnoremap zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nnoremap zd <ScriptCmd>vimrc#myutil#Zd()<CR>
-nnoremap g; <ScriptCmd>silent! normal! g;zO<CR>
+nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 # }}}
 # }}}
 
