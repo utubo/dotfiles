@@ -217,12 +217,19 @@ endif
 
 # ------------------------------------------------------
 # ファイルを開いたらカーソル位置を復元する {{{
-# http://advweb.seesaa.net/article/13443981.html
 def RestorePos()
-	const n = line('''"')
-	if 1 <= n && n <= line('$') && &ft !=# 'help'
-		silent! normal! g`"zvzz
+	if &ft ==# 'help'
+		return
 	endif
+	if !!&diff
+		return
+	endif
+	const n = line('''"')
+	if n < 1 || line('$') < n
+		return
+	endif
+	# ここまで来たらOK
+	silent! normal! g`"zvzz
 enddef
 # FileTypeでfoldmethodを指定したあとにzvしたいのでSafeState後に実行する
 au vimrc BufRead * au vimrc SafeState * ++once RestorePos()

@@ -156,10 +156,17 @@ set bg=light
 sil! colorscheme girly
 endif
 def F()
-const n = line('''"')
-if 1 <= n && n <= line('$') && &ft !=# 'help'
-sil! normal! g`"zvzz
+if &ft ==# 'help'
+return
 endif
+if !!&diff
+return
+endif
+const n = line('''"')
+if n < 1 || line('$') < n
+return
+endif
+sil! normal! g`"zvzz
 enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
