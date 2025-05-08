@@ -154,7 +154,8 @@ export def Popup(what: list<any>, options: any = {})
 	opts = {
 		zindex: 1,
 		tabpage: -1,
-		maxheight: 21,
+		maxheight: &lines - 2,
+		maxwidth: &columns - 5,
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
 	}
@@ -188,6 +189,9 @@ export def Close()
 	popup_close(filterwinid)
 	winid = 0
 	filterwinid = 0
+	augroup popselect
+		au!
+	augroup END
 enddef
 
 export def BlinkCursor(timer: number)

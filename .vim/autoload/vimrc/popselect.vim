@@ -146,7 +146,8 @@ s = false
 lm = {
 zindex: 1,
 tabpage: -1,
-maxheight: 21,
+maxheight: &lines - 2,
+maxwidth: &columns - 5,
 mapping: false,
 filter: (id, key) => B(id, key),
 }
@@ -178,6 +179,9 @@ popup_close(k)
 popup_close(o)
 k = 0
 o = 0
+aug popselect
+au!
+aug END
 enddef
 export def BlinkCursor(a: number)
 if k ==# 0 || popup_list()->index(k) ==# -1
