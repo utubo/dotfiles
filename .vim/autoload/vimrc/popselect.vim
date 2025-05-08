@@ -45,19 +45,26 @@ lm = min([max([1, lm]), ll->len()])
 popup_settext(k, a)
 win_execute(k, $"normal! :{lm + (r ? 1 : 0)}\<CR>")
 if r
-const e = $'Filter:{q}{s ? ' ' : ''}'
+var e = ''
+if s
+hi link popselectFilter PMenu
+e = ' '
+else
+hi link popselectFilter PMenuExtra
+endif
+const f = $'Filter:{q}{e}'
 const p = popup_getpos(k)
-const f = max([p.core_width, strdisplaywidth(e)])
-popup_move(k, { minwidth: f })
+const g = max([p.core_width, strdisplaywidth(f)])
+popup_move(k, { minwidth: g })
 popup_move(o, {
 col: p.core_col,
 line: p.core_line,
-maxwidth: f,
-minwidth: f,
+maxwidth: g,
+minwidth: g,
 zindex: 2,
 })
 popup_show(o)
-popup_settext(o, e)
+popup_settext(o, f)
 endif
 redraw
 enddef
@@ -192,15 +199,16 @@ endfor
 win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{t ? '.' : ''}/')
 win_execute(k, 'syntax match PMenuExtra /\t.*$/')
 B()
-o = popup_create('', {})
-set t_ve=
+hi link popselectFilter PMenu
 hi link popselectCursor Cursor
+o = popup_create('', { highlight: 'popselectFilter' })
+win_execute(o, 'syntax match popselectCursor / $/')
 aug popselect
 au!
 au VimLeavePre * J()
 aug END
+set t_ve=
 lo = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
-win_execute(o, 'syntax match popselectCursor / $/')
 enddef
 export def Close()
 J()

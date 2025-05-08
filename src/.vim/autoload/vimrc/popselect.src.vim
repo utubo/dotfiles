@@ -49,7 +49,14 @@ def Update()
 	popup_settext(winid, text)
 	win_execute(winid, $"normal! :{cursorRow + (filterVisible ? 1 : 0)}\<CR>")
 	if filterVisible
-		const filtertext = $'Filter:{filter}{filterFocused ? ' ' : ''}'
+		var cursor = ''
+		if filterFocused
+			hi link popselectFilter PMenu
+			cursor = ' '
+		else
+			hi link popselectFilter PMenuExtra
+		endif
+		const filtertext = $'Filter:{filter}{cursor}'
 		const p = popup_getpos(winid)
 		const width = max([p.core_width, strdisplaywidth(filtertext)])
 		popup_move(winid, { minwidth: width })
@@ -205,15 +212,16 @@ export def Popup(what: list<any>, options: any = {})
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	Update()
 	# Filter input box
-	filterWinId = popup_create('', {})
-	set t_ve=
+	hi link popselectFilter PMenu
 	hi link popselectCursor Cursor
+	filterWinId = popup_create('', { highlight: 'popselectFilter' })
+	win_execute(filterWinId, 'syntax match popselectCursor / $/')
 	augroup popselect
 		au!
 		au VimLeavePre * RestoreCursor()
 	augroup END
+	set t_ve=
 	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
-	win_execute(filterWinId, 'syntax match popselectCursor / $/')
 enddef
 
 export def Close()
