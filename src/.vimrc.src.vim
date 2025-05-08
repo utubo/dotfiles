@@ -219,12 +219,12 @@ endif
 # http://advweb.seesaa.net/article/13443981.html
 def RestorePos()
 	const n = line('''"')
-	if 1 <= n && n <= line('$')
-		# FileTypeでfoldmethodを指定したあとにzvしたいのでSafeState後に実行する
-		au vimrc SafeState * ++once silent! normal! g`"zvzz
+	if 1 <= n && n <= line('$') && &ft !=# 'help'
+		silent! normal! g`"zvzz
 	endif
 enddef
-au vimrc BufRead * RestorePos()
+# FileTypeでfoldmethodを指定したあとにzvしたいのでSafeState後に実行する
+au vimrc BufRead * au vimrc SafeState * ++once RestorePos()
 # }}}
 
 # ------------------------------------------------------

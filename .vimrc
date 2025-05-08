@@ -156,11 +156,11 @@ sil! colorscheme girly
 endif
 def F()
 const n = line('''"')
-if 1 <= n && n <= line('$')
-au vimrc SafeState * ++once silent! normal! g`"zvzz
+if 1 <= n && n <= line('$') && &ft !=# 'help'
+sil! normal! g`"zvzz
 endif
 enddef
-au vimrc BufRead * F()
+au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
