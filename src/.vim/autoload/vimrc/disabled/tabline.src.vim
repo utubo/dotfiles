@@ -87,3 +87,13 @@ export def MyTabline(): string
 	return line
 enddef
 
+# 使かうときは以下をlazyload.src.vimに書く
+# gt, gTしたときだけtablineを表示する(thx:kawarimidollさん)
+set showtabline=0
+def ShowTab(a: string)
+	set tabline=%!vimrc#tabline#MyTabline()
+	set showtabline=2
+	execute $'normal! g{a}'
+	au SafeState * ++once au CursorMoved * ++once set showtabline=0
+enddef
+Each X=t,T nmap gX <SID>(tab)X | nmap <SID>(tab)X <ScriptCmd>ShowTab('X')<CR><SID>(tab)

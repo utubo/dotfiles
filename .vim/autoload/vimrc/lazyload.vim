@@ -115,8 +115,6 @@ nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
-nn <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
@@ -281,18 +279,10 @@ endfor
 echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
-nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BB()<CR>
-set showtabline=0
+nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
+nn <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
+Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 def F(a: string)
-set tabline=%!vimrc#tabline#MyTabline()
-set showtabline=2
-exe $'normal! g{a}'
-au SafeState * ++once au CursorMoved * ++once set showtabline=0
-enddef
-Each X=t,T nmap gX <SID>(tab)X|nm <SID>(tab)X <ScriptCmd>F('X')<CR><SID>(tab)
-def G(a: string)
-set tabline=%!vimrc#bufline#MyBufline()
-set showtabline=2
 const b = bufnr()
 while true
 exe $'b{a}'
@@ -300,9 +290,9 @@ if &buftype !=# 'terminal' || bufnr() ==# b
 break
 endif
 endwhile
-au SafeState * ++once au CursorMoved * ++once set showtabline=0
+call vimrc#popselect#PopupBufList()
 enddef
-Each X=n,p nmap gX <SID>(buf)X|nm <SID>(buf)X <ScriptCmd>G('X')<CR><SID>(buf)
+Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -317,7 +307,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def H()
+def G()
 if !!bufname()
 update
 return
@@ -352,7 +342,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav H()
+com! Sav G()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 no ;m <Esc>
@@ -476,31 +466,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def I()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def J(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * I()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-J('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-J('SpellRare', '\s[=!]=\s')
-J('SpellBad', '\s[=!]==\s')
-J('SpellBad', '\s\~[=!][=#]\?\s')
-J('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def BA()
+def J()
 var a = getregion(getpos('v'), getpos('.'))->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -510,8 +500,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BA()<CR>
-def BB()
+xn <C-g> <ScriptCmd>J()<CR>
+def BA()
 var p = getcurpos()
 popup_create($'{p[1]}, {p[2]}', {
 pos: 'botleft',

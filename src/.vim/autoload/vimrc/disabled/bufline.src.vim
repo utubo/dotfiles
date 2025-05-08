@@ -49,3 +49,20 @@ export def MyBufline(): string
 	return $'%#TabLine#{repeat(' ', o)}{left}%#TabLineSel#{select}%#TabLine#{right}'
 enddef
 
+# gnとgpでバッファ移動
+def ShowBuf(a: string)
+	set tabline=%!vimrc#bufline#MyBufline()
+	set showtabline=2
+	const b = bufnr()
+	while true
+		execute $'b{a}'
+		# terminalに移動すると混乱するのでスキップする || 無限ループ防止
+		if &buftype !=# 'terminal' || bufnr() ==# b
+			break
+		endif
+	endwhile
+	au SafeState * ++once au CursorMoved * ++once set showtabline=0
+enddef
+
+# 使うときは以下をlazyload.src.vimに書く
+Each X=n,p nmap gX <SID>(buf)X | nmap <SID>(buf)X <ScriptCmd>ShowBuf('X')<CR><SID>(buf)

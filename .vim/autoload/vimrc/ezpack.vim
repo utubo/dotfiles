@@ -34,7 +34,6 @@ EzpackL tpope/vim-fugitive
 EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
-Ezpack yegappan/mru <cmd> MRUToggle,MRU
 EzpackL yuki-yano/dedent-yank.vim
 EzpackO lambdalisue/fern.vim
 EzpackO lambdalisue/fern-git-status.vim

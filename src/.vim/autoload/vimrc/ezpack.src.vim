@@ -44,7 +44,6 @@ EzpackL tpope/vim-fugitive # `:Git`コマンド
 EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
-Ezpack  yegappan/mru <cmd> MRUToggle,MRU
 EzpackL yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 
 # Fern
@@ -59,10 +58,11 @@ EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 
-# おま環で断念中
+# 復活させるかも
 # EzpackL girishji/autosuggest.vim # うちのWindows環境で動きが怪しい
 # EzpackL github/copilot.vim
-# EzpackL tani/vim-typo            # OmniSyntaxListが何故か重い
+# Ezpack  yegappan/mru <cmd> MRUToggle,MRU
+# EzpackL tani/vim-typo            # おま環でOmniSyntaxListが何故か重い
 # EzpackS obcat/vim-sclow          # 調査中
 # EzpackO Shougo/cmdline.vim
 # EzpackO utubo/cmdline.vim <branch> develop

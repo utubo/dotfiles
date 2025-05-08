@@ -20,6 +20,7 @@ set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
 set cursorline
 set hidden
+set showtabline=0
 set cmdheight=1
 set noshowcmd
 set noshowmode

@@ -167,12 +167,6 @@ au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # }}}
 
-# MRU {{{
-nnoremap <F2> <Cmd>MRUToggle<CR>
-g:MRU_Exclude_Files = has('win32') ? $'{$TEMP}\\.*' : '^/tmp/.*\|^/var/tmp/.*'
-# MRUに関してのその他の設定は.vim/after/ftplugin/mru.src.vimで指定している
-# }}}
-
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
@@ -411,22 +405,14 @@ enddef
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<CR>
 # }}}
 
+# TODO
 # ------------------------------------------------------
-# TablineとBufline {{{
-# gt, gTしたときだけtablineを表示する(thx:kawarimidollさん)
-set showtabline=0
-def ShowTab(a: string)
-	set tabline=%!vimrc#tabline#MyTabline()
-	set showtabline=2
-	execute $'normal! g{a}'
-	au SafeState * ++once au CursorMoved * ++once set showtabline=0
-enddef
-Each X=t,T nmap gX <SID>(tab)X | nmap <SID>(tab)X <ScriptCmd>ShowTab('X')<CR><SID>(tab)
+# ポップアップで色々選択 {{{
+nnoremap <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
+Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 
 # gnとgpでバッファ移動
 def ShowBuf(a: string)
-	set tabline=%!vimrc#bufline#MyBufline()
-	set showtabline=2
 	const b = bufnr()
 	while true
 		execute $'b{a}'
@@ -435,9 +421,10 @@ def ShowBuf(a: string)
 			break
 		endif
 	endwhile
-	au SafeState * ++once au CursorMoved * ++once set showtabline=0
+	call vimrc#popselect#PopupBufList()
 enddef
-Each X=n,p nmap gX <SID>(buf)X | nmap <SID>(buf)X <ScriptCmd>ShowBuf('X')<CR><SID>(buf)
+Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
+
 # }}}
 
 # ------------------------------------------------------
