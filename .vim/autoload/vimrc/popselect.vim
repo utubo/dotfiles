@@ -4,12 +4,15 @@ var o = 0
 var q = ''
 var r = false
 var s = false
-var t = []
+var t = false
 var lk = []
-var ll = 0
-var lm = {}
-var ln = 0
-var lo = false
+var ll = []
+var lm = 0
+var ln = {}
+var lo = 0
+var lp = false
+const lq = "\uf489"
+const lr = "\uea7b"
 def A()
 var a = []
 if r
@@ -19,31 +22,39 @@ popup_hide(o)
 endif
 var n = 0
 if r && q !=# ''
-lk = matchfuzzy(t, q, { text_cb: (i) => i.label })
+ll = matchfuzzy(lk, q, { text_cb: (i) => i.label })
 else
-lk = t->copy()
+ll = lk->copy()
 endif
-for b in lk
+var b = ' '
+for c in ll
 n += 1
-a += [$'{n}: {b.label->trim()}']
+if 10 <= n || ll->len() < 10
+b = ''
+endif
+var d = ''
+if t
+d = !c.icon ? lr : c.icon
+endif
+a += [$'{b}{n}:{d}{c.label->trim()}']
 endfor
-ll = min([max([1, ll]), lk->len()])
+lm = min([max([1, lm]), ll->len()])
 popup_settext(k, a)
-win_execute(k, $"normal! :{ll + (r ? 1 : 0)}\<CR>")
+win_execute(k, $"normal! :{lm + (r ? 1 : 0)}\<CR>")
 if r
-const c = $'Filter:{q}{s ? ' ' : ''}'
+const e = $'Filter:{q}{s ? ' ' : ''}'
 const p = popup_getpos(k)
-const d = max([p.core_width, strdisplaywidth(c)])
-popup_move(k, { minwidth: d })
+const f = max([p.core_width, strdisplaywidth(e)])
+popup_move(k, { minwidth: f })
 popup_move(o, {
 col: p.core_col,
 line: p.core_line,
-maxwidth: d,
-minwidth: d,
+maxwidth: f,
+minwidth: f,
 zindex: 2,
 })
 popup_show(o)
-popup_settext(o, c)
+popup_settext(o, e)
 endif
 redraw
 enddef
@@ -51,12 +62,12 @@ def B(a: number, b: string): bool
 if b ==# "\<CursorHold>"
 return false
 endif
-const c = match("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", b)
+const c = stridx("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", b)
 if c !=# -1
-ll = c + 1
+lm = c + 1
 D()
 endif
-if b ==# "\<ESC>" || b ==# "\<C-x>"
+if stridx("\<ESC>\<C-x>", b) !=# -1
 Close()
 return true
 elseif b ==# "\<CR>"
@@ -80,40 +91,49 @@ endif
 A()
 return true
 endif
-if b ==# 'f' || b ==# "\<Tab>"
+if ln->has_key($'onkey_{b}')
+funcref(ln[$'onkey_{b}'], [ll[lm - 1]])()
+elseif stridx("f\<Tab>", b) !=# -1
 r = !r || b ==# "\<Tab>"
 s = r
 A()
-return true
-endif
-if match('nbt', b) !=# -1
+elseif stridx('nbt', b) !=# -1
 C(1)
-elseif match('pBT', b) !=# -1
+elseif stridx('pBT', b) !=# -1
 C(-1)
-elseif match('123456789', b) !=# -1
-ll = str2nr(b)
+elseif stridx('123456789', b) !=# -1
+lm = str2nr(b)
 D()
 elseif b ==# "x"
 Close()
-return true
 else
 Close()
 return false
 endif
 return true
 enddef
+export def Delete(a: any)
+lk->remove(
+(lk) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
+)
+if lk->len() < 1
+Close()
+else
+A()
+endif
+enddef
 def C(d: number)
-ll += d
-if ll < 1
-ll = lk->len()
-elseif lk->len() < ll
-ll = 1
+lm += d
+if lm < 1
+lm = ll->len()
+elseif ll->len() < lm
+lm = 1
 endif
 E()
 A()
 enddef
 def D()
-if ll < 1
+if lm < 1
 return
 endif
 E()
@@ -121,29 +141,30 @@ F()
 Close()
 enddef
 def E()
-if ll < 1
+if lm < 1
 return
 endif
-if !lm->has_key('onselect')
+if !ln->has_key('onselect')
 return
 endif
-lm.onselect(lk[ll - 1])
+ln.onselect(ll[lm - 1])
 enddef
 def F()
-if !lm->has_key('oncomplete')
+if !ln->has_key('oncomplete')
 return
 endif
-lm.oncomplete(lk[ll - 1])
+ln.oncomplete(ll[lm - 1])
 enddef
 export def Popup(a: list<any>, b: any = {})
 if a->len() <= 1
 return
 endif
-ll = 1
+lm = 1
 q = ''
 r = false
 s = false
-lm = {
+t = false
+ln = {
 zindex: 1,
 tabpage: -1,
 maxheight: &lines - 2,
@@ -151,15 +172,16 @@ maxwidth: &columns - 5,
 mapping: false,
 filter: (id, key) => B(id, key),
 }
-lm->extend(b)
-k = popup_menu([], lm)
-t = a->copy()
-for i in range(t->len())
-if get(t[i], 'selected', false)
-ll = i + 1
+ln->extend(b)
+k = popup_menu([], ln)
+lk = a->copy()
+for i in range(lk->len())
+if get(lk[i], 'selected', false)
+lm = i + 1
 endif
+t = t || lk[i]->has_key('icon')
 endfor
-win_execute(k, 'syntax match PMenuKind /^\d\+:/')
+win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{t ? '.' : ''}/')
 win_execute(k, 'syntax match PMenuExtra /\t.*$/')
 A()
 o = popup_create('', {})
@@ -169,12 +191,12 @@ aug popselect
 au!
 au VimLeavePre * G()
 aug END
-ln = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+lo = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
 win_execute(o, 'syntax match popselectCursor / $/')
 enddef
 export def Close()
 G()
-timer_stop(ln)
+timer_stop(lo)
 popup_close(k)
 popup_close(o)
 k = 0
@@ -188,8 +210,8 @@ if k ==# 0 || popup_list()->index(k) ==# -1
 Close()
 return
 endif
-lo = !lo
-if lo
+lp = !lp
+if lp
 hi clear popselectCursor
 else
 hi link popselectCursor Cursor
@@ -197,6 +219,29 @@ endif
 enddef
 def G()
 set t_ve&
+enddef
+def H(a: string): string
+try
+packadd nerdfont.vim
+return nerdfont#find(expand(a))
+catch
+endtry
+return ''
+enddef
+export def PopupMRU()
+var a = []
+for f in v:oldfiles
+if filereadable(expand(f))
+const b = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
+add(a, { icon: H(f), label: b, tag: f })
+endif
+endfor
+Popup(a, {
+title: 'MRU',
+oncomplete: (item) => {
+exe $'edit {item.tag}'
+}
+})
 enddef
 export def PopupBufList()
 var a = []
@@ -207,37 +252,30 @@ const m = d->matchlist('^ *\([0-9]\+\) \([^"]*\)"\(.*\)" [^0-9]\+ [0-9]\+')
 if m->empty()
 continue
 endif
-const e = m[1]
+const e = str2nr(m[1])
 var f = m[3]
+var g = ''
 if m[2][2] =~# '[RF?]'
-f = g:buflist_term_sign ..
-term_getline(str2nr(e), '.')
+g = lq
+f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
+else
+const h = bufname(e)->fnamemodify(':p')
+g = H(h)
+f = $"{fnamemodify(f, ':t')}\<Tab>{h}"
 endif
-const h = $"{fnamemodify(f, ':t')}\<Tab>{bufname(e)->fnamemodify(':p')}"
 const i = m[2][0] ==# '%'
-add(a, { label: h, selected: i, tag: e })
+add(a, { icon: g, label: f, tag: e, selected: i })
 endfor
 Popup(a, {
 title: 'Buffers',
 onselect: (item) => {
 exe $'buffer {item.tag}'
-}
-})
-enddef
-export def PopupMRU()
-var a = []
-for f in v:oldfiles
-if filereadable(expand(f))
-const b = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
-add(a, { label: b, tag: f })
-endif
-endfor
-Popup(a, {
-title: 'MRU',
-oncomplete: (item) => {
-exe $'edit {item.tag}'
-}
+},
+onkey_q: (item) => {
+exe $'bdelete! {item.tag}'
+vimrc#popselect#Delete(item)
+},
 })
 enddef
 export def PopupTabList()
@@ -256,7 +294,7 @@ var j = bufname(b)
 if !j
 j = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-j = 'terminal ' .. term_getline(b, '.')->trim()
+j = lq .. term_getline(b, '.')->trim()
 else
 j = j->pathshorten()
 endif
@@ -272,6 +310,10 @@ Popup(a, {
 title: 'Tab pages',
 onselect: (item) => {
 exe $'tabnext {item.tag}'
-}
+},
+onkey_q: (item) => {
+exe $'tabclose! {item.tag}'
+vimrc#popselect#Delete(item)
+},
 })
 enddef

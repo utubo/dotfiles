@@ -5,12 +5,15 @@ var filterwinid = 0
 var filter = ''
 var filter_visible = false
 var filter_focused = false
+var hasicon = false
 var items = []
 var filtered = []
 var currow = 0
 var opts = {}
 var blinktimer = 0
 var blink = false
+const termicon = "\uf489"
+const unknownicon = "\uea7b"
 
 def Update()
 	var text = []
@@ -25,9 +28,17 @@ def Update()
 	else
 		filtered = items->copy()
 	endif
+	var offset = ' '
 	for item in filtered
 		n += 1
-		text += [$'{n}: {item.label->trim()}']
+		if 10 <= n || filtered->len() < 10
+			offset = ''
+		endif
+		var icon = ''
+		if hasicon
+			icon = !item.icon ? unknownicon : item.icon
+		endif
+		text += [$'{offset}{n}:{icon}{item.label->trim()}']
 	endfor
 	currow = min([max([1, currow]), filtered->len()])
 	popup_settext(winid, text)
@@ -54,12 +65,12 @@ def Filter(id: number, key: string): bool
 	if key ==# "\<CursorHold>"
 		return false
 	endif
-	const ctrlN = match("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", key)
+	const ctrlN = stridx("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", key)
 	if ctrlN !=# -1
 		currow = ctrlN + 1
 		Complete()
 	endif
-	if key ==# "\<ESC>" || key ==# "\<C-x>"
+	if stridx("\<ESC>\<C-x>", key) !=# -1
 		Close()
 		return true
 	elseif key ==# "\<CR>"
@@ -83,27 +94,37 @@ def Filter(id: number, key: string): bool
 		Update()
 		return true
 	endif
-	if key ==# 'f' || key ==# "\<Tab>"
+	if opts->has_key($'onkey_{key}')
+		funcref(opts[$'onkey_{key}'], [filtered[currow - 1]])()
+	elseif  stridx("f\<Tab>", key) !=# -1
 		filter_visible = !filter_visible || key ==# "\<Tab>"
 		filter_focused = filter_visible
 		Update()
-		return true
-	endif
-	if match('nbt', key) !=# -1
+	elseif stridx('nbt', key) !=# -1
 		Move(1)
-	elseif match('pBT', key) !=# -1
+	elseif stridx('pBT', key) !=# -1
 		Move(-1)
-	elseif match('123456789', key) !=# -1
+	elseif stridx('123456789', key) !=# -1
 		currow = str2nr(key)
 		Complete()
 	elseif key ==# "x"
 		Close()
-		return true
 	else
 		Close()
 		return false
 	endif
 	return true
+enddef
+
+export def Delete(item: any)
+	items->remove(
+		(items) -> indexof((_, v) => v.label ==# item.label && v.tag ==# item.tag)
+	)
+	if items->len() < 1
+		Close()
+	else
+		Update()
+	endif
 enddef
 
 def Move(d: number)
@@ -151,6 +172,7 @@ export def Popup(what: list<any>, options: any = {})
 	filter = ''
 	filter_visible = false
 	filter_focused = false
+	hasicon = false
 	opts = {
 		zindex: 1,
 		tabpage: -1,
@@ -166,8 +188,9 @@ export def Popup(what: list<any>, options: any = {})
 		if get(items[i], 'selected', false)
 			currow = i + 1
 		endif
+		hasicon = hasicon || items[i]->has_key('icon')
 	endfor
-	win_execute(winid, 'syntax match PMenuKind /^\d\+:/')
+	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasicon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	Update()
 	# Filter input box
@@ -213,6 +236,32 @@ def RestoreCursor()
 	set t_ve&
 enddef
 
+def NerdFont(path: string): string
+	try
+		packadd nerdfont.vim
+		return nerdfont#find(expand(path))
+	catch
+		# nop
+	endtry
+	return ''
+enddef
+
+export def PopupMRU()
+	var items = []
+	for f in v:oldfiles
+		if filereadable(expand(f))
+			const label = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
+			add(items, { icon: NerdFont(f), label: label, tag: f })
+		endif
+	endfor
+	Popup(items, {
+		title: 'MRU',
+		oncomplete: (item) => {
+			execute $'edit {item.tag}'
+		}
+	})
+enddef
+
 export def PopupBufList()
 	var bufs = []
 	var labels = []
@@ -222,38 +271,30 @@ export def PopupBufList()
 		if m->empty()
 			continue
 		endif
-		const nr = m[1]
+		const nr = str2nr(m[1])
 		var name = m[3]
+		var icon = ''
 		if m[2][2] =~# '[RF?]'
-			name = g:buflist_term_sign ..
-				term_getline(str2nr(nr), '.')
-					->substitute('\s*[%#>$]\s*$', '', '')
+			icon = termicon
+			name = term_getline(nr, '.')
+				->substitute('\s*[%#>$]\s*$', '', '')
+		else
+			const path = bufname(nr)->fnamemodify(':p')
+			icon = NerdFont(path)
+			name = $"{fnamemodify(name, ':t')}\<Tab>{path}"
 		endif
-		const label = $"{fnamemodify(name, ':t')}\<Tab>{bufname(nr)->fnamemodify(':p')}"
 		const current = m[2][0] ==# '%'
-		add(bufs, { label: label, selected: current, tag: nr })
+		add(bufs, { icon: icon, label: name, tag: nr, selected: current })
 	endfor
 	Popup(bufs, {
 		title: 'Buffers',
 		onselect: (item) => {
 			execute $'buffer {item.tag}'
-		}
-	})
-enddef
-
-export def PopupMRU()
-	var items = []
-	for f in v:oldfiles
-		if filereadable(expand(f))
-			const label = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
-			add(items, { label: label, tag: f })
-		endif
-	endfor
-	Popup(items, {
-		title: 'MRU',
-		oncomplete: (item) => {
-			execute $'edit {item.tag}'
-		}
+		},
+		onkey_q: (item) => {
+			execute $'bdelete! {item.tag}'
+			vimrc#popselect#Delete(item)
+		},
 	})
 enddef
 
@@ -273,7 +314,7 @@ export def PopupTabList()
 			if !name
 				name = '[No Name]'
 			elseif getbufvar(b, '&buftype') ==# 'terminal'
-				name = 'terminal ' .. term_getline(b, '.')->trim()
+				name = termicon .. term_getline(b, '.')->trim()
 			else
 				name = name->pathshorten()
 			endif
@@ -289,6 +330,10 @@ export def PopupTabList()
 		title: 'Tab pages',
 		onselect: (item) => {
 			execute $'tabnext {item.tag}'
-		}
+		},
+		onkey_q: (item) => {
+			execute $'tabclose! {item.tag}'
+			vimrc#popselect#Delete(item)
+		},
 	})
 enddef
