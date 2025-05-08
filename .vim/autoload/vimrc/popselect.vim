@@ -13,6 +13,7 @@ var lo = 0
 var lp = false
 const lq = "\uf489"
 const lr = "\uea7b"
+const lt = "💠"
 def A(a: any)
 enddef
 def B()
@@ -232,7 +233,7 @@ packadd nerdfont.vim
 return nerdfont#find(expand(a))
 catch
 endtry
-return ''
+return lt
 enddef
 export def PopupMRU()
 var a = []

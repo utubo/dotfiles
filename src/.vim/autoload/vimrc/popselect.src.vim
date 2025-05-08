@@ -14,6 +14,7 @@ var blinkTimer = 0
 var blink = false
 const ICON_TERM = "\uf489"
 const ICON_UNKNOWN = "\uea7b"
+const ICON_NO_NERDFONT = "💠"
 
 def Nop(item: any)
 	# nop
@@ -252,7 +253,7 @@ def NerdFont(path: string): string
 	catch
 		# nop
 	endtry
-	return ''
+	return ICON_NO_NERDFONT
 enddef
 
 export def PopupMRU()
