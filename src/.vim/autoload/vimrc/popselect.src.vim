@@ -363,13 +363,13 @@ export def PopupDir(path: string = '')
 			isdir: true,
 		})
 	endif
-	const files = glob($'{fullpath}/*', false, true, true)
+	const files = readdirex(fullpath, '1', { sort: 'collate' })
 	for f in files
-		const isdir = isdirectory(f)
+		const isdir = f.type ==# 'dir' || f.type ==# 'linkd'
 		add(items, {
-			icon: isdir ? ICON_DIR : NerdFont(f),
-			label: fnamemodify(f, ':t:r'),
-			tag: f,
+			icon: isdir ? ICON_DIR : NerdFont(f.name),
+			label: f.name,
+			tag: $'{fullpath}/{f.name}',
 			isdir: isdir,
 		})
 	endfor

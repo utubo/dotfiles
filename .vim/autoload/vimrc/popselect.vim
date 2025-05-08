@@ -339,13 +339,13 @@ tag: c->fnamemodify(':h'),
 isdir: true,
 })
 endif
-const d = glob($'{c}/*', false, true, true)
+const d = readdirex(c, '1', { sort: 'collate' })
 for f in d
-const e = isdirectory(f)
+const e = f.type ==# 'dir' || f.type ==# 'linkd'
 add(b, {
-icon: e ? lt : BA(f),
-label: fnamemodify(f, ':t:r'),
-tag: f,
+icon: e ? lt : BA(f.name),
+label: f.name,
+tag: $'{c}/{f.name}',
 isdir: e,
 })
 endfor
