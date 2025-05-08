@@ -1,19 +1,19 @@
 vim9script
 
 var winid = 0
-var filterwinid = 0
+var filterWinId = 0
 var filter = ''
-var filter_visible = false
-var filter_focused = false
-var hasicon = false
+var filterVisible = false
+var filterFocused = false
+var hasIcon = false
 var items = []
 var filtered = []
-var currow = 0
+var cursorRow = 0
 var opts = {}
-var blinktimer = 0
+var blinkTimer = 0
 var blink = false
-const termicon = "\uf489"
-const unknownicon = "\uea7b"
+const ICON_TERM = "\uf489"
+const ICON_UNKNOWN = "\uea7b"
 
 def Nop(item: any)
 	# nop
@@ -21,12 +21,12 @@ enddef
 
 def Update()
 	var text = []
-	if filter_visible
+	if filterVisible
 		text += [''] # for filter input box
 	else
-		popup_hide(filterwinid)
+		popup_hide(filterWinId)
 	endif
-	if filter_visible && filter !=# ''
+	if filterVisible && filter !=# ''
 		filtered = matchfuzzy(items, filter, { text_cb: (i) => i.label })
 	else
 		filtered = items->copy()
@@ -39,28 +39,28 @@ def Update()
 			offset = ''
 		endif
 		var icon = ''
-		if hasicon
-			icon = !item.icon ? unknownicon : item.icon
+		if hasIcon
+			icon = !item.icon ? ICON_UNKNOWN : item.icon
 		endif
 		text += [$'{offset}{n}:{icon}{item.label->trim()}']
 	endfor
-	currow = min([max([1, currow]), filtered->len()])
+	cursorRow = min([max([1, cursorRow]), filtered->len()])
 	popup_settext(winid, text)
-	win_execute(winid, $"normal! :{currow + (filter_visible ? 1 : 0)}\<CR>")
-	if filter_visible
-		const filtertext = $'Filter:{filter}{filter_focused ? ' ' : ''}'
+	win_execute(winid, $"normal! :{cursorRow + (filterVisible ? 1 : 0)}\<CR>")
+	if filterVisible
+		const filtertext = $'Filter:{filter}{filterFocused ? ' ' : ''}'
 		const p = popup_getpos(winid)
 		const width = max([p.core_width, strdisplaywidth(filtertext)])
 		popup_move(winid, { minwidth: width })
-		popup_move(filterwinid, {
+		popup_move(filterWinId, {
 		   col: p.core_col,
 		   line: p.core_line,
 		   maxwidth: width,
 		   minwidth: width,
 			zindex: 2,
 		})
-		popup_show(filterwinid)
-		popup_settext(filterwinid, filtertext)
+		popup_show(filterWinId)
+		popup_settext(filterWinId, filtertext)
 	endif
 	redraw
 enddef
@@ -82,9 +82,9 @@ def Filter(id: number, key: string): bool
 		Move(-1)
 		return true
 	endif
-	if filter_focused
+	if filterFocused
 		if key ==# "\<Tab>"
-			filter_focused = false
+			filterFocused = false
 		elseif key ==# "\<BS>"
 			filter = filter->substitute('.$', '', '')
 		else
@@ -99,19 +99,19 @@ def Filter(id: number, key: string): bool
 	endif
 	if stridx('qd', key) !=# -1 && opts->has_key('ondelete')
 		Execute('ondelete')
-		Delete(filtered[currow - 1])
+		Delete(filtered[cursorRow - 1])
 		return true
 	endif
 	if stridx("f\<Tab>", key) !=# -1
-		filter_visible = !filter_visible || key ==# "\<Tab>"
-		filter_focused = filter_visible
+		filterVisible = !filterVisible || key ==# "\<Tab>"
+		filterFocused = filterVisible
 		Update()
 	elseif stridx('njbt', key) !=# -1
 		Move(1)
 	elseif stridx('pkBT', key) !=# -1
 		Move(-1)
 	elseif stridx('123456789', key) !=# -1
-		currow = str2nr(key)
+		cursorRow = str2nr(key)
 		Complete()
 	elseif key ==# "x"
 		Close()
@@ -135,18 +135,18 @@ def Delete(item: any)
 enddef
 
 def Move(d: number)
-	currow += d
-	if currow < 1
-		currow = filtered->len()
-	elseif filtered->len() < currow
-		currow = 1
+	cursorRow += d
+	if cursorRow < 1
+		cursorRow = filtered->len()
+	elseif filtered->len() < cursorRow
+		cursorRow = 1
 	endif
 	OnSelect()
 	Update()
 enddef
 
 def Complete()
-	if currow < 1
+	if cursorRow < 1
 		return
 	endif
 	OnSelect()
@@ -155,19 +155,19 @@ def Complete()
 enddef
 
 def OnSelect()
-	if currow < 1
+	if cursorRow < 1
 		return
 	endif
-	opts.onselect(filtered[currow - 1])
+	opts.onselect(filtered[cursorRow - 1])
 enddef
 
 def OnComplete()
-	opts.oncomplete(filtered[currow - 1])
+	opts.oncomplete(filtered[cursorRow - 1])
 enddef
 
 def Execute(name: string)
 	if opts->has_key(name)
-		funcref(opts[name], [filtered[currow - 1]])()
+		funcref(opts[name], [filtered[cursorRow - 1]])()
 	endif
 enddef
 
@@ -175,11 +175,11 @@ export def Popup(what: list<any>, options: any = {})
 	if what->len() <= 1
 		return
 	endif
-	currow = 1
+	cursorRow = 1
 	filter = ''
-	filter_visible = false
-	filter_focused = false
-	hasicon = false
+	filterVisible = false
+	filterFocused = false
+	hasIcon = false
 	opts = {
 		zindex: 1,
 		tabpage: -1,
@@ -195,32 +195,32 @@ export def Popup(what: list<any>, options: any = {})
 	items = what->copy()
 	for i in range(items->len())
 		if get(items[i], 'selected', false)
-			currow = i + 1
+			cursorRow = i + 1
 		endif
-		hasicon = hasicon || items[i]->has_key('icon')
+		hasIcon = hasIcon || items[i]->has_key('icon')
 	endfor
-	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasicon ? '.' : ''}/')
+	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasIcon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	Update()
 	# Filter input box
-	filterwinid = popup_create('', {})
+	filterWinId = popup_create('', {})
 	set t_ve=
 	hi link popselectCursor Cursor
 	augroup popselect
 		au!
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	blinktimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
-	win_execute(filterwinid, 'syntax match popselectCursor / $/')
+	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+	win_execute(filterWinId, 'syntax match popselectCursor / $/')
 enddef
 
 export def Close()
 	RestoreCursor()
-	timer_stop(blinktimer)
+	timer_stop(blinkTimer)
 	popup_close(winid)
-	popup_close(filterwinid)
+	popup_close(filterWinId)
 	winid = 0
-	filterwinid = 0
+	filterWinId = 0
 	augroup popselect
 		au!
 	augroup END
@@ -288,7 +288,7 @@ export def PopupBufList()
 		var name = m[3]
 		var icon = ''
 		if m[2][2] =~# '[RF?]'
-			icon = termicon
+			icon = ICON_TERM
 			name = term_getline(nr, '.')
 				->substitute('\s*[%#>$]\s*$', '', '')
 		else
@@ -322,7 +322,7 @@ export def PopupTabList()
 			if !name
 				name = '[No Name]'
 			elseif getbufvar(b, '&buftype') ==# 'terminal'
-				name = termicon .. term_getline(b, '.')->trim()
+				name = ICON_TERM .. term_getline(b, '.')->trim()
 			else
 				name = name->pathshorten()
 			endif
