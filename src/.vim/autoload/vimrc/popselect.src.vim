@@ -95,9 +95,9 @@ def Filter(id: number, key: string): bool
 		filter_visible = !filter_visible || key ==# "\<Tab>"
 		filter_focused = filter_visible
 		Update()
-	elseif stridx('nbt', key) !=# -1
+	elseif stridx('njbt', key) !=# -1
 		Move(1)
-	elseif stridx('pBT', key) !=# -1
+	elseif stridx('pkBT', key) !=# -1
 		Move(-1)
 	elseif stridx('123456789', key) !=# -1
 		currow = str2nr(key)
@@ -253,6 +253,10 @@ export def PopupMRU()
 		title: 'MRU',
 		oncomplete: (item) => {
 			execute $'edit {item.tag}'
+		},
+		onkey_t: (item) => {
+			execute $'tabedit {item.tag}'
+			vimrc#popselect#Close()
 		}
 	})
 enddef

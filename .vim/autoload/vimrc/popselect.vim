@@ -92,9 +92,9 @@ elseif stridx("f\<Tab>", b) !=# -1
 r = !r || b ==# "\<Tab>"
 s = r
 A()
-elseif stridx('nbt', b) !=# -1
+elseif stridx('njbt', b) !=# -1
 C(1)
-elseif stridx('pBT', b) !=# -1
+elseif stridx('pkBT', b) !=# -1
 C(-1)
 elseif stridx('123456789', b) !=# -1
 lm = str2nr(b)
@@ -235,6 +235,10 @@ Popup(a, {
 title: 'MRU',
 oncomplete: (item) => {
 exe $'edit {item.tag}'
+},
+onkey_t: (item) => {
+exe $'tabedit {item.tag}'
+vimrc#popselect#Close()
 }
 })
 enddef
