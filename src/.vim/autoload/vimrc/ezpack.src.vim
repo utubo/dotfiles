@@ -27,6 +27,7 @@ EzpackL hrsh7th/vim-vsnip-integ
 EzpackL itchyny/calendar.vim
 EzpackO kana/vim-textobj-user
 EzpackL kana/vim-smartword # wとかのモーションをいい感じにする
+EzpackO lambdalisue/nerdfont.vim
 EzpackL LeafCage/vimhelpgenerator
 EzpackL luochen1990/rainbow
 EzpackO machakann/vim-sandwich
@@ -46,13 +47,6 @@ EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
 EzpackL yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 
-# Fern
-EzpackO lambdalisue/fern.vim
-EzpackO lambdalisue/fern-git-status.vim
-EzpackO lambdalisue/fern-renderer-nerdfont.vim
-EzpackO lambdalisue/fern-hijack.vim
-EzpackO lambdalisue/nerdfont.vim
-
 # 様子見中
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
@@ -66,6 +60,10 @@ EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 # EzpackS obcat/vim-sclow          # 調査中
 # EzpackO Shougo/cmdline.vim
 # EzpackO utubo/cmdline.vim <branch> develop
+# EzpackO lambdalisue/fern.vim
+# EzpackO lambdalisue/fern-git-status.vim
+# EzpackO lambdalisue/fern-renderer-nerdfont.vim
+# EzpackO lambdalisue/fern-hijack.vim
 
 # 🐶🍚
 EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ

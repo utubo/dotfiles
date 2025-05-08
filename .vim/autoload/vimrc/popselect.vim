@@ -13,7 +13,8 @@ var lo = 0
 var lp = false
 const lq = "\uf489"
 const lr = "\uea7b"
-const lt = "💠"
+const lt = "📂"
+const mk = "💠"
 def A(a: any)
 enddef
 def B()
@@ -70,7 +71,7 @@ redraw
 enddef
 def C(a: number, b: string): bool
 if b ==# "\<CursorHold>"
-return false
+return true
 endif
 if stridx("\<ESC>\<C-x>", b) !=# -1
 Close()
@@ -151,8 +152,8 @@ if lm < 1
 return
 endif
 G()
-H()
 Close()
+H()
 enddef
 def G()
 if lm < 1
@@ -169,7 +170,7 @@ funcref(ln[a], [ll[lm - 1]])()
 endif
 enddef
 export def Popup(a: list<any>, b: any = {})
-if a->len() <= 1
+if a->len() < 1
 return
 endif
 lm = 1
@@ -198,7 +199,6 @@ t = t || lk[i]->has_key('icon')
 endfor
 win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{t ? '.' : ''}/')
 win_execute(k, 'syntax match PMenuExtra /\t.*$/')
-B()
 hi link popselectFilter PMenu
 hi link popselectCursor Cursor
 o = popup_create('', { highlight: 'popselectFilter' })
@@ -209,6 +209,7 @@ au VimLeavePre * J()
 aug END
 set t_ve=
 lo = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+B()
 enddef
 export def Close()
 J()
@@ -242,7 +243,7 @@ packadd nerdfont.vim
 return nerdfont#find(expand(a))
 catch
 endtry
-return lt
+return mk
 enddef
 export def PopupMRU()
 var a = []
@@ -325,5 +326,41 @@ Popup(a, {
 title: 'Tab pages',
 onselect: (item) => execute($'tabnext {item.tag}'),
 ondelete: (item) => execute($'tabclose! {item.tag}'),
+})
+enddef
+export def PopupDir(a: string = '')
+var b = []
+const c = a ==# '' ? expand('%:p:h') : a
+if c->fnamemodify(':h') !=# c
+add(b, {
+icon: lt,
+label: '..',
+tag: c->fnamemodify(':h'),
+isdir: true,
+})
+endif
+const d = glob($'{c}/*', false, true, true)
+for f in d
+const e = isdirectory(f)
+add(b, {
+icon: e ? lt : BA(f),
+label: fnamemodify(f, ':t:r'),
+tag: f,
+isdir: e,
+})
+endfor
+Popup(b, {
+title: lt .. fnamemodify(c, ':t:r'),
+oncomplete: (item) => {
+if item.isdir
+PopupDir(item.tag)
+else
+exe $'edit {item.tag}'
+endif
+},
+onkey_t: (item) => {
+exe $'tabedit {item.tag}'
+vimrc#popselect#Close()
+}
 })
 enddef

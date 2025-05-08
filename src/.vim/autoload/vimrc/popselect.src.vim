@@ -14,6 +14,7 @@ var blinkTimer = 0
 var blink = false
 const ICON_TERM = "\uf489"
 const ICON_UNKNOWN = "\uea7b"
+const ICON_DIR = "📂"
 const ICON_NO_NERDFONT = "💠"
 
 def Nop(item: any)
@@ -75,7 +76,7 @@ enddef
 
 def Filter(id: number, key: string): bool
 	if key ==# "\<CursorHold>"
-		return false
+		return true
 	endif
 	if stridx("\<ESC>\<C-x>", key) !=# -1
 		Close()
@@ -159,8 +160,8 @@ def Complete()
 		return
 	endif
 	OnSelect()
-	OnComplete()
 	Close()
+	OnComplete()
 enddef
 
 def OnSelect()
@@ -181,7 +182,7 @@ def Execute(name: string)
 enddef
 
 export def Popup(what: list<any>, options: any = {})
-	if what->len() <= 1
+	if what->len() < 1
 		return
 	endif
 	cursorRow = 1
@@ -210,7 +211,6 @@ export def Popup(what: list<any>, options: any = {})
 	endfor
 	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasIcon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
-	Update()
 	# Filter input box
 	hi link popselectFilter PMenu
 	hi link popselectCursor Cursor
@@ -222,6 +222,7 @@ export def Popup(what: list<any>, options: any = {})
 	augroup END
 	set t_ve=
 	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+	Update()
 enddef
 
 export def Close()
@@ -348,5 +349,42 @@ export def PopupTabList()
 		title: 'Tab pages',
 		onselect: (item) => execute($'tabnext {item.tag}'),
 		ondelete: (item) => execute($'tabclose! {item.tag}'),
+	})
+enddef
+
+export def PopupDir(path: string = '')
+	var items = []
+	const fullpath = path ==# '' ? expand('%:p:h') : path
+	if fullpath->fnamemodify(':h') !=# fullpath
+		add(items, {
+			icon: ICON_DIR,
+			label: '..',
+			tag: fullpath->fnamemodify(':h'),
+			isdir: true,
+		})
+	endif
+	const files = glob($'{fullpath}/*', false, true, true)
+	for f in files
+		const isdir = isdirectory(f)
+		add(items, {
+			icon: isdir ? ICON_DIR : NerdFont(f),
+			label: fnamemodify(f, ':t:r'),
+			tag: f,
+			isdir: isdir,
+		})
+	endfor
+	Popup(items, {
+		title: ICON_DIR .. fnamemodify(fullpath, ':t:r'),
+		oncomplete: (item) => {
+			if item.isdir
+				PopupDir(item.tag)
+			else
+				execute $'edit {item.tag}'
+			endif
+		},
+		onkey_t: (item) => {
+			execute $'tabedit {item.tag}'
+			vimrc#popselect#Close()
+		}
 	})
 enddef

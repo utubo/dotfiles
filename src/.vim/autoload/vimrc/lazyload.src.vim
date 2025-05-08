@@ -207,7 +207,6 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
-nnoremap <F1> <Cmd>Fern . -reveal=% -opener=edit<CR>
 # }}}
 
 # その他 {{{
@@ -405,9 +404,9 @@ enddef
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<CR>
 # }}}
 
-# TODO
 # ------------------------------------------------------
 # ポップアップで色々選択 {{{
+nnoremap <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
 nnoremap <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 
@@ -800,7 +799,7 @@ endif
 
 # ------------------------------------------------------
 # メモ {{{
-# <F1> fern <S-F1>でフォルダを開く(win32)
+# <F1> カレントディレクトリ
 # <F2> MRU
 # <F3>
 # <F4>

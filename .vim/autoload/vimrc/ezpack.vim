@@ -17,6 +17,7 @@ EzpackL hrsh7th/vim-vsnip-integ
 EzpackL itchyny/calendar.vim
 EzpackO kana/vim-textobj-user
 EzpackL kana/vim-smartword
+EzpackO lambdalisue/nerdfont.vim
 EzpackL LeafCage/vimhelpgenerator
 EzpackL luochen1990/rainbow
 EzpackO machakann/vim-sandwich
@@ -35,11 +36,6 @@ EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
 EzpackL yuki-yano/dedent-yank.vim
-EzpackO lambdalisue/fern.vim
-EzpackO lambdalisue/fern-git-status.vim
-EzpackO lambdalisue/fern-renderer-nerdfont.vim
-EzpackO lambdalisue/fern-hijack.vim
-EzpackO lambdalisue/nerdfont.vim
 EzpackO ctrlpvim/ctrlp.vim
 EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot

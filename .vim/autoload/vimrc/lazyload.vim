@@ -137,7 +137,6 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
-nn <F1> <Cmd>Fern . -reveal=% -opener=edit<CR>
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
@@ -280,6 +279,7 @@ echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
+nn <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
 nn <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 def F(a: string)
