@@ -408,6 +408,10 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<
 # ポップアップで色々選択 {{{
 nnoremap <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
 nnoremap <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
+nnoremap <F3> <Cmd>call vimrc#popselect#PopupBufList()<CR>
+nnoremap <F4> <Cmd>call vimrc#popselect#PopupTabList()<CR>
+
+# タブ移動したときだけリストを表示
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 
 # gnとgpでバッファ移動
@@ -801,8 +805,8 @@ endif
 # メモ {{{
 # <F1> カレントディレクトリ
 # <F2> MRU
-# <F3>
-# <F4>
+# <F3> BufferList
+# <F4> TabList
 # <F5> 日付関係
 # <F6>
 # <F7>

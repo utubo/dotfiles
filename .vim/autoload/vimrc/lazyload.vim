@@ -281,6 +281,8 @@ enddef
 nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
 nn <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
 nn <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
+nn <F3> <Cmd>call vimrc#popselect#PopupBufList()<CR>
+nn <F4> <Cmd>call vimrc#popselect#PopupTabList()<CR>
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 def F(a: string)
 const b = bufnr()
