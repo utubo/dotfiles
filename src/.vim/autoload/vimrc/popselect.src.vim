@@ -126,8 +126,12 @@ def Filter(id: number, key: string): bool
 		Move(1)
 	elseif stridx('pkBT', key) !=# -1
 		Move(-1)
-	elseif stridx('123456789', key) !=# -1
+	elseif stridx('0123456789', key) !=# -1
 		cursorRow = str2nr(key)
+		const s = popup_getpos(winid).firstline
+		while cursorRow < s
+			cursorRow += 10
+		endwhile
 		Complete()
 	else
 		Close()
@@ -171,7 +175,9 @@ def OnSelect()
 	if cursorRow < 1
 		return
 	endif
-	opts.onselect(filtered[cursorRow - 1])
+	var item = filtered[cursorRow - 1]
+	item.index = cursorRow
+	opts.onselect(item)
 enddef
 
 def OnComplete()
@@ -201,8 +207,9 @@ export def Popup(what: list<any>, options: any = {})
 	}
 	opts->extend(options)
 	# List box
-	items = what->copy()
+	cursorRow = 1
 	hasIcon = false
+	items = what->copy()
 	for i in range(items->len())
 		var item = items[i]
 		if type(item) ==# type('')
@@ -215,7 +222,6 @@ export def Popup(what: list<any>, options: any = {})
 		hasIcon = hasIcon || item->has_key('icon')
 	endfor
 	winid = popup_menu([], opts)
-	cursorRow = 1
 	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasIcon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	# Filter input box
@@ -368,8 +374,8 @@ export def PopupTabList()
 	endfor
 	Popup(items, {
 		title: 'Tab pages',
-		onselect: (item) => execute($'tabnext {item.tag}'),
-		ondelete: (item) => execute($'tabclose! {item.tag}'),
+		onselect: (item) => execute($'tabnext {item.index}'),
+		ondelete: (item) => execute($'tabclose! {item.index}'),
 	})
 enddef
 

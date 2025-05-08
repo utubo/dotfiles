@@ -4,20 +4,20 @@ var k = 0
 var o = 0
 var q = ''
 var r = false
-var s = false
 var t = false
-var lk = []
+var lk = false
 var ll = []
-var lm = 0
-var ln = {}
-var lo = 0
-var lp = false
-const lq = "\uf489"
-const lr = "\uea7b"
-const lt = "\ue5fe"
-const mk = "\ue5fb"
-const ml = "\uf062"
-const mm = "💠"
+var lm = []
+var ln = 0
+var lo = {}
+var lp = 0
+var lq = false
+const lr = "\uf489"
+const lt = "\uea7b"
+const mk = "\ue5fe"
+const ml = "\ue5fb"
+const mm = "\uf062"
+const mn = "💠"
 def A(a: any)
 enddef
 def B()
@@ -28,29 +28,29 @@ else
 popup_hide(o)
 endif
 if r && q !=# ''
-ll = matchfuzzy(lk, q, { text_cb: (i) => i.label })
+lm = matchfuzzy(ll, q, { text_cb: (i) => i.label })
 else
-ll = lk->copy()
+lm = ll->copy()
 endif
 var n = 0
-var b = ll->len() < 10 ? '' : ' '
-for c in ll
+var b = lm->len() < 10 ? '' : ' '
+for c in lm
 n += 1
 if 10 <= n
 b = ''
 endif
 var d = ''
-if t
-d = !c.icon ? lr : c.icon
+if lk
+d = !c.icon ? lt : c.icon
 endif
 a += [$'{b}{n}:{d}{c.label->trim()}']
 endfor
-lm = min([max([1, lm]), ll->len()])
+ln = min([max([1, ln]), lm->len()])
 popup_settext(k, a)
-win_execute(k, $"normal! :{lm + (r ? 1 : 0)}\<CR>")
+win_execute(k, $"normal! :{ln + (r ? 1 : 0)}\<CR>")
 if r
 var e = ''
-if s
+if t
 hi link popselectFilter PMenu
 e = ' '
 else
@@ -88,9 +88,9 @@ elseif b ==# "\<C-p>"
 E(-1)
 return true
 endif
-if s
+if t
 if b ==# "\<Tab>"
-s = false
+t = false
 elseif b ==# "\<BS>"
 q = q->substitute('.$', '', '')
 elseif match(b, '^\p$') ==# -1
@@ -98,30 +98,34 @@ Close()
 return true
 else
 q ..= b
-lm = 1
+ln = 1
 endif
 B()
 return true
 endif
-if ln->has_key($'onkey_{b}')
+if lo->has_key($'onkey_{b}')
 I($'onkey_{b}')
 return true
 endif
-if stridx('qd', b) !=# -1 && ln->has_key('ondelete')
+if stridx('qd', b) !=# -1 && lo->has_key('ondelete')
 I('ondelete')
-D(ll[lm - 1])
+D(lm[ln - 1])
 return true
 endif
 if stridx("f\<Tab>", b) !=# -1
 r = !r || b ==# "\<Tab>"
-s = r
+t = r
 B()
 elseif stridx('njbt', b) !=# -1
 E(1)
 elseif stridx('pkBT', b) !=# -1
 E(-1)
-elseif stridx('123456789', b) !=# -1
-lm = str2nr(b)
+elseif stridx('0123456789', b) !=# -1
+ln = str2nr(b)
+const s = popup_getpos(k).firstline
+while ln < s
+ln += 10
+endwhile
 F()
 else
 Close()
@@ -129,10 +133,10 @@ endif
 return true
 enddef
 def D(a: any)
-lk->remove(
-(lk) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
+ll->remove(
+(ll) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
 )
-if lk->len() < 1
+if ll->len() < 1
 Close()
 else
 B()
@@ -140,17 +144,17 @@ G()
 endif
 enddef
 def E(d: number)
-lm += d
-if lm < 1
-lm = ll->len()
-elseif ll->len() < lm
-lm = 1
+ln += d
+if ln < 1
+ln = lm->len()
+elseif lm->len() < ln
+ln = 1
 endif
 G()
 B()
 enddef
 def F()
-if lm < 1
+if ln < 1
 return
 endif
 G()
@@ -158,24 +162,26 @@ Close()
 H()
 enddef
 def G()
-if lm < 1
+if ln < 1
 return
 endif
-ln.onselect(ll[lm - 1])
+var a = lm[ln - 1]
+a.index = ln
+lo.onselect(a)
 enddef
 def H()
-ln.oncomplete(ll[lm - 1])
+lo.oncomplete(lm[ln - 1])
 enddef
 def I(a: string)
-if ln->has_key(a)
-funcref(ln[a], [ll[lm - 1]])()
+if lo->has_key(a)
+funcref(lo[a], [lm[ln - 1]])()
 endif
 enddef
 export def Popup(a: list<any>, b: any = {})
 if a->len() < 1
 return
 endif
-ln = {
+lo = {
 zindex: 1,
 tabpage: -1,
 maxheight: min([9, &lines - 2]),
@@ -186,27 +192,27 @@ focusfilter: false,
 onselect: (c) => A(c),
 oncomplete: (c) => A(c),
 }
-ln->extend(b)
-lk = a->copy()
-t = false
-for i in range(lk->len())
-var c = lk[i]
+lo->extend(b)
+ln = 1
+lk = false
+ll = a->copy()
+for i in range(ll->len())
+var c = ll[i]
 if type(c) ==# type('')
 c = { label: c }
-lk[i] = c
+ll[i] = c
 endif
 if get(c, 'selected', false)
-lm = i + 1
+ln = i + 1
 endif
-t = t || c->has_key('icon')
+lk = lk || c->has_key('icon')
 endfor
-k = popup_menu([], ln)
-lm = 1
-win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{t ? '.' : ''}/')
+k = popup_menu([], lo)
+win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{lk ? '.' : ''}/')
 win_execute(k, 'syntax match PMenuExtra /\t.*$/')
 q = ''
-r = ln.focusfilter
-s = ln.focusfilter
+r = lo.focusfilter
+t = lo.focusfilter
 hi link popselectFilter PMenu
 hi link popselectCursor Cursor
 o = popup_create('', { highlight: 'popselectFilter' })
@@ -216,12 +222,12 @@ au!
 au VimLeavePre * J()
 aug END
 set t_ve=
-lo = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+lp = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
 B()
 enddef
 export def Close()
 J()
-timer_stop(lo)
+timer_stop(lp)
 popup_close(k)
 popup_close(o)
 k = 0
@@ -235,8 +241,8 @@ if k ==# 0 || popup_list()->index(k) ==# -1
 Close()
 return
 endif
-lp = !lp
-if lp
+lq = !lq
+if lq
 hi clear popselectCursor
 else
 hi link popselectCursor Cursor
@@ -248,11 +254,11 @@ enddef
 def BA(a: string, b: bool = false): string
 if b
 if a ==# '..'
-return ml
+return mm
 elseif a->fnamemodify(':t') ==# '.git'
-return mk
+return ml
 else
-return lt
+return mk
 endif
 endif
 try
@@ -262,7 +268,7 @@ return c
 endif
 catch
 endtry
-return mm
+return mn
 enddef
 export def PopupMRU()
 var a = []
@@ -296,7 +302,7 @@ const e = str2nr(m[1])
 var f = m[3]
 var g = ''
 if m[2][2] =~# '[RF?]'
-g = lq
+g = lr
 f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
 else
@@ -329,7 +335,7 @@ var j = bufname(b)
 if !j
 j = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-j = lq .. term_getline(b, '.')->trim()
+j = lr .. term_getline(b, '.')->trim()
 else
 j = j->pathshorten()
 endif
@@ -343,8 +349,8 @@ add(a, { label: e, tag: d, selected: d ==# c })
 endfor
 Popup(a, {
 title: 'Tab pages',
-onselect: (item) => execute($'tabnext {item.tag}'),
-ondelete: (item) => execute($'tabclose! {item.tag}'),
+onselect: (item) => execute($'tabnext {item.index}'),
+ondelete: (item) => execute($'tabclose! {item.index}'),
 })
 enddef
 export def PopupDir(a: string = '')
