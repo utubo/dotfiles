@@ -9,7 +9,7 @@ augroup END
 set textwidth=0
 set renderoptions=type:directx,renmode:6
 set guifont=Cica:h13
-# 絵文字テスト 🐞_🐝_
+# この絵文字がちゃんと表示されればOK→ 🐞_🐝_
 # }}}
 
 # フォントサイズ変更 {{{
@@ -32,16 +32,6 @@ set go-=m
 set go-=T
 # }}}
 
-# Tabline {{{
-# gvimのタブにCicaフォントが使えないので
-g:tabline_mod_sign = '✏'
-g:tabline_git_sign = '🐙'
-g:tabline_dir_sign = '📂'
-g:tabline_term_sign = '⚡'
-g:tabline_max_len = 40
-set guitablabel=%{vimrc#tabline#MyTablabel()}
-# }}}
-
 # ウィンドウ位置記憶 {{{
 # http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
 g:save_window_file = expand('~/.vimwinpos')
@@ -62,9 +52,6 @@ if filereadable(g:save_window_file)
 endif
 # }}}
 
-# プラグイン設定 {{{
-# }}}
-
 # Windows {{{
 if has('win32')
 	# Alt-Spaceでシステムメニュー(winaltkeysはメニューバーが無いと動かないので×)
@@ -73,5 +60,8 @@ if has('win32')
 	# https://github.com/utubo/winscp_upload.bat
 	nnoremap <S-F2> :<C-u>!winscp_upload.bat <C-r>=expand("%:p")<CR>
 endif
+# }}}
+
+# プラグイン設定 {{{
 # }}}
 

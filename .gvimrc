@@ -20,12 +20,6 @@ nn <silent> <M-m> <Cmd>if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>end
 nn <silent> <M-t> <Cmd>if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
 set go-=m
 set go-=T
-g:tabline_mod_sign = '✏'
-g:tabline_git_sign = '🐙'
-g:tabline_dir_sign = '📂'
-g:tabline_term_sign = '⚡'
-g:tabline_max_len = 40
-set guitablabel=%{vimrc#tabline#MyTablabel()}
 g:save_window_file = expand('~/.vimwinpos')
 def B()
 var a = [
