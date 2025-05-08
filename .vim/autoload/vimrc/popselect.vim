@@ -136,6 +136,9 @@ def D(a: any)
 ll->remove(
 (ll) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
 )
+for i in range(ll->len())
+ll[i].index = i + 1
+endfor
 if ll->len() < 1
 Close()
 else
@@ -165,9 +168,7 @@ def G()
 if ln < 1
 return
 endif
-var a = lm[ln - 1]
-a.index = ln
-lo.onselect(a)
+lo.onselect(lm[ln - 1])
 enddef
 def H()
 lo.oncomplete(lm[ln - 1])
@@ -205,6 +206,7 @@ endif
 if get(c, 'selected', false)
 ln = i + 1
 endif
+c.index = i + 1
 lk = lk || c->has_key('icon')
 endfor
 k = popup_menu([], lo)

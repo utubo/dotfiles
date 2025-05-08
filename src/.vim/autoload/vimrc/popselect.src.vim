@@ -143,6 +143,9 @@ def Delete(item: any)
 	items->remove(
 		(items) -> indexof((_, v) => v.label ==# item.label && v.tag ==# item.tag)
 	)
+	for i in range(items->len())
+		items[i].index = i + 1
+	endfor
 	if items->len() < 1
 		Close()
 	else
@@ -175,9 +178,7 @@ def OnSelect()
 	if cursorRow < 1
 		return
 	endif
-	var item = filtered[cursorRow - 1]
-	item.index = cursorRow
-	opts.onselect(item)
+	opts.onselect(filtered[cursorRow - 1])
 enddef
 
 def OnComplete()
@@ -219,6 +220,7 @@ export def Popup(what: list<any>, options: any = {})
 		if get(item, 'selected', false)
 			cursorRow = i + 1
 		endif
+		item.index = i + 1
 		hasIcon = hasIcon || item->has_key('icon')
 	endfor
 	winid = popup_menu([], opts)
