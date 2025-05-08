@@ -15,6 +15,10 @@ var blink = false
 const termicon = "\uf489"
 const unknownicon = "\uea7b"
 
+def Nop(item: any)
+	# nop
+enddef
+
 def Update()
 	var text = []
 	if filter_visible
@@ -90,8 +94,15 @@ def Filter(id: number, key: string): bool
 		return true
 	endif
 	if opts->has_key($'onkey_{key}')
-		funcref(opts[$'onkey_{key}'], [filtered[currow - 1]])()
-	elseif  stridx("f\<Tab>", key) !=# -1
+		Execute($'onkey_{key}')
+		return true
+	endif
+	if stridx('qd', key) !=# -1 && opts->has_key('ondelete')
+		Execute('ondelete')
+		Delete(filtered[currow - 1])
+		return true
+	endif
+	if stridx("f\<Tab>", key) !=# -1
 		filter_visible = !filter_visible || key ==# "\<Tab>"
 		filter_focused = filter_visible
 		Update()
@@ -111,7 +122,7 @@ def Filter(id: number, key: string): bool
 	return true
 enddef
 
-export def Delete(item: any)
+def Delete(item: any)
 	items->remove(
 		(items) -> indexof((_, v) => v.label ==# item.label && v.tag ==# item.tag)
 	)
@@ -119,6 +130,7 @@ export def Delete(item: any)
 		Close()
 	else
 		Update()
+		OnSelect()
 	endif
 enddef
 
@@ -146,17 +158,17 @@ def OnSelect()
 	if currow < 1
 		return
 	endif
-	if !opts->has_key('onselect')
-		return
-	endif
 	opts.onselect(filtered[currow - 1])
 enddef
 
 def OnComplete()
-	if !opts->has_key('oncomplete')
-		return
-	endif
 	opts.oncomplete(filtered[currow - 1])
+enddef
+
+def Execute(name: string)
+	if opts->has_key(name)
+		funcref(opts[name], [filtered[currow - 1]])()
+	endif
 enddef
 
 export def Popup(what: list<any>, options: any = {})
@@ -175,6 +187,8 @@ export def Popup(what: list<any>, options: any = {})
 		maxwidth: &columns - 5,
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
+		onselect: (item) => Nop(item),
+		oncomplete: (item) => Nop(item),
 	}
 	opts->extend(options)
 	winid = popup_menu([], opts)
@@ -287,13 +301,8 @@ export def PopupBufList()
 	endfor
 	Popup(bufs, {
 		title: 'Buffers',
-		onselect: (item) => {
-			execute $'buffer {item.tag}'
-		},
-		onkey_q: (item) => {
-			execute $'bdelete! {item.tag}'
-			vimrc#popselect#Delete(item)
-		},
+		onselect: (item) => execute($'buffer {item.tag}'),
+		ondelete: (item) => execute($'bdelete! {item.tag}'),
 	})
 enddef
 
@@ -327,12 +336,7 @@ export def PopupTabList()
 	endfor
 	Popup(items, {
 		title: 'Tab pages',
-		onselect: (item) => {
-			execute $'tabnext {item.tag}'
-		},
-		onkey_q: (item) => {
-			execute $'tabclose! {item.tag}'
-			vimrc#popselect#Delete(item)
-		},
+		onselect: (item) => execute($'tabnext {item.tag}'),
+		ondelete: (item) => execute($'tabclose! {item.tag}'),
 	})
 enddef
