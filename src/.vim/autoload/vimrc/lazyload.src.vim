@@ -324,9 +324,6 @@ SetupTabstopLazy()
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-# BでCtrlpBuffer
-command! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
-nnoremap B <ScriptCmd>CtrlPBuffer<CR>
 # }}}
 
 # ------------------------------------------------------
@@ -761,7 +758,11 @@ command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 
-#noremap <F1> <Cmd>smile<CR>
+# # BでCtrlpBuffer
+# command! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
+# nnoremap B <ScriptCmd>CtrlPBuffer<CR>
+
+# noremap <F1> <Cmd>smile<CR>
 # }}}
 
 # ------------------------------------------------------

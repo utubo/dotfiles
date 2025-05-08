@@ -211,8 +211,6 @@ D()
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
-com! CtrlPBuffer delc CtrlPBuffer|vimrc#ctrlp#LazyLoad()|CtrlPBuffer
-nn B <ScriptCmd>CtrlPBuffer<CR>
 def E(a: string = '')
 if &ft ==# 'qf'
 return

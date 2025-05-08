@@ -36,8 +36,6 @@ EzpackL tyru/capture.vim
 EzpackL tyru/caw.vim
 EzpackO yegappan/lsp
 EzpackL yuki-yano/dedent-yank.vim
-EzpackO ctrlpvim/ctrlp.vim
-EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot
 EzpackO utubo/vim-ezpack
 EzpackL utubo/vim-headtail

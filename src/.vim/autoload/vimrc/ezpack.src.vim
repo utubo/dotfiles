@@ -48,8 +48,6 @@ EzpackO yegappan/lsp
 EzpackL yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 
 # 様子見中
-EzpackO ctrlpvim/ctrlp.vim
-EzpackO mattn/ctrlp-matchfuzzy
 EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 
 # 復活させるかも
@@ -64,6 +62,8 @@ EzpackL sheerun/vim-polyglot       # 色んなファイルタイプに対応
 # EzpackO lambdalisue/fern-git-status.vim
 # EzpackO lambdalisue/fern-renderer-nerdfont.vim
 # EzpackO lambdalisue/fern-hijack.vim
+# EzpackO ctrlpvim/ctrlp.vim
+# EzpackO mattn/ctrlp-matchfuzzy
 
 # 🐶🍚
 EzpackO utubo/vim-ezpack           # 自作プラグインマネージャ
