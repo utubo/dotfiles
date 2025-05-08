@@ -62,11 +62,6 @@ def B(a: number, b: string): bool
 if b ==# "\<CursorHold>"
 return false
 endif
-const c = stridx("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", b)
-if c !=# -1
-lm = c + 1
-D()
-endif
 if stridx("\<ESC>\<C-x>", b) !=# -1
 Close()
 return true

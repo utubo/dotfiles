@@ -65,11 +65,6 @@ def Filter(id: number, key: string): bool
 	if key ==# "\<CursorHold>"
 		return false
 	endif
-	const ctrlN = stridx("\<C-1>\<C-2>\<C-3>\<C-4>\<C-5>\<C-6>\<C-7>\<C-8>\<C-9>", key)
-	if ctrlN !=# -1
-		currow = ctrlN + 1
-		Complete()
-	endif
 	if stridx("\<ESC>\<C-x>", key) !=# -1
 		Close()
 		return true
