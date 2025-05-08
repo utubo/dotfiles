@@ -90,6 +90,7 @@ def Filter(id: number, key: string): bool
 			filter = filter->substitute('.$', '', '')
 		else
 			filter ..= key
+			cursorRow = 1
 		endif
 		Update()
 		return true

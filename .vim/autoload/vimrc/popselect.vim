@@ -85,6 +85,7 @@ elseif b ==# "\<BS>"
 q = q->substitute('.$', '', '')
 else
 q ..= b
+lm = 1
 endif
 B()
 return true
