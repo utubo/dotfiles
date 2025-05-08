@@ -91,6 +91,9 @@ if b ==# "\<Tab>"
 s = false
 elseif b ==# "\<BS>"
 q = q->substitute('.$', '', '')
+elseif match(b, '^\p$') ==# -1
+Close()
+return true
 else
 q ..= b
 lm = 1
@@ -118,11 +121,8 @@ E(-1)
 elseif stridx('123456789', b) !=# -1
 lm = str2nr(b)
 F()
-elseif b ==# "x"
-Close()
 else
 Close()
-return false
 endif
 return true
 enddef
@@ -181,8 +181,8 @@ t = false
 ln = {
 zindex: 1,
 tabpage: -1,
-maxheight: &lines - 2,
-maxwidth: &columns - 5,
+maxheight: min([9, &lines - 2]),
+maxwidth: min([60, &columns - 5]),
 mapping: false,
 filter: (id, key) => C(id, key),
 onselect: (item) => A(item),

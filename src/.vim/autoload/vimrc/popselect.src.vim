@@ -96,6 +96,9 @@ def Filter(id: number, key: string): bool
 			filterFocused = false
 		elseif key ==# "\<BS>"
 			filter = filter->substitute('.$', '', '')
+		elseif match(key, '^\p$') ==# -1
+			Close()
+			return true
 		else
 			filter ..= key
 			cursorRow = 1
@@ -123,11 +126,8 @@ def Filter(id: number, key: string): bool
 	elseif stridx('123456789', key) !=# -1
 		cursorRow = str2nr(key)
 		Complete()
-	elseif key ==# "x"
-		Close()
 	else
 		Close()
-		return false
 	endif
 	return true
 enddef
@@ -193,8 +193,8 @@ export def Popup(what: list<any>, options: any = {})
 	opts = {
 		zindex: 1,
 		tabpage: -1,
-		maxheight: &lines - 2,
-		maxwidth: &columns - 5,
+		maxheight: min([9, &lines - 2]),
+		maxwidth: min([60, &columns - 5]),
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
 		onselect: (item) => Nop(item),
