@@ -184,11 +184,6 @@ export def Popup(what: list<any>, options: any = {})
 	if what->len() < 1
 		return
 	endif
-	cursorRow = 1
-	filter = ''
-	filterVisible = false
-	filterFocused = false
-	hasIcon = false
 	opts = {
 		zindex: 1,
 		tabpage: -1,
@@ -196,21 +191,33 @@ export def Popup(what: list<any>, options: any = {})
 		maxwidth: min([60, &columns - 5]),
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
+		focusfilter: false,
 		onselect: (item) => Nop(item),
 		oncomplete: (item) => Nop(item),
 	}
 	opts->extend(options)
-	winid = popup_menu([], opts)
+	# List box
 	items = what->copy()
+	hasIcon = false
 	for i in range(items->len())
-		if get(items[i], 'selected', false)
+		var item = items[i]
+		if type(item) ==# type('')
+			item = { label: item }
+			items[i] = item
+		endif
+		if get(item, 'selected', false)
 			cursorRow = i + 1
 		endif
-		hasIcon = hasIcon || items[i]->has_key('icon')
+		hasIcon = hasIcon || item->has_key('icon')
 	endfor
+	winid = popup_menu([], opts)
+	cursorRow = 1
 	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasIcon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	# Filter input box
+	filter = ''
+	filterVisible = opts.focusfilter
+	filterFocused = opts.focusfilter
 	hi link popselectFilter PMenu
 	hi link popselectCursor Cursor
 	filterWinId = popup_create('', { highlight: 'popselectFilter' })

@@ -172,11 +172,6 @@ export def Popup(a: list<any>, b: any = {})
 if a->len() < 1
 return
 endif
-lm = 1
-q = ''
-r = false
-s = false
-t = false
 ln = {
 zindex: 1,
 tabpage: -1,
@@ -184,20 +179,31 @@ maxheight: min([9, &lines - 2]),
 maxwidth: min([60, &columns - 5]),
 mapping: false,
 filter: (id, key) => C(id, key),
-onselect: (item) => A(item),
-oncomplete: (item) => A(item),
+focusfilter: false,
+onselect: (c) => A(c),
+oncomplete: (c) => A(c),
 }
 ln->extend(b)
-k = popup_menu([], ln)
 lk = a->copy()
+t = false
 for i in range(lk->len())
-if get(lk[i], 'selected', false)
+var c = lk[i]
+if type(c) ==# type('')
+c = { label: c }
+lk[i] = c
+endif
+if get(c, 'selected', false)
 lm = i + 1
 endif
-t = t || lk[i]->has_key('icon')
+t = t || c->has_key('icon')
 endfor
+k = popup_menu([], ln)
+lm = 1
 win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{t ? '.' : ''}/')
 win_execute(k, 'syntax match PMenuExtra /\t.*$/')
+q = ''
+r = ln.focusfilter
+s = ln.focusfilter
 hi link popselectFilter PMenu
 hi link popselectCursor Cursor
 o = popup_create('', { highlight: 'popselectFilter' })
