@@ -1,5 +1,7 @@
 vim9script
 
+silent! packadd nerdfont.vim
+
 var winid = 0
 var filterWinId = 0
 var filter = ''
@@ -14,7 +16,9 @@ var blinkTimer = 0
 var blink = false
 const ICON_TERM = "\uf489"
 const ICON_UNKNOWN = "\uea7b"
-const ICON_DIR = "📂"
+const ICON_DIR = "\ue5fe"
+const ICON_GIT = "\ue5fb"
+const ICON_DIRUP = "\uf062"
 const ICON_NO_NERDFONT = "💠"
 
 def Nop(item: any)
@@ -262,10 +266,21 @@ def RestoreCursor()
 	set t_ve&
 enddef
 
-def NerdFont(path: string): string
+def NerdFont(path: string, isDir: bool = false): string
+	if isDir
+		if path ==# '..'
+			return ICON_DIRUP
+		elseif path->fnamemodify(':t') ==# '.git'
+			return ICON_GIT
+		else
+			return ICON_DIR
+		endif
+	endif
 	try
-		packadd nerdfont.vim
-		return nerdfont#find(expand(path))
+		const icon = nerdfont#find(expand(path))
+		if icon !=# ''
+			return icon
+		endif
 	catch
 		# nop
 	endtry
@@ -363,7 +378,7 @@ export def PopupDir(path: string = '')
 	const fullpath = path ==# '' ? expand('%:p:h') : path
 	if fullpath->fnamemodify(':h') !=# fullpath
 		add(items, {
-			icon: ICON_DIR,
+			icon: NerdFont('..', true),
 			label: '..',
 			tag: fullpath->fnamemodify(':h'),
 			isdir: true,
@@ -373,14 +388,14 @@ export def PopupDir(path: string = '')
 	for f in files
 		const isdir = f.type ==# 'dir' || f.type ==# 'linkd'
 		add(items, {
-			icon: isdir ? ICON_DIR : NerdFont(f.name),
+			icon: NerdFont(f.name, isdir),
 			label: f.name,
 			tag: $'{fullpath}/{f.name}',
 			isdir: isdir,
 		})
 	endfor
 	Popup(items, {
-		title: ICON_DIR .. fnamemodify(fullpath, ':t:r'),
+		title: NerdFont(fullpath, true) .. fnamemodify(fullpath, ':t:r'),
 		oncomplete: (item) => {
 			if item.isdir
 				PopupDir(item.tag)

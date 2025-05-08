@@ -1,4 +1,5 @@
 vim9script
+sil! packadd nerdfont.vim
 var k = 0
 var o = 0
 var q = ''
@@ -13,8 +14,10 @@ var lo = 0
 var lp = false
 const lq = "\uf489"
 const lr = "\uea7b"
-const lt = "📂"
-const mk = "💠"
+const lt = "\ue5fe"
+const mk = "\ue5fb"
+const ml = "\uf062"
+const mm = "💠"
 def A(a: any)
 enddef
 def B()
@@ -242,13 +245,24 @@ enddef
 def J()
 set t_ve&
 enddef
-def BA(a: string): string
+def BA(a: string, b: bool = false): string
+if b
+if a ==# '..'
+return ml
+elseif a->fnamemodify(':t') ==# '.git'
+return mk
+else
+return lt
+endif
+endif
 try
-packadd nerdfont.vim
-return nerdfont#find(expand(a))
+const c = nerdfont#find(expand(a))
+if c !=# ''
+return c
+endif
 catch
 endtry
-return mk
+return mm
 enddef
 export def PopupMRU()
 var a = []
@@ -338,7 +352,7 @@ var b = []
 const c = a ==# '' ? expand('%:p:h') : a
 if c->fnamemodify(':h') !=# c
 add(b, {
-icon: lt,
+icon: BA('..', true),
 label: '..',
 tag: c->fnamemodify(':h'),
 isdir: true,
@@ -348,14 +362,14 @@ const d = readdirex(c, '1', { sort: 'collate' })
 for f in d
 const e = f.type ==# 'dir' || f.type ==# 'linkd'
 add(b, {
-icon: e ? lt : BA(f.name),
+icon: BA(f.name, e),
 label: f.name,
 tag: $'{c}/{f.name}',
 isdir: e,
 })
 endfor
 Popup(b, {
-title: lt .. fnamemodify(c, ':t:r'),
+title: BA(c, true) .. fnamemodify(c, ':t:r'),
 oncomplete: (item) => {
 if item.isdir
 PopupDir(item.tag)
