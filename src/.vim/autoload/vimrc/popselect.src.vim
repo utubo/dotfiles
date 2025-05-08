@@ -18,20 +18,20 @@ const unknownicon = "\uea7b"
 def Update()
 	var text = []
 	if filter_visible
-		text += ['']
+		text += [''] # for filter input box
 	else
 		popup_hide(filterwinid)
 	endif
-	var n = 0
 	if filter_visible && filter !=# ''
 		filtered = matchfuzzy(items, filter, { text_cb: (i) => i.label })
 	else
 		filtered = items->copy()
 	endif
-	var offset = ' '
+	var n = 0
+	var offset = filtered->len() < 10 ? '' : ' '
 	for item in filtered
 		n += 1
-		if 10 <= n || filtered->len() < 10
+		if 10 <= n
 			offset = ''
 		endif
 		var icon = ''

@@ -20,16 +20,16 @@ a += ['']
 else
 popup_hide(o)
 endif
-var n = 0
 if r && q !=# ''
 ll = matchfuzzy(lk, q, { text_cb: (i) => i.label })
 else
 ll = lk->copy()
 endif
-var b = ' '
+var n = 0
+var b = ll->len() < 10 ? '' : ' '
 for c in ll
 n += 1
-if 10 <= n || ll->len() < 10
+if 10 <= n
 b = ''
 endif
 var d = ''
