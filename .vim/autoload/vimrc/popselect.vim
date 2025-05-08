@@ -67,7 +67,6 @@ zindex: 2,
 popup_show(o)
 popup_settext(o, f)
 endif
-redraw
 enddef
 def C(a: number, b: string): bool
 if b ==# "\<CursorHold>"

@@ -71,7 +71,6 @@ def Update()
 		popup_show(filterWinId)
 		popup_settext(filterWinId, filtertext)
 	endif
-	redraw
 enddef
 
 def Filter(id: number, key: string): bool
