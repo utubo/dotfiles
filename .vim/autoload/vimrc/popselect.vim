@@ -236,7 +236,7 @@ win_execute(o, $'syntax match PMenuKind /^\s*\d\+ {ll ? '.' : ''}/')
 win_execute(o, 'syntax match PMenuExtra /\t.*$/')
 win_execute(o, $'setlocal tabstop={g:popselect.tabstop}')
 r = ''
-if type(lo.filter_focused) ==# type('') && lo.filter_focused !=# 'keep'
+if type(lo.filter_focused) !=# type('') || lo.filter_focused !=# 'keep'
 lk = !!lo.filter_focused
 endif
 t = lk

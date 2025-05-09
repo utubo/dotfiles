@@ -254,7 +254,7 @@ export def Popup(what: list<any>, options: any = {})
 	win_execute(winid, $'setlocal tabstop={g:popselect.tabstop}')
 	# Filter input box
 	filter_text = ''
-	if type(opts.filter_focused) ==# type('') && opts.filter_focused !=# 'keep'
+	if type(opts.filter_focused) !=# type('') || opts.filter_focused !=# 'keep'
 		filter_focused = !!opts.filter_focused
 	endif
 	filter_visible = filter_focused
