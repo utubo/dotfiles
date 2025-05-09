@@ -4,12 +4,12 @@ silent! packadd nerdfont.vim
 
 var winid = 0
 var filterWinId = 0
-var filter = ''
+var filterText = ''
 var filterVisible = false
 var filterFocused = false
 var hasIcon = false
+var src = []
 var items = []
-var filtered = []
 var opts = {}
 var blinkTimer = 0
 var blink = false
@@ -40,19 +40,19 @@ def GetPos(): number
 enddef
 
 def Item(): any
-	return filtered[GetPos() - 1]
+	return items[GetPos() - 1]
 enddef
 
 def Update()
 	var text = []
-	if filterVisible && filter !=# ''
-		filtered = matchfuzzy(items, filter, { text_cb: (i) => i.label })
+	if filterVisible && filterText !=# ''
+		items = matchfuzzy(src, filterText, { text_cb: (i) => i.label })
 	else
-		filtered = items->copy()
+		items = src->copy()
 	endif
 	var n = 0
-	var offset = filtered->len() < 10 ? '' : ' '
-	for item in filtered
+	var offset = items->len() < 10 ? '' : ' '
+	for item in items
 		n += 1
 		if 10 <= n
 			offset = ''
@@ -73,7 +73,7 @@ def Update()
 	if filterVisible
 		popup_setoptions(winid, {
 			padding: [!text ? 0 : 1, 1, 0, 1],
-			cursorline: !!filtered,
+			cursorline: !!items,
 		})
 		var cursor = ''
 		if filterFocused
@@ -82,7 +82,7 @@ def Update()
 		else
 			hi link popselectFilter PMenuExtra
 		endif
-		const filtertext = $'Filter:{filter}{cursor}'
+		const filtertext = $'Filter:{filterText}{cursor}'
 		const p = popup_getpos(winid)
 		const width = max([p.core_width, strdisplaywidth(filtertext)])
 		popup_move(winid, { minwidth: width })
@@ -119,12 +119,12 @@ def Filter(id: number, key: string): bool
 		if key ==# "\<Tab>"
 			filterFocused = false
 		elseif key ==# "\<BS>"
-			filter = filter->substitute('.$', '', '')
+			filterText = filterText->substitute('.$', '', '')
 		elseif match(key, '^\p$') ==# -1
 			Close()
 			return true
 		else
-			filter ..= key
+			filterText ..= key
 			Select(1)
 		endif
 		Update()
@@ -160,13 +160,13 @@ def Filter(id: number, key: string): bool
 enddef
 
 def Delete(item: any)
-	items->remove(
-		(items) -> indexof((_, v) => v.label ==# item.label && v.tag ==# item.tag)
+	src->remove(
+		(src) -> indexof((_, v) => v.label ==# item.label && v.tag ==# item.tag)
 	)
-	for i in range(items->len())
-		items[i].index = i + 1
+	for i in range(src->len())
+		src[i].index = i + 1
 	endfor
-	if items->len() < 1
+	if src->len() < 1
 		Close()
 	else
 		Update()
@@ -189,7 +189,7 @@ def Move(key: any)
 	var p = GetPos()
 	if k ==# 'k' && p <= 1
 		k = 'G'
-	elseif k ==# 'g' || k ==# 'j' && filtered->len() <= p
+	elseif k ==# 'g' || k ==# 'j' && items->len() <= p
 		k = 'gg'
 	endif
 	win_execute(winid, $'normal! {k}')
@@ -197,7 +197,7 @@ def Move(key: any)
 enddef
 
 def Complete()
-	if filtered->len() < 1
+	if items->len() < 1
 		return
 	endif
 	const item = Item()
@@ -206,7 +206,7 @@ def Complete()
 enddef
 
 def OnSelect()
-	if filtered->len() < 1
+	if items->len() < 1
 		return
 	endif
 	opts.onselect(Item())
@@ -237,12 +237,12 @@ export def Popup(what: list<any>, options: any = {})
 	# List box
 	var selectedIndex = 1
 	hasIcon = false
-	items = what->copy()
-	for i in range(items->len())
-		var item = items[i]
+	src = what->copy()
+	for i in range(src->len())
+		var item = src[i]
 		if type(item) ==# type('')
 			item = { label: item }
-			items[i] = item
+			src[i] = item
 		endif
 		if get(item, 'selected', false)
 			selectedIndex = i + 1
@@ -255,7 +255,7 @@ export def Popup(what: list<any>, options: any = {})
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	win_execute(winid, $'setlocal tabstop={g:popselect.tabstop}')
 	# Filter input box
-	filter = ''
+	filterText = ''
 	filterVisible = opts.focusfilter
 	filterFocused = opts.focusfilter
 	hi link popselectFilter PMenu
