@@ -14,8 +14,8 @@ var lq = false
 var lr = {
 maxwidth: 60,
 maxheight: 9,
-tabstop: 2,
 colwidth: 18,
+tabstop: 2,
 icon: {
 term: "\uf489",
 unknown: "\uea7b",
@@ -51,12 +51,13 @@ var d = ''
 if ll
 d = !c.icon ? g:popselect.icon.unknown : c.icon
 endif
-var e = c.label->split("\<Tab>")
-if e[0]->strdisplaywidth() < g:popselect.colwidth
-e[0] = (e[0] .. repeat(' ', g:popselect.colwidth))
+var e = c.label->trim()
+if e->strdisplaywidth() < g:popselect.colwidth
+e = (e .. repeat(' ', g:popselect.colwidth))
 ->matchstr($'.*\%{g:popselect.colwidth}v')
 endif
-a += [$'{b}{n} {d}{e->join("\<Tab>")->trim()}']
+var f = get(c, 'extra', '')->trim()
+a += [$'{b}{n} {d}{[e, f]->join("\<Tab>")}']
 endfor
 popup_settext(o, a)
 if t
@@ -64,26 +65,26 @@ popup_setoptions(o, {
 padding: [!a ? 0 : 1, 1, 0, 1],
 cursorline: !!ln,
 })
-var f = ''
+var h = ''
 if lk
 hi link popselectFilter PMenu
-f = ' '
+h = ' '
 else
 hi link popselectFilter PMenuExtra
 endif
-const h = $'Filter:{r}{f}'
+const j = $'Filter:{r}{h}'
 const p = popup_getpos(o)
-const j = max([p.core_width, strdisplaywidth(h)])
-popup_move(o, { minwidth: j })
+const lt = max([p.core_width, strdisplaywidth(j)])
+popup_move(o, { minwidth: lt })
 popup_move(q, {
 col: p.core_col,
 line: p.core_line - (!a ? 0 : 1),
-maxwidth: j,
-minwidth: j,
+maxwidth: lt,
+minwidth: lt,
 zindex: 2,
 })
 popup_show(q)
-popup_settext(q, h)
+popup_settext(q, j)
 else
 popup_setoptions(o, { padding: [0, 1, 0, 1] })
 popup_hide(q)
@@ -300,8 +301,12 @@ export def PopupMRU()
 var a = []
 for f in v:oldfiles
 if filereadable(expand(f))
-const b = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
-add(a, { icon: BC(f), label: b, tag: f })
+add(a, {
+icon: BC(f),
+label: fnamemodify(f, ':t'),
+extra: f->fnamemodify(':p'),
+tag: f
+})
 endif
 endfor
 Popup(a, {
@@ -327,17 +332,18 @@ endif
 const e = str2nr(m[1])
 var f = m[3]
 var h = ''
+var i = ''
 if m[2][2] =~# '[RF?]'
-h = g:popselect.icon.term
+i = g:popselect.icon.term
 f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
 else
-const i = bufname(e)->fnamemodify(':p')
-h = BC(i)
-f = $"{fnamemodify(f, ':t')}\<Tab>{i}"
+h = bufname(e)->fnamemodify(':p')
+i = BC(h)
+f = fnamemodify(f, ':t')
 endif
 const j = m[2][0] ==# '%'
-add(a, { icon: h, label: f, tag: e, selected: j })
+add(a, { icon: i, label: f, extra: h, tag: e, selected: j })
 endfor
 Popup(a, {
 title: 'Buffers',

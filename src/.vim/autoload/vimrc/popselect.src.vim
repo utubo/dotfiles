@@ -17,8 +17,8 @@ var blink = false
 var defaultOpt = {
 	maxwidth: 60,
 	maxheight: 9,
-	tabstop: 2,
 	colwidth: 18,
+	tabstop: 2,
 	icon: {
 		term: "\uf489",
 		unknown: "\uea7b",
@@ -59,12 +59,13 @@ def Update()
 		if hasIcon
 			icon = !item.icon ? g:popselect.icon.unknown : item.icon
 		endif
-		var cols = item.label->split("\<Tab>")
-		if cols[0]->strdisplaywidth() < g:popselect.colwidth
-			cols[0] = (cols[0] .. repeat(' ', g:popselect.colwidth))
+		var label = item.label->trim()
+		if label->strdisplaywidth() < g:popselect.colwidth
+			label = (label .. repeat(' ', g:popselect.colwidth))
 				->matchstr($'.*\%{g:popselect.colwidth}v')
 		endif
-		text += [$'{offset}{n} {icon}{cols->join("\<Tab>")->trim()}']
+		var extra = get(item, 'extra', '')->trim()
+		text += [$'{offset}{n} {icon}{[label, extra]->join("\<Tab>")}']
 	endfor
 	popup_settext(winid, text)
 	if filterVisible
@@ -326,8 +327,12 @@ export def PopupMRU()
 	var items = []
 	for f in v:oldfiles
 		if filereadable(expand(f))
-			const label = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
-			add(items, { icon: NerdFont(f), label: label, tag: f })
+			add(items, {
+				icon: NerdFont(f),
+				label: fnamemodify(f, ':t'),
+				extra: f->fnamemodify(':p'),
+				tag: f
+			})
 		endif
 	endfor
 	Popup(items, {
@@ -353,18 +358,19 @@ export def PopupBufList()
 		endif
 		const nr = str2nr(m[1])
 		var name = m[3]
+		var path = ''
 		var icon = ''
 		if m[2][2] =~# '[RF?]'
 			icon = g:popselect.icon.term
 			name = term_getline(nr, '.')
 				->substitute('\s*[%#>$]\s*$', '', '')
 		else
-			const path = bufname(nr)->fnamemodify(':p')
+			path = bufname(nr)->fnamemodify(':p')
 			icon = NerdFont(path)
-			name = $"{fnamemodify(name, ':t')}\<Tab>{path}"
+			name = fnamemodify(name, ':t')
 		endif
 		const current = m[2][0] ==# '%'
-		add(bufs, { icon: icon, label: name, tag: nr, selected: current })
+		add(bufs, { icon: icon, label: name, extra: path, tag: nr, selected: current })
 	endfor
 	Popup(bufs, {
 		title: 'Buffers',
