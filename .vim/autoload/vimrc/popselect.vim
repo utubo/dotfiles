@@ -18,13 +18,11 @@ maxwidth: 60,
 maxheight: 9,
 colwidth: 18,
 tabstop: 2,
-icon: {
-term: "\uf489",
-unknown: "\uea7b",
-diropen: "\ue5fe",
-dirgit: "\ue5fb",
-dirup: "\uf062",
-}
+icon_term: "\uf489",
+icon_unknown: "\uea7b",
+icon_diropen: "\ue5fe",
+icon_dirgit: "\ue5fb",
+icon_dirup: "\uf062",
 }
 g:popselect = mk->extend(get(g:, 'popselect', {}))
 def A(a: any)
@@ -51,7 +49,7 @@ b = ''
 endif
 var d = ''
 if ll
-d = !c.icon ? g:popselect.icon.unknown : c.icon
+d = !c.icon ? g:popselect.icon_unknown : c.icon
 endif
 var e = c.label->trim()
 if e->strdisplaywidth() < g:popselect.colwidth
@@ -287,11 +285,11 @@ enddef
 def BC(a: string, b: bool = false): string
 if b
 if a ==# '..'
-return g:popselect.icon.dirup
+return g:popselect.icon_dirup
 elseif a->fnamemodify(':t') ==# '.git'
-return g:popselect.icon.dirgit
+return g:popselect.icon_dirgit
 else
-return g:popselect.icon.diropen
+return g:popselect.icon_diropen
 endif
 endif
 try
@@ -301,7 +299,7 @@ return c
 endif
 catch
 endtry
-return g:popselect.icon.unknown
+return g:popselect.icon_unknown
 enddef
 export def PopupMRU()
 var a = []
@@ -340,7 +338,7 @@ var f = m[3]
 var h = ''
 var i = ''
 if m[2][2] =~# '[RF?]'
-i = g:popselect.icon.term
+i = g:popselect.icon_term
 f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
 else
@@ -373,7 +371,7 @@ var ml = bufname(b)
 if !ml
 ml = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-ml = g:popselect.icon.term .. term_getline(b, '.')->trim()
+ml = g:popselect.icon_term .. term_getline(b, '.')->trim()
 else
 ml = ml->pathshorten()
 endif

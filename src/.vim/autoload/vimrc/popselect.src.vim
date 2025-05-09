@@ -3,33 +3,31 @@ vim9script
 silent! packadd nerdfont.vim
 
 var winid = 0
-var filterWinId = 0
-var filterText = ''
-var filterVisible = false
-var filterFocused = false
-var hasIcon = false
+var filter_winid = 0
+var filter_text = ''
+var filter_visible = false
+var filter_focused = false
+var has_icon = false
 var src = []
 var items = []
 var opts = {}
-var blinkTimer = 0
+var blink_timer = 0
 var blink = false
 var hlcur = []
-var hlPopSelectCursor = []
+var hl_popselect_cursor = []
 
-var defaultOpt = {
+var defaultSettings = {
 	maxwidth: 60,
 	maxheight: 9,
 	colwidth: 18,
 	tabstop: 2,
-	icon: {
-		term: "\uf489",
-		unknown: "\uea7b",
-		diropen: "\ue5fe",
-		dirgit: "\ue5fb",
-		dirup: "\uf062",
-	}
+	icon_term: "\uf489",
+	icon_unknown: "\uea7b",
+	icon_diropen: "\ue5fe",
+	icon_dirgit: "\ue5fb",
+	icon_dirup: "\uf062",
 }
-g:popselect = defaultOpt->extend(get(g:, 'popselect', {}))
+g:popselect = defaultSettings->extend(get(g:, 'popselect', {}))
 
 def Nop(item: any)
 	# nop
@@ -45,8 +43,8 @@ enddef
 
 def Update()
 	var text = []
-	if filterVisible && filterText !=# ''
-		items = matchfuzzy(src, filterText, { text_cb: (i) => i.label })
+	if filter_visible && filter_text !=# ''
+		items = matchfuzzy(src, filter_text, { text_cb: (i) => i.label })
 	else
 		items = src->copy()
 	endif
@@ -58,8 +56,8 @@ def Update()
 			offset = ''
 		endif
 		var icon = ''
-		if hasIcon
-			icon = !item.icon ? g:popselect.icon.unknown : item.icon
+		if has_icon
+			icon = !item.icon ? g:popselect.icon_unknown : item.icon
 		endif
 		var label = item.label->trim()
 		if label->strdisplaywidth() < g:popselect.colwidth
@@ -70,34 +68,34 @@ def Update()
 		text += [$'{offset}{n} {icon}{[label, extra]->join("\<Tab>")}']
 	endfor
 	popup_settext(winid, text)
-	if filterVisible
+	if filter_visible
 		popup_setoptions(winid, {
 			padding: [!text ? 0 : 1, 1, 0, 1],
 			cursorline: !!items,
 		})
 		var cursor = ''
-		if filterFocused
+		if filter_focused
 			hi link popselectFilter PMenu
 			cursor = ' '
 		else
 			hi link popselectFilter PMenuExtra
 		endif
-		const filtertext = $'Filter:{filterText}{cursor}'
+		const filtertext = $'Filter:{filter_text}{cursor}'
 		const p = popup_getpos(winid)
 		const width = max([p.core_width, strdisplaywidth(filtertext)])
 		popup_move(winid, { minwidth: width })
-		popup_move(filterWinId, {
+		popup_move(filter_winid, {
 		   col: p.core_col,
 		   line: p.core_line - (!text ? 0 : 1),
 		   maxwidth: width,
 		   minwidth: width,
 			zindex: 2,
 		})
-		popup_show(filterWinId)
-		popup_settext(filterWinId, filtertext)
+		popup_show(filter_winid)
+		popup_settext(filter_winid, filtertext)
 	else
 		popup_setoptions(winid, { padding: [0, 1, 0, 1] })
-		popup_hide(filterWinId)
+		popup_hide(filter_winid)
 	endif
 enddef
 
@@ -115,16 +113,16 @@ def Filter(id: number, key: string): bool
 		Move(key)
 		return true
 	endif
-	if filterFocused
+	if filter_focused
 		if key ==# "\<Tab>"
-			filterFocused = false
+			filter_focused = false
 		elseif key ==# "\<BS>"
-			filterText = filterText->substitute('.$', '', '')
+			filter_text = filter_text->substitute('.$', '', '')
 		elseif match(key, '^\p$') ==# -1
 			Close()
 			return true
 		else
-			filterText ..= key
+			filter_text ..= key
 			Select(1)
 		endif
 		Update()
@@ -140,8 +138,8 @@ def Filter(id: number, key: string): bool
 		return true
 	endif
 	if stridx("f\<Tab>", key) !=# -1
-		filterVisible = !filterVisible || key ==# "\<Tab>"
-		filterFocused = filterVisible
+		filter_visible = !filter_visible || key ==# "\<Tab>"
+		filter_focused = filter_visible
 		Update()
 	elseif stridx('njbtpkBTgG', key) !=# -1
 		Move(key)
@@ -236,7 +234,7 @@ export def Popup(what: list<any>, options: any = {})
 	opts->extend(options)
 	# List box
 	var selectedIndex = 1
-	hasIcon = false
+	has_icon = false
 	src = what->copy()
 	for i in range(src->len())
 		var item = src[i]
@@ -248,29 +246,29 @@ export def Popup(what: list<any>, options: any = {})
 			selectedIndex = i + 1
 		endif
 		item.index = i + 1
-		hasIcon = hasIcon || item->has_key('icon')
+		has_icon = has_icon || item->has_key('icon')
 	endfor
 	winid = popup_menu([], opts)
-	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+ {hasIcon ? '.' : ''}/')
+	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+ {has_icon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
 	win_execute(winid, $'setlocal tabstop={g:popselect.tabstop}')
 	# Filter input box
-	filterText = ''
-	filterVisible = opts.focusfilter
-	filterFocused = opts.focusfilter
+	filter_text = ''
+	filter_visible = opts.focusfilter
+	filter_focused = opts.focusfilter
 	hi link popselectFilter PMenu
-	filterWinId = popup_create('', { highlight: 'popselectFilter' })
+	filter_winid = popup_create('', { highlight: 'popselectFilter' })
 	augroup popselect
 		au!
 		au VimLeavePre * RestoreCursor()
 	augroup END
 	set t_ve=
 	hlcur = hlget('Cursor')
-	hlPopSelectCursor = [hlcur[0]->copy()->extend({ name: 'popselectCursor' })]
-	hlset(hlPopSelectCursor)
+	hl_popselect_cursor = [hlcur[0]->copy()->extend({ name: 'popselectCursor' })]
+	hlset(hl_popselect_cursor)
 	hi clear Cursor
-	win_execute(filterWinId, 'syntax match popselectCursor / $/')
-	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+	win_execute(filter_winid, 'syntax match popselectCursor / $/')
+	blink_timer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
 	# Show
 	Update()
 	win_gotoid(winid)
@@ -279,11 +277,11 @@ enddef
 
 export def Close()
 	RestoreCursor()
-	timer_stop(blinkTimer)
+	timer_stop(blink_timer)
 	popup_close(winid)
-	popup_close(filterWinId)
+	popup_close(filter_winid)
 	winid = 0
-	filterWinId = 0
+	filter_winid = 0
 	augroup popselect
 		au!
 	augroup END
@@ -300,7 +298,7 @@ export def BlinkCursor(timer: number)
 	if blink
 		hi clear popselectCursor
 	else
-		hlset(hlPopSelectCursor)
+		hlset(hl_popselect_cursor)
 	endif
 enddef
 
@@ -312,11 +310,11 @@ enddef
 def NerdFont(path: string, isDir: bool = false): string
 	if isDir
 		if path ==# '..'
-			return g:popselect.icon.dirup
+			return g:popselect.icon_dirup
 		elseif path->fnamemodify(':t') ==# '.git'
-			return g:popselect.icon.dirgit
+			return g:popselect.icon_dirgit
 		else
-			return g:popselect.icon.diropen
+			return g:popselect.icon_diropen
 		endif
 	endif
 	try
@@ -327,7 +325,7 @@ def NerdFont(path: string, isDir: bool = false): string
 	catch
 		# nop
 	endtry
-	return g:popselect.icon.unknown
+	return g:popselect.icon_unknown
 enddef
 
 export def PopupMRU()
@@ -368,7 +366,7 @@ export def PopupBufList()
 		var path = ''
 		var icon = ''
 		if m[2][2] =~# '[RF?]'
-			icon = g:popselect.icon.term
+			icon = g:popselect.icon_term
 			name = term_getline(nr, '.')
 				->substitute('\s*[%#>$]\s*$', '', '')
 		else
@@ -402,7 +400,7 @@ export def PopupTabList()
 			if !name
 				name = '[No Name]'
 			elseif getbufvar(b, '&buftype') ==# 'terminal'
-				name = g:popselect.icon.term .. term_getline(b, '.')->trim()
+				name = g:popselect.icon_term .. term_getline(b, '.')->trim()
 			else
 				name = name->pathshorten()
 			endif
