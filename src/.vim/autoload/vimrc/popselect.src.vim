@@ -17,6 +17,8 @@ var blink = false
 var defaultOpt = {
 	maxwidth: 60,
 	maxheight: 9,
+	tabstop: 2,
+	colwidth: 18,
 	icon: {
 		term: "\uf489",
 		unknown: "\uea7b",
@@ -57,7 +59,12 @@ def Update()
 		if hasIcon
 			icon = !item.icon ? g:popselect.icon.unknown : item.icon
 		endif
-		text += [$'{offset}{n}:{icon}{item.label->trim()}']
+		var cols = item.label->split("\<Tab>")
+		if cols[0]->strdisplaywidth() < g:popselect.colwidth
+			cols[0] = (cols[0] .. repeat(' ', g:popselect.colwidth))
+				->matchstr($'.*\%{g:popselect.colwidth}v')
+		endif
+		text += [$'{offset}{n} {icon}{cols->join("\<Tab>")->trim()}']
 	endfor
 	popup_settext(winid, text)
 	if filterVisible
@@ -241,8 +248,9 @@ export def Popup(what: list<any>, options: any = {})
 		hasIcon = hasIcon || item->has_key('icon')
 	endfor
 	winid = popup_menu([], opts)
-	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+:{hasIcon ? '.' : ''}/')
+	win_execute(winid, $'syntax match PMenuKind /^\s*\d\+ {hasIcon ? '.' : ''}/')
 	win_execute(winid, 'syntax match PMenuExtra /\t.*$/')
+	win_execute(winid, $'setlocal tabstop={g:popselect.tabstop}')
 	# Filter input box
 	filter = ''
 	filterVisible = opts.focusfilter

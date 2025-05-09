@@ -14,6 +14,8 @@ var lq = false
 var lr = {
 maxwidth: 60,
 maxheight: 9,
+tabstop: 2,
+colwidth: 18,
 icon: {
 term: "\uf489",
 unknown: "\uea7b",
@@ -49,7 +51,12 @@ var d = ''
 if ll
 d = !c.icon ? g:popselect.icon.unknown : c.icon
 endif
-a += [$'{b}{n}:{d}{c.label->trim()}']
+var e = c.label->split("\<Tab>")
+if e[0]->strdisplaywidth() < g:popselect.colwidth
+e[0] = (e[0] .. repeat(' ', g:popselect.colwidth))
+->matchstr($'.*\%{g:popselect.colwidth}v')
+endif
+a += [$'{b}{n} {d}{e->join("\<Tab>")->trim()}']
 endfor
 popup_settext(o, a)
 if t
@@ -57,26 +64,26 @@ popup_setoptions(o, {
 padding: [!a ? 0 : 1, 1, 0, 1],
 cursorline: !!ln,
 })
-var e = ''
+var f = ''
 if lk
 hi link popselectFilter PMenu
-e = ' '
+f = ' '
 else
 hi link popselectFilter PMenuExtra
 endif
-const f = $'Filter:{r}{e}'
+const h = $'Filter:{r}{f}'
 const p = popup_getpos(o)
-const h = max([p.core_width, strdisplaywidth(f)])
-popup_move(o, { minwidth: h })
+const j = max([p.core_width, strdisplaywidth(h)])
+popup_move(o, { minwidth: j })
 popup_move(q, {
 col: p.core_col,
 line: p.core_line - (!a ? 0 : 1),
-maxwidth: h,
-minwidth: h,
+maxwidth: j,
+minwidth: j,
 zindex: 2,
 })
 popup_show(q)
-popup_settext(q, f)
+popup_settext(q, h)
 else
 popup_setoptions(o, { padding: [0, 1, 0, 1] })
 popup_hide(q)
@@ -224,8 +231,9 @@ d.index = i + 1
 ll = ll || d->has_key('icon')
 endfor
 o = popup_menu([], lo)
-win_execute(o, $'syntax match PMenuKind /^\s*\d\+:{ll ? '.' : ''}/')
+win_execute(o, $'syntax match PMenuKind /^\s*\d\+ {ll ? '.' : ''}/')
 win_execute(o, 'syntax match PMenuExtra /\t.*$/')
+win_execute(o, $'setlocal tabstop={g:popselect.tabstop}')
 r = ''
 t = lo.focusfilter
 lk = lo.focusfilter
