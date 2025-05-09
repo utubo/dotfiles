@@ -13,6 +13,8 @@ var filtered = []
 var opts = {}
 var blinkTimer = 0
 var blink = false
+var hlcur = []
+var hlPopSelectCursor = []
 
 var defaultOpt = {
 	maxwidth: 60,
@@ -257,15 +259,19 @@ export def Popup(what: list<any>, options: any = {})
 	filterVisible = opts.focusfilter
 	filterFocused = opts.focusfilter
 	hi link popselectFilter PMenu
-	hi link popselectCursor Cursor
 	filterWinId = popup_create('', { highlight: 'popselectFilter' })
-	win_execute(filterWinId, 'syntax match popselectCursor / $/')
 	augroup popselect
 		au!
 		au VimLeavePre * RestoreCursor()
 	augroup END
 	set t_ve=
+	hlcur = hlget('Cursor')
+	hlPopSelectCursor = [hlcur[0]->copy()->extend({ name: 'popselectCursor' })]
+	hlset(hlPopSelectCursor)
+	hi clear Cursor
+	win_execute(filterWinId, 'syntax match popselectCursor / $/')
 	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
+	# Show
 	Update()
 	win_gotoid(winid)
 	Select(selectedIndex)
@@ -294,12 +300,13 @@ export def BlinkCursor(timer: number)
 	if blink
 		hi clear popselectCursor
 	else
-		hi link popselectCursor Cursor
+		hlset(hlPopSelectCursor)
 	endif
 enddef
 
 def RestoreCursor()
 	set t_ve&
+	hlset(hlcur)
 enddef
 
 def NerdFont(path: string, isDir: bool = false): string

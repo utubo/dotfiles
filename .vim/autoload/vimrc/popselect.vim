@@ -11,7 +11,9 @@ var ln = []
 var lo = {}
 var lp = 0
 var lq = false
-var lr = {
+var lr = []
+var lt = []
+var mk = {
 maxwidth: 60,
 maxheight: 9,
 colwidth: 18,
@@ -24,7 +26,7 @@ dirgit: "\ue5fb",
 dirup: "\uf062",
 }
 }
-g:popselect = lr->extend(get(g:, 'popselect', {}))
+g:popselect = mk->extend(get(g:, 'popselect', {}))
 def A(a: any)
 enddef
 def B(): number
@@ -74,13 +76,13 @@ hi link popselectFilter PMenuExtra
 endif
 const j = $'Filter:{r}{h}'
 const p = popup_getpos(o)
-const lt = max([p.core_width, strdisplaywidth(j)])
-popup_move(o, { minwidth: lt })
+const ml = max([p.core_width, strdisplaywidth(j)])
+popup_move(o, { minwidth: ml })
 popup_move(q, {
 col: p.core_col,
 line: p.core_line - (!a ? 0 : 1),
-maxwidth: lt,
-minwidth: lt,
+maxwidth: ml,
+minwidth: ml,
 zindex: 2,
 })
 popup_show(q)
@@ -239,14 +241,17 @@ r = ''
 t = lo.focusfilter
 lk = lo.focusfilter
 hi link popselectFilter PMenu
-hi link popselectCursor Cursor
 q = popup_create('', { highlight: 'popselectFilter' })
-win_execute(q, 'syntax match popselectCursor / $/')
 aug popselect
 au!
 au VimLeavePre * BB()
 aug END
 set t_ve=
+lr = hlget('Cursor')
+lt = [lr[0]->copy()->extend({ name: 'popselectCursor' })]
+hlset(lt)
+hi clear Cursor
+win_execute(q, 'syntax match popselectCursor / $/')
 lp = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
 D()
 win_gotoid(o)
@@ -272,11 +277,12 @@ lq = !lq
 if lq
 hi clear popselectCursor
 else
-hi link popselectCursor Cursor
+hlset(lt)
 endif
 enddef
 def BB()
 set t_ve&
+hlset(lr)
 enddef
 def BC(a: string, b: bool = false): string
 if b
@@ -363,17 +369,17 @@ var j = []
 var i = -1
 for b in f
 i += 1
-var lt = bufname(b)
-if !lt
-lt = '[No Name]'
+var ml = bufname(b)
+if !ml
+ml = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-lt = g:popselect.icon.term .. term_getline(b, '.')->trim()
+ml = g:popselect.icon.term .. term_getline(b, '.')->trim()
 else
-lt = lt->pathshorten()
+ml = ml->pathshorten()
 endif
-const l = len(lt)
-if j->index(lt) ==# -1
-j += [lt]
+const l = len(ml)
+if j->index(ml) ==# -1
+j += [ml]
 endif
 endfor
 e ..= j->join(', ')
