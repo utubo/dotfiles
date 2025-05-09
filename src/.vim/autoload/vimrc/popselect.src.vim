@@ -13,7 +13,7 @@ var items = []
 var opts = {}
 var blink_timer = 0
 var blink = false
-var hlcur = []
+var hl_cursor = []
 var hl_popselect_cursor = []
 
 var defaultSettings = {
@@ -263,8 +263,8 @@ export def Popup(what: list<any>, options: any = {})
 		au VimLeavePre * RestoreCursor()
 	augroup END
 	set t_ve=
-	hlcur = hlget('Cursor')
-	hl_popselect_cursor = [hlcur[0]->copy()->extend({ name: 'popselectCursor' })]
+	hl_cursor = hlget('Cursor')
+	hl_popselect_cursor = [hl_cursor[0]->copy()->extend({ name: 'popselectCursor' })]
 	hlset(hl_popselect_cursor)
 	hi clear Cursor
 	win_execute(filter_winid, 'syntax match popselectCursor / $/')
@@ -304,7 +304,7 @@ enddef
 
 def RestoreCursor()
 	set t_ve&
-	hlset(hlcur)
+	hlset(hl_cursor)
 enddef
 
 def NerdFont(path: string, isDir: bool = false): string
