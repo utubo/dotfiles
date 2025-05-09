@@ -134,7 +134,6 @@ Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
-nm <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
 Enable g:rainbow_active
@@ -277,10 +276,11 @@ echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
-nn <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
-nn <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
-nn <F3> <Cmd>call vimrc#popselect#PopupBufList()<CR>
-nn <F4> <Cmd>call vimrc#popselect#PopupTabList()<CR>
+nn <F1> <ScriptCmd>vimrc#popselect#PopupDir()<CR>
+nn <F2> <ScriptCmd>vimrc#popselect#PopupMRU()<CR>
+nn <F3> <ScriptCmd>vimrc#popselect#PopupBufList()<CR>
+nn <F4> <ScriptCmd>vimrc#popselect#PopupTabList()<CR>
+nn <C-p> <ScriptCmd>vimrc#popselect#PopupMruAndProjectFiles()<CR>
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
 def F(a: string)
 const b = bufnr()

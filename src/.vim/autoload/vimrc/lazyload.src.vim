@@ -204,7 +204,6 @@ vimrc#lsp#LazyLoad()
 
 # 遅延読み込みもの {{{
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
-nmap <C-p> <ScriptCmd>vimrc#ctrlp#LazyLoad()<CR><C-p>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
 # }}}
@@ -403,10 +402,11 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<
 
 # ------------------------------------------------------
 # ポップアップで色々選択 {{{
-nnoremap <F1> <Cmd>call vimrc#popselect#PopupDir()<CR>
-nnoremap <F2> <Cmd>call vimrc#popselect#PopupMRU()<CR>
-nnoremap <F3> <Cmd>call vimrc#popselect#PopupBufList()<CR>
-nnoremap <F4> <Cmd>call vimrc#popselect#PopupTabList()<CR>
+nnoremap <F1> <ScriptCmd>vimrc#popselect#PopupDir()<CR>
+nnoremap <F2> <ScriptCmd>vimrc#popselect#PopupMRU()<CR>
+nnoremap <F3> <ScriptCmd>vimrc#popselect#PopupBufList()<CR>
+nnoremap <F4> <ScriptCmd>vimrc#popselect#PopupTabList()<CR>
+nnoremap <C-p> <ScriptCmd>vimrc#popselect#PopupMruAndProjectFiles()<CR>
 
 # タブ移動したときだけリストを表示
 Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>

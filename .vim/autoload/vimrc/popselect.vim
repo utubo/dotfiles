@@ -23,6 +23,25 @@ icon_unknown: "\uea7b",
 icon_diropen: "\ue5fe",
 icon_dirgit: "\ue5fb",
 icon_dirup: "\uf062",
+projectfiles_ignore_dirs: [
+'node_modules',
+'.git',
+'dist',
+'build',
+'.next',
+'.cache',
+'.venv',
+'.out',
+],
+projectfiles_root_anchor: [
+'.git',
+'package.json',
+'pom.xml',
+'build.gradle',
+'README.md',
+],
+projectfiles_depth: 5,
+projectfiles_limit: 300,
 }
 g:popselect = mk->extend(get(g:, 'popselect', {}))
 def A(a: any)
@@ -303,11 +322,11 @@ catch
 endtry
 return g:popselect.icon_unknown
 enddef
-export def PopupMRU()
-var a = []
-for f in v:oldfiles
+export def PopupFiles(a: list<string>, b: any = {})
+var c = []
+for f in a
 if filereadable(expand(f))
-add(a, {
+add(c, {
 icon: BC(f),
 label: fnamemodify(f, ':t'),
 extra: f->fnamemodify(':p'),
@@ -315,8 +334,7 @@ tag: f
 })
 endif
 endfor
-Popup(a, {
-title: 'MRU',
+Popup(c, {
 oncomplete: (item) => {
 exe $'edit {item.tag}'
 },
@@ -324,7 +342,10 @@ onkey_t: (item) => {
 exe $'tabedit {item.tag}'
 vimrc#popselect#Close()
 }
-})
+}->extend(b))
+enddef
+export def PopupMRU()
+PopupFiles(v:oldfiles, { title: 'MRU' })
 enddef
 export def PopupBufList()
 var a = []
@@ -427,4 +448,62 @@ exe $'tabedit {item.tag}'
 vimrc#popselect#Close()
 }
 })
+enddef
+def BD(a: string, b: number, c: number): list<string>
+var d = []
+var e = []
+var l = c
+const h = readdirex(a, '1', { sort: 'collate' })
+for f in h
+l -= 1
+if l <= 0
+break
+endif
+const i = $'{a}/{f.name}'
+if f.type ==# 'dir' || f.type ==# 'linkd'
+if index(g:popselect.projectfiles_ignore_dirs, f.name) !=# -1
+elseif 0 < b
+e += BD(i, b - 1, l)
+endif
+else
+add(d, i)
+endif
+endfor
+return d + e
+enddef
+export def GetProjectFiles(): list<string>
+var b = false
+var c = expand('%:p:h')
+var d = 0
+while true
+d += 1
+for a in g:popselect.projectfiles_root_anchor
+if isdirectory($'{c}/{a}') || filereadable($'{c}/{a}')
+b = true
+break
+endif
+endfor
+if b
+break
+endif
+const e = fnamemodify(c, ':h')
+if c ==# e
+break
+else
+c = e
+endif
+endwhile
+if !b
+c = expand('%:p:h')
+d = 0
+endif
+return BD(
+c,
+g:popselect.projectfiles_depth + d,
+g:popselect.projectfiles_limit
+)
+enddef
+export def PopupMruAndProjectFiles()
+var a = v:oldfiles + GetProjectFiles()
+PopupFiles(a, { title: 'MRU + Project files', filter_focused: true })
 enddef
