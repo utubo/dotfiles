@@ -13,29 +13,30 @@ var filtered = []
 var opts = {}
 var blinkTimer = 0
 var blink = false
-const ICON_TERM = "\uf489"
-const ICON_UNKNOWN = "\uea7b"
-const ICON_DIR = "\ue5fe"
-const ICON_GIT = "\ue5fb"
-const ICON_DIRUP = "\uf062"
-const ICON_NO_NERDFONT = "💠"
-const MAX_WIDTH = 60
-const MAX_HEIGHT = 9
+
+var defaultOpt = {
+	maxwidth: 60,
+	maxheight: 9,
+	icon: {
+		term: "\uf489",
+		unknown: "\uea7b",
+		diropen: "\ue5fe",
+		dirgit: "\ue5fb",
+		dirup: "\uf062",
+	}
+}
+g:popselect = defaultOpt->extend(get(g:, 'popselect', {}))
 
 def Nop(item: any)
 	# nop
 enddef
 
 def GetPos(): number
-	return win_execute(winid, 'echo getcurpos()[1]')->trim()->str2nr()
+	return win_execute(winid, 'echon getcurpos()[1]')->str2nr()
 enddef
 
-def GetItem(index = 0): any
-	if index ==# 0
-		return filtered[GetPos() - 1]
-	else
-		return filtered[index - 1]
-	endif
+def Item(): any
+	return filtered[GetPos() - 1]
 enddef
 
 def Update()
@@ -54,7 +55,7 @@ def Update()
 		endif
 		var icon = ''
 		if hasIcon
-			icon = !item.icon ? ICON_UNKNOWN : item.icon
+			icon = !item.icon ? g:popselect.icon.unknown : item.icon
 		endif
 		text += [$'{offset}{n}:{icon}{item.label->trim()}']
 	endfor
@@ -125,7 +126,7 @@ def Filter(id: number, key: string): bool
 	endif
 	if stridx('qd', key) !=# -1 && opts->has_key('ondelete')
 		Execute('ondelete')
-		Delete(GetItem())
+		Delete(Item())
 		return true
 	endif
 	if stridx("f\<Tab>", key) !=# -1
@@ -170,12 +171,12 @@ enddef
 
 def Move(key: any)
 	var k = key
-	var p = GetPos()
 	if stridx('\<C-p>pBT', k) !=# -1
 		k = 'k'
 	elseif stridx("\<C-n>nbt", k) !=# -1
 		k = 'j'
 	endif
+	var p = GetPos()
 	if k ==# 'k' && p <= 1
 		k = 'G'
 	elseif k ==# 'g' || k ==# 'j' && filtered->len() <= p
@@ -189,7 +190,7 @@ def Complete()
 	if filtered->len() < 1
 		return
 	endif
-	const item = GetItem()
+	const item = Item()
 	Close()
 	opts.oncomplete(item)
 enddef
@@ -198,12 +199,12 @@ def OnSelect()
 	if filtered->len() < 1
 		return
 	endif
-	opts.onselect(GetItem())
+	opts.onselect(Item())
 enddef
 
 def Execute(name: string)
 	if opts->has_key(name)
-		funcref(opts[name], [GetItem()])()
+		funcref(opts[name], [Item()])()
 	endif
 enddef
 
@@ -214,8 +215,8 @@ export def Popup(what: list<any>, options: any = {})
 	opts = {
 		zindex: 1,
 		tabpage: -1,
-		maxheight: min([MAX_HEIGHT, &lines - 2]),
-		maxwidth: min([MAX_WIDTH, &columns - 5]),
+		maxheight: min([g:popselect.maxheight, &lines - 2]),
+		maxwidth: min([g:popselect.maxwidth, &columns - 5]),
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
 		focusfilter: false,
@@ -295,11 +296,11 @@ enddef
 def NerdFont(path: string, isDir: bool = false): string
 	if isDir
 		if path ==# '..'
-			return ICON_DIRUP
+			return g:popselect.icon.dirup
 		elseif path->fnamemodify(':t') ==# '.git'
-			return ICON_GIT
+			return g:popselect.icon.dirgit
 		else
-			return ICON_DIR
+			return g:popselect.icon.diropen
 		endif
 	endif
 	try
@@ -310,7 +311,7 @@ def NerdFont(path: string, isDir: bool = false): string
 	catch
 		# nop
 	endtry
-	return ICON_NO_NERDFONT
+	return g:popselect.icon.unknown
 enddef
 
 export def PopupMRU()
@@ -346,7 +347,7 @@ export def PopupBufList()
 		var name = m[3]
 		var icon = ''
 		if m[2][2] =~# '[RF?]'
-			icon = ICON_TERM
+			icon = g:popselect.icon.term
 			name = term_getline(nr, '.')
 				->substitute('\s*[%#>$]\s*$', '', '')
 		else
@@ -380,7 +381,7 @@ export def PopupTabList()
 			if !name
 				name = '[No Name]'
 			elseif getbufvar(b, '&buftype') ==# 'terminal'
-				name = ICON_TERM .. term_getline(b, '.')->trim()
+				name = g:popselect.icon.term .. term_getline(b, '.')->trim()
 			else
 				name = name->pathshorten()
 			endif

@@ -11,25 +11,25 @@ var ln = []
 var lo = {}
 var lp = 0
 var lq = false
-const lr = "\uf489"
-const lt = "\uea7b"
-const mk = "\ue5fe"
-const ml = "\ue5fb"
-const mm = "\uf062"
-const mn = "💠"
-const mo = 60
-const mp = 9
+var lr = {
+maxwidth: 60,
+maxheight: 9,
+icon: {
+term: "\uf489",
+unknown: "\uea7b",
+diropen: "\ue5fe",
+dirgit: "\ue5fb",
+dirup: "\uf062",
+}
+}
+g:popselect = lr->extend(get(g:, 'popselect', {}))
 def A(a: any)
 enddef
 def B(): number
-return win_execute(o, 'echo getcurpos()[1]')->trim()->str2nr()
+return win_execute(o, 'echon getcurpos()[1]')->str2nr()
 enddef
-def C(index = 0): any
-if index ==# 0
+def C(): any
 return ln[B() - 1]
-else
-return ln[index - 1]
-endif
 enddef
 def D()
 var a = []
@@ -47,7 +47,7 @@ b = ''
 endif
 var d = ''
 if ll
-d = !c.icon ? lt : c.icon
+d = !c.icon ? g:popselect.icon.unknown : c.icon
 endif
 a += [$'{b}{n}:{d}{c.label->trim()}']
 endfor
@@ -66,13 +66,13 @@ hi link popselectFilter PMenuExtra
 endif
 const f = $'Filter:{r}{e}'
 const p = popup_getpos(o)
-const g = max([p.core_width, strdisplaywidth(f)])
-popup_move(o, { minwidth: g })
+const h = max([p.core_width, strdisplaywidth(f)])
+popup_move(o, { minwidth: h })
 popup_move(q, {
 col: p.core_col,
 line: p.core_line - (!a ? 0 : 1),
-maxwidth: g,
-minwidth: g,
+maxwidth: h,
+minwidth: h,
 zindex: 2,
 })
 popup_show(q)
@@ -159,12 +159,12 @@ J()
 enddef
 def H(a: any)
 var k = a
-var p = B()
 if stridx('\<C-p>pBT', k) !=# -1
 k = 'k'
 elseif stridx("\<C-n>nbt", k) !=# -1
 k = 'j'
 endif
+var p = B()
 if k ==# 'k' && p <= 1
 k = 'G'
 elseif k ==# 'g' || k ==# 'j' && ln->len() <= p
@@ -199,8 +199,8 @@ endif
 lo = {
 zindex: 1,
 tabpage: -1,
-maxheight: min([mp, &lines - 2]),
-maxwidth: min([mo, &columns - 5]),
+maxheight: min([g:popselect.maxheight, &lines - 2]),
+maxwidth: min([g:popselect.maxwidth, &columns - 5]),
 mapping: false,
 filter: (id, key) => E(id, key),
 focusfilter: false,
@@ -272,11 +272,11 @@ enddef
 def BC(a: string, b: bool = false): string
 if b
 if a ==# '..'
-return mm
+return g:popselect.icon.dirup
 elseif a->fnamemodify(':t') ==# '.git'
-return ml
+return g:popselect.icon.dirgit
 else
-return mk
+return g:popselect.icon.diropen
 endif
 endif
 try
@@ -286,7 +286,7 @@ return c
 endif
 catch
 endtry
-return mn
+return g:popselect.icon.unknown
 enddef
 export def PopupMRU()
 var a = []
@@ -318,18 +318,18 @@ continue
 endif
 const e = str2nr(m[1])
 var f = m[3]
-var g = ''
+var h = ''
 if m[2][2] =~# '[RF?]'
-g = lr
+h = g:popselect.icon.term
 f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
 else
-const h = bufname(e)->fnamemodify(':p')
-g = BC(h)
-f = $"{fnamemodify(f, ':t')}\<Tab>{h}"
+const i = bufname(e)->fnamemodify(':p')
+h = BC(i)
+f = $"{fnamemodify(f, ':t')}\<Tab>{i}"
 endif
-const i = m[2][0] ==# '%'
-add(a, { icon: g, label: f, tag: e, selected: i })
+const j = m[2][0] ==# '%'
+add(a, { icon: h, label: f, tag: e, selected: j })
 endfor
 Popup(a, {
 title: 'Buffers',
@@ -343,26 +343,26 @@ const c = tabpagenr()
 for d in range(1, tabpagenr('$'))
 var e = ''
 var f = tabpagebuflist(d)
-const g = tabpagewinnr(d) - 1
-f = remove(f, g, g) + f
-var h = []
+const h = tabpagewinnr(d) - 1
+f = remove(f, h, h) + f
+var j = []
 var i = -1
 for b in f
 i += 1
-var j = bufname(b)
-if !j
-j = '[No Name]'
+var lt = bufname(b)
+if !lt
+lt = '[No Name]'
 elseif getbufvar(b, '&buftype') ==# 'terminal'
-j = lr .. term_getline(b, '.')->trim()
+lt = g:popselect.icon.term .. term_getline(b, '.')->trim()
 else
-j = j->pathshorten()
+lt = lt->pathshorten()
 endif
-const l = len(j)
-if h->index(j) ==# -1
-h += [j]
+const l = len(lt)
+if j->index(lt) ==# -1
+j += [lt]
 endif
 endfor
-e ..= h->join(', ')
+e ..= j->join(', ')
 add(a, { label: e, tag: d, selected: d ==# c })
 endfor
 Popup(a, {
