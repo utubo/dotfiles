@@ -10,7 +10,6 @@ var filterFocused = false
 var hasIcon = false
 var items = []
 var filtered = []
-var cursorRow = 0
 var opts = {}
 var blinkTimer = 0
 var blink = false
@@ -20,18 +19,27 @@ const ICON_DIR = "\ue5fe"
 const ICON_GIT = "\ue5fb"
 const ICON_DIRUP = "\uf062"
 const ICON_NO_NERDFONT = "💠"
+const MAX_WIDTH = 60
+const MAX_HEIGHT = 9
 
 def Nop(item: any)
 	# nop
 enddef
 
+def GetPos(): number
+	return win_execute(winid, 'echo getcurpos()[1]')->trim()->str2nr()
+enddef
+
+def GetItem(index = 0): any
+	if index ==# 0
+		return filtered[GetPos() - 1]
+	else
+		return filtered[index - 1]
+	endif
+enddef
+
 def Update()
 	var text = []
-	if filterVisible
-		text += [''] # for filter input box
-	else
-		popup_hide(filterWinId)
-	endif
 	if filterVisible && filter !=# ''
 		filtered = matchfuzzy(items, filter, { text_cb: (i) => i.label })
 	else
@@ -50,10 +58,12 @@ def Update()
 		endif
 		text += [$'{offset}{n}:{icon}{item.label->trim()}']
 	endfor
-	cursorRow = min([max([1, cursorRow]), filtered->len()])
 	popup_settext(winid, text)
-	win_execute(winid, $"normal! :{cursorRow + (filterVisible ? 1 : 0)}\<CR>")
 	if filterVisible
+		popup_setoptions(winid, {
+			padding: [!text ? 0 : 1, 1, 0, 1],
+			cursorline: !!filtered,
+		})
 		var cursor = ''
 		if filterFocused
 			hi link popselectFilter PMenu
@@ -67,13 +77,16 @@ def Update()
 		popup_move(winid, { minwidth: width })
 		popup_move(filterWinId, {
 		   col: p.core_col,
-		   line: p.core_line,
+		   line: p.core_line - (!text ? 0 : 1),
 		   maxwidth: width,
 		   minwidth: width,
 			zindex: 2,
 		})
 		popup_show(filterWinId)
 		popup_settext(filterWinId, filtertext)
+	else
+		popup_setoptions(winid, { padding: [0, 1, 0, 1] })
+		popup_hide(filterWinId)
 	endif
 enddef
 
@@ -88,10 +101,16 @@ def Filter(id: number, key: string): bool
 		Complete()
 		return true
 	elseif key ==# "\<C-n>"
-		Move(1)
+		Move('j')
 		return true
 	elseif key ==# "\<C-p>"
-		Move(-1)
+		Move('k')
+		return true
+	elseif key ==# "\<C-f>"
+		Move("\<C-f>")
+		return true
+	elseif key ==# "\<C-b>"
+		Move("\<C-b>")
 		return true
 	endif
 	if filterFocused
@@ -104,7 +123,7 @@ def Filter(id: number, key: string): bool
 			return true
 		else
 			filter ..= key
-			cursorRow = 1
+			Select(1)
 		endif
 		Update()
 		return true
@@ -115,7 +134,7 @@ def Filter(id: number, key: string): bool
 	endif
 	if stridx('qd', key) !=# -1 && opts->has_key('ondelete')
 		Execute('ondelete')
-		Delete(filtered[cursorRow - 1])
+		Delete(GetItem())
 		return true
 	endif
 	if stridx("f\<Tab>", key) !=# -1
@@ -123,15 +142,20 @@ def Filter(id: number, key: string): bool
 		filterFocused = filterVisible
 		Update()
 	elseif stridx('njbt', key) !=# -1
-		Move(1)
+		Move('j')
 	elseif stridx('pkBT', key) !=# -1
-		Move(-1)
+		Move('k')
+	elseif key ==# 'g'
+		Move('gg')
+	elseif key ==# 'G'
+		Move('G')
 	elseif stridx('0123456789', key) !=# -1
-		cursorRow = str2nr(key)
+		var target = str2nr(key)
 		const s = popup_getpos(winid).firstline
-		while cursorRow < s
-			cursorRow += 10
+		while target < s
+			target += 10
 		endwhile
+		Select(target)
 		Complete()
 	else
 		Close()
@@ -154,40 +178,42 @@ def Delete(item: any)
 	endif
 enddef
 
-def Move(d: number)
-	cursorRow += d
-	if cursorRow < 1
-		cursorRow = filtered->len()
-	elseif filtered->len() < cursorRow
-		cursorRow = 1
-	endif
+def Select(line: number)
+	win_execute(winid, $':{line}')
 	OnSelect()
-	Update()
+enddef
+
+def Move(keys: any)
+	var k = keys
+	var p = GetPos()
+	if keys ==# 'k' && p <= 1
+		k = 'G'
+	elseif keys ==# 'j' && filtered->len() <= p
+		k = 'gg'
+	endif
+	win_execute(winid, $'normal! {k}')
+	OnSelect()
 enddef
 
 def Complete()
-	if cursorRow < 1
+	if filtered->len() < 1
 		return
 	endif
-	OnSelect()
+	const item = GetItem()
 	Close()
-	OnComplete()
+	opts.oncomplete(item)
 enddef
 
 def OnSelect()
-	if cursorRow < 1
+	if filtered->len() < 1
 		return
 	endif
-	opts.onselect(filtered[cursorRow - 1])
-enddef
-
-def OnComplete()
-	opts.oncomplete(filtered[cursorRow - 1])
+	opts.onselect(GetItem())
 enddef
 
 def Execute(name: string)
 	if opts->has_key(name)
-		funcref(opts[name], [filtered[cursorRow - 1]])()
+		funcref(opts[name], [GetItem()])()
 	endif
 enddef
 
@@ -198,8 +224,8 @@ export def Popup(what: list<any>, options: any = {})
 	opts = {
 		zindex: 1,
 		tabpage: -1,
-		maxheight: min([9, &lines - 2]),
-		maxwidth: min([60, &columns - 5]),
+		maxheight: min([MAX_HEIGHT, &lines - 2]),
+		maxwidth: min([MAX_WIDTH, &columns - 5]),
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
 		focusfilter: false,
@@ -208,7 +234,7 @@ export def Popup(what: list<any>, options: any = {})
 	}
 	opts->extend(options)
 	# List box
-	cursorRow = 1
+	var selectedIndex = 1
 	hasIcon = false
 	items = what->copy()
 	for i in range(items->len())
@@ -218,7 +244,7 @@ export def Popup(what: list<any>, options: any = {})
 			items[i] = item
 		endif
 		if get(item, 'selected', false)
-			cursorRow = i + 1
+			selectedIndex = i + 1
 		endif
 		item.index = i + 1
 		hasIcon = hasIcon || item->has_key('icon')
@@ -241,6 +267,8 @@ export def Popup(what: list<any>, options: any = {})
 	set t_ve=
 	blinkTimer = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
 	Update()
+	win_gotoid(winid)
+	Select(selectedIndex)
 enddef
 
 export def Close()

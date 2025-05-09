@@ -1,14 +1,13 @@
 vim9script
 sil! packadd nerdfont.vim
-var k = 0
 var o = 0
-var q = ''
-var r = false
+var q = 0
+var r = ''
 var t = false
 var lk = false
-var ll = []
+var ll = false
 var lm = []
-var ln = 0
+var ln = []
 var lo = {}
 var lp = 0
 var lq = false
@@ -18,60 +17,72 @@ const mk = "\ue5fe"
 const ml = "\ue5fb"
 const mm = "\uf062"
 const mn = "💠"
+const mo = 60
+const mp = 9
 def A(a: any)
 enddef
-def B()
-var a = []
-if r
-a += ['']
+def B(): number
+return win_execute(o, 'echo getcurpos()[1]')->trim()->str2nr()
+enddef
+def C(index = 0): any
+if index ==# 0
+return ln[B() - 1]
 else
-popup_hide(o)
+return ln[index - 1]
 endif
-if r && q !=# ''
-lm = matchfuzzy(ll, q, { text_cb: (i) => i.label })
+enddef
+def D()
+var a = []
+if t && r !=# ''
+ln = matchfuzzy(lm, r, { text_cb: (i) => i.label })
 else
-lm = ll->copy()
+ln = lm->copy()
 endif
 var n = 0
-var b = lm->len() < 10 ? '' : ' '
-for c in lm
+var b = ln->len() < 10 ? '' : ' '
+for c in ln
 n += 1
 if 10 <= n
 b = ''
 endif
 var d = ''
-if lk
+if ll
 d = !c.icon ? lt : c.icon
 endif
 a += [$'{b}{n}:{d}{c.label->trim()}']
 endfor
-ln = min([max([1, ln]), lm->len()])
-popup_settext(k, a)
-win_execute(k, $"normal! :{ln + (r ? 1 : 0)}\<CR>")
-if r
-var e = ''
+popup_settext(o, a)
 if t
+popup_setoptions(o, {
+padding: [!a ? 0 : 1, 1, 0, 1],
+cursorline: !!ln,
+})
+var e = ''
+if lk
 hi link popselectFilter PMenu
 e = ' '
 else
 hi link popselectFilter PMenuExtra
 endif
-const f = $'Filter:{q}{e}'
-const p = popup_getpos(k)
+const f = $'Filter:{r}{e}'
+const p = popup_getpos(o)
 const g = max([p.core_width, strdisplaywidth(f)])
-popup_move(k, { minwidth: g })
-popup_move(o, {
+popup_move(o, { minwidth: g })
+popup_move(q, {
 col: p.core_col,
-line: p.core_line,
+line: p.core_line - (!a ? 0 : 1),
 maxwidth: g,
 minwidth: g,
 zindex: 2,
 })
-popup_show(o)
-popup_settext(o, f)
+popup_show(q)
+popup_settext(q, f)
+else
+popup_setoptions(o, { padding: [0, 1, 0, 1] })
+popup_hide(q)
 endif
 enddef
-def C(a: number, b: string): bool
+def E(a: number, b: string): bool
 if b ==# "\<CursorHold>"
 return true
 endif
@@ -79,103 +90,116 @@ if stridx("\<ESC>\<C-x>", b) !=# -1
 Close()
 return true
 elseif b ==# "\<CR>"
-F()
+I()
 return true
 elseif b ==# "\<C-n>"
-E(1)
+H('j')
 return true
 elseif b ==# "\<C-p>"
-E(-1)
+H('k')
+return true
+elseif b ==# "\<C-f>"
+H("\<C-f>")
+return true
+elseif b ==# "\<C-b>"
+H("\<C-b>")
 return true
 endif
-if t
+if lk
 if b ==# "\<Tab>"
-t = false
+lk = false
 elseif b ==# "\<BS>"
-q = q->substitute('.$', '', '')
+r = r->substitute('.$', '', '')
 elseif match(b, '^\p$') ==# -1
 Close()
 return true
 else
-q ..= b
-ln = 1
+r ..= b
+G(1)
 endif
-B()
+D()
 return true
 endif
 if lo->has_key($'onkey_{b}')
-I($'onkey_{b}')
+BA($'onkey_{b}')
 return true
 endif
 if stridx('qd', b) !=# -1 && lo->has_key('ondelete')
-I('ondelete')
-D(lm[ln - 1])
+BA('ondelete')
+F(C())
 return true
 endif
 if stridx("f\<Tab>", b) !=# -1
-r = !r || b ==# "\<Tab>"
-t = r
-B()
+t = !t || b ==# "\<Tab>"
+lk = t
+D()
 elseif stridx('njbt', b) !=# -1
-E(1)
+H('j')
 elseif stridx('pkBT', b) !=# -1
-E(-1)
+H('k')
+elseif b ==# 'g'
+H('gg')
+elseif b ==# 'G'
+H('G')
 elseif stridx('0123456789', b) !=# -1
-ln = str2nr(b)
-const s = popup_getpos(k).firstline
-while ln < s
-ln += 10
+var c = str2nr(b)
+const s = popup_getpos(o).firstline
+while c < s
+c += 10
 endwhile
-F()
+G(c)
+I()
 else
 Close()
 endif
 return true
 enddef
-def D(a: any)
-ll->remove(
-(ll) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
+def F(a: any)
+lm->remove(
+(lm) -> indexof((_, v) => v.label ==# a.label && v.tag ==# a.tag)
 )
-for i in range(ll->len())
-ll[i].index = i + 1
+for i in range(lm->len())
+lm[i].index = i + 1
 endfor
-if ll->len() < 1
+if lm->len() < 1
 Close()
 else
-B()
-G()
+D()
+J()
 endif
 enddef
-def E(d: number)
-ln += d
-if ln < 1
-ln = lm->len()
-elseif lm->len() < ln
-ln = 1
-endif
-G()
-B()
+def G(a: number)
+win_execute(o, $':{a}')
+J()
 enddef
-def F()
-if ln < 1
+def H(a: any)
+var k = a
+var p = B()
+if a ==# 'k' && p <= 1
+k = 'G'
+elseif a ==# 'j' && ln->len() <= p
+k = 'gg'
+endif
+win_execute(o, $'normal! {k}')
+J()
+enddef
+def I()
+if ln->len() < 1
 return
 endif
-G()
+const a = C()
 Close()
-H()
+lo.oncomplete(a)
 enddef
-def G()
-if ln < 1
+def J()
+if ln->len() < 1
 return
 endif
-lo.onselect(lm[ln - 1])
+lo.onselect(C())
 enddef
-def H()
-lo.oncomplete(lm[ln - 1])
-enddef
-def I(a: string)
+def BA(a: string)
 if lo->has_key(a)
-funcref(lo[a], [lm[ln - 1]])()
+funcref(lo[a], [C()])()
 endif
 enddef
 export def Popup(a: list<any>, b: any = {})
@@ -185,61 +209,63 @@ endif
 lo = {
 zindex: 1,
 tabpage: -1,
-maxheight: min([9, &lines - 2]),
-maxwidth: min([60, &columns - 5]),
+maxheight: min([mp, &lines - 2]),
+maxwidth: min([mo, &columns - 5]),
 mapping: false,
-filter: (id, key) => C(id, key),
+filter: (id, key) => E(id, key),
 focusfilter: false,
-onselect: (c) => A(c),
-oncomplete: (c) => A(c),
+onselect: (d) => A(d),
+oncomplete: (d) => A(d),
 }
 lo->extend(b)
-ln = 1
-lk = false
-ll = a->copy()
-for i in range(ll->len())
-var c = ll[i]
-if type(c) ==# type('')
-c = { label: c }
-ll[i] = c
+var c = 1
+ll = false
+lm = a->copy()
+for i in range(lm->len())
+var d = lm[i]
+if type(d) ==# type('')
+d = { label: d }
+lm[i] = d
 endif
-if get(c, 'selected', false)
-ln = i + 1
+if get(d, 'selected', false)
+c = i + 1
 endif
-c.index = i + 1
-lk = lk || c->has_key('icon')
+d.index = i + 1
+ll = ll || d->has_key('icon')
 endfor
-k = popup_menu([], lo)
-win_execute(k, $'syntax match PMenuKind /^\s*\d\+:{lk ? '.' : ''}/')
-win_execute(k, 'syntax match PMenuExtra /\t.*$/')
-q = ''
-r = lo.focusfilter
+o = popup_menu([], lo)
+win_execute(o, $'syntax match PMenuKind /^\s*\d\+:{ll ? '.' : ''}/')
+win_execute(o, 'syntax match PMenuExtra /\t.*$/')
+r = ''
 t = lo.focusfilter
+lk = lo.focusfilter
 hi link popselectFilter PMenu
 hi link popselectCursor Cursor
-o = popup_create('', { highlight: 'popselectFilter' })
-win_execute(o, 'syntax match popselectCursor / $/')
+q = popup_create('', { highlight: 'popselectFilter' })
+win_execute(q, 'syntax match popselectCursor / $/')
 aug popselect
 au!
-au VimLeavePre * J()
+au VimLeavePre * BB()
 aug END
 set t_ve=
 lp = timer_start(500, vimrc#popselect#BlinkCursor, { repeat: -1 })
-B()
+D()
+win_gotoid(o)
+G(c)
 enddef
 export def Close()
-J()
+BB()
 timer_stop(lp)
-popup_close(k)
 popup_close(o)
-k = 0
+popup_close(q)
 o = 0
+q = 0
 aug popselect
 au!
 aug END
 enddef
 export def BlinkCursor(a: number)
-if k ==# 0 || popup_list()->index(k) ==# -1
+if o ==# 0 || popup_list()->index(o) ==# -1
 Close()
 return
 endif
@@ -250,10 +276,10 @@ else
 hi link popselectCursor Cursor
 endif
 enddef
-def J()
+def BB()
 set t_ve&
 enddef
-def BA(a: string, b: bool = false): string
+def BC(a: string, b: bool = false): string
 if b
 if a ==# '..'
 return mm
@@ -277,7 +303,7 @@ var a = []
 for f in v:oldfiles
 if filereadable(expand(f))
 const b = $"{fnamemodify(f, ':t')}\<Tab>{f->fnamemodify(':p')}"
-add(a, { icon: BA(f), label: b, tag: f })
+add(a, { icon: BC(f), label: b, tag: f })
 endif
 endfor
 Popup(a, {
@@ -309,7 +335,7 @@ f = term_getline(e, '.')
 ->substitute('\s*[%#>$]\s*$', '', '')
 else
 const h = bufname(e)->fnamemodify(':p')
-g = BA(h)
+g = BC(h)
 f = $"{fnamemodify(f, ':t')}\<Tab>{h}"
 endif
 const i = m[2][0] ==# '%'
@@ -360,7 +386,7 @@ var b = []
 const c = a ==# '' ? expand('%:p:h') : a
 if c->fnamemodify(':h') !=# c
 add(b, {
-icon: BA('..', true),
+icon: BC('..', true),
 label: '..',
 tag: c->fnamemodify(':h'),
 isdir: true,
@@ -370,14 +396,14 @@ const d = readdirex(c, '1', { sort: 'collate' })
 for f in d
 const e = f.type ==# 'dir' || f.type ==# 'linkd'
 add(b, {
-icon: BA(f.name, e),
+icon: BC(f.name, e),
 label: f.name,
 tag: $'{c}/{f.name}',
 isdir: e,
 })
 endfor
 Popup(b, {
-title: BA(c, true) .. fnamemodify(c, ':t:r'),
+title: BC(c, true) .. fnamemodify(c, ':t:r'),
 oncomplete: (item) => {
 if item.isdir
 PopupDir(item.tag)
