@@ -227,7 +227,7 @@ export def Popup(what: list<any>, options: any = {})
 		maxwidth: min([g:popselect.maxwidth, &columns - 5]),
 		mapping: false,
 		filter: (id, key) => Filter(id, key),
-		focusfilter: false,
+		filter_focused: false,
 		onselect: (item) => Nop(item),
 		oncomplete: (item) => Nop(item),
 	}
@@ -254,8 +254,10 @@ export def Popup(what: list<any>, options: any = {})
 	win_execute(winid, $'setlocal tabstop={g:popselect.tabstop}')
 	# Filter input box
 	filter_text = ''
-	filter_visible = opts.focusfilter
-	filter_focused = opts.focusfilter
+	if opts.filter_focused !=# 'keep'
+		filter_focused = !!opts.filter_focused
+	endif
+	filter_visible = filter_focused
 	hi link popselectFilter PMenu
 	filter_winid = popup_create('', { highlight: 'popselectFilter' })
 	augroup popselect
@@ -442,6 +444,7 @@ export def PopupDir(path: string = '')
 	endfor
 	Popup(items, {
 		title: NerdFont(fullpath, true) .. fnamemodify(fullpath, ':t:r'),
+		filter_focused: !path ? '' : 'keep',
 		oncomplete: (item) => {
 			if item.isdir
 				PopupDir(item.tag)

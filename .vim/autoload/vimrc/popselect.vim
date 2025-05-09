@@ -211,7 +211,7 @@ maxheight: min([g:popselect.maxheight, &lines - 2]),
 maxwidth: min([g:popselect.maxwidth, &columns - 5]),
 mapping: false,
 filter: (id, key) => E(id, key),
-focusfilter: false,
+filter_focused: false,
 onselect: (d) => A(d),
 oncomplete: (d) => A(d),
 }
@@ -236,8 +236,10 @@ win_execute(o, $'syntax match PMenuKind /^\s*\d\+ {ll ? '.' : ''}/')
 win_execute(o, 'syntax match PMenuExtra /\t.*$/')
 win_execute(o, $'setlocal tabstop={g:popselect.tabstop}')
 r = ''
-t = lo.focusfilter
-lk = lo.focusfilter
+if lo.filter_focused !=# 'keep'
+lk = !!lo.filter_focused
+endif
+t = lk
 hi link popselectFilter PMenu
 q = popup_create('', { highlight: 'popselectFilter' })
 aug popselect
@@ -412,6 +414,7 @@ isdir: e,
 endfor
 Popup(b, {
 title: BC(c, true) .. fnamemodify(c, ':t:r'),
+filter_focused: !a ? '' : 'keep',
 oncomplete: (item) => {
 if item.isdir
 PopupDir(item.tag)
