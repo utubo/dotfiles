@@ -92,17 +92,8 @@ return true
 elseif b ==# "\<CR>"
 I()
 return true
-elseif b ==# "\<C-n>"
-H('j')
-return true
-elseif b ==# "\<C-p>"
-H('k')
-return true
-elseif b ==# "\<C-f>"
-H("\<C-f>")
-return true
-elseif b ==# "\<C-b>"
-H("\<C-b>")
+elseif stridx("\<C-n>\<C-p>\<C-f>\<C-b>", b) !=# -1
+H(b)
 return true
 endif
 if lk
@@ -133,14 +124,8 @@ if stridx("f\<Tab>", b) !=# -1
 t = !t || b ==# "\<Tab>"
 lk = t
 D()
-elseif stridx('njbt', b) !=# -1
-H('j')
-elseif stridx('pkBT', b) !=# -1
-H('k')
-elseif b ==# 'g'
-H('gg')
-elseif b ==# 'G'
-H('G')
+elseif stridx('njbtpkBTgG', b) !=# -1
+H(b)
 elseif stridx('0123456789', b) !=# -1
 var c = str2nr(b)
 const s = popup_getpos(o).firstline
@@ -175,9 +160,14 @@ enddef
 def H(a: any)
 var k = a
 var p = B()
-if a ==# 'k' && p <= 1
+if stridx('\<C-p>pBT', k) !=# -1
+k = 'k'
+elseif stridx("\<C-n>nbt", k) !=# -1
+k = 'j'
+endif
+if k ==# 'k' && p <= 1
 k = 'G'
-elseif a ==# 'j' && ln->len() <= p
+elseif k ==# 'g' || k ==# 'j' && ln->len() <= p
 k = 'gg'
 endif
 win_execute(o, $'normal! {k}')

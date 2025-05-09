@@ -100,17 +100,8 @@ def Filter(id: number, key: string): bool
 	elseif key ==# "\<CR>"
 		Complete()
 		return true
-	elseif key ==# "\<C-n>"
-		Move('j')
-		return true
-	elseif key ==# "\<C-p>"
-		Move('k')
-		return true
-	elseif key ==# "\<C-f>"
-		Move("\<C-f>")
-		return true
-	elseif key ==# "\<C-b>"
-		Move("\<C-b>")
+	elseif stridx("\<C-n>\<C-p>\<C-f>\<C-b>", key) !=# -1
+		Move(key)
 		return true
 	endif
 	if filterFocused
@@ -141,14 +132,8 @@ def Filter(id: number, key: string): bool
 		filterVisible = !filterVisible || key ==# "\<Tab>"
 		filterFocused = filterVisible
 		Update()
-	elseif stridx('njbt', key) !=# -1
-		Move('j')
-	elseif stridx('pkBT', key) !=# -1
-		Move('k')
-	elseif key ==# 'g'
-		Move('gg')
-	elseif key ==# 'G'
-		Move('G')
+	elseif stridx('njbtpkBTgG', key) !=# -1
+		Move(key)
 	elseif stridx('0123456789', key) !=# -1
 		var target = str2nr(key)
 		const s = popup_getpos(winid).firstline
@@ -183,12 +168,17 @@ def Select(line: number)
 	OnSelect()
 enddef
 
-def Move(keys: any)
-	var k = keys
+def Move(key: any)
+	var k = key
 	var p = GetPos()
-	if keys ==# 'k' && p <= 1
+	if stridx('\<C-p>pBT', k) !=# -1
+		k = 'k'
+	elseif stridx("\<C-n>nbt", k) !=# -1
+		k = 'j'
+	endif
+	if k ==# 'k' && p <= 1
 		k = 'G'
-	elseif keys ==# 'j' && filtered->len() <= p
+	elseif k ==# 'g' || k ==# 'j' && filtered->len() <= p
 		k = 'gg'
 	endif
 	win_execute(winid, $'normal! {k}')
