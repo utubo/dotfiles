@@ -351,14 +351,18 @@ enddef
 
 export def PopupFiles(files: list<string>, options: any = {})
 	var items = []
+	var seen = {}
 	for f in files
-		if filereadable(expand(f))
+		if seen->has_key(f)
+			continue
+		elseif filereadable(expand(f))
 			add(items, {
 				icon: NerdFont(f),
 				label: fnamemodify(f, ':t'),
 				extra: f->fnamemodify(':p'),
 				tag: f
 			})
+			seen[f] = 1
 		endif
 	endfor
 	Popup(items, {

@@ -324,14 +324,18 @@ return g:popselect.icon_unknown
 enddef
 export def PopupFiles(a: list<string>, b: any = {})
 var c = []
+var d = {}
 for f in a
-if filereadable(expand(f))
+if d->has_key(f)
+continue
+elseif filereadable(expand(f))
 add(c, {
 icon: BC(f),
 label: fnamemodify(f, ':t'),
 extra: f->fnamemodify(':p'),
 tag: f
 })
+d[f] = 1
 endif
 endfor
 Popup(c, {
