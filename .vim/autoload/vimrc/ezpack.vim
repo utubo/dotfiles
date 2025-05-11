@@ -41,6 +41,7 @@ EzpackO utubo/vim-ezpack
 EzpackL utubo/vim-headtail
 EzpackL utubo/vim-hlpairs
 EzpackL utubo/vim-minviml
+EzpackO utubo/vim-popselect
 EzpackO utubo/vim-reformatdate
 EzpackL utubo/vim-registers-lite
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c

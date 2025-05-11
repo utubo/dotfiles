@@ -51,8 +51,8 @@ au ModeChanged c:[^c] B()
 au WinScrolled * E()
 au VimLeavePre * D()
 aug END
-m.blinktimer = timer_start(500, vimrc#cmdline#BlinkPopupCursor, { repeat: -1 })
-m.updatetimer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
+m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
+m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
 def B()
 aug vimrc_cmdline_popup
@@ -114,5 +114,5 @@ cno <A-j> <Up>
 cno <A-k> <Down>
 cno <A-l> <Right>
 cno <expr> <Space> A()
-com! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
+com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 enddef

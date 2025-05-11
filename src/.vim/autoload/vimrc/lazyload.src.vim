@@ -402,14 +402,15 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<
 
 # ------------------------------------------------------
 # ポップアップで色々選択 {{{
-nnoremap <F1> <ScriptCmd>vimrc#popselect#PopupDir()<CR>
-nnoremap <F2> <ScriptCmd>vimrc#popselect#PopupMRU()<CR>
-nnoremap <F3> <ScriptCmd>vimrc#popselect#PopupBufList()<CR>
-nnoremap <F4> <ScriptCmd>vimrc#popselect#PopupTabList()<CR>
-nnoremap <C-p> <ScriptCmd>vimrc#popselect#PopupMruAndProjectFiles()<CR>
+packadd vim-popselect
+nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
+nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
+nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
+nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupMruAndProjectFiles()<CR>
 
 # タブ移動したときだけリストを表示
-Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
+Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
 
 # gnとgpでバッファ移動
 def ShowBuf(a: string)
@@ -421,7 +422,7 @@ def ShowBuf(a: string)
 			break
 		endif
 	endwhile
-	call vimrc#popselect#PopupBufList()
+	call popselect#buffers#Popup()
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 

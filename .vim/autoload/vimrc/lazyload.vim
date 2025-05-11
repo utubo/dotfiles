@@ -276,12 +276,13 @@ echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
-nn <F1> <ScriptCmd>vimrc#popselect#PopupDir()<CR>
-nn <F2> <ScriptCmd>vimrc#popselect#PopupMRU()<CR>
-nn <F3> <ScriptCmd>vimrc#popselect#PopupBufList()<CR>
-nn <F4> <ScriptCmd>vimrc#popselect#PopupTabList()<CR>
-nn <C-p> <ScriptCmd>vimrc#popselect#PopupMruAndProjectFiles()<CR>
-Each X=t,T nnoremap gX gX<Cmd>call vimrc#popselect#PopupTabList()<CR>
+packadd vim-popselect
+nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
+nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
+nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
+nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nn <C-p> <ScriptCmd>popselect#projectfiles#PopupMruAndProjectFiles()<CR>
+Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
 def F(a: string)
 const b = bufnr()
 while true
@@ -290,7 +291,7 @@ if &buftype !=# 'terminal' || bufnr() ==# b
 break
 endif
 endwhile
-call vimrc#popselect#PopupBufList()
+call popselect#buffers#Popup()
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
@@ -374,9 +375,9 @@ Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
 Each nnoremap,xnoremap + :
 Each nnoremap,xnoremap , :
 Each nnoremap,xnoremap <Space><Space>, ,
-au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
-Each n,v {}noremap : <Cmd>call vimrc#cmdline#Popup()<CR>:
-Each /,? nnoremap {} <Cmd>call vimrc#cmdline#Popup()<CR><Cmd>noh<CR>{}
+au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
+Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
