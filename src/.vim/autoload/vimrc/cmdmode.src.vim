@@ -69,8 +69,8 @@ export def Popup()
 		au WinScrolled * UpdatePopupCover()
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	popup.blinktimer = timer_start(500, vimrc#cmdline#BlinkPopupCursor, { repeat: -1 })
-	popup.updatetimer = timer_start(16, vimrc#cmdline#UpdatePopup, { repeat: -1 })
+	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
+	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
 
 def ClosePopup()
@@ -144,6 +144,6 @@ export def ApplySettings()
 	cnoremap <A-k> <Down>
 	cnoremap <A-l> <Right>
 	cnoremap <expr> <Space> MyAbbrev()
-	command! -nargs=1 -complete=file MoveFile vimrc#cmdline#MoveFile(<f-args>)
+	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 enddef
 

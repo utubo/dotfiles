@@ -539,9 +539,9 @@ Each nnoremap,xnoremap + :
 Each nnoremap,xnoremap , :
 Each nnoremap,xnoremap <Space><Space>, ,
 # その他の設定
-au vimrc CmdlineEnter * ++once vimrc#cmdline#ApplySettings()
-Each n,v {}noremap : <Cmd>call vimrc#cmdline#Popup()<CR>:
-Each /,? nnoremap {} <Cmd>call vimrc#cmdline#Popup()<CR><Cmd>noh<CR>{}
+au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
+Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
 # }}}
 
 # ------------------------------------------------------
