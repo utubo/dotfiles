@@ -407,7 +407,7 @@ nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupMruAndProjectFiles()<CR>
+nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupMruAndProjectFiles({ filter_focused: true })<CR>
 
 # タブ移動したときだけリストを表示
 Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
