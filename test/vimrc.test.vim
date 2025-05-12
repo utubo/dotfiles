@@ -101,6 +101,7 @@ suite.TestMapping = () => {
 	# n  B  CtrlPBuffer
 	# n  e  vim-smart-word
 	# n  ga textobjの先頭に移動
+	# n  gb buffer #
 	# n  gc vim-caw
 	# n  gd vim-vimscript-gd
 	# n  ge vim-smart-word
@@ -140,7 +141,7 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  \([abBehijklmnopqswAMOPQSTY;''/?:%,+]\)',
-		'n  \(g[acdesinprtT;]\)',
+		'n  \(g[abcdesinprtT;]\)',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  \(G[ai%]\)',
 		'n  \(<C-[AWXG]>\)',
@@ -170,6 +171,7 @@ suite.TestMapping = () => {
 		'[noxv]  [ai]sb', # sandwitch
 		'n  \[c.*', # GitGutter
 		'n  \]c.*', # GitGutter
+		'o  [IA]', # hlpiars
 	]->join('\|')
 
 	# ユーザー定義のマッピング
