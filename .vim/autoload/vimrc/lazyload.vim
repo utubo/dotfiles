@@ -294,6 +294,7 @@ endwhile
 call popselect#buffers#Popup()
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
+nn gb <ScriptCmd>buffer #<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
