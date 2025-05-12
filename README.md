@@ -13,13 +13,13 @@ If you want open the source of .vimrc
 :e ~/dotfile/src/.vimrc.src.vim
 ```
 
-or press `F1` key to open the fern.  
+or press `F1` key to open current dir.  
 
 If it is bright
 ```vim
 :colorscheme softgreen
 ```
 
-vim-plugins I use.  
+I use my plugin manager.
 [src/.vim/autoload/vimrc/ezpack.src.vim](src/.vim/autoload/vimrc/ezpack.src.vim)
 
