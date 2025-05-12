@@ -426,7 +426,7 @@ def ShowBuf(a: string)
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 # これはポップアップしないでいいか…
-nnoremap gb <ScriptCmd>buffer #<CR>
+nnoremap gb <Cmd>buffer #<CR>
 # }}}
 
 # ------------------------------------------------------
