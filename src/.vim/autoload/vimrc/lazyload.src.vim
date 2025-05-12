@@ -422,7 +422,7 @@ def ShowBuf(a: string)
 			break
 		endif
 	endwhile
-	call popselect#buffers#Popup()
+	call popselect#buffers#Popup({ show_extra: false })
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 # これはポップアップしないでいいか…
