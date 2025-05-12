@@ -171,7 +171,7 @@ suite.TestMapping = () => {
 		'[noxv]  [ai]sb', # sandwitch
 		'n  \[c.*', # GitGutter
 		'n  \]c.*', # GitGutter
-		'o  [IA]', # hlpiars
+		'o  [IA]', # vim-hlpiars, vim-headtail
 	]->join('\|')
 
 	# ユーザー定義のマッピング
