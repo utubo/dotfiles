@@ -426,7 +426,7 @@ def ShowBuf(a: string)
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 
-# デフォルのgmは使わないかな…
+# デフォルトのgmは使わないかな…
 # Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
 nnoremap gm <Cmd>buffer #<CR>
 # }}}
