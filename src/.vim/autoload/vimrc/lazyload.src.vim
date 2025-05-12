@@ -288,6 +288,8 @@ nnoremap <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 # ------------------------------------------------------
 # タブ幅やタブ展開を自動設定 {{{
 def SetupTabstop()
+	setlocal shiftwidth=0
+	setlocal softtabstop=0
 	if &ft ==# 'help'
 		return
 	endif
@@ -304,8 +306,6 @@ def SetupTabstop()
 		setlocal expandtab
 		setlocal tabstop=4
 	endif
-	&shiftwidth = &tabstop
-	&softtabstop = &tabstop
 	setpos('.', org)
 enddef
 # filetype indent on が終わってから判定する

@@ -182,6 +182,8 @@ nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
 def C()
+setl sw=0
+setl st=0
 if &ft ==# 'help'
 return
 endif
@@ -198,8 +200,6 @@ elseif !!search('^    \S', 'nc', a)
 setl et
 setl ts=4
 endif
-&sw = &ts
-&st = &ts
 setpos('.', b)
 enddef
 def D()
