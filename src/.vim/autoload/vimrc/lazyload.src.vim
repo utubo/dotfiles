@@ -425,8 +425,10 @@ def ShowBuf(a: string)
 	call popselect#buffers#Popup({ show_extra: false })
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
-# これはポップアップしないでいいか…
-nnoremap gb <Cmd>buffer #<CR>
+
+# デフォルのgmは使わないかな…
+# Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
+nnoremap gm <Cmd>buffer #<CR>
 # }}}
 
 # ------------------------------------------------------
