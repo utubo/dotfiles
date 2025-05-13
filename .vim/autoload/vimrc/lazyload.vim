@@ -241,7 +241,7 @@ add(e, ['Normal', ' '])
 endif
 add(e, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
 add(e, ['Normal', ' '])
-const f = empty(&fenc) ? &enc : &fenc
+const f = &fenc ?? &enc
 add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
 add(e, ['Normal', ' '])
 add(e, ['MoreMsg', &ft])

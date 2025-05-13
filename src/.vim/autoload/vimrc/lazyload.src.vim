@@ -362,7 +362,7 @@ def ShowBufInfo(event: string = '')
 	endif
 	add(msg, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
 	add(msg, ['Normal', ' '])
-	const enc = empty(&fenc) ? &encoding : &fenc
+	const enc = &fenc ?? &encoding
 	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
