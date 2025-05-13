@@ -291,7 +291,7 @@ if &buftype !=# 'terminal' || bufnr() ==# b
 break
 endif
 endwhile
-call popselect#buffers#Popup({ extra_show: false })
+popselect#buffers#Popup({ extra_show: false })
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
 nn gm <Cmd>buffer #<CR>
