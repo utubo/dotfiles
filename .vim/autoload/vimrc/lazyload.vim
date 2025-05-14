@@ -289,7 +289,7 @@ nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nn <C-p> <ScriptCmd>popselect#projectfiles#PopupMruAndProjectFiles({ filter_focused: true })<CR>
+nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
 Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
 def F(a: string)
 const b = bufnr()
