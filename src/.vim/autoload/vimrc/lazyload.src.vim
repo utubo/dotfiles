@@ -15,28 +15,28 @@ vim9script
 # ※これ使うよりべたで書いたほうが起動は速い
 g:util_each_nest = 0
 def! g:UtilEach(qargs: string)
-	var [items, args] = qargs->split('^\S*\zs')
+	var [items, cmd] = qargs->split('^\S*\zs')
 	g:util_each_nest += 1
 	const kv = items->split('=')
 	const keys = len(kv) ==# 1 ? ['{0\?}'] : kv[0]->split(',')
 	const values = kv[-1]->split(',')
-	const haskey = match(args, keys[0]) !=# -1
+	const haskey = match(cmd, keys[0]) !=# -1
 	var i = 0
 	while i < values->len()
+		var c = cmd
 		var v = values[i]
-		var a = args
 		if haskey
-			# 置き換え文字ありの場合(e.g. `Each val1,val2 com {}`)
+			# 置き換え文字ありの場合(e.g. `Each val1,val2 cmd {}`)
 			for k in keys
-				a = a->substitute(k, v, 'g')
+				c = c->substitute(k, v, 'g')
 				i += 1
 			endfor
 		else
-			# 置き換え文字なしの場合(e.g. `Each com1,com2 args`)
-			a = $'{v} {a}'
+			# 置き換え文字なしの場合(e.g. `Each cmd1,cmd2 val`)
+			c = $'{v} {c}'
 			i += 1
 		endif
-		execute a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
+		execute c->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
 	endwhile
 	g:util_each_nest -= 1
 enddef

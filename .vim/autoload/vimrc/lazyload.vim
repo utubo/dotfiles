@@ -1,26 +1,26 @@
 vim9script
 g:util_each_nest = 0
-def! g:UtilEach(b: string)
-var [c, d] = b->split('^\S*\zs')
+def! g:UtilEach(a: string)
+var [b, d] = a->split('^\S*\zs')
 g:util_each_nest += 1
-const e = c->split('=')
+const e = b->split('=')
 const f = len(e) ==# 1 ? ['{0\?}'] : e[0]->split(',')
 const h = e[-1]->split(',')
 const j = match(d, f[0]) !=# -1
 var i = 0
 while i < h->len()
+var c = d
 var v = h[i]
-var a = d
 if j
 for k in f
-a = a->substitute(k, v, 'g')
+c = c->substitute(k, v, 'g')
 i += 1
 endfor
 else
-a = $'{v} {a}'
+c = $'{v} {c}'
 i += 1
 endif
-exe a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
+exe c->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
 endwhile
 g:util_each_nest -= 1
 enddef
