@@ -9,24 +9,32 @@ vim9script
 # 先頭以外に差し込んだりネストしたい場合はこう
 #   Each j,k Each nmap,xmap {1} {0} g{0}
 #   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
-# 名前をつけたい場合はこう
-#   Each X=j,k Each cmd=nmap,xmap cmd X gX
+# 名前をつけたい場合はこんなかんじ
+#   Each X=j,k Each nnoremap X gX
+#   Each X,Y=j,+,k,- nnoremap <Space>X Y
 # ※これ使うよりべたで書いたほうが起動は速い
 g:util_each_nest = 0
 def! g:UtilEach(qargs: string)
 	var [items, args] = qargs->split('^\S*\zs')
 	g:util_each_nest += 1
-	var values =  items->split(',')
-	const kv = values[0]->split('=')
-	const k = len(kv) ==# 1 ? '{0\?}' : kv[0]
-	values[0] = kv[-1]
-	for i in values
-		var a = args->substitute(k, i, 'g')
+	const kv = items->split('=')
+	const keys = len(kv) ==# 1 ? ['{0\?}'] : kv[0]->split(',')
+	const values = kv[-1]->split(',')
+	var i = 0
+	while i < values->len()
+		var v = values[i]
+		# 置き換え文字ありの場合(e.g. `Each val1,val2 com {}`)
+		var a = args
+		for k in keys
+			a = a->substitute(k, v, 'g')
+			i += 1
+		endfor
+		# 置き換え文字なしの場合(e.g. `Each com1,com2 args`)
 		if a ==# args
-			a = $'{i} {a}'
+			a = $'{v} {a}'
 		endif
 		execute a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
-	endfor
+	endwhile
 	g:util_each_nest -= 1
 enddef
 command! -keepscript -nargs=* Each g:UtilEach(<q-args>)
@@ -640,8 +648,7 @@ nnoremap <CR> j0
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-nnoremap <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
-nnoremap <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
+Each A,B=j,+,k,- nnoremap <expr> A '<Cmd>noh<CR>' .. ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>
@@ -674,10 +681,6 @@ nnoremap M m
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
-# CursorHoldでnoholsearchする
-# nohlsearchはautocmdでは動かない(:help noh)
-# 誰かがautocmd CursorHoldしてれば定期的に<CursorHold>キーがストロークされる
-nnoremap <CursorHold> <Cmd>nohlsearch<CR>
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w

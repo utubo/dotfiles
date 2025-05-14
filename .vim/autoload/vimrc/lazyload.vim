@@ -3,17 +3,22 @@ g:util_each_nest = 0
 def! g:UtilEach(b: string)
 var [c, d] = b->split('^\S*\zs')
 g:util_each_nest += 1
-var e = c->split(',')
-const f = e[0]->split('=')
-const k = len(f) ==# 1 ? '{0\?}' : f[0]
-e[0] = f[-1]
-for i in e
-var a = d->substitute(k, i, 'g')
+const e = c->split('=')
+const f = len(e) ==# 1 ? ['{0\?}'] : e[0]->split(',')
+const h = e[-1]->split(',')
+var i = 0
+while i < h->len()
+var v = h[i]
+var a = d
+for k in f
+a = a->substitute(k, v, 'g')
+i += 1
+endfor
 if a ==# d
-a = $'{i} {a}'
+a = $'{v} {a}'
 endif
 exe a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
-endfor
+endwhile
 g:util_each_nest -= 1
 enddef
 com! -keepscript -nargs=* Each g:UtilEach(<q-args>)
@@ -441,8 +446,7 @@ nn <CR> j0
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
-nn <expr> j (getline('.')->match('\S') + 1 ==# col('.')) ? '+' : 'j'
-nn <expr> k (getline('.')->match('\S') + 1 ==# col('.')) ? '-' : 'k'
+Each A,B=j,+,k,- nnoremap <expr> A '<Cmd>noh<CR>' .. ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
@@ -463,7 +467,6 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-nn <CursorHold> <Cmd>nohlsearch<CR>
 nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my

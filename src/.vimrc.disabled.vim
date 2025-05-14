@@ -251,3 +251,9 @@ au vimrc ColorScheme default {
 	hi DiffText ctermbg=227
 }
 # }}}
+
+# CursorHoldでnohlsearchする {{{
+# nohlsearchはautocmdでは動かない(:help noh)
+# 誰かがautocmd CursorHoldしてれば定期的に<CursorHold>キーがストロークされる
+nnoremap <CursorHold> <Cmd>nohlsearch<CR>
+# }}}
