@@ -9,13 +9,14 @@ const h = e[-1]->split(',')
 var i = 0
 while i < h->len()
 var v = h[i]
-i += 1
 var a = d
 for k in f
 a = a->substitute(k, v, 'g')
+i += 1
 endfor
 if a ==# d
 a = $'{v} {a}'
+i += 1
 endif
 exe a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
 endwhile

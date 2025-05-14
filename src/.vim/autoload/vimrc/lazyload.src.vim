@@ -23,15 +23,16 @@ def! g:UtilEach(qargs: string)
 	var i = 0
 	while i < values->len()
 		var v = values[i]
-		i += 1
 		# 置き換え文字ありの場合(e.g. `Each val1,val2 com {}`)
 		var a = args
 		for k in keys
 			a = a->substitute(k, v, 'g')
+			i += 1
 		endfor
 		# 置き換え文字なしの場合(e.g. `Each com1,com2 args`)
 		if a ==# args
 			a = $'{v} {a}'
+			i += 1
 		endif
 		execute a->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
 	endwhile
