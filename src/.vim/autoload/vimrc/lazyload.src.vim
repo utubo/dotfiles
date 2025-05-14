@@ -20,17 +20,19 @@ def! g:UtilEach(qargs: string)
 	const kv = items->split('=')
 	const keys = len(kv) ==# 1 ? ['{0\?}'] : kv[0]->split(',')
 	const values = kv[-1]->split(',')
+	const haskey = match(args, keys[0]) !=# -1
 	var i = 0
 	while i < values->len()
 		var v = values[i]
-		# 置き換え文字ありの場合(e.g. `Each val1,val2 com {}`)
 		var a = args
-		for k in keys
-			a = a->substitute(k, v, 'g')
-			i += 1
-		endfor
-		# 置き換え文字なしの場合(e.g. `Each com1,com2 args`)
-		if a ==# args
+		if haskey
+			# 置き換え文字ありの場合(e.g. `Each val1,val2 com {}`)
+			for k in keys
+				a = a->substitute(k, v, 'g')
+				i += 1
+			endfor
+		else
+			# 置き換え文字なしの場合(e.g. `Each com1,com2 args`)
 			a = $'{v} {a}'
 			i += 1
 		endif

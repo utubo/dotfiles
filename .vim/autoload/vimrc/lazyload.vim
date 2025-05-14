@@ -6,15 +6,17 @@ g:util_each_nest += 1
 const e = c->split('=')
 const f = len(e) ==# 1 ? ['{0\?}'] : e[0]->split(',')
 const h = e[-1]->split(',')
+const j = match(d, f[0]) !=# -1
 var i = 0
 while i < h->len()
 var v = h[i]
 var a = d
+if j
 for k in f
 a = a->substitute(k, v, 'g')
 i += 1
 endfor
-if a ==# d
+else
 a = $'{v} {a}'
 i += 1
 endif
