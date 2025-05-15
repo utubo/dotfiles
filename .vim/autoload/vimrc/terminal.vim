@@ -3,7 +3,7 @@ export def ApplySettings()
 tno <C-w>; <C-w>:
 tno <C-w><C-w> <C-w>w
 tno <C-w><C-q> exit<CR>
-au vimrc BufEnter * B()
+au vimrc BufEnter * A()
 enddef
 export def Tapi_drop(a: number, b: list<string>)
 const c = b[0]
@@ -22,29 +22,24 @@ e = 'drop'
 endif
 exe e fnameescape(f)
 enddef
-def A(): bool
-const a = tabpagenr()->tabpagebuflist()
-if a->len() !=# 1
-return false
-else
-return getbufvar(a[0], '&buftype') ==# 'terminal'
-endif
-enddef
 var k = 0
-def B()
-const b = A()
-if !b
+def A()
+const a = tabpagenr()->tabpagebuflist()
+if a->len() ==# 1 && a[0]->getbufvar('&buftype') ==# 'terminal'
+if !k
+k = popup_create(
+'vim teminal',
+{
+line: 1,
+col: &columns,
+pos: 'topright',
+},
+)
+endif
+else
 if !!k
 popup_close(k)
 k = 0
-endif
-else
-if !k
-k = popup_create('vim teminal', {
-col: &columns,
-line: 1,
-pos: 'topright',
-})
 endif
 endif
 enddef

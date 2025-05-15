@@ -31,30 +31,24 @@ export def Tapi_drop(bufnr: number, arglist: list<string>)
 	execute opencmd fnameescape(filepath)
 enddef
 
-def IsOnlyTerminalWindow(): bool
-   const bufs = tabpagenr()->tabpagebuflist()
-	if bufs->len() !=# 1
-		return false
-	else
-		return getbufvar(bufs[0], '&buftype') ==# 'terminal'
-	endif
-enddef
-
 var notify_winid = 0
 def NotifyOnlyTerminalWindow()
-	const b = IsOnlyTerminalWindow()
-	if !b
+   const bufs = tabpagenr()->tabpagebuflist()
+	if bufs->len() ==# 1 && bufs[0]->getbufvar('&buftype') ==# 'terminal'
+		if !notify_winid
+			notify_winid = popup_create(
+				'vim teminal',
+				{
+					line: 1,
+					col: &columns,
+					pos: 'topright',
+				},
+			)
+		endif
+	else
 		if !!notify_winid
 			popup_close(notify_winid)
 			notify_winid = 0
-		endif
-	else
-		if !notify_winid
-			notify_winid = popup_create('vim teminal', {
-				col: &columns,
-				line: 1,
-				pos: 'topright',
-			})
 		endif
 	endif
 enddef
