@@ -35,11 +35,9 @@ def IsOnlyTerminalWindow(): bool
    const bufs = tabpagenr()->tabpagebuflist()
 	if bufs->len() !=# 1
 		return false
+	else
+		return getbufvar(bufs[0], '&buftype') ==# 'terminal'
 	endif
-	if getbufvar(bufs[0], '&buftype') !=# 'terminal'
-		return false
-	endif
-	return true
 enddef
 
 var notify_winid = 0

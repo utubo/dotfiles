@@ -26,11 +26,9 @@ def A(): bool
 const a = tabpagenr()->tabpagebuflist()
 if a->len() !=# 1
 return false
+else
+return getbufvar(a[0], '&buftype') ==# 'terminal'
 endif
-if getbufvar(a[0], '&buftype') !=# 'terminal'
-return false
-endif
-return true
 enddef
 var k = 0
 def B()
