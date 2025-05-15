@@ -4,7 +4,7 @@ export def ApplySettings()
 	tnoremap <C-w>; <C-w>:
 	tnoremap <C-w><C-w> <C-w>w
 	tnoremap <C-w><C-q> exit<CR>
-	au vimrc BufEnter * NotifyOnlyTerminal()
+	au vimrc BufEnter * NotifyOnlyTerminalWindow()
 enddef
 
 # https://zenn.dev/vim_jp/articles/5fdad17d336c6d
@@ -31,7 +31,7 @@ export def Tapi_drop(bufnr: number, arglist: list<string>)
 	execute opencmd fnameescape(filepath)
 enddef
 
-def IfOnly(): bool
+def IsOnlyTerminalWindow(): bool
    const bufs = tabpagenr()->tabpagebuflist()
 	if bufs->len() !=# 1
 		return false
@@ -43,8 +43,8 @@ def IfOnly(): bool
 enddef
 
 var notify_winid = 0
-def NotifyOnlyTerminal()
-	const b = IfOnly()
+def NotifyOnlyTerminalWindow()
+	const b = IsOnlyTerminalWindow()
 	if !b
 		if !!notify_winid
 			popup_close(notify_winid)
