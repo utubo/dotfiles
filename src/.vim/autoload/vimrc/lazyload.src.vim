@@ -732,6 +732,7 @@ def PopupVisualLength()
 		pos: 'botleft',
 		line: 'cursor-1',
 		col: 'cursor+1',
+		fixed: true,
 		moved: 'any',
 		padding: [1, 1, 1, 1],
 	})

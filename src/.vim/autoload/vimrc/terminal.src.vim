@@ -36,12 +36,16 @@ def NotifyOnlyTerminalWindow()
    const bufs = tabpagenr()->tabpagebuflist()
 	if bufs->len() ==# 1 && bufs[0]->getbufvar('&buftype') ==# 'terminal'
 		if !notify_winid
+			const [row, col] = win_getid()->win_screenpos()
+			const width = winwidth(0)
 			notify_winid = popup_create(
 				'vim teminal',
 				{
-					line: 1,
-					col: &columns,
+					line: &lines,
+					# Note: &colulmnsだとtabpageが左にあるときに見切れてしまう
+					col: col + width - 1,
 					pos: 'topright',
+					fixed: true,
 				},
 			)
 		endif

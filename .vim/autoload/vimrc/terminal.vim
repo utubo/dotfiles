@@ -27,12 +27,15 @@ def A()
 const a = tabpagenr()->tabpagebuflist()
 if a->len() ==# 1 && a[0]->getbufvar('&buftype') ==# 'terminal'
 if !k
+const [b, c] = win_getid()->win_screenpos()
+const d = winwidth(0)
 k = popup_create(
 'vim teminal',
 {
-line: 1,
-col: &columns,
+line: &lines,
+col: c + d - 1,
 pos: 'topright',
+fixed: true,
 },
 )
 endif
