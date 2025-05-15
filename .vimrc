@@ -83,7 +83,10 @@ hi! link ALEVirtualTextError ALEErrorSign
 set fdm=syntax
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc FileType vim setlocal foldmethod=marker
-nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nn <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h') .. '<Cmd>noh<CR>'
+nn l l<Cmd>normal zv<CR><Cmd>noh<CR>
+nn n n<Cmd>normal zv<CR>
+nn N N<Cmd>normal zv<CR>
 nn Z<Tab> <Cmd>set foldmethod=indent<CR>
 nn Z{ <Cmd>set foldmethod=marker<CR>
 nn Zy <Cmd>set foldmethod=syntax<CR>
