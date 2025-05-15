@@ -651,7 +651,7 @@ nnoremap <CR> j0
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-Each A,B=j,+,k,- nnoremap <expr> A '<Cmd>noh<CR>' .. ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
+Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A') .. '<Cmd>noh<CR>'
 
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>

@@ -449,7 +449,7 @@ nn <CR> j0
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
-Each A,B=j,+,k,- nnoremap <expr> A '<Cmd>noh<CR>' .. ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
+Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A') .. '<Cmd>noh<CR>'
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
