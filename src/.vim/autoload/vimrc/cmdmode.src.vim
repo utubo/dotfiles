@@ -38,21 +38,26 @@ enddef
 var popup = {
 	win: 0,
 	timer: 0,
-	cover: 0,
 	blink: false,
 	blinktimer: 0,
 	curpos: 0,
 	curhl: [],
+	msghl: [],
 }
 export def Popup()
 	if popup.win !=# 0
 		echoerr 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 		return
 	endif
-	# cmdlineを隠すwindow
-	popup.cover = popup_create('', { zindex: 1 })
-	setwinvar(popup.cover, '&wincolor', 'Normal')
-	UpdatePopupCover()
+	# cmdlineを隠す
+	popup.msghl = 'MsgArea'->hlget()
+	const norhl = 'Normal'->hlget()[0]
+	var msghl = popup.msghl[0]->copy()->extend({
+		ctermfg: get(popup.msghl[0], 'ctermbg', get(norhl, 'ctermbg', 'NONE')),
+		guifg: get(popup.msghl[0], 'guibg', get(norhl, 'guibg', 'NONE')),
+		cleared: false,
+	})
+	[msghl]->hlset()
 	# cmdline
 	popup.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
@@ -66,7 +71,6 @@ export def Popup()
 	augroup vimrc_cmdline_popup
 		au!
 		au ModeChanged c:[^c] ClosePopup()
-		au WinScrolled * UpdatePopupCover()
 		au VimLeavePre * RestoreCursor()
 	augroup END
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
@@ -84,8 +88,7 @@ def ClosePopup()
 	popup.blinktimer = 0
 	popup_close(popup.win)
 	popup.win = 0
-	popup_close(popup.cover)
-	popup.cover = 0
+	popup.msghl->hlset()
 	redraw
 enddef
 
@@ -130,11 +133,6 @@ enddef
 def RestoreCursor()
 	hlset(popup.curhl)
 	set t_ve&
-enddef
-
-def UpdatePopupCover()
-	popup_move(popup.cover, { col: 1, line: &lines, zindex: 1 })
-	popup_settext(popup.cover, repeat(' ', &columns))
 enddef
 # }}}
 

@@ -24,20 +24,25 @@ enddef
 var m = {
 win: 0,
 timer: 0,
-cover: 0,
 blink: false,
 blinktimer: 0,
 curpos: 0,
 curhl: [],
+msghl: [],
 }
 export def Popup()
 if m.win !=# 0
 echoerr 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 return
 endif
-m.cover = popup_create('', { zindex: 1 })
-setwinvar(m.cover, '&wincolor', 'Normal')
-E()
+m.msghl = 'MsgArea'->hlget()
+const a = 'Normal'->hlget()[0]
+var b = m.msghl[0]->copy()->extend({
+ctermfg: get(m.msghl[0], 'ctermbg', get(a, 'ctermbg', 'NONE')),
+guifg: get(m.msghl[0], 'guibg', get(a, 'guibg', 'NONE')),
+cleared: false,
+})
+[b]->hlset()
 m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
@@ -48,7 +53,6 @@ hi Cursor NONE
 aug vimrc_cmdline_popup
 au!
 au ModeChanged c:[^c] B()
-au WinScrolled * E()
 au VimLeavePre * D()
 aug END
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
@@ -65,8 +69,7 @@ timer_stop(m.blinktimer)
 m.blinktimer = 0
 popup_close(m.win)
 m.win = 0
-popup_close(m.cover)
-m.cover = 0
+m.msghl->hlset()
 redraw
 enddef
 export def UpdatePopup(a: number)
@@ -103,10 +106,6 @@ enddef
 def D()
 hlset(m.curhl)
 set t_ve&
-enddef
-def E()
-popup_move(m.cover, { col: 1, line: &lines, zindex: 1 })
-popup_settext(m.cover, repeat(' ', &columns))
 enddef
 export def ApplySettings()
 cno <A-h> <Left>
