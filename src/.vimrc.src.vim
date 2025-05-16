@@ -223,7 +223,7 @@ endif
 # ------------------------------------------------------
 # ファイルを開いたらカーソル位置を復元する {{{
 def RestorePos()
-	if &ft ==# 'help'
+	if &ft ==# 'help' || &ft ==# 'gitrebase'
 		return
 	endif
 	if !!&diff

@@ -160,7 +160,7 @@ set bg=light
 sil! colorscheme girly
 endif
 def F()
-if &ft ==# 'help'
+if &ft ==# 'help' || &ft ==# 'gitrebase'
 return
 endif
 if !!&diff
