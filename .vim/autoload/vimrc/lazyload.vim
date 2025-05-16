@@ -74,6 +74,7 @@ complete: ['<CR>', ';;'],
 nn ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 au vimrc User Vim9skkEnter feedkeys('Q')
+au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 no <Leader>ga ga
 packadd vim-headtail
 HeadTailMap g G

@@ -112,9 +112,8 @@ nnoremap ;j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 # 見出しモードでスタートする
 au vimrc User Vim9skkEnter feedkeys('Q')
-# ↓やっぱ微妙かも
-## インサートモードが終わったらオフにする
-# au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
+# インサートモードが終わったらオフにする
+au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 # }}}
 
 # headtail {{{
