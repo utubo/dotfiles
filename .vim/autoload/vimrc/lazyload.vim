@@ -100,11 +100,12 @@ com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gc :<C-u>GitCommit<Space><Tab>
 nn <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
-nn <Space>gp :<C-u>Git push<End>
+nn <Space>gP :<C-u>Git push<End>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gl <Cmd>Git pull<CR>
+nn <Space>gp <Cmd>Git pull<CR>
+nn <Space>gl <Cmd>Git log<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
 def A()
