@@ -115,3 +115,12 @@ cno <A-l> <Right>
 cno <expr> <Space> A()
 com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 enddef
+export def ForVim9skk(a: any): any
+if m.win !=# 0
+var c = popup_getpos(m.win)
+a.col += c.col - 1
+a.line += c.line - &lines
+endif
+return a
+enddef
+g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk

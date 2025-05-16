@@ -145,3 +145,14 @@ export def ApplySettings()
 	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 enddef
 
+# vim9skkとの連携 {{{
+export def ForVim9skk(popup_pos: any): any
+	if popup.win !=# 0
+		var c = popup_getpos(popup.win)
+		popup_pos.col += c.col - 1
+		popup_pos.line += c.line - &lines
+	endif
+	return popup_pos
+enddef
+g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
+# }}}
