@@ -114,6 +114,8 @@ au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 au vimrc User Vim9skkEnter feedkeys('Q')
 # インサートモードが終わったらオフにする
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
+# 見出しの色見出しの色を替たらみやすいかな？
+au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 # }}}
 
 # headtail {{{
