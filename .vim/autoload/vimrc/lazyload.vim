@@ -126,6 +126,24 @@ nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
+nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
+nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
+nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
+nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
+Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
+def B(a: string)
+const b = bufnr()
+while true
+exe $'b{a}'
+if &buftype !=# 'terminal' || bufnr() ==# b
+break
+endif
+endwhile
+popselect#buffers#Popup({ extra_show: false })
+enddef
+Each X=n,p nnoremap gX <ScriptCmd>B('X')<CR>
+nn gr <Cmd>buffer #<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
@@ -168,13 +186,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def B(): string
+def C(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{B()}"
+ino <expr> ;l $"<C-w>{C()}"
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -192,7 +210,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def C()
+def D()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -213,15 +231,12 @@ setl ts=4
 endif
 setpos('.', b)
 enddef
-def D()
-au vimrc SafeState * ++once C()
+def SetupTabstopLazy()
+au vimrc SafeState * ++once D()
 enddef
-au vimrc BufReadPost * D()
-D()
-g:recentBufnr = 1
-au vimrc BufLeave * g:recentBufnr = bufnr()
-nn gr <Cmd>execute $'b{g:recentBufnr}'<CR>
-def E(a: string = '')
+au vimrc BufReadPost * SetupTabstopLazy()
+SetupTabstopLazy()
+def F(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -286,25 +301,7 @@ endfor
 echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
-nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
-nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
-nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
-nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
-nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
-Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
-def F(a: string)
-const b = bufnr()
-while true
-exe $'b{a}'
-if &buftype !=# 'terminal' || bufnr() ==# b
-break
-endif
-endwhile
-popselect#buffers#Popup({ extra_show: false })
-enddef
-Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
-nn gm <Cmd>buffer #<CR>
+nn <script> <C-g> <ScriptCmd>F()<CR><ScriptCmd>BA()<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :

@@ -180,6 +180,35 @@ au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # }}}
 
+# popselect {{{
+nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
+nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
+nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
+nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
+
+# タブ移動したときもポップアップする
+Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
+
+# gnとgpでポップアップしながらバッファ移動
+def ShowBuf(a: string)
+	const b = bufnr()
+	while true
+		execute $'b{a}'
+		# terminalに移動すると混乱するのでスキップする || 無限ループ防止
+		if &buftype !=# 'terminal' || bufnr() ==# b
+			break
+		endif
+	endwhile
+	popselect#buffers#Popup({ extra_show: false })
+enddef
+Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
+
+# デフォルトのgrは使わないかな…
+# Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
+nnoremap gr <Cmd>buffer #<CR>
+# }}}
+
 # Portal {{{
 nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
@@ -331,14 +360,6 @@ SetupTabstopLazy()
 # }}}
 
 # ------------------------------------------------------
-# バッファ操作 {{{
-# grで直前のバッファ
-g:recentBufnr = 1
-au vimrc BufLeave * g:recentBufnr = bufnr()
-nnoremap gr <Cmd>execute $'b{g:recentBufnr}'<CR>
-# }}}
-
-# ------------------------------------------------------
 # バッファの情報を色付きで表示 {{{
 def ShowBufInfo(event: string = '')
 	if &ft ==# 'qf'
@@ -411,36 +432,6 @@ def ShowBufInfo(event: string = '')
 enddef
 
 nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<CR>
-# }}}
-
-# ------------------------------------------------------
-# ポップアップで色々選択 {{{
-nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
-nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
-nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
-nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
-
-# タブ移動したときだけリストを表示
-Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
-
-# gnとgpでバッファ移動
-def ShowBuf(a: string)
-	const b = bufnr()
-	while true
-		execute $'b{a}'
-		# terminalに移動すると混乱するのでスキップする || 無限ループ防止
-		if &buftype !=# 'terminal' || bufnr() ==# b
-			break
-		endif
-	endwhile
-	popselect#buffers#Popup({ extra_show: false })
-enddef
-Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
-
-# デフォルトのgmは使わないかな…
-# Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
-nnoremap gm <Cmd>buffer #<CR>
 # }}}
 
 # ------------------------------------------------------
