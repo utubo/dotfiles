@@ -333,7 +333,7 @@ SetupTabstopLazy()
 # ------------------------------------------------------
 # バッファ操作 {{{
 # grで直前のバッファ
-g:recentBufnr = 0
+g:recentBufnr = 1
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nnoremap gr <Cmd>execute $'b{g:recentBufnr}'<CR>
 # }}}

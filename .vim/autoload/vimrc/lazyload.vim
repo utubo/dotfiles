@@ -218,7 +218,7 @@ au vimrc SafeState * ++once C()
 enddef
 au vimrc BufReadPost * D()
 D()
-g:recentBufnr = 0
+g:recentBufnr = 1
 au vimrc BufLeave * g:recentBufnr = bufnr()
 nn gr <Cmd>execute $'b{g:recentBufnr}'<CR>
 def E(a: string = '')
