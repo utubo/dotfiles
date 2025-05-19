@@ -140,8 +140,8 @@ def ElaseListMark()
 		setline(l, a)
 	endfor
 enddef
-inoremap <buffer> ;m <CR><ScriptCmd>ElaseListMark()<CR>
-nnoremap <buffer> ;m <ScriptCmd>ElaseListMark()<CR>
-vnoremap <buffer> ;m <ScriptCmd>ElaseListMark()<CR>
+inoremap <buffer> ;r <CR><ScriptCmd>ElaseListMark()<CR>
+nnoremap <buffer> ;r <ScriptCmd>ElaseListMark()<CR>
+vnoremap <buffer> ;r <ScriptCmd>ElaseListMark()<CR>
 #}}} -------------------------------------------------------
 

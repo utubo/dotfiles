@@ -91,23 +91,23 @@ sil! cmdheight0#Invalidate()
 endif
 enddef
 const k = 300
+var m = 0
 var n = 0
-var p = 0
 def CursorMovedDelayExec(a: any = 0)
+m = 0
+if n !=# 0
 n = 0
-if p !=# 0
-p = 0
 D()
 endif
 enddef
 def F()
-if n !=# 0
-p += 1
+if m !=# 0
+n += 1
 return
 endif
 D()
-p = 0
-n = timer_start(k, CursorMovedDelayExec)
+n = 0
+m = timer_start(k, CursorMovedDelayExec)
 enddef
 au after_ftplugin_md CursorMoved <buffer> F()
 def G()
@@ -116,6 +116,6 @@ const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' '
 setline(l, a)
 endfor
 enddef
-ino <buffer> ;m <CR><ScriptCmd>G()<CR>
-nn <buffer> ;m <ScriptCmd>G()<CR>
-vn <buffer> ;m <ScriptCmd>G()<CR>
+ino <buffer> ;r <CR><ScriptCmd>G()<CR>
+nn <buffer> ;r <ScriptCmd>G()<CR>
+vn <buffer> ;r <ScriptCmd>G()<CR>
