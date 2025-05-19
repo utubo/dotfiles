@@ -19,6 +19,7 @@ return {
 cs: "\<C-u>colorscheme ",
 sb: "\<C-u>set background=\<Tab>",
 mv: "\<C-u>MoveFile ",
+pd: "\<C-u>PopSelectDir ",
 }->get(getcmdline(), ' ')
 enddef
 var m = {
@@ -114,6 +115,7 @@ cno <A-k> <Down>
 cno <A-l> <Right>
 cno <expr> <Space> A()
 com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
+com! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
 enddef
 export def ForVim9skk(a: any): any
 if m.win !=# 0

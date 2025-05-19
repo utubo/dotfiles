@@ -25,6 +25,7 @@ def MyAbbrev(): string
 		cs: "\<C-u>colorscheme ",
 		sb: "\<C-u>set background=\<Tab>",
 		mv: "\<C-u>MoveFile ",
+		pd: "\<C-u>PopSelectDir ",
 	}->get(getcmdline(), ' ')
 enddef
 #}}}
@@ -143,6 +144,7 @@ export def ApplySettings()
 	cnoremap <A-l> <Right>
 	cnoremap <expr> <Space> MyAbbrev()
 	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
+	command! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
 enddef
 
 # vim9skkとの連携 {{{
