@@ -559,6 +559,8 @@ Each nnoremap,xnoremap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
+# 念のため元の:をバックアップしておく
+nnoremap \: :
 # }}}
 
 # ------------------------------------------------------
