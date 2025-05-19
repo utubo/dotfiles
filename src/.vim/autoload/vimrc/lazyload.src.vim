@@ -90,7 +90,6 @@ enddef
 
 # このスクリプト内で必要となるプラグイン {{{
 packadd lsp
-packadd vim-notification
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail

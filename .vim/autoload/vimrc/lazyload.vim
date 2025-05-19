@@ -60,7 +60,6 @@ const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
 packadd lsp
-packadd vim-notification
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail
