@@ -335,7 +335,7 @@ SetupTabstopLazy()
 # grで直前のバッファ
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
-nnoremap <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
+nnoremap gr <Cmd>execute $'b{g:recentBufnr}'<CR>
 # }}}
 
 # ------------------------------------------------------

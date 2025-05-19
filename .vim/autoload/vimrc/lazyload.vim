@@ -220,7 +220,7 @@ au vimrc BufReadPost * D()
 D()
 g:recentBufnr = 0
 au vimrc BufLeave * g:recentBufnr = bufnr()
-nn <expr> gr $"\<Cmd>b{g:recentBufnr}\<CR>"
+nn gr <Cmd>execute $'b{g:recentBufnr}'<CR>
 def E(a: string = '')
 if &ft ==# 'qf'
 return
