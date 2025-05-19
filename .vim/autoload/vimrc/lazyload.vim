@@ -63,6 +63,8 @@ packadd lsp
 packadd vim-notification
 packadd vim-reformatdate
 packadd vim-textobj-user
+packadd vim-headtail
+packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
@@ -77,7 +79,6 @@ au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 no <Leader>ga ga
-packadd vim-headtail
 HeadTailMap g G
 Each nmap,xmap g% gi%
 Each nmap,xmap G% Gi%
@@ -287,7 +288,6 @@ echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 nn <script> <C-g> <ScriptCmd>E()<CR><ScriptCmd>BA()<CR>
-packadd vim-popselect
 nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>

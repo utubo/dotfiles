@@ -93,6 +93,8 @@ packadd lsp
 packadd vim-notification
 packadd vim-reformatdate
 packadd vim-textobj-user
+packadd vim-headtail
+packadd vim-popselect
 # }}}
 
 # zenmode {{{
@@ -120,7 +122,6 @@ au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 
 # headtail {{{
 noremap <Leader>ga ga
-packadd vim-headtail
 HeadTailMap g G
 Each nmap,xmap g% gi%
 Each nmap,xmap G% Gi%
@@ -415,7 +416,6 @@ nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<
 
 # ------------------------------------------------------
 # ポップアップで色々選択 {{{
-packadd vim-popselect
 nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
