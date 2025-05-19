@@ -147,6 +147,9 @@ def MyHighlight()
 	execute $'hi LspDiagSignHintText    {x}bg={signBg} {x}fg={GetHl("Question").fg}'
 	execute $'hi LspDiagSignInfoText    {x}bg={signBg} {x}fg={GetHl("Pmenu").fg}'
 	execute $'hi LspDiagSignWarningText {x}bg={signBg} {x}fg={GetHl("WarningMsg").fg}'
+	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
+	# E28: No such highlight group name: luaParenError " See issue #11277
+	hi link luaParenError Error
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
