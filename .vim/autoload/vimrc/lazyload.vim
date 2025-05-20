@@ -144,19 +144,6 @@ popselect#buffers#Popup({ extra_show: false })
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>B('X')<CR>
 nn gr <Cmd>buffer #<CR>
-def C()
-popselect#Popup([
-{ key: 'q', label: 'This' },
-'q: This',
-'j: Upper',
-'k: Bellow',
-'h: Right',
-'l: Left',
-'o: Only',
-], {
-})
-enddef
-nn <Leader>q <ScriptCmd>C()<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
@@ -199,13 +186,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def D(): string
+def C(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{D()}"
+ino <expr> ;l $"<C-w>{C()}"
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -223,7 +210,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def E()
+def D()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -245,11 +232,11 @@ endif
 setpos('.', b)
 enddef
 def SetupTabstopLazy()
-au vimrc SafeState * ++once E()
+au vimrc SafeState * ++once D()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
-def G(a: string = '')
+def F(a: string = '')
 if &ft ==# 'qf'
 return
 endif
@@ -314,7 +301,7 @@ endfor
 echoh Normal
 popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
-nn <script> <C-g> <ScriptCmd>G()<CR><ScriptCmd>BB()<CR>
+nn <script> <C-g> <ScriptCmd>F()<CR><ScriptCmd>BA()<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -329,7 +316,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def H()
+def G()
 if !!bufname()
 update
 return
@@ -364,7 +351,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav H()
+com! Sav G()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 no ;m <Esc>
@@ -487,31 +474,31 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def I()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def J(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * I()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-J('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-J('SpellRare', '\s[=!]=\s')
-J('SpellBad', '\s[=!]==\s')
-J('SpellBad', '\s\~[=!][=#]\?\s')
-J('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def BA()
+def J()
 var a = getregion(getpos('v'), getpos('.'))->join('')
 popup_create($'{strlen(a)}chars', {
 pos: 'botleft',
@@ -522,8 +509,8 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
-xn <C-g> <ScriptCmd>BA()<CR>
-def BB()
+xn <C-g> <ScriptCmd>J()<CR>
+def BA()
 var p = getcurpos()
 popup_create($'{p[1]}, {p[2]}', {
 pos: 'botleft',

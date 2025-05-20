@@ -257,3 +257,20 @@ au vimrc ColorScheme default {
 # 誰かがautocmd CursorHoldしてれば定期的に<CursorHold>キーがストロークされる
 nnoremap <CursorHold> <Cmd>nohlsearch<CR>
 # }}}
+
+# ポップアップでメニューをだしてウインドウをクローズ {{{
+def CloseMenu()
+	popselect#Popup([
+		{ shortcut: 'q', label: 'This' },
+		{ shortcut: 'j', label: 'Upper' },
+		{ shortcut: 'k', label: 'Bellow' },
+		{ shortcut: 'h', label: 'Right' },
+		{ shortcut: 'l', label: 'Left' },
+		{ shortcut: 'o', label: 'Only' },
+	], {
+		oncomplete: (item) => g:QuitWin(item.shortcut)
+	})
+enddef
+nnoremap <Leader>q <ScriptCmd>CloseMenu()<CR>
+# }}}
+
