@@ -314,11 +314,11 @@ xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nnoremap,xnoremap ;c :
-Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
-Each nnoremap,xnoremap + :
-Each nnoremap,xnoremap , :
-Each nnoremap,xnoremap <Space><Space>, ,
+Each nmap,xmap ;c :
+Each nmap,xmap ;s /
+Each nmap,xmap + :
+Each nmap,xmap , :
+Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}

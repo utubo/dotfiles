@@ -469,11 +469,11 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
 # 考え中
-Each nnoremap,xnoremap ;c :
-Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
-Each nnoremap,xnoremap + :
-Each nnoremap,xnoremap , :
-Each nnoremap,xnoremap <Space><Space>, ,
+Each nmap,xmap ;c :
+Each nmap,xmap ;s /
+Each nmap,xmap + :
+Each nmap,xmap , :
+Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
