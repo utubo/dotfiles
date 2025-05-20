@@ -59,6 +59,9 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
+g:maplocalleader = ';'
+nn <Space><LocalLeader> ;
+no <Space><LocalLeader> ;
 packadd lsp
 packadd vim-reformatdate
 packadd vim-textobj-user
@@ -67,12 +70,13 @@ packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
-midasi: ['Q', '; '],
-toggle: ['<C-j>', ';j'],
-complete: ['<CR>', ';;'],
+midasi: ['Q', '<LocalLeader>j'],
+enable: ['<LocalLeader>j'],
+disable: ['<LocalLeader>a'],
+complete: ['<CR>', '<LocalLeader>l'],
 },
 }
-nn ;j i<Plug>(vim9skk-enable)
+nn <LocalLeader>j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()

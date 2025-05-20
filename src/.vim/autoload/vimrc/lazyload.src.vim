@@ -85,6 +85,12 @@ def! g:VRange(): list<number>
 enddef
 # }}}
 
+# セミコロンをプレフィックスに {{{
+g:maplocalleader = ';'
+nnoremap <Space><LocalLeader> ;
+noremap  <Space><LocalLeader> ;
+# }}}
+
 # ------------------------------------------------------
 # プラグイン {{{
 
@@ -103,12 +109,13 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # vim9skk {{{
 g:vim9skk = {
 	keymap: {
-    	midasi: ['Q', '; '],
-		toggle: ['<C-j>', ';j'],
-		complete: ['<CR>', ';;'],
+		midasi: ['Q', '<LocalLeader>j'],
+		enable: ['<LocalLeader>j'],
+		disable: ['<LocalLeader>a'],
+		complete: ['<CR>', '<LocalLeader>l'],
 	},
 }
-nnoremap ;j i<Plug>(vim9skk-enable)
+nnoremap <LocalLeader>j i<Plug>(vim9skk-enable)
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 # 見出しモードでスタートする
@@ -429,7 +436,7 @@ command! Sav Sav()
 # }}}
 
 # ------------------------------------------------------
-# セミコロンをプレフィックスに {{{
+# <LocalLeader>系 {{{
 g:maplocalleader = ';'
 nnoremap <Space><LocalLeader> ;
 noremap  <Space><LocalLeader> ;
