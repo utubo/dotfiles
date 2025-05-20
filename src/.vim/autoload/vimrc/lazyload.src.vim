@@ -360,7 +360,7 @@ SetupTabstopLazy()
 # }}}
 
 # ------------------------------------------------------
-# <C-g>で色々情報を表示 {{{
+# <C-g>で本来の情報＋アルファを表示 {{{
 nnoremap <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
 xnoremap <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
 # }}}
