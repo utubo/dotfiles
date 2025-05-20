@@ -360,78 +360,9 @@ SetupTabstopLazy()
 # }}}
 
 # ------------------------------------------------------
-# バッファの情報を色付きで表示 {{{
-def ShowBufInfo(event: string = '')
-	if &ft ==# 'qf'
-		return
-	endif
-
-	var isReadPost = event ==# 'BufReadPost'
-	if isReadPost && !filereadable(expand('%'))
-		# プラグインとかが一時的なbufnameを付与して開いた場合は無視する
-		return
-	endif
-
-	const ruler = $' {line(".")}:{col(".")}'
-
-	var msg = []
-	add(msg, ['Title', $'"{bufname()}"'])
-	add(msg, ['Normal', ' '])
-	if &modified
-		add(msg, ['Delimiter', '[+]'])
-		add(msg, ['Normal', ' '])
-	endif
-	if !isReadPost && !filereadable(expand('%'))
-		add(msg, ['Tag', '[New]'])
-		add(msg, ['Normal', ' '])
-	endif
-	if &readonly
-		add(msg, ['WarningMsg', '[RO]'])
-		add(msg, ['Normal', ' '])
-	endif
-	const w = wordcount()
-	if isReadPost || w.bytes !=# 0
-		add(msg, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-		add(msg, ['Normal', ' '])
-	endif
-	add(msg, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
-	add(msg, ['Normal', ' '])
-	const enc = &fenc ?? &encoding
-	add(msg, [enc ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', enc])
-	add(msg, ['Normal', ' '])
-	add(msg, ['MoreMsg', &ft])
-	add(msg, ['Normal', ' '])
-	const branch = g:System('git branch')->trim()->matchstr('\w\+$')
-	add(msg, ['WarningMsg', branch])
-	var msglen = 0
-	const maxlen = &columns - len(ruler) - 2
-	for i in reverse(range(0, len(msg) - 1))
-		var s = msg[i][1]
-		var d = strdisplaywidth(s)
-		msglen += d
-		if maxlen < msglen
-			const l = maxlen - msglen + d
-			while !empty(s) && l < strdisplaywidth(s)
-				s = s[1 :]
-			endwhile
-			msg[i][1] = s
-			msg = msg[i : ]
-			insert(msg, ['SpecialKey', '<'], 0)
-			break
-		endif
-	endfor
-	add(msg, ['Normal', repeat(' ', maxlen - msglen) .. ruler])
-	redraw
-	echo ''
-	for m in msg
-		execute 'echohl' m[0]
-		echon m[1]
-	endfor
-	echohl Normal
-	popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
-enddef
-
-nnoremap <script> <C-g> <ScriptCmd>ShowBufInfo()<CR><ScriptCmd>PopupCursorPos()<CR>
+# <C-g>で色々情報を表示 {{{
+nnoremap <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
+xnoremap <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
 # }}}
 
 # ------------------------------------------------------
@@ -619,8 +550,8 @@ nnoremap <script> g: :<C-u><SID>(exec_line)
 nnoremap <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xnoremap g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
 xnoremap g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
-# カーソル位置のハイライトを確認するやつ
-nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
+# カーソル位置のハイライトを確認するやつ→<C-g>に移動
+# nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim
 # }}}
 
@@ -718,34 +649,6 @@ def g:EchoYankText(t: number)
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 #
-# }}}
-# 選択中の文字数をポップアップ {{{
-def PopupVisualLength()
-	var text = getregion(getpos('v'), getpos('.'))->join('')
-	popup_create($'{strlen(text)}chars', {
-		pos: 'botleft',
-		line: 'cursor-1',
-		col: 'cursor+1',
-		fixed: true,
-		moved: 'any',
-		padding: [1, 1, 1, 1],
-	})
-enddef
-xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
-# }}}
-#
-# カーソル位置をポップアップ {{{
-def PopupCursorPos()
-	var p = getcurpos()
-	popup_create($'{p[1]}:{p[2]}', {
-		pos: 'botleft',
-		line: 'cursor-1',
-		col: 'cursor+1',
-		moved: 'any',
-		padding: [1, 1, 1, 1],
-	})
-enddef
-#nnoremap <C-g> <ScriptCmd>PopupCursorPos()<CR>
 # }}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示

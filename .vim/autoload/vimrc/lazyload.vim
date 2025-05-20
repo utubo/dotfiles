@@ -236,72 +236,8 @@ au vimrc SafeState * ++once D()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
-def F(a: string = '')
-if &ft ==# 'qf'
-return
-endif
-var b = a ==# 'BufReadPost'
-if b && !filereadable(expand('%'))
-return
-endif
-const c = $' {line(".")}:{col(".")}'
-var e = []
-add(e, ['Title', $'"{bufname()}"'])
-add(e, ['Normal', ' '])
-if &modified
-add(e, ['Delimiter', '[+]'])
-add(e, ['Normal', ' '])
-endif
-if !b && !filereadable(expand('%'))
-add(e, ['Tag', '[New]'])
-add(e, ['Normal', ' '])
-endif
-if &readonly
-add(e, ['WarningMsg', '[RO]'])
-add(e, ['Normal', ' '])
-endif
-const w = wordcount()
-if b || w.bytes !=# 0
-add(e, ['Constant', printf('%dL, %dB', w.bytes ==# 0 ? 0 : line('$'), w.bytes)])
-add(e, ['Normal', ' '])
-endif
-add(e, [&ff ==# 'unix' ? 'MoreMsg' : 'WarningMsg', &ff])
-add(e, ['Normal', ' '])
-const f = &fenc ?? &enc
-add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
-add(e, ['Normal', ' '])
-add(e, ['MoreMsg', &ft])
-add(e, ['Normal', ' '])
-const h = g:System('git branch')->trim()->matchstr('\w\+$')
-add(e, ['WarningMsg', h])
-var j = 0
-const ba = &columns - len(c) - 2
-for i in reverse(range(0, len(e) - 1))
-var s = e[i][1]
-var d = strdisplaywidth(s)
-j += d
-if ba < j
-const l = ba - j + d
-while !empty(s) && l < strdisplaywidth(s)
-s = s[1 :]
-endwhile
-e[i][1] = s
-e = e[i : ]
-insert(e, ['SpecialKey', '<'], 0)
-break
-endif
-endfor
-add(e, ['Normal', repeat(' ', ba - j) .. c])
-redraw
-ec ''
-for m in e
-exe 'echohl' m[0]
-echon m[1]
-endfor
-echoh Normal
-popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
-enddef
-nn <script> <C-g> <ScriptCmd>F()<CR><ScriptCmd>BA()<CR>
+nn <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
+xn <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
@@ -316,7 +252,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def G()
+def F()
 if !!bufname()
 update
 return
@@ -351,7 +287,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav G()
+com! Sav F()
 cno ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 no ;m <Esc>
@@ -432,7 +368,6 @@ nn <script> g: :<C-u><SID>(exec_line)
 nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xn g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
 xn g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
-nn <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
@@ -474,52 +409,30 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def H()
+def G()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def I(a: string, b: string)
+def H(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * H()
+au vimrc Syntax * G()
 au vimrc Syntax javascript {
-I('SpellRare', '\s[=!]=\s')
+H('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-I('SpellRare', '\s[=!]=\s')
-I('SpellBad', '\s[=!]==\s')
-I('SpellBad', '\s\~[=!][=#]\?\s')
-I('SpellRare', '\<normal!\@!')
+H('SpellRare', '\s[=!]=\s')
+H('SpellBad', '\s[=!]==\s')
+H('SpellBad', '\s\~[=!][=#]\?\s')
+H('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
 vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-def J()
-var a = getregion(getpos('v'), getpos('.'))->join('')
-popup_create($'{strlen(a)}chars', {
-pos: 'botleft',
-line: 'cursor-1',
-col: 'cursor+1',
-fixed: true,
-moved: 'any',
-padding: [1, 1, 1, 1],
-})
-enddef
-xn <C-g> <ScriptCmd>J()<CR>
-def BA()
-var p = getcurpos()
-popup_create($'{p[1]}:{p[2]}', {
-pos: 'botleft',
-line: 'cursor-1',
-col: 'cursor+1',
-moved: 'any',
-padding: [1, 1, 1, 1],
-})
-enddef
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
 Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
