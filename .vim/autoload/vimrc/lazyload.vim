@@ -322,7 +322,7 @@ Each nnoremap,xnoremap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
-nn \: :
+nn <Leader>: :
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
