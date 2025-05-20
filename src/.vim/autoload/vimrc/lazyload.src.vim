@@ -207,6 +207,21 @@ Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 # デフォルトのgrは使わないかな…
 # Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
 nnoremap gr <Cmd>buffer #<CR>
+
+def CloseMenu()
+	popselect#Popup([
+		{ key: 'q', label: 'This' },
+		'q: This',
+		'j: Upper',
+		'k: Bellow',
+		'h: Right',
+		'l: Left',
+		'o: Only',
+	], {
+	})
+enddef
+nnoremap <Leader>q <ScriptCmd>CloseMenu()<CR>
+
 # }}}
 
 # Portal {{{
