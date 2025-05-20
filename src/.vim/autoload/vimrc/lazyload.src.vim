@@ -737,7 +737,7 @@ xnoremap <C-g> <ScriptCmd>PopupVisualLength()<CR>
 # カーソル位置をポップアップ {{{
 def PopupCursorPos()
 	var p = getcurpos()
-	popup_create($'{p[1]}, {p[2]}', {
+	popup_create($'{p[1]}:{p[2]}', {
 		pos: 'botleft',
 		line: 'cursor-1',
 		col: 'cursor+1',
