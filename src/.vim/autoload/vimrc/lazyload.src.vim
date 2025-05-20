@@ -430,12 +430,12 @@ command! Sav Sav()
 
 # ------------------------------------------------------
 # セミコロンをプレフィックスに {{{
-# ;nで決定、;mでキャンセル(;bにしたいが分割キーボードだと遠い…)
+# ;nで決定、;mでキャンセル
 cnoremap ;n <CR>
 Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
 noremap  ;m <Esc>
 inoremap ;m <Esc>`^
-# <Esc>はコマンドが実行されちゃうし<C-c>は副作用が大きい
+# Note: `<Esc>`だとコマンドが実行されちゃうし<C-c>は副作用が大きい
 cnoremap ;m <Cmd>call feedkeys("\e", 'nt')<CR>
 # その他
 inoremap ;v ;<CR>
