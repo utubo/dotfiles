@@ -24,8 +24,8 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> ;o <ScriptCmd>A()<CR>
-ino <buffer> ;o <ScriptCmd>A()<CR>
+no <buffer> <LocalLeader>o <ScriptCmd>A()<CR>
+ino <buffer> <LocalLeader>o <ScriptCmd>A()<CR>
 def B()
 for l in g:VRange()
 const a = getline(l)
@@ -42,7 +42,7 @@ endif
 endfor
 enddef
 nn <buffer> <Space>- <ScriptCmd>B()<CR>
-ino <buffer> ;- <ScriptCmd>B()<CR>
+ino <buffer> <LocalLeader>- <ScriptCmd>B()<CR>
 def C(): string
 var [a, b] = [line('.'), line('v')]->sort('n')
 if mode() ==? 'V'
@@ -116,6 +116,6 @@ const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' '
 setline(l, a)
 endfor
 enddef
-ino <buffer> ;r <CR><ScriptCmd>G()<CR>
-nn <buffer> ;r <ScriptCmd>G()<CR>
-vn <buffer> ;r <ScriptCmd>G()<CR>
+ino <buffer> <LocalReader>r <CR><ScriptCmd>G()<CR>
+nn <buffer> <LocalReader>r <ScriptCmd>G()<CR>
+vn <buffer> <LocalReader>r <ScriptCmd>G()<CR>

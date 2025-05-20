@@ -30,8 +30,8 @@ def ToggleCheckBox()
 		endif
 	endfor
 enddef
-noremap <buffer> ;o <ScriptCmd>ToggleCheckBox()<CR>
-inoremap <buffer> ;o <ScriptCmd>ToggleCheckBox()<CR>
+noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox()<CR>
+inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -52,7 +52,7 @@ def ToggleListMark()
 	endfor
 enddef
 nnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
-inoremap <buffer> ;- <ScriptCmd>ToggleListMark()<CR>
+inoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -140,8 +140,8 @@ def ElaseListMark()
 		setline(l, a)
 	endfor
 enddef
-inoremap <buffer> ;r <CR><ScriptCmd>ElaseListMark()<CR>
-nnoremap <buffer> ;r <ScriptCmd>ElaseListMark()<CR>
-vnoremap <buffer> ;r <ScriptCmd>ElaseListMark()<CR>
+inoremap <buffer> <LocalReader>r <CR><ScriptCmd>ElaseListMark()<CR>
+nnoremap <buffer> <LocalReader>r <ScriptCmd>ElaseListMark()<CR>
+vnoremap <buffer> <LocalReader>r <ScriptCmd>ElaseListMark()<CR>
 #}}} -------------------------------------------------------
 

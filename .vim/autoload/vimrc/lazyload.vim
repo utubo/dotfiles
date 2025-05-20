@@ -288,25 +288,24 @@ exe 'sav' e
 endif
 enddef
 com! Sav F()
-cno ;n <CR>
-Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
-no ;m <Esc>
-ino ;m <Esc>`^
-cno ;m <Cmd>call feedkeys("\e", 'nt')<CR>
-ino ;v ;<CR>
-ino ;w <C-o>e<C-o>a
-ino ;k 「」<C-g>U<Left>
-ino ;u <Esc>u
-nn ;r "
-nn ;rr "0p
-cno ;r <C-r>
-cno <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
-cno <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
-nn <Space>; ;
+g:maplocalleader = ';'
+nn <Space><LocalLeader> ;
+no <Space><LocalLeader> ;
+Each map,imap,cmap <LocalLeader>n <SID>(ok)
+Each map,imap,cmap <LocalLeader>m <SID>(cancel)
+Each nnoremap,inoremap <SID>(ok) <Esc><Cmd>Sav<CR>
+no <SID>(cancel) <Esc>
+ino <SID>(cancel) <Esc>`^
+ino <LocalLeader>v ;<CR>
+ino <LocalLeader>w <C-o>e<C-o>a
+ino <LocalLeader>k 「」<C-g>U<Left>
+ino <LocalLeader>u <Esc>u
+nn <LocalLeader>r "
+nn <LocalLeader>rr "0p
+Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 map! <script> <SID>bs_ <Nop>
-map! <script> ;h <SID>bs_h
+map! <script> <LocalLeader>h <SID>bs_h
 no! <script> <SID>bs_h <BS><SID>bs_
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
@@ -314,8 +313,8 @@ xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
 xn <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nmap,xmap ;c :
-Each nmap,xmap ;s /
+Each nmap,xmap <LocalLeader>c :
+Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,

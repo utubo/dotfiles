@@ -430,29 +430,28 @@ command! Sav Sav()
 
 # ------------------------------------------------------
 # セミコロンをプレフィックスに {{{
+g:maplocalleader = ';'
+nnoremap <Space><LocalLeader> ;
+noremap  <Space><LocalLeader> ;
 # ;nで決定、;mでキャンセル
-cnoremap ;n <CR>
-Each nnoremap,inoremap ;n <Esc><Cmd>Sav<CR>
-noremap  ;m <Esc>
-inoremap ;m <Esc>`^
-# Note: `<Esc>`だとコマンドが実行されちゃうし<C-c>は副作用が大きい
-cnoremap ;m <Cmd>call feedkeys("\e", 'nt')<CR>
+# コマンドモードの定義はcmdmode.src.vim
+Each map,imap,cmap <LocalLeader>n <SID>(ok)
+Each map,imap,cmap <LocalLeader>m <SID>(cancel)
+Each nnoremap,inoremap <SID>(ok) <Esc><Cmd>Sav<CR>
+noremap  <SID>(cancel) <Esc>
+inoremap <SID>(cancel) <Esc>`^
 # その他
-inoremap ;v ;<CR>
-inoremap ;w <C-o>e<C-o>a
-inoremap ;k 「」<C-g>U<Left>
-inoremap ;u <Esc>u
-nnoremap ;r "
-nnoremap ;rr "0p
-cnoremap ;r <C-r>
-cnoremap <expr> ;rr trim(@")->substitute('\n', ' \| ', 'g')
-cnoremap <expr> ;re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-Each nnoremap,inoremap ;<Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap ;<S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
-nnoremap <Space>; ;
+inoremap <LocalLeader>v ;<CR>
+inoremap <LocalLeader>w <C-o>e<C-o>a
+inoremap <LocalLeader>k 「」<C-g>U<Left>
+inoremap <LocalLeader>u <Esc>u
+nnoremap <LocalLeader>r "
+nnoremap <LocalLeader>rr "0p
+Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
+Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 # `;h`+`h`連打で<BS>
 map! <script> <SID>bs_ <Nop>
-map! <script> ;h <SID>bs_h
+map! <script> <LocalLeader>h <SID>bs_h
 noremap! <script> <SID>bs_h <BS><SID>bs_
 # }}}
 
@@ -469,8 +468,8 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
 # 考え中
-Each nmap,xmap ;c :
-Each nmap,xmap ;s /
+Each nmap,xmap <LocalLeader>c :
+Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
