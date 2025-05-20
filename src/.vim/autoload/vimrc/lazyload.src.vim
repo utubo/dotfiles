@@ -468,8 +468,6 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
-# Each nnoremap,xnoremap / <Cmd>noh<CR>/
-# Each nnoremap,xnoremap ? <Cmd>noh<CR>?
 # 考え中
 Each nnoremap,xnoremap ;c :
 Each nnoremap,xnoremap ;s <Cmd>noh<CR>/
