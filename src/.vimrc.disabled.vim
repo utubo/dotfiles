@@ -274,3 +274,15 @@ enddef
 nnoremap <Leader>q <ScriptCmd>CloseMenu()<CR>
 # }}}
 
+# 行番号表示をトグルする {{{
+export def ToggleNumber()
+	if &number
+		set nonumber
+	elseif &relativenumber
+		set number norelativenumber
+	else
+		set relativenumber
+	endif
+enddef
+#}}}
+

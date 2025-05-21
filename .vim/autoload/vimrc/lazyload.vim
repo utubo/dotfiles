@@ -168,7 +168,7 @@ vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
-com! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
@@ -375,7 +375,7 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
-nn <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
+nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
 nm gs :<C-u>%s///g<Left><Left><Left>
 nm gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>

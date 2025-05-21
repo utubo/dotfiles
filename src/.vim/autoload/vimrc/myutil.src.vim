@@ -30,18 +30,6 @@ export def VimGrep(keyword: string, ...targets: list<string>)
 enddef
 #}}}
 
-# 行番号表示をトグルする {{{
-export def ToggleNumber()
-	if &number
-		set nonumber
-	elseif &relativenumber
-		set number norelativenumber
-	else
-		set relativenumber
-	endif
-enddef
-#}}}
-
 # ホールドマーカーの前にスペース、後ろに改行を入れる {{{
 export def Zf()
 	var [firstline, lastline] = g:VFirstLast()

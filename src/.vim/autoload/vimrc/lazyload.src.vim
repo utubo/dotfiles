@@ -254,7 +254,7 @@ vimrc#lsp#LazyLoad()
 # 遅延読み込みもの {{{
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
-command! -nargs=* Fern vimrc#fern#LazyLoad(<q-args>)
+Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 # }}}
 
 # その他 {{{
@@ -566,7 +566,7 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
-nnoremap <F11> <ScriptCmd>vimrc#myutil#ToggleNumber()<CR>
+nnoremap <F11> <Cmd>set number!<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
 nmap gs :<C-u>%s///g<Left><Left><Left>

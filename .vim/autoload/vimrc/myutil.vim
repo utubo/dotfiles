@@ -21,15 +21,6 @@ tabc +
 endif
 endif
 enddef
-export def ToggleNumber()
-if &number
-set nonumber
-elseif &relativenumber
-set number norelativenumber
-else
-set relativenumber
-endif
-enddef
 export def Zf()
 var [a, b] = g:VFirstLast()
 exe ':' a 's/\v(\S)?$/\1 /'
