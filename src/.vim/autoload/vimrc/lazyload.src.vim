@@ -64,7 +64,7 @@ enddef
 # Repeatable last key
 # e.g. RLK nmap <Leader> h <BS>
 var repeatable_id = 0
-def! g:RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
+def RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
 	repeatable_id += 1
 	const nor = cmd->substitute('map', 'noremap', '')
 	# <Space> prevents ghoast char.
@@ -73,7 +73,7 @@ def! g:RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
 	execute $'{nor} <script> {sidkey}{last} {rhs->join(' ')}{sidkey}'
 	execute $'{cmd} <script> {lhs}{last} {sidkey}{last}'
 enddef
-command! -nargs=* RLK g:RLK(<f-args>)
+command! -nargs=* RLK RLK(<f-args>)
 # }}}
 
 # ------------------------------------------------------
