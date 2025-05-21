@@ -53,7 +53,7 @@ enddef
 def g:KeepCursor(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
-	execute 'normal! {expr}'
+	execute $'normal! {expr}'
 	cur[2] += getline('.')->len() - len
 	setpos('.', cur)
 enddef
