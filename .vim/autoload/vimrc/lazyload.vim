@@ -23,9 +23,6 @@ enddef
 com! -nargs=* Each g:UtilEach(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def g:IndentStr(a: any): string
-return matchstr(getline(a), '^\s*')
-enddef
 def A(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
@@ -47,13 +44,6 @@ while job_status(c) ==# 'run'
 sleep 10m
 endwhile
 return join(b, "\n")
-enddef
-def! g:VFirstLast(): list<number>
-return [line('.'), line('v')]->sort('n')
-enddef
-def! g:VRange(): list<number>
-const a = g:VFirstLast()
-return range(a[0], a[1])
 enddef
 var lk = 0
 def! g:RLK(a: string, b: string, c: string, ...d: list<string>)

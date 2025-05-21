@@ -37,10 +37,6 @@ command! -nargs=* Each g:UtilEach(<q-args>)
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-def g:IndentStr(expr: any): string
-	return matchstr(getline(expr), '^\s*')
-enddef
-
 def KeepCursor(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
@@ -63,16 +59,6 @@ def g:System(cmd: string): string
 		sleep 10m
 	endwhile
 	return join(result, "\n")
-enddef
-
-# <Cmd>でdefを実行したときのビジュアルモードの範囲(行)
-def! g:VFirstLast(): list<number>
-	return [line('.'), line('v')]->sort('n')
-enddef
-
-def! g:VRange(): list<number>
-	const a = g:VFirstLast()
-	return range(a[0], a[1])
 enddef
 
 # Repeatable last key

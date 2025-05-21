@@ -22,11 +22,14 @@ endif
 endif
 enddef
 export def Zf()
-var [a, b] = g:VFirstLast()
-exe ':' a 's/\v(\S)?$/\1 /'
-append(b, g:IndentStr(a))
-cursor([a, 1])
-cursor([b + 1, 1])
+const a = getregionpos(getpos('v'), getpos('.'))
+const b = a[0][0][1]
+const c = a[-1][-1][1]
+exe $':{b}s/\v(\S)?$/\1 /'
+const d = getline(b)->matchstr('^\s*')
+append(c, d)
+cursor([b, 1])
+cursor([c + 1, 1])
 normal! zf
 enddef
 export def Zd()
