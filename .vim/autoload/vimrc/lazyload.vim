@@ -1,30 +1,26 @@
 vim9script
-g:util_each_nest = 0
 def! g:UtilEach(a: string)
 var [b, d] = a->split('^\S*\zs')
-g:util_each_nest += 1
 const e = b->split('=')
-const f = len(e) ==# 1 ? ['{0\?}'] : e[0]->split(',')
-const h = e[-1]->split(',')
-const j = match(d, f[0]) !=# -1
+const f = e[-1]->split(',')
+var h = ['<UtilEach>']
+if len(e) ==# 1
+d = $'{h[0]} {d}'
+else
+h = e[0]->split(',')
+endif
 var i = 0
-while i < h->len()
+while i < f->len()
 var c = d
-var v = h[i]
-if j
-for k in f
-c = c->substitute(k, v, 'g')
+var v = f[i]
+for k in h
+c = c->substitute(k, f[i], 'g')
 i += 1
 endfor
-else
-c = $'{v} {c}'
-i += 1
-endif
-exe c->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
+exe c
 endwhile
-g:util_each_nest -= 1
 enddef
-com! -keepscript -nargs=* Each g:UtilEach(<q-args>)
+com! -nargs=* Each g:UtilEach(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def g:IndentStr(a: any): string
@@ -328,8 +324,8 @@ Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
+Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
 nn <Leader>: :
 if has('win32')
 com! Powershell :bo terminal ++close pwsh

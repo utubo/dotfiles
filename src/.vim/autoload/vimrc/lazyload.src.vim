@@ -7,40 +7,31 @@ vim9script
 #   Each nmap,xmap j gj
 #   → nmap j gj | xmap j gj
 # 先頭以外に差し込んだりネストしたい場合はこう
-#   Each j,k Each nmap,xmap {1} {0} g{0}
-#   → nmap j gj | xmap j gj | nmap k gk | xmap k gk
-# 名前をつけたい場合はこんなかんじ
-#   Each X=j,k Each nnoremap X gX
-#   Each X,Y=j,+,k,- nnoremap <Space>X Y
+#   Each X=n,x Each Y=j,k Ymap X gX
+#   → nmap j gj | nmap k gk | xmap j gj | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-g:util_each_nest = 0
 def! g:UtilEach(qargs: string)
 	var [items, cmd] = qargs->split('^\S*\zs')
-	g:util_each_nest += 1
 	const kv = items->split('=')
-	const keys = len(kv) ==# 1 ? ['{0\?}'] : kv[0]->split(',')
 	const values = kv[-1]->split(',')
-	const haskey = match(cmd, keys[0]) !=# -1
+	var keys = ['<UtilEach>']
+	if len(kv) ==# 1
+		cmd = $'{keys[0]} {cmd}'
+	else
+		keys = kv[0]->split(',')
+	endif
 	var i = 0
 	while i < values->len()
 		var c = cmd
 		var v = values[i]
-		if haskey
-			# 置き換え文字ありの場合(e.g. `Each val1,val2 cmd {}`)
-			for k in keys
-				c = c->substitute(k, v, 'g')
-				i += 1
-			endfor
-		else
-			# 置き換え文字なしの場合(e.g. `Each cmd1,cmd2 val`)
-			c = $'{v} {c}'
+		for k in keys
+			c = c->substitute(k, values[i], 'g')
 			i += 1
-		endif
-		execute c->substitute($"\{{g:util_each_nest}\}", '{}', 'g')
+		endfor
+		execute c
 	endwhile
-	g:util_each_nest -= 1
 enddef
-command! -keepscript -nargs=* Each g:UtilEach(<q-args>)
+command! -nargs=* Each g:UtilEach(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
@@ -493,8 +484,8 @@ Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each n,v {}noremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each /,? nnoremap {} <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>{}
+Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
 # 念のため元の:をバックアップしておく
 nnoremap <Leader>: :
 # }}}

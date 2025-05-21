@@ -17,7 +17,7 @@ enddef
 def A(): string
 return {
 cs: "\<C-u>colorscheme ",
-sb: "\<C-u>set background=\<Tab>",
+sb: "\<C-u>set background=\<Tab>\<Tab>",
 mv: "\<C-u>MoveFile ",
 pd: "\<C-u>PopSelectDir ",
 }->get(getcmdline(), ' ')
@@ -44,7 +44,7 @@ guifg: get(m.msghl[0], 'guibg', get(a, 'guibg', 'NONE')),
 cleared: false,
 })
 [b]->hlset()
-m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
+m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2, highlightaaa: 'Normal' })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
 set t_ve=
