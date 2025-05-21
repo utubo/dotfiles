@@ -45,7 +45,7 @@ def g:System(cmd: string): string
 	var result = []
 	var job = job_start(cmd, {
 		out_cb: (j, s) => {
-			result = result + [s]
+			result->add(s)
 		}
 	})
 	while job_status(job) ==# 'run'

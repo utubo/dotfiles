@@ -30,7 +30,7 @@ endif
 var b = []
 var c = job_start(a, {
 out_cb: (j, s) => {
-b = b + [s]
+b->add(s)
 }
 })
 while job_status(c) ==# 'run'
