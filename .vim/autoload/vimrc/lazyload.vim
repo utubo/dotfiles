@@ -23,13 +23,6 @@ enddef
 com! -nargs=* Each A(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def B(a: string)
-const b = getline('.')->len()
-var c = getcurpos()
-exe $'normal! {a}'
-c[2] += getline('.')->len() - b
-setpos('.', c)
-enddef
 def g:System(a: string): string
 if !has('win32')
 return system(a)
@@ -44,6 +37,13 @@ while job_status(c) ==# 'run'
 sleep 10m
 endwhile
 return join(b, "\n")
+enddef
+def B(a: string)
+const b = getline('.')->len()
+var c = getcurpos()
+exe $'normal! {a}'
+c[2] += getline('.')->len() - b
+setpos('.', c)
 enddef
 var lk = 0
 def C(a: string, b: string, c: string, ...d: list<string>)

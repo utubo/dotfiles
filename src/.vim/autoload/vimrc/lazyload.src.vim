@@ -33,18 +33,11 @@ def UtilEach(qargs: string)
 enddef
 command! -nargs=* Each UtilEach(<q-args>)
 
-# その他
+# よくあるやつ
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-def KeepCursor(expr: string)
-	const len = getline('.')->len()
-	var cur = getcurpos()
-	execute $'normal! {expr}'
-	cur[2] += getline('.')->len() - len
-	setpos('.', cur)
-enddef
-
+# Windowsで窓を表示させないsystem()
 def g:System(cmd: string): string
 	if !has('win32')
 		return system(cmd)
@@ -61,8 +54,17 @@ def g:System(cmd: string): string
 	return join(result, "\n")
 enddef
 
+# >>とかしたときにカーソル位置をキープ
+def KeepCursor(expr: string)
+	const len = getline('.')->len()
+	var cur = getcurpos()
+	execute $'normal! {expr}'
+	cur[2] += getline('.')->len() - len
+	setpos('.', cur)
+enddef
+
 # Repeatable last key
-# e.g. RLK nmap <Leader> h <BS>
+# e.g. RLK cmap <Leader> h <Left>
 var repeatable_id = 0
 def RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
 	repeatable_id += 1
