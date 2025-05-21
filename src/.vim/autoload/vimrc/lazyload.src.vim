@@ -77,11 +77,6 @@ command! -nargs=* RLK RLK(<f-args>)
 # }}}
 
 # ------------------------------------------------------
-# セミコロンをプレフィックスに {{{
-g:maplocalleader = ';'
-# }}}
-
-# ------------------------------------------------------
 # プラグイン {{{
 
 # このスクリプト内で必要となるプラグイン {{{
@@ -294,6 +289,100 @@ inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
 # }}}
 
 # ------------------------------------------------------
+# <LocalLeader>系 {{{
+g:maplocalleader = ';'
+nnoremap <Space><LocalLeader> ;
+noremap  <Space><LocalLeader> ;
+# ;nで決定、;mでキャンセル
+# コマンドモードの定義はcmdmode.src.vim
+Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
+Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
+Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
+noremap  <LocalLeader>(cancel) <Esc>
+inoremap <LocalLeader>(cancel) <Esc>`^
+# その他
+inoremap <LocalLeader>v ;<CR>
+inoremap <LocalLeader>w <C-o>e<C-o>a
+inoremap <LocalLeader>k 「」<C-g>U<Left>
+inoremap <LocalLeader>u <Esc>u
+nnoremap <LocalLeader>r "
+nnoremap <LocalLeader>rr "0p
+RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCursor('>>')<CR>
+RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCursor('<<')<CR>
+RLK map! <LocalLeader> b <BS>
+RLK map! <LocalLeader> h <Left>
+RLK map! <LocalLeader> l <Right>
+# }}}
+
+# ------------------------------------------------------
+# スマホ用 {{{
+# - キーが小さいので押しにくいものはSpaceへマッピング
+# - スマホでのコーディングは基本的にバグ取り
+# スタックトレースからyankしてソースの該当箇所を探すのを補助
+nnoremap <Space>e G?\cErr\\|Exception<CR>
+nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
+# スマホだと:と/とファンクションキーが遠いので…
+nmap <Space>. :
+nmap <Space>, /
+nmap g<Space> g;
+for i in range(1, 10)
+	execute $'nmap <Space>{i % 10} <F{i}>'
+endfor
+nmap <Space><Space>1 <F11>
+nmap <Space><Space>2 <F12>
+# その他
+nnoremap <Space>a A
+nnoremap <Space>h ^
+nnoremap <Space>l $
+nnoremap <Space>y yiw
+# }}}
+
+# ------------------------------------------------------
+# ビジュアルモードあれこれ {{{
+xnoremap u <ScriptCmd>undo\|normal! gv<CR>
+xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xnoremap <Tab> <ScriptCmd>KeepCursor('>gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>KeepCursor('<gv')<CR>
+const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
+xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
+# }}}
+
+# ------------------------------------------------------
+# コマンドモードあれこれ {{{
+# 考え中
+Each nmap,xmap <LocalLeader>c :
+Each nmap,xmap <LocalLeader>s /
+Each nmap,xmap + :
+Each nmap,xmap , :
+Each nmap,xmap <Space><Space>, ,
+# その他の設定
+au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
+Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
+# 念のため元の:をバックアップしておく
+nnoremap <Leader>: :
+# }}}
+
+# ------------------------------------------------------
+# terminalとか {{{
+# `SH`で開く
+if has('win32')
+	command! Powershell :bo terminal ++close pwsh
+	nnoremap SH <Cmd>Powershell<CR>
+	nnoremap <S-F1> <Cmd>silent !start explorer %:p:h<CR>
+else
+	nnoremap SH <Cmd>bo terminal<CR>
+endif
+# `drop`コマンドでterminalからvimで開く
+def g:Tapi_drop(bufnr: number, arglist: list<string>)
+	 vimrc#terminal#Tapi_drop(bufnr, arglist)
+enddef
+# その他の設定
+au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
+
+# }}}
+
+# ------------------------------------------------------
 # vimgrep {{{
 command! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
@@ -362,29 +451,6 @@ xnoremap <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
 # }}}
 
 # ------------------------------------------------------
-# スマホ用 {{{
-# - キーが小さいので押しにくいものはSpaceへマッピング
-# - スマホでのコーディングは基本的にバグ取り
-# スタックトレースからyankしてソースの該当箇所を探すのを補助
-nnoremap <Space>e G?\cErr\\|Exception<CR>
-nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
-# スマホだと:と/とファンクションキーが遠いので…
-nmap <Space>. :
-nmap <Space>, /
-nmap g<Space> g;
-for i in range(1, 10)
-	execute $'nmap <Space>{i % 10} <F{i}>'
-endfor
-nmap <Space><Space>1 <F11>
-nmap <Space><Space>2 <F12>
-# その他
-nnoremap <Space>a A
-nnoremap <Space>h ^
-nnoremap <Space>l $
-nnoremap <Space>y yiw
-# }}}
-
-# ------------------------------------------------------
 # ファイル名を勝手につけて保存 {{{
 def Sav()
 	if !!bufname()
@@ -422,77 +488,6 @@ def Sav()
 	endif
 enddef
 command! Sav Sav()
-# }}}
-
-# ------------------------------------------------------
-# <LocalLeader>系 {{{
-g:maplocalleader = ';'
-nnoremap <Space><LocalLeader> ;
-noremap  <Space><LocalLeader> ;
-# ;nで決定、;mでキャンセル
-# コマンドモードの定義はcmdmode.src.vim
-Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
-Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
-Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
-noremap  <LocalLeader>(cancel) <Esc>
-inoremap <LocalLeader>(cancel) <Esc>`^
-# その他
-inoremap <LocalLeader>v ;<CR>
-inoremap <LocalLeader>w <C-o>e<C-o>a
-inoremap <LocalLeader>k 「」<C-g>U<Left>
-inoremap <LocalLeader>u <Esc>u
-nnoremap <LocalLeader>r "
-nnoremap <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCursor('>>')<CR>
-RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCursor('<<')<CR>
-RLK map! <LocalLeader> b <BS>
-RLK map! <LocalLeader> h <Left>
-RLK map! <LocalLeader> l <Right>
-# }}}
-
-# ------------------------------------------------------
-# ビジュアルモードあれこれ {{{
-xnoremap u <ScriptCmd>undo\|normal! gv<CR>
-xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>KeepCursor('>gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>KeepCursor('<gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
-xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
-# }}}
-
-# ------------------------------------------------------
-# コマンドモードあれこれ {{{
-# 考え中
-Each nmap,xmap <LocalLeader>c :
-Each nmap,xmap <LocalLeader>s /
-Each nmap,xmap + :
-Each nmap,xmap , :
-Each nmap,xmap <Space><Space>, ,
-# その他の設定
-au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
-# 念のため元の:をバックアップしておく
-nnoremap <Leader>: :
-# }}}
-
-# ------------------------------------------------------
-# terminalとか {{{
-# `SH`で開く
-if has('win32')
-	command! Powershell :bo terminal ++close pwsh
-	nnoremap SH <Cmd>Powershell<CR>
-	nnoremap <S-F1> <Cmd>silent !start explorer %:p:h<CR>
-else
-	nnoremap SH <Cmd>bo terminal<CR>
-endif
-# `drop`コマンドでterminalからvimで開く
-def g:Tapi_drop(bufnr: number, arglist: list<string>)
-	 vimrc#terminal#Tapi_drop(bufnr, arglist)
-enddef
-# その他の設定
-au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-
 # }}}
 
 # ------------------------------------------------------

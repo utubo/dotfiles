@@ -55,7 +55,6 @@ exe $'{e} <script> {f}{c} {d->join(' ')}{f}'
 exe $'{a} <script> {b}{c} {f}{c}'
 enddef
 com! -nargs=* RLK B(<f-args>)
-g:maplocalleader = ';'
 packadd lsp
 packadd vim-reformatdate
 packadd vim-textobj-user
@@ -190,6 +189,65 @@ const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
 ino <expr> ;l $"<C-w>{E()}"
+g:maplocalleader = ';'
+nn <Space><LocalLeader> ;
+no <Space><LocalLeader> ;
+Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
+Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
+Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
+no <LocalLeader>(cancel) <Esc>
+ino <LocalLeader>(cancel) <Esc>`^
+ino <LocalLeader>v ;<CR>
+ino <LocalLeader>w <C-o>e<C-o>a
+ino <LocalLeader>k 「」<C-g>U<Left>
+ino <LocalLeader>u <Esc>u
+nn <LocalLeader>r "
+nn <LocalLeader>rr "0p
+RLK nmap <LocalLeader> <Tab> <ScriptCmd>A('>>')<CR>
+RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>A('<<')<CR>
+RLK map! <LocalLeader> b <BS>
+RLK map! <LocalLeader> h <Left>
+RLK map! <LocalLeader> l <Right>
+nn <Space>e G?\cErr\\|Exception<CR>
+nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
+nm <Space>. :
+nm <Space>, /
+nm g<Space> g;
+for i in range(1, 10)
+exe $'nmap <Space>{i % 10} <F{i}>'
+endfor
+nm <Space><Space>1 <F11>
+nm <Space><Space>2 <F12>
+nn <Space>a A
+nn <Space>h ^
+nn <Space>l $
+nn <Space>y yiw
+xn u <ScriptCmd>undo\|normal! gv<CR>
+xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xn <Tab> <ScriptCmd>A('>gv')<CR>
+xn <S-Tab> <ScriptCmd>A('<gv')<CR>
+const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
+xn <script> <expr> v vmode[vmode->index(mode()) + 1]
+Each nmap,xmap <LocalLeader>c :
+Each nmap,xmap <LocalLeader>s /
+Each nmap,xmap + :
+Each nmap,xmap , :
+Each nmap,xmap <Space><Space>, ,
+au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
+Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
+nn <Leader>: :
+if has('win32')
+com! Powershell :bo terminal ++close pwsh
+nn SH <Cmd>Powershell<CR>
+nn <S-F1> <Cmd>silent !start explorer %:p:h<CR>
+else
+nn SH <Cmd>bo terminal<CR>
+endif
+def g:Tapi_drop(a: number, b: list<string>)
+vimrc#terminal#Tapi_drop(a, b)
+enddef
+au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -235,20 +293,6 @@ au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
 nn <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
 xn <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
-nn <Space>e G?\cErr\\|Exception<CR>
-nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
-nm <Space>. :
-nm <Space>, /
-nm g<Space> g;
-for i in range(1, 10)
-exe $'nmap <Space>{i % 10} <F{i}>'
-endfor
-nm <Space><Space>1 <F11>
-nm <Space><Space>2 <F12>
-nn <Space>a A
-nn <Space>h ^
-nn <Space>l $
-nn <Space>y yiw
 def H()
 if !!bufname()
 update
@@ -285,51 +329,6 @@ exe 'sav' e
 endif
 enddef
 com! Sav H()
-g:maplocalleader = ';'
-nn <Space><LocalLeader> ;
-no <Space><LocalLeader> ;
-Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
-Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
-Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
-no <LocalLeader>(cancel) <Esc>
-ino <LocalLeader>(cancel) <Esc>`^
-ino <LocalLeader>v ;<CR>
-ino <LocalLeader>w <C-o>e<C-o>a
-ino <LocalLeader>k 「」<C-g>U<Left>
-ino <LocalLeader>u <Esc>u
-nn <LocalLeader>r "
-nn <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> <ScriptCmd>A('>>')<CR>
-RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>A('<<')<CR>
-RLK map! <LocalLeader> b <BS>
-RLK map! <LocalLeader> h <Left>
-RLK map! <LocalLeader> l <Right>
-xn u <ScriptCmd>undo\|normal! gv<CR>
-xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>A('>gv')<CR>
-xn <S-Tab> <ScriptCmd>A('<gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
-xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nmap,xmap <LocalLeader>c :
-Each nmap,xmap <LocalLeader>s /
-Each nmap,xmap + :
-Each nmap,xmap , :
-Each nmap,xmap <Space><Space>, ,
-au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
-nn <Leader>: :
-if has('win32')
-com! Powershell :bo terminal ++close pwsh
-nn SH <Cmd>Powershell<CR>
-nn <S-F1> <Cmd>silent !start explorer %:p:h<CR>
-else
-nn SH <Cmd>bo terminal<CR>
-endif
-def g:Tapi_drop(a: number, b: list<string>)
-vimrc#terminal#Tapi_drop(a, b)
-enddef
-au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 def g:QuitWin(a: string)
 if winnr() ==# winnr(a)
 return
