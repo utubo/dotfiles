@@ -50,14 +50,13 @@ def g:IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
-def g:KeepCursor(expr: string)
+def KeepCursor(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
 	execute $'normal! {expr}'
 	cur[2] += getline('.')->len() - len
 	setpos('.', cur)
 enddef
-command! -nargs=1 KeepCursor g:KeepCursor(<q-args>)
 
 def g:System(cmd: string): string
 	if !has('win32')
@@ -467,8 +466,8 @@ inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
 nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> KeepCursor >>
-RLK nmap <LocalLeader> <S-Tab> KeepCursor <<
+RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCursor('>>')<CR>
+RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCursor('<<')<CR>
 # `;h`+`h`連打で<BS>
 # Note: マッピングの最後を<Space>にしないと表示にゴミが残こる
 RLK map! <LocalLeader> h <BS>
@@ -478,8 +477,8 @@ RLK map! <LocalLeader> h <BS>
 # ビジュアルモードあれこれ {{{
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> KeepCursor >gv
-xnoremap <S-Tab> KeepCursor <gv
+xnoremap <Tab> <ScriptCmd>KeepCursor('>gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>KeepCursor('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
 xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # }}}

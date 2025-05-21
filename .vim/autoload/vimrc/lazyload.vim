@@ -30,14 +30,13 @@ com! -nargs=1 -complete=var Disable <args> = 0
 def g:IndentStr(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
-def g:KeepCursor(a: string)
+def A(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe $'normal! {a}'
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-com! -nargs=1 KeepCursor g:KeepCursor(<q-args>)
 def g:System(a: string): string
 if !has('win32')
 return system(a)
@@ -123,7 +122,7 @@ nn <Space>gp <Cmd>Git pull<CR>
 nn <Space>gl <Cmd>Git log<CR>
 nn <Space>gt :<C-u>GitTagPush<Space>
 nn <Space>gC :<C-u>Git checkout %
-def A()
+def B()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
 const c = getcwd()
@@ -133,7 +132,7 @@ chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
-nn <Space>GL <ScriptCmd>A()<CR>
+nn <Space>GL <ScriptCmd>B()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
@@ -145,7 +144,7 @@ nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
 nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
 Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
-def B(a: string)
+def C(a: string)
 const b = bufnr()
 while true
 exe $'b{a}'
@@ -155,7 +154,7 @@ endif
 endwhile
 popselect#buffers#Popup({ extra_show: false })
 enddef
-Each X=n,p nnoremap gX <ScriptCmd>B('X')<CR>
+Each X=n,p nnoremap gX <ScriptCmd>C('X')<CR>
 nn gr <Cmd>buffer #<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
@@ -198,13 +197,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def C(): string
+def D(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{C()}"
+ino <expr> ;l $"<C-w>{D()}"
 com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
@@ -222,7 +221,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def D()
+def E()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -244,7 +243,7 @@ endif
 setpos('.', b)
 enddef
 def SetupTabstopLazy()
-au vimrc SafeState * ++once D()
+au vimrc SafeState * ++once E()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
@@ -264,7 +263,7 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-def F()
+def G()
 if !!bufname()
 update
 return
@@ -299,7 +298,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav F()
+com! Sav G()
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
@@ -314,13 +313,13 @@ ino <LocalLeader>k 「」<C-g>U<Left>
 ino <LocalLeader>u <Esc>u
 nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> KeepCursor >>
-RLK nmap <LocalLeader> <S-Tab> KeepCursor <<
+RLK nmap <LocalLeader> <Tab> <ScriptCmd>A('>>')<CR>
+RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>A('<<')<CR>
 RLK map! <LocalLeader> h <BS>
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> KeepCursor >gv
-xn <S-Tab> KeepCursor <gv
+xn <Tab> <ScriptCmd>A('>gv')<CR>
+xn <S-Tab> <ScriptCmd>A('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 Each nmap,xmap <LocalLeader>c :
@@ -418,24 +417,24 @@ nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F10> <ESC>1<C-w>s<C-w>w
 nn <F9> my
 nn <Space><F9> 'y
-def G()
+def H()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def H(a: string, b: string)
+def I(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * G()
+au vimrc Syntax * H()
 au vimrc Syntax javascript {
-H('SpellRare', '\s[=!]=\s')
+I('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-H('SpellRare', '\s[=!]=\s')
-H('SpellBad', '\s[=!]==\s')
-H('SpellBad', '\s\~[=!][=#]\?\s')
-H('SpellRare', '\<normal!\@!')
+I('SpellRare', '\s[=!]=\s')
+I('SpellBad', '\s[=!]==\s')
+I('SpellBad', '\s\~[=!][=#]\?\s')
+I('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)
