@@ -116,8 +116,8 @@ cno <A-l> <Right>
 cno <expr> <Space> A()
 com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 com! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
-cno <SID>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
-cno <SID>(ok) <CR>
+cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
+cno <LocalLeader>(ok) <CR>
 cno <LocalLeader>r <C-r>
 cno <expr> <LocalLeader>rr trim(@")->substitute('\n', ' \| ', 'g')
 cno <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')

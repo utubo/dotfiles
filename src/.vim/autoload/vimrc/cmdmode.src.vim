@@ -147,8 +147,8 @@ export def ApplySettings()
 	command! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
 	# <LocalLeader>系
 	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
-	cnoremap <SID>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
-	cnoremap <SID>(ok) <CR>
+	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
+	cnoremap <LocalLeader>(ok) <CR>
 	cnoremap <LocalLeader>r <C-r>
 	cnoremap <expr> <LocalLeader>rr trim(@")->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')

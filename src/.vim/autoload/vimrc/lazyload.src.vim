@@ -442,11 +442,11 @@ nnoremap <Space><LocalLeader> ;
 noremap  <Space><LocalLeader> ;
 # ;nで決定、;mでキャンセル
 # コマンドモードの定義はcmdmode.src.vim
-Each map,imap,cmap <LocalLeader>n <SID>(ok)
-Each map,imap,cmap <LocalLeader>m <SID>(cancel)
-Each nnoremap,inoremap <SID>(ok) <Esc><Cmd>Sav<CR>
-noremap  <SID>(cancel) <Esc>
-inoremap <SID>(cancel) <Esc>`^
+Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
+Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
+Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
+noremap  <LocalLeader>(cancel) <Esc>
+inoremap <LocalLeader>(cancel) <Esc>`^
 # その他
 inoremap <LocalLeader>v ;<CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a

@@ -295,11 +295,11 @@ com! Sav F()
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
-Each map,imap,cmap <LocalLeader>n <SID>(ok)
-Each map,imap,cmap <LocalLeader>m <SID>(cancel)
-Each nnoremap,inoremap <SID>(ok) <Esc><Cmd>Sav<CR>
-no <SID>(cancel) <Esc>
-ino <SID>(cancel) <Esc>`^
+Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
+Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
+Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
+no <LocalLeader>(cancel) <Esc>
+ino <LocalLeader>(cancel) <Esc>`^
 ino <LocalLeader>v ;<CR>
 ino <LocalLeader>w <C-o>e<C-o>a
 ino <LocalLeader>k 「」<C-g>U<Left>
