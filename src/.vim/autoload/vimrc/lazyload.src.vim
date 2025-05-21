@@ -85,10 +85,9 @@ def! g:VRange(): list<number>
 enddef
 # }}}
 
+# ------------------------------------------------------
 # セミコロンをプレフィックスに {{{
 g:maplocalleader = ';'
-nnoremap <Space><LocalLeader> ;
-noremap  <Space><LocalLeader> ;
 # }}}
 
 # ------------------------------------------------------

@@ -60,8 +60,6 @@ const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
 g:maplocalleader = ';'
-nn <Space><LocalLeader> ;
-no <Space><LocalLeader> ;
 packadd lsp
 packadd vim-reformatdate
 packadd vim-textobj-user
