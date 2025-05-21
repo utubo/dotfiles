@@ -7,7 +7,9 @@ aug after_ftplugin_md
 au!
 aug END
 def A()
-for l in g:VRange()
+const d = getregionpos(getpos('v'), getpos('.'))
+for p in d
+const l = p[0][1]
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b

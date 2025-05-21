@@ -13,7 +13,9 @@ augroup END
 # ----------------------------------------------------------
 # チェックボックスオンオフ {{{
 def ToggleCheckBox()
-	for l in g:VRange()
+	const pos = getregionpos(getpos('v'), getpos('.'))
+	for p in pos
+		const l = p[0][1]
 		const a = getline(l)
 		var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
 		if a ==# b

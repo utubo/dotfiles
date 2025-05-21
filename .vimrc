@@ -36,6 +36,7 @@ set ut=2000
 set is
 set hls
 set shortmess+=FI
+g:maplocalleader = ';'
 filetype plugin indent on
 aug vimrc
 au!
