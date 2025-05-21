@@ -10,7 +10,7 @@ vim9script
 #   Each X=n,x Each Y=j,k Ymap X gX
 #   → nmap j gj | nmap k gk | xmap j gj | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-def! g:UtilEach(qargs: string)
+def UtilEach(qargs: string)
 	var [items, cmd] = qargs->split('^\S*\zs')
 	const kv = items->split('=')
 	const values = kv[-1]->split(',')
@@ -31,7 +31,7 @@ def! g:UtilEach(qargs: string)
 		execute c
 	endwhile
 enddef
-command! -nargs=* Each g:UtilEach(<q-args>)
+command! -nargs=* Each UtilEach(<q-args>)
 
 # その他
 command! -nargs=1 -complete=var Enable  <args> = 1
