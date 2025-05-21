@@ -65,12 +65,12 @@ enddef
 
 # Repeatable last key
 # e.g. RLK cmap <Leader> h <Left>
-var repeatable_id = 0
+var rlk_id = 0
 def RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
-	repeatable_id += 1
+	rlk_id += 1
 	const nor = cmd->substitute('map', 'noremap', '')
 	# <Space> prevents ghoast char.
-	const sidkey = $'<SID>rp{repeatable_id}<Space>'
+	const sidkey = $'<SID>rp{rlk_id}<Space>'
 	execute $'{cmd} <script> {sidkey} <Nop>'
 	execute $'{nor} <script> {sidkey}{last} {rhs->join(' ')}{sidkey}'
 	execute $'{cmd} <script> {lhs}{last} {sidkey}{last}'
