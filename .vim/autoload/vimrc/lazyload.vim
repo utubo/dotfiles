@@ -308,9 +308,9 @@ nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
 Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
 Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
-map! <script> <SID>bs_ <Nop>
-map! <script> <LocalLeader>h <SID>bs_h
-no! <script> <SID>bs_h <BS><SID>bs_
+map! <script> <SID>(bs)<Space> <Nop>
+map! <script> <LocalLeader>h <SID>(bs)<Space>h
+no! <script> <SID>(bs)<Space>h <BS><SID>(bs)<Space>
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>

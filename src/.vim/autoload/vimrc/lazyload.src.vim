@@ -457,9 +457,10 @@ nnoremap <LocalLeader>rr "0p
 Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
 Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
 # `;h`+`h`連打で<BS>
-map! <script> <SID>bs_ <Nop>
-map! <script> <LocalLeader>h <SID>bs_h
-noremap! <script> <SID>bs_h <BS><SID>bs_
+# Note: マッピングの最後を<Space>にしないと表示にゴミが残こる
+map! <script> <SID>(bs)<Space> <Nop>
+map! <script> <LocalLeader>h <SID>(bs)<Space>h
+noremap! <script> <SID>(bs)<Space>h <BS><SID>(bs)<Space>
 # }}}
 
 # ------------------------------------------------------
