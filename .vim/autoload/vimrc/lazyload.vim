@@ -30,13 +30,14 @@ com! -nargs=1 -complete=var Disable <args> = 0
 def g:IndentStr(a: any): string
 return matchstr(getline(a), '^\s*')
 enddef
-def g:StayCurPos(a: string)
+def g:KeepCursor(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
-exe a
+exe 'normal! {expr}'
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
+com! -nargs=1 KeepCursor g:KeepCursor(<q-args>)
 def g:System(a: string): string
 if !has('win32')
 return system(a)
@@ -59,6 +60,16 @@ def! g:VRange(): list<number>
 const a = g:VFirstLast()
 return range(a[0], a[1])
 enddef
+var lk = 0
+def! g:RLK(a: string, b: string, c: string, ...d: list<string>)
+lk += 1
+const e = a->substitute('map', 'noremap', '')
+const f = $'<SID>rp{lk}<Space>'
+exe $'{a} <script> {f} <Nop>'
+exe $'{e} <script> {f}{c} {d->join(' ')}{f}'
+exe $'{a} <script> {b}{c} {f}{c}'
+enddef
+com! -nargs=* RLK g:RLK(<f-args>)
 g:maplocalleader = ';'
 packadd lsp
 packadd vim-reformatdate
@@ -181,9 +192,8 @@ au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
-Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
-Each X=+,-,>,< Each nnoremap,tnoremap <script> <SID>wsX <C-w>X<SID>ws
-Each nmap,tmap <SID>ws <Nop>
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
 nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
@@ -304,15 +314,13 @@ ino <LocalLeader>k 「」<C-g>U<Left>
 ino <LocalLeader>u <Esc>u
 nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
-Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
-map! <script> <SID>(bs)<Space> <Nop>
-map! <script> <LocalLeader>h <SID>(bs)<Space>h
-no! <script> <SID>(bs)<Space>h <BS><SID>(bs)<Space>
+RLK nmap <LocalLeader> <Tab> KeepCursor >>
+RLK nmap <LocalLeader> <S-Tab> KeepCursor <<
+RLK map! <LocalLeader> h <BS>
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
-xn <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
+xn <Tab> KeepCursor >gv
+xn <S-Tab> KeepCursor <gv
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 Each nmap,xmap <LocalLeader>c :
@@ -435,9 +443,6 @@ vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
-Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
-nm <SID>(hold-ctrl) <Nop>
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)

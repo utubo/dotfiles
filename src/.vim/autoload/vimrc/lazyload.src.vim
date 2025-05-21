@@ -50,13 +50,14 @@ def g:IndentStr(expr: any): string
 	return matchstr(getline(expr), '^\s*')
 enddef
 
-def g:StayCurPos(expr: string)
+def g:KeepCursor(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
-	execute expr
+	execute 'normal! {expr}'
 	cur[2] += getline('.')->len() - len
 	setpos('.', cur)
 enddef
+command! -nargs=1 KeepCursor g:KeepCursor(<q-args>)
 
 def g:System(cmd: string): string
 	if !has('win32')
@@ -83,6 +84,20 @@ def! g:VRange(): list<number>
 	const a = g:VFirstLast()
 	return range(a[0], a[1])
 enddef
+
+# Repeatable last key
+# e.g. RLK nmap <Leader> h <BS>
+var repeatable_id = 0
+def! g:RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
+	repeatable_id += 1
+	const nor = cmd->substitute('map', 'noremap', '')
+	# <Space> prevents ghoast char.
+	const sidkey = $'<SID>rp{repeatable_id}<Space>'
+	execute $'{cmd} <script> {sidkey} <Nop>'
+	execute $'{nor} <script> {sidkey}{last} {rhs->join(' ')}{sidkey}'
+	execute $'{cmd} <script> {lhs}{last} {sidkey}{last}'
+enddef
+command! -nargs=* RLK g:RLK(<f-args>)
 # }}}
 
 # ------------------------------------------------------
@@ -283,9 +298,8 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each X=+,-,>,< Each nmap,tmap <C-w>X <C-w>X<SID>ws
-Each X=+,-,>,< Each nnoremap,tnoremap <script> <SID>wsX <C-w>X<SID>ws
-Each nmap,tmap <SID>ws <Nop>
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
 nnoremap <A-J> <Cmd>copy.<CR>
@@ -453,21 +467,19 @@ inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
 nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
-Each nnoremap,inoremap <LocalLeader><Tab> <ScriptCmd>g:StayCurPos('normal! >>')<CR>
-Each nnoremap,inoremap <LocalLeader><S-Tab> <ScriptCmd>g:StayCurPos('normal! <<')<CR>
+RLK nmap <LocalLeader> <Tab> KeepCursor >>
+RLK nmap <LocalLeader> <S-Tab> KeepCursor <<
 # `;h`+`h`連打で<BS>
 # Note: マッピングの最後を<Space>にしないと表示にゴミが残こる
-map! <script> <SID>(bs)<Space> <Nop>
-map! <script> <LocalLeader>h <SID>(bs)<Space>h
-noremap! <script> <SID>(bs)<Space>h <BS><SID>(bs)<Space>
+RLK map! <LocalLeader> h <BS>
 # }}}
 
 # ------------------------------------------------------
 # ビジュアルモードあれこれ {{{
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>g:StayCurPos('normal! >gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>g:StayCurPos('normal! <gv')<CR>
+xnoremap <Tab> KeepCursor >gv
+xnoremap <S-Tab> KeepCursor <gv
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
 xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # }}}
@@ -659,11 +671,7 @@ au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 # (Buffer Regular Expression Print)
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 
-# <C-f>と<C-b>、CTRLおしっぱがつらいので…
-Each $=f,b nmap <C-$> <C-$><SID>(hold-ctrl)
-Each $=f,b nnoremap <script> <SID>(hold-ctrl)$ <C-$><SID>(hold-ctrl)
-nmap <SID>(hold-ctrl) <Nop>
-
+# README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
 # 🐶🍚
