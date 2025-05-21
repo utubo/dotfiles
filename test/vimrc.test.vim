@@ -299,16 +299,16 @@ suite.TestCmdlinePair = () => {
 
 # ユーティリティのテスト {{{
 suite.TestEach = () => {
-	Each nmap,vmap {} xxx yyy_{}
+	Each X=nmap,vmap X xxx yyy_X
 	assert.equals(execute('nmap xxx'), "\n\nn  xxx           yyy_nmap")
 	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyy_vmap")
 	nunmap xxx
 	vunmap xxx
-	Each nmap,vmap Each X,Y {0} {1} yyy_{1}
-	assert.equals(execute('nmap X'), "\n\nn  X             yyy_X")
-	assert.equals(execute('vmap X'), "\n\nv  X             yyy_X")
-	assert.equals(execute('nmap Y'), "\n\nn  Y             yyy_Y")
-	assert.equals(execute('vmap Y'), "\n\nv  Y             yyy_Y")
+	Each {a},{b}=X,A,Y,B Each nmap,vmap {a} yyy_{b}
+	assert.equals(execute('nmap X'), "\n\nn  X             yyy_A")
+	assert.equals(execute('vmap X'), "\n\nv  X             yyy_A")
+	assert.equals(execute('nmap Y'), "\n\nn  Y             yyy_B")
+	assert.equals(execute('vmap Y'), "\n\nv  Y             yyy_B")
 	nunmap X
 	vunmap X
 	nunmap Y
