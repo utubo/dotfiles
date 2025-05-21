@@ -445,9 +445,9 @@ nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
 RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCursor('>>')<CR>
 RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCursor('<<')<CR>
-# `;h`+`h`連打で<BS>
-# Note: マッピングの最後を<Space>にしないと表示にゴミが残こる
-RLK map! <LocalLeader> h <BS>
+RLK map! <LocalLeader> b <BS>
+RLK map! <LocalLeader> h <Left>
+RLK map! <LocalLeader> l <Right>
 # }}}
 
 # ------------------------------------------------------

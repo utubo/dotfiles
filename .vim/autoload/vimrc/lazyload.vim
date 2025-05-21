@@ -301,7 +301,9 @@ nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
 RLK nmap <LocalLeader> <Tab> <ScriptCmd>A('>>')<CR>
 RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>A('<<')<CR>
-RLK map! <LocalLeader> h <BS>
+RLK map! <LocalLeader> b <BS>
+RLK map! <LocalLeader> h <Left>
+RLK map! <LocalLeader> l <Right>
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>A('>gv')<CR>
