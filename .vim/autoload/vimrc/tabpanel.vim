@@ -29,7 +29,7 @@ enddef
 set tabpanel=%!vimrc#tabpanel#TabPanel()
 aug show_hiddens_in_tabpanel
 au!
-au BufUnload * &showtabpanel = &showtabpanel
+au BufDelete * &showtabpanel = &showtabpanel
 aug END
 export def Toggle(n: number = 0)
 &showtabpanel = n ?? !&showtabpanel ? 2 : 0

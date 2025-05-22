@@ -36,7 +36,7 @@ set tabpanel=%!vimrc#tabpanel#TabPanel()
 
 augroup show_hiddens_in_tabpanel
 	autocmd!
-	autocmd BufUnload * &showtabpanel = &showtabpanel
+	autocmd BufDelete * &showtabpanel = &showtabpanel
 augroup END
 
 export def Toggle(n: number = 0)
