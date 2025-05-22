@@ -34,7 +34,7 @@ enddef
 
 set tabpanel=%!vimrc#tabpanel#TabPanel()
 
-augroup showbuffers_in_tabpanel
+augroup show_hiddens_in_tabpanel
 	autocmd!
 	autocmd BufUnload * &showtabpanel = &showtabpanel
 augroup END

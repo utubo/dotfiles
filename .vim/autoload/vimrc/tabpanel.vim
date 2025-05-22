@@ -27,7 +27,7 @@ endif
 return a->join("\n")
 enddef
 set tabpanel=%!vimrc#tabpanel#TabPanel()
-aug showbuffers_in_tabpanel
+aug show_hiddens_in_tabpanel
 au!
 au BufUnload * &showtabpanel = &showtabpanel
 aug END
