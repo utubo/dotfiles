@@ -137,23 +137,6 @@ def RestoreCursor()
 enddef
 # }}}
 
-export def ApplySettings()
-	cnoremap <A-h> <Left>
-	cnoremap <A-j> <Up>
-	cnoremap <A-k> <Down>
-	cnoremap <A-l> <Right>
-	cnoremap <expr> <Space> MyAbbrev()
-	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
-	command! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
-	# <LocalLeader>系
-	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
-	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
-	cnoremap <LocalLeader>(ok) <CR>
-	cnoremap <LocalLeader>r <C-r>
-	cnoremap <expr> <LocalLeader>rr trim(@")->substitute('\n', ' \| ', 'g')
-	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
-enddef
-
 # vim9skkとの連携 {{{
 export def ForVim9skk(popup_pos: any): any
 	if popup.win !=# 0
@@ -165,3 +148,18 @@ export def ForVim9skk(popup_pos: any): any
 enddef
 g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 # }}}
+
+export def ApplySettings()
+	cnoremap <expr> <Space> MyAbbrev()
+	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
+	command! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
+	# <LocalLeader>系
+	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
+	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
+	cnoremap <LocalLeader>(ok) <CR>
+	cnoremap <LocalLeader>r <C-r>
+	RLK cmap <LocalLeader> k <C-p>
+	RLK cmap <LocalLeader> K <C-n>
+	cnoremap <expr> <LocalLeader>rr trim()->substitute('\n', ' \| ', 'g')
+	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
+enddef
