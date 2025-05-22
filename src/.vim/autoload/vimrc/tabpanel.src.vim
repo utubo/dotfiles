@@ -11,7 +11,7 @@ def BufLabel(b: dict<any>): string
 		->substitute($'\%{width}v.*', '>', '')
 enddef
 
-def! g:TabPanel(): string
+export def TabPanel(): string
 	var label = [$'{g:actual_curtabpage}']
 	for b in tabpagebuflist(g:actual_curtabpage)
 		label->add(b->getbufinfo()[0]->BufLabel())
@@ -32,7 +32,7 @@ def! g:TabPanel(): string
 	return label->join("\n")
 enddef
 
-set tabpanel=%!g:TabPanel()
+set tabpanel=%!vimrc#tabpanel#TabPanel()
 
 export def Toggle(n: number = 2)
 	&showtabpanel = n ?? !&showtabpanel ? 2 : 0
