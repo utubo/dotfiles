@@ -1,4 +1,13 @@
 vim9script
+def A(): string
+return {
+cs: "\<C-u>colorscheme ",
+sb: "\<C-u>set background=\<Tab>",
+mv: "\<C-u>MoveFile ",
+pd: "\<C-u>PopSelectDir ",
+tb: "\<C-u>tab help ",
+}->get(getcmdline(), ' ')
+enddef
 export def MoveFile(a: string)
 const b = expand('%')
 const c = expand(a)
@@ -13,14 +22,6 @@ rename(b, c)
 endif
 exe 'saveas!' c
 edit
-enddef
-def A(): string
-return {
-cs: "\<C-u>colorscheme ",
-sb: "\<C-u>set background=\<Tab>",
-mv: "\<C-u>MoveFile ",
-pd: "\<C-u>PopSelectDir ",
-}->get(getcmdline(), ' ')
 enddef
 var l = {
 win: 0,

@@ -1,5 +1,17 @@
 vim9script
 
+# cnoreabbrevちょっと改良 {{{
+def MyAbbrev(): string
+	return {
+		cs: "\<C-u>colorscheme ",
+		sb: "\<C-u>set background=\<Tab>",
+		mv: "\<C-u>MoveFile ",
+		pd: "\<C-u>PopSelectDir ",
+		tb: "\<C-u>tab help ",
+	}->get(getcmdline(), ' ')
+enddef
+#}}}
+
 # ファイルを移動して保存 {{{
 export def MoveFile(newname: string)
 	const oldpath = expand('%')
@@ -16,17 +28,6 @@ export def MoveFile(newname: string)
 	execute 'saveas!' newpath
 	# 開き直してMRUに登録
 	edit
-enddef
-#}}}
-
-# cnoreabbrevちょっと改良 {{{
-def MyAbbrev(): string
-	return {
-		cs: "\<C-u>colorscheme ",
-		sb: "\<C-u>set background=\<Tab>",
-		mv: "\<C-u>MoveFile ",
-		pd: "\<C-u>PopSelectDir ",
-	}->get(getcmdline(), ' ')
 enddef
 #}}}
 
