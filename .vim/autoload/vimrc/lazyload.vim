@@ -123,13 +123,23 @@ nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
+def E()
+if !vimrc#tabpanel#IsVisible()
+popselect#buffers#Popup()
+endif
+enddef
+def F()
+if !vimrc#tabpanel#IsVisible()
+popselect#tabpages#Popup()
+endif
+enddef
 nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
-nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
-nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nn <F3> <ScriptCmd>E()<CR>
+nn <F4> <ScriptCmd>F()<CR>
 nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
-Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
-def E(a: string)
+Each X=t,T nnoremap gX gX<ScriptCmd>F()<CR>
+def G(a: string)
 const b = bufnr()
 while true
 exe $'b{a}'
@@ -137,9 +147,9 @@ if &buftype !=# 'terminal' || bufnr() ==# b
 break
 endif
 endwhile
-popselect#buffers#Popup()
+E()
 enddef
-Each X=n,p nnoremap gX <ScriptCmd>E('X')<CR>
+Each X=n,p nnoremap gX <ScriptCmd>G('X')<CR>
 nn gr <Cmd>buffer #<CR>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
@@ -182,13 +192,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def F(): string
+def H(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{F()}"
+ino <expr> ;l $"<C-w>{H()}"
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
@@ -265,7 +275,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def G()
+def I()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -287,13 +297,13 @@ endif
 setpos('.', b)
 enddef
 def SetupTabstopLazy()
-au vimrc SafeState * ++once G()
+au vimrc SafeState * ++once I()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
 nn <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
 xn <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
-def I()
+def BA()
 if !!bufname()
 update
 return
@@ -328,7 +338,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav I()
+com! Sav BA()
 def g:QuitWin(a: string)
 if winnr() ==# winnr(a)
 return
@@ -367,6 +377,7 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
+nn <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
 nm gs :<C-u>%s///g<Left><Left><Left>
@@ -400,28 +411,28 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-nn <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
-xn <F10> <ESC>1<C-w>s<C-w>w
-nn <F9> my
-nn <Space><F9> 'y
-def J()
+nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
+xn <F9> <ESC>1<C-w>s<C-w>w
+nn <F8> my
+nn <Space><F8> 'y
+def BB()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BA(a: string, b: string)
+def BC(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * J()
+au vimrc Syntax * BB()
 au vimrc Syntax javascript {
-BA('SpellRare', '\s[=!]=\s')
+BC('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BA('SpellRare', '\s[=!]=\s')
-BA('SpellBad', '\s[=!]==\s')
-BA('SpellBad', '\s\~[=!][=#]\?\s')
-BA('SpellRare', '\<normal!\@!')
+BC('SpellRare', '\s[=!]=\s')
+BC('SpellBad', '\s[=!]==\s')
+BC('SpellBad', '\s\~[=!][=#]\?\s')
+BC('SpellRare', '\<normal!\@!')
 }
 set report=9999
 def g:EchoYankText(t: number)

@@ -7,7 +7,7 @@ def MyAbbrev(): string
 		sb: "\<C-u>set background=\<Tab>",
 		mv: "\<C-u>MoveFile ",
 		pd: "\<C-u>PopSelectDir ",
-		tb: "\<C-u>tab help ",
+		th: "\<C-u>tab help ",
 	}->get(getcmdline(), ' ')
 enddef
 #}}}

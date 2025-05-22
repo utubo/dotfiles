@@ -175,14 +175,26 @@ au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # }}}
 
 # popselect {{{
+def PopselectBuffers()
+	if !vimrc#tabpanel#IsVisible()
+		popselect#buffers#Popup()
+	endif
+enddef
+
+def PopselectTabpages()
+	if !vimrc#tabpanel#IsVisible()
+		popselect#tabpages#Popup()
+	endif
+enddef
+
 nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
-nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
-nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nnoremap <F3> <ScriptCmd>PopselectBuffers()<CR>
+nnoremap <F4> <ScriptCmd>PopselectTabpages()<CR>
 nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
 
 # タブ移動したときもポップアップする
-Each X=t,T nnoremap gX gX<Cmd>call popselect#tabpages#Popup()<CR>
+Each X=t,T nnoremap gX gX<ScriptCmd>PopselectTabpages()<CR>
 
 # gnとgpでポップアップしながらバッファ移動
 def ShowBuf(a: string)
@@ -194,7 +206,7 @@ def ShowBuf(a: string)
 			break
 		endif
 	endwhile
-	popselect#buffers#Popup()
+	PopselectBuffers()
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 
@@ -551,6 +563,7 @@ if has('clipboard')
 	au vimrc FocusLost   * @+ = @"
 endif
 
+nnoremap <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nnoremap <F11> <Cmd>set number!<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>
 
@@ -600,12 +613,12 @@ nnoremap M m
 # 様子見中 使わなそうなら削除する {{{
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
-nnoremap <silent> <F10> <ESC>1<C-w>s:1<CR><C-w>w
-xnoremap <F10> <ESC>1<C-w>s<C-w>w
+nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
+xnoremap <F9> <ESC>1<C-w>s<C-w>w
 
 # ここまで読(y)んだ
-nnoremap <F9> my
-nnoremap <Space><F9> 'y
+nnoremap <F8> my
+nnoremap <Space><F8> 'y
 
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
@@ -704,9 +717,9 @@ endif
 # <F5> 日付関係
 # <F6>
 # <F7>
-# <F8>
-# <F9> ここまでよんだ
-# <F10> ヘッダ行を表示(あんまり使わない)
+# <F8> ここまでよんだ
+# <F9> ヘッダ行を表示(あんまり使わない)
+# <F10> タブパネル
 # <F11> 行番号表示切替
 # <F12> 折り返し表示切替
 # }}}
