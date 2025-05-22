@@ -11,17 +11,17 @@ enddef
 def! g:TabPanel(): string
 	var label = [$'{g:actual_curtabpage}']
 	for b in tabpagebuflist(g:actual_curtabpage)
-		label->add(BufLabel(b->getbufinfo()[0]))
+		label->add(b->getbufinfo()[0]->BufLabel())
 	endfor
 
 	# Show Hiddens
 	if g:actual_curtabpage ==# tabpagenr('$')
 		const hiddens = getbufinfo({ buflisted: 1 })
-			->filter((i, v) => v.hidden)
+			->filter((_, v) => v.hidden)
 		if !!hiddens
 			label->add('%#TabPanel#Hidden')
 			for h in hiddens
-				label->add($'%#TabPanel#{BufLabel(h)}')
+				label->add($'%#TabPanel#{h->BufLabel()}')
 			endfor
 		endif
 	endif

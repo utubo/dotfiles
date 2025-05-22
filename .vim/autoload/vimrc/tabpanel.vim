@@ -9,15 +9,15 @@ enddef
 def! g:TabPanel(): string
 var a = [$'{g:actual_curtabpage}']
 for b in tabpagebuflist(g:actual_curtabpage)
-a->add(A(b->getbufinfo()[0]))
+a->add(b->getbufinfo()[0]->A())
 endfor
 if g:actual_curtabpage ==# tabpagenr('$')
 const c = getbufinfo({ buflisted: 1 })
-->filter((i, v) => v.hidden)
+->filter((_, v) => v.hidden)
 if !!c
 a->add('%#TabPanel#Hidden')
 for h in c
-a->add($'%#TabPanel#{A(h)}')
+a->add($'%#TabPanel#{h->A()}')
 endfor
 endif
 endif
