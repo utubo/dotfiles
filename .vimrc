@@ -154,6 +154,7 @@ if has('vim_starting')
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 endif
+vimrc#tabpanel#Toggle(2)
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif

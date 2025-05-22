@@ -34,8 +34,8 @@ enddef
 
 set tabpanel=%!g:TabPanel()
 
-export def Toggle()
-	&showtabpanel = !&showtabpanel ? 2 : 0
+export def Toggle(n: number = 2)
+	&showtabpanel = n ?? !&showtabpanel ? 2 : 0
 enddef
 
 export def IsVisible(): bool
