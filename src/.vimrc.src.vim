@@ -22,7 +22,7 @@ set cursorline
 set hidden
 set showtabline=0
 # タブパネルを左に表示するとポップアップウインドウで不都合が…
-silent! set tabpanelopt=align:right
+set tabpanelopt=align:right
 set cmdheight=1
 set noshowcmd
 set noshowmode

@@ -18,7 +18,7 @@ set fcs=
 set cursorline
 set hidden
 set showtabline=0
-sil! set tabpanelopt=align:right
+set tabpanelopt=align:right
 set cmdheight=1
 set noshowcmd
 set noshowmode
