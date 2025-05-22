@@ -124,9 +124,9 @@ com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 com! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 cno <LocalLeader>(ok) <CR>
-cno <LocalLeader>r <C-r>
 RLK cmap <LocalLeader> k <C-p>
 RLK cmap <LocalLeader> K <C-n>
+cno <LocalLeader>r <C-r>
 cno <expr> <LocalLeader>rr trim()->substitute('\n', ' \| ', 'g')
 cno <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 enddef
