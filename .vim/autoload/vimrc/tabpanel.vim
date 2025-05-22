@@ -27,7 +27,11 @@ endif
 return a->join("\n")
 enddef
 set tabpanel=%!vimrc#tabpanel#TabPanel()
-export def Toggle(n: number = 2)
+aug showbuffers_in_tabpanel
+au!
+au BufUnload * &showtabpanel = &showtabpanel
+aug END
+export def Toggle(n: number = 0)
 &showtabpanel = n ?? !&showtabpanel ? 2 : 0
 enddef
 export def IsVisible(): bool

@@ -34,7 +34,12 @@ enddef
 
 set tabpanel=%!vimrc#tabpanel#TabPanel()
 
-export def Toggle(n: number = 2)
+augroup showbuffers_in_tabpanel
+	autocmd!
+	autocmd BufUnload * &showtabpanel = &showtabpanel
+augroup END
+
+export def Toggle(n: number = 0)
 	&showtabpanel = n ?? !&showtabpanel ? 2 : 0
 enddef
 
