@@ -5,7 +5,10 @@ def BufLabel(b: dict<any>): string
 	const mod = !b.changed ? '' : '+'
 	const nr = !b.hidden ? '' : $'{b.bufnr}:'
 	const name = b.name->fnamemodify(':t') ?? '[No Name]'
+	const width = &tabpanelopt
+		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
 	return $' {current}{mod}{nr}{name}'
+		->substitute($'\%{width}v.*', '>', '')
 enddef
 
 def! g:TabPanel(): string

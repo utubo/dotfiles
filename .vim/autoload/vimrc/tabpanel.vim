@@ -4,7 +4,10 @@ const a = b.bufnr ==# bufnr('%') ? '>' : ' '
 const c = !b.changed ? '' : '+'
 const d = !b.hidden ? '' : $'{b.bufnr}:'
 const e = b.name->fnamemodify(':t') ?? '[No Name]'
+const f = &tabpanelopt
+->matchstr('\(columns:\)\@<=\d\+') ?? '20'
 return $' {a}{c}{d}{e}'
+->substitute($'\%{f}v.*', '>', '')
 enddef
 def! g:TabPanel(): string
 var a = [$'{g:actual_curtabpage}']
