@@ -440,6 +440,12 @@ vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
+au vimrc BufHidden * {
+const b = getbufinfo('%')[0]
+if !b.name && !b.changed
+timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
+endif
+}
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
