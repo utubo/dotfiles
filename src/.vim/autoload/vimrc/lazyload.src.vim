@@ -549,7 +549,7 @@ au vimrc BufHidden * {
 	const b = getbufinfo('%')[0]
 	if !b.name && !b.changed
 		# BufHidden中に該当のバッファは削除できないのでtimerでやる
-		timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
+		timer_start(0, (_) => execute($'bdelete {b.bufnr}'))
 	endif
 }
 # }}}
