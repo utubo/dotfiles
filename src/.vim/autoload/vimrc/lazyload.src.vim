@@ -544,6 +544,17 @@ nnoremap qQ <Cmd>e #<1<CR>
 # }}}
 
 # ------------------------------------------------------
+# 新規バッファを何もせず閉じたらバッファリストから削除する {{{
+au vimrc BufHidden * {
+	const b = getbufinfo('%')[0]
+	if !b.name && !b.changed
+		# BufHidden中に該当のバッファは削除できないのでtimerでやる
+		timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
+	endif
+}
+# }}}
+
+# ------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
 cnoremap <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
@@ -653,18 +664,10 @@ au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 #
 # }}}
 
-# `:%g!/re/d` の結果を新規ウインドウに表示
+# `:%g!/re/d` の結果を新規ウインドウに表示 {{{
 # (Buffer Regular Expression Print)
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-
-# 新規バッファを何もせず閉じたらバッファリストから削除する
-au vimrc BufHidden * {
-	const b = getbufinfo('%')[0]
-	if !b.name && !b.changed
-		# BufHidden中に該当のバッファは削除できないのでtimerでやる
-		timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
-	endif
-}
+# }}}
 
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)

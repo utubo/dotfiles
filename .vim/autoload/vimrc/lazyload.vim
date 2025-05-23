@@ -368,6 +368,12 @@ nn q: q:
 nn q/ q/
 nn q? q?
 nn qQ <Cmd>e #<1<CR>
+au vimrc BufHidden * {
+const b = getbufinfo('%')[0]
+if !b.name && !b.changed
+timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
+endif
+}
 cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
 nn <script> g: :<C-u><SID>(exec_line)
 nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
@@ -440,12 +446,6 @@ vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-au vimrc BufHidden * {
-const b = getbufinfo('%')[0]
-if !b.name && !b.changed
-timer_start(1, (_) => execute($'bdelete {b.bufnr}'))
-endif
-}
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
