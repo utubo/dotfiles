@@ -175,6 +175,10 @@ au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # }}}
 
 # popselect {{{
+g:popselect = {
+	# 角が`+`だと圧が強いので…
+	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"]
+}
 def PopselectBuffers()
 	if !vimrc#tabpanel#IsVisible()
 		popselect#buffers#Popup()

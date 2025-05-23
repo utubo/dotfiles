@@ -123,6 +123,9 @@ nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
+g:popselect = {
+borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"]
+}
 def E()
 if !vimrc#tabpanel#IsVisible()
 popselect#buffers#Popup()
