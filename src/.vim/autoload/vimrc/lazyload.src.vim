@@ -245,6 +245,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 # }}}
 
 # 🐶🍚 {{{
+g:registerslite_delay = 0.6
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 # }}}
