@@ -179,25 +179,18 @@ g:popselect = {
 	# 角が`+`だと圧が強いので…
 	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"]
 }
-def PopselectBuffers()
-	if !vimrc#tabpanel#IsVisible()
-		popselect#buffers#Popup()
-	endif
-enddef
+nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
+nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
+nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
+nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
 
+# タブ移動したときもポップアップする
 def PopselectTabpages()
 	if !vimrc#tabpanel#IsVisible()
 		popselect#tabpages#Popup()
 	endif
 enddef
-
-nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
-nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
-nnoremap <F3> <ScriptCmd>PopselectBuffers()<CR>
-nnoremap <F4> <ScriptCmd>PopselectTabpages()<CR>
-nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
-
-# タブ移動したときもポップアップする
 Each X=t,T nnoremap gX gX<ScriptCmd>PopselectTabpages()<CR>
 
 # gnとgpでポップアップしながらバッファ移動
@@ -210,7 +203,9 @@ def ShowBuf(a: string)
 			break
 		endif
 	endwhile
-	PopselectBuffers()
+	if !vimrc#tabpanel#IsVisible()
+		popselect#buffers#Popup()
+	endif
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 
