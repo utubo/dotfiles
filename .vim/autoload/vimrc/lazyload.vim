@@ -66,7 +66,7 @@ keymap: {
 midasi: ['Q', '<LocalLeader>j'],
 enable: ['<LocalLeader>j'],
 disable: ['<LocalLeader>a'],
-complete: ['<CR>', '<LocalLeader>l'],
+complete: ['<LocalLeader>l'],
 },
 }
 nn <LocalLeader>j i<Plug>(vim9skk-enable)

@@ -99,7 +99,7 @@ g:vim9skk = {
 		midasi: ['Q', '<LocalLeader>j'],
 		enable: ['<LocalLeader>j'],
 		disable: ['<LocalLeader>a'],
-		complete: ['<CR>', '<LocalLeader>l'],
+		complete: ['<LocalLeader>l'],
 	},
 }
 nnoremap <LocalLeader>j i<Plug>(vim9skk-enable)
