@@ -672,6 +672,9 @@ command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
+# g1～g9でバッファ移動
+Each X=1,2,3,4,5,6,7,8,9 nnoremap gX <Cmd>bX<CR>
+
 # 🐶🍚
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
