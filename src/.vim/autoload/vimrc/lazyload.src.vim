@@ -101,6 +101,7 @@ g:vim9skk = {
 		disable: ['<LocalLeader>a'],
 		complete: ['<LocalLeader>l'],
 	},
+	run_on_midasi: true,
 }
 nnoremap <LocalLeader>j i<Plug>(vim9skk-enable)
 # AZIKライクな設定とか

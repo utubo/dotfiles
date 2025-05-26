@@ -68,6 +68,7 @@ enable: ['<LocalLeader>j'],
 disable: ['<LocalLeader>a'],
 complete: ['<LocalLeader>l'],
 },
+run_on_midasi: true,
 }
 nn <LocalLeader>j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
