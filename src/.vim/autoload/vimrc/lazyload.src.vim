@@ -673,7 +673,7 @@ command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
 # g1～g7でバッファ移動
-# g8とg9が使用済だから別のg以外へかえようかな…
+# g8とg9が使用済だからg以外へかえようかな…
 Each {bufnr}=1,2,3,4,5,6,7 nnoremap g{bufnr} <Cmd>b{bufnr}<CR>
 
 # 🐶🍚
