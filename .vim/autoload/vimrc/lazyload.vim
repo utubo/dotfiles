@@ -66,7 +66,7 @@ keymap: {
 midasi: ['Q', '<LocalLeader>j'],
 enable: ['<LocalLeader>j'],
 disable: ['<LocalLeader>a'],
-complete: ['<LocalLeader>l'],
+complete: ['<CR>', '<LocalLeader>l'],
 },
 run_on_midasi: true,
 }
