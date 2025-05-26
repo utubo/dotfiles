@@ -36,7 +36,9 @@ set tabpanel=%!vimrc#tabpanel#TabPanel()
 
 augroup show_hiddens_in_tabpanel
 	autocmd!
-	autocmd BufDelete * &showtabpanel = &showtabpanel
+	# BufDeleteのタイミングではまだバッファが削除されていない
+	# <abuf>に情報はあるが面倒なのでSafeStateを使っちゃう
+	autocmd BufDelete * autocmd SafeState * ++once redrawtabp
 augroup END
 
 export def Toggle(n: number = 0)
