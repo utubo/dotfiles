@@ -99,6 +99,7 @@ g:vim9skk = {
 		midasi: ['Q', '<LocalLeader>j'],
 		enable: ['<LocalLeader>j'],
 		disable: ['<LocalLeader>a'],
+		# TODO: `<CR>`での確定を禁止にしたらabbrを確定できなくなっちゃった！後で考える
 		complete: ['<LocalLeader>l'],
 	},
 	run_on_midasi: true,
