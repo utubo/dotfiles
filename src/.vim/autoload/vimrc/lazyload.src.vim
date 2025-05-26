@@ -112,6 +112,12 @@ au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 # 見出しの色見出しの色を替たらみやすいかな？
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
+# 「を」で確定
+au vimrc User Vim9skkMidasiInput {
+	if g:vim9skk_midasi[-1] ==# 'を'
+		feedkeys($'{g:maplocalleader}l')
+	endif
+}
 # }}}
 
 # headtail {{{
