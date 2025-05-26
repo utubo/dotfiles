@@ -448,7 +448,7 @@ enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-Each X=1,2,3,4,5,6,7,8,9 nnoremap gX <Cmd>bX<CR>
+Each {bufnr}=1,2,3,4,5,6,7,8 nnoremap g{bufnr} <Cmd>b{bufnr}<CR>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
 nn <Space>w <C-w>w
