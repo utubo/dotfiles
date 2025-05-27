@@ -23,9 +23,11 @@ export def Calendar(): list<string>
 	var lines = ['%#TabPanelFill#']
 	const width = &tabpanelopt
 		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-	const t = strptime('%Y-%m-%d', ymd[0 : 7] .. '01')
 	lines->add('%#TabPanel#' .. repeat(' ', str2nr(width) / 2 - 1) .. ymd[5 : 6])
-	var wday = strftime('%w', t)->str2nr()
+	# strptimeが未定義の環境がある！
+	# const t = strptime('%Y-%m-%d', ymd[0 : 7] .. '01')
+	# var wday = strftime('%w', t)->str2nr()
+	var wday = (str2nr(ymd[8 : 9]) - strftime('%w')->str2nr() - 1) % 7
 	var days = repeat(['  '], wday)
 	for d in range(1, 31)
 		const day = printf('%02d', d)
