@@ -20,20 +20,23 @@ export def GetCalendar(): list<string>
 	if calendar_cache.ymd ==# ymd
 		return calendar_cache.lines
 	endif
-	const [month, today] = ymd->split('-')[1 : 2]
+	const [year, month, day] = ymd->split('-')
+	const y = year->str2nr()
+	const m = month->str2nr()
+	const d = day->str2nr()
 	var lines = ['%#TabPanelFill#']
 	const width = &tabpanelopt
 		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-	lines->add('%#TabPanel#' .. repeat(' ', str2nr(width) / 2 - 1) .. month)
-	var wday = (today->str2nr() - strftime('%w')->str2nr()) % 7
+	lines->add('%#TabPanel#' .. repeat(' ', width->str2nr() / 2 - 1) .. month)
+	var wday = (d - strftime('%w')->str2nr()) % 7
 	var days = repeat(['  '], wday)
-	for d in range(1, 31)
-		const day = printf('%02d', d)
-		if day ==# today
-			days->add($'%#TabPanelSel#{day}%#TabPanel#')
-		else
-			days->add(day)
-		endif
+	var last_day = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	if y % 4 ==# 0 && y % 100 !=# 0 || y % 400 ==# 0
+		last_day[2] = 29
+	endif
+	for i in range(1, last_day[m])
+		const dd = printf('%02d', i)
+		days->add(dd ==# day ? $'%#TabPanelSel#{dd}%#TabPanel#' : dd)
 		wday = (wday + 1) % 7
 		if !wday
 			lines->add('%#TabPanel#' .. days->join(' '))

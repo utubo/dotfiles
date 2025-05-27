@@ -17,31 +17,34 @@ const a = strftime('%Y-%m-%d')
 if k.ymd ==# a
 return k.lines
 endif
-const [b, c] = a->split('-')[1 : 2]
-var e = ['%#TabPanelFill#']
-const f = &tabpanelopt
+const [b, c, e] = a->split('-')
+const y = b->str2nr()
+const m = c->str2nr()
+const d = e->str2nr()
+var f = ['%#TabPanelFill#']
+const g = &tabpanelopt
 ->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-e->add('%#TabPanel#' .. repeat(' ', str2nr(f) / 2 - 1) .. b)
-var g = (c->str2nr() - strftime('%w')->str2nr()) % 7
-var h = repeat(['  '], g)
-for d in range(1, 31)
-const i = printf('%02d', d)
-if i ==# c
-h->add($'%#TabPanelSel#{i}%#TabPanel#')
-else
-h->add(i)
+f->add('%#TabPanel#' .. repeat(' ', g->str2nr() / 2 - 1) .. c)
+var h = (d - strftime('%w')->str2nr()) % 7
+var j = repeat(['  '], h)
+var l = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+if y % 4 ==# 0 && y % 100 !=# 0 || y % 400 ==# 0
+l[2] = 29
 endif
-g = (g + 1) % 7
-if !g
-e->add('%#TabPanel#' .. h->join(' '))
-h = []
+for i in range(1, l[m])
+const o = printf('%02d', i)
+j->add(o ==# e ? $'%#TabPanelSel#{o}%#TabPanel#' : o)
+h = (h + 1) % 7
+if !h
+f->add('%#TabPanel#' .. j->join(' '))
+j = []
 endif
 endfor
 k.ymd = a
-k.lines = e
-return e
+k.lines = f
+return f
 enddef
-var l = {}
+var p = {}
 export def TabPanel(): string
 var a = [$'{g:actual_curtabpage}']
 for b in tabpagebuflist(g:actual_curtabpage)
@@ -61,7 +64,7 @@ if g:actual_curtabpage ==# tabpagenr('$')
 const d = GetCalendar()
 var e = &lines
 for i in range(1, g:actual_curtabpage - 1)
-e -= get(l, i, 0)
+e -= get(p, i, 0)
 endfor
 e -= a->len()
 e -= d->len()
@@ -71,7 +74,7 @@ a += repeat(['%#TabPanelFill#'], e)
 a += d
 endif
 else
-l[g:actual_curtabpage] = a->len()
+p[g:actual_curtabpage] = a->len()
 endif
 return a->join("\n")
 enddef
