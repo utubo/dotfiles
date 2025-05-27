@@ -24,9 +24,6 @@ export def Calendar(): list<string>
 	const width = &tabpanelopt
 		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
 	lines->add('%#TabPanel#' .. repeat(' ', str2nr(width) / 2 - 1) .. ymd[5 : 6])
-	# strptimeが未定義の環境がある！
-	# const t = strptime('%Y-%m-%d', ymd[0 : 7] .. '01')
-	# var wday = strftime('%w', t)->str2nr()
 	var wday = (str2nr(ymd[8 : 9]) - strftime('%w')->str2nr()) % 7
 	var days = repeat(['  '], wday)
 	for d in range(1, 31)
