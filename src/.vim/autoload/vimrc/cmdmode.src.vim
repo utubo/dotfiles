@@ -90,6 +90,7 @@ def ClosePopup()
 	popup.blinktimer = 0
 	popup_close(popup.win)
 	popup.win = 0
+	hi MsgArea None
 	popup.msghl->hlset()
 	redraw
 enddef

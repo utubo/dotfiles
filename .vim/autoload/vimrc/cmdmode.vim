@@ -71,6 +71,7 @@ timer_stop(l.blinktimer)
 l.blinktimer = 0
 popup_close(l.win)
 l.win = 0
+hi MsgArea None
 l.msghl->hlset()
 redraw
 enddef
