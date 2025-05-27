@@ -21,7 +21,7 @@ var b = ['%#TabPanelFill#']
 const c = &tabpanelopt
 ->matchstr('\(columns:\)\@<=\d\+') ?? '20'
 b->add('%#TabPanel#' .. repeat(' ', str2nr(c) / 2 - 1) .. a[5 : 6])
-var e = (str2nr(a[8 : 9]) - strftime('%w')->str2nr() - 1) % 7
+var e = (str2nr(a[8 : 9]) - strftime('%w')->str2nr()) % 7
 var f = repeat(['  '], e)
 for d in range(1, 31)
 const g = printf('%02d', d)
