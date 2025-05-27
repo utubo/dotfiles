@@ -9,6 +9,39 @@ const f = &tabpanelopt
 return $' {a}{c}{d}{e}'
 ->substitute($'\%{f}v.*', '>', '')
 enddef
+var k = {
+ymd: '', lines: []
+}
+export def Calendar(): list<string>
+const a = strftime('%Y-%m-%d')
+if k.ymd ==# a
+return k.lines
+endif
+var b = ['%#TabPanelFill#']
+const c = &tabpanelopt
+->matchstr('\(columns:\)\@<=\d\+') ?? '20'
+const t = strptime('%Y-%m-%d', a[0 : 7] .. '01')
+b->add('%#TabPanel#' .. repeat(' ', str2nr(c) / 2 - 1) .. a[5 : 6])
+var e = strftime('%w', t)->str2nr()
+var f = repeat(['  '], e)
+for d in range(1, 31)
+const g = printf('%02d', d)
+if g ==# a[8 : 9]
+f->add($'%#TabPanelSel#{g}%#TabPanel#')
+else
+f->add(g)
+endif
+e = (e + 1) % 7
+if !e
+b->add('%#TabPanel#' .. f->join(' '))
+f = []
+endif
+endfor
+k.ymd = a
+k.lines = b
+return b
+enddef
+var l = {}
 export def TabPanel(): string
 var a = [$'{g:actual_curtabpage}']
 for b in tabpagebuflist(g:actual_curtabpage)
@@ -23,6 +56,20 @@ for h in c
 a->add($'%#TabPanel#{h->A()}')
 endfor
 endif
+endif
+if g:actual_curtabpage ==# tabpagenr('$')
+const d = Calendar()
+var e = 0
+for i in range(1, g:actual_curtabpage - 1)
+e += get(l, i, 0)
+endfor
+const f = &lines - &cmdheight - e - a->len() - d->len()
+if 0 <= f
+a += repeat(['%#TabPanelFill#'], f)
+a += d
+endif
+else
+l[g:actual_curtabpage] = a->len()
 endif
 return a->join("\n")
 enddef
