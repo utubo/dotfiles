@@ -12,7 +12,7 @@ enddef
 var k = {
 ymd: '', lines: []
 }
-export def Calendar(): list<string>
+export def GetClaendar(): list<string>
 const a = strftime('%Y-%m-%d')
 if k.ymd ==# a
 return k.lines
@@ -58,14 +58,16 @@ endfor
 endif
 endif
 if g:actual_curtabpage ==# tabpagenr('$')
-const d = Calendar()
-var e = 0
+const d = GetClaendar()
+var e = &lines
 for i in range(1, g:actual_curtabpage - 1)
-e += get(l, i, 0)
+e -= get(l, i, 0)
 endfor
-const f = &lines - &cmdheight - e - a->len() - d->len()
-if 0 <= f
-a += repeat(['%#TabPanelFill#'], f)
+e -= a->len()
+e -= d->len()
+e -= &cmdheight
+if 0 <= e
+a += repeat(['%#TabPanelFill#'], e)
 a += d
 endif
 else
