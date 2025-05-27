@@ -15,7 +15,7 @@ var calendar_cache = {
 	ymd: '', lines: []
 }
 
-export def GetClaendar(): list<string>
+export def GetCalendar(): list<string>
 	const ymd = strftime('%Y-%m-%d')
 	if calendar_cache.ymd ==# ymd
 		return calendar_cache.lines
@@ -65,9 +65,9 @@ export def TabPanel(): string
 		endif
 	endif
 
-	# Show Claendar
+	# Show Calendar
 	if g:actual_curtabpage ==# tabpagenr('$')
-		const cal = GetClaendar()
+		const cal = GetCalendar()
 		var pad = &lines
 		for i in range(1, g:actual_curtabpage - 1)
 			pad -= get(label_height, i, 0)
