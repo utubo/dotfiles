@@ -20,15 +20,16 @@ export def Calendar(): list<string>
 	if calendar_cache.ymd ==# ymd
 		return calendar_cache.lines
 	endif
+	const [month, today] = ymd->split('-')[1 : 2]
 	var lines = ['%#TabPanelFill#']
 	const width = &tabpanelopt
 		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-	lines->add('%#TabPanel#' .. repeat(' ', str2nr(width) / 2 - 1) .. ymd[5 : 6])
-	var wday = (str2nr(ymd[8 : 9]) - strftime('%w')->str2nr()) % 7
+	lines->add('%#TabPanel#' .. repeat(' ', str2nr(width) / 2 - 1) .. month)
+	var wday = (today->str2nr() - strftime('%w')->str2nr()) % 7
 	var days = repeat(['  '], wday)
 	for d in range(1, 31)
 		const day = printf('%02d', d)
-		if day ==# ymd[8 : 9]
+		if day ==# today
 			days->add($'%#TabPanelSel#{day}%#TabPanel#')
 		else
 			days->add(day)

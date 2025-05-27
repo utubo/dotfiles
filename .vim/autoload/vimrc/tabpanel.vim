@@ -17,28 +17,29 @@ const a = strftime('%Y-%m-%d')
 if k.ymd ==# a
 return k.lines
 endif
-var b = ['%#TabPanelFill#']
-const c = &tabpanelopt
+const [b, c] = a->split('-')[1 : 2]
+var e = ['%#TabPanelFill#']
+const f = &tabpanelopt
 ->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-b->add('%#TabPanel#' .. repeat(' ', str2nr(c) / 2 - 1) .. a[5 : 6])
-var e = (str2nr(a[8 : 9]) - strftime('%w')->str2nr()) % 7
-var f = repeat(['  '], e)
+e->add('%#TabPanel#' .. repeat(' ', str2nr(f) / 2 - 1) .. b)
+var g = (c->str2nr() - strftime('%w')->str2nr()) % 7
+var h = repeat(['  '], g)
 for d in range(1, 31)
-const g = printf('%02d', d)
-if g ==# a[8 : 9]
-f->add($'%#TabPanelSel#{g}%#TabPanel#')
+const i = printf('%02d', d)
+if i ==# c
+h->add($'%#TabPanelSel#{i}%#TabPanel#')
 else
-f->add(g)
+h->add(i)
 endif
-e = (e + 1) % 7
-if !e
-b->add('%#TabPanel#' .. f->join(' '))
-f = []
+g = (g + 1) % 7
+if !g
+e->add('%#TabPanel#' .. h->join(' '))
+h = []
 endif
 endfor
 k.ymd = a
-k.lines = b
-return b
+k.lines = e
+return e
 enddef
 var l = {}
 export def TabPanel(): string
