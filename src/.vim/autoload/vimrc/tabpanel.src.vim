@@ -53,7 +53,9 @@ export def GetCalendar(): list<string>
 	for i in range(0, lines->len() - 1)
 		lines[i] = $'%#TabPanel#{pad}{lines[i]}'
 	endfor
+	# Margin top
 	lines = ['%#TabPanelFill#'] + lines
+	# Cache
 	calendar_cache.ymd = ymd
 	calendar_cache.opt = &tabpanelopt
 	calendar_cache.lines = lines
