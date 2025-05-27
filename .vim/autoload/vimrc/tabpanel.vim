@@ -10,41 +10,49 @@ return $' {a}{c}{d}{e}'
 ->substitute($'\%{f}v.*', '>', '')
 enddef
 var k = {
-ymd: '', lines: []
+ymd: '', lines: [], opt: ''
 }
 export def GetCalendar(): list<string>
 const a = strftime('%Y-%m-%d')
-if k.ymd ==# a
+if k.ymd ==# a &&
+k.opt ==# &tabpanelopt
 return k.lines
 endif
 const [b, c, e] = a->split('-')
 const y = b->str2nr()
 const m = c->str2nr()
 const d = e->str2nr()
-var f = ['%#TabPanelFill#']
-const g = &tabpanelopt
-->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-f->add('%#TabPanel#' .. repeat(' ', g->str2nr() / 2 - 1) .. c)
+var f = []
+f->add($'         {c}')
+var g = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+if y % 4 ==# 0 && y % 100 !=# 0 || y % 400 ==# 0
+g[2] = 29
+endif
 var h = (d - strftime('%w')->str2nr()) % 7
 var j = repeat(['  '], h)
-var l = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-if y % 4 ==# 0 && y % 100 !=# 0 || y % 400 ==# 0
-l[2] = 29
-endif
-for i in range(1, l[m])
-const o = printf('%02d', i)
-j->add(o ==# e ? $'%#TabPanelSel#{o}%#TabPanel#' : o)
+for i in range(1, g[m])
+const l = printf('%02d', i)
+j->add(l ==# e ? $'%#TabPanelSel#{l}%#TabPanel#' : l)
 h = (h + 1) % 7
 if !h
-f->add('%#TabPanel#' .. j->join(' '))
+f->add(j->join(' '))
 j = []
 endif
 endfor
+const o = &tabpanelopt
+->matchstr('\(columns:\)\@<=\d\+') ?? '20'
+const p = o->str2nr() / 2 - 10
+const q = repeat(' ', p)
+for i in range(0, f->len() - 1)
+f[i] = $'%#TabPanel#{q}{f[i]}'
+endfor
+f = ['%#TabPanelFill#'] + f
 k.ymd = a
+k.opt = &tabpanelopt
 k.lines = f
 return f
 enddef
-var p = {}
+var r = {}
 export def TabPanel(): string
 var a = [$'{g:actual_curtabpage}']
 for b in tabpagebuflist(g:actual_curtabpage)
@@ -64,7 +72,7 @@ if g:actual_curtabpage ==# tabpagenr('$')
 const d = GetCalendar()
 var e = &lines
 for i in range(1, g:actual_curtabpage - 1)
-e -= get(p, i, 0)
+e -= get(r, i, 0)
 endfor
 e -= a->len()
 e -= d->len()
@@ -74,7 +82,7 @@ a += repeat(['%#TabPanelFill#'], e)
 a += d
 endif
 else
-p[g:actual_curtabpage] = a->len()
+r[g:actual_curtabpage] = a->len()
 endif
 return a->join("\n")
 enddef
