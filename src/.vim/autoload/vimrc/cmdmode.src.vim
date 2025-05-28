@@ -110,11 +110,11 @@ export def UpdatePopup(timer: number)
 	const text = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
 	if &columns < strdisplaywidth(text)
 		ClosePopup()
-		redraw
-		return
+	else
+		popup_settext(popup.win, text)
+		ShowPopupCursor()
 	endif
-	popup_settext(popup.win, text)
-	ShowPopupCursor()
+	redraw
 enddef
 
 def ShowPopupCursor()

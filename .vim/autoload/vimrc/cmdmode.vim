@@ -86,11 +86,11 @@ endif
 const b = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
 if &columns < strdisplaywidth(b)
 B()
-redraw
-return
-endif
+else
 popup_settext(l.win, b)
 C()
+endif
+redraw
 enddef
 def C()
 win_execute(l.win, 'call clearmatches()')
