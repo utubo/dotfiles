@@ -3,11 +3,10 @@ vim9script
 def BufLabel(b: dict<any>): string
 	const current = b.bufnr ==# bufnr('%') ? '>' : ' '
 	const mod = !b.changed ? '' : '+'
-	const nr = !b.hidden ? '' : $'{b.bufnr}:'
 	const name = b.name->fnamemodify(':t') ?? '[No Name]'
 	const width = &tabpanelopt
 		->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-	return $' {current}{mod}{nr}{name}'
+	return $' {current}{mod}{name}'
 		->substitute($'\%{width}v.*', '>', '')
 enddef
 

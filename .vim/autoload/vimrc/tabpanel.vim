@@ -2,12 +2,11 @@ vim9script
 def A(b: dict<any>): string
 const a = b.bufnr ==# bufnr('%') ? '>' : ' '
 const c = !b.changed ? '' : '+'
-const d = !b.hidden ? '' : $'{b.bufnr}:'
-const e = b.name->fnamemodify(':t') ?? '[No Name]'
-const f = &tabpanelopt
+const d = b.name->fnamemodify(':t') ?? '[No Name]'
+const e = &tabpanelopt
 ->matchstr('\(columns:\)\@<=\d\+') ?? '20'
-return $' {a}{c}{d}{e}'
-->substitute($'\%{f}v.*', '>', '')
+return $' {a}{c}{d}'
+->substitute($'\%{e}v.*', '>', '')
 enddef
 export def TabLabel(): string
 var a = [$'{g:actual_curtabpage}']
