@@ -8,6 +8,7 @@ Ezpack vim-jp/vital.vim
 Ezpack utubo/vim-colorscheme-girly # うちのvimが一番kawaii!
 Ezpack utubo/vim-colorscheme-softgreen # 緑がかって目に優しめを目指しました
 Ezpack utubo/vim-zenmode # cmdheight=0エミュレータ(statuslineも非表示)
+Ezpack utubo/vim-anypanel
 
 # 遅延ロード
 EzpackLazyLoad

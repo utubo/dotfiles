@@ -213,6 +213,19 @@ vimrc#tabpanel#Toggle(2)
 # }}}
 
 # ------------------------------------------------------
+# タブパネル
+g:anypanel = [
+	'',
+	'vimrc#tabpanel#TabLabel()',
+	'anypanel#HiddenBufs()',
+	[
+		'anypanel#Padding(1)',
+		'anypanel#Calendar()',
+	],
+]
+anypanel#Init()
+
+# ------------------------------------------------------
 # ローカル設定 {{{
 if '~/.vimrc_local'->expand()->filereadable()
 	source ~/.vimrc_local

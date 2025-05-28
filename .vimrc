@@ -155,6 +155,16 @@ if has('vim_starting')
 &t_SR = "\e[4 q"
 endif
 vimrc#tabpanel#Toggle(2)
+g:anypanel = [
+'',
+'vimrc#tabpanel#TabLabel()',
+'anypanel#HiddenBufs()',
+[
+'anypanel#Padding(1)',
+'anypanel#Calendar()',
+],
+]
+anypanel#Init()
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
