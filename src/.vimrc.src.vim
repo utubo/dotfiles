@@ -216,7 +216,7 @@ vimrc#tabpanel#Toggle(2)
 # タブパネル
 g:anypanel = [
 	'',
-	'vimrc#tabpanel#TabLabel()',
+	'',
 	'anypanel#HiddenBufs()',
 	[
 		'anypanel#Padding(1)',

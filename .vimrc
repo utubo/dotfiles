@@ -157,7 +157,7 @@ endif
 vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 '',
-'vimrc#tabpanel#TabLabel()',
+'',
 'anypanel#HiddenBufs()',
 [
 'anypanel#Padding(1)',
