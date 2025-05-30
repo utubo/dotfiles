@@ -6,6 +6,7 @@ sb: "\<C-u>set background=\<Tab>",
 mv: "\<C-u>MoveFile ",
 pd: "\<C-u>PopSelectDir ",
 th: "\<C-u>tab help ",
+'9': "\<C-u>vim9cmd ",
 }->get(getcmdline(), ' ')
 enddef
 export def MoveFile(a: string)
