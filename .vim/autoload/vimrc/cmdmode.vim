@@ -24,6 +24,24 @@ endif
 exe 'saveas!' c
 edit
 enddef
+com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
+def B()
+normal! gv
+for p in getregionpos(getpos('v'), getpos('.'))
+const a = p[0][0]
+const b = p[0][1]
+const f = p[0][2] - 1
+const t = p[1][2] - 1
+const c = getbufline(a, b)[0]
+const d = c[f : t]->substitute(
+'\(.*\S\)\(\s*[<>=#!]\+\s*\)\(\S.*\)',
+'\3\2\1',
+''
+)
+setbufline(a, b, c[0 : f - 1] .. d .. c[t + 1 :])
+endfor
+enddef
+com! -range=% SwapExpr B()
 var l = {
 win: 0,
 timer: 0,
@@ -55,17 +73,17 @@ l.curhl = 'Cursor'->hlget()
 hi Cursor NONE
 aug vimrc_cmdline_popup
 au!
-au ModeChanged c:[^c] B()
-au VimLeavePre * D()
+au ModeChanged c:[^c] C()
+au VimLeavePre * E()
 aug END
 l.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 l.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
-def B()
+def C()
 aug vimrc_cmdline_popup
 au!
 aug END
-D()
+E()
 timer_stop(l.updatetimer)
 l.updatetimer = 0
 timer_stop(l.blinktimer)
@@ -78,7 +96,7 @@ redraw
 enddef
 export def UpdatePopup(a: number)
 if l.win ==# 0 || mode() !=# 'c' || popup_list()->index(l.win) ==# -1
-B()
+C()
 if mode() ==# 'c'
 feedkeys("\<Esc>", 'nt')
 endif
@@ -86,14 +104,14 @@ return
 endif
 const b = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
 if &columns < strdisplaywidth(b)
-B()
+C()
 else
 popup_settext(l.win, b)
-C()
+D()
 endif
 redraw
 enddef
-def C()
+def D()
 win_execute(l.win, 'call clearmatches()')
 var c = getcmdscreenpos()
 if c !=# l.curpos
@@ -107,7 +125,7 @@ enddef
 export def BlinkPopupCursor(a: number)
 l.blink = !l.blink
 enddef
-def D()
+def E()
 hlset(l.curhl)
 set t_ve&
 enddef
@@ -121,9 +139,8 @@ return a
 enddef
 g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 export def ApplySettings()
-cno <expr> <Space> A()
-com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 com! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
+cno <expr> <Space> A()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 cno <LocalLeader>(ok) <CR>
 RLK cmap <LocalLeader> k <C-p>

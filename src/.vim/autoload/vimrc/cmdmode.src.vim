@@ -30,7 +30,28 @@ export def MoveFile(newname: string)
 	# 開き直してMRUに登録
 	edit
 enddef
+command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 #}}}
+
+# 式の左辺と右辺を交換 {{{
+def SwapExpr()
+	normal! gv
+	for p in getregionpos(getpos('v'), getpos('.'))
+		const buf = p[0][0]
+		const line = p[0][1]
+		const f = p[0][2] - 1
+		const t = p[1][2] - 1
+		const src = getbufline(buf, line)[0]
+		const rep = src[f : t]->substitute(
+			'\(.*\S\)\(\s*[<>=#!]\+\s*\)\(\S.*\)',
+			'\3\2\1',
+			''
+		)
+		setbufline(buf, line, src[0 : f - 1] .. rep .. src[t + 1 :])
+	endfor
+enddef
+command! -range=% SwapExpr SwapExpr()
+# }}}
 
 # カーソル付近にポップアップ(like cmdline.vim) {{{
 # NOTE: colorschme defualtで微妙だけど知らない！
@@ -152,10 +173,10 @@ enddef
 g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 # }}}
 
+# コマンドモードのマッピングとか {{{
 export def ApplySettings()
-	cnoremap <expr> <Space> MyAbbrev()
-	command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 	command! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
+	cnoremap <expr> <Space> MyAbbrev()
 	# <LocalLeader>系
 	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
 	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
@@ -166,3 +187,4 @@ export def ApplySettings()
 	cnoremap <expr> <LocalLeader>rr trim()->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 enddef
+# }}}
