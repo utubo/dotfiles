@@ -51,11 +51,11 @@ toolbarspring {
 #personal-bookmarks toolbarbutton[container].bookmark-item .toolbarbutton-text {
     background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32"><path fill="white" opacity="0.3" d="M1 3l3-4h6l3 4h15v17h-27z"/></svg>');
     background-repeat: no-repeat;
-    font-size:12px;
     height: 23px;
-    opacity: 1;
     width: 23px;
-    justify-content: center;
+    font-size:12px;
     align-items: center;
+    justify-content: center;
+    opacity: 1;
 }
 
