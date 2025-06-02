@@ -453,6 +453,10 @@ vimrc#echoyanktext#EchoYankText()
 enddef
 au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
+nn <Tab> >
+nn <Tab><Tab> >>
+nn <S-Tab> <
+nn <S-Tab><S-Tab> <<
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 Each {bufnr}=1,2,3,4,5,6,7 nnoremap g{bufnr} <Cmd>b{bufnr}<CR>
 ono A <Plug>(textobj-twochars-a)
@@ -460,11 +464,9 @@ ono I <Plug>(textobj-twochars-i)
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
-nn <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
-nn <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
-au vimrc FileType html,xml,svg {
-nn <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-nn <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+au vimrc FileType tsv,csv {
+nn <buffer> <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+nn <buffer> <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 }
 nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
 nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>

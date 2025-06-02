@@ -676,6 +676,12 @@ au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # }}}
 
+# やっぱり>>より押し易い…
+nnoremap <Tab> >
+nnoremap <Tab><Tab> >>
+nnoremap <S-Tab> <
+nnoremap <S-Tab><S-Tab> <<
+
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
@@ -699,11 +705,9 @@ nnoremap <Space>o <C-w>w
 nnoremap <Space>d "_d
 
 # <Tab>でtsvとかcsvとかhtmlの次の項目に移動
-nnoremap <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
-nnoremap <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
-au vimrc FileType html,xml,svg {
-	nnoremap <buffer> <silent> <Tab> <Cmd>call search('>')<CR><Cmd>call search('\S')<CR>
-	nnoremap <buffer> <silent> <S-Tab> <Cmd>call search('>', 'b')<CR><Cmd>call search('>', 'b')<CR><Cmd>call search('\S')<CR>
+au vimrc FileType tsv,csv {
+	nnoremap <buffer> <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+	nnoremap <buffer> <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 }
 
 # タブは卒業！
