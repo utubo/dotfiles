@@ -34,7 +34,7 @@ const f = p[0][2] - 1
 const t = p[1][2] - 1
 const c = getbufline(a, b)[0]
 const d = c[f : t]->substitute(
-'\(.*\S\)\(\s*[<>=#!]\+\s*\)\(\S.*\)',
+'\(.*\S\)\(\s*[=<>!~#]\+\s*\)\(\S.*\)',
 '\3\2\1',
 ''
 )

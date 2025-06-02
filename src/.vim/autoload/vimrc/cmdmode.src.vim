@@ -43,7 +43,7 @@ def SwapExpr()
 		const t = p[1][2] - 1
 		const src = getbufline(buf, line)[0]
 		const rep = src[f : t]->substitute(
-			'\(.*\S\)\(\s*[<>=#!]\+\s*\)\(\S.*\)',
+			'\(.*\S\)\(\s*[=<>!~#]\+\s*\)\(\S.*\)',
 			'\3\2\1',
 			''
 		)
