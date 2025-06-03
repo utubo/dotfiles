@@ -211,6 +211,7 @@ const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
 ino <expr> ;l $"<C-w>{G()}"
+au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;

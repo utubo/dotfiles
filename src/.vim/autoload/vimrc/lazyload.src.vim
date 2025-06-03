@@ -318,7 +318,8 @@ def ToupperPrevWord(): string
   return toupper(word)
 enddef
 inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
-
+# https://blog.atusy.net/2025/06/03/vim-contextful-mark/
+au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
 # }}}
 
 # ------------------------------------------------------
