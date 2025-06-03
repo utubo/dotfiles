@@ -70,7 +70,8 @@ complete: ['<CR>', '<LocalLeader>l'],
 },
 run_on_midasi: true,
 }
-nn <LocalLeader>j i<Plug>(vim9skk-enable)
+nn <LocalLeader>j a<Plug>(vim9skk-enable)
+nn <LocalLeader><LocalLeader>j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()

@@ -103,7 +103,8 @@ g:vim9skk = {
 	},
 	run_on_midasi: true,
 }
-nnoremap <LocalLeader>j i<Plug>(vim9skk-enable)
+nnoremap <LocalLeader>j a<Plug>(vim9skk-enable)
+nnoremap <LocalLeader><LocalLeader>j i<Plug>(vim9skk-enable)
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 # 見出しモードでスタートする
