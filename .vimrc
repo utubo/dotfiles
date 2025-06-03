@@ -161,7 +161,6 @@ g:anypanel = [
 'anypanel#HiddenBufs()',
 [
 'anypanel#Padding(1)',
-'"TodoList"',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
 'anypanel#Calendar()',
