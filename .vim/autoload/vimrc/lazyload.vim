@@ -429,11 +429,11 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-set spell spelllang=en
+nn <F8> <Cmd>setlocal spell! spelllang=en_us<CR><Cmd>setlocal spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
-nn <F8> my
-nn <Space><F8> 'y
+nn <F7> my
+nn <Space><F7> 'y
 def BA()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)

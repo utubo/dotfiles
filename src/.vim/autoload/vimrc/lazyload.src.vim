@@ -643,15 +643,15 @@ nnoremap M m
 # 様子見中 使わなそうなら削除する {{{
 
 # typoがやばい！
-set spell spelllang=en
+nnoremap <F8> <Cmd>setlocal spell! spelllang=en_us<CR><Cmd>setlocal spell?<CR>
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xnoremap <F9> <ESC>1<C-w>s<C-w>w
 
 # ここまで読(y)んだ
-nnoremap <F8> my
-nnoremap <Space><F8> 'y
+nnoremap <F7> my
+nnoremap <Space><F7> 'y
 
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
@@ -754,8 +754,8 @@ endif
 # <F4> TabList
 # <F5> 日付関係
 # <F6>
-# <F7>
-# <F8> ここまでよんだ
+# <F7> ここまでよんだ
+# <F8> Spell check
 # <F9> ヘッダ行を表示(あんまり使わない)
 # <F10> タブパネル
 # <F11> 行番号表示切替
