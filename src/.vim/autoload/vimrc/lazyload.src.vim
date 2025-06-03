@@ -190,7 +190,7 @@ nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nnoremap <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
+nnoremap <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
 
 # タブ移動したときもポップアップする
 def PopselectTabpages()
@@ -226,6 +226,17 @@ nnoremap <Leader>a <Cmd>PortalAim<CR>
 nnoremap <Leader>b <Cmd>PortalAim blue<CR>
 nnoremap <Leader>o <Cmd>PortalAim orange<CR>
 nnoremap <Leader>r <Cmd>PortalReset<CR>
+# }}}
+
+# yankround {{{
+nmap p <Plug>(yankround-p)
+xmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap <C-n> <Plug>(yankround-next)
+# gpは他のことに使いたい…
+# nmap gp <ScriptCmd>vimrc#yankround#Paste('gp')<CR>
+# xmap gp <ScriptCmd>vimrc#yankround#Paste('gp')<CR>
+# nmap gP <ScriptCmd>vimrc#yankround#Paste('gP')<CR>
 # }}}
 
 # 補完 {{{

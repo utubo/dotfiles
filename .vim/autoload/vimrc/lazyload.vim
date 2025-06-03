@@ -136,7 +136,7 @@ nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nn <C-p> <ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })<CR>
+nn <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
 def E()
 if !vimrc#tabpanel#IsVisible()
 popselect#tabpages#Popup()
@@ -161,6 +161,10 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
+nm p <Plug>(yankround-p)
+xm p <Plug>(yankround-p)
+nm P <Plug>(yankround-P)
+nm <C-n> <Plug>(yankround-next)
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
