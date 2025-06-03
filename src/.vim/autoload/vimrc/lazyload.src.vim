@@ -637,6 +637,9 @@ inoremap （） ()<C-g>U<Left>
 nnoremap ' "
 nnoremap m '
 nnoremap M m
+
+# typoがやばい！
+au vimrc BufReadPost * setlocal spell spelllang=en
 # }}}
 
 # ------------------------------------------------------
