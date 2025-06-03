@@ -637,13 +637,13 @@ inoremap （） ()<C-g>U<Left>
 nnoremap ' "
 nnoremap m '
 nnoremap M m
-
-# typoがやばい！
-au vimrc BufReadPost * setlocal spell spelllang=en
 # }}}
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
+
+# typoがやばい！
+set spell spelllang=en
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w

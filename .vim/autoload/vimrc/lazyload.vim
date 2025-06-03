@@ -429,7 +429,7 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-au vimrc BufReadPost * setlocal spell spelllang=en
+set spell spelllang=en
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 nn <F8> my
