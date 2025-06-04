@@ -259,7 +259,7 @@ Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
-nn <Leader>: :
+Each X=:,/,? nnoremap <Leader>X X
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>

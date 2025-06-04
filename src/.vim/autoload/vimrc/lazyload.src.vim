@@ -394,7 +394,7 @@ au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
 # 念のため元の:をバックアップしておく
-nnoremap <Leader>: :
+Each X=:,/,? nnoremap <Leader>X X
 # }}}
 
 # ------------------------------------------------------
