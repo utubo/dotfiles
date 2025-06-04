@@ -63,10 +63,10 @@ packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skk = {
 keymap: {
-midasi: ['Q', '<LocalLeader>j'],
 enable: ['<LocalLeader>j'],
 disable: ['<LocalLeader>a'],
-complete: ['<CR>', '<LocalLeader>l'],
+midasi: ['<LocalLeader>j', 'Q'],
+complete: ['<LocalLeader>l', '<CR>'],
 },
 run_on_midasi: true,
 }

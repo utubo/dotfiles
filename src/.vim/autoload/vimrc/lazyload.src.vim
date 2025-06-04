@@ -96,10 +96,10 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # vim9skk {{{
 g:vim9skk = {
 	keymap: {
-		midasi: ['Q', '<LocalLeader>j'],
-		enable: ['<LocalLeader>j'],
-		disable: ['<LocalLeader>a'],
-		complete: ['<CR>', '<LocalLeader>l'],
+		enable:   ['<LocalLeader>j'],
+		disable:  ['<LocalLeader>a'],
+		midasi:   ['<LocalLeader>j', 'Q'],
+		complete: ['<LocalLeader>l', '<CR>'],
 	},
 	run_on_midasi: true,
 }
@@ -111,7 +111,7 @@ au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
 au vimrc User Vim9skkEnter feedkeys('Q')
 # インサートモードが終わったらオフにする
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
-# 見出しの色見出しの色を替たらみやすいかな？
+# 見出しの色を見易すく
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 # 「を」で確定
 au vimrc User Vim9skkMidasiInput {
