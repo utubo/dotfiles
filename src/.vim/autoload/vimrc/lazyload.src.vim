@@ -643,8 +643,10 @@ nnoremap M m
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
 
-# typoがやばい！
-nnoremap <F8> <Cmd>setlocal spell! spelllang=en_us<CR><Cmd>setlocal spell?<CR>
+# typoの量がやばい！
+# やばすぎるので重くてもデフォルトでオンにする(戒め)
+set spell spelllang=en_us,cjk
+nnoremap <F8> <Cmd>set spell! spell?<CR>
 
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w

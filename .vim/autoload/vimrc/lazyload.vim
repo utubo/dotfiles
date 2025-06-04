@@ -430,7 +430,8 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-nn <F8> <Cmd>setlocal spell! spelllang=en_us<CR><Cmd>setlocal spell?<CR>
+set spell spelllang=en_us,cjk
+nn <F8> <Cmd>set spell! spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 nn <F7> my
