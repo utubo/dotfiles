@@ -384,7 +384,7 @@ nn qQ <Cmd>e #<1<CR>
 au vimrc BufHidden * {
 const b = getbufinfo('%')[0]
 if !b.name && !b.changed
-timer_start(0, (_) => execute($'bdelete {b.bufnr}'))
+timer_start(0, (_) => execute($'silent! bdelete {b.bufnr}'))
 endif
 }
 cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
