@@ -78,7 +78,7 @@ au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
 const t = g:vim9skk_midasi[-1]
-if t ==# 'を' || t !=# '*' && t->match('[ぁ-んァ-ヴ]') ==# -1
+if t ==# 'を' || t !=# '*' && t->match('[ぁ-んァ-ヴー]') ==# -1
 feedkeys("\<CR>")
 endif
 }
