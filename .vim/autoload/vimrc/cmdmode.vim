@@ -2,7 +2,7 @@ vim9script
 def A(): string
 return {
 cs: "\<C-u>colorscheme ",
-sb: "\<C-u>set background=\<Tab>",
+sb: "\<C-u>set background=\<Tab>\<Tab>",
 mv: "\<C-u>MoveFile ",
 pd: "\<C-u>PopSelectDir ",
 th: "\<C-u>tab help ",
@@ -142,7 +142,7 @@ return a
 enddef
 g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 export def ApplySettings()
-com! -nargs=1 -complete=dir PopSelectDir popselect#dir#Popup(<f-args>)
+com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->popselect#dir#Popup()
 cno <expr> <Space> A()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 cno <LocalLeader>(ok) <CR>
