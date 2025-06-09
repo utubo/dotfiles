@@ -235,6 +235,7 @@ RLK map! <LocalLeader> l <Right>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
+nm <Space>; :
 nm <Space>, /
 nm g<Space> g;
 for i in range(1, 10)

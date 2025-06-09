@@ -64,15 +64,15 @@ exe $'{b} new'
 append(0, c)
 setl nomodified
 enddef
-export def HelpPlugins(b: string)
-const c = globpath(&rtp, $'**/{b}/doc/*.txt')
-g:a = c
+export def HelpPlugins(a: string)
+const b = globpath(&rtp, $'**/{a}/doc/*.txt')
+if b !=# ''
+exe 'edit' b
+return
+endif
+const c = globpath(&rtp, $'**/{a}/README.md')
 if c !=# ''
 exe 'edit' c
-endif
-const d = globpath(&rtp, $'**/{b}/README.md')
-if d !=# ''
-exe 'edit' d
 endif
 enddef
 export def ShowBufInfo(a: string = '')

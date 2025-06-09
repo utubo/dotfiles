@@ -358,6 +358,7 @@ nnoremap <Space>e G?\cErr\\|Exception<CR>
 nnoremap <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 # スマホだと:と/とファンクションキーが遠いので…
 nmap <Space>. :
+nmap <Space>; :
 nmap <Space>, /
 nmap g<Space> g;
 for i in range(1, 10)
