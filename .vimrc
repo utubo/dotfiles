@@ -147,9 +147,7 @@ au vimrc OptionSet list silent! E()
 au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
-if has('termguicolors')
 set termguicolors
-endif
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 if has('vim_starting')

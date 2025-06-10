@@ -191,9 +191,7 @@ au vimrc BufNew,BufReadPost * silent! HiTail()
 
 silent! syntax enable
 set t_Co=256
-if has('termguicolors')
-  set termguicolors
-endif
+set termguicolors
 # 以下はローカル設定後にやる
 # set background=light
 # silent! colorscheme girly
