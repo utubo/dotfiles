@@ -178,7 +178,7 @@ g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 
 # コマンドモードのマッピングとか {{{
 export def ApplySettings()
-	command! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->popselect#dir#Popup()
+	command! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 	cnoremap <expr> <Space> MyAbbrev()
 	# <LocalLeader>系
 	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
