@@ -10,6 +10,7 @@ th: "\<C-u>tab help ",
 '9': "\<C-u>vim9cmd ",
 }->get(getcmdline(), ' ')
 enddef
+cno <expr> <Space> A()
 export def MoveFile(a: string)
 const b = expand('%')
 const c = expand(a)
@@ -145,7 +146,6 @@ enddef
 g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
 export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
-cno <expr> <Space> A()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 cno <LocalLeader>(ok) <CR>
 RLK cmap <LocalLeader> k <C-p>
