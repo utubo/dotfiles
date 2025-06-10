@@ -419,12 +419,6 @@ au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 # }}}
 
 # ------------------------------------------------------
-# vimgrep {{{
-command! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
-au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
-# }}}
-
-# ------------------------------------------------------
 # diff {{{
 set splitright
 set fillchars+=diff:\ # 削除行は空白文字で埋める
@@ -595,6 +589,8 @@ if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"
 endif
+
+au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 
 nnoremap <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nnoremap <F11> <Cmd>set number!<CR>

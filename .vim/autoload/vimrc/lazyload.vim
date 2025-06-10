@@ -273,8 +273,6 @@ def g:Tapi_drop(a: number, b: list<string>)
 vimrc#terminal#Tapi_drop(a, b)
 enddef
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
-com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
-au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 set spr
 set fcs+=diff:\ 
 au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
@@ -398,6 +396,7 @@ if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
+au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 nn <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>

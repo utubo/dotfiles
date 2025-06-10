@@ -4,6 +4,7 @@ return {
 cs: "\<C-u>colorscheme ",
 sb: "\<C-u>set background=\<Tab>\<Tab>",
 mv: "\<C-u>MoveFile ",
+vg: "\<C-u>VimGrep ",
 pd: "\<C-u>PopSelectDir ",
 th: "\<C-u>tab help ",
 '9': "\<C-u>vim9cmd ",
@@ -25,6 +26,7 @@ exe 'saveas!' c
 edit
 enddef
 com! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
+com! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
 def B(
 pat: string, sub: string, flags: string = '')
 normal! gv

@@ -6,6 +6,7 @@ def MyAbbrev(): string
 		cs: "\<C-u>colorscheme ",
 		sb: "\<C-u>set background=\<Tab>\<Tab>",
 		mv: "\<C-u>MoveFile ",
+		vg: "\<C-u>VimGrep ",
 		pd: "\<C-u>PopSelectDir ",
 		th: "\<C-u>tab help ",
 		'9': "\<C-u>vim9cmd ",
@@ -32,6 +33,10 @@ export def MoveFile(newname: string)
 enddef
 command! -nargs=1 -complete=file MoveFile vimrc#cmdmode#MoveFile(<f-args>)
 #}}}
+
+# ちょっと楽なgrep {{{
+command! -nargs=+ -complete=dir VimGrep vimrc#myutil#VimGrep(<f-args>)
+# }}}
 
 # 式の左辺と右辺を交換 {{{
 def ReplaceVisualSelection(
