@@ -138,7 +138,7 @@ exe 'echohl' m[0]
 echon m[1]
 endfor
 echoh Normal
-popup_create(expand('%:p'), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
+popup_create(execute('pwd')->trim(), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
 export def PopupCursorPos()
 const p = getcurpos()
