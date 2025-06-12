@@ -185,6 +185,7 @@ vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
+packadd hlyank
 packadd comment
 nm <Space>c gcc
 Enable g:rainbow_active
@@ -457,11 +458,6 @@ BB('SpellBad', '\s[=!]==\s')
 BB('SpellBad', '\s\~[=!][=#]\?\s')
 BB('SpellRare', '\<normal!\@!')
 }
-set report=9999
-def g:EchoYankText(t: number)
-vimrc#echoyanktext#EchoYankText()
-enddef
-au vimrc TextYankPost * timer_start(1, g:EchoYankText)
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <Tab> >
 nn <Tab><Tab> >>

@@ -277,6 +277,7 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 # }}}
 
 # built-in {{{
+packadd hlyank
 packadd comment
 nmap <Space>c gcc
 # }}}
@@ -679,16 +680,6 @@ au vimrc Syntax vim {
 	AddMySyntax('SpellBad', '\s\~[=!][=#]\?\s')
 	AddMySyntax('SpellRare', '\<normal!\@!')
 }
-# }}}
-
-# yankした文字をecho {{{
-set report=9999
-# 他のプラグインと競合するのでタイマーで遅延させる
-def g:EchoYankText(t: number)
-	vimrc#echoyanktext#EchoYankText()
-enddef
-au vimrc TextYankPost * timer_start(1, g:EchoYankText)
-#
 # }}}
 
 # `:%g!/re/d` の結果を新規ウインドウに表示 {{{

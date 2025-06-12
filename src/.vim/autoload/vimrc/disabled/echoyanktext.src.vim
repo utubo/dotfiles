@@ -1,5 +1,16 @@
 vim9script
 
+# これをvimrcとかに定義する
+# yankした文字をecho {{{
+set report=9999
+# 他のプラグインと競合するのでタイマーで遅延させる
+def g:EchoYankText(t: number)
+	vimrc#echoyanktext#EchoYankText()
+enddef
+au vimrc TextYankPost * timer_start(1, g:EchoYankText)
+# }}}
+
+# 本体
 export def EchoYankText()
 	const title = get(g:, 'echo_yank_text_title', 'yanked: ')
 	const chars = {
