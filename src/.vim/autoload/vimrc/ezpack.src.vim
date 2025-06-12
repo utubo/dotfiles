@@ -31,7 +31,6 @@ Ezpack thinca/vim-portal
 Ezpack thinca/vim-themis
 Ezpack tpope/vim-fugitive # `:Git`コマンド
 Ezpack tyru/capture.vim
-Ezpack tyru/caw.vim
 Ezpack yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 
 # あとは全部opt行き

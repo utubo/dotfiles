@@ -185,12 +185,13 @@ vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
+packadd comment
+nm <Space>c gcc
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
-Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'

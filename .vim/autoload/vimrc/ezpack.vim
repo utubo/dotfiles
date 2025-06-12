@@ -26,7 +26,6 @@ Ezpack thinca/vim-portal
 Ezpack thinca/vim-themis
 Ezpack tpope/vim-fugitive
 Ezpack tyru/capture.vim
-Ezpack tyru/caw.vim
 Ezpack yuki-yano/dedent-yank.vim
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log

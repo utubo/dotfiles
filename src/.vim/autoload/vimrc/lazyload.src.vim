@@ -276,13 +276,17 @@ nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 # }}}
 
+# built-in {{{
+packadd comment
+nmap <Space>c gcc
+# }}}
+
 # その他 {{{
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &updatetime
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
-Each nnoremap,xnoremap <Space>c <Plug>(caw:hatpos:toggle)
 # }}}
 
 # 開発用 {{{
