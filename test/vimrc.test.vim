@@ -101,7 +101,8 @@ suite.TestMapping = () => {
 	# n  B  CtrlPBuffer
 	# n  e  vim-smart-word
 	# n  ga textobjの先頭に移動
-	# n  gc vim-caw
+	# n  gc comment
+	# n  gcc comment
 	# n  gd vim-vimscript-gd
 	# n  ge vim-smart-word
 	# n  gi textobjの先頭に移動
@@ -141,14 +142,14 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
-		'n  \([abBehijklmnopqswAMOPQSTY;''/?:%,+]\)',
-		'n  \(g[acdesinmprtT;]\)',
+		'n  [abBehijklmnopqswAMOPQSTY;''/?:%,+]',
+		'n  g[acdesinmprtT;]',
 		'n  \(zd\|zf\|ZZ\)',
-		'n  \(G[ai%]\)',
-		'n  \(<C-[ABFGNPWX]>\)',
-		'n  \(<Esc>\)',
-		'v  \([*/?:]\)',
-		'i  \(<C-U>\)',
+		'n  G[ai%]',
+		'n  <C-[ABFGNPWX]>',
+		'n  <Esc>',
+		'v  [*/?:]',
+		'i  <C-U>',
 	]->join('\|')
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
@@ -171,6 +172,7 @@ suite.TestMapping = () => {
 		'[noxv]  [ai]sb', # sandwitch
 		'n  \[c.*', # GitGutter
 		'n  \]c.*', # GitGutter
+		'n  gcc', # comment
 		'o  [IA]', # vim-hlpiars, vim-headtail
 	]->join('\|')
 
