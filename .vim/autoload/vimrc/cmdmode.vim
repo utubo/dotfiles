@@ -34,20 +34,20 @@ normal! gv
 for p in getregionpos(getpos('v'), getpos('.'))
 const a = p[0][0]
 const b = p[0][1]
-const f = p[0][2] - 1
-const t = p[1][2] - 1
 const c = getbufline(a, b)[0]
+const f = charidx(c, p[0][2] - 1)
+const t = charidx(c, p[1][2] - 1)
 const d = c[f : t]->substitute(pat, sub, flags)
 setbufline(a, b, c[0 : f - 1] .. d .. c[t + 1 :])
 endfor
 enddef
-def C()
+def C(a: string = '[=<>!~#]\+')
 B(
-'\(.*\S\)\(\s*[=<>!~#]\+\s*\)\(\S.*\)',
+$'\(.*\S\)\(\s*{a}\s*\)\(\S.*\)',
 '\3\2\1'
 )
 enddef
-com! -range=% SwapExpr C()
+com! -range=% -nargs=? SwapExpr C(<f-args>)
 var l = {
 win: 0,
 timer: 0,

@@ -46,20 +46,20 @@ def ReplaceVisualSelection(
 	for p in getregionpos(getpos('v'), getpos('.'))
 		const buf = p[0][0]
 		const line = p[0][1]
-		const f = p[0][2] - 1
-		const t = p[1][2] - 1
 		const src = getbufline(buf, line)[0]
+		const f = charidx(src, p[0][2] - 1)
+		const t = charidx(src, p[1][2] - 1)
 		const rep = src[f : t]->substitute(pat, sub, flags)
 		setbufline(buf, line, src[0 : f - 1] .. rep .. src[t + 1 :])
 	endfor
 enddef
-def SwapExpr()
+def SwapExpr(dlm: string = '[=<>!~#]\+')
 	ReplaceVisualSelection(
-		'\(.*\S\)\(\s*[=<>!~#]\+\s*\)\(\S.*\)',
+		$'\(.*\S\)\(\s*{dlm}\s*\)\(\S.*\)',
 		'\3\2\1'
 	)
 enddef
-command! -range=% SwapExpr SwapExpr()
+command! -range=% -nargs=? SwapExpr SwapExpr(<f-args>)
 # }}}
 
 # カーソル付近にポップアップ(like cmdline.vim) {{{
