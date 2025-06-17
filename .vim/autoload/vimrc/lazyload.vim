@@ -78,9 +78,11 @@ au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
-const t = g:vim9skk_midasi[-1]
-if t ==# 'を' || t !=# '*' && t->match('[ぁ-んァ-ヴー]') ==# -1
+const m = g:vim9skk_midasi
+if m[-1] ==# 'を' || m[-1] !=# '*' && t->match('[ぁ-んァ-ヴー]') ==# -1
 feedkeys("\<CR>")
+elseif m[-2] ==# '*'
+feedkeys("\<Space>")
 endif
 }
 no <Leader>ga ga
