@@ -696,6 +696,9 @@ nnoremap <Tab> >
 nnoremap <Tab><Tab> >>
 nnoremap <S-Tab> <
 nnoremap <S-Tab><S-Tab> <<
+# NOTE: <Tab> ==# <C-i> なので<C-i>を<C-k>へ退避させる
+nnoremap <C-k> <C-i>
+nnoremap <Leader><C-k> <C-k>
 
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)

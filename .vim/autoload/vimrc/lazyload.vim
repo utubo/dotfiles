@@ -467,6 +467,8 @@ nn <Tab> >
 nn <Tab><Tab> >>
 nn <S-Tab> <
 nn <S-Tab><S-Tab> <<
+nn <C-k> <C-i>
+nn <Leader><C-k> <C-k>
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 Each {bufnr}=1,2,3,4,5,6,7 nnoremap g{bufnr} <Cmd>b{bufnr}<CR>
 ono A <Plug>(textobj-twochars-a)
