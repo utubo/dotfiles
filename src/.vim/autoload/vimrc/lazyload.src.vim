@@ -622,6 +622,7 @@ nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
 nnoremap TT <Cmd>tabnext #<CR>
+nnoremap TB <Cmd>tabnew %<CR>g;
 
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
