@@ -223,8 +223,7 @@ enddef
 Each X=n,p nnoremap gX <ScriptCmd>ShowBuf('X')<CR>
 
 # デフォルトのgrは使わないかな…
-# Note: 押しにくいのでやめた→nnoremap gb <Cmd>buffer #<CR>
-nnoremap gr <Cmd>buffer #<CR>
+nnoremap gr <C-^>
 # }}}
 
 # Portal {{{

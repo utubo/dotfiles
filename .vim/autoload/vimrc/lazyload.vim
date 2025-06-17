@@ -161,7 +161,7 @@ popselect#buffers#Popup()
 endif
 enddef
 Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
-nn gr <Cmd>buffer #<CR>
+nn gr <C-^>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
