@@ -63,28 +63,29 @@ command! EzpackCleanUp vimrc#ezpack#CleanUp()
 # ------------------------------------------------------
 # 折り畳み {{{
 def! g:MyFoldText(): string
+	const icon = "\uf196"
 	const indent = repeat(' ', indent(v:foldstart))
 	if &foldmethod ==# 'syntax'
 		# こんなかんじ
-		# ああああ 📁
+		# ああああ⊞
 		const text = getline(v:foldstart)->trim()
-		return $'{indent}{text} 📁'
+		return $'{indent}{text}{icon}'
 	endif
 	if &foldmethod ==# 'marker'
 		# syntaxと同じfoldmarkerは削除
 		const text = getline(v:foldstart)
 			->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 			->trim()
-		return $'{indent}{text} 📁'
+		return $'{indent}{text}{icon}'
 	endif
 	# こんなかんじ
-	# 📁 lines 3
-	const text = $'{indent}📁 {v:foldend - v:foldstart + 1}lines'
+	# ⊞lines 3
+	const text = $'{indent}{icon} {v:foldend - v:foldstart + 1}lines'
 	if &ft !=# 'markdown'
 		return text
 	endif
 	# こんなかんじでマークダウンのチェックボックスの数を表示
-	# 📁 lines 3 [1/3]
+	# ⊞lines 3 [1/3]
 	var checkbox = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
 	const total = checkbox->len()
 	if total ==# 0

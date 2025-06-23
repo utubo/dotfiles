@@ -49,30 +49,31 @@ endif
 com! EzpackInstall vimrc#ezpack#Install()
 com! EzpackCleanUp vimrc#ezpack#CleanUp()
 def! g:MyFoldText(): string
-const a = repeat(' ', indent(v:foldstart))
+const a = "\uf196"
+const b = repeat(' ', indent(v:foldstart))
 if &fdm ==# 'syntax'
-const b = getline(v:foldstart)->trim()
-return $'{a}{b} 📁'
+const c = getline(v:foldstart)->trim()
+return $'{b}{c}{a}'
 endif
 if &fdm ==# 'marker'
-const b = getline(v:foldstart)
+const c = getline(v:foldstart)
 ->substitute(matchstr(&foldmarker, '^[^,]*'), '', '')
 ->trim()
-return $'{a}{b} 📁'
+return $'{b}{c}{a}'
 endif
-const b = $'{a}📁 {v:foldend - v:foldstart + 1}lines'
+const c = $'{b}{a} {v:foldend - v:foldstart + 1}lines'
 if &ft !=# 'markdown'
-return b
+return c
 endif
-var c = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
-const d = c->len()
-if d ==# 0
-return b
+var d = matchbufline(bufnr(), '^\s*- \[[ x*]]', v:foldstart, v:foldend)
+const e = d->len()
+if e ==# 0
+return c
 endif
-const e = c
+const f = d
 ->filter((index, value) => value.text[-2 : -2] !=# ' ')
 ->len()
-return $'{b} [{e}/{d}]'
+return $'{c} [{f}/{e}]'
 enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
