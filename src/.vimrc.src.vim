@@ -80,7 +80,7 @@ def! g:MyFoldText(): string
 	endif
 	# こんなかんじ
 	# ⊞lines 3
-	const text = $'{indent}{icon} {v:foldend - v:foldstart + 1}lines'
+	const text = $'{indent}{icon}{v:foldend - v:foldstart + 1}lines'
 	if &ft !=# 'markdown'
 		return text
 	endif

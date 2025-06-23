@@ -61,7 +61,7 @@ const c = getline(v:foldstart)
 ->trim()
 return $'{b}{c}{a}'
 endif
-const c = $'{b}{a} {v:foldend - v:foldstart + 1}lines'
+const c = $'{b}{a}{v:foldend - v:foldstart + 1}lines'
 if &ft !=# 'markdown'
 return c
 endif
