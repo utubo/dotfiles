@@ -20,11 +20,6 @@
   display:block;
 }
 
-/* タブのデフォルト幅 */
-tab {
-    width: 200px !important;
-}
-
 /* ピン留タブをアイコンだけ表示 */
 .tabbrowser-tab[pinned] {
    padding-left: 5px;
