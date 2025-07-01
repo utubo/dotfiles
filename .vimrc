@@ -160,7 +160,7 @@ vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
-'anypanel#HiddenBufs()->g:IndexToChars()',
+'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 [
 'anypanel#Padding(1)',
 'anypanel#File("~/todolist.md")',
@@ -168,20 +168,21 @@ g:anypanel = [
 'anypanel#Calendar()',
 ],
 ]
-g:indexchars = '%jklhdsahgqwertyuiopzxcvbnm'
-def! g:IndexToChars(a: string): string
-return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
+g:idxchars = '%jklhdsahgqwertyuiopzxcvbnm'
+def! g:TabpanelIdx2Chars(a: string): string
+return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
-def F()
+def! g:Getchar2idx(): number
 ec 'Input bufnr: '
-const a = stridx(g:indexchars, getchar()->nr2char())
+const a = stridx(g:idxchars, getchar()->nr2char())
 if a ==# -1
-exe $'buffer {bufnr('#')}'
+return bufnr('#')
 else
-exe $'buffer {a}'
+return a
 endif
 enddef
-nn <LocalLeader>f <ScriptCmd>F()<CR>
+nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
+nn <LocalLeader>q <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
 anypanel#Init()
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
@@ -190,7 +191,7 @@ if !exists('g:colors_name')
 set bg=light
 sil! colorscheme girly
 endif
-def G()
+def F()
 if &ft ==# 'help' || &ft ==# 'gitrebase'
 return
 endif
@@ -203,7 +204,7 @@ return
 endif
 sil! normal! g`"zvzz
 enddef
-au vimrc BufRead * au vimrc SafeState * ++once G()
+au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()

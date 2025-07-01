@@ -219,7 +219,7 @@ vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 	'',
 	'anypanel#TabBufs()',
-	'anypanel#HiddenBufs()->g:IndexToChars()',
+	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	[
 		'anypanel#Padding(1)',
 		'anypanel#File("~/todolist.md")',
@@ -227,20 +227,24 @@ g:anypanel = [
 		'anypanel#Calendar()',
 	],
 ]
-g:indexchars = '%jklhdsahgqwertyuiopzxcvbnm'
-def! g:IndexToChars(lines: string): string
-	return lines->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
+
+# ------------------------------------------------------
+# 数字キー無しでバッファを操作
+g:idxchars = '%jklhdsahgqwertyuiopzxcvbnm'
+def! g:TabpanelIdx2Chars(lines: string): string
+	return lines->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
-def SwitchBufWithChar()
+def! g:Getchar2idx(): number
 	echo 'Input bufnr: '
-	const idx = stridx(g:indexchars, getchar()->nr2char())
+	const idx = stridx(g:idxchars, getchar()->nr2char())
 	if idx ==# -1
-		execute $'buffer {bufnr('#')}'
+		return bufnr('#')
 	else
-		execute $'buffer {idx}'
+		return idx
 	endif
 enddef
-nnoremap <LocalLeader>f <ScriptCmd>SwitchBufWithChar()<CR>
+nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
+nnoremap <LocalLeader>q <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
 
 anypanel#Init()
 
