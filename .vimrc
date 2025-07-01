@@ -168,7 +168,7 @@ g:anypanel = [
 'anypanel#Calendar()',
 ],
 ]
-g:idxchars = '%jklhdsahgqwertyuiopzxcvbnm'
+g:idxchars = '%jklhdsanmvchgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
