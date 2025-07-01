@@ -226,6 +226,10 @@ Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
 Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
 no <LocalLeader>(cancel) <Esc>
 ino <LocalLeader>(cancel) <Esc>`^
+nm <LocalLeader>w <C-w>
+nn <LocalLeader>v <C-v>
+nn <LocalLeader>a <C-a>
+nn <LocalLeader>x <C-a>
 ino <LocalLeader>v ;<CR>
 ino <LocalLeader>w <C-o>e<C-o>a
 ino <LocalLeader>k 「」<C-g>U<Left>

@@ -343,6 +343,11 @@ Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
 Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
 noremap  <LocalLeader>(cancel) <Esc>
 inoremap <LocalLeader>(cancel) <Esc>`^
+# CTRLの代り
+nmap <LocalLeader>w <C-w>
+nnoremap <LocalLeader>v <C-v>
+nnoremap <LocalLeader>a <C-a>
+nnoremap <LocalLeader>x <C-a>
 # その他
 inoremap <LocalLeader>v ;<CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a
