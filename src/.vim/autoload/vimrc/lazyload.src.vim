@@ -707,12 +707,6 @@ nnoremap [t <C-t>
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
-# g1～g7でバッファ移動
-# g8とg9が使用済だからg以外へかえようかな…
-Each {bufnr}=1,2,3,4,5,6,7 nnoremap g{bufnr} <Cmd>b{bufnr}<CR>
-# うーん<F3>に指定してるけど、ちょっと遠いかな
-nnoremap gb <ScriptCmd>popselect#buffers#Popup()<CR>
-
 # 🐶🍚
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)

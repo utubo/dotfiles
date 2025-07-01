@@ -160,7 +160,7 @@ vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
-'anypanel#HiddenBufs()',
+'anypanel#HiddenBufs()->g:IndexToAlph()',
 [
 'anypanel#Padding(1)',
 'anypanel#File("~/todolist.md")',
@@ -168,6 +168,20 @@ g:anypanel = [
 'anypanel#Calendar()',
 ],
 ]
+g:indexchars = '%jklhfdsahgqwertyuiopzxcvbnm'
+def! g:IndexToAlph(a: string): string
+return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
+enddef
+def F()
+ec 'Input bufnr: '
+const a = stridx(g:indexchars, getchar()->nr2char())
+if a ==# -1
+b
+else
+exe $'b {a}'
+endif
+enddef
+nn <LocalLeader>f <ScriptCmd>F()<CR>
 anypanel#Init()
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
@@ -176,7 +190,7 @@ if !exists('g:colors_name')
 set bg=light
 sil! colorscheme girly
 endif
-def F()
+def G()
 if &ft ==# 'help' || &ft ==# 'gitrebase'
 return
 endif
@@ -189,7 +203,7 @@ return
 endif
 sil! normal! g`"zvzz
 enddef
-au vimrc BufRead * au vimrc SafeState * ++once F()
+au vimrc BufRead * au vimrc SafeState * ++once G()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()

@@ -101,7 +101,6 @@ suite.TestMapping = () => {
 	# n  B  CtrlPBuffer
 	# n  e  vim-smart-word
 	# n  ga textobjの先頭に移動
-	# n  gb バッファの一覧を表示
 	# n  gc comment
 	# n  gcc comment
 	# n  gd vim-vimscript-gd
@@ -144,7 +143,7 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  [abBehijklmnopqswAMOPQSTY;''/?:%,+]',
-		'n  g[abcdesinmprtT;]',
+		'n  g[acdesinmprtT;]',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  G[ai%]',
 		'n  <C-[ABFGNPWX]>',
