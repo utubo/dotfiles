@@ -219,7 +219,7 @@ vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 	'',
 	'anypanel#TabBufs()',
-	'anypanel#HiddenBufs()->g:IndexToAlph()',
+	'anypanel#HiddenBufs()->g:IndexToChars()',
 	[
 		'anypanel#Padding(1)',
 		'anypanel#File("~/todolist.md")',
@@ -228,10 +228,10 @@ g:anypanel = [
 	],
 ]
 g:indexchars = '%jklhfdsahgqwertyuiopzxcvbnm'
-def! g:IndexToAlph(lines: string): string
+def! g:IndexToChars(lines: string): string
 	return lines->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
-def SwitchBufWithAlph()
+def SwitchBufWithChar()
 	echo 'Input bufnr: '
 	const idx = stridx(g:indexchars, getchar()->nr2char())
 	if idx ==# -1
@@ -240,7 +240,7 @@ def SwitchBufWithAlph()
 		execute $'b {idx}'
 	endif
 enddef
-nnoremap <LocalLeader>f <ScriptCmd>SwitchBufWithAlph()<CR>
+nnoremap <LocalLeader>f <ScriptCmd>SwitchBufWithChar()<CR>
 
 anypanel#Init()
 

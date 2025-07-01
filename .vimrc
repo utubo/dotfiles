@@ -160,7 +160,7 @@ vimrc#tabpanel#Toggle(2)
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
-'anypanel#HiddenBufs()->g:IndexToAlph()',
+'anypanel#HiddenBufs()->g:IndexToChars()',
 [
 'anypanel#Padding(1)',
 'anypanel#File("~/todolist.md")',
@@ -169,7 +169,7 @@ g:anypanel = [
 ],
 ]
 g:indexchars = '%jklhfdsahgqwertyuiopzxcvbnm'
-def! g:IndexToAlph(a: string): string
+def! g:IndexToChars(a: string): string
 return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
 def F()
