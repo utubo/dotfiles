@@ -168,7 +168,7 @@ g:anypanel = [
 'anypanel#Calendar()',
 ],
 ]
-g:indexchars = '%jklhfdsahgqwertyuiopzxcvbnm'
+g:indexchars = '%jklhdsahgqwertyuiopzxcvbnm'
 def! g:IndexToChars(a: string): string
 return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
@@ -176,9 +176,9 @@ def F()
 ec 'Input bufnr: '
 const a = stridx(g:indexchars, getchar()->nr2char())
 if a ==# -1
-b
+exe $'buffer {bufnr('#')}'
 else
-exe $'b {a}'
+exe $'buffer {a}'
 endif
 enddef
 nn <LocalLeader>f <ScriptCmd>F()<CR>

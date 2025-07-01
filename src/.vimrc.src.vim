@@ -227,7 +227,7 @@ g:anypanel = [
 		'anypanel#Calendar()',
 	],
 ]
-g:indexchars = '%jklhfdsahgqwertyuiopzxcvbnm'
+g:indexchars = '%jklhdsahgqwertyuiopzxcvbnm'
 def! g:IndexToChars(lines: string): string
 	return lines->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:indexchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
@@ -235,9 +235,9 @@ def SwitchBufWithChar()
 	echo 'Input bufnr: '
 	const idx = stridx(g:indexchars, getchar()->nr2char())
 	if idx ==# -1
-		b #
+		execute $'buffer {bufnr('#')}'
 	else
-		execute $'b {idx}'
+		execute $'buffer {idx}'
 	endif
 enddef
 nnoremap <LocalLeader>f <ScriptCmd>SwitchBufWithChar()<CR>
