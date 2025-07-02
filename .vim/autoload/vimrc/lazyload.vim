@@ -81,7 +81,7 @@ au vimrc User Vim9skkMidasiInput {
 const m = g:vim9skk_midasi
 if m[-1] ==# 'を' || m[-1] !=# '*' && m->match('[ぁ-んァ-ヴー]') ==# -1
 feedkeys("\<CR>")
-elseif m[-2] ==# '*'
+elseif m->match('*[^a-zA-Zっ]$') !=# -1
 feedkeys("\<Space>")
 endif
 }

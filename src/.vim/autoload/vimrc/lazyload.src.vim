@@ -119,7 +119,7 @@ au vimrc User Vim9skkMidasiInput {
 	if m[-1] ==# 'を' || m[-1] !=# '*' && m->match('[ぁ-んァ-ヴー]') ==# -1
 		# ひらがなカタカナ以外を入力したら自動で確定
 		feedkeys("\<CR>")
-	elseif m[-2] ==# '*'
+	elseif m->match('*[^a-zA-Zっ]$') !=# -1
 		# 送り仮名が確定したら変換を開始
 		feedkeys("\<Space>")
 	endif
