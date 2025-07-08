@@ -166,13 +166,11 @@ def MyMatches()
 	matchadd('Label', '^\s*■.*$')
 	matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 	matchadd('Todo', 'TODO')
-	matchadd('Todo', '- \[ \]')
+	matchadd('Todo', '^\s*- \zs\[ \]')
 	matchadd('Error', 'ERROR')
 	matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 	# 全角空白と半角幅の円記号
 	matchadd('SpellBad', '[　¥]')
-	# 稀によくtypoする単語(気づいたら追加する)
-	matchadd('SpellBad', 'stlye')
 enddef
 au vimrc VimEnter,WinEnter * MyMatches()
 
