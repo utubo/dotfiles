@@ -108,15 +108,13 @@ nnoremap <LocalLeader>j a<Plug>(vim9skk-enable)
 nnoremap <LocalLeader><LocalLeader>j i<Plug>(vim9skk-enable)
 # AZIKライクな設定とか
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-# 見出しモードでスタートする
-au vimrc User Vim9skkEnter feedkeys('Q')
 # インサートモードが終わったらオフにする
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 # 見出しの色を見易すく
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
 	const m = g:vim9skk_midasi
-	if m->match('*[^a-zA-Zっ]$') !=# -1
+	if m->match('*[^a-zA-Zっッ]$') !=# -1
 		# 送り仮名が確定したら変換を開始
 		feedkeys("\<Space>")
 	elseif m->match('[^ぁ-わんァ-ヴー]$') !=# -1

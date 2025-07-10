@@ -74,12 +74,11 @@ run_on_midasi: true,
 nn <LocalLeader>j a<Plug>(vim9skk-enable)
 nn <LocalLeader><LocalLeader>j i<Plug>(vim9skk-enable)
 au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-au vimrc User Vim9skkEnter feedkeys('Q')
 au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
 const m = g:vim9skk_midasi
-if m->match('*[^a-zA-Zっ]$') !=# -1
+if m->match('*[^a-zA-Zっッ]$') !=# -1
 feedkeys("\<Space>")
 elseif m->match('[^ぁ-わんァ-ヴー]$') !=# -1
 feedkeys("\<CR>")
