@@ -116,12 +116,12 @@ au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
 	const m = g:vim9skk_midasi
-	if m[-1] ==# 'を' || m->match('\(^\|[^*]\)[^ぁ-んァ-ヴー]$') !=# -1
-		# ひらがなカタカナ以外を入力したら自動で確定
-		feedkeys("\<CR>")
-	elseif m->match('*[^a-zA-Zっ]$') !=# -1
+	if m->match('*[^a-zA-Zっ]$') !=# -1
 		# 送り仮名が確定したら変換を開始
 		feedkeys("\<Space>")
+	elseif m->match('[^ぁ-わんァ-ヴー]$') !=# -1
+		# ひらがなカタカナ以外を入力したら自動で確定
+		feedkeys("\<CR>")
 	endif
 }
 # }}}
