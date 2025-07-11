@@ -163,7 +163,7 @@ if !c
 return
 endif
 o = o->substitute('\S*$', '', '')
-var p = screenpos(bufnr('%'), line('.'), col('.'))
+var p = screenpos(0, line('.'), col('.'))
 var a = &lines
 var b = 'topleft'
 if p.row < &lines / 2

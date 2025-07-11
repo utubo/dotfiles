@@ -199,7 +199,7 @@ export def PopupPum()
 		return
 	endif
 	pumpat = pumpat->substitute('\S*$', '', '')
-	var p = screenpos(bufnr('%'), line('.'), col('.'))
+	var p = screenpos(0, line('.'), col('.'))
 	var maxheight = &lines
 	var pos = 'topleft'
 	if p.row < &lines / 2
