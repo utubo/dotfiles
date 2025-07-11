@@ -67,7 +67,14 @@ command! -range=% -nargs=? SwapExpr SwapExpr(<f-args>)
 # NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
 #       cmdlineを抜けるまでポップアップのゴーストが残るので
 #       callback等では解決できない
-# TODO: wildmenumode=fuzzyを使いたいけどgetcmdline()に反映されない
+# NOTE: cmdline.vimと違うところ
+#       (これらが解決すればcmdline.vimに戻れるかも)
+#   - [ ] プロンプトの右側にパディング無し
+#     →58db2ef時点の124行目でハードコーディングされているので要相談かな？
+#   - [x] カーソルが点滅する
+#     →CmdlineCursorをタイマーで切り替えればできそう
+#   - [x] ポップアップの状態を取得できる
+#     →cmdline#_get().idを見ればよさそう
 var popup = {
 	win: 0,
 	timer: 0,
