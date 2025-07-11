@@ -186,6 +186,7 @@ line: p.row,
 maxheight: a,
 pos: b,
 })
+setcmdline(o .. getbufline(winbufnr(m), 1)[0])
 enddef
 def G()
 if !!m

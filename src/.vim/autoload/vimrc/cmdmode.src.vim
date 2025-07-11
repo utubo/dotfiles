@@ -222,6 +222,7 @@ export def PopupPum()
 		maxheight: maxheight,
 		pos: pos,
 	})
+	setcmdline(pumpat .. getbufline(winbufnr(pumid), 1)[0])
 enddef
 
 def ClosePum()
