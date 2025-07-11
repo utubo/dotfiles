@@ -113,7 +113,7 @@ export def Popup()
 		au ModeChanged c:[^c] ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
+	MapTab2Pum()
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -182,6 +182,10 @@ enddef
 var pumid = 0
 var pumpat = ''
 
+def MapTab2Pum()
+	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
+enddef
+
 export def PumKeyDown(id: number, k: string): bool
 	if k ==# "\<Tab>" || k ==# "\<C-n>"
 		noautocmd win_execute(pumid, 'normal! j')
@@ -189,7 +193,7 @@ export def PumKeyDown(id: number, k: string): bool
 		noautocmd win_execute(pumid, 'normal! k')
 	else
 		ClosePum()
-		cnoremap <Tab> PopupPum()
+		MapTab2Pum()
 		return false
 	endif
 	setcmdline(pumpat .. getbufline(winbufnr(pumid), getcurpos(pumid)[1])[0])

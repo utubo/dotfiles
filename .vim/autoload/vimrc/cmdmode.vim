@@ -82,7 +82,7 @@ au!
 au ModeChanged c:[^c] D()
 au VimLeavePre * F()
 aug END
-cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
+G()
 l.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 l.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -97,7 +97,7 @@ timer_stop(l.blinktimer)
 l.blinktimer = 0
 popup_close(l.win)
 l.win = 0
-G()
+H()
 hi MsgArea None
 l.msghl->hlset()
 sil! cu <Tab>
@@ -140,14 +140,17 @@ set t_ve&
 enddef
 var m = 0
 var o = ''
+def G()
+cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
+enddef
 export def PumKeyDown(a: number, k: string): bool
 if k ==# "\<Tab>" || k ==# "\<C-n>"
 noautocmd win_execute(m, 'normal! j')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(m, 'normal! k')
 else
+H()
 G()
-cno <Tab> PopupPum()
 return false
 endif
 setcmdline(o .. getbufline(winbufnr(m), getcurpos(m)[1])[0])
@@ -156,7 +159,7 @@ return true
 enddef
 export def PopupPum()
 cu <Tab>
-G()
+H()
 o = getcmdline()
 const c = getcompletion(o, 'cmdline')
 if !c
@@ -188,7 +191,7 @@ pos: b,
 })
 setcmdline(o .. getbufline(winbufnr(m), 1)[0])
 enddef
-def G()
+def H()
 if !!m
 popup_close(m)
 m = 0
