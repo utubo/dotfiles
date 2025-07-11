@@ -106,6 +106,7 @@ export def Popup()
 		au ModeChanged c:[^c] ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
+	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -121,8 +122,10 @@ def ClosePopup()
 	popup.blinktimer = 0
 	popup_close(popup.win)
 	popup.win = 0
+	ClosePum()
 	hi MsgArea None
 	popup.msghl->hlset()
+	silent! cunmap <Tab>
 	redraw
 enddef
 
@@ -167,6 +170,65 @@ enddef
 def RestoreCursor()
 	hlset(popup.curhl)
 	set t_ve&
+enddef
+
+var pumid = 0
+var pumpat = ''
+
+export def PumKeyDown(id: number, k: string): bool
+	if k ==# "\<Tab>" || k ==# "\<C-n>"
+		noautocmd win_execute(pumid, 'normal! j')
+	elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
+		noautocmd win_execute(pumid, 'normal! k')
+	else
+		ClosePum()
+		cnoremap <Tab> PopupPum()
+		return false
+	endif
+	setcmdline(pumpat .. getbufline(winbufnr(pumid), getcurpos(pumid)[1])[0])
+	redraw
+	return true
+enddef
+
+export def PopupPum()
+	cunmap <Tab>
+	ClosePum()
+	pumpat = getcmdline()
+	const c = getcompletion(pumpat, 'cmdline')
+	if !c
+		return
+	endif
+	pumpat = pumpat->substitute('\S*$', '', '')
+	var p = screenpos(bufnr('%'), line('.'), col('.'))
+	var maxheight = &lines
+	var pos = 'topleft'
+	if p.row < &lines / 2
+		p.row += 2
+		maxheight -= p.row
+	else
+		p.row
+		maxheight = p.row
+		pos = 'botleft'
+	endif
+	pumid = popup_create(c, {
+		zindex: 3,
+		wrap: 0,
+		cursorline: 1,
+		padding: [0, 1, 0, 1],
+		mapping: 1,
+		filter: 'vimrc#cmdmode#PumKeyDown',
+		col: p.col + strdisplaywidth(pumpat) - 1,
+		line: p.row,
+		maxheight: maxheight,
+		pos: pos,
+	})
+enddef
+
+def ClosePum()
+	if  !!pumid
+		popup_close(pumid)
+		pumid = 0
+	endif
 enddef
 # }}}
 

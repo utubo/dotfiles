@@ -82,6 +82,7 @@ au!
 au ModeChanged c:[^c] D()
 au VimLeavePre * F()
 aug END
+cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 l.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 l.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -96,8 +97,10 @@ timer_stop(l.blinktimer)
 l.blinktimer = 0
 popup_close(l.win)
 l.win = 0
+G()
 hi MsgArea None
 l.msghl->hlset()
+sil! cu <Tab>
 redraw
 enddef
 export def UpdatePopup(a: number)
@@ -134,6 +137,61 @@ enddef
 def F()
 hlset(l.curhl)
 set t_ve&
+enddef
+var m = 0
+var o = ''
+export def PumKeyDown(a: number, k: string): bool
+if k ==# "\<Tab>" || k ==# "\<C-n>"
+noautocmd win_execute(m, 'normal! j')
+elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
+noautocmd win_execute(m, 'normal! k')
+else
+G()
+cno <Tab> PopupPum()
+return false
+endif
+setcmdline(o .. getbufline(winbufnr(m), getcurpos(m)[1])[0])
+redraw
+return true
+enddef
+export def PopupPum()
+cu <Tab>
+G()
+o = getcmdline()
+const c = getcompletion(o, 'cmdline')
+if !c
+return
+endif
+o = o->substitute('\S*$', '', '')
+var p = screenpos(bufnr('%'), line('.'), col('.'))
+var a = &lines
+var b = 'topleft'
+if p.row < &lines / 2
+p.row += 2
+a -= p.row
+else
+p.row
+a = p.row
+b = 'botleft'
+endif
+m = popup_create(c, {
+zindex: 3,
+wrap: 0,
+cursorline: 1,
+padding: [0, 1, 0, 1],
+mapping: 1,
+filter: 'vimrc#cmdmode#PumKeyDown',
+col: p.col + strdisplaywidth(o) - 1,
+line: p.row,
+maxheight: a,
+pos: b,
+})
+enddef
+def G()
+if !!m
+popup_close(m)
+m = 0
+endif
 enddef
 export def ForVim9skk(a: any): any
 if l.win !=# 0
