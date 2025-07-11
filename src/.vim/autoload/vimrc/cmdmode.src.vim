@@ -228,7 +228,7 @@ export def PopupPum()
 		padding: [0, 1, 0, 1],
 		mapping: 1,
 		filter: 'vimrc#cmdmode#PumKeyDown',
-		col: p.col + strdisplaywidth(pumpat) - 1,
+		col: max([2, p.col]) + strdisplaywidth(pumpat) - 1,
 		line: p.row,
 		maxheight: maxheight,
 		pos: pos,
