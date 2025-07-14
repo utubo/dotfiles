@@ -242,7 +242,7 @@ def! g:Getchar2idx(): number
 	endif
 enddef
 nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nnoremap <LocalLeader>q <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
+nnoremap <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
 
 anypanel#Init()
 

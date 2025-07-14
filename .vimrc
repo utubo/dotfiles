@@ -181,7 +181,7 @@ return a
 endif
 enddef
 nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nn <LocalLeader>q <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
+nn <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
 anypanel#Init()
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
