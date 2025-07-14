@@ -1,6 +1,6 @@
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators")) { Start-Process powershell.exe "-File `"$PSCommandPath`"" -Verb RunAs; exit }
 
-New-Item -ItemType SymbolicLink -Value $PSScriptRoot/Microsoft.PowerShell_profile.ps1 -Path $PROFILE
+New-Item -ItemType SymbolicLink -Value $PSScriptRoot/win/Microsoft.PowerShell_profile.ps1 -Path $PROFILE
 New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.gitignore_global -Path ~/.gitignore_global
 New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.gvimrc -Path ~/_gvimrc
 New-Item -ItemType SymbolicLink -Value $PSScriptRoot/.vimrc -Path ~/_vimrc
