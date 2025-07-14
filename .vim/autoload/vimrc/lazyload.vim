@@ -195,6 +195,8 @@ g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
+vm mj <Plug>MoveBlockDown
+vm mk <Plug>MoveBlockUp
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'

@@ -289,6 +289,9 @@ g:auto_cursorline_wait_ms = &updatetime
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
 nnoremap [c <Plug>(GitGutterPrevHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk)
+# m少し潰してもいいか…
+vmap mj <Plug>MoveBlockDown
+vmap mk <Plug>MoveBlockUp
 # }}}
 
 # 開発用 {{{
