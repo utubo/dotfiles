@@ -228,7 +228,7 @@ g:anypanel = [
 
 # ------------------------------------------------------
 # 数字キー無しでバッファを操作
-g:idxchars = '%jklhdsanmvchgqwertyuiopzxb'
+g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(lines: string): string
 	return lines->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
