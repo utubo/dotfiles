@@ -478,6 +478,10 @@ nn [t <C-t>
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
+nm <LocalLeader><LocalLeader>a <F1>
+nm <LocalLeader><LocalLeader>s <F2>
+nm <LocalLeader><LocalLeader>d <F3>
+nm <LocalLeader><LocalLeader>f <F4>
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d

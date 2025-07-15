@@ -717,6 +717,12 @@ command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 
+# ホームポジションに引き篭りたい…
+nmap <LocalLeader><LocalLeader>a <F1>
+nmap <LocalLeader><LocalLeader>s <F2>
+nmap <LocalLeader><LocalLeader>d <F3>
+nmap <LocalLeader><LocalLeader>f <F4>
+
 # noremap <F1> <Cmd>smile<CR>
 # }}}
 
