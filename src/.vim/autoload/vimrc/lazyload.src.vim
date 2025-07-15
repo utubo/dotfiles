@@ -101,7 +101,7 @@ g:vim9skk = {
 		midasi:   ['Q'],
 		midasi_toggle: ['<LocalLeader>j'],
 		# うーん…
-		complete: ['<LocalLeader>l', ':', '<CR>'],
+		complete: ['<CR>', ':', '<LocalLeader>l', '<LocalLeader><Space>'],
 	},
 	run_on_midasi: true,
 }
