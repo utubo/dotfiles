@@ -100,7 +100,8 @@ g:vim9skk = {
 		disable:  ['<LocalLeader>a'],
 		midasi:   ['Q'],
 		midasi_toggle: ['<LocalLeader>j'],
-		complete: ['<LocalLeader>l', '<CR>'],
+		# うーん…
+		complete: ['<LocalLeader>l', ':', '<CR>'],
 	},
 	run_on_midasi: true,
 }
