@@ -115,7 +115,7 @@ au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
 au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
 au vimrc User Vim9skkMidasiInput {
 	const m = g:vim9skk_midasi
-	if m->match('*[^a-zA-Zっッ]$') !=# -1
+	if m->match('*[っッ]\?[^a-zA-Zっッ]$') !=# -1
 		# 送り仮名が確定したら変換を開始
 		feedkeys("\<Space>")
 	elseif m->match('[^ぁ-わんァ-ヴー]$') !=# -1
