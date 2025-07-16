@@ -198,7 +198,6 @@ endif
 enddef
 nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
 nn <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
-anypanel#Init()
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
@@ -206,6 +205,7 @@ if !exists('g:colors_name')
 set bg=light
 sil! colorscheme girly
 endif
+anypanel#Init()
 def F()
 if &ft ==# 'help' || &ft ==# 'gitrebase'
 return

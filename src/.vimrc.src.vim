@@ -264,8 +264,6 @@ enddef
 nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
 nnoremap <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
 
-anypanel#Init()
-
 # ------------------------------------------------------
 # ローカル設定 {{{
 if '~/.vimrc_local'->expand()->filereadable()
@@ -279,6 +277,9 @@ if !exists('g:colors_name')
   set background=light
   silent! colorscheme girly
 endif
+
+# 色の設定が終ってからtabpanelを表示する
+anypanel#Init()
 # }}}
 
 # ------------------------------------------------------
