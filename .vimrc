@@ -156,6 +156,22 @@ if has('vim_starting')
 &t_SR = "\e[4 q"
 endif
 vimrc#tabpanel#Toggle(2)
+g:zenmode = { ruler: true }
+var k = 0
+au vimrc WinEnter * {
+k = winnr()
+}
+def! g:MyRuler(): string
+const p = getcurpos(k)
+const b = winbufnr(k)
+var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
+if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
+a ..= ' CRLF'
+endif
+return repeat(' ', 9 - len(a) / 2) .. a
+enddef
+set ru
+set rulerformat=%{g:MyRuler()}
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
@@ -206,13 +222,13 @@ enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
-const k = get(v:oldfiles, 0, '')->expand()
-if k->filereadable()
+const o = get(v:oldfiles, 0, '')->expand()
+if o->filereadable()
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
-exe 'edit' k
+exe 'edit' o
 endif
 endif
 if empty(bufname())

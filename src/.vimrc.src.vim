@@ -213,6 +213,26 @@ vimrc#tabpanel#Toggle(2)
 # }}}
 
 # ------------------------------------------------------
+# ルーラー
+g:zenmode = { ruler: true }
+var curwin = 0
+au vimrc WinEnter * {
+	curwin = winnr()
+}
+def! g:MyRuler(): string
+	const p = getcurpos(curwin)
+	const b = winbufnr(curwin)
+	var text = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
+	if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
+		text ..= ' CRLF'
+	endif
+	# tabpanelの下にセンタリングして表示する
+	return repeat(' ', 9 - len(text) / 2) .. text
+enddef
+set ruler
+set rulerformat=%{g:MyRuler()}
+
+# ------------------------------------------------------
 # タブパネル
 g:anypanel = [
 	'',
