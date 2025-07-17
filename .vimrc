@@ -102,9 +102,8 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-var k = false
 def A(a: number, b: string): string
-const v = synIDattr(a, b)->matchstr(k ? '.*[^0-9].*' : '^[0-9]\+$')
+const v = synIDattr(a, b)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
 def B(a: string): any
@@ -112,13 +111,16 @@ const b = hlID(a)->synIDtrans()
 return { fg: A(b, 'fg'), bg: A(b, 'bg') }
 enddef
 def C()
-k = has('gui_running') || &termguicolors
-const x = k ? 'gui' : 'cterm'
-const a = B('LineNr').bg
-exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={B("ErrorMsg").fg}'
-exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={B("Question").fg}'
-exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={B("Pmenu").fg}'
-exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={B("WarningMsg").fg}'
+const x = &termguicolors ? 'gui' : 'cterm'
+const c = B('LineNr').bg
+for [a, b] in items({
+Error: 'ErrorMsg',
+Hint: 'Question',
+Info: 'MoreMsg',
+Warning: 'WarningMsg',
+})
+exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={B(b).fg}'
+endfor
 hi link luaParenError Error
 enddef
 au vimrc VimEnter,ColorScheme * C()
@@ -159,13 +161,13 @@ if has('vim_starting')
 endif
 vimrc#tabpanel#Toggle(2)
 g:zenmode = { ruler: true }
-var o = 0
+var k = 0
 au vimrc WinEnter * {
-o = winnr()
+k = winnr()
 }
 def! g:MyRuler(): string
-const p = getcurpos(o)
-const b = winbufnr(o)
+const p = getcurpos(k)
+const b = winbufnr(k)
 var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
 if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
 a ..= ' CRLF'
@@ -224,13 +226,13 @@ enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
-const q = get(v:oldfiles, 0, '')->expand()
-if q->filereadable()
+const o = get(v:oldfiles, 0, '')->expand()
+if o->filereadable()
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
-exe 'edit' q
+exe 'edit' o
 endif
 endif
 if empty(bufname())

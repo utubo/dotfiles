@@ -132,10 +132,8 @@ au vimrc ColorSchemePre * {
 	]
 }
 
-var isguicolor = false
-
 def GetAttr(id: number, name: string): string
-	const v = synIDattr(id, name)->matchstr(isguicolor ? '.*[^0-9].*' : '^[0-9]\+$')
+	const v = synIDattr(id, name)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
 	return !v ? 'NONE' : v
 enddef
 
@@ -145,13 +143,17 @@ def GetHl(name: string): any
 enddef
 
 def MyHighlight()
-	isguicolor = has('gui_running') || &termguicolors
-	const x = isguicolor ? 'gui' : 'cterm'
+	const x = &termguicolors ? 'gui' : 'cterm'
 	const signBg = GetHl('LineNr').bg
-	execute $'hi LspDiagSignErrorText   {x}bg={signBg} {x}fg={GetHl("ErrorMsg").fg}'
-	execute $'hi LspDiagSignHintText    {x}bg={signBg} {x}fg={GetHl("Question").fg}'
-	execute $'hi LspDiagSignInfoText    {x}bg={signBg} {x}fg={GetHl("Pmenu").fg}'
-	execute $'hi LspDiagSignWarningText {x}bg={signBg} {x}fg={GetHl("WarningMsg").fg}'
+	# lspのsign
+	for [a, b] in items({
+		Error: 'ErrorMsg',
+		Hint: 'Question',
+		Info: 'MoreMsg',
+		Warning: 'WarningMsg',
+	})
+		execute $'hi LspDiagSign{a}Text {x}bg={signBg} {x}fg={GetHl(b).fg}'
+	endfor
 	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 	# E28: No such highlight group name: luaParenError " See issue #11277
 	hi link luaParenError Error
