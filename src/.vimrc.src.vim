@@ -221,27 +221,30 @@ vimrc#tabpanel#Toggle(2)
 # ルーラー
 g:zenmode = { ruler: true }
 var curwin = 0
+var curbuf = 0
+var rulerinfo = ''
 au vimrc WinEnter * {
 	curwin = winnr()
+	curbuf = winbufnr(curwin)
+	rulerinfo = ''
+	const ff = getbufvar(curbuf, '&ff')
+	if ff ==# 'mac'
+		rulerinfo ..= ' CR'
+	elseif ff ==# 'unix'
+		if has('win32')
+			rulerinfo ..= ' LF'
+		endif
+	elseif !has('win32')
+		rulerinfo ..= ' CRLF'
+	endif
+	const fenc = getbufvar(curbuf, '&fenc')
+	if fenc !=# 'utf-8'
+		rulerinfo ..= $' {fenc}'
+	endif
 }
 def! g:MyRuler(): string
 	const p = getcurpos(curwin)
-	const b = winbufnr(curwin)
-	var text = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
-	const ff = getbufvar(b, '&ff')
-	if ff ==# 'mac'
-		text ..= ' CR'
-	elseif ff ==# 'unix'
-		if has('win32')
-			text ..= ' LF'
-		endif
-	elseif !has('win32')
-		text ..= ' CRLF'
-	endif
-	const fenc = getbufvar(b, '&fenc')
-	if fenc !=# 'utf-8'
-		text ..= $' {fenc}'
-	endif
+	var text = $'{p[1]}/{getbufinfo(curbuf)[0].linecount}:{p[2]}{rulerinfo}'
 	# tabpanelの下にセンタリングして表示する
 	return repeat(' ', 9 - len(text) / 2) .. text
 enddef
@@ -278,7 +281,7 @@ def! g:Getchar2idx(): number
 	endif
 enddef
 nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nnoremap <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
+nnoremap <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
 
 # ------------------------------------------------------
 # ローカル設定 {{{

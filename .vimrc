@@ -162,27 +162,30 @@ endif
 vimrc#tabpanel#Toggle(2)
 g:zenmode = { ruler: true }
 var k = 0
+var o = 0
+var q = ''
 au vimrc WinEnter * {
 k = winnr()
+o = winbufnr(k)
+q = ''
+const r = getbufvar(o, '&ff')
+if r ==# 'mac'
+q ..= ' CR'
+elseif r ==# 'unix'
+if has('win32')
+q ..= ' LF'
+endif
+elseif !has('win32')
+q ..= ' CRLF'
+endif
+const s = getbufvar(o, '&fenc')
+if s !=# 'utf-8'
+q ..= $' {s}'
+endif
 }
 def! g:MyRuler(): string
 const p = getcurpos(k)
-const b = winbufnr(k)
-var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
-const c = getbufvar(b, '&ff')
-if c ==# 'mac'
-a ..= ' CR'
-elseif c ==# 'unix'
-if has('win32')
-a ..= ' LF'
-endif
-elseif !has('win32')
-a ..= ' CRLF'
-endif
-const d = getbufvar(b, '&fenc')
-if d !=# 'utf-8'
-a ..= $' {d}'
-endif
+var a = $'{p[1]}/{getbufinfo(o)[0].linecount}:{p[2]}{q}'
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef
 set ru
@@ -212,7 +215,7 @@ return a
 endif
 enddef
 nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nn <LocalLeader>d <ScriptCmd>execute $'bdel {g:Getchar2idx()}'<CR>
+nn <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
@@ -237,13 +240,13 @@ enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
-const o = get(v:oldfiles, 0, '')->expand()
-if o->filereadable()
+const t = get(v:oldfiles, 0, '')->expand()
+if t->filereadable()
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
-exe 'edit' o
+exe 'edit' t
 endif
 endif
 if empty(bufname())
