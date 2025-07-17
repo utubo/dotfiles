@@ -170,13 +170,13 @@ o = winbufnr(k)
 q = ''
 const r = getbufvar(o, '&ff')
 if r ==# 'mac'
-q ..= ' CR'
+q = ' CR'
 elseif r ==# 'unix'
 if has('win32')
-q ..= ' LF'
+q = ' LF'
 endif
 elseif !has('win32')
-q ..= ' CRLF'
+q = ' CRLF'
 endif
 const s = getbufvar(o, '&fenc')
 if s !=# 'utf-8'

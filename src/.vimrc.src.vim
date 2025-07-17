@@ -229,13 +229,13 @@ au vimrc WinEnter * {
 	rulerinfo = ''
 	const ff = getbufvar(curbuf, '&ff')
 	if ff ==# 'mac'
-		rulerinfo ..= ' CR'
+		rulerinfo = ' CR'
 	elseif ff ==# 'unix'
 		if has('win32')
-			rulerinfo ..= ' LF'
+			rulerinfo = ' LF'
 		endif
 	elseif !has('win32')
-		rulerinfo ..= ' CRLF'
+		rulerinfo = ' CRLF'
 	endif
 	const fenc = getbufvar(curbuf, '&fenc')
 	if fenc !=# 'utf-8'
