@@ -102,8 +102,9 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
+var k = false
 def A(a: number, b: string): string
-const v = synIDattr(a, b)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
+const v = synIDattr(a, b)->matchstr(k ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
 def B(a: string): any
@@ -111,15 +112,14 @@ const b = hlID(a)->synIDtrans()
 return { fg: A(b, 'fg'), bg: A(b, 'bg') }
 enddef
 def C()
-const x = has('gui') ? 'gui' : 'cterm'
+k = has('gui_running') || &termguicolors
+const x = k ? 'gui' : 'cterm'
 const a = B('LineNr').bg
 exe $'hi LspDiagSignErrorText   {x}bg={a} {x}fg={B("ErrorMsg").fg}'
 exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={B("Question").fg}'
 exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={B("Pmenu").fg}'
 exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={B("WarningMsg").fg}'
 hi link luaParenError Error
-hi link LspDiagSignErrorText Error
-hi link LspDiagSignWarningText Question
 enddef
 au vimrc VimEnter,ColorScheme * C()
 def D()
@@ -159,13 +159,13 @@ if has('vim_starting')
 endif
 vimrc#tabpanel#Toggle(2)
 g:zenmode = { ruler: true }
-var k = 0
+var o = 0
 au vimrc WinEnter * {
-k = winnr()
+o = winnr()
 }
 def! g:MyRuler(): string
-const p = getcurpos(k)
-const b = winbufnr(k)
+const p = getcurpos(o)
+const b = winbufnr(o)
 var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
 if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
 a ..= ' CRLF'
@@ -224,13 +224,13 @@ enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
-const o = get(v:oldfiles, 0, '')->expand()
-if o->filereadable()
+const q = get(v:oldfiles, 0, '')->expand()
+if q->filereadable()
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
-exe 'edit' o
+exe 'edit' q
 endif
 endif
 if empty(bufname())

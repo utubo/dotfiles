@@ -132,8 +132,10 @@ au vimrc ColorSchemePre * {
 	]
 }
 
+var isguicolor = false
+
 def GetAttr(id: number, name: string): string
-	const v = synIDattr(id, name)->matchstr(has('gui') ? '.*[^0-9].*' : '^[0-9]\+$')
+	const v = synIDattr(id, name)->matchstr(isguicolor ? '.*[^0-9].*' : '^[0-9]\+$')
 	return !v ? 'NONE' : v
 enddef
 
@@ -143,7 +145,8 @@ def GetHl(name: string): any
 enddef
 
 def MyHighlight()
-	const x = has('gui') ? 'gui' : 'cterm'
+	isguicolor = has('gui_running') || &termguicolors
+	const x = isguicolor ? 'gui' : 'cterm'
 	const signBg = GetHl('LineNr').bg
 	execute $'hi LspDiagSignErrorText   {x}bg={signBg} {x}fg={GetHl("ErrorMsg").fg}'
 	execute $'hi LspDiagSignHintText    {x}bg={signBg} {x}fg={GetHl("Question").fg}'
@@ -152,8 +155,6 @@ def MyHighlight()
 	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 	# E28: No such highlight group name: luaParenError " See issue #11277
 	hi link luaParenError Error
-	hi link LspDiagSignErrorText Error
-	hi link LspDiagSignWarningText Question
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
