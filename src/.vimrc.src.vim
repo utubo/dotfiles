@@ -231,6 +231,10 @@ def! g:MyRuler(): string
 	if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
 		text ..= ' CRLF'
 	endif
+	const fenc = getbufvar(b, '&fenc')
+	if fenc !=# 'utf-8'
+		text ..= $' {fenc}'
+	endif
 	# tabpanelの下にセンタリングして表示する
 	return repeat(' ', 9 - len(text) / 2) .. text
 enddef

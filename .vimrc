@@ -172,6 +172,10 @@ var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
 if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
 a ..= ' CRLF'
 endif
+const c = getbufvar(b, '&fenc')
+if c !=# 'utf-8'
+a ..= $' {c}'
+endif
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef
 set ru
