@@ -152,6 +152,8 @@ def MyHighlight()
 	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 	# E28: No such highlight group name: luaParenError " See issue #11277
 	hi link luaParenError Error
+	hi link LspDiagSignErrorText Error
+	hi link LspDiagSignWarningText Question
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 

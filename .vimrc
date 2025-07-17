@@ -118,6 +118,8 @@ exe $'hi LspDiagSignHintText    {x}bg={a} {x}fg={B("Question").fg}'
 exe $'hi LspDiagSignInfoText    {x}bg={a} {x}fg={B("Pmenu").fg}'
 exe $'hi LspDiagSignWarningText {x}bg={a} {x}fg={B("WarningMsg").fg}'
 hi link luaParenError Error
+hi link LspDiagSignErrorText Error
+hi link LspDiagSignWarningText Question
 enddef
 au vimrc VimEnter,ColorScheme * C()
 def D()
