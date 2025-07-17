@@ -169,12 +169,19 @@ def! g:MyRuler(): string
 const p = getcurpos(k)
 const b = winbufnr(k)
 var a = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
-if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
+const c = getbufvar(b, '&ff')
+if c ==# 'mac'
+a ..= ' CR'
+elseif c ==# 'unix'
+if has('win32')
+a ..= ' LF'
+endif
+elseif !has('win32')
 a ..= ' CRLF'
 endif
-const c = getbufvar(b, '&fenc')
-if c !=# 'utf-8'
-a ..= $' {c}'
+const d = getbufvar(b, '&fenc')
+if d !=# 'utf-8'
+a ..= $' {d}'
 endif
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef

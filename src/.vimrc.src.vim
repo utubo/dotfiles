@@ -228,7 +228,14 @@ def! g:MyRuler(): string
 	const p = getcurpos(curwin)
 	const b = winbufnr(curwin)
 	var text = $'{p[1]}/{getbufinfo(b)[0].linecount}:{p[2]}'
-	if getbufvar(b, '&ff') ==# 'dos' && !has('win32')
+	const ff = getbufvar(b, '&ff')
+	if ff ==# 'mac'
+		text ..= ' CR'
+	elseif ff ==# 'unix'
+		if has('win32')
+			text ..= ' LF'
+		endif
+	elseif !has('win32')
 		text ..= ' CRLF'
 	endif
 	const fenc = getbufvar(b, '&fenc')
