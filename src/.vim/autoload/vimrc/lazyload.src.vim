@@ -100,8 +100,11 @@ g:vim9skk = {
 		disable:  ['<LocalLeader>a'],
 		midasi:   ['Q'],
 		midasi_toggle: ['<LocalLeader>j'],
-		# うーん…
-		complete: ['<CR>', ':', '<LocalLeader>l', '<LocalLeader><Space>'],
+		# 検討中
+		# 小さい文字を単独でいれることは無さそうなので「l」を潰しても大丈夫かも？
+		# 「:」も悪くないかも？ちょっと打ちづらいか？
+		# 「;;」は打ちづらそう
+		complete: ['<CR>', '<LocalLeader><Space>', '<LocalLeader><LocalLeader>', 'l', ':'],
 	},
 	run_on_midasi: true,
 }

@@ -67,7 +67,7 @@ enable: ['<LocalLeader>j'],
 disable: ['<LocalLeader>a'],
 midasi: ['Q'],
 midasi_toggle: ['<LocalLeader>j'],
-complete: ['<CR>', ':', '<LocalLeader>l', '<LocalLeader><Space>'],
+complete: ['<CR>', '<LocalLeader><Space>', '<LocalLeader><LocalLeader>', 'l', ':'],
 },
 run_on_midasi: true,
 }
