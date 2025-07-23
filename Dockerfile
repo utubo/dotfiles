@@ -1,4 +1,4 @@
-FROM thinca/vim:v9.1.1425
+FROM thinca/vim:v9.1.1582
 
 RUN apk update && \
     apk --no-cache add \
