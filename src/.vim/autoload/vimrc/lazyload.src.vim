@@ -105,6 +105,7 @@ g:vim9skk = {
 		# 「:」も悪くないかも？ちょっと打ちづらいか？
 		# 「;;」は打ちづらそう
 		complete: ['<CR>', '<LocalLeader><Space>', '<LocalLeader><LocalLeader>', 'l', ':'],
+		select_top: '.',
 	},
 	run_on_midasi: true,
 }
