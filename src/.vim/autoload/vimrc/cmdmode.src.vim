@@ -190,7 +190,8 @@ export def PumKeyDown(id: number, k: string): bool
 	const i = getwininfo(pumid)[0]
 	const l = getcurpos(pumid)[1]
 	if k ==# "\<Tab>" || k ==# "\<C-n>"
-		noautocmd win_execute(pumid, $'normal! { l < i.botline ? 'j' : 'gg' }')
+		const lc = i.bufnr->getbufinfo()[0].linecount
+		noautocmd win_execute(pumid, $'normal! { l < lc ? 'j' : 'gg' }')
 	elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 		noautocmd win_execute(pumid, $'normal! { l <= 1 ? 'G' : 'k' }')
 	else

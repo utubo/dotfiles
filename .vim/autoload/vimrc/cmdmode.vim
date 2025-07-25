@@ -147,7 +147,8 @@ export def PumKeyDown(a: number, k: string): bool
 const i = getwininfo(o)[0]
 const l = getcurpos(o)[1]
 if k ==# "\<Tab>" || k ==# "\<C-n>"
-noautocmd win_execute(o, $'normal! { l < i.botline ? 'j' : 'gg' }')
+const b = i.bufnr->getbufinfo()[0].linecount
+noautocmd win_execute(o, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(o, $'normal! { l <= 1 ? 'G' : 'k' }')
 else
