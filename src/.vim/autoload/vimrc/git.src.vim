@@ -6,7 +6,7 @@ export def Add(args: string)
 		chdir(expand('%:p:h'))
 		echoh MoreMsg
 		echo 'git add --dry-run ' .. args
-		const list = system('git add --dry-run ' .. args)
+		const list = g:System('git add --dry-run ' .. args)
 		if !!v:shell_error
 			echoh ErrorMsg
 			echo list
@@ -24,7 +24,7 @@ export def Add(args: string)
 		const yn = input('execute ? (Y/n) > ', 'y')
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
-			system('git add ' .. args)
+			g:System('git add ' .. args)
 			redraw
 			echo 'done.'
 		else
@@ -43,20 +43,20 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	echo system($'git commit -m {shellescape(msg)}')
+	echo g:System($'git commit -m {shellescape(msg)}')
 enddef
 
 export def Amend(msg: string)
-	echo system($'git commit --amend -m {shellescape(msg)}')
+	echo g:System($'git commit --amend -m {shellescape(msg)}')
 enddef
 
 export def GetLastCommitMessage(): string
-	return system($'git log -1 --pretty=%B')->trim()
+	return g:System($'git log -1 --pretty=%B')->trim()
 enddef
 
 export def TagPush(tagname: string)
-	echo system($'git tag {shellescape(tagname)}')
-	echo system($'git push origin {shellescape(tagname)}')
+	echo g:System($'git tag {shellescape(tagname)}')
+	echo g:System($'git push origin {shellescape(tagname)}')
 enddef
 
 # 以下はvimrcで定義する
