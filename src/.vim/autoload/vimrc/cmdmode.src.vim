@@ -113,7 +113,7 @@ export def Popup()
 		au ModeChanged c:[^c] ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	MapTab2Pum()
+	MapTab2OpenPum()
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -182,21 +182,23 @@ enddef
 var pumid = 0
 var pumpat = ''
 
-def MapTab2Pum()
+def MapTab2OpenPum()
 	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 
 export def PumKeyDown(id: number, k: string): bool
+	const i = getwininfo(pumid)[0]
+	const l = getcurpos(pumid)[1]
 	if k ==# "\<Tab>" || k ==# "\<C-n>"
-		noautocmd win_execute(pumid, 'normal! j')
+		noautocmd win_execute(pumid, $'normal! { l < i.botline ? 'j' : 'gg' }')
 	elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
-		noautocmd win_execute(pumid, 'normal! k')
+		noautocmd win_execute(pumid, $'normal! { l <= 1 ? 'G' : 'k' }')
 	else
 		ClosePum()
-		MapTab2Pum()
+		MapTab2OpenPum()
 		return false
 	endif
-	setcmdline(pumpat .. getbufline(winbufnr(pumid), getcurpos(pumid)[1])[0])
+	setcmdline(pumpat .. i.bufnr->getbufline(getcurpos(pumid)[1])[0])
 	redraw
 	return true
 enddef

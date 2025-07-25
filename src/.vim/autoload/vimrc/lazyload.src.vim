@@ -159,16 +159,17 @@ command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit v
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
-nnoremap <Space>gc :<C-u>GitCommit<Space><Tab>
-nnoremap <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
-nnoremap <Space>gP :<C-u>Git push<End>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gp <Cmd>Git pull<CR>
 nnoremap <Space>gl <Cmd>Git log<CR>
-nnoremap <Space>gt :<C-u>GitTagPush<Space>
-nnoremap <Space>gC :<C-u>Git checkout %
+# cmdlineをポップアップさせるためにnnoremapではなくてnmapにしておく
+nmap <Space>gP :<C-u>Git push<End>
+nmap <Space>gt :<C-u>GitTagPush<Space>
+nmap <Space>gC :<C-u>Git checkout %
+nmap <Space>gc :<C-u>GitCommit<Space><Tab>
+nmap <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 def PullDotfiles()
 	const vimrcpath = has('win32') ? '~/_vimrc' : '~/.vimrc'
 	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')

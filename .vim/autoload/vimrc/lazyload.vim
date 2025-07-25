@@ -108,16 +108,16 @@ com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
-nn <Space>gc :<C-u>GitCommit<Space><Tab>
-nn <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
-nn <Space>gP :<C-u>Git push<End>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gp <Cmd>Git pull<CR>
 nn <Space>gl <Cmd>Git log<CR>
-nn <Space>gt :<C-u>GitTagPush<Space>
-nn <Space>gC :<C-u>Git checkout %
+nm <Space>gP :<C-u>Git push<End>
+nm <Space>gt :<C-u>GitTagPush<Space>
+nm <Space>gC :<C-u>Git checkout %
+nm <Space>gc :<C-u>GitCommit<Space><Tab>
+nm <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
 def D()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
