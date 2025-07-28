@@ -117,7 +117,7 @@ export def Popup()
 	MapTab2OpenPum()
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-	popup.shade = matchadd('Comment', '.')
+	popup.shade = matchadd('NonText', '.')
 enddef
 
 def ClosePopup()

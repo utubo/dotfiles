@@ -86,7 +86,7 @@ aug END
 G()
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-m.shade = matchadd('Comment', '.')
+m.shade = matchadd('NonText', '.')
 enddef
 def D()
 matchdelete(m.shade)
