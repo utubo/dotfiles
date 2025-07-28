@@ -191,6 +191,7 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 packadd hlyank
 packadd comment
 nm <Space>c gcc
+xm <Space>c gc
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)

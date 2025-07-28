@@ -287,6 +287,7 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 packadd hlyank
 packadd comment
 nmap <Space>c gcc
+xmap <Space>c gc
 # }}}
 
 # その他 {{{
