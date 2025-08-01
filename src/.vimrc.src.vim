@@ -245,12 +245,16 @@ au vimrc WinEnter * {
 }
 def! g:MyRuler(): string
 	const p = getcurpos(curwin)
-	var text = $'{p[1]}/{getbufinfo(curbuf)[0].linecount}:{p[2]}{rulerinfo}'
+	const b = getbufinfo(curbuf)
+	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
 	# tabpanelの下にセンタリングして表示する
 	return repeat(' ', 9 - len(text) / 2) .. text
 enddef
-set ruler
-set rulerformat=%{g:MyRuler()}
+# テスト時などバッファがないとgetbufinfoが空になってしまうのでVimEnterを待ってからセット
+au vimrc VimEnter * {
+	set ruler
+	set rulerformat=%{g:MyRuler()}
+}
 
 # ------------------------------------------------------
 # タブパネル

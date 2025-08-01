@@ -186,11 +186,14 @@ endif
 }
 def! g:MyRuler(): string
 const p = getcurpos(k)
-var a = $'{p[1]}/{getbufinfo(o)[0].linecount}:{p[2]}{q}'
+const b = getbufinfo(o)
+var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{q}'
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef
+au vimrc VimEnter * {
 set ru
 set rulerformat=%{g:MyRuler()}
+}
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
