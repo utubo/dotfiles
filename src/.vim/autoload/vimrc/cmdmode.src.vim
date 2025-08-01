@@ -83,7 +83,7 @@ var popup = {
 	curpos: 0,
 	curhl: [],
 	msghl: [],
-	shade: 0,
+	# shade: 0,
 }
 export def Popup()
 	if popup.win !=# 0
@@ -117,11 +117,15 @@ export def Popup()
 	MapTab2OpenPum()
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-	popup.shade = matchadd('NonText', '.')
+	# これやっちゃうとビジュアルモードの選択範囲とかhlsearchがわかんなくなる
+	# popup.shade = matchadd('NonText', '.')
 enddef
 
 def ClosePopup()
-	matchdelete(popup.shade)
+	# if !!popup.shade
+	# 	matchdelete(popup.shade)
+	# 	popup.shade = 0
+	# endif
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END

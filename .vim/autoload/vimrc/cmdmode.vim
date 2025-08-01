@@ -56,7 +56,6 @@ blinktimer: 0,
 curpos: 0,
 curhl: [],
 msghl: [],
-shade: 0,
 }
 export def Popup()
 if m.win !=# 0
@@ -86,10 +85,8 @@ aug END
 G()
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-m.shade = matchadd('NonText', '.')
 enddef
 def D()
-matchdelete(m.shade)
 aug vimrc_cmdline_popup
 au!
 aug END
