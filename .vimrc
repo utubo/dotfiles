@@ -35,6 +35,7 @@ set udf
 set ut=2000
 set is
 set hls
+set autocomplete
 set shortmess+=FI
 g:maplocalleader = ';'
 filetype plugin indent on
@@ -203,7 +204,7 @@ g:anypanel = [
 ]
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
-return a->substitute('\(%#TabPanel# \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
+return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
 enddef
 def! g:Getchar2idx(): number
 ec 'Input bufnr: '
