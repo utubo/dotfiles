@@ -109,7 +109,7 @@ export def ShowBufInfo(event: string = '')
 		return
 	endif
 
-	const ruler = $' {line(".")}:{col(".")}'
+	const ruler = &ruler ? $' {line(".")}:{col(".")}' : ''
 
 	var msg = []
 	add(msg, ['Title', $'"{bufname()}"'])
@@ -157,7 +157,9 @@ export def ShowBufInfo(event: string = '')
 			break
 		endif
 	endfor
-	add(msg, ['Normal', repeat(' ', maxlen - msglen) .. ruler])
+	if !&ruler
+		add(msg, ['Normal', repeat(' ', maxlen - msglen) .. ruler])
+	endif
 	redraw
 	echo ''
 	for m in msg

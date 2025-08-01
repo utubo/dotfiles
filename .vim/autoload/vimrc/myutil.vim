@@ -83,7 +83,7 @@ var b = a ==# 'BufReadPost'
 if b && !filereadable(expand('%'))
 return
 endif
-const c = $' {line(".")}:{col(".")}'
+const c = &ru ? $' {line(".")}:{col(".")}' : ''
 var e = []
 add(e, ['Title', $'"{bufname()}"'])
 add(e, ['Normal', ' '])
@@ -130,7 +130,9 @@ insert(e, ['SpecialKey', '<'], 0)
 break
 endif
 endfor
+if !&ru
 add(e, ['Normal', repeat(' ', k - j) .. c])
+endif
 redraw
 ec ''
 for m in e
