@@ -158,6 +158,8 @@ suite.TestMapping = () => {
 		'n  \([qS:]\|<Plug>fugitive:\)',
 		'v  J',
 		'x  S',
+		'x  [ai]c', # GitGutter
+		'o  [ai]c', # GitGutter
 		'i  <Esc>',
 		'i  [「（\[{;]', # vim-lexima
 		'   <SNR>\d\+_(save-cursor-pos)', # vim-textobj
