@@ -222,7 +222,7 @@ vimrc#tabpanel#Toggle(2)
 # }}}
 
 # ------------------------------------------------------
-# タブパネル
+# タブパネル {{{
 g:anypanel = [
 	'',
 	'anypanel#TabBufs()',
@@ -234,9 +234,10 @@ g:anypanel = [
 		'anypanel#Calendar()',
 	],
 ]
+# }}}
 
 # ------------------------------------------------------
-# 数字キー無しでバッファを操作
+# 数字キー無しでバッファを操作 {{{
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(lines: string): string
 	return lines->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
@@ -252,6 +253,7 @@ def! g:Getchar2idx(): number
 enddef
 nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
 nnoremap <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
+# }}}
 
 # ------------------------------------------------------
 # ローカル設定 {{{
