@@ -37,6 +37,7 @@ set is
 set hls
 set autocomplete
 set shortmess+=FI
+set rulerformat=\ 
 g:maplocalleader = ';'
 filetype plugin indent on
 aug vimrc
@@ -155,45 +156,13 @@ set t_Co=256
 set termguicolors
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
+g:zenmode = { ruler: true }
 if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 endif
 vimrc#tabpanel#Toggle(2)
-g:zenmode = { ruler: true }
-var k = 0
-var o = 0
-var q = ''
-au vimrc WinEnter * {
-k = winnr()
-o = winbufnr(k)
-q = ''
-const r = getbufvar(o, '&ff')
-if r ==# 'mac'
-q = ' CR'
-elseif r ==# 'unix'
-if has('win32')
-q = ' LF'
-endif
-elseif !has('win32')
-q = ' CRLF'
-endif
-const s = getbufvar(o, '&fenc')
-if s !=# 'utf-8'
-q ..= $' {s}'
-endif
-}
-def! g:MyRuler(): string
-const p = getcurpos(k)
-const b = getbufinfo(o)
-var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{q}'
-return repeat(' ', 9 - len(a) / 2) .. a
-enddef
-au vimrc VimEnter * {
-set ru
-set rulerformat=%{g:MyRuler()}
-}
 g:anypanel = [
 '',
 'anypanel#TabBufs()',
@@ -244,13 +213,13 @@ enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
-const t = get(v:oldfiles, 0, '')->expand()
-if t->filereadable()
+const k = get(v:oldfiles, 0, '')->expand()
+if k->filereadable()
 packadd vim-gitgutter
 packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
-exe 'edit' t
+exe 'edit' k
 endif
 endif
 if empty(bufname())

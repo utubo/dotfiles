@@ -606,6 +606,8 @@ xnoremap g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdl
 
 # ------------------------------------------------------
 # その他細々したの {{{
+vimrc#ruler#Apply()
+
 if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"

@@ -404,6 +404,7 @@ nn <script> g: :<C-u><SID>(exec_line)
 nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
 xn g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
 xn g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
+vimrc#ruler#Apply()
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"

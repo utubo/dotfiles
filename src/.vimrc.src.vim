@@ -41,7 +41,9 @@ set incsearch
 set hlsearch
 set autocomplete
 set shortmess+=FI # 後で:introする
+set rulerformat=\ # 遅延で設定しなおす
 g:maplocalleader = ';'
+
 filetype plugin indent on
 
 augroup vimrc
@@ -206,6 +208,7 @@ set termguicolors
 # その他 {{{
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
+g:zenmode = { ruler: true }
 
 # カーソルの形
 if has('vim_starting')
@@ -217,44 +220,6 @@ endif
 # しばらくタブパネルをおためし
 vimrc#tabpanel#Toggle(2)
 # }}}
-
-# ------------------------------------------------------
-# ルーラー
-g:zenmode = { ruler: true }
-var curwin = 0
-var curbuf = 0
-var rulerinfo = ''
-au vimrc WinEnter * {
-	curwin = winnr()
-	curbuf = winbufnr(curwin)
-	rulerinfo = ''
-	const ff = getbufvar(curbuf, '&ff')
-	if ff ==# 'mac'
-		rulerinfo = ' CR'
-	elseif ff ==# 'unix'
-		if has('win32')
-			rulerinfo = ' LF'
-		endif
-	elseif !has('win32')
-		rulerinfo = ' CRLF'
-	endif
-	const fenc = getbufvar(curbuf, '&fenc')
-	if fenc !=# 'utf-8'
-		rulerinfo ..= $' {fenc}'
-	endif
-}
-def! g:MyRuler(): string
-	const p = getcurpos(curwin)
-	const b = getbufinfo(curbuf)
-	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
-	# tabpanelの下にセンタリングして表示する
-	return repeat(' ', 9 - len(text) / 2) .. text
-enddef
-# テスト時などバッファがないとgetbufinfoが空になってしまうのでVimEnterを待ってからセット
-au vimrc VimEnter * {
-	set ruler
-	set rulerformat=%{g:MyRuler()}
-}
 
 # ------------------------------------------------------
 # タブパネル
