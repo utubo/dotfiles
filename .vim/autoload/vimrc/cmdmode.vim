@@ -128,7 +128,7 @@ m.blink = true
 m.curpos = c
 endif
 if m.blink
-win_execute(m.win, $'echo matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
+win_execute(m.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 endif
 enddef
 export def BlinkPopupCursor(a: number)

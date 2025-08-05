@@ -173,7 +173,7 @@ def ShowPopupCursor()
 		popup.curpos = c
 	endif
 	if popup.blink
-		win_execute(popup.win, $'echo matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
+		win_execute(popup.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 	endif
 enddef
 
