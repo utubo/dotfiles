@@ -208,7 +208,7 @@ a.line += c.line - &lines
 endif
 return a
 enddef
-g:vim9skk.change_popuppos = vimrc#cmdmode#ForVim9skk
+g:vim9skk.getcurpos = vimrc#cmdmode#ForVim9skk
 export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
