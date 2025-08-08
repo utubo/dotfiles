@@ -268,6 +268,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 
 # 🐶🍚 {{{
 g:registerslite_delay = 0.4
+g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 # }}}
@@ -337,6 +338,12 @@ enddef
 inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
 # https://blog.atusy.net/2025/06/03/vim-contextful-mark/
 au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
+# https://blog.atusy.net/2023/12/17/vim-easy-to-remember-regnames/
+au vimrc TextYankPost * {
+	if !v:event.regname
+		setreg(v:event.operator, getreg())
+	endif
+}
 # }}}
 
 # ------------------------------------------------------

@@ -181,6 +181,7 @@ enddef
 Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-n>' : vimrc#lazyload#SkipParen()
 Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 g:registerslite_delay = 0.4
+g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 vimrc#lexima#LazyLoad()
@@ -221,6 +222,11 @@ return toupper(c)
 enddef
 ino <expr> ;l $"<C-w>{G()}"
 au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
+au vimrc TextYankPost * {
+if !v:event.regname
+setreg(v:event.operator, getreg())
+endif
+}
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
