@@ -99,8 +99,8 @@ PROMPT="%F{cyan}%(4~|...|)%3~ %# %f%k"
 
 case $TERM in
 linux)
-	if [ -c /dev/fb0 ]; then
-		jfbterm -q -e uim-fep -u anthy
+	if hash fbterm 2>/dev/null; then
+		fbterm
 	fi
 	;;
 esac
