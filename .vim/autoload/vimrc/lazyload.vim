@@ -405,8 +405,8 @@ if !b.name && !b.changed
 timer_start(0, (_) => execute($'silent! bdelete {b.bufnr}'))
 endif
 }
-nn <script> g: <Cmd>.source<CR>
-nn <script> g9 <Cmd>vim9cmd :.source<CR>
+nn g: <Cmd>.source<CR>
+nn g9 <Cmd>vim9cmd :.source<CR>
 xn g: :source<CR>
 xn g9 :vim9cmd source<CR>
 vimrc#ruler#Apply()

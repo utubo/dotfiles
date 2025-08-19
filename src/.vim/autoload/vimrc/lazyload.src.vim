@@ -601,8 +601,8 @@ au vimrc BufHidden * {
 # ------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
-nnoremap <script> g: <Cmd>.source<CR>
-nnoremap <script> g9 <Cmd>vim9cmd :.source<CR>
+nnoremap g: <Cmd>.source<CR>
+nnoremap g9 <Cmd>vim9cmd :.source<CR>
 xnoremap g: :source<CR>
 xnoremap g9 :vim9cmd source<CR>
 # カーソル位置のハイライトを確認するやつ→<C-g>に移動
