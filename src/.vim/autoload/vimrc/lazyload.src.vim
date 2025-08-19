@@ -601,11 +601,10 @@ au vimrc BufHidden * {
 # ------------------------------------------------------
 # vimrc、plugin、colorscheme作成用 {{{
 # カーソル行を実行するやつ
-cnoremap <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
-nnoremap <script> g: :<C-u><SID>(exec_line)
-nnoremap <script> g9 :<C-u>vim9cmd <SID>(exec_line)
-xnoremap g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
-xnoremap g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
+nnoremap <script> g: <Cmd>.source<CR>
+nnoremap <script> g9 <Cmd>vim9cmd :.source<CR>
+xnoremap g: :source<CR>
+xnoremap g9 :vim9cmd source<CR>
 # カーソル位置のハイライトを確認するやつ→<C-g>に移動
 # nnoremap <expr> <Space>hl $'<Cmd>hi {synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')}<CR>'
 # 他の定義は.vim/after/ftplugin/vim.vim

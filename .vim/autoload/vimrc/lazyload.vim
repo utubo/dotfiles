@@ -405,11 +405,10 @@ if !b.name && !b.changed
 timer_start(0, (_) => execute($'silent! bdelete {b.bufnr}'))
 endif
 }
-cno <script> <expr> <SID>(exec_line) $'{getline('.')->substitute('^[ \t"#:]\+', '', '')}<CR>'
-nn <script> g: :<C-u><SID>(exec_line)
-nn <script> g9 :<C-u>vim9cmd <SID>(exec_line)
-xn g: :<C-u><Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
-xn g9 :<C-u>vim9cmd <Cmd>call getregion(getpos('v'), getpos('.'))->setcmdline()<CR><CR>
+nn <script> g: <Cmd>.source<CR>
+nn <script> g9 <Cmd>vim9cmd :.source<CR>
+xn g: :source<CR>
+xn g9 :vim9cmd source<CR>
 vimrc#ruler#Apply()
 if has('clipboard')
 au vimrc FocusGained * @" = @+
