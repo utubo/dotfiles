@@ -227,6 +227,7 @@ if !v:event.regname
 setreg(v:event.operator, getreg())
 endif
 }
+Each onoremap,xnoremap ae :<C-u>keepjumps normal! G$vgo<CR>
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
@@ -450,30 +451,37 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
+g:preYCursor = getcurpos()
+def BA()
+g:preYCursor = getcurpos()
+au vimrc SafeState * ++once setpos('.', g:preYCursor)
+feedkeys('y', 'n')
+enddef
+nn y <ScriptCmd>BA()<CR>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 nn <F7> my
 nn <Space><F7> 'y
-def BA()
+def BB()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BB(a: string, b: string)
+def BC(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BA()
+au vimrc Syntax * BB()
 au vimrc Syntax javascript {
-BB('SpellRare', '\s[=!]=\s')
+BC('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BB('SpellRare', '\s[=!]=\s')
-BB('SpellBad', '\s[=!]==\s')
-BB('SpellBad', '\s\~[=!][=#]\?\s')
-BB('SpellRare', '\<normal!\@!')
+BC('SpellRare', '\s[=!]=\s')
+BC('SpellBad', '\s[=!]==\s')
+BC('SpellBad', '\s\~[=!][=#]\?\s')
+BC('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <Tab> >

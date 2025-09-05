@@ -344,6 +344,8 @@ au vimrc TextYankPost * {
 		setreg(v:event.operator, getreg())
 	endif
 }
+# from vim-textobj-entrie and vim-jp slack
+Each onoremap,xnoremap ae :<C-u>keepjumps normal! G$vgo<CR>
 # }}}
 
 # ------------------------------------------------------
@@ -666,6 +668,15 @@ inoremap （） ()<C-g>U<Left>
 nnoremap ' "
 nnoremap m '
 nnoremap M m
+
+# yiwとかしたときにカーソルを移動させたくないが、やりかたが微妙…
+g:preYCursor = getcurpos()
+def YankWithKeepCursor()
+	g:preYCursor = getcurpos()
+	au vimrc SafeState * ++once setpos('.', g:preYCursor)
+	feedkeys('y', 'n')
+enddef
+nnoremap y <ScriptCmd>YankWithKeepCursor()<CR>
 # }}}
 
 # ------------------------------------------------------
