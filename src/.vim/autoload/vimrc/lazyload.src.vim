@@ -55,7 +55,7 @@ def g:System(cmd: string): string
 enddef
 
 # >>とかしたときにカーソル位置をキープ
-def KeepCursor(expr: string)
+def KeepCurpos(expr: string)
 	const len = getline('.')->len()
 	var cur = getcurpos()
 	execute $'normal! {expr}'
@@ -330,10 +330,10 @@ xnoremap <A-J> :copy'<-1<CR>gv
 xnoremap <A-K> :copy'>+0<CR>gv
 # https://zenn.dev/vim_jp/articles/2024-10-07-vim-insert-uppercase
 def ToupperPrevWord(): string
-  const col = getpos('.')[2]
-  const substring = getline('.')[0 : col - 1]
-  const word = matchstr(substring, '\v<(\k(<)@!)*$')
-  return toupper(word)
+	const col = getpos('.')[2]
+	const substring = getline('.')[0 : col - 1]
+	const word = matchstr(substring, '\v<(\k(<)@!)*$')
+	return toupper(word)
 enddef
 inoremap <expr> ;l $"<C-w>{ToupperPrevWord()}"
 # https://blog.atusy.net/2025/06/03/vim-contextful-mark/
@@ -372,8 +372,8 @@ inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
 nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCursor('>>')<CR>
-RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCursor('<<')<CR>
+RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCurpos('>>')<CR>
+RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCurpos('<<')<CR>
 RLK map! <LocalLeader> b <BS>
 RLK map! <LocalLeader> h <Left>
 RLK map! <LocalLeader> l <Right>
@@ -407,8 +407,8 @@ nnoremap <Space>y yiw
 # ビジュアルモードあれこれ {{{
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>KeepCursor('>gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>KeepCursor('<gv')<CR>
+xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
 xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # }}}
@@ -441,7 +441,7 @@ else
 endif
 # `drop`コマンドでterminalからvimで開く
 def g:Tapi_drop(bufnr: number, arglist: list<string>)
-	 vimrc#terminal#Tapi_drop(bufnr, arglist)
+	vimrc#terminal#Tapi_drop(bufnr, arglist)
 enddef
 # その他の設定
 au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
@@ -670,13 +670,13 @@ nnoremap m '
 nnoremap M m
 
 # yiwとかしたときにカーソルを移動させたくないが、やりかたが微妙…
-g:preYCursor = getcurpos()
-def YankWithKeepCursor()
-	g:preYCursor = getcurpos()
-	au vimrc SafeState * ++once setpos('.', g:preYCursor)
-	feedkeys('y', 'n')
+g:preOpeCurpos = getcurpos()
+def OpeWithKeepCurpos(expr: string)
+	g:preOpeCurpos = getcurpos()
+	au vimrc SafeState * ++once setpos('.', g:preOpeCurpos)
+	feedkeys(expr, 'n')
 enddef
-nnoremap y <ScriptCmd>YankWithKeepCursor()<CR>
+Each key=y,= nnoremap key <ScriptCmd>OpeWithKeepCurpos('key')<CR>
 # }}}
 
 # ------------------------------------------------------

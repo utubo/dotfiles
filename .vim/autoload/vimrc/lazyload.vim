@@ -451,13 +451,13 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-g:preYCursor = getcurpos()
-def BA()
-g:preYCursor = getcurpos()
-au vimrc SafeState * ++once setpos('.', g:preYCursor)
-feedkeys('y', 'n')
+g:preOpeCurpos = getcurpos()
+def BA(a: string)
+g:preOpeCurpos = getcurpos()
+au vimrc SafeState * ++once setpos('.', g:preOpeCurpos)
+feedkeys(a, 'n')
 enddef
-nn y <ScriptCmd>BA()<CR>
+Each key=y,= nnoremap key <ScriptCmd>BA('key')<CR>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
