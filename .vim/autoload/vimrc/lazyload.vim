@@ -458,6 +458,7 @@ au vimrc SafeState * ++once setpos('.', g:preOpeCurpos)
 feedkeys(a, 'n')
 enddef
 Each key=y,= nnoremap key <ScriptCmd>BA('key')<CR>
+nn <Space>r :!<Up>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w

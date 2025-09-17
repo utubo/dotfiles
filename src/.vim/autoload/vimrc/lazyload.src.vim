@@ -679,6 +679,9 @@ enddef
 Each key=y,= nnoremap key <ScriptCmd>OpeWithKeepCurpos('key')<CR>
 # }}}
 
+# 極々個人的に多い操作
+nnoremap <Space>r :!<Up>
+
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
 
