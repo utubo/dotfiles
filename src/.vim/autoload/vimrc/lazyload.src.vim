@@ -95,6 +95,9 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 
 # vim9skk {{{
 g:vim9skkp = {
+	keymap: {
+		commit: ["\<CR>", 'l'],
+	},
 	keep_midasi_mode: true,
 }
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)

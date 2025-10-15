@@ -62,6 +62,9 @@ packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skkp = {
+keymap: {
+commit: ["\<CR>", 'l'],
+},
 keep_midasi_mode: true,
 }
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
