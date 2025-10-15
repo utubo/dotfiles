@@ -263,7 +263,7 @@ export def ForVim9skk(popup_pos: any): any
 	endif
 	return popup_pos
 enddef
-g:vim9skk.getcurpos = vimrc#cmdmode#ForVim9skk
+g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
 # }}}
 
 # コマンドモードのマッピングとか {{{

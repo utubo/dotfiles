@@ -61,30 +61,13 @@ packadd vim-textobj-user
 packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-g:vim9skk = {
-keymap: {
-enable: ['<LocalLeader>j'],
-disable: ['<LocalLeader>a'],
-midasi: ['Q'],
-midasi_toggle: ['<LocalLeader>j'],
-complete: ['<CR>', '<LocalLeader><Space>', '<LocalLeader><LocalLeader>', 'l', ':'],
-select_top: '.',
-},
-run_on_midasi: true,
+g:vim9skkp = {
+keep_midasi_mode: true,
 }
-nn <LocalLeader>j a<Plug>(vim9skk-enable)
-nn <LocalLeader><LocalLeader>j i<Plug>(vim9skk-enable)
-au vimrc User Vim9skkInitPre vimrc#vim9skk#ApplySettings()
-au vimrc ModeChanged [ic]:n au SafeState * ++once vim9skk#Disable()
-au vimrc User Vim9skkEnter hi! link vim9skkMidasi PMenuSel
-au vimrc User Vim9skkMidasiInput {
-const m = g:vim9skk_midasi
-if m->match('*[っッ]\?[^a-zA-Zっッ]$') !=# -1
-feedkeys("\<Space>")
-elseif m->match('[^ぁ-わんァ-ヴー]$') !=# -1
-feedkeys("\<CR>")
-endif
-}
+ino <LocalLeader>j <Plug>(vim9skkp-toggle)
+cno <LocalLeader>j <Plug>(vim9skkp-toggle)
+nn <LocalLeader>j a<Plug>(vim9skkp-enable)
+nn <LocalLeader><LocalLeader>j i<Plug>(vim9skkp-enable)
 no <Leader>ga ga
 HeadTailMap g G
 Each nmap,xmap g% gi%

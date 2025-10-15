@@ -69,7 +69,7 @@ Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
 Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-Ezpack utubo/vim-vim9skk <on> ModeChanged *:[ic] # vim9scriptで作ったskk
+Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] # vim9scriptで作ったskk
 
 EzpackLazyLoad
 Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動

@@ -43,7 +43,7 @@ Ezpack utubo/vim-ezpack
 Ezpack utubo/vim-popselect
 Ezpack utubo/vim-reformatdate
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c
-Ezpack utubo/vim-vim9skk <on> ModeChanged *:[ic]
+Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic]
 EzpackLazyLoad
 Ezpack utubo/vim-headtail
 Ezpack utubo/vim-hlpairs
