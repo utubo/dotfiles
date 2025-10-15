@@ -31,6 +31,9 @@ def! g:MyRuler(): string
 	const p = getcurpos(curwin)
 	const b = getbufinfo(curbuf)
 	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
+	if exists('g:vim9skkp_status')
+		text ..= $' {g:vim9skkp_status.mode}'
+	endif
 	# tabpanelの下にセンタリングして表示する
 	return repeat(' ', 9 - len(text) / 2) .. text
 enddef

@@ -25,6 +25,9 @@ def! g:MyRuler(): string
 const p = getcurpos(k)
 const b = getbufinfo(l)
 var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{m}'
+if exists('g:vim9skkp_status')
+a ..= $' {g:vim9skkp_status.mode}'
+endif
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef
 export def Apply()
