@@ -7,7 +7,7 @@ var curwin = 0
 var curbuf = 0
 var rulerinfo = ''
 
-au vimrc WinEnter * {
+au vimrc WinEnter,BufEnter * {
 	curwin = winnr()
 	curbuf = winbufnr(curwin)
 	rulerinfo = ''

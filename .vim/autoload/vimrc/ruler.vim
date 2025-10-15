@@ -2,7 +2,7 @@ vim9script
 var k = 0
 var l = 0
 var m = ''
-au vimrc WinEnter * {
+au vimrc WinEnter,BufEnter * {
 k = winnr()
 l = winbufnr(k)
 m = ''
