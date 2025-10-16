@@ -43,6 +43,5 @@ export def Apply()
 	# って感じだったんだけどこのファイルを読むタイミングを変えたので大丈夫
 	# au vimrc VimEnter * {
 		set rulerformat=%{g:MyRuler()}
-		set ruler
 	# }
 enddef

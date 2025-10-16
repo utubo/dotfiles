@@ -38,6 +38,7 @@ set hls
 set autocomplete
 set shortmess+=FI
 set rulerformat=\ 
+set noru
 g:maplocalleader = ';'
 filetype plugin indent on
 aug vimrc
@@ -156,13 +157,15 @@ set t_Co=256
 set termguicolors
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true }
+g:zenmode = { ruler: true}
 if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 endif
+if 60 < &columns
 vimrc#tabpanel#Toggle(2)
+endif
 g:anypanel = [
 '',
 'anypanel#TabBufs()',

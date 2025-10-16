@@ -42,6 +42,7 @@ set hlsearch
 set autocomplete
 set shortmess+=FI # 後で:introする
 set rulerformat=\ # 遅延で設定しなおす
+set noruler
 g:maplocalleader = ';'
 
 filetype plugin indent on
@@ -208,7 +209,7 @@ set termguicolors
 # その他 {{{
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true }
+g:zenmode = { ruler: true}
 
 # カーソルの形
 if has('vim_starting')
@@ -218,7 +219,9 @@ if has('vim_starting')
 endif
 
 # しばらくタブパネルをおためし
-vimrc#tabpanel#Toggle(2)
+if 60 < &columns
+	vimrc#tabpanel#Toggle(2)
+endif
 # }}}
 
 # ------------------------------------------------------
