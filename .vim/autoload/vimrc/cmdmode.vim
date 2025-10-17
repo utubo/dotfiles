@@ -54,7 +54,7 @@ timer: 0,
 blink: false,
 blinktimer: 0,
 curpos: 0,
-curhl: [],
+gcr: &gcr,
 msghl: [],
 }
 export def Popup()
@@ -74,8 +74,9 @@ m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
 set t_ve=
-m.curhl = 'Cursor'->hlget()
-[m.curhl[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
+m.gcr = &guicursor
+set guicursor=i-c:CursorTransparent
+['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
 hi Cursor NONE
 aug vimrc_cmdline_popup
 au!
@@ -135,7 +136,7 @@ export def BlinkPopupCursor(a: number)
 m.blink = !m.blink
 enddef
 def F()
-hlset(m.curhl)
+&guicursor = m.gcr
 set t_ve&
 enddef
 var o = 0
