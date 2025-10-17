@@ -139,10 +139,10 @@ nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>gp <Cmd>Git pull<CR>
-nnoremap <Space>gl <Cmd>Git log<CR>
+nnoremap <Space>gl <Cmd>Git pull<CR>
+nnoremap <Space>gL <Cmd>Git log<CR>
 # cmdlineをポップアップさせるためにnnoremapではなくてnmapにしておく
-nmap <Space>gP :<C-u>Git push<End>
+nmap <Space>gp :<C-u>Git push<End>
 nmap <Space>gt :<C-u>GitTagPush<Space>
 nmap <Space>gC :<C-u>Git checkout %
 nmap <Space>gc :<C-u>GitCommit<Space><Tab>

@@ -97,9 +97,9 @@ nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gp <Cmd>Git pull<CR>
-nn <Space>gl <Cmd>Git log<CR>
-nm <Space>gP :<C-u>Git push<End>
+nn <Space>gl <Cmd>Git pull<CR>
+nn <Space>gL <Cmd>Git log<CR>
+nm <Space>gp :<C-u>Git push<End>
 nm <Space>gt :<C-u>GitTagPush<Space>
 nm <Space>gC :<C-u>Git checkout %
 nm <Space>gc :<C-u>GitCommit<Space><Tab>
