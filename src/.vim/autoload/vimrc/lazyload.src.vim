@@ -139,8 +139,8 @@ nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
 nnoremap <Space>gv <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
-nnoremap <Space>gl <Cmd>Git pull<CR>
-nnoremap <Space>gL <Cmd>Git log<CR>
+nnoremap <Space>gu <Cmd>Git pull<CR>
+nnoremap <Space>gl <Cmd>Git log<CR>
 # cmdlineをポップアップさせるためにnnoremapではなくてnmapにしておく
 nmap <Space>gp :<C-u>Git push<End>
 nmap <Space>gt :<C-u>GitTagPush<Space>
@@ -157,7 +157,7 @@ def PullDotfiles()
 	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 	EzpackInstall
 enddef
-nnoremap <Space>GL <ScriptCmd>PullDotfiles()<CR>
+nnoremap <Space>GU <ScriptCmd>PullDotfiles()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 # }}}
 

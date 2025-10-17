@@ -97,8 +97,8 @@ nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gs <Cmd>Git status -sb<CR>
 nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gl <Cmd>Git pull<CR>
-nn <Space>gL <Cmd>Git log<CR>
+nn <Space>gu <Cmd>Git pull<CR>
+nn <Space>gl <Cmd>Git log<CR>
 nm <Space>gp :<C-u>Git push<End>
 nm <Space>gt :<C-u>GitTagPush<Space>
 nm <Space>gC :<C-u>Git checkout %
@@ -114,7 +114,7 @@ chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
-nn <Space>GL <ScriptCmd>D()<CR>
+nn <Space>GU <ScriptCmd>D()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>gh <Cmd>e gh://utubo/repos<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
