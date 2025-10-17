@@ -81,7 +81,7 @@ var popup = {
 	blink: false,
 	blinktimer: 0,
 	curpos: 0,
-	gcr: &gcr,
+	gcr: '',
 	msghl: [],
 	# shade: 0,
 }
@@ -105,10 +105,11 @@ export def Popup()
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
 	# カーソル関係
 	set t_ve=
-	popup.gcr = &guicursor
-	set guicursor=i-c:CursorTransparent
+	if !popup.gcr
+		popup.gcr = &guicursor
+	endif
+	set guicursor=c:CursorTransparent
 	['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
-	hi Cursor NONE
 	# イベント等
 	augroup vimrc_cmdline_popup
 		au!
@@ -123,10 +124,6 @@ export def Popup()
 enddef
 
 def ClosePopup()
-	# if !!popup.shade
-	# 	matchdelete(popup.shade)
-	# 	popup.shade = 0
-	# endif
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
@@ -183,7 +180,10 @@ export def BlinkPopupCursor(timer: number)
 enddef
 
 def RestoreCursor()
-	&guicursor = popup.gcr
+	if !!popup.gcr
+		&guicursor = popup.gcr
+		popup.gcr = ''
+	endif
 	set t_ve&
 enddef
 
