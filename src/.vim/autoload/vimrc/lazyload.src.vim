@@ -171,7 +171,9 @@ au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # popselect {{{
 g:popselect = {
 	# 角が`+`だと圧が強いので…
-	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"]
+	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
+	# 一時ファイルを除外
+	files_ignore_regexp: '^/var/tmp',
 }
 nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
