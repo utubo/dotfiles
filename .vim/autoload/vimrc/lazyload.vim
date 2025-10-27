@@ -122,7 +122,7 @@ au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 g:popselect = {
 borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
-files_ignore_regexp: '^/var/tmp',
+files_ignore_regexp: '^/var/tmp\|/vim/vim91/doc/',
 }
 nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
