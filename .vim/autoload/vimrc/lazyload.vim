@@ -380,7 +380,7 @@ nn qt <Cmd>confirm tabclose +<CR>
 nn qT <Cmd>confirm tabclose -<CR>
 nn q# <Cmd>confirm tabclose #<CR>
 nn qOt <Cmd>confirm tabonly<CR>
-nn qb <Cmd>confirm bd<CR>
+nn qd <Cmd>confirm bd<CR>
 nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nn <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"

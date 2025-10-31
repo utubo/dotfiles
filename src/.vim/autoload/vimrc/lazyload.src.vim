@@ -557,7 +557,7 @@ nnoremap qT <Cmd>confirm tabclose -<CR>
 nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qOt <Cmd>confirm tabonly<CR>
 # バッファ
-nnoremap qb <Cmd>confirm bd<CR>
+nnoremap qd <Cmd>confirm bd<CR>
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nnoremap <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"
