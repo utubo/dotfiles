@@ -162,7 +162,8 @@ au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 # }}}
 
 # gh {{{
-nnoremap <Space>gh <Cmd>e gh://utubo/repos<CR>
+nnoremap <Space>GH <Cmd>e gh://utubo/repos<CR>
+nnoremap <Space>gi <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()

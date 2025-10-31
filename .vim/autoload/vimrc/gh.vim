@@ -27,6 +27,17 @@ nn <buffer> i <ScriptCmd>execute 'edit!' ['gh:/', getline('.')->matchstr('\S\+')
 gh#map#add('gh-buffer-repo-list', 'nnoremap', '<C-h>', '<ScriptCmd>call g:GhRepoListChangePage("-")<CR>')
 gh#map#add('gh-buffer-repo-list', 'nnoremap', '<C-l>', '<ScriptCmd>call g:GhRepoListChangePage("+")<CR>')
 enddef
+export def OpenCurrentIssues()
+try
+const a = g:System('git remote get-url origin')
+const b = matchlist(a, '^https://github.com/\(.*\)\.git')[1]
+if !!b
+exe $'new gh://{b}/issues'
+endif
+catch
+ec v:exception
+endtry
+enddef
 export def IssuesKeymap()
 nn <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
 nn <buffer> r <ScriptCmd>execute 'edit!' expand('%:h:h') .. '/repos'<CR>

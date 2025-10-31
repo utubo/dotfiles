@@ -105,6 +105,10 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
+if !has('gui')
+au vimrc ColorScheme * {
+}
+endif
 def A(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v

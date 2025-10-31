@@ -116,7 +116,8 @@ EzpackInstall
 enddef
 nn <Space>GU <ScriptCmd>D()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
-nn <Space>gh <Cmd>e gh://utubo/repos<CR>
+nn <Space>GH <Cmd>e gh://utubo/repos<CR>
+nn <Space>gi <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()

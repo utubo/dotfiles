@@ -34,6 +34,18 @@ enddef
 # }}}
 
 # issues {{{
+export def OpenCurrentIssues()
+	try
+		const url = g:System('git remote get-url origin')
+		const ownerAndRepo = matchlist(url, '^https://github.com/\(.*\)\.git')[1]
+		if !!ownerAndRepo
+			execute $'new gh://{ownerAndRepo}/issues'
+		endif
+	catch
+		echo v:exception
+	endtry
+enddef
+
 export def IssuesKeymap()
 	nnoremap <buffer> <CR> <ScriptCmd>execute 'new' [expand('%'), getline('.')->matchstr('[0-9]\+'), 'comments']->join('/')<CR>
 	nnoremap <buffer> r <ScriptCmd>execute 'edit!' expand('%:h:h') .. '/repos'<CR>
@@ -45,4 +57,4 @@ export def IssueCommentsKeymap()
 	nnoremap <buffer> <CR> <ScriptCmd>execute 'bo vsplit' [expand('%'), getline('.')->matchstr('[0-9]\+')]->join('/')<CR><Cmd>setlocal wrap<CR>
 enddef
 # }}}
-#
+
