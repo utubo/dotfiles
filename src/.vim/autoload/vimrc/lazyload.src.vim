@@ -558,8 +558,6 @@ nnoremap q# <Cmd>confirm tabclose #<CR>
 nnoremap qOt <Cmd>confirm tabonly<CR>
 # バッファ
 nnoremap qd <Cmd>confirm bd<CR>
-nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
-nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 nnoremap <expr> qo $"\<Cmd>vim9cmd confirm bd {range(1, last_buffer_nr())->filter((i, b) => b !=# bufnr() && buflisted(b))->join()}\<CR>"
 # デフォルト動作を保持
 nnoremap q: q:
@@ -745,9 +743,13 @@ nnoremap <Space>d "_d
 
 # <Tab>でtsvとかcsvとかhtmlの次の項目に移動
 au vimrc FileType tsv,csv {
-	nnoremap <buffer> <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
-	nnoremap <buffer> <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
+	nnoremap <buffer> <nowait> <Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'e')<CR>
+	nnoremap <buffer> <nowait> <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 }
+
+# ほとんど使わない
+nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
+nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 
 # タブは卒業！
 nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
