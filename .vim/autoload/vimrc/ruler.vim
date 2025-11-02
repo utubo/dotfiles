@@ -31,5 +31,5 @@ endif
 return repeat(' ', 9 - len(a) / 2) .. a
 enddef
 export def Apply()
-set rulerformat=%{g:MyRuler()}
+set rulerformat=%#TabPanel#%{g:MyRuler()}
 enddef

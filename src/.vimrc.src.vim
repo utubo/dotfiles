@@ -147,6 +147,7 @@ def GetHl(name: string): any
 enddef
 
 def MyHighlight()
+	hi! link MsgArea TabPanel
 	const x = &termguicolors ? 'gui' : 'cterm'
 	const signBg = GetHl('LineNr').bg
 	# lspのsign
