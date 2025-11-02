@@ -280,6 +280,10 @@ nnoremap ]c <Plug>(GitGutterNextHunk)
 # m少し潰してもいいか…
 vmap mj <Plug>MoveBlockDown
 vmap mk <Plug>MoveBlockUp
+nnoremap <C-o> :Back<CR>
+nnoremap <C-i> :Forward<CR>
+nnoremap <Leader><C-o> <C-o>
+nnoremap <Leader><C-i> <C-i>
 # }}}
 
 # 開発用 {{{

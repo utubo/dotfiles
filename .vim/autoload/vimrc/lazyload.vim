@@ -188,6 +188,10 @@ nn [c <Plug>(GitGutterPrevHunk)
 nn ]c <Plug>(GitGutterNextHunk)
 vm mj <Plug>MoveBlockDown
 vm mk <Plug>MoveBlockUp
+nn <C-o> :Back<CR>
+nn <C-i> :Forward<CR>
+nn <Leader><C-o> <C-o>
+nn <Leader><C-i> <C-i>
 g:vimhelpgenerator_version = ''
 g:vimhelpgenerator_author = 'Author  : utubo'
 g:vimhelpgenerator_defaultlanguage = 'en'

@@ -7,6 +7,7 @@ Ezpack utubo/vim-colorscheme-softgreen
 Ezpack utubo/vim-zenmode
 Ezpack utubo/vim-anypanel
 EzpackLazyLoad
+Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
 Ezpack LeafCage/vimhelpgenerator
 Ezpack PProvost/vim-ps1

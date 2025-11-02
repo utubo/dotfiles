@@ -12,6 +12,7 @@ Ezpack utubo/vim-anypanel
 
 # 遅延ロード
 EzpackLazyLoad
+Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
 Ezpack LeafCage/vimhelpgenerator
 Ezpack PProvost/vim-ps1 # Powershellのシンタックスハイライト
