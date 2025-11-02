@@ -92,10 +92,11 @@ export def Popup()
 	endif
 	# cmdlineを隠す
 	popup.msghl = 'MsgArea'->hlget()
+	const norhl = 'Normal'->hlget(true)[0]
 	var msghl = 'MsgArea'->hlget(true)[0]
 	msghl = msghl->copy()->extend({
-		ctermfg: get(msghl, 'ctermbg', get(msghl, 'ctermbg', 'NONE')),
-		guifg: get(msghl, 'guibg', get(msghl, 'guibg', 'NONE')),
+		ctermfg: get(msghl, 'ctermbg', get(norhl, 'ctermbg', 'NONE')),
+		guifg: get(msghl, 'guibg', get(norhl, 'guibg', 'NONE')),
 		cleared: false,
 	})
 	[msghl]->hlset()

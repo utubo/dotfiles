@@ -114,7 +114,6 @@ const b = hlID(a)->synIDtrans()
 return { fg: A(b, 'fg'), bg: A(b, 'bg') }
 enddef
 def C()
-hi! link MsgArea TabPanel
 const x = &termguicolors ? 'gui' : 'cterm'
 const c = B('LineNr').bg
 for [a, b] in items({
