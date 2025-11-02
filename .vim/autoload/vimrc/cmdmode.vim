@@ -63,13 +63,13 @@ echoerr 'cmdlineのポップアップが変なタイミングで実行された�
 return
 endif
 m.msghl = 'MsgArea'->hlget()
-const a = 'Normal'->hlget()[0]
-var b = m.msghl[0]->copy()->extend({
-ctermfg: get(m.msghl[0], 'ctermbg', get(a, 'ctermbg', 'NONE')),
-guifg: get(m.msghl[0], 'guibg', get(a, 'guibg', 'NONE')),
+var a = 'MsgArea'->hlget(true)[0]
+a = a->copy()->extend({
+ctermfg: get(a, 'ctermbg', get(a, 'ctermbg', 'NONE')),
+guifg: get(a, 'guibg', get(a, 'guibg', 'NONE')),
 cleared: false,
 })
-[b]->hlset()
+[a]->hlset()
 m.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
 setbufvar(winbufnr(m.win), '&filetype', 'vim')
 win_execute(m.win, $'syntax match PMenuKind /^./')
