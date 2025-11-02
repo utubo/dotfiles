@@ -475,10 +475,6 @@ BC('SpellBad', '\s\~[=!][=#]\?\s')
 BC('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-nn <Tab> >
-nn <Tab><Tab> >>
-nn <S-Tab> <
-nn <S-Tab><S-Tab> <<
 nn <C-k> <C-i>
 nn ]t <C-]>
 nn [t <C-t>

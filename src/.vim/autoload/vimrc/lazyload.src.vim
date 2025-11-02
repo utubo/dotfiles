@@ -709,10 +709,11 @@ command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # }}}
 
 # やっぱり>>より押し易い…
-nnoremap <Tab> >
-nnoremap <Tab><Tab> >>
-nnoremap <S-Tab> <
-nnoremap <S-Tab><S-Tab> <<
+# → <C-i>が<Tab>と同値なのでやめとくか？
+# nnoremap <Tab> >
+# nnoremap <Tab><Tab> >>
+# nnoremap <S-Tab> <
+# nnoremap <S-Tab><S-Tab> <<
 # NOTE: <Tab> ==# <C-i> なので<C-i>を<C-k>へ退避させる
 nnoremap <C-k> <C-i>
 
