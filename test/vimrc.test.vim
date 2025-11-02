@@ -145,13 +145,14 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  [abBehijklmnopqswAMOPQSTY;''/?:%,+]',
-		'n  g[acdesinmprtT;]',
+		'n  g[acdefsinmprtT;]',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  G[ai%]',
 		'n  <C-[ABFGINOPWX]>',
 		'n  <Esc>',
 		'v  [*/?:]',
 		'i  <C-U>',
+		'n  \\<C-I>', # BackAndForward
 	]->join('\|')
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
@@ -178,6 +179,7 @@ suite.TestMapping = () => {
 		'n  \]c.*', # GitGutter
 		'n  gcc', # comment
 		'o  [IA]', # vim-hlpiars, vim-headtail
+		'n  gf', # vimgoto
 	]->join('\|')
 
 	# ユーザー定義のマッピング
