@@ -42,6 +42,6 @@ export def Apply()
 	# テスト時などバッファがないとgetbufinfoが空になってしまうのでVimEnterを待ってからセット
 	# って感じだったんだけどこのファイルを読むタイミングを変えたので大丈夫
 	# au vimrc VimEnter * {
-		set rulerformat=%#TabPanel#%{g:MyRuler()}
+		set rulerformat=%#MsgArea#%{g:MyRuler()}
 	# }
 enddef
