@@ -136,6 +136,8 @@ suite.TestMapping = () => {
 	# n <C-B>
 	# n <C-N> yankround
 	# n <C-P> yankround
+	# n <C-I> BackAndForward
+	# n <C-O> BackAndForward
 	# v  :  <Plug><ahc-switch>:
 	# v  /  <Plug><ahc-switch>/
 	# v  ?  <Plug><ahc-switch>?
@@ -146,7 +148,7 @@ suite.TestMapping = () => {
 		'n  g[acdesinmprtT;]',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  G[ai%]',
-		'n  <C-[ABFGNPWX]>',
+		'n  <C-[ABFGINOPWX]>',
 		'n  <Esc>',
 		'v  [*/?:]',
 		'i  <C-U>',
