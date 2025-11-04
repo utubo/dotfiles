@@ -14,7 +14,7 @@ set nf=alpha,hex
 set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
-set fcs=
+set fcs=vert:\|
 set cursorline
 set hidden
 set showtabline=0
@@ -157,7 +157,7 @@ set t_Co=256
 set termguicolors
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true}
+g:zenmode = { ruler: true }
 if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"

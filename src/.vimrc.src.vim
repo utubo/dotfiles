@@ -17,7 +17,7 @@ set nf=alpha,hex
 set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
-set fillchars=
+set fillchars=vert:\|
 set cursorline
 set hidden
 set showtabline=0
@@ -209,7 +209,7 @@ set termguicolors
 # その他 {{{
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true}
+g:zenmode = { ruler: true }
 
 # カーソルの形
 if has('vim_starting')
