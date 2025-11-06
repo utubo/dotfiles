@@ -305,7 +305,7 @@ au vimrc VimEnter * ++nested {
 			packadd vim-polyglot
 			vimrc#lsp#LazyLoad()
 			execute 'edit' lastfile
-			normal! zv
+			silent! normal! zv
 		endif
 	endif
 	if empty(bufname())
