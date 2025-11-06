@@ -1,11 +1,13 @@
 vim9script
 
 # ------------------------------------------------------
-# ルーラー
+# ルーラー(タブパネルに表示)
 
 var curwin = 0
 var curbuf = 0
 var rulerinfo = ''
+
+au vimrc CursorMoved,CursorMovedI * au SafeState * ++once :redrawtabp
 
 au vimrc WinEnter,BufEnter * {
 	curwin = winnr()
@@ -27,21 +29,17 @@ au vimrc WinEnter,BufEnter * {
 	endif
 }
 
-def! g:MyRuler(): string
+export def MyRuler(): string
+	if !v:vim_did_enter
+		return ''
+	endif
 	const p = getcurpos(curwin)
 	const b = getbufinfo(curbuf)
 	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
 	if exists('g:vim9skkp_status')
 		text ..= $' {g:vim9skkp_status.mode}'
+	else
+		text ..= ' _A'
 	endif
-	# tabpanelの下にセンタリングして表示する
-	return repeat(' ', 9 - len(text) / 2) .. text
-enddef
-
-export def Apply()
-	# テスト時などバッファがないとgetbufinfoが空になってしまうのでVimEnterを待ってからセット
-	# って感じだったんだけどこのファイルを読むタイミングを変えたので大丈夫
-	# au vimrc VimEnter * {
-		set rulerformat=%#MsgArea#%{g:MyRuler()}
-	# }
+	return $'%#TabPanelFill#{anypanel#align#Center(text)}'
 enddef

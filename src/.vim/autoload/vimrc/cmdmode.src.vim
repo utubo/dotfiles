@@ -256,12 +256,12 @@ def ClosePum()
 enddef
 # }}}
 
-# vim9skkとの連携 {{{
+# vim9skkpとの連携 {{{
 export def ForVim9skk(popup_pos: any): any
 	if popup.win !=# 0
 		var c = popup_getpos(popup.win)
-		popup_pos.col += c.col - 1
-		popup_pos.line += c.line - &lines
+		popup_pos.col = c.col + getcmdscreenpos() - 1
+		popup_pos.line = c.line
 	endif
 	return popup_pos
 enddef

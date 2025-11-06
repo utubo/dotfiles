@@ -18,7 +18,6 @@ set fcs=vert:\|
 set cursorline
 set hidden
 set showtabline=0
-set tabpanelopt=align:right
 set cmdheight=1
 set noshowcmd
 set noshowmode
@@ -37,7 +36,6 @@ set is
 set hls
 set autocomplete
 set shortmess+=FI
-set rulerformat=\ 
 set noru
 g:maplocalleader = ';'
 filetype plugin indent on
@@ -157,7 +155,6 @@ set t_Co=256
 set termguicolors
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true }
 if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
@@ -167,14 +164,15 @@ if 60 < &columns
 vimrc#tabpanel#Toggle(2)
 endif
 g:anypanel = [
-'',
+[''],
 'anypanel#TabBufs()',
-'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+['anypanel#HiddenBufs()->g:TabpanelIdx2Chars()'],
 [
 'anypanel#Padding(1)',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
 'anypanel#Calendar()',
+'vimrc#ruler#MyRuler()'
 ],
 ]
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
@@ -223,6 +221,7 @@ packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
 exe 'edit' k
+normal! zv
 endif
 endif
 if empty(bufname())

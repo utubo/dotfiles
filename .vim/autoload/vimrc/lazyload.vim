@@ -172,6 +172,8 @@ g:registerslite_delay = 0.4
 g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
+ono A <Plug>(textobj-twochars-a)
+ono I <Plug>(textobj-twochars-i)
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
@@ -400,7 +402,6 @@ nn g: <Cmd>.source<CR>
 nn g9 <Cmd>vim9cmd :.source<CR>
 xn g: :source<CR>
 xn g9 :vim9cmd source<CR>
-vimrc#ruler#Apply()
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
@@ -449,42 +450,42 @@ feedkeys(a, 'n')
 enddef
 Each key=y,= nnoremap key <ScriptCmd>BA('key')<CR>
 nn <Space>r :!<Up>
-set spell spelllang=en_us,cjk
-nn <F8> <Cmd>set spell! spell?<CR>
-nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
-xn <F9> <ESC>1<C-w>s<C-w>w
-nn <F7> my
-nn <Space><F7> 'y
-def BB()
+def BB(c: string): string
+nn <nowait> <expr> ; BB(';')
+nn <nowait> <expr> , BB(',')
+aug unmap-semi
+au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ;|unm ,
+aug END
+return c
+enddef
+Each X=f,F,t,T nnoremap <expr> X BB('X')
+def BC()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BC(a: string, b: string)
+def BD(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BB()
+au vimrc Syntax * BC()
 au vimrc Syntax javascript {
-BC('SpellRare', '\s[=!]=\s')
+BD('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BC('SpellRare', '\s[=!]=\s')
-BC('SpellBad', '\s[=!]==\s')
-BC('SpellBad', '\s\~[=!][=#]\?\s')
-BC('SpellRare', '\<normal!\@!')
+BD('SpellRare', '\s[=!]=\s')
+BD('SpellBad', '\s[=!]==\s')
+BD('SpellBad', '\s\~[=!][=#]\?\s')
+BD('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-nn <C-k> <C-i>
+set spell spelllang=en_us,cjk
+nn <F8> <Cmd>set spell! spell?<CR>
+nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
+xn <F9> <ESC>1<C-w>s<C-w>w
 nn ]t <C-]>
 nn [t <C-t>
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-ono A <Plug>(textobj-twochars-a)
-ono I <Plug>(textobj-twochars-i)
-nm <LocalLeader><LocalLeader>a <F1>
-nm <LocalLeader><LocalLeader>s <F2>
-nm <LocalLeader><LocalLeader>d <F3>
-nm <LocalLeader><LocalLeader>f <F4>
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d

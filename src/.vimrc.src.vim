@@ -21,8 +21,6 @@ set fillchars=vert:\|
 set cursorline
 set hidden
 set showtabline=0
-# タブパネルを左に表示するとポップアップウインドウで不都合が…
-set tabpanelopt=align:right
 set cmdheight=1
 set noshowcmd
 set noshowmode
@@ -41,7 +39,6 @@ set incsearch
 set hlsearch
 set autocomplete
 set shortmess+=FI # 後で:introする
-set rulerformat=\ # 遅延で設定しなおす
 set noruler
 g:maplocalleader = ';'
 
@@ -209,7 +206,6 @@ set termguicolors
 # その他 {{{
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-g:zenmode = { ruler: true }
 
 # カーソルの形
 if has('vim_starting')
@@ -227,14 +223,15 @@ endif
 # ------------------------------------------------------
 # タブパネル {{{
 g:anypanel = [
-	'',
+	[''],
 	'anypanel#TabBufs()',
-	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+	['anypanel#HiddenBufs()->g:TabpanelIdx2Chars()'],
 	[
 		'anypanel#Padding(1)',
 		'anypanel#File("~/todolist.md")',
 		'anypanel#Padding(1)',
 		'anypanel#Calendar()',
+		'vimrc#ruler#MyRuler()'
 	],
 ]
 # }}}
@@ -268,8 +265,8 @@ endif
 # ------------------------------------------------------
 # 色(ローカル設定後) {{{
 if !exists('g:colors_name')
-  set background=light
-  silent! colorscheme girly
+	set background=light
+	silent! colorscheme girly
 endif
 
 # 色の設定が終ってからtabpanelを表示する
@@ -308,6 +305,7 @@ au vimrc VimEnter * ++nested {
 			packadd vim-polyglot
 			vimrc#lsp#LazyLoad()
 			execute 'edit' lastfile
+			normal! zv
 		endif
 	endif
 	if empty(bufname())

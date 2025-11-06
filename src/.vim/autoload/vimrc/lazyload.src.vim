@@ -7,7 +7,7 @@ vim9script
 #   Each nmap,xmap j gj
 #   → nmap j gj | xmap j gj
 # 先頭以外に差し込んだりネストしたい場合はこう
-#   Each X=n,x Each Y=j,k Ymap X gX
+#   Each X=n,x Each Y=j,k Xmap Y gY
 #   → nmap j gj | nmap k gk | xmap j gj | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
 def UtilEach(qargs: string)
@@ -251,6 +251,8 @@ g:registerslite_delay = 0.4
 g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
+onoremap A <Plug>(textobj-twochars-a)
+onoremap I <Plug>(textobj-twochars-i)
 # }}}
 
 # 設定が膨らんできたので別ファイルで定義 {{{
@@ -596,8 +598,6 @@ xnoremap g9 :vim9cmd source<CR>
 
 # ------------------------------------------------------
 # その他細々したの {{{
-vimrc#ruler#Apply()
-
 if has('clipboard')
 	au vimrc FocusGained * @" = @+
 	au vimrc FocusLost   * @+ = @"
@@ -659,26 +659,25 @@ def OpeWithKeepCurpos(expr: string)
 	feedkeys(expr, 'n')
 enddef
 Each key=y,= nnoremap key <ScriptCmd>OpeWithKeepCurpos('key')<CR>
-# }}}
 
 # 極々個人的に多い操作
 nnoremap <Space>r :!<Up>
+# }}}
 
 # ------------------------------------------------------
 # 様子見中 使わなそうなら削除する {{{
 
-# typoの量がやばい！
-# やばすぎるので重くてもデフォルトでオンにする(戒め)
-set spell spelllang=en_us,cjk
-nnoremap <F8> <Cmd>set spell! spell?<CR>
-
-# CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
-nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
-xnoremap <F9> <ESC>1<C-w>s<C-w>w
-
-# ここまで読(y)んだ
-nnoremap <F7> my
-nnoremap <Space><F7> 'y
+# f,F,t,Tの時だけセミコロンとカンマを復活させる {{{
+def UnmapSemi(c: string): string
+	nnoremap <nowait> <expr> ; UnmapSemi(';')
+	nnoremap <nowait> <expr> , UnmapSemi(',')
+	augroup unmap-semi
+		au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ; | unmap ,
+	augroup END
+	return c
+enddef
+Each X=f,F,t,T nnoremap <expr> X UnmapSemi('X')
+# }}}
 
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
@@ -708,14 +707,14 @@ au vimrc Syntax vim {
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # }}}
 
-# やっぱり>>より押し易い…
-# → <C-i>が<Tab>と同値なのでやめとくか？
-# nnoremap <Tab> >
-# nnoremap <Tab><Tab> >>
-# nnoremap <S-Tab> <
-# nnoremap <S-Tab><S-Tab> <<
-# NOTE: <Tab> ==# <C-i> なので<C-i>を<C-k>へ退避させる
-nnoremap <C-k> <C-i>
+# typoの量がやばい！
+# やばすぎるので重くてもデフォルトでオンにする(戒め)
+set spell spelllang=en_us,cjk
+nnoremap <F8> <Cmd>set spell! spell?<CR>
+
+# CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
+nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
+xnoremap <F9> <ESC>1<C-w>s<C-w>w
 
 # <C-]>に対して<C-[>→ESCになっちゃうのでNG→わかる
 # <C-t>に対して<C-]>→わからない
@@ -724,16 +723,6 @@ nnoremap [t <C-t>
 
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-
-# 🐶🍚
-onoremap A <Plug>(textobj-twochars-a)
-onoremap I <Plug>(textobj-twochars-i)
-
-# ホームポジションに引き篭りたい…
-nmap <LocalLeader><LocalLeader>a <F1>
-nmap <LocalLeader><LocalLeader>s <F2>
-nmap <LocalLeader><LocalLeader>d <F3>
-nmap <LocalLeader><LocalLeader>f <F4>
 
 # noremap <F1> <Cmd>smile<CR>
 # }}}

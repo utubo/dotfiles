@@ -2,6 +2,7 @@ vim9script
 var k = 0
 var l = 0
 var m = ''
+au vimrc CursorMoved,CursorMovedI * au SafeState * ++once :redrawtabp
 au vimrc WinEnter,BufEnter * {
 k = winnr()
 l = winbufnr(k)
@@ -21,15 +22,17 @@ if o !=# 'utf-8'
 m ..= $' {o}'
 endif
 }
-def! g:MyRuler(): string
+export def MyRuler(): string
+if !v:vim_did_enter
+return ''
+endif
 const p = getcurpos(k)
 const b = getbufinfo(l)
 var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{m}'
 if exists('g:vim9skkp_status')
 a ..= $' {g:vim9skkp_status.mode}'
+else
+a ..= ' _A'
 endif
-return repeat(' ', 9 - len(a) / 2) .. a
-enddef
-export def Apply()
-set rulerformat=%#MsgArea#%{g:MyRuler()}
+return $'%#TabPanelFill#{anypanel#align#Center(a)}'
 enddef
