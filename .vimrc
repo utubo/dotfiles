@@ -221,7 +221,7 @@ packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
 exe 'edit' k
-sil! normal! zv
+sil! execute('normal! zv')
 endif
 endif
 if empty(bufname())
