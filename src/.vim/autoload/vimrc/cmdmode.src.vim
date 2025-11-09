@@ -83,6 +83,7 @@ var popup = {
 	curpos: 0,
 	gcr: '',
 	msghl: [],
+	offset: 0,
 	# shade: 0,
 }
 export def Popup()
@@ -166,7 +167,12 @@ enddef
 
 def ShowPopupCursor()
 	win_execute(popup.win, 'call clearmatches()')
-	var c = getcmdscreenpos()
+
+	if !getcmdline()
+		popup.offset = getcmdpos() - getcmdscreenpos() + 1
+	endif
+
+	var c = getcmdscreenpos() + popup.offset
 	if c !=# popup.curpos
 		popup.blink = true
 		popup.curpos = c
@@ -260,7 +266,7 @@ enddef
 export def ForVim9skk(popup_pos: any): any
 	if popup.win !=# 0
 		var c = popup_getpos(popup.win)
-		popup_pos.col = c.col + getcmdscreenpos() - 1
+		popup_pos.col = c.col + getcmdscreenpos() - 1 + popup.offset
 		popup_pos.line = c.line
 	endif
 	return popup_pos

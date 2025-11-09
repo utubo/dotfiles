@@ -56,6 +56,7 @@ blinktimer: 0,
 curpos: 0,
 gcr: '',
 msghl: [],
+offset: 0,
 }
 export def Popup()
 if m.win !=# 0
@@ -125,7 +126,10 @@ redraw
 enddef
 def E()
 win_execute(m.win, 'call clearmatches()')
-var c = getcmdscreenpos()
+if !getcmdline()
+m.offset = getcmdpos() - getcmdscreenpos() + 1
+endif
+var c = getcmdscreenpos() + m.offset
 if c !=# m.curpos
 m.blink = true
 m.curpos = c
@@ -209,7 +213,7 @@ enddef
 export def ForVim9skk(a: any): any
 if m.win !=# 0
 var c = popup_getpos(m.win)
-a.col = c.col + getcmdscreenpos() - 1
+a.col = c.col + getcmdscreenpos() - 1 + m.offset
 a.line = c.line
 endif
 return a
