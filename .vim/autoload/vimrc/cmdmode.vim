@@ -213,7 +213,7 @@ enddef
 export def ForVim9skk(a: any): any
 if m.win !=# 0
 var c = popup_getpos(m.win)
-a.col = c.col + getcmdscreenpos() - 1 + m.offset
+a.col += c.col + m.offset - 1
 a.line = c.line
 endif
 return a
