@@ -100,6 +100,7 @@ suite.TestMapping = () => {
 	# n  b  vim-smart-word
 	# n  B  CtrlPBuffer
 	# n  e  vim-smart-word
+	# n  f  ;の有効化(F,t,Tも同様)
 	# n  ga textobjの先頭に移動
 	# n  gc comment
 	# n  gcc comment
@@ -144,7 +145,7 @@ suite.TestMapping = () => {
 	# i  <C-U> defaults.vim
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
-		'n  [abBehijklmnopqswAMOPQSTY;''/?:%,+]',
+		'n  [abBefhijklmnopqstwAFMOPQSTY;''/?:%,+]',
 		'n  g[acdefsinmprtT;]',
 		'n  \(zd\|zf\|ZZ\)',
 		'n  G[ai%]',
@@ -180,6 +181,7 @@ suite.TestMapping = () => {
 		'n  gcc', # comment
 		'o  [IA]', # vim-hlpiars, vim-headtail
 		'n  gf', # vimgoto
+		'n  T', # f,F,t,T
 	]->join('\|')
 
 	# ユーザー定義のマッピング
