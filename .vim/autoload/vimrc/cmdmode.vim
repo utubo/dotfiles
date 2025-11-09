@@ -84,9 +84,9 @@ set guicursor=c:CursorTransparent
 aug vimrc_cmdline_popup
 au!
 au ModeChanged c:[^c] D()
-au VimLeavePre * F()
+au VimLeavePre * H()
 aug END
-G()
+I()
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -94,14 +94,14 @@ def D()
 aug vimrc_cmdline_popup
 au!
 aug END
-F()
+H()
 timer_stop(m.updatetimer)
 m.updatetimer = 0
 timer_stop(m.blinktimer)
 m.blinktimer = 0
 popup_close(m.win)
 m.win = 0
-H()
+J()
 hi MsgArea None
 m.msghl->hlset()
 sil! cu <Tab>
@@ -115,7 +115,7 @@ feedkeys("\<Esc>", 'nt')
 endif
 return
 endif
-const b = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
+const b = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
 if &columns < strdisplaywidth(b)
 D()
 else
@@ -126,10 +126,7 @@ redraw
 enddef
 def E()
 win_execute(m.win, 'call clearmatches()')
-if !getcmdline()
-m.offset = getcmdpos() - getcmdscreenpos() + 1
-endif
-var c = getcmdscreenpos() + m.offset
+var c = F()
 if c !=# m.curpos
 m.blink = true
 m.curpos = c
@@ -138,10 +135,26 @@ if m.blink
 win_execute(m.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 endif
 enddef
+def F(): number
+return getcmdscreenpos() - G()
+enddef
+def G(): number
+if !&showtabpanel
+return 0
+endif
+if &showtabpanel ==# 1 && tabpagenr('$') ==# 1
+return 0
+endif
+if &tabpanelopt =~ 'align:right'
+return 0
+endif
+const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
+return &columns < c ? 0 : c
+enddef
 export def BlinkPopupCursor(a: number)
 m.blink = !m.blink
 enddef
-def F()
+def H()
 if !!m.gcr
 &guicursor = m.gcr
 m.gcr = ''
@@ -150,7 +163,7 @@ set t_ve&
 enddef
 var o = 0
 var q = ''
-def G()
+def I()
 cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 export def PumKeyDown(a: number, k: string): bool
@@ -162,8 +175,8 @@ noautocmd win_execute(o, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(o, $'normal! { l <= 1 ? 'G' : 'k' }')
 else
-H()
-G()
+J()
+I()
 return false
 endif
 setcmdline(q .. i.bufnr->getbufline(getcurpos(o)[1])[0])
@@ -172,7 +185,7 @@ return true
 enddef
 export def PopupPum()
 cu <Tab>
-H()
+J()
 q = getcmdline()
 const c = getcompletion(q, 'cmdline')
 if !c
@@ -204,7 +217,7 @@ pos: b,
 })
 setcmdline(q .. getbufline(winbufnr(o), 1)[0])
 enddef
-def H()
+def J()
 if !!o
 popup_close(o)
 o = 0
@@ -213,7 +226,7 @@ enddef
 export def ForVim9skk(a: any): any
 if m.win !=# 0
 var c = popup_getpos(m.win)
-a.col = c.col + getcmdscreenpos() + m.offset - 1
+a.col = c.col + F() - 1
 a.line = c.line
 endif
 return a

@@ -155,7 +155,7 @@ export def UpdatePopup(timer: number)
 		endif
 		return
 	endif
-	const text = getcmdtype() .. getcmdline() .. getcmdprompt() .. ' '
+	const text = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
 	if &columns < strdisplaywidth(text)
 		ClosePopup()
 	else
@@ -167,12 +167,7 @@ enddef
 
 def ShowPopupCursor()
 	win_execute(popup.win, 'call clearmatches()')
-
-	if !getcmdline()
-		popup.offset = getcmdpos() - getcmdscreenpos() + 1
-	endif
-
-	var c = getcmdscreenpos() + popup.offset
+	var c = Getcmdscreenpos()
 	if c !=# popup.curpos
 		popup.blink = true
 		popup.curpos = c
@@ -180,6 +175,24 @@ def ShowPopupCursor()
 	if popup.blink
 		win_execute(popup.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 	endif
+enddef
+
+def Getcmdscreenpos(): number
+	return getcmdscreenpos() - GetTabpanelWidth()
+enddef
+
+def GetTabpanelWidth(): number
+	if !&showtabpanel
+		return 0
+	endif
+	if &showtabpanel ==# 1 && tabpagenr('$') ==# 1
+		return 0
+	endif
+	if &tabpanelopt =~ 'align:right'
+		return 0
+	endif
+	const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
+	return &columns < c ? 0 : c
 enddef
 
 export def BlinkPopupCursor(timer: number)
@@ -266,7 +279,7 @@ enddef
 export def ForVim9skk(popup_pos: any): any
 	if popup.win !=# 0
 		var c = popup_getpos(popup.win)
-		popup_pos.col = c.col + getcmdscreenpos() + popup.offset - 1
+		popup_pos.col = c.col + Getcmdscreenpos() - 1
 		popup_pos.line = c.line
 	endif
 	return popup_pos
