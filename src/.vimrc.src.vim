@@ -123,6 +123,39 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 # }}}
 
 # ------------------------------------------------------
+# tabpanel {{{
+g:anypanel_panels = [
+  'strftime("  %Y-%m-%d %H:%M")',
+	['anypanel#TabBufs()'],
+	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+	'%=',
+	'anypanel#File("~/todolist.md")',
+	'anypanel#Padding(1)',
+	'anypanel#Calendar()',
+	'vimrc#ruler#MyRuler()',
+]
+# }}}
+
+# ------------------------------------------------------
+# 数字キー無しでバッファを操作 {{{
+g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
+def! g:TabpanelIdx2Chars(lines: string): string
+	return lines->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
+enddef
+def! g:Getchar2idx(): number
+	echo 'Input bufnr: '
+	const idx = stridx(g:idxchars, getchar()->nr2char())
+	if idx ==# -1
+		return bufnr('#')
+	else
+		return idx
+	endif
+enddef
+nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
+nnoremap <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
+# }}}
+
+# ------------------------------------------------------
 # 色 {{{
 nnoremap <expr> ZB $"<Cmd>set background={&background ==# 'dark' ? 'light' : 'dark'}<CR>"
 
@@ -203,6 +236,13 @@ set termguicolors
 # }}}
 
 # ------------------------------------------------------
+# ローカル設定 {{{
+if '~/.vimrc_local'->expand()->filereadable()
+	source ~/.vimrc_local
+endif
+# }}}
+
+# ------------------------------------------------------
 # その他 {{{
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
@@ -212,46 +252,6 @@ if has('vim_starting')
 	&t_SI = "\e[0 q"
 	&t_EI = "\e[2 q"
 	&t_SR = "\e[4 q"
-endif
-# }}}
-
-# ------------------------------------------------------
-# tabpanel {{{
-g:anypanel_panels = [
-  'strftime("  %Y-%m-%d %H:%M")',
-	['anypanel#TabBufs()'],
-	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
-	'%=',
-	'anypanel#File("~/todolist.md")',
-	'anypanel#Padding(1)',
-	'anypanel#Calendar()',
-	'vimrc#ruler#MyRuler()',
-]
-# }}}
-
-# ------------------------------------------------------
-# 数字キー無しでバッファを操作 {{{
-g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
-def! g:TabpanelIdx2Chars(lines: string): string
-	return lines->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
-enddef
-def! g:Getchar2idx(): number
-	echo 'Input bufnr: '
-	const idx = stridx(g:idxchars, getchar()->nr2char())
-	if idx ==# -1
-		return bufnr('#')
-	else
-		return idx
-	endif
-enddef
-nnoremap <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nnoremap <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
-# }}}
-
-# ------------------------------------------------------
-# ローカル設定 {{{
-if '~/.vimrc_local'->expand()->filereadable()
-	source ~/.vimrc_local
 endif
 # }}}
 

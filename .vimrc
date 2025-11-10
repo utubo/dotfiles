@@ -96,6 +96,31 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
+g:anypanel_panels = [
+'strftime("  %Y-%m-%d %H:%M")',
+['anypanel#TabBufs()'],
+'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+'%=',
+'anypanel#File("~/todolist.md")',
+'anypanel#Padding(1)',
+'anypanel#Calendar()',
+'vimrc#ruler#MyRuler()',
+]
+g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
+def! g:TabpanelIdx2Chars(a: string): string
+return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
+enddef
+def! g:Getchar2idx(): number
+ec 'Input bufnr: '
+const a = stridx(g:idxchars, getchar()->nr2char())
+if a ==# -1
+return bufnr('#')
+else
+return a
+endif
+enddef
+nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
+nn <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [
@@ -153,40 +178,15 @@ au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
 set termguicolors
+if '~/.vimrc_local'->expand()->filereadable()
+so ~/.vimrc_local
+endif
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
-endif
-g:anypanel_panels = [
-'strftime("  %Y-%m-%d %H:%M")',
-['anypanel#TabBufs()'],
-'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
-'%=',
-'anypanel#File("~/todolist.md")',
-'anypanel#Padding(1)',
-'anypanel#Calendar()',
-'vimrc#ruler#MyRuler()',
-]
-g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
-def! g:TabpanelIdx2Chars(a: string): string
-return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
-enddef
-def! g:Getchar2idx(): number
-ec 'Input bufnr: '
-const a = stridx(g:idxchars, getchar()->nr2char())
-if a ==# -1
-return bufnr('#')
-else
-return a
-endif
-enddef
-nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nn <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
-if '~/.vimrc_local'->expand()->filereadable()
-so ~/.vimrc_local
 endif
 if !exists('g:colors_name')
 set bg=light
