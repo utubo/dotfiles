@@ -253,6 +253,7 @@ Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
+command! UpdateVim packadd vim-update|call vimupdate#Update()
 # }}}
 
 # 設定が膨らんできたので別ファイルで定義 {{{

@@ -174,6 +174,7 @@ Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
+com! UpdateVim packadd vim-update|call vimupdate#Update()
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad('S')<CR>
