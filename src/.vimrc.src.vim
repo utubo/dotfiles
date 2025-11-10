@@ -213,20 +213,15 @@ if has('vim_starting')
 	&t_EI = "\e[2 q"
 	&t_SR = "\e[4 q"
 endif
-
-# しばらくタブパネルをおためし
-if 60 < &columns
-	vimrc#tabpanel#Toggle(2)
-endif
 # }}}
 
 # ------------------------------------------------------
-# タブパネル {{{
+# tabpanel {{{
 g:anypanel_panels = [
+  'strftime("  %Y-%m-%d %H:%M")',
 	['anypanel#TabBufs()'],
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	'%=',
-	'anypanel#Padding(1)',
 	'anypanel#File("~/todolist.md")',
 	'anypanel#Padding(1)',
 	'anypanel#Calendar()',
@@ -269,6 +264,9 @@ endif
 
 # 色の設定が終ってからtabpanelを表示する
 anypanel#Init()
+if 60 < &columns
+	vimrc#tabpanel#Toggle(2)
+endif
 # }}}
 
 # ------------------------------------------------------
