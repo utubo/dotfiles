@@ -301,7 +301,7 @@ au vimrc VimEnter * ++nested {
 			packadd vim-polyglot
 			vimrc#lsp#LazyLoad()
 			execute 'edit' lastfile
-			silent! execute('normal! zv') # executeじゃないとおかしくなる？
+			RestorePos()
 		endif
 	endif
 	if empty(bufname())
