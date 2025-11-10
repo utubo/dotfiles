@@ -222,17 +222,15 @@ endif
 
 # ------------------------------------------------------
 # タブパネル {{{
-g:anypanel = [
-	[''],
-	'anypanel#TabBufs()',
-	['anypanel#HiddenBufs()->g:TabpanelIdx2Chars()'],
-	[
-		'anypanel#Padding(1)',
-		'anypanel#File("~/todolist.md")',
-		'anypanel#Padding(1)',
-		'anypanel#Calendar()',
-		'vimrc#ruler#MyRuler()'
-	],
+g:anypanel_panels = [
+	['anypanel#TabBufs()'],
+	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+	'%=',
+	'anypanel#Padding(1)',
+	'anypanel#File("~/todolist.md")',
+	'anypanel#Padding(1)',
+	'anypanel#Calendar()',
+	'vimrc#ruler#MyRuler()',
 ]
 # }}}
 

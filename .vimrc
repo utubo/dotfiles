@@ -163,17 +163,15 @@ endif
 if 60 < &columns
 vimrc#tabpanel#Toggle(2)
 endif
-g:anypanel = [
-[''],
-'anypanel#TabBufs()',
-['anypanel#HiddenBufs()->g:TabpanelIdx2Chars()'],
-[
+g:anypanel_panels = [
+['anypanel#TabBufs()'],
+'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
+'%=',
 'anypanel#Padding(1)',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
 'anypanel#Calendar()',
-'vimrc#ruler#MyRuler()'
-],
+'vimrc#ruler#MyRuler()',
 ]
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
