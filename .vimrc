@@ -106,6 +106,11 @@ g:anypanel_panels = [
 'anypanel#Calendar()',
 'vimrc#ruler#MyRuler()',
 ]
+def RefreshMinute(_: number)
+redrawtabpanel
+timer_start(60 - localtime() % 60, RefreshMinute)
+enddef
+au vimrc VimEnter * RefreshMinute(0)
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
