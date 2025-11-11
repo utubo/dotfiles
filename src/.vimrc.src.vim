@@ -124,7 +124,7 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 
 # ------------------------------------------------------
 # tabpanel {{{
-g:anypanel_panels = [
+g:anypanel_contents = [
   'strftime("  %Y-%m-%d %H:%M")',
 	['anypanel#TabBufs()'],
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',

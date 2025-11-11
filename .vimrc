@@ -96,7 +96,7 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
-g:anypanel_panels = [
+g:anypanel_contents = [
 'strftime("  %Y-%m-%d %H:%M")',
 ['anypanel#TabBufs()'],
 'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
