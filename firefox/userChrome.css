@@ -1,15 +1,25 @@
 /* コンテキストメニューアイコンをdarkモードに対応させる */
 .menuitem-iconic {
-    fill:var(--button-color, ButtonText);
-    -moz-context-properties: fill;
+  fill:var(--button-color, ButtonText);
+  -moz-context-properties: fill;
+}
+
+/* ツールーバーにアプリアイコンを表示する */
+#nav-bar-customization-target::before {
+  content: url(chrome://branding/content/icon16.png);
+  display: inline-block;
+  width: 16px;
+  height:16px;
+  margin-left: 16px;
+  margin-top: 8px;
 }
 
 /* アドレスバーにある使わないボタンを非表示にする */
 #reader-mode-button {
-    display: none;
+  display: none;
 }
 #pageAction-urlbar-_testpilot-containers {
-    display: none;
+  display: none;
 }
 
 /* タブを閉じるボタンはマウスホバーのときだけ表示する */
@@ -22,35 +32,36 @@
 
 /* ピン留タブをアイコンだけ表示 */
 .tabbrowser-tab[pinned] {
-   padding-left: 5px;
-   width: 40px !important;
+  padding-left: 5px;
+  width: 40px !important;
 }
 .tab-label-container[pinned] {
-    visibility: hidden !important;
+  visibility: hidden !important;
 }
 
 /* 伸縮自在のスペースを0～100%まで伸縮するように */
 toolbarspring {
-    -moz-box-flex: 100 !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
+  -moz-box-flex: 100 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
 /* ブックマークツールバーのフォルダアイコンを非表示にする
  * (アイコン代わりにフォルダ名を絵文字1文字にしておく)
  */
 #personal-bookmarks toolbarbutton[container].bookmark-item>image {
-    display: none;
+  display: none;
 }
+
 /* ブックマークツールバーのフォルダの背景にフォルダのシルエットを表示する */
 #personal-bookmarks toolbarbutton[container].bookmark-item .toolbarbutton-text {
-    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32"><path fill="white" opacity="0.3" d="M1 3l3-4h6l3 4h15v17h-27z"/></svg>');
-    background-repeat: no-repeat;
-    height: 23px;
-    width: 23px;
-    font-size:12px;
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32"><path fill="white" opacity="0.3" d="M1 3l3-4h6l3 4h15v17h-27z"/></svg>');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 23px;
+  font-size:12px;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
 }
 
