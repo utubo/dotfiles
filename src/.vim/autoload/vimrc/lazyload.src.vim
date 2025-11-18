@@ -746,10 +746,6 @@ au vimrc FileType tsv,csv {
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
 
-# タブは卒業！
-nnoremap <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
-nnoremap <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
-
 # }}}
 
 # ------------------------------------------------------

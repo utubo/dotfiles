@@ -496,8 +496,6 @@ nn <buffer> <nowait> <S-Tab> <Cmd>call search('\(^\\|\t\\|, *\)\S\?', 'be')<CR>
 }
 nn qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nn qp <Cmd>bp<CR><Cmd>confirm bd<CR>
-nn <Space><Tab>u <Cmd>call vimrc#recentlytabs#ReopenRecentlyTab()<CR>
-nn <Space><Tab>l <Cmd>call vimrc#recentlytabs#ShowMostRecentlyClosedTabs()<CR>
 if strftime('%d') ==# '01'
 au vimrc VimEnter * {
 echow "✨ Today, Let's enjoy the default key mapping ! ✨"
