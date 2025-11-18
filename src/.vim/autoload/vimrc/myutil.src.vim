@@ -141,7 +141,7 @@ export def ShowBufInfo(event: string = '')
 	const branch = g:System('git branch')->trim()->matchstr('\w\+$')
 	add(msg, ['WarningMsg', branch])
 	var msglen = 0
-	const maxlen = &columns - len(ruler) - 2
+	const maxlen = &columns - len(ruler) - GetTabpanelWidth() - 2
 	for i in reverse(range(0, len(msg) - 1))
 		var s = msg[i][1]
 		var d = strdisplaywidth(s)
@@ -169,6 +169,22 @@ export def ShowBufInfo(event: string = '')
 	echohl Normal
 	popup_create(execute('pwd')->trim(), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
 enddef
+
+def GetTabpanelWidth(): number
+	if !&showtabpanel
+		return 0
+	endif
+	if &showtabpanel ==# 1 && tabpagenr('$') ==# 1
+		return 0
+	endif
+	if &tabpanelopt =~ 'align:right'
+		return 0
+	endif
+	const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
+	return &columns < c ? 0 : c
+enddef
+
+
 # }}}
 
 # カーソル位置をポップアップ {{{

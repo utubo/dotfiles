@@ -114,7 +114,7 @@ add(e, ['Normal', ' '])
 const h = g:System('git branch')->trim()->matchstr('\w\+$')
 add(e, ['WarningMsg', h])
 var j = 0
-const k = &columns - len(c) - 2
+const k = &columns - len(c) - A() - 2
 for i in reverse(range(0, len(e) - 1))
 var s = e[i][1]
 var d = strdisplaywidth(s)
@@ -141,6 +141,19 @@ echon m[1]
 endfor
 echoh Normal
 popup_create(execute('pwd')->trim(), { line: &lines - 1, col: 1, minheight: 1, maxheight: 1, minwidth: &columns, pos: 'botleft', moved: 'any' })
+enddef
+def A(): number
+if !&showtabpanel
+return 0
+endif
+if &showtabpanel ==# 1 && tabpagenr('$') ==# 1
+return 0
+endif
+if &tabpanelopt =~ 'align:right'
+return 0
+endif
+const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
+return &columns < c ? 0 : c
 enddef
 export def PopupCursorPos()
 const p = getcurpos()
