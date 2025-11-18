@@ -84,9 +84,9 @@ set guicursor=c:CursorTransparent
 aug vimrc_cmdline_popup
 au!
 au ModeChanged c:[^c] D()
-au VimLeavePre * H()
+au VimLeavePre * I()
 aug END
-I()
+J()
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 enddef
@@ -94,14 +94,14 @@ def D()
 aug vimrc_cmdline_popup
 au!
 aug END
-H()
+I()
 timer_stop(m.updatetimer)
 m.updatetimer = 0
 timer_stop(m.blinktimer)
 m.blinktimer = 0
 popup_close(m.win)
 m.win = 0
-J()
+BA()
 hi MsgArea None
 m.msghl->hlset()
 sil! cu <Tab>
@@ -116,7 +116,7 @@ endif
 return
 endif
 const b = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
-if &columns < strdisplaywidth(b)
+if G() < strdisplaywidth(b)
 D()
 else
 popup_settext(m.win, b)
@@ -136,9 +136,12 @@ win_execute(m.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 endif
 enddef
 def F(): number
-return getcmdscreenpos() - G()
+return getcmdscreenpos() - H()
 enddef
 def G(): number
+return &columns - H()
+enddef
+def H(): number
 if !&showtabpanel
 return 0
 endif
@@ -154,7 +157,7 @@ enddef
 export def BlinkPopupCursor(a: number)
 m.blink = !m.blink
 enddef
-def H()
+def I()
 if !!m.gcr
 &guicursor = m.gcr
 m.gcr = ''
@@ -163,7 +166,7 @@ set t_ve&
 enddef
 var o = 0
 var q = ''
-def I()
+def J()
 cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 export def PumKeyDown(a: number, k: string): bool
@@ -175,8 +178,8 @@ noautocmd win_execute(o, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(o, $'normal! { l <= 1 ? 'G' : 'k' }')
 else
+BA()
 J()
-I()
 return false
 endif
 setcmdline(q .. i.bufnr->getbufline(getcurpos(o)[1])[0])
@@ -185,7 +188,7 @@ return true
 enddef
 export def PopupPum()
 cu <Tab>
-J()
+BA()
 q = getcmdline()
 const c = getcompletion(q, 'cmdline')
 if !c
@@ -217,7 +220,7 @@ pos: b,
 })
 setcmdline(q .. getbufline(winbufnr(o), 1)[0])
 enddef
-def J()
+def BA()
 if !!o
 popup_close(o)
 o = 0
@@ -232,6 +235,13 @@ endif
 return a
 enddef
 g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
+au vimrc CmdlineChanged * {
+const c = getcmdline()
+const w = G()
+const h = c->strdisplaywidth() / w + 1
+&cmdheight = h
+}
+com! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>

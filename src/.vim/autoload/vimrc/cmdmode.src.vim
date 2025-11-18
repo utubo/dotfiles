@@ -156,7 +156,7 @@ export def UpdatePopup(timer: number)
 		return
 	endif
 	const text = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
-	if &columns < strdisplaywidth(text)
+	if GetCmdlineWidth() < strdisplaywidth(text)
 		ClosePopup()
 	else
 		popup_settext(popup.win, text)
@@ -179,6 +179,10 @@ enddef
 
 def Getcmdscreenpos(): number
 	return getcmdscreenpos() - GetTabpanelWidth()
+enddef
+
+def GetCmdlineWidth(): number
+	return &columns - GetTabpanelWidth()
 enddef
 
 def GetTabpanelWidth(): number
@@ -285,6 +289,17 @@ export def ForVim9skk(popup_pos: any): any
 	return popup_pos
 enddef
 g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
+
+# cmdlineheightを自動調整してポップアップがずれないようにする
+au vimrc CmdlineChanged * {
+	const c = getcmdline()
+	const w = GetCmdlineWidth()
+	const h = c->strdisplaywidth() / w + 1
+	&cmdheight = h
+}
+# でもcmdheightを再設定するとechoが消えちゃう
+# 遅延してエコーさせるやつ作っておくか…
+command! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 # }}}
 
 # コマンドモードのマッピングとか {{{
@@ -301,3 +316,4 @@ export def ApplySettings()
 	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
 enddef
 # }}}
+
