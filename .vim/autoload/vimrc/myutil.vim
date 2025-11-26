@@ -158,7 +158,7 @@ enddef
 export def PopupCursorPos()
 const p = getcurpos()
 const a = synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')
-popup_create([$'{p[1]}:{p[2]}', a], {
+popup_create($'{p[1]}:{p[2]}({a})', {
 pos: 'botleft',
 line: 'cursor-1',
 col: 'cursor+1',

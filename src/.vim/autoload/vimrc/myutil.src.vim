@@ -192,7 +192,7 @@ export def PopupCursorPos()
 	const p = getcurpos()
 	# ついでにハイライト名も表示しちゃう
 	const hiname = synID(line('.'), col('.'), 1)->synIDattr('name')->substitute('^$', 'Normal', '')
-	popup_create([$'{p[1]}:{p[2]}', hiname], {
+	popup_create($'{p[1]}:{p[2]}({hiname})', {
 		pos: 'botleft',
 		line: 'cursor-1',
 		col: 'cursor+1',
