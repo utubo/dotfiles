@@ -177,7 +177,7 @@ ono I <Plug>(textobj-twochars-i)
 com! UpdateVim packadd vim-update|call vimupdate#Update()
 vimrc#lexima#LazyLoad()
 vimrc#lsp#LazyLoad()
-Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>
+Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 packadd hlyank
