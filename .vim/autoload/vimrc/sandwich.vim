@@ -1,5 +1,5 @@
 vim9script
-export def LazyLoad(a: string)
+export def LazyLoad()
 Enable g:sandwich_no_default_key_mappings
 Enable g:operator_sandwich_no_default_key_mappings
 packadd vim-sandwich
@@ -23,6 +23,7 @@ xm Sd <Plug>(operator-sandwich-delete)
 nm Sr <Plug>(operator-sandwich-replace)ab
 xm Sr <Plug>(operator-sandwich-replace)
 nn S <Plug>(operator-sandwich-add)iw
+nn <Space>S <Plug>(operator-sandwich-add)
 xn S <Plug>(operator-sandwich-add)
 nm <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 nm S$ vg_S
@@ -31,7 +32,6 @@ au vimrc User OperatorSandwichAddPost vimrc#sandwich#FixSandwichPos()
 au vimrc User OperatorSandwichDeletePost vimrc#sandwich#RemoveAirBuns()
 xn Sm <ScriptCmd>vimrc#sandwich#BigMac()<CR>
 nm Sm viwSm
-feedkeys(a, 'it')
 enddef
 def! g:CommentString(a: number): string
 return &commentstring->split('%s')->get(a, '')
@@ -68,7 +68,7 @@ feedkeys('S')
 else
 setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-feedkeys('gvS')
+feedkeys("gv\<Plug>(operator-sandwich-add)")
 endif
 endif
 enddef

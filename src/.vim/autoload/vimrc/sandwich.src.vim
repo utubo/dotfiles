@@ -1,6 +1,6 @@
 vim9script
 
-export def LazyLoad(prefix: string)
+export def LazyLoad()
 	Enable g:sandwich_no_default_key_mappings
 	Enable g:operator_sandwich_no_default_key_mappings
 	packadd vim-sandwich
@@ -24,6 +24,7 @@ export def LazyLoad(prefix: string)
 	nmap Sr <Plug>(operator-sandwich-replace)ab
 	xmap Sr <Plug>(operator-sandwich-replace)
 	nnoremap S <Plug>(operator-sandwich-add)iw
+	nnoremap <Space>S <Plug>(operator-sandwich-add)
 	xnoremap S <Plug>(operator-sandwich-add)
 	nmap <expr> Srr (matchstr(getline('.'), '[''"]', col('.')) ==# '"') ? "Sr'" : 'Sr"'
 	# `S${`と被ってしまうけどまぁいいか
@@ -35,7 +36,6 @@ export def LazyLoad(prefix: string)
 	# 内側に連続で挟むやつ
 	xnoremap Sm <ScriptCmd>vimrc#sandwich#BigMac()<CR>
 	nmap Sm viwSm
-	feedkeys(prefix, 'it')
 enddef
 
 # `<!-- -->`とかを返す
@@ -80,7 +80,7 @@ export def BigMac(first: bool = true)
 		else
 			setpos("'<", g:operator#sandwich#object.cursor.inner_head)
 			setpos("'>", g:operator#sandwich#object.cursor.inner_tail)
-			feedkeys('gvS')
+			feedkeys("gv\<Plug>(operator-sandwich-add)")
 		endif
 	endif
 enddef
