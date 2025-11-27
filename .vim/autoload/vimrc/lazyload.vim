@@ -45,14 +45,14 @@ exe $'normal! {a}'
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-var lk = 0
-def C(a: string, b: string, c: string, ...d: list<string>)
-lk += 1
-const e = a->substitute('map', 'noremap', '')
-const f = $'<SID>rp{lk}<Space>'
-exe $'{a} <script> {f} <Nop>'
-exe $'{e} <script> {f}{c} {d->join(' ')}{f}'
-exe $'{a} <script> {b}{c} {f}{c}'
+def C(a: string, b: string, c: string, d: string, ...e: list<string>)
+const f = b->substitute('map', 'noremap', '')
+const g = $'<SID>rp{a}<Space>'
+exe $'{b} <script> {g} <Nop>'
+exe $'{b} <script> {g}<CR> <Nop>'
+exe $'{b} <script> {g}<Esc> <Nop>'
+exe $'{f} <script> {g}{d} {e->join(' ')}{g}'
+exe $'{b} <script> {c}{d} {g}{d}'
 enddef
 com! -nargs=* RLK C(<f-args>)
 packadd lsp
@@ -206,8 +206,8 @@ au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
 nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
@@ -238,23 +238,21 @@ nm <LocalLeader>w <C-w>
 nn <LocalLeader>v <C-v>
 nn <LocalLeader>a <C-a>
 nn <LocalLeader>x <C-a>
-ino <SID>(indent)> <Nop>
-im <SID>(indent)><ESC> <Nop>
-im <SID>(indent)>t <C-t><SID>(indent)>
-im <SID>(indent)>d <C-d><SID>(indent)>
-im <LocalLeader>t <SID>(indent)>t
-im <LocalLeader>d <SID>(indent)>d
+RLK indent imap <LocalLeader> t <C-t>
+RLK indent imap <LocalLeader> d <C-d>
+RLK indent nmap <LocalLeader> t >>
+RLK indent nmap <LocalLeader> d <lt><lt>
+RLK indent xmap <LocalLeader> t >gv
+RLK indent xmap <LocalLeader> d <lt>gv
 ino <LocalLeader>v ;<CR>
 ino <LocalLeader>w <C-o>e<C-o>a
 ino <LocalLeader>k 「」<C-g>U<Left>
 ino <LocalLeader>u <Esc>u
 nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> <ScriptCmd>B('>>')<CR>
-RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>B('<<')<CR>
-RLK map! <LocalLeader> b <BS>
-RLK map! <LocalLeader> h <Left>
-RLK map! <LocalLeader> l <Right>
+RLK bs map! <LocalLeader> b <BS>
+RLK movecursor map! <LocalLeader> h <Left>
+RLK movecursor map! <LocalLeader> l <Right>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :

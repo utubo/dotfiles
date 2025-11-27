@@ -125,7 +125,7 @@ return a
 endif
 enddef
 nn <LocalLeader>f <ScriptCmd>execute $'buffer {g:Getchar2idx()}'<CR>
-nn <LocalLeader>d <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
+nn <LocalLeader>q <ScriptCmd>execute $'confirm bdel {g:Getchar2idx()}'<CR>
 nn <expr> ZB $"<Cmd>set background={&bg ==# 'dark' ? 'light' : 'dark'}<CR>"
 au vimrc ColorSchemePre * {
 g:rcsv_colorpairs = [

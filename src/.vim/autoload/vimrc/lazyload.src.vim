@@ -64,14 +64,14 @@ def KeepCurpos(expr: string)
 enddef
 
 # Repeatable last key
-# e.g. RLK cmap <Leader> h <Left>
-var rlk_id = 0
-def RLK(cmd: string, lhs: string, last: string, ...rhs: list<string>)
-	rlk_id += 1
+# e.g. RLK cmdcursor cmap <Leader> h <Left>
+def RLK(id: string, cmd: string, lhs: string, last: string, ...rhs: list<string>)
 	const nor = cmd->substitute('map', 'noremap', '')
 	# <Space> prevents ghoast char.
-	const sidkey = $'<SID>rp{rlk_id}<Space>'
+	const sidkey = $'<SID>rp{id}<Space>'
 	execute $'{cmd} <script> {sidkey} <Nop>'
+	execute $'{cmd} <script> {sidkey}<CR> <Nop>'
+	execute $'{cmd} <script> {sidkey}<Esc> <Nop>'
 	execute $'{nor} <script> {sidkey}{last} {rhs->join(' ')}{sidkey}'
 	execute $'{cmd} <script> {lhs}{last} {sidkey}{last}'
 enddef
@@ -311,8 +311,8 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
 nnoremap <A-J> <Cmd>copy.<CR>
@@ -357,13 +357,12 @@ nnoremap <LocalLeader>v <C-v>
 nnoremap <LocalLeader>a <C-a>
 nnoremap <LocalLeader>x <C-a>
 # `;ttt...`、`;ddd...`でインデント調整
-# NOTE: マッピング末尾の文字がカーソル位置に表示されるのでタブっぽい記号`>`にしておく
-inoremap <SID>(indent)> <Nop>
-imap <SID>(indent)><ESC> <Nop>
-imap <SID>(indent)>t <C-t><SID>(indent)>
-imap <SID>(indent)>d <C-d><SID>(indent)>
-imap <LocalLeader>t <SID>(indent)>t
-imap <LocalLeader>d <SID>(indent)>d
+RLK indent imap <LocalLeader> t <C-t>
+RLK indent imap <LocalLeader> d <C-d>
+RLK indent nmap <LocalLeader> t >>
+RLK indent nmap <LocalLeader> d <lt><lt>
+RLK indent xmap <LocalLeader> t >gv
+RLK indent xmap <LocalLeader> d <lt>gv
 # その他
 inoremap <LocalLeader>v ;<CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a
@@ -371,11 +370,9 @@ inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
 nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
-RLK nmap <LocalLeader> <Tab> <ScriptCmd>KeepCurpos('>>')<CR>
-RLK nmap <LocalLeader> <S-Tab> <ScriptCmd>KeepCurpos('<<')<CR>
-RLK map! <LocalLeader> b <BS>
-RLK map! <LocalLeader> h <Left>
-RLK map! <LocalLeader> l <Right>
+RLK bs map! <LocalLeader> b <BS>
+RLK movecursor map! <LocalLeader> h <Left>
+RLK movecursor map! <LocalLeader> l <Right>
 # }}}
 
 # ------------------------------------------------------
