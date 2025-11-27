@@ -175,6 +175,10 @@ g:popselect = {
 	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
 	# 一時ファイルやヘルプファイルを除外
 	files_ignore_regexp: '^/var/tmp\|/vim/vim91/doc/',
+	# 視点移動を少なく
+	pos: 'topleft',
+	col: 'cursor',
+	line: 'cursor+1',
 }
 nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
