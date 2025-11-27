@@ -356,6 +356,13 @@ nmap <LocalLeader>w <C-w>
 nnoremap <LocalLeader>v <C-v>
 nnoremap <LocalLeader>a <C-a>
 nnoremap <LocalLeader>x <C-a>
+# `;ttt...`、`;ddd...`でインデント調整
+# NOTE: マッピング末尾の文字がカーソル位置に表示されるのでタブっぽい記号`>`にしておく
+inoremap <SID>(indent)> <Nop>
+imap <SID>(indent)>t <C-t><SID>(indent)>
+imap <SID>(indent)>d <C-d><SID>(indent)>
+imap <LocalLeader>t <SID>(indent)>t
+imap <LocalLeader>d <SID>(indent)>d
 # その他
 inoremap <LocalLeader>v ;<CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a

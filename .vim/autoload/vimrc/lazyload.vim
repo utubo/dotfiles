@@ -238,6 +238,11 @@ nm <LocalLeader>w <C-w>
 nn <LocalLeader>v <C-v>
 nn <LocalLeader>a <C-a>
 nn <LocalLeader>x <C-a>
+ino <SID>(indent)> <Nop>
+im <SID>(indent)>t <C-t><SID>(indent)>
+im <SID>(indent)>d <C-d><SID>(indent)>
+im <LocalLeader>t <SID>(indent)>t
+im <LocalLeader>d <SID>(indent)>d
 ino <LocalLeader>v ;<CR>
 ino <LocalLeader>w <C-o>e<C-o>a
 ino <LocalLeader>k 「」<C-g>U<Left>
