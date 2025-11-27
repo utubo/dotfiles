@@ -147,3 +147,8 @@ nnoremap <buffer> <LocalReader>r <ScriptCmd>ElaseListMark()<CR>
 vnoremap <buffer> <LocalReader>r <ScriptCmd>ElaseListMark()<CR>
 #}}} -------------------------------------------------------
 
+# ----------------------------------------------------------
+# その他定義 {{{
+g:vim_markdown_new_list_item_indent = 2
+#}}} -------------------------------------------------------
+
