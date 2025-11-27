@@ -63,19 +63,18 @@ def KeepCurpos(expr: string)
 	setpos('.', cur)
 enddef
 
-# Repeatable last key
-# e.g. RLK cmdcursor cmap <Leader> h <Left>
-def RLK(id: string, cmd: string, lhs: string, last: string, ...rhs: list<string>)
-	const nor = cmd->substitute('map', 'noremap', '')
+# SubMode
+def SubMode(name: string, cmd: string, enter: string, lhs: string, ...rhs: list<string>)
 	# <Space> prevents ghoast char.
-	const sidkey = $'<SID>rp{id}<Space>'
-	execute $'{cmd} <script> {sidkey} <Nop>'
-	execute $'{cmd} <script> {sidkey}<CR> <Nop>'
-	execute $'{cmd} <script> {sidkey}<Esc> <Nop>'
-	execute $'{nor} <script> {sidkey}{last} {rhs->join(' ')}{sidkey}'
-	execute $'{cmd} <script> {lhs}{last} {sidkey}{last}'
+	const s = $'<SID>sub{name}<Space>'
+	const nor = cmd->substitute('map', 'noremap', '')
+	execute $'{cmd} <script> {s} <Nop>'
+	execute $'{cmd} <script> {s}<CR> <Nop>'
+	execute $'{cmd} <script> {s}<Esc> <Nop>'
+	execute $'{nor} <script> {s}{lhs} {rhs->join(' ')}{s}'
+	execute $'{cmd} <script> {enter}{lhs} {s}{lhs}'
 enddef
-command! -nargs=* RLK RLK(<f-args>)
+command! -nargs=* SubMode SubMode(<f-args>)
 # }}}
 
 # ------------------------------------------------------
@@ -311,8 +310,8 @@ set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
-Each X=+,-,>,<lt> Each Y=nmap,tmap RLK winsize Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap SubMode winsize Y <C-w> X <C-w>X
+Each X=+,-,>,<lt> Each Y=nmap,tmap SubMode winsize Y <C-w> X <C-w>X
 # 感謝
 # https://zenn.dev/vim_jp/articles/43d021f461f3a4
 nnoremap <A-J> <Cmd>copy.<CR>
@@ -357,12 +356,12 @@ nnoremap <LocalLeader>v <C-v>
 nnoremap <LocalLeader>a <C-a>
 nnoremap <LocalLeader>x <C-a>
 # `;ttt...`、`;ddd...`でインデント調整
-RLK indent imap <LocalLeader> t <C-t>
-RLK indent imap <LocalLeader> d <C-d>
-RLK indent nmap <LocalLeader> t >>
-RLK indent nmap <LocalLeader> d <lt><lt>
-RLK indent xmap <LocalLeader> t >gv
-RLK indent xmap <LocalLeader> d <lt>gv
+SubMode indent imap <LocalLeader> t <C-t>
+SubMode indent imap <LocalLeader> d <C-d>
+SubMode indent nmap <LocalLeader> t >>
+SubMode indent nmap <LocalLeader> d <lt><lt>
+SubMode indent xmap <LocalLeader> t >gv
+SubMode indent xmap <LocalLeader> d <lt>gv
 # その他
 inoremap <LocalLeader>v ;<CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a
@@ -370,9 +369,9 @@ inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
 nnoremap <LocalLeader>r "
 nnoremap <LocalLeader>rr "0p
-RLK bs map! <LocalLeader> b <BS>
-RLK movecursor map! <LocalLeader> h <Left>
-RLK movecursor map! <LocalLeader> l <Right>
+SubMode bs map! <LocalLeader> b <BS>
+SubMode movecursor map! <LocalLeader> h <Left>
+SubMode movecursor map! <LocalLeader> l <Right>
 # }}}
 
 # ------------------------------------------------------

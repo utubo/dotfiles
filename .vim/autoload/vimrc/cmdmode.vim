@@ -246,8 +246,8 @@ export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 cno <LocalLeader>(ok) <CR>
-RLK cmdhistory cmap <LocalLeader> k <C-p>
-RLK cmdhistory cmap <LocalLeader> K <C-n>
+SubMode cmdhistory cmap <LocalLeader> k <C-p>
+SubMode cmdhistory cmap <LocalLeader> K <C-n>
 cno <LocalLeader>r <C-r>
 cno <expr> <LocalLeader>rr trim()->substitute('\n', ' \| ', 'g')
 cno <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')

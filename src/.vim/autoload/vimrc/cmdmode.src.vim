@@ -309,8 +309,8 @@ export def ApplySettings()
 	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
 	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
 	cnoremap <LocalLeader>(ok) <CR>
-	RLK cmdhistory cmap <LocalLeader> k <C-p>
-	RLK cmdhistory cmap <LocalLeader> K <C-n>
+	SubMode cmdhistory cmap <LocalLeader> k <C-p>
+	SubMode cmdhistory cmap <LocalLeader> K <C-n>
 	cnoremap <LocalLeader>r <C-r>
 	cnoremap <expr> <LocalLeader>rr trim()->substitute('\n', ' \| ', 'g')
 	cnoremap <expr> <LocalLeader>re escape(@", '~^$.*?/\[]')->substitute('\n', '\\n', 'g')
