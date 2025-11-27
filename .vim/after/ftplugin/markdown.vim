@@ -118,7 +118,7 @@ const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' '
 setline(l, a)
 endfor
 enddef
-ino <buffer> <LocalReader>r <CR><ScriptCmd>G()<CR>
-nn <buffer> <LocalReader>r <ScriptCmd>G()<CR>
-vn <buffer> <LocalReader>r <ScriptCmd>G()<CR>
+ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
+nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
+vn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
 g:vim_markdown_new_list_item_indent = 2
