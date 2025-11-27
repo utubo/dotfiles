@@ -211,6 +211,8 @@ def MyMatches()
 	matchadd('Delimiter', 'WARN\|注意\|注:\|[★※][^\s()（）]*')
 	matchadd('Todo', 'TODO')
 	matchadd('Todo', '^\s*- \zs\[ \]')
+	matchadd('Comment', 'DONE')
+	matchadd('Comment', '^\s*- \zs\[x\]')
 	matchadd('Error', 'ERROR')
 	matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 	# 全角空白と半角幅の円記号
