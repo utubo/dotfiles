@@ -6,10 +6,11 @@ b:did_my_after_ftplugin = 1
 aug after_ftplugin_md
 au!
 aug END
-def A()
-const d = getregionpos(getpos('v'), getpos('.'))
-for p in d
-const l = p[0][1]
+def A(): list<number>
+return getregionpos(getpos('v'), getpos('.'))->map((_, v) => v[0][1])
+enddef
+def B()
+for l in A()
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
 if a ==# b
@@ -26,10 +27,10 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> <LocalLeader>o <ScriptCmd>A()<CR>
-ino <buffer> <LocalLeader>o <ScriptCmd>A()<CR>
-def B()
-for l in g:VRange()
+no <buffer> <LocalLeader>o <ScriptCmd>B()<CR>
+ino <buffer> <LocalLeader>o <ScriptCmd>B()<CR>
+def C()
+for l in A()
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '')
 if a ==# b
@@ -43,9 +44,10 @@ setpos('.', c)
 endif
 endfor
 enddef
-nn <buffer> <Space>- <ScriptCmd>B()<CR>
-ino <buffer> <LocalLeader>- <ScriptCmd>B()<CR>
-def C(): string
+nn <buffer> <Space>- <ScriptCmd>C()<CR>
+ino <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
+xn <buffer> <Space>- <ScriptCmd>C()<CR>
+def D(): string
 var [a, b] = [line('.'), line('v')]->sort('n')
 if mode() ==? 'V'
 elseif &ft !=# 'markdown'
@@ -82,11 +84,11 @@ var h = g ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
 return $'%#{h}#✅%*{f}/{f + g}{e}'
 endif
 enddef
-def D()
+def E()
 if mode()[0] !=# 'n'
 return
 endif
-const a = C()
+const a = D()
 if a !=# get(w:, 'ruler_mdcb', '')
 w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
@@ -99,26 +101,26 @@ def CursorMovedDelayExec(a: any = 0)
 m = 0
 if n !=# 0
 n = 0
-D()
+E()
 endif
 enddef
-def F()
+def G()
 if m !=# 0
 n += 1
 return
 endif
-D()
+E()
 n = 0
 m = timer_start(k, CursorMovedDelayExec)
 enddef
-au after_ftplugin_md CursorMoved <buffer> F()
-def G()
-for l in g:VRange()
+au after_ftplugin_md CursorMoved <buffer> G()
+def H()
+for l in A()
 const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
 setline(l, a)
 endfor
 enddef
-ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
-nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
-vn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
+ino <buffer> <LocalLeader>r <CR><ScriptCmd>H()<CR>
+nn <buffer> <LocalLeader>r <ScriptCmd>H()<CR>
+xn <buffer> <LocalLeader>r <ScriptCmd>H()<CR>
 g:vim_markdown_new_list_item_indent = 2

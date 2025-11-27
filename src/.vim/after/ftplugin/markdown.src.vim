@@ -9,13 +9,14 @@ augroup after_ftplugin_md
 	au!
 augroup END
 
+def GetRange(): list<number>
+	return getregionpos(getpos('v'), getpos('.'))->map((_, v) => v[0][1])
+enddef
 
 # ----------------------------------------------------------
 # チェックボックスオンオフ {{{
 def ToggleCheckBox()
-	const pos = getregionpos(getpos('v'), getpos('.'))
-	for p in pos
-		const l = p[0][1]
+	for l in GetRange()
 		const a = getline(l)
 		var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
 		if a ==# b
@@ -39,7 +40,7 @@ inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox()<CR>
 # ----------------------------------------------------------
 # リストオンオフ {{{
 def ToggleListMark()
-	for l in g:VRange()
+	for l in GetRange()
 		const a = getline(l)
 		var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '') # remove list-mark
 		if a ==# b
@@ -55,6 +56,7 @@ def ToggleListMark()
 enddef
 nnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
 inoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
+xnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -137,14 +139,14 @@ au after_ftplugin_md CursorMoved <buffer> CursorMovedDelay()
 # ----------------------------------------------------------
 # リスト項目内で改行 {{{
 def ElaseListMark()
-	for l in g:VRange()
+	for l in GetRange()
 		const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
 		setline(l, a)
 	endfor
 enddef
 inoremap <buffer> <LocalLeader>r <CR><ScriptCmd>ElaseListMark()<CR>
 nnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
-vnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
+xnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
