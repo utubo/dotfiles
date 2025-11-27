@@ -239,6 +239,7 @@ nn <LocalLeader>v <C-v>
 nn <LocalLeader>a <C-a>
 nn <LocalLeader>x <C-a>
 ino <SID>(indent)> <Nop>
+im <SID>(indent)><ESC> <Nop>
 im <SID>(indent)>t <C-t><SID>(indent)>
 im <SID>(indent)>d <C-d><SID>(indent)>
 im <LocalLeader>t <SID>(indent)>t
