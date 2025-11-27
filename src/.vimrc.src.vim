@@ -193,6 +193,8 @@ def MyHighlight()
 	})
 		execute $'hi LspDiagSign{a}Text {x}bg={signBg} {x}fg={GetHl(b).fg}'
 	endfor
+	# Commentが斜体になってるcolorshemeが多い…
+	hi Comment gui=none cterm=none
 	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 	# E28: No such highlight group name: luaParenError " See issue #11277
 	hi link luaParenError Error

@@ -152,6 +152,7 @@ Warning: 'WarningMsg',
 })
 exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={B(b).fg}'
 endfor
+hi Comment gui=none cterm=none
 hi link luaParenError Error
 enddef
 au vimrc VimEnter,ColorScheme * C()
