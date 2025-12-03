@@ -244,7 +244,7 @@ SubMode indent nmap <LocalLeader> t >>
 SubMode indent nmap <LocalLeader> d <lt><lt>
 SubMode indent xmap <LocalLeader> t >gv
 SubMode indent xmap <LocalLeader> d <lt>gv
-ino <LocalLeader>v ;<CR>
+im <LocalLeader><Space> <CR>
 ino <LocalLeader>w <C-o>e<C-o>a
 ino <LocalLeader>k 「」<C-g>U<Left>
 ino <LocalLeader>u <Esc>u

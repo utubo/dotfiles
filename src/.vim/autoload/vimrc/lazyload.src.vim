@@ -363,7 +363,7 @@ SubMode indent nmap <LocalLeader> d <lt><lt>
 SubMode indent xmap <LocalLeader> t >gv
 SubMode indent xmap <LocalLeader> d <lt>gv
 # その他
-inoremap <LocalLeader>v ;<CR>
+imap <LocalLeader><Space> <CR>
 inoremap <LocalLeader>w <C-o>e<C-o>a
 inoremap <LocalLeader>k 「」<C-g>U<Left>
 inoremap <LocalLeader>u <Esc>u
