@@ -64,15 +64,15 @@ def KeepCurpos(expr: string)
 enddef
 
 # SubMode
-def SubMode(name: string, cmd: string, enter: string, lhs: string, ...rhs: list<string>)
+def SubMode(name: string, mapcmd: string, switch: string, lhs: string, ...rhs: list<string>)
 	# <Space> prevents ghoast char.
 	const s = $'<SID>sub{name}<Space>'
-	const nor = cmd->substitute('map', 'noremap', '')
-	execute $'{cmd} <script> {s} <Nop>'
-	execute $'{cmd} <script> {s}<CR> <Nop>'
-	execute $'{cmd} <script> {s}<Esc> <Nop>'
-	execute $'{nor} <script> {s}{lhs} {rhs->join(' ')}{s}'
-	execute $'{cmd} <script> {enter}{lhs} {s}{lhs}'
+	const norcmd = mapcmd->substitute('map', 'noremap', '')
+	execute $'{mapcmd} <script> {s} <Nop>'
+	execute $'{mapcmd} <script> {s}<CR> <Nop>'
+	execute $'{mapcmd} <script> {s}<Esc> <Nop>'
+	execute $'{norcmd} <script> {s}{lhs} {rhs->join(' ')}{s}'
+	execute $'{mapcmd} <script> {switch}{lhs} {s}{lhs}'
 enddef
 command! -nargs=* SubMode SubMode(<f-args>)
 # }}}
