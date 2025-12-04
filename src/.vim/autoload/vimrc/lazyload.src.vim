@@ -272,9 +272,9 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 
 # built-in {{{
 packadd hlyank
-packadd comment
-nmap <Space>c gcc
-xmap <Space>c gc
+nmap <Space>c <Cmd>packadd comment<CR>gcc
+xmap <Space>c <Cmd>packadd comment<CR>gc
+nnoremap <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
 # }}}
 
 # その他 {{{
