@@ -275,6 +275,7 @@ packadd hlyank
 nmap <Space>c <Cmd>packadd comment<CR>gcc
 xmap <Space>c <Cmd>packadd comment<CR>gc
 nnoremap <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
+g:helptoc = { popup_borderchars: [] }
 # }}}
 
 # その他 {{{

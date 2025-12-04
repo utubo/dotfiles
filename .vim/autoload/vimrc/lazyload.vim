@@ -187,6 +187,7 @@ packadd hlyank
 nm <Space>c <Cmd>packadd comment<CR>gcc
 xm <Space>c <Cmd>packadd comment<CR>gc
 nn <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
+g:helptoc = { popup_borderchars: [] }
 Enable g:rainbow_active
 g:auto_cursorline_wait_ms = &ut
 Each X=w,b,e,ge nnoremap X <Plug>(smartword-X)
