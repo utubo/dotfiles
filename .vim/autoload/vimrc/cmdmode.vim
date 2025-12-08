@@ -10,7 +10,7 @@ th: "\<C-u>tab help ",
 '9': "\<C-u>vim9cmd ",
 }->get(getcmdline(), ' ')
 enddef
-cno <expr> <Space> A()
+cm <expr> <Space> A()
 export def MoveFile(a: string)
 const b = expand('%')
 const c = expand(a)

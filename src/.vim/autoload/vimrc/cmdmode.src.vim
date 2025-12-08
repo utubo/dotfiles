@@ -12,7 +12,8 @@ def MyAbbrev(): string
 		'9': "\<C-u>vim9cmd ",
 	}->get(getcmdline(), ' ')
 enddef
-cnoremap <expr> <Space> MyAbbrev()
+# Note: <Space>をcnoremapするとcabbrevが効かなくなる
+cmap <expr> <Space> MyAbbrev()
 #}}}
 
 # ファイルを移動して保存 {{{
