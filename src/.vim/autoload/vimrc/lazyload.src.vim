@@ -661,22 +661,6 @@ nnoremap ' "
 nnoremap m '
 nnoremap M m
 
-# yiwとかしたときにカーソルを移動させたくないが、やりかたが微妙…
-g:preOpeCurpos = getcurpos()
-def OpeWithKeepCurpos(expr: string)
-	g:preOpeCurpos = getcurpos()
-	au vimrc SafeState * ++once setpos('.', g:preOpeCurpos)
-	feedkeys(expr, 'n')
-enddef
-Each key=y,= nnoremap key <ScriptCmd>OpeWithKeepCurpos('key')<CR>
-
-# 極々個人的に多い操作
-nnoremap <Space>r :!<Up>
-# }}}
-
-# ------------------------------------------------------
-# 様子見中 使わなそうなら削除する {{{
-
 # f,F,t,Tの時だけセミコロンとカンマを復活させる {{{
 def UnmapSemi(c: string): string
 	nnoremap <nowait> <expr> ; UnmapSemi(';')
@@ -689,6 +673,30 @@ enddef
 Each X=f,F,t,T nnoremap <expr> X UnmapSemi('X')
 # }}}
 
+# yiwとかしたときにカーソルを移動させたくないが、やりかたが微妙…
+g:preOpCurpos = getcurpos()
+def OpWithKeepCurpos(expr: string)
+	g:preOpCurpos = getcurpos()
+	au vimrc SafeState * ++once setpos('.', g:preOpCurpos)
+	feedkeys(expr, 'n')
+enddef
+Each key=y,= nnoremap key <ScriptCmd>OpWithKeepCurpos('key')<CR>
+
+# 極々個人的に多い操作
+nnoremap <Space>r :!<Up>
+
+# typoの量がやばすぎるので重くてもデフォルトでオンにする(戒め)
+set spell spelllang=en_us,cjk
+nnoremap <F8> <Cmd>set spell! spell?<CR>
+
+# <C-]>に対して<C-[>→ESCになっちゃうのでNG→わかる
+# <C-t>に対して<C-]>→わからない
+nnoremap ]t <C-]>
+nnoremap [t <C-t>
+# }}}
+
+# ------------------------------------------------------
+# 様子見中 {{{
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
@@ -717,29 +725,16 @@ au vimrc Syntax vim {
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # }}}
 
-# typoの量がやばい！
-# やばすぎるので重くてもデフォルトでオンにする(戒め)
-set spell spelllang=en_us,cjk
-nnoremap <F8> <Cmd>set spell! spell?<CR>
-
 # CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
 nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xnoremap <F9> <ESC>1<C-w>s<C-w>w
 
-# <C-]>に対して<C-[>→ESCになっちゃうのでNG→わかる
-# <C-t>に対して<C-]>→わからない
-nnoremap ]t <C-]>
-nnoremap [t <C-t>
-
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-
-# noremap <F1> <Cmd>smile<CR>
 # }}}
 
 # ------------------------------------------------------
 # † あともう1回「これ使ってないな…」と思ったときに消す {{{
-
 # どっちも<C-w>w。左手オンリーと右手オンリーのマッピング
 nnoremap <Space>w <C-w>w
 nnoremap <Space>o <C-w>w
@@ -754,7 +749,6 @@ au vimrc FileType tsv,csv {
 # ほとんど使わない
 nnoremap qn <Cmd>bn<CR><Cmd>confirm bd<CR>
 nnoremap qp <Cmd>bp<CR><Cmd>confirm bd<CR>
-
 # }}}
 
 # ------------------------------------------------------

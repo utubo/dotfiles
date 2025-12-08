@@ -451,23 +451,27 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-g:preOpeCurpos = getcurpos()
-def BA(a: string)
-g:preOpeCurpos = getcurpos()
-au vimrc SafeState * ++once setpos('.', g:preOpeCurpos)
-feedkeys(a, 'n')
-enddef
-Each key=y,= nnoremap key <ScriptCmd>BA('key')<CR>
-nn <Space>r :!<Up>
-def BB(c: string): string
-nn <nowait> <expr> ; BB(';')
-nn <nowait> <expr> , BB(',')
+def BA(c: string): string
+nn <nowait> <expr> ; BA(';')
+nn <nowait> <expr> , BA(',')
 aug unmap-semi
 au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ;|unm ,
 aug END
 return c
 enddef
-Each X=f,F,t,T nnoremap <expr> X BB('X')
+Each X=f,F,t,T nnoremap <expr> X BA('X')
+g:preOpCurpos = getcurpos()
+def BB(a: string)
+g:preOpCurpos = getcurpos()
+au vimrc SafeState * ++once setpos('.', g:preOpCurpos)
+feedkeys(a, 'n')
+enddef
+Each key=y,= nnoremap key <ScriptCmd>BB('key')<CR>
+nn <Space>r :!<Up>
+set spell spelllang=en_us,cjk
+nn <F8> <Cmd>set spell! spell?<CR>
+nn ]t <C-]>
+nn [t <C-t>
 def BC()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
@@ -488,12 +492,8 @@ BD('SpellBad', '\s\~[=!][=#]\?\s')
 BD('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-set spell spelllang=en_us,cjk
-nn <F8> <Cmd>set spell! spell?<CR>
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
-nn ]t <C-]>
-nn [t <C-t>
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
