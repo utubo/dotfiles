@@ -123,6 +123,8 @@ au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 g:popselect = {
 borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
+filter_focused: true,
+want_number: false,
 files_ignore_regexp: '^/var/tmp\|/vim/vim91/doc/',
 pos: 'topleft',
 col: 'cursor',
@@ -495,6 +497,62 @@ com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
+def BE(): string
+if !exists('w:diffloc')
+return ''
+endif
+var a = line('.')
+var b = w:diffloc->indexof((_, v) => v[0] <= a && a <= v[1]) + 1
+return $', Cur:{!b ? '-' : b}/{len(w:diffloc)}'
+enddef
+def g:MyStatusLine(): string
+var a = '%f'
+if &diff
+if !exists('w:difflines')
+w:diffloc = []
+var b = 0
+var c = ''
+var d = 0
+var e = 0
+for f in range(1, line('$'))
+const h = diff_hlID(f, 1)->synIDattr('name')
+if h ==# 'DiffAdd'
+d += 1
+elseif h ==# 'DiffChange'
+e += 1
+endif
+if c ==# h
+continue
+endif
+c = h
+if !!b
+w:diffloc->add([b, f - 1])
+endif
+b = h ==# 'DiffAdd' || h ==# 'DiffChange' ? f : 0
+endfor
+if !!b
+w:diffloc->add([b, line('$')])
+endif
+w:difflines = $'Added:{d},Changed:{e}'
+w:difflocstr = BE()
+endif
+a = $'{w:difflines}{w:difflocstr}%@{a}'
+au vimrc CursorMoved * w:difflocstr = BE()
+endif
+return a
+enddef
+def BF()
+if zenmode#Toggle()
+return
+elseif !exists('g:has_mulitilinestatusline')
+return
+else
+set stlo=maxheight:2
+set stl=%{%g:MyStatusLine()%}
+endif
+enddef
+no ZZ <ScriptCmd>BF()<CR>
+au vimrc WinResized * redrawstatus
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
