@@ -742,8 +742,14 @@ def GetDiffLocStr(): string
 	endif
 	var ln = line('.')
 	var idx = w:diffloc->indexof((_, v) => v[0] <= ln && ln <= v[1]) + 1
-	return $', Cur:{!idx ? '-' : idx}/{len(w:diffloc)}'
+	return $'{!idx ? '-' : idx}/{len(w:diffloc)}'
 enddef
+
+def ClearDiffLoc()
+	silent! unlet w:difflines
+enddef
+
+au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * ClearDiffLoc()
 
 def g:MyStatusLine(): string
 	var stl = '%f'
@@ -776,7 +782,7 @@ def g:MyStatusLine(): string
 			w:difflines = $'Added:{added},Changed:{changed}'
 			w:difflocstr = GetDiffLocStr()
 		endif
-		stl = $'{w:difflines}{w:difflocstr}%@{stl}'
+		stl = $'{w:difflines}%={w:difflocstr}%@{stl}'
 		au vimrc CursorMoved * w:difflocstr = GetDiffLocStr()
 	endif
 	return stl

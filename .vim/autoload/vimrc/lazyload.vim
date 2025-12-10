@@ -503,8 +503,12 @@ return ''
 endif
 var a = line('.')
 var b = w:diffloc->indexof((_, v) => v[0] <= a && a <= v[1]) + 1
-return $', Cur:{!b ? '-' : b}/{len(w:diffloc)}'
+return $'{!b ? '-' : b}/{len(w:diffloc)}'
 enddef
+def BF()
+sil! unlet w:difflines
+enddef
+au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * BF()
 def g:MyStatusLine(): string
 var a = '%f'
 if &diff
@@ -536,12 +540,12 @@ endif
 w:difflines = $'Added:{d},Changed:{e}'
 w:difflocstr = BE()
 endif
-a = $'{w:difflines}{w:difflocstr}%@{a}'
+a = $'{w:difflines}%={w:difflocstr}%@{a}'
 au vimrc CursorMoved * w:difflocstr = BE()
 endif
 return a
 enddef
-def BF()
+def BG()
 if zenmode#Toggle()
 return
 elseif !exists('g:has_mulitilinestatusline')
@@ -551,7 +555,7 @@ set stlo=maxheight:2
 set stl=%{%g:MyStatusLine()%}
 endif
 enddef
-no ZZ <ScriptCmd>BF()<CR>
+no ZZ <ScriptCmd>BG()<CR>
 au vimrc WinResized * redrawstatus
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
