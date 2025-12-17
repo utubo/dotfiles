@@ -68,6 +68,7 @@ Ezpack sheerun/vim-polyglot       # 色んなファイルタイプに対応
 EzpackInstallToOpt
 Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
 Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
+Ezpack utubo/vim-previewcmd <on> ModeChanged *:c # コマンド補完
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
 Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] # vim9scriptで作ったskk
@@ -76,7 +77,6 @@ EzpackLazyLoad
 Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動
 Ezpack utubo/vim-hlpairs          # 括弧をハイライト強化版
 Ezpack utubo/vim-minviml          # vimscriptをminify
-Ezpack utubo/vim-previewcmd       # コマンド補完
 Ezpack utubo/vim-registers-lite   # registers.nvimライクなプラグイン
 Ezpack utubo/vim-update           # gvim.exeの最新版をgithubから落とす
 Ezpack utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
