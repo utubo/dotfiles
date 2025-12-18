@@ -40,6 +40,8 @@ Ezpack yegappan/lsp
 EzpackLazyLoad
 Ezpack sheerun/vim-polyglot
 EzpackInstallToOpt
+Ezpack robenkleene/veep.vim <cmd> P
+EzpackInstallToOpt
 Ezpack utubo/vim-ezpack
 Ezpack utubo/vim-popselect
 Ezpack utubo/vim-previewcmd <on> ModeChanged *:c

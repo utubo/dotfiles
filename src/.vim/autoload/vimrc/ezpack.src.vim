@@ -48,6 +48,8 @@ Ezpack yegappan/lsp
 # 様子見中
 EzpackLazyLoad
 Ezpack sheerun/vim-polyglot       # 色んなファイルタイプに対応
+EzpackInstallToOpt
+Ezpack robenkleene/veep.vim <cmd> P # ビジュアルブロックに対してexcommand
 
 # 復活させるかも
 # Ezpack girishji/autosuggest.vim # うちのWindows環境で動きが怪しい

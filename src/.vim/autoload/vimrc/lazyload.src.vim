@@ -96,6 +96,7 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 g:vim9skkp = {
 	keymap: {
 		commit: ["\<CR>", 'l'],
+		cancel: ["\<C-g>", "\<C-e>"],
 	},
 	keep_midasi_mode: true,
 }
