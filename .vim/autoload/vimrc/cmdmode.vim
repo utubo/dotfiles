@@ -89,7 +89,7 @@ aug END
 J()
 m.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 m.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-g:previewcmd.enable = false
+g:previewcmd.popup_args = { col: 'cursor-1', line: 'cursor' }
 enddef
 def D()
 aug vimrc_cmdline_popup
@@ -106,7 +106,7 @@ BA()
 hi MsgArea None
 m.msghl->hlset()
 sil! cu <Tab>
-g:previewcmd.enable = true
+g:previewcmd.popup_args = {}
 redraw
 enddef
 export def UpdatePopup(a: number)

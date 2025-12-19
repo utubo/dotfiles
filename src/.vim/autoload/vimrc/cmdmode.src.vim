@@ -124,7 +124,7 @@ export def Popup()
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 	# これやっちゃうとビジュアルモードの選択範囲とかhlsearchがわかんなくなる
 	# popup.shade = matchadd('NonText', '.')
-	g:previewcmd.enable = false
+	g:previewcmd.popup_args = { col: 'cursor-1', line: 'cursor' }
 enddef
 
 def ClosePopup()
@@ -142,7 +142,7 @@ def ClosePopup()
 	hi MsgArea None
 	popup.msghl->hlset()
 	silent! cunmap <Tab>
-	g:previewcmd.enable = true
+	g:previewcmd.popup_args = {}
 	redraw
 enddef
 
