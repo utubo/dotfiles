@@ -55,7 +55,6 @@ exe $'{f} <script> {s}{d} {e->join(' ')}{s}'
 exe $'{b} <script> {c}{d} {s}{d}'
 enddef
 com! -nargs=* SubMode C(<f-args>)
-packadd lsp
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail

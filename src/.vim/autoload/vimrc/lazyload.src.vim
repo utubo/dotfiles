@@ -81,7 +81,6 @@ command! -nargs=* SubMode SubMode(<f-args>)
 # プラグイン {{{
 
 # このスクリプト内で必要となるプラグイン {{{
-packadd lsp
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail
