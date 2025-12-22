@@ -66,6 +66,7 @@ keymap: {
 commit: ["\<CR>", 'l'],
 cancel: ["\<C-g>", "\<C-e>"],
 },
+showmode: 'cursor',
 keep_midasi_mode: true,
 }
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)

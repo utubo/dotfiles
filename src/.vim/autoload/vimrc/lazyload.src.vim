@@ -98,6 +98,7 @@ g:vim9skkp = {
 		commit: ["\<CR>", 'l'],
 		cancel: ["\<C-g>", "\<C-e>"],
 	},
+	showmode: 'cursor',
 	keep_midasi_mode: true,
 }
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
