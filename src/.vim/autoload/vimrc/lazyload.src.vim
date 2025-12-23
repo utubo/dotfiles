@@ -611,6 +611,13 @@ xnoremap g9 :vim9cmd source<CR>
 # }}}
 
 # ------------------------------------------------------
+# &autocompleteはそのままだと表示しただけでバッファを更新してしまう {{{
+set noautocomplete
+au vimrc InsertEnter * au TextChangedI * ++once set autocomplete
+au vimrc InsertLeave * set noautocomplete
+# }}}
+
+# ------------------------------------------------------
 # その他細々したの {{{
 if has('clipboard')
 	au vimrc FocusGained * @" = @+

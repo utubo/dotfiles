@@ -414,6 +414,9 @@ nn g: <Cmd>.source<CR>
 nn g9 <Cmd>vim9cmd :.source<CR>
 xn g: :source<CR>
 xn g9 :vim9cmd source<CR>
+set noautocomplete
+au vimrc InsertEnter * au TextChangedI * ++once set autocomplete
+au vimrc InsertLeave * set noautocomplete
 if has('clipboard')
 au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"

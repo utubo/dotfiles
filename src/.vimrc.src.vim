@@ -37,7 +37,6 @@ set undofile
 set updatetime=2000
 set incsearch
 set hlsearch
-set autocomplete
 set shortmess+=FI # 後で:introする
 set noruler
 g:maplocalleader = ';'

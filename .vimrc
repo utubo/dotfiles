@@ -34,7 +34,6 @@ set udf
 set ut=2000
 set is
 set hls
-set autocomplete
 set shortmess+=FI
 set noru
 g:maplocalleader = ';'
