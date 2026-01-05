@@ -17,7 +17,7 @@ set nf=alpha,hex
 set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
-set fillchars=vert:\|
+set fillchars=
 set cursorline
 set hidden
 set showtabline=0
@@ -197,6 +197,8 @@ def MyHighlight()
 	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 	# E28: No such highlight group name: luaParenError " See issue #11277
 	hi link luaParenError Error
+	hi! link VertSplit TabLineFill
+	hi! link ZenmodeHoriz TabLineFill
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 

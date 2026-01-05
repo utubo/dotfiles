@@ -14,7 +14,7 @@ set nf=alpha,hex
 set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
-set fcs=vert:\|
+set fcs=
 set cursorline
 set hidden
 set showtabline=0
@@ -153,6 +153,8 @@ exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={B(b).fg}'
 endfor
 hi Comment gui=none cterm=none
 hi link luaParenError Error
+hi! link VertSplit TabLineFill
+hi! link ZenmodeHoriz TabLineFill
 enddef
 au vimrc VimEnter,ColorScheme * C()
 def D()
