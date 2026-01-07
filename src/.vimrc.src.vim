@@ -101,7 +101,7 @@ set fillchars+=fold:\ # 折り畳み時の「-」は半角空白
 
 # その他折りたたみ関係 {{{
 au vimrc ColorScheme * {
-	hi! link Folded Delimiter
+	hi! link Folded Directory
 	hi! link ALEVirtualTextWarning ALEWarningSign
 	hi! link ALEVirtualTextError ALEErrorSign
 }

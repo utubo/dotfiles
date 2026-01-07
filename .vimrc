@@ -78,7 +78,7 @@ enddef
 set fdt=g:MyFoldText()
 set fcs+=fold:\ 
 au vimrc ColorScheme * {
-hi! link Folded Delimiter
+hi! link Folded Directory
 hi! link ALEVirtualTextWarning ALEWarningSign
 hi! link ALEVirtualTextError ALEErrorSign
 }
