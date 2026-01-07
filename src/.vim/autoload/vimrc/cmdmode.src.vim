@@ -129,15 +129,16 @@ export def Popup(timer: number = 0)
 	endif
 	set guicursor=c:CursorTransparent
 	['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
+	popup.curpos = 0
+	BlinkStart()
 	# イベント等
 	augroup vimrc_cmdline_popup
 		au!
 		au ModeChanged c:[^c] ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	# MapTabToPum()
-	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
+	MapTabToPum()
 	g:previewcmd.popup_args = { col: popup.col, line: popup.line - 1 }
 enddef
 
@@ -157,7 +158,6 @@ enddef
 
 def GetVisualMatchPos(): list<any>
 	var pos = []
-	g:a = getregionpos(getpos('.'), getpos('v'), { type: mode() })
 	for p in getregionpos(getpos('.'), getpos('v'), { type: mode() })
 		const s = p[0]
 		const e = p[1]
@@ -227,15 +227,15 @@ export def UpdatePopup(timer: number)
 enddef
 
 def ShowPopupCursor()
-	win_execute(popup.win, 'call clearmatches()')
 	var c = Getcmdscreenpos()
-	if c !=# popup.curpos
-		popup.blink = true
-		popup.curpos = c
+	if c ==# popup.curpos
+		return
 	endif
-	if popup.blink
-		win_execute(popup.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
-	endif
+	popup.curpos = c
+	win_execute(popup.win, 'call clearmatches()')
+	win_execute(popup.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
+	popup.blink = false
+	BlinkStart()
 enddef
 
 def Getcmdscreenpos(): number
@@ -260,7 +260,21 @@ def GetTabpanelWidth(): number
 	return &columns < c ? 0 : c
 enddef
 
+def BlinkStart()
+	if !!popup.blinktimer
+		timer_stop(popup.blinktimer)
+	endif
+	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
+	popup.blink = true
+	BlinkPopupCursor(0)
+enddef
+
 export def BlinkPopupCursor(timer: number)
+	if popup.blink
+		hi! link vimrcCmdlineCursor Cursor
+	else
+		hi! link vimrcCmdlineCursor None
+	endif
 	popup.blink = !popup.blink
 enddef
 
@@ -330,13 +344,15 @@ export def PopupPum()
 		pos: pos,
 	})
 	setcmdline(pumpat .. getbufline(winbufnr(pumid), 1)[0])
+	g:previewcmd.enable = false
 enddef
 
 def ClosePum()
-	if  !!pumid
+	if !!pumid
 		popup_close(pumid)
 		pumid = 0
 	endif
+	g:previewcmd.enable = true
 enddef
 # }}}
 
