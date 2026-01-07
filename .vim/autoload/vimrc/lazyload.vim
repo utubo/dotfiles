@@ -285,7 +285,7 @@ Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each :=:,/,? Each nnoremap,vnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each :=:,/,? Each nnoremap,vnoremap <script>: <ScriptCmd>vimrc#cmdmode#PopupMapping()<CR>:
 Each :=:,/,? Each nnoremap,vnoremap <Leader>: :
 if has('win32')
 com! Powershell :bo terminal ++close pwsh

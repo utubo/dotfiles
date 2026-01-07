@@ -84,14 +84,30 @@ var popup = {
 	curpos: 0,
 	gcr: '',
 	msghl: [],
+	cursorlinehl: [],
 	offset: 0,
-	# shade: 0,
+	visual: 0,
+	shade: 0,
 }
-export def Popup()
+
+export def PopupMapping()
+	Popup()
+enddef
+
+export def Popup(timer: number = 0)
 	if popup.win !=# 0
-		echoerr 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
+		echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 		return
 	endif
+
+	# ポップアップを強調
+	popup.shade = matchadd(hlexists('EasyMotionShade') ? 'EasyMotionShade' : 'NonText', '.')
+
+	# Visualモードを確保
+	HighlightVisual()
+	popup.corsorlinehl = 'CursorLine'->hlget()
+	hi CursorLine None
+
 	# cmdlineを隠す
 	popup.msghl = 'MsgArea'->hlget()
 	const norhl = 'Normal'->hlget(true)[0]
@@ -103,7 +119,7 @@ export def Popup()
 	})
 	[msghl]->hlset()
 	# cmdline
-	popup.win = popup_create('  ', { col: 'cursor-1', line: 'cursor+1', zindex: 2 })
+	popup.win = popup_create('  ', { col: popup.col, line: popup.line, zindex: 2 })
 	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
 	# カーソル関係
@@ -119,18 +135,56 @@ export def Popup()
 		au ModeChanged c:[^c] ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
-	MapTab2OpenPum()
+	# MapTabToPum()
 	popup.blinktimer = timer_start(500, vimrc#cmdmode#BlinkPopupCursor, { repeat: -1 })
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-	# これやっちゃうとビジュアルモードの選択範囲とかhlsearchがわかんなくなる
-	# popup.shade = matchadd('NonText', '.')
-	g:previewcmd.popup_args = { col: 'cursor-1', line: 'cursor' }
+	g:previewcmd.popup_args = { col: popup.col, line: popup.line - 1 }
+enddef
+
+def HighlightVisual()
+	const m = mode()
+	if m ==# 'V' || m ==# 'v' || m ==# "\<C-v>"
+		var p = GetVisualMatchPos()
+		popup.visual = matchaddpos('Visual', p)
+		popup.col = p->copy()->map((i, v) => screenpos(0, v[0], v[1]).col)->min()
+		popup.line = p->copy()->map((i, v) => screenpos(0, v[0], v[1]).row)->max() + 1
+	else
+		popup.visual = 0
+		popup.col = 'cursor-1'
+		popup.line = screenpos(0, line('.'), col('.')).row + 1
+	endif
+enddef
+
+def GetVisualMatchPos(): list<any>
+	var pos = []
+	for p in getregionpos(getpos('.'), getpos('v'), { type: mode() })
+		const s = p[0]
+		const e = p[1]
+		var b = 0
+		if s[1] ==# e[1]
+			b = e[2] - s[2] + 1
+		else
+			b = getline(s[1])->len() - s[2]
+			for l in range(s[1] + 1, e[1] - 1)
+				b += getline(l)->len()
+			endfor
+			b += e[2]
+		endif
+		pos += [[s[1], s[2], b]]
+	endfor
+	return pos
 enddef
 
 def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
+	if popup.visual !=# 0
+		matchdelete(popup.visual)
+	endif
+	if popup.shade !=# 0
+		matchdelete(popup.shade)
+	endif
 	RestoreCursor()
 	timer_stop(popup.updatetimer)
 	popup.updatetimer = 0
@@ -141,6 +195,7 @@ def ClosePopup()
 	ClosePum()
 	hi MsgArea None
 	popup.msghl->hlset()
+	popup.cursorlinehl->hlset()
 	silent! cunmap <Tab>
 	g:previewcmd.popup_args = {}
 	redraw
@@ -217,7 +272,7 @@ enddef
 var pumid = 0
 var pumpat = ''
 
-def MapTab2OpenPum()
+def MapTabToPum()
 	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 
@@ -231,7 +286,7 @@ export def PumKeyDown(id: number, k: string): bool
 		noautocmd win_execute(pumid, $'normal! { l <= 1 ? 'G' : 'k' }')
 	else
 		ClosePum()
-		MapTab2OpenPum()
+		MapTabToPum()
 		return false
 	endif
 	setcmdline(pumpat .. i.bufnr->getbufline(getcurpos(pumid)[1])[0])
