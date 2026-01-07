@@ -424,7 +424,7 @@ Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each :=:,/,? Each N=n,v Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each :=:,/,? Each N=n,x Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 # 念のため元の:をバックアップしておく
 Each :=:,/,? nnoremap <Leader>: :
 # }}}
