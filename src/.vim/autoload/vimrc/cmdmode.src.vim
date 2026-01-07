@@ -101,7 +101,7 @@ export def Popup(timer: number = 0)
 	endif
 
 	# ポップアップを強調
-	popup.shade = matchadd(hlexists('EasyMotionShade') ? 'EasyMotionShade' : 'NonText', '.')
+	popup.shade = matchadd('NonText', '.')
 
 	# Visualモードを確保
 	HighlightVisual()

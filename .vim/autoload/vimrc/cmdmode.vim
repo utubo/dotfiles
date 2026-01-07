@@ -69,7 +69,7 @@ if o.win !=# 0
 echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 return
 endif
-o.shade = matchadd(hlexists('EasyMotionShade') ? 'EasyMotionShade' : 'NonText', '.')
+o.shade = matchadd('NonText', '.')
 D()
 o.corsorlinehl = 'CursorLine'->hlget()
 hi CursorLine None
