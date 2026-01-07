@@ -10,20 +10,22 @@ vim9script
 #   Each X=n,x Each Y=j,k Xmap Y gY
 #   → nmap j gj | nmap k gk | xmap j gj | xmap k gk
 # ※これ使うよりべたで書いたほうが起動は速い
-def UtilEach(qargs: string)
+def Each(qargs: string)
 	var [items, cmd] = qargs->split('^\S*\zs')
-	const kv = items->split('=')
-	const values = kv[-1]->split(',')
-	var keys = ['<UtilEach>']
-	if len(kv) ==# 1
-		cmd = $'{keys[0]} {cmd}'
-	else
-		keys = kv[0]->split(',')
+	# Each foo,bar buz
+	if items->stridx('=') ==# -1
+		for v in items->split(',')
+			execute $'{v} {cmd}'
+		endfor
+		return
 	endif
+	# Each X=foo,bar buz X
+	const kv = items->split('=')
+	const keys = kv[0]->split(',')
+	const values = kv[1]->split(',')
 	var i = 0
-	while i < values->len()
+	while i < len(values)
 		var c = cmd
-		var v = values[i]
 		for k in keys
 			c = c->substitute(k, values[i], 'g')
 			i += 1
@@ -31,7 +33,7 @@ def UtilEach(qargs: string)
 		execute c
 	endwhile
 enddef
-command! -nargs=* Each UtilEach(<q-args>)
+command! -nargs=* Each Each(<q-args>)
 
 # よくあるやつ
 command! -nargs=1 -complete=var Enable  <args> = 1
@@ -424,9 +426,10 @@ Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each :=:,/,? Each N=n,x Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+# cmdlineをポップアップする
+Each :=:,/,? Each nnoremap,vnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 # 念のため元の:をバックアップしておく
-Each :=:,/,? nnoremap <Leader>: :
+Each :=:,/,? Each nnoremap,vnoremap <Leader>: :
 # }}}
 
 # ------------------------------------------------------

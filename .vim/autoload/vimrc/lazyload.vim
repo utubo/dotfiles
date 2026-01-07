@@ -1,20 +1,20 @@
 vim9script
 def A(a: string)
 var [b, d] = a->split('^\S*\zs')
-const e = b->split('=')
-const f = e[-1]->split(',')
-var g = ['<UtilEach>']
-if len(e) ==# 1
-d = $'{g[0]} {d}'
-else
-g = e[0]->split(',')
+if b->stridx('=') ==# -1
+for v in b->split(',')
+exe $'{v} {d}'
+endfor
+return
 endif
+const e = b->split('=')
+const f = e[0]->split(',')
+const g = e[1]->split(',')
 var i = 0
-while i < f->len()
+while i < len(g)
 var c = d
-var v = f[i]
-for k in g
-c = c->substitute(k, f[i], 'g')
+for k in f
+c = c->substitute(k, g[i], 'g')
 i += 1
 endfor
 exe c
@@ -285,8 +285,8 @@ Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each :=:,/,? Each N=n,x Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each :=:,/,? nnoremap <Leader>: :
+Each :=:,/,? Each nnoremap,vnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each :=:,/,? Each nnoremap,vnoremap <Leader>: :
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
