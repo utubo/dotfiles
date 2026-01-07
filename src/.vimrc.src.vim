@@ -108,8 +108,8 @@ au vimrc ColorScheme * {
 set foldmethod=syntax
 au vimrc FileType markdown,yaml setlocal foldlevelstart=99 foldmethod=indent
 au vimrc FileType vim setlocal foldmethod=marker
-nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h') .. '<Cmd>noh<CR>'
-nnoremap l l<Cmd>normal zv<CR><Cmd>noh<CR>
+nnoremap <expr> h (col('.') ==# 1 && 0 < foldlevel('.') ? 'zc' : 'h')
+nnoremap l l<Cmd>normal zv<CR>
 nnoremap <silent> n n<Cmd>normal zv<CR>
 nnoremap <silent> N N<Cmd>normal zv<CR>
 nnoremap Z<Tab> <Cmd>set foldmethod=indent<CR>

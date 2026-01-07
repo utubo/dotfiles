@@ -186,6 +186,7 @@ vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
+packadd nohlsearch
 packadd hlyank
 nm <Space>c <Cmd>packadd comment<CR>gcc
 xm <Space>c <Cmd>packadd comment<CR>gc
@@ -284,9 +285,8 @@ Each nmap,xmap + :
 Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
-Each X=:,/,? nnoremap <Leader>X X
+Each :=:,/,? Each N=n,v Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
+Each :=:,/,? nnoremap <Leader>: :
 if has('win32')
 com! Powershell :bo terminal ++close pwsh
 nn SH <Cmd>Powershell<CR>
@@ -435,7 +435,7 @@ nn <CR> j0
 nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
-Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A') .. '<Cmd>noh<CR>'
+Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>

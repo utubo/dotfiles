@@ -275,6 +275,7 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 # }}}
 
 # built-in {{{
+packadd nohlsearch
 packadd hlyank
 nmap <Space>c <Cmd>packadd comment<CR>gcc
 xmap <Space>c <Cmd>packadd comment<CR>gc
@@ -423,10 +424,9 @@ Each nmap,xmap , :
 Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
-Each X=n,v Xnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
-Each X=/,? nnoremap X <Cmd>call vimrc#cmdmode#Popup()<CR><Cmd>noh<CR>X
+Each :=:,/,? Each N=n,v Nnoremap : <Cmd>call vimrc#cmdmode#Popup()<CR>:
 # 念のため元の:をバックアップしておく
-Each X=:,/,? nnoremap <Leader>X X
+Each :=:,/,? nnoremap <Leader>: :
 # }}}
 
 # ------------------------------------------------------
@@ -641,7 +641,7 @@ nnoremap <CR> j0
 nnoremap Y y$
 nnoremap <Space>p $p
 nnoremap <Space>P ^P
-Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A') .. '<Cmd>noh<CR>'
+Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>
