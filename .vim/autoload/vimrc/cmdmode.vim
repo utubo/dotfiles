@@ -114,23 +114,26 @@ o.line = screenpos(0, line('.'), col('.')).row + 1
 endif
 enddef
 def E(): list<any>
-var a = []
+var c = []
+g:a = getregionpos(getpos('.'), getpos('v'), { type: mode() })
 for p in getregionpos(getpos('.'), getpos('v'), { type: mode() })
 const s = p[0]
 const e = p[1]
 var b = 0
-if s[1] ==# e[1]
-b = e[2] - s[2] + 1
-else
+if s[1] !=# e[1]
 b = getline(s[1])->len() - s[2]
 for l in range(s[1] + 1, e[1] - 1)
 b += getline(l)->len()
 endfor
 b += e[2]
+elseif s[2] ==# e[2]
+continue
+else
+b = e[2] - s[2] + 1
 endif
-a += [[s[1], s[2], b]]
+c += [[s[1], s[2], b]]
 endfor
-return a
+return c
 enddef
 def F()
 aug vimrc_cmdline_popup
