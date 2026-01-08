@@ -66,6 +66,9 @@ def KeepCurpos(expr: string)
 enddef
 
 # SubMode
+# e.g.)
+# SubMode winsize nmap W j <C-w>+
+# -> You can type Wjjj... to expand the window.
 def SubMode(name: string, mapcmd: string, switch: string, lhs: string, ...rhs: list<string>)
 	# <Space> prevents ghoast char.
 	const s = $'<SID>sub{name}<Space>'
