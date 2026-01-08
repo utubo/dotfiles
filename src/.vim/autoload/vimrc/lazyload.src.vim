@@ -104,6 +104,29 @@ g:vim9skkp = {
 	},
 	showmode: 'cursor',
 	keep_midasi_mode: true,
+	roman_table: {
+		'ds': 'です',
+		'ms': 'ます',
+		'sr': 'する',
+		'st': 'して',
+		'ks': 'ください',
+		'g,': 'が、',
+		'dg': 'ですが、',
+		'mg': 'ますが、',
+		# 頻出単語
+		'bg': 'バグ',
+		'fx': '修正',
+		'cn': '設定',
+		'wn': 'ウィンドウ',
+		'ky': 'キー',
+		# 記号
+		'z*': '※',
+		'v.': '︙',
+		# Vim用語
+		'vb': 'バッファ',
+		'vm': 'マッピング',
+		'vk': 'キーマッピング',
+	},
 }
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 cnoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
