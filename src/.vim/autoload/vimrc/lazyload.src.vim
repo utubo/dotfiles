@@ -165,6 +165,7 @@ call textobj#user#plugin('nonwhitespace', {
 command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
+command! -nargs=* GitPush vimrc#git#Push(<q-args>)
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
@@ -173,7 +174,7 @@ nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gu <Cmd>Git pull<CR>
 nnoremap <Space>gl <Cmd>Git log<CR>
 # cmdlineをポップアップさせるためにnnoremapではなくてnmapにしておく
-nmap <Space>gp :<C-u>Git push<End>
+nmap <Space>gp :<C-u>GitPush<End>
 nmap <Space>gt :<C-u>GitTagPush<Space>
 nmap <Space>gC :<C-u>Git checkout %
 nmap <Space>gc :<C-u>GitCommit<Space><Tab>

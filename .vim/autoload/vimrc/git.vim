@@ -48,6 +48,9 @@ enddef
 export def GetLastCommitMessage(): string
 return g:System($'git log -1 --pretty=%B')->trim()
 enddef
+export def Push(a: string)
+echow g:System($'git push {a}')
+enddef
 export def TagPush(a: string)
 echow g:System($'git tag {shellescape(a)}')
 echow g:System($'git push origin {shellescape(a)}')
