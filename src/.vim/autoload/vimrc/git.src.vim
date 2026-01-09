@@ -62,6 +62,7 @@ enddef
 
 export def Push(args: string)
 	SystemW($'git push {args}')
+	silent! GitGutter
 enddef
 
 export def TagPush(tagname: string)

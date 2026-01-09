@@ -55,6 +55,7 @@ return g:System($'git log -1 --pretty=%B')->trim()
 enddef
 export def Push(a: string)
 A($'git push {a}')
+sil! GitGutter
 enddef
 export def TagPush(a: string)
 A($'git tag {shellescape(a)}')
