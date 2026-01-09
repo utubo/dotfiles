@@ -383,7 +383,6 @@ command! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 g:previewcmd = { enable: true }
 # }}}
 
-
 # コマンドモードのマッピングとか {{{
 export def ApplySettings()
 	command! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()

@@ -43,11 +43,11 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	echo g:System($'git commit -m {shellescape(msg)}')
+	echow g:System($'git commit -m {shellescape(msg)}')
 enddef
 
 export def Amend(msg: string)
-	echo g:System($'git commit --amend -m {shellescape(msg)}')
+	echow g:System($'git commit --amend -m {shellescape(msg)}')
 enddef
 
 export def GetLastCommitMessage(): string
@@ -55,8 +55,8 @@ export def GetLastCommitMessage(): string
 enddef
 
 export def TagPush(tagname: string)
-	echo g:System($'git tag {shellescape(tagname)}')
-	echo g:System($'git push origin {shellescape(tagname)}')
+	echow g:System($'git tag {shellescape(tagname)}')
+	echow g:System($'git push origin {shellescape(tagname)}')
 enddef
 
 # 以下はvimrcで定義する

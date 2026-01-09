@@ -40,15 +40,15 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
-ec g:System($'git commit -m {shellescape(a)}')
+echow g:System($'git commit -m {shellescape(a)}')
 enddef
 export def Amend(a: string)
-ec g:System($'git commit --amend -m {shellescape(a)}')
+echow g:System($'git commit --amend -m {shellescape(a)}')
 enddef
 export def GetLastCommitMessage(): string
 return g:System($'git log -1 --pretty=%B')->trim()
 enddef
 export def TagPush(a: string)
-ec g:System($'git tag {shellescape(a)}')
-ec g:System($'git push origin {shellescape(a)}')
+echow g:System($'git tag {shellescape(a)}')
+echow g:System($'git push origin {shellescape(a)}')
 enddef
