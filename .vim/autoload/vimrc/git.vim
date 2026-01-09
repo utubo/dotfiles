@@ -1,4 +1,9 @@
 vim9script
+def A(a: string)
+for l in g:SystemList(a)
+echow l
+endfor
+enddef
 export def Add(a: string)
 const b = getcwd()
 try
@@ -40,15 +45,18 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
-echow g:System($'git commit -m {shellescape(a)}')
+A($'git commit -m {shellescape(a)}')
 enddef
 export def Amend(a: string)
-echow g:System($'git commit --amend -m {shellescape(a)}')
+A($'git commit --amend -m {shellescape(a)}')
 enddef
 export def GetLastCommitMessage(): string
 return g:System($'git log -1 --pretty=%B')->trim()
 enddef
+export def Push(a: string)
+A($'git push {a}')
+enddef
 export def TagPush(a: string)
-echow g:System($'git tag {shellescape(a)}')
-echow g:System($'git push origin {shellescape(a)}')
+A($'git tag {shellescape(a)}')
+A($'git push origin {shellescape(a)}')
 enddef

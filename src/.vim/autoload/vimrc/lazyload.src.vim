@@ -44,6 +44,13 @@ def g:System(cmd: string): string
 	if !has('win32')
 		return system(cmd)
 	endif
+	return g:SystemList(cmd)->join("\n")
+enddef
+
+def g:SystemList(cmd: string): list<string>
+	if !has('win32')
+		return systemlist(cmd)
+	endif
 	var result = []
 	var job = job_start(cmd, {
 		out_cb: (j, s) => {
@@ -53,7 +60,7 @@ def g:System(cmd: string): string
 	while job_status(job) ==# 'run'
 		sleep 10m
 	endwhile
-	return join(result, "\n")
+	return result
 enddef
 
 # >>とかしたときにカーソル位置をキープ
@@ -165,6 +172,7 @@ call textobj#user#plugin('nonwhitespace', {
 command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
+command! -nargs=* GitPush vimrc#git#Push(<q-args>)
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nnoremap <Space>ga <Cmd>GitAdd -A<CR>
 nnoremap <Space>gs <Cmd>Git status -sb<CR>
@@ -173,7 +181,7 @@ nnoremap <Space>gd <Cmd>Gdiffsplit<CR>
 nnoremap <Space>gu <Cmd>Git pull<CR>
 nnoremap <Space>gl <Cmd>Git log<CR>
 # cmdlineをポップアップさせるためにnnoremapではなくてnmapにしておく
-nmap <Space>gp :<C-u>Git push<End>
+nmap <Space>gp :<C-u>GitPush<End>
 nmap <Space>gt :<C-u>GitTagPush<Space>
 nmap <Space>gC :<C-u>Git checkout %
 nmap <Space>gc :<C-u>GitCommit<Space><Tab>

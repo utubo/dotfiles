@@ -1,5 +1,11 @@
 vim9script
 
+def SystemW(cmd: string)
+	for l in g:SystemList(cmd)
+		echow l
+	endfor
+enddef
+
 export def Add(args: string)
 	const current_dir = getcwd()
 	try
@@ -43,20 +49,24 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	echow g:System($'git commit -m {shellescape(msg)}')
+	SystemW($'git commit -m {shellescape(msg)}')
 enddef
 
 export def Amend(msg: string)
-	echow g:System($'git commit --amend -m {shellescape(msg)}')
+	SystemW($'git commit --amend -m {shellescape(msg)}')
 enddef
 
 export def GetLastCommitMessage(): string
 	return g:System($'git log -1 --pretty=%B')->trim()
 enddef
 
+export def Push(args: string)
+	SystemW($'git push {args}')
+enddef
+
 export def TagPush(tagname: string)
-	echow g:System($'git tag {shellescape(tagname)}')
-	echow g:System($'git push origin {shellescape(tagname)}')
+	SystemW($'git tag {shellescape(tagname)}')
+	SystemW($'git push origin {shellescape(tagname)}')
 enddef
 
 # 以下はvimrcで定義する

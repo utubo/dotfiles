@@ -27,6 +27,12 @@ def g:System(a: string): string
 if !has('win32')
 return system(a)
 endif
+return g:SystemList(a)->join("\n")
+enddef
+def g:SystemList(a: string): list<string>
+if !has('win32')
+return systemlist(a)
+endif
 var b = []
 var c = job_start(a, {
 out_cb: (j, s) => {
@@ -36,7 +42,7 @@ b->add(s)
 while job_status(c) ==# 'run'
 sleep 10m
 endwhile
-return join(b, "\n")
+return b
 enddef
 def B(a: string)
 const b = getline('.')->len()
@@ -116,6 +122,7 @@ call textobj#user#plugin('nonwhitespace', {
 com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
+com! -nargs=* GitPush vimrc#git#Push(<q-args>)
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 nn <Space>ga <Cmd>GitAdd -A<CR>
 nn <Space>gs <Cmd>Git status -sb<CR>
@@ -123,7 +130,7 @@ nn <Space>gv <Cmd>Gvdiffsplit<CR>
 nn <Space>gd <Cmd>Gdiffsplit<CR>
 nn <Space>gu <Cmd>Git pull<CR>
 nn <Space>gl <Cmd>Git log<CR>
-nm <Space>gp :<C-u>Git push<End>
+nm <Space>gp :<C-u>GitPush<End>
 nm <Space>gt :<C-u>GitTagPush<Space>
 nm <Space>gC :<C-u>Git checkout %
 nm <Space>gc :<C-u>GitCommit<Space><Tab>
