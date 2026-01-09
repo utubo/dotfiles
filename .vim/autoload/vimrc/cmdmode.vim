@@ -256,22 +256,22 @@ enddef
 export def PopupPum()
 cu <Tab>
 BD()
-lk = getcmdline()
-const c = getcompletion(lk, 'cmdline')
+const a = getcmdline()
+const c = getcompletion(a, 'cmdline')
 if !c
 return
 endif
-lk = lk->substitute('[^ =]*$', '', '')
+lk = a->substitute('[^ =]*$', '', '')
 var p = screenpos(0, line('.'), col('.'))
-var a = &lines
-var b = 'topleft'
+var b = &lines
+var d = 'topleft'
 if p.row < &lines / 2
 p.row += 2
-a -= p.row
+b -= p.row
 else
 p.row
-a = p.row
-b = 'botleft'
+b = p.row
+d = 'botleft'
 endif
 q = popup_create(c, {
 zindex: 3,
@@ -282,8 +282,8 @@ mapping: 1,
 filter: 'vimrc#cmdmode#PumKeyDown',
 col: max([2, p.col]) + strdisplaywidth(lk) - 1,
 line: p.row,
-maxheight: a,
-pos: b,
+maxheight: b,
+pos: d,
 })
 setcmdline(lk .. getbufline(winbufnr(q), 1)[0])
 g:previewcmd.enable = false

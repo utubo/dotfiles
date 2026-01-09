@@ -314,12 +314,12 @@ enddef
 export def PopupPum()
 	cunmap <Tab>
 	ClosePum()
-	pumpat = getcmdline()
-	const c = getcompletion(pumpat, 'cmdline')
+	const cl = getcmdline()
+	const c = getcompletion(cl, 'cmdline')
 	if !c
 		return
 	endif
-	pumpat = pumpat->substitute('[^ =]*$', '', '')
+	pumpat = cl->substitute('[^ =]*$', '', '')
 	var p = screenpos(0, line('.'), col('.'))
 	var maxheight = &lines
 	var pos = 'topleft'
