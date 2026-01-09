@@ -111,7 +111,7 @@ g:vim9skkp = {
 	},
 	showmode: 'cursor',
 	keep_midasi_mode: true,
-	roman_table: {
+	roman_abbr: {
 		'ds': 'です',
 		'ms': 'ます',
 		'sr': 'する',
@@ -124,6 +124,7 @@ g:vim9skkp = {
 		'bg': 'バグ',
 		'fx': '修正',
 		'dl': '削除',
+		'chg': '変更',
 		'tk': '追加', # 'a'は'あ'なので'ad'にはできない…
 		'cn': '設定',
 		'wn': 'ウィンドウ',

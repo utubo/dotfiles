@@ -73,7 +73,7 @@ cancel: ["\<C-g>", "\<C-e>"],
 },
 showmode: 'cursor',
 keep_midasi_mode: true,
-roman_table: {
+roman_abbr: {
 'ds': 'です',
 'ms': 'ます',
 'sr': 'する',
@@ -85,6 +85,7 @@ roman_table: {
 'bg': 'バグ',
 'fx': '修正',
 'dl': '削除',
+'chg': '変更',
 'tk': '追加',
 'cn': '設定',
 'wn': 'ウィンドウ',
