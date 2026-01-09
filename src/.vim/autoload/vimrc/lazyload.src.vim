@@ -103,7 +103,7 @@ packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # }}}
 
-# vim9skk {{{
+# vim9skkp {{{
 g:vim9skkp = {
 	keymap: {
 		commit: ["\<CR>", 'l'],
@@ -115,7 +115,6 @@ g:vim9skkp = {
 		'ds': 'です',
 		'ms': 'ます',
 		'sr': 'する',
-		'nd': 'ので',
 		'st': 'して',
 		'ks': 'ください',
 		'g,': 'が、',
@@ -129,6 +128,7 @@ g:vim9skkp = {
 		'cn': '設定',
 		'wn': 'ウィンドウ',
 		'ky': 'キー',
+		'skk': 'SKK',
 		# 記号
 		'z*': '※',
 		'v.': '︙',
@@ -136,6 +136,7 @@ g:vim9skkp = {
 		'vb': 'バッファ',
 		'vm': 'マッピング',
 		'vk': 'キーマッピング',
+		'vp': 'プラグイン',
 	},
 }
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
