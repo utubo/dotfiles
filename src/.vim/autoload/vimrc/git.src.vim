@@ -50,6 +50,7 @@ enddef
 
 export def Commit(msg: string)
 	SystemW($'git commit -m {shellescape(msg)}')
+	silent! GitGutter
 enddef
 
 export def Amend(msg: string)

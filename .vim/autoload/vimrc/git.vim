@@ -46,6 +46,7 @@ return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪
 enddef
 export def Commit(a: string)
 A($'git commit -m {shellescape(a)}')
+sil! GitGutter
 enddef
 export def Amend(a: string)
 A($'git commit --amend -m {shellescape(a)}')
