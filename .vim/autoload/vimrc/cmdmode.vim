@@ -261,7 +261,7 @@ const c = getcompletion(lk, 'cmdline')
 if !c
 return
 endif
-lk = lk->substitute('\S*$', '', '')
+lk = lk->substitute('[^ =]*$', '', '')
 var p = screenpos(0, line('.'), col('.'))
 var a = &lines
 var b = 'topleft'
