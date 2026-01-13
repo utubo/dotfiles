@@ -15,12 +15,12 @@ enddef
 
 # ----------------------------------------------------------
 # チェックボックスオンオフ {{{
-def ToggleCheckBox()
+def ToggleCheckBox(x: string)
 	for l in GetRange()
 		const a = getline(l)
-		var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '') # check on
+		var b = substitute(a, '^\(\s*\)- \[ \]', $'\1- [{x}]', '') # check on
 		if a ==# b
-			b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '') # check off
+			b = substitute(a, '^\(\s*\)- \[[-x*]\]', '\1- [ ]', '') # check off
 		endif
 		if a ==# b
 			b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
@@ -33,8 +33,9 @@ def ToggleCheckBox()
 		endif
 	endfor
 enddef
-noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox()<CR>
-inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox()<CR>
+noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
+inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
+noremap  <buffer> <LocalLeader>- <ScriptCmd>ToggleCheckBox('-')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

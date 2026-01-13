@@ -9,12 +9,12 @@ aug END
 def A(): list<number>
 return getregionpos(getpos('v'), getpos('.'))->map((_, v) => v[0][1])
 enddef
-def B()
+def B(x: string)
 for l in A()
 const a = getline(l)
-var b = substitute(a, '^\(\s*\)- \[ \]', '\1- [x]', '')
+var b = substitute(a, '^\(\s*\)- \[ \]', $'\1- [{x}]', '')
 if a ==# b
-b = substitute(a, '^\(\s*\)- \[x\]', '\1- [ ]', '')
+b = substitute(a, '^\(\s*\)- \[[-x*]\]', '\1- [ ]', '')
 endif
 if a ==# b
 b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '')
@@ -27,8 +27,9 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> <LocalLeader>o <ScriptCmd>B()<CR>
-ino <buffer> <LocalLeader>o <ScriptCmd>B()<CR>
+no <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
+ino <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
+no <buffer> <LocalLeader>- <ScriptCmd>B('-')<CR>
 def C()
 for l in A()
 const a = getline(l)
