@@ -65,9 +65,6 @@ command! -range=% -nargs=? SwapExpr SwapExpr(<f-args>)
 
 # カーソル付近にポップアップ(like cmdline.vim) {{{
 # NOTE: colorschme defualtで微妙だけど知らない！
-# NOTE: cmdlineで<C-c>した場合、挙動がおかしくなるが
-#       cmdlineを抜けるまでポップアップのゴーストが残るので
-#       callback等では解決できない
 # NOTE: cmdline.vimと違うところ
 #       (これらが解決すればcmdline.vimに戻れるかも)
 #   - [ ] プロンプトの右側にパディング無し
