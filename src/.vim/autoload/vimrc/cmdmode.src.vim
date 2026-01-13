@@ -83,8 +83,7 @@ var popup = {
 	blinktimer: 0,
 	curpos: 0,
 	gcr: '',
-	msghl: [],
-	cursorlinehl: [],
+	hlback: {},
 	offset: 0,
 	visual: 0,
 	shade: 0,
@@ -100,16 +99,20 @@ export def Popup(timer: number = 0)
 		return
 	endif
 
+	# ハイライトをバックアップ
+	for h in ['MsgArea', 'CursorLine', 'Folded']
+		popup.hlback[h] = h->hlget()
+	endfor
+
 	# ポップアップを強調
 	popup.shade = matchadd('NonText', '.')
+	hi! link Folded NonText
 
 	# Visualモードを確保
 	HighlightVisual()
-	popup.corsorlinehl = 'CursorLine'->hlget()
 	hi CursorLine None
 
 	# cmdlineを隠す
-	popup.msghl = 'MsgArea'->hlget()
 	const norhl = 'Normal'->hlget(true)[0]
 	var msghl = 'MsgArea'->hlget(true)[0]
 	msghl = msghl->copy()->extend({
@@ -196,9 +199,10 @@ def ClosePopup()
 	popup_close(popup.win)
 	popup.win = 0
 	ClosePum()
-	hi MsgArea None
-	popup.msghl->hlset()
-	popup.cursorlinehl->hlset()
+	for h in popup.hlback->values()
+		execute $'hi {h[0].name} None'
+		h->hlset()
+	endfor
 	silent! cunmap <Tab>
 	g:previewcmd.popup_args = {}
 	redraw

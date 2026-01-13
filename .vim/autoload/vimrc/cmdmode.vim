@@ -55,8 +55,7 @@ blink: false,
 blinktimer: 0,
 curpos: 0,
 gcr: '',
-msghl: [],
-cursorlinehl: [],
+hlback: {},
 offset: 0,
 visual: 0,
 shade: 0,
@@ -69,11 +68,13 @@ if o.win !=# 0
 echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 return
 endif
+for h in ['MsgArea', 'CursorLine', 'Folded']
+o.hlback[h] = h->hlget()
+endfor
 o.shade = matchadd('NonText', '.')
+hi! link Folded NonText
 D()
-o.corsorlinehl = 'CursorLine'->hlget()
 hi CursorLine None
-o.msghl = 'MsgArea'->hlget()
 const b = 'Normal'->hlget(true)[0]
 var d = 'MsgArea'->hlget(true)[0]
 d = d->copy()->extend({
@@ -154,9 +155,10 @@ o.blinktimer = 0
 popup_close(o.win)
 o.win = 0
 BD()
-hi MsgArea None
-o.msghl->hlset()
-o.cursorlinehl->hlset()
+for h in o.hlback->values()
+exe $'hi {h[0].name} None'
+h->hlset()
+endfor
 sil! cu <Tab>
 g:previewcmd.popup_args = {}
 redraw
