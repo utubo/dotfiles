@@ -78,11 +78,11 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	System($'git commit -m {shellescape(msg)}', EchoW, RefreshSigns)
+	System($'git commit -m "{msg}"', EchoW, RefreshSigns)
 enddef
 
 export def Amend(msg: string)
-	System($'git commit --amend -m {shellescape(msg)}')
+	System($'git commit --amend -m "{msg}"')
 enddef
 
 export def GetLastCommitMessage(): string

@@ -68,10 +68,10 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
-A($'git commit -m {shellescape(a)}', EchoW, RefreshSigns)
+A($'git commit -m "{a}"', EchoW, RefreshSigns)
 enddef
 export def Amend(a: string)
-A($'git commit --amend -m {shellescape(a)}')
+A($'git commit --amend -m "{a}"')
 enddef
 export def GetLastCommitMessage(): string
 return B($'git log -1 --pretty=%B')[0]
