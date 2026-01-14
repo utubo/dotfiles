@@ -1,9 +1,36 @@
 vim9script
 
-def SystemW(cmd: string)
-	for l in g:SystemList(cmd)
-		echow l
-	endfor
+# minviml:fixed=Nop,EchoW,RefreshSigns
+def Nop(j: any, s: any)
+enddef
+
+def EchoW(j: any, s: any)
+	echow s
+enddef
+
+def RefreshSigns(j: any, s: any)
+	silent! GitGutter
+enddef
+
+def System(cmd: string, Out: func = EchoW, Cb: func = Nop)
+	var job = job_start(cmd, {
+		out_cb: Out,
+		exit_cb: Cb,
+	})
+enddef
+
+def SystemList(cmd: string): list<string>
+	var result = []
+	# NOTE: use job_start() instead system() for windows
+	var job = job_start(cmd, {
+		out_cb: (j, s) => {
+			result->add(s)
+		}
+	})
+	while job_status(job) ==# 'run'
+		sleep 10m
+	endwhile
+	return result
 enddef
 
 export def Add(args: string)
@@ -12,7 +39,7 @@ export def Add(args: string)
 		chdir(expand('%:p:h'))
 		echoh MoreMsg
 		echo 'git add --dry-run ' .. args
-		const list = g:System('git add --dry-run ' .. args)
+		const list = SystemList('git add --dry-run ' .. args)
 		if !!v:shell_error
 			echoh ErrorMsg
 			echo list
@@ -22,7 +49,7 @@ export def Add(args: string)
 			echo 'Nothing specified, nothing added.'
 			return
 		endif
-		for item in split(list, '\n')
+		for item in list
 			execute 'echoh' (item =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
 			echo item
 		endfor
@@ -30,8 +57,7 @@ export def Add(args: string)
 		const yn = input('execute ? (Y/n) > ', 'y')
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
-			g:System('git add ' .. args)
-			redraw
+			System('git add ' .. args)
 			echo 'done.'
 		else
 			echoh Normal
@@ -49,26 +75,25 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	SystemW($'git commit -m {shellescape(msg)}')
-	silent! GitGutter
+	System($'git commit -m {shellescape(msg)}', EchoW, RefreshSigns)
 enddef
 
 export def Amend(msg: string)
-	SystemW($'git commit --amend -m {shellescape(msg)}')
+	System($'git commit --amend -m {shellescape(msg)}')
 enddef
 
 export def GetLastCommitMessage(): string
-	return g:System($'git log -1 --pretty=%B')->trim()
+	return SystemList($'git log -1 --pretty=%B')[0]
 enddef
 
 export def Push(args: string)
-	SystemW($'git push {args}')
-	silent! GitGutter
+	System($'git push {args}', EchoW, RefreshSigns)
 enddef
 
 export def TagPush(tagname: string)
-	SystemW($'git tag {shellescape(tagname)}')
-	SystemW($'git push origin {shellescape(tagname)}')
+	System($'git tag {shellescape(tagname)}', (j, s) => {
+		System($'git push origin {shellescape(tagname)}')
+	})
 enddef
 
 # 以下はvimrcで定義する
