@@ -1,6 +1,5 @@
 vim9script
 
-# minviml:fixed=Nop,EchoW,RefreshSigns
 def Nop(j: any, s: any)
 enddef
 

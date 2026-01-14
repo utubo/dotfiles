@@ -1,5 +1,5 @@
 vim9script
-def A(a: string)
+def D(a: string)
 var [b, d] = a->split('^\S*\zs')
 if b->stridx('=') ==# -1
 for v in b->split(',')
@@ -20,7 +20,7 @@ endfor
 exe c
 endwhile
 enddef
-com! -nargs=* Each A(<q-args>)
+com! -nargs=* Each D(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def g:System(a: string): string
@@ -44,14 +44,14 @@ sleep 10m
 endwhile
 return b
 enddef
-def B(a: string)
+def E(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe $'normal! {a}'
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-def C(a: string, b: string, c: string, d: string, ...e: list<string>)
+def H(a: string, b: string, c: string, d: string, ...e: list<string>)
 const s = $'<SID>sub{a}<Space>'
 const f = b->substitute('map', 'noremap', '')
 exe $'{b} <script> {s} <Nop>'
@@ -60,7 +60,7 @@ exe $'{b} <script> {s}<Esc> <Nop>'
 exe $'{f} <script> {s}{d} {e->join(' ')}{s}'
 exe $'{b} <script> {c}{d} {s}{d}'
 enddef
-com! -nargs=* SubMode C(<f-args>)
+com! -nargs=* SubMode H(<f-args>)
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail
@@ -136,7 +136,7 @@ nm <Space>gt :<C-u>GitTagPush<Space>
 nm <Space>gC :<C-u>Git checkout %
 nm <Space>gc :<C-u>GitCommit<Space><Tab>
 nm <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
-def D()
+def BA()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
 const c = getcwd()
@@ -146,7 +146,7 @@ chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
-nn <Space>GU <ScriptCmd>D()<CR>
+nn <Space>GU <ScriptCmd>BA()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>GH <Cmd>e gh://utubo/repos<CR>
 nn <Space>gi <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
@@ -167,13 +167,13 @@ nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
 nn <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
-def E()
+def BB()
 if !vimrc#tabpanel#IsVisible()
 popselect#tabpages#Popup()
 endif
 enddef
-Each X=t,T nnoremap gX gX<ScriptCmd>E()<CR>
-def F(a: string)
+Each X=t,T nnoremap gX gX<ScriptCmd>BB()<CR>
+def BC(a: string)
 const b = bufnr()
 while true
 exe $'b{a}'
@@ -185,7 +185,7 @@ if !vimrc#tabpanel#IsVisible()
 popselect#buffers#Popup()
 endif
 enddef
-Each X=n,p nnoremap gX <ScriptCmd>F('X')<CR>
+Each X=n,p nnoremap gX <ScriptCmd>BC('X')<CR>
 nn gr <C-^>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
@@ -248,13 +248,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def G(): string
+def BD(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{G()}"
+ino <expr> ;l $"<C-w>{BD()}"
 au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
 au vimrc TextYankPost * {
 if !v:event.regname
@@ -306,8 +306,8 @@ nn <Space>l $
 nn <Space>y yiw
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>B('>gv')<CR>
-xn <S-Tab> <ScriptCmd>B('<gv')<CR>
+xn <Tab> <ScriptCmd>E('>gv')<CR>
+xn <S-Tab> <ScriptCmd>E('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 Each nmap,xmap <LocalLeader>c :
@@ -344,7 +344,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def H()
+def BE()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -366,13 +366,13 @@ endif
 setpos('.', b)
 enddef
 def SetupTabstopLazy()
-au vimrc SafeState * ++once H()
+au vimrc SafeState * ++once BE()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
 nn <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
 xn <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
-def J()
+def BG()
 if !!bufname()
 update
 return
@@ -407,7 +407,7 @@ if !!e
 exe 'sav' e
 endif
 enddef
-com! Sav J()
+com! Sav BG()
 def g:QuitWin(a: string)
 if winnr() ==# winnr(a)
 return
@@ -488,51 +488,51 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-def BA(c: string): string
-nn <nowait> <expr> ; BA(';')
-nn <nowait> <expr> , BA(',')
+def BH(c: string): string
+nn <nowait> <expr> ; BH(';')
+nn <nowait> <expr> , BH(',')
 aug unmap-semi
 au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ;|unm ,
 aug END
 return c
 enddef
-Each X=f,F,t,T nnoremap <expr> X BA('X')
+Each X=f,F,t,T nnoremap <expr> X BH('X')
 g:preOpCurpos = getcurpos()
-def BB(a: string)
+def BI(a: string)
 g:preOpCurpos = getcurpos()
 au vimrc SafeState * ++once setpos('.', g:preOpCurpos)
 feedkeys(a, 'n')
 enddef
-Each key=y,= nnoremap key <ScriptCmd>BB('key')<CR>
+Each key=y,= nnoremap key <ScriptCmd>BI('key')<CR>
 nn <Space>r :!<Up>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn ]t <C-]>
 nn [t <C-t>
-def BC()
+def BJ()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BD(a: string, b: string)
+def CA(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BC()
+au vimrc Syntax * BJ()
 au vimrc Syntax javascript {
-BD('SpellRare', '\s[=!]=\s')
+CA('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BD('SpellRare', '\s[=!]=\s')
-BD('SpellBad', '\s[=!]==\s')
-BD('SpellBad', '\s\~[=!][=#]\?\s')
-BD('SpellRare', '\<normal!\@!')
+CA('SpellRare', '\s[=!]=\s')
+CA('SpellBad', '\s[=!]==\s')
+CA('SpellBad', '\s\~[=!][=#]\?\s')
+CA('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-def BE(): string
+def CB(): string
 if !exists('w:diffloc')
 return ''
 endif
@@ -540,10 +540,10 @@ var a = line('.')
 var b = w:diffloc->indexof((_, v) => v[0] <= a && a <= v[1]) + 1
 return $'{!b ? '-' : b}/{len(w:diffloc)}'
 enddef
-def BF()
+def CC()
 sil! unlet w:difflines
 enddef
-au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * BF()
+au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * CC()
 def g:MyStatusLine(): string
 var a = '%f'
 if &diff
@@ -573,14 +573,14 @@ if !!b
 w:diffloc->add([b, line('$')])
 endif
 w:difflines = $'Added:{d},Changed:{e}'
-w:difflocstr = BE()
+w:difflocstr = CB()
 endif
 a = $'{w:difflines}%={w:difflocstr}%@{a}'
-au vimrc CursorMoved * w:difflocstr = BE()
+au vimrc CursorMoved * w:difflocstr = CB()
 endif
 return a
 enddef
-def BG()
+def CD()
 if zenmode#Toggle()
 return
 elseif !exists('g:has_mulitilinestatusline')
@@ -590,7 +590,7 @@ set stlo=maxheight:2
 set stl=%{%g:MyStatusLine()%}
 endif
 enddef
-no ZZ <ScriptCmd>BG()<CR>
+no ZZ <ScriptCmd>CD()<CR>
 au vimrc WinResized * redrawstatus
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w

@@ -1,13 +1,13 @@
 vim9script
-def Nop(j: any, s: any)
+def A(j: any, s: any)
 enddef
-def EchoW(j: any, s: any)
+def B(j: any, s: any)
 echow s
 enddef
-def RefreshSigns(j: any, s: any)
+def C(j: any, s: any)
 sil! GitGutter
 enddef
-def A(a: string, L: func = EchoW, M: func = Nop)
+def D(a: string, L: func = B, M: func = A)
 echow a
 job_start(a, {
 out_cb: L,
@@ -15,7 +15,7 @@ err_cb: L,
 exit_cb: M,
 })
 enddef
-def B(a: string): list<string>
+def E(a: string): list<string>
 var b = []
 var c = job_start(a, {
 out_cb: (j, s) => {
@@ -33,7 +33,7 @@ try
 chdir(expand('%:p:h'))
 echoh MoreMsg
 ec 'git add --dry-run ' .. a
-const c = B('git add --dry-run ' .. a)
+const c = E('git add --dry-run ' .. a)
 if !!v:shell_error
 echoh ErrorMsg
 ec c
@@ -51,7 +51,7 @@ echoh Question
 const e = input('execute ? (Y/n) > ', 'y')
 if e ==# 'y' || e ==# "\r"
 echoh Normal
-A('git add ' .. a)
+D('git add ' .. a)
 redraw
 ec 'done.'
 else
@@ -68,19 +68,19 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '⏪revert:', '✅test:', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
-A($'git commit -m "{a}"', EchoW, RefreshSigns)
+D($'git commit -m "{a}"', B, C)
 enddef
 export def Amend(a: string)
-A($'git commit --amend -m "{a}"')
+D($'git commit --amend -m "{a}"')
 enddef
 export def GetLastCommitMessage(): string
-return B($'git log -1 --pretty=%B')[0]
+return E($'git log -1 --pretty=%B')[0]
 enddef
 export def Push(a: string)
-A($'git push {a}', EchoW, RefreshSigns)
+D($'git push {a}', B, C)
 enddef
 export def TagPush(a: string)
-A($'git tag {shellescape(a)}', EchoW, (j, s) => {
-A($'git push origin {shellescape(a)}')
+D($'git tag {shellescape(a)}', B, (j, s) => {
+D($'git push origin {shellescape(a)}')
 })
 enddef
