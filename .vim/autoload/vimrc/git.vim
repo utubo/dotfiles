@@ -8,8 +8,10 @@ def RefreshSigns(j: any, s: any)
 sil! GitGutter
 enddef
 def A(a: string, L: func = EchoW, M: func = Nop)
-var d = job_start(a, {
+echow a
+job_start(a, {
 out_cb: L,
+err_cb: L,
 exit_cb: M,
 })
 enddef
@@ -50,6 +52,7 @@ const e = input('execute ? (Y/n) > ', 'y')
 if e ==# 'y' || e ==# "\r"
 echoh Normal
 A('git add ' .. a)
+redraw
 ec 'done.'
 else
 echoh Normal
@@ -77,7 +80,7 @@ export def Push(a: string)
 A($'git push {a}', EchoW, RefreshSigns)
 enddef
 export def TagPush(a: string)
-A($'git tag {shellescape(a)}', (j, s) => {
+A($'git tag {shellescape(a)}', EchoW, (j, s) => {
 A($'git push origin {shellescape(a)}')
 })
 enddef

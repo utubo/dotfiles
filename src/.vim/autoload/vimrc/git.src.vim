@@ -13,8 +13,10 @@ def RefreshSigns(j: any, s: any)
 enddef
 
 def System(cmd: string, Out: func = EchoW, Cb: func = Nop)
-	var job = job_start(cmd, {
+	echow cmd
+	job_start(cmd, {
 		out_cb: Out,
+		err_cb: Out,
 		exit_cb: Cb,
 	})
 enddef
@@ -58,6 +60,7 @@ export def Add(args: string)
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
 			System('git add ' .. args)
+			redraw
 			echo 'done.'
 		else
 			echoh Normal
@@ -91,7 +94,7 @@ export def Push(args: string)
 enddef
 
 export def TagPush(tagname: string)
-	System($'git tag {shellescape(tagname)}', (j, s) => {
+	System($'git tag {shellescape(tagname)}', EchoW, (j, s) => {
 		System($'git push origin {shellescape(tagname)}')
 	})
 enddef
