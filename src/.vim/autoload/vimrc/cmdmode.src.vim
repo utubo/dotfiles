@@ -366,6 +366,7 @@ export def ForVim9skk(popup_pos: any): any
 	endif
 	return popup_pos
 enddef
+g:vim9skkp = get(g:, 'vim9skkp', {})
 g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
 
 # cmdlineheightを自動調整してポップアップがずれないようにする

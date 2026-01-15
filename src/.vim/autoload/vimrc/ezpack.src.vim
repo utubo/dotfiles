@@ -12,6 +12,7 @@ Ezpack utubo/vim-anypanel
 
 # 遅延ロード
 EzpackLazyLoad
+Ezpack cohama/lexima.vim <post> call vimrc#lexima#LazyLoad()
 Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
 Ezpack LeafCage/vimhelpgenerator
@@ -38,7 +39,6 @@ Ezpack yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter # gitの差分を表示する
-Ezpack cohama/lexima.vim
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich
@@ -73,7 +73,9 @@ Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
 Ezpack utubo/vim-previewcmd <on> ModeChanged *:c # コマンド補完
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
 Ezpack utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] # vim9scriptで作ったskk
+
+# vim9scriptで作ったskk
+Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
 
 EzpackLazyLoad
 Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動

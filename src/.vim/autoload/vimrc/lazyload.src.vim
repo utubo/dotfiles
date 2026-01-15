@@ -104,8 +104,6 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # }}}
 
 # vim9skkp {{{
-g:vim9skkp = {} # NOTE: cmdmode.src.vimで見てるので…
-au vimrc User Vim9skkpInitializePre vimrc#vim9skkp#LazyLoad()
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 cnoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 nnoremap <LocalLeader>j a<Plug>(vim9skkp-enable)
@@ -270,15 +268,11 @@ onoremap I <Plug>(textobj-twochars-i)
 command! UpdateVim packadd vim-update|call vimupdate#Update()
 # }}}
 
-# 設定が膨らんできたので別ファイルで定義 {{{
-vimrc#lexima#LazyLoad()
-vimrc#lsp#LazyLoad()
-# }}}
-
 # 遅延読み込みもの {{{
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
+vimrc#lsp#LazyLoad()
 # }}}
 
 # built-in {{{

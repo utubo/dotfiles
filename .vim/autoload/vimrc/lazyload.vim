@@ -66,8 +66,6 @@ packadd vim-textobj-user
 packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-g:vim9skkp = {}
-au vimrc User Vim9skkpInitializePre vimrc#vim9skkp#LazyLoad()
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
@@ -182,11 +180,10 @@ Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
 com! UpdateVim packadd vim-update|call vimupdate#Update()
-vimrc#lexima#LazyLoad()
-vimrc#lsp#LazyLoad()
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
+vimrc#lsp#LazyLoad()
 packadd nohlsearch
 packadd hlyank
 nm <Space>c <Cmd>packadd comment<CR>gcc

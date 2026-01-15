@@ -305,6 +305,7 @@ a.line = c.line
 endif
 return a
 enddef
+g:vim9skkp = get(g:, 'vim9skkp', {})
 g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
 au vimrc CmdlineChanged * {
 const c = getcmdline()
