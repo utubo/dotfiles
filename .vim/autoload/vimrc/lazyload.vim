@@ -66,40 +66,7 @@ packadd vim-textobj-user
 packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
-g:vim9skkp = {
-keymap: {
-commit: ["\<CR>", 'l'],
-cancel: ["\<C-g>", "\<C-e>"],
-},
-showmode: 'cursor',
-keep_midasi_mode: true,
-roman_abbrev: {
-ds: 'です',
-ms: 'ます',
-sr: 'する',
-st: 'して',
-ks: 'ください',
-dg: 'ですが、',
-mg: 'ますが、',
-fx: '修正',
-dl: '削除',
-chg: '変更',
-tk: '追加',
-skk: 'SKK',
-bg: 'バグ',
-cm: 'コメント',
-cnf: '設定',
-wn: 'ウィンドウ',
-'z*': '※', 'v.': '︙',
-'z.': '…', 'z{': '【', 'z}': '】',
-zl: '→', zh: '←', zj: '↓', zk: '↑',
-'[': '「', ']': '」',
-vb: 'バッファ',
-vm: 'マッピング',
-vk: 'キーマッピング',
-vp: 'プラグイン',
-},
-}
+au vimrc User Vim9skkpInitializePre vimrc#vim9skkp#LazyLoad()
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
