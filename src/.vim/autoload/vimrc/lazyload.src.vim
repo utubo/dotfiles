@@ -144,6 +144,7 @@ inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 cnoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 nnoremap <LocalLeader>j a<Plug>(vim9skkp-enable)
 nnoremap <LocalLeader>i i<Plug>(vim9skkp-enable)
+au vimrc ColorScheme * hi! Vim9skkMode Vim9skkCursor
 # }}}
 
 # headtail {{{

@@ -102,6 +102,7 @@ ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
 nn <LocalLeader>i i<Plug>(vim9skkp-enable)
+au vimrc ColorScheme * hi! Vim9skkMode Vim9skkCursor
 no <Leader>ga ga
 HeadTailMap g G
 Each nmap,xmap g% gi%
