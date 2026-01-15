@@ -7,6 +7,7 @@ echow s
 enddef
 def C(j: any, s: any)
 sil! GitGutter
+echow 'OK.'
 enddef
 def D(a: string, L: func = B, M: func = A)
 echow a

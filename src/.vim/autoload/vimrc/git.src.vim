@@ -10,6 +10,7 @@ enddef
 
 def RefreshSigns(j: any, s: any)
 	silent! GitGutter
+	echow 'OK.'
 enddef
 
 def System(cmd: string, Out: func = EchoW, Cb: func = OK)
