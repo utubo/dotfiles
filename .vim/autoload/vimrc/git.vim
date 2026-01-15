@@ -3,18 +3,18 @@ def A(j: any, s: any)
 echow 'OK.'
 enddef
 def B(j: any, s: any)
-echow s
-enddef
-def C(j: any, s: any)
 sil! GitGutter
 echow 'OK.'
 enddef
-def D(a: string, L: func = B, M: func = A)
+def C(j: any, s: any)
+echow s
+enddef
+def D(a: string, L: func = A)
 echow a
 job_start(a, {
-out_cb: L,
-err_cb: L,
-exit_cb: M,
+out_cb: C,
+err_cb: C,
+exit_cb: L,
 })
 enddef
 def E(a: string): list<string>
@@ -69,7 +69,7 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔Broke:']
 enddef
 export def Commit(a: string)
-D($'git commit -m "{a}"', B, C)
+D($'git commit -m "{a}"', B)
 enddef
 export def Amend(a: string)
 D($'git commit --amend -m "{a}"')
@@ -78,10 +78,10 @@ export def GetLastCommitMessage(): string
 return E($'git log -1 --pretty=%B')[0]
 enddef
 export def Push(a: string)
-D($'git push {a}', B, C)
+D($'git push {a}', B)
 enddef
 export def TagPush(a: string)
-D($'git tag {shellescape(a)}', B, (j, s) => {
+D($'git tag {shellescape(a)}', (j, s) => {
 D($'git push origin {shellescape(a)}')
 })
 enddef

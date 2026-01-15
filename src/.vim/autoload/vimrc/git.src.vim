@@ -4,20 +4,20 @@ def OK(j: any, s: any)
 	echow 'OK.'
 enddef
 
-def EchoW(j: any, s: any)
-	echow s
-enddef
-
 def RefreshSigns(j: any, s: any)
 	silent! GitGutter
 	echow 'OK.'
 enddef
 
-def System(cmd: string, Out: func = EchoW, Cb: func = OK)
+def EchoW(j: any, s: any)
+	echow s
+enddef
+
+def System(cmd: string, Cb: func = OK)
 	echow cmd
 	job_start(cmd, {
-		out_cb: Out,
-		err_cb: Out,
+		out_cb: EchoW,
+		err_cb: EchoW,
 		exit_cb: Cb,
 	})
 enddef
@@ -78,7 +78,7 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	System($'git commit -m "{msg}"', EchoW, RefreshSigns)
+	System($'git commit -m "{msg}"', RefreshSigns)
 enddef
 
 export def Amend(msg: string)
@@ -90,11 +90,11 @@ export def GetLastCommitMessage(): string
 enddef
 
 export def Push(args: string)
-	System($'git push {args}', EchoW, RefreshSigns)
+	System($'git push {args}', RefreshSigns)
 enddef
 
 export def TagPush(tagname: string)
-	System($'git tag {shellescape(tagname)}', EchoW, (j, s) => {
+	System($'git tag {shellescape(tagname)}', (j, s) => {
 		System($'git push origin {shellescape(tagname)}')
 	})
 enddef
