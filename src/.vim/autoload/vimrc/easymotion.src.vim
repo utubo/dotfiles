@@ -9,7 +9,7 @@ export def LazyLoad()
 	Disable g:EasyMotion_startofline
 	g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfjASDGHKLQWERTYUIOPZXCVBNMFJ;'
 	g:EasyMotion_prompt = 'EasyMotion: '
-	noremap s <Plug>(easymotion-s)
+	noremap s <ScriptCmd>silent doautocmd User EasyMotionPromptPre<CR><Plug>(easymotion-s)
 	map <Leader>j <Plug>(easymotion-j)
 	map <Leader>k <Plug>(easymotion-k)
 	packadd vim-easymotion

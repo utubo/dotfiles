@@ -792,6 +792,20 @@ xnoremap <F9> <ESC>1<C-w>s<C-w>w
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
+# カーソル行を常に真ん中に表示 {{{
+set scrolloff=99
+def SmoothZZ(timer: number = -1)
+	if timer ==# -1 || 0 < &l:scrolloff && &l:scrolloff < 99
+		&l:scrolloff += 1
+		timer_start(10, SmoothZZ)
+	endif
+enddef
+nnoremap zz <ScriptCmd>SmoothZZ()<CR>
+au vimrc ModeChanged *:[vV\x16] setlocal scrolloff=0
+au vimrc User EasyMotionPromptPre setlocal scrolloff=1
+au vimrc User EasyMotionPromptEnd SmoothZZ()
+# }}}
+
 # multi line statusline {{{
 def GetDiffLocStr(): string
 	if !exists('w:diffloc')

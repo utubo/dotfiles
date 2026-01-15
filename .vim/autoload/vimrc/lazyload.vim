@@ -535,7 +535,18 @@ com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
-def CB(): string
+set scrolloff=99
+def CB(a: number = -1)
+if a ==# -1 || 0 < &l:scrolloff && &l:scrolloff < 99
+&l:scrolloff += 1
+timer_start(10, CB)
+endif
+enddef
+nn zz <ScriptCmd>CB()<CR>
+au vimrc ModeChanged *:[vV\x16] setlocal scrolloff=0
+au vimrc User EasyMotionPromptPre setlocal scrolloff=1
+au vimrc User EasyMotionPromptEnd CB()
+def CC(): string
 if !exists('w:diffloc')
 return ''
 endif
@@ -543,10 +554,10 @@ var a = line('.')
 var b = w:diffloc->indexof((_, v) => v[0] <= a && a <= v[1]) + 1
 return $'{!b ? '-' : b}/{len(w:diffloc)}'
 enddef
-def CC()
+def CD()
 sil! unlet w:difflines
 enddef
-au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * CC()
+au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * CD()
 def g:MyStatusLine(): string
 var a = '%f'
 if &diff
@@ -576,14 +587,14 @@ if !!b
 w:diffloc->add([b, line('$')])
 endif
 w:difflines = $'Added:{d},Changed:{e}'
-w:difflocstr = CB()
+w:difflocstr = CC()
 endif
 a = $'{w:difflines}%={w:difflocstr}%@{a}'
-au vimrc CursorMoved * w:difflocstr = CB()
+au vimrc CursorMoved * w:difflocstr = CC()
 endif
 return a
 enddef
-def CD()
+def CE()
 if zenmode#Toggle()
 return
 elseif !exists('g:has_mulitilinestatusline')
@@ -593,7 +604,7 @@ set stlo=maxheight:2
 set stl=%{%g:MyStatusLine()%}
 endif
 enddef
-no ZZ <ScriptCmd>CD()<CR>
+no ZZ <ScriptCmd>CE()<CR>
 au vimrc WinResized * redrawstatus
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
