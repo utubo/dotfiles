@@ -41,13 +41,13 @@ const d = c[f : t]->substitute(pat, sub, flags)
 setbufline(a, b, c[0 : f - 1] .. d .. c[t + 1 :])
 endfor
 enddef
-def C(a: string = '[=<>!~#]\+')
+def D(a: string = '[=<>!~#]\+')
 B(
 $'\(.*\S\)\(\s*{a}\s*\)\(\S.*\)',
 '\3\2\1'
 )
 enddef
-com! -range=% -nargs=? SwapExpr C(<f-args>)
+com! -range=% -nargs=? SwapExpr D(<f-args>)
 var o = {
 win: 0,
 timer: 0,
@@ -73,7 +73,7 @@ o.hlback[h] = h->hlget()
 endfor
 o.shade = matchadd('NonText', '.')
 hi! link Folded NonText
-D()
+E()
 hi CursorLine None
 const b = 'Normal'->hlget(true)[0]
 var d = 'MsgArea'->hlget(true)[0]
@@ -93,20 +93,20 @@ endif
 set guicursor=c:CursorTransparent
 ['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
 o.curpos = 0
-BA()
+BB()
 aug vimrc_cmdline_popup
 au!
-au ModeChanged c:[^c] F()
-au VimLeavePre * BB()
+au ModeChanged c:[^c] G()
+au VimLeavePre * BC()
 aug END
 o.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-BC()
+BD()
 g:previewcmd.popup_args = { col: o.col, line: o.line - 1 }
 enddef
-def D()
+def E()
 const m = mode()
 if m ==# 'V' || m ==# 'v' || m ==# "\<C-v>"
-var p = E()
+var p = F()
 o.visual = matchaddpos('Visual', p)
 o.col = p->copy()->map((i, v) => screenpos(0, v[0], v[1]).col)->min()
 o.line = p->copy()->map((i, v) => screenpos(0, v[0], v[1]).row)->max() + 1
@@ -116,7 +116,7 @@ o.col = 'cursor-1'
 o.line = screenpos(0, line('.'), col('.')).row + 1
 endif
 enddef
-def E(): list<any>
+def F(): list<any>
 var a = []
 for p in getregionpos(getpos('.'), getpos('v'), { type: mode() })
 const s = p[0]
@@ -137,7 +137,7 @@ a += [[s[1], s[2], b]]
 endfor
 return a
 enddef
-def F()
+def G()
 aug vimrc_cmdline_popup
 au!
 aug END
@@ -147,14 +147,14 @@ endif
 if o.shade !=# 0
 matchdelete(o.shade)
 endif
-BB()
+BC()
 timer_stop(o.updatetimer)
 o.updatetimer = 0
 timer_stop(o.blinktimer)
 o.blinktimer = 0
 popup_close(o.win)
 o.win = 0
-BD()
+BE()
 for h in o.hlback->values()
 exe $'hi {h[0].name} None'
 h->hlset()
@@ -165,23 +165,23 @@ redraw
 enddef
 export def UpdatePopup(a: number)
 if o.win ==# 0 || mode() !=# 'c' || popup_list()->index(o.win) ==# -1
-F()
+G()
 if mode() ==# 'c'
 feedkeys("\<Esc>", 'nt')
 endif
 return
 endif
 const b = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
-if I() < strdisplaywidth(b)
-F()
+if J() < strdisplaywidth(b)
+G()
 else
 popup_settext(o.win, b)
-G()
+H()
 endif
 redraw
 enddef
-def G()
-var c = H()
+def H()
+var c = I()
 if c ==# o.curpos
 return
 endif
@@ -189,15 +189,15 @@ o.curpos = c
 win_execute(o.win, 'call clearmatches()')
 win_execute(o.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 o.blink = false
-BA()
-enddef
-def H(): number
-return getcmdscreenpos() - J()
+BB()
 enddef
 def I(): number
-return &columns - J()
+return getcmdscreenpos() - BA()
 enddef
 def J(): number
+return &columns - BA()
+enddef
+def BA(): number
 if !&showtabpanel
 return 0
 endif
@@ -210,7 +210,7 @@ endif
 const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
 return &columns < c ? 0 : c
 enddef
-def BA()
+def BB()
 if !!o.blinktimer
 timer_stop(o.blinktimer)
 endif
@@ -226,7 +226,7 @@ hi! link vimrcCmdlineCursor None
 endif
 o.blink = !o.blink
 enddef
-def BB()
+def BC()
 if !!o.gcr
 &guicursor = o.gcr
 o.gcr = ''
@@ -235,7 +235,7 @@ set t_ve&
 enddef
 var q = 0
 var lk = ''
-def BC()
+def BD()
 cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 export def PumKeyDown(a: number, k: string): bool
@@ -247,8 +247,8 @@ noautocmd win_execute(q, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(q, $'normal! { l <= 1 ? 'G' : 'k' }')
 else
+BE()
 BD()
-BC()
 return false
 endif
 setcmdline(lk .. i.bufnr->getbufline(getcurpos(q)[1])[0])
@@ -257,7 +257,7 @@ return true
 enddef
 export def PopupPum()
 cu <Tab>
-BD()
+BE()
 const a = getcmdline()
 const c = getcompletion(a, 'cmdline')
 if !c
@@ -290,7 +290,7 @@ pos: d,
 setcmdline(lk .. getbufline(winbufnr(q), 1)[0])
 g:previewcmd.enable = false
 enddef
-def BD()
+def BE()
 if !!q
 popup_close(q)
 q = 0
@@ -300,7 +300,7 @@ enddef
 export def ForVim9skk(a: any): any
 if o.win !=# 0
 var c = popup_getpos(o.win)
-a.col = c.col + H() - 1
+a.col = c.col + I() - 1
 a.line = c.line
 endif
 return a
@@ -308,7 +308,7 @@ enddef
 g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
 au vimrc CmdlineChanged * {
 const c = getcmdline()
-const w = I()
+const w = J()
 const h = c->strdisplaywidth() / w + 1
 &cmdheight = h
 }

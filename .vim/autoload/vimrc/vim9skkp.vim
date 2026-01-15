@@ -1,5 +1,5 @@
 vim9script
-g:vim9skkp = {
+g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 keymap: {
 commit: ["\<CR>", 'l'],
 cancel: ["\<C-g>", "\<C-e>"],
@@ -32,6 +32,6 @@ vm: 'マッピング',
 vk: 'キーマッピング',
 vp: 'プラグイン',
 },
-}
+})
 export def LazyLoad()
 enddef

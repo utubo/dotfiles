@@ -66,6 +66,7 @@ packadd vim-textobj-user
 packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
+g:vim9skkp = {}
 au vimrc User Vim9skkpInitializePre vimrc#vim9skkp#LazyLoad()
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)

@@ -104,6 +104,7 @@ au vimrc User Vim9skkModeChanged zenmode#Invalidate()
 # }}}
 
 # vim9skkp {{{
+g:vim9skkp = {} # NOTE: cmdmode.src.vimで見てるので…
 au vimrc User Vim9skkpInitializePre vimrc#vim9skkp#LazyLoad()
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 cnoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
