@@ -685,12 +685,16 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 
+nnoremap zV zMzv
+
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>
 nnoremap TN <Cmd>tabnew<CR>
 nnoremap TD <Cmd>tabe ./<CR>
 nnoremap TT <Cmd>tabnext #<CR>
 nnoremap TB <Cmd>tabnew %<CR>g;
+# TCは微妙に打ち;づらい…
+nnoremap TQ :<C-u>tabc<Space>
 
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"

@@ -467,11 +467,13 @@ nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
 Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
+nn zV zMzv
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>
 nn TT <Cmd>tabnext #<CR>
 nn TB <Cmd>tabnew %<CR>g;
+nn TQ :<C-u>tabc<Space>
 ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
