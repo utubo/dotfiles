@@ -216,7 +216,7 @@ const n = line('''"')
 if n < 1 || line('$') < n
 return
 endif
-sil! normal! g`"zvzz
+sil! normal! g`"zMzvzz
 enddef
 au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {

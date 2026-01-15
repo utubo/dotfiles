@@ -293,7 +293,7 @@ def RestorePos()
 		return
 	endif
 	# ここまで来たらOK
-	silent! normal! g`"zvzz
+	silent! normal! g`"zMzvzz
 enddef
 # FileTypeでfoldmethodを指定したあとにzvしたいのでSafeState後に実行する
 au vimrc BufRead * au vimrc SafeState * ++once RestorePos()

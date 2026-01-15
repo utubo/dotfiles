@@ -101,7 +101,7 @@ vp: 'プラグイン',
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
-nn <LocalLeader><LocalLeader>j i<Plug>(vim9skkp-enable)
+nn <LocalLeader>i i<Plug>(vim9skkp-enable)
 no <Leader>ga ga
 HeadTailMap g G
 Each nmap,xmap g% gi%
@@ -467,7 +467,8 @@ nn Y y$
 nn <Space>p $p
 nn <Space>P ^P
 Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
-nn zV zMzv
+nn zV zMzvzz
+nm <LocalLeader><LocalLeader> zV
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>

@@ -143,7 +143,7 @@ g:vim9skkp = {
 inoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 cnoremap <LocalLeader>j <Plug>(vim9skkp-toggle)
 nnoremap <LocalLeader>j a<Plug>(vim9skkp-enable)
-nnoremap <LocalLeader><LocalLeader>j i<Plug>(vim9skkp-enable)
+nnoremap <LocalLeader>i i<Plug>(vim9skkp-enable)
 # }}}
 
 # headtail {{{
@@ -685,7 +685,10 @@ nnoremap <Space>p $p
 nnoremap <Space>P ^P
 Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 
-nnoremap zV zMzv
+# カーソル位置以外を折り畳み
+nnoremap zV zMzvzz
+# 打ち易すぎるから別の機能にした方がいいかも…
+nmap <LocalLeader><LocalLeader> zV
 
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>
