@@ -121,6 +121,7 @@ suite.TestMapping = () => {
 	# n  o  markdown checkbox
 	# n  p  行単位p
 	# n  w  vim-smart-word
+	# n  zz スムーズスクロール版zz
 	# n  A  _cc
 	# n  O  markdown checkbox
 	# n  P  行単位P
@@ -147,7 +148,7 @@ suite.TestMapping = () => {
 	var default_ignore = '\C' .. [
 		'n  [abBefhijklmnopqstwAFMOPQSTY;''/?:%,+]',
 		'n  g[acdefsinmprtT;]',
-		'n  \(zd\|zf\|ZZ\)',
+		'n  \(zd\|zf\|zz\|ZZ\)',
 		'n  G[ai%]',
 		'n  <C-[ABFGINOPWX]>',
 		'n  <Esc>',
@@ -182,6 +183,7 @@ suite.TestMapping = () => {
 		'o  [IA]', # vim-hlpiars, vim-headtail
 		'n  gf', # vimgoto
 		'n  T', # f,F,t,T
+		'n  gy', # detent-yank
 	]->join('\|')
 
 	# ユーザー定義のマッピング
