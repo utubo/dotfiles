@@ -1,5 +1,6 @@
 vim9script
 def A(j: any, s: any)
+echow 'OK.'
 enddef
 def B(j: any, s: any)
 echow s
@@ -53,11 +54,10 @@ if e ==# 'y' || e ==# "\r"
 echoh Normal
 D('git add ' .. a)
 redraw
-ec 'done.'
 else
 echoh Normal
 redraw
-ec 'canceled.'
+echow 'Canceled.'
 endif
 finally
 echoh Normal

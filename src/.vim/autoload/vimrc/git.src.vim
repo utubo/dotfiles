@@ -1,6 +1,7 @@
 vim9script
 
-def Nop(j: any, s: any)
+def OK(j: any, s: any)
+	echow 'OK.'
 enddef
 
 def EchoW(j: any, s: any)
@@ -11,7 +12,7 @@ def RefreshSigns(j: any, s: any)
 	silent! GitGutter
 enddef
 
-def System(cmd: string, Out: func = EchoW, Cb: func = Nop)
+def System(cmd: string, Out: func = EchoW, Cb: func = OK)
 	echow cmd
 	job_start(cmd, {
 		out_cb: Out,
@@ -60,11 +61,10 @@ export def Add(args: string)
 			echoh Normal
 			System('git add ' .. args)
 			redraw
-			echo 'done.'
 		else
 			echoh Normal
 			redraw
-			echo 'canceled.'
+			echow 'Canceled.'
 		endif
 	finally
 		echoh Normal
