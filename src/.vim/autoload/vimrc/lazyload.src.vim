@@ -774,7 +774,7 @@ def ZenModeOverride(winid: number, winnr: number, width: number): bool
 	vimrc#diffinfo#EchoDiffInfo(winid, winnr, width)
 	return true
 enddef
-
+g:zenmode.override = get(g:, 'zenmode', {})
 g:zenmode.override = ZenModeOverride
 # }}}
 # }}}
