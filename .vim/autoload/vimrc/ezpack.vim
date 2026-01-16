@@ -52,9 +52,15 @@ EzpackInstallToOpt
 Ezpack utubo/vim-ezpack
 Ezpack utubo/vim-popselect
 Ezpack utubo/vim-reformatdate
-Ezpack utubo/vim-previewcmd <on> ModeChanged *:c
-Ezpack utubo/vim-skipslash <on> ModeChanged *:c
-Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
+Ezpack utubo/vim-previewcmd
+Ezpack utubo/vim-skipslash
+Ezpack utubo/vim-vim9skkp
+EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
+EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
+EzpackPost au ModeChanged *:[ic] ++once {
+EzpackPost call vimrc#vim9skkp#LazyLoad()
+EzpackPost packadd vim-vim9skkp
+EzpackPost }
 EzpackInstallToOpt
 Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackLazyLoad

@@ -79,12 +79,17 @@ EzpackInstallToOpt
 Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
 Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
-# コマンド補完
-Ezpack utubo/vim-previewcmd <on> ModeChanged *:c
-# `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-Ezpack utubo/vim-skipslash  <on> ModeChanged *:c
-# vim9scriptで作ったskk
-Ezpack utubo/vim-vim9skkp   <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
+Ezpack utubo/vim-previewcmd       # コマンド補完
+Ezpack utubo/vim-skipslash        # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
+Ezpack utubo/vim-vim9skkp         # vim9scriptで作ったskk
+
+# Ezpackのオプションでもできるけど見通し悪かったので直書き
+EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
+EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
+EzpackPost au ModeChanged *:[ic] ++once {
+EzpackPost    call vimrc#vim9skkp#LazyLoad()
+EzpackPost    packadd vim-vim9skkp
+EzpackPost }
 
 # 🐶💬🍚作ったけど使用頻度が低い
 EzpackInstallToOpt
