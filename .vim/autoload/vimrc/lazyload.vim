@@ -513,66 +513,14 @@ nn zz <ScriptCmd>CB()<CR>
 au vimrc ModeChanged *:[vV\x16] setlocal scrolloff=0
 au vimrc User EasyMotionPromptPre setlocal scrolloff=1
 au vimrc User EasyMotionPromptEnd CB()
-def CC(): string
-if !exists('w:diffloc')
-return ''
+def CC(a: number, b: number, c: number): bool
+if !getwinvar(b, '&diff')
+return false
 endif
-var a = line('.')
-var b = w:diffloc->indexof((_, v) => v[0] <= a && a <= v[1]) + 1
-return $'{!b ? '-' : b}/{len(w:diffloc)}'
+vimrc#diffinfo#EchoDiffInfo(a, b, c)
+return true
 enddef
-def CD()
-sil! unlet w:difflines
-enddef
-au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * CD()
-def g:MyStatusLine(): string
-var a = '%f'
-if &diff
-if !exists('w:difflines')
-w:diffloc = []
-var b = 0
-var c = ''
-var d = 0
-var e = 0
-for f in range(1, line('$'))
-const h = diff_hlID(f, 1)->synIDattr('name')
-if h ==# 'DiffAdd'
-d += 1
-elseif h ==# 'DiffChange'
-e += 1
-endif
-if c ==# h
-continue
-endif
-c = h
-if !!b
-w:diffloc->add([b, f - 1])
-endif
-b = h ==# 'DiffAdd' || h ==# 'DiffChange' ? f : 0
-endfor
-if !!b
-w:diffloc->add([b, line('$')])
-endif
-w:difflines = $'Added:{d},Changed:{e}'
-w:difflocstr = CC()
-endif
-a = $'{w:difflines}%={w:difflocstr}%@{a}'
-au vimrc CursorMoved * w:difflocstr = CC()
-endif
-return a
-enddef
-def CE()
-if zenmode#Toggle()
-return
-elseif !exists('g:has_mulitilinestatusline')
-return
-else
-set stlo=maxheight:2
-set stl=%{%g:MyStatusLine()%}
-endif
-enddef
-no ZZ <ScriptCmd>CE()<CR>
-au vimrc WinResized * redrawstatus
+g:zenmode.override = CC
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d

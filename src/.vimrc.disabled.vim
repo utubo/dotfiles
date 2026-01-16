@@ -321,3 +321,72 @@ au vimrc User Vim9skkMidasiInput {
 	endif
 }
 # }}}
+
+# multi line statusline {{{
+def GetDiffLocStr(): string
+	if !exists('w:diffloc')
+		return ''
+	endif
+	var ln = line('.')
+	var idx = w:diffloc->indexof((_, v) => v[0] <= ln && ln <= v[1]) + 1
+	return $'{!idx ? '-' : idx}/{len(w:diffloc)}'
+enddef
+
+def ClearDiffLoc()
+	silent! unlet w:difflines
+enddef
+
+au vimrc WinEnter,TextChanged,InsertLeave,BufWritePost * ClearDiffLoc()
+
+def g:MyStatusLine(): string
+	var stl = '%f'
+	if &diff
+		if !exists('w:difflines')
+			w:diffloc = []
+			var start = 0
+			var name_bk = ''
+			var added = 0
+			var changed = 0
+			for lnum in range(1, line('$'))
+				const name = diff_hlID(lnum, 1)->synIDattr('name')
+				if name ==# 'DiffAdd'
+					added += 1
+				elseif name ==# 'DiffChange'
+					changed += 1
+				endif
+				if name_bk ==# name
+					continue
+				endif
+				name_bk = name
+				if !!start
+					w:diffloc->add([start, lnum - 1])
+				endif
+				start = name ==# 'DiffAdd' || name ==# 'DiffChange' ? lnum : 0
+			endfor
+			if !!start
+				w:diffloc->add([start, line('$')])
+			endif
+			w:difflines = $'Added:{added},Changed:{changed}'
+			w:difflocstr = GetDiffLocStr()
+		endif
+		stl = $'{w:difflines}%={w:difflocstr}%@{stl}'
+		au vimrc CursorMoved * w:difflocstr = GetDiffLocStr()
+	endif
+	return stl
+enddef
+def ToggleZen()
+	if zenmode#Toggle()
+		# statusline表示なし
+		return
+	elseif !exists('g:has_mulitilinestatusline') # ←.vimrc_localで設定
+		# multi line statusline表示なし
+		return
+	else
+		# statusline表示あり
+		set stlo=maxheight:2
+		set stl=%{%g:MyStatusLine()%}
+	endif
+enddef
+noremap ZZ <ScriptCmd>ToggleZen()<CR>
+au vimrc WinResized * redrawstatus
+# }}}
