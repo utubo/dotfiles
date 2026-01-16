@@ -67,16 +67,6 @@ Ezpack robenkleene/veep.vim <cmd> P # ビジュアルブロックに対してexc
 # Ezpack mattn/ctrlp-matchfuzzy
 
 # 🐶🍚
-EzpackInstallToOpt
-Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
-Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
-Ezpack utubo/vim-previewcmd <on> ModeChanged *:c # コマンド補完
-Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
-Ezpack utubo/vim-skipslash <on> ModeChanged *:c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-
-# vim9scriptで作ったskk
-Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
-
 EzpackLazyLoad
 Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動
 Ezpack utubo/vim-hlpairs          # 括弧をハイライト強化版
@@ -84,6 +74,17 @@ Ezpack utubo/vim-minviml          # vimscriptをminify
 Ezpack utubo/vim-registers-lite   # registers.nvimライクなプラグイン
 Ezpack utubo/vim-update           # gvim.exeの最新版をgithubから落とす
 Ezpack utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
+# 以下はoptに入れておけばOK
+EzpackInstallToOpt
+Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
+Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
+Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
+# コマンド補完
+Ezpack utubo/vim-previewcmd <on> ModeChanged *:c
+# `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
+Ezpack utubo/vim-skipslash  <on> ModeChanged *:c
+# vim9scriptで作ったskk
+Ezpack utubo/vim-vim9skkp   <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
 
 # 🐶💬🍚作ったけど使用頻度が低い
 EzpackInstallToOpt

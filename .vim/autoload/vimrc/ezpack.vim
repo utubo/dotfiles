@@ -41,13 +41,6 @@ EzpackLazyLoad
 Ezpack sheerun/vim-polyglot
 EzpackInstallToOpt
 Ezpack robenkleene/veep.vim <cmd> P
-EzpackInstallToOpt
-Ezpack utubo/vim-ezpack
-Ezpack utubo/vim-popselect
-Ezpack utubo/vim-previewcmd <on> ModeChanged *:c
-Ezpack utubo/vim-reformatdate
-Ezpack utubo/vim-skipslash <on> ModeChanged *:c
-Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
 EzpackLazyLoad
 Ezpack utubo/vim-headtail
 Ezpack utubo/vim-hlpairs
@@ -55,6 +48,13 @@ Ezpack utubo/vim-minviml
 Ezpack utubo/vim-registers-lite
 Ezpack utubo/vim-update
 Ezpack utubo/vim-yomigana
+EzpackInstallToOpt
+Ezpack utubo/vim-ezpack
+Ezpack utubo/vim-popselect
+Ezpack utubo/vim-reformatdate
+Ezpack utubo/vim-previewcmd <on> ModeChanged *:c
+Ezpack utubo/vim-skipslash <on> ModeChanged *:c
+Ezpack utubo/vim-vim9skkp <on> ModeChanged *:[ic] <pre> call vimrc#vim9skkp#LazyLoad()
 EzpackInstallToOpt
 Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackLazyLoad
