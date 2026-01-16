@@ -18,7 +18,6 @@ set virtualedit=block
 set list
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
 set fillchars=
-set cursorline
 set hidden
 set showtabline=0
 set cmdheight=1
