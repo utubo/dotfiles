@@ -83,7 +83,8 @@ Ezpack utubo/vim-previewcmd       # コマンド補完
 Ezpack utubo/vim-skipslash        # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
 Ezpack utubo/vim-vim9skkp         # vim9scriptで作ったskk
 
-# Ezpackのオプションでもできるけど見通し悪かったので直書き
+# 以下はautocmdでロードさせる
+# Note: Ezpackのオプションでも同じ事をできるけど見通し悪かった…
 EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
 EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
 EzpackPost au ModeChanged *:[ic] ++once {
