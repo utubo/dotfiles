@@ -7,7 +7,6 @@ Ezpack utubo/vim-colorscheme-softgreen
 Ezpack utubo/vim-zenmode
 Ezpack utubo/vim-anypanel
 EzpackLazyLoad
-Ezpack cohama/lexima.vim <post> call vimrc#lexima#LazyLoad()
 Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
 Ezpack LeafCage/vimhelpgenerator
@@ -32,6 +31,7 @@ Ezpack yuki-yano/dedent-yank.vim
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter
+Ezpack cohama/lexima.vim <on> ModeChanged *:[ic] <post> call vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich

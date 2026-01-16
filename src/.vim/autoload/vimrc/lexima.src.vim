@@ -1,5 +1,15 @@
 vim9script
 
+def OnCmdline()
+	# cmdlineでの括弧
+	for pair in ['()', '{}', '""', "''", '``']
+		lexima#add_rule({ char: pair[0], input_after: pair[1], mode: 'c' })
+		lexima#add_rule({ char: pair[1], at: '\%#' .. pair[1], leave: 1, mode: 'c' })
+	endfor
+	# `I'm`を入力できるようにするルール
+	lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
+enddef
+
 export def LazyLoad()
 	Enable g:lexima_no_default_rules
 	g:lexima_map_escape = ''
@@ -10,14 +20,10 @@ export def LazyLoad()
 	lexima#add_rule({ char: ')', at: '\%#\\)', leave: 2, mode: 'ic' })
 	lexima#add_rule({ char: '}', at: '\%#\\}', leave: 2, mode: 'ic' })
 	lexima#add_rule({ char: '\', at: '\%#\\[)}]', leave: 1, mode: 'ic' })
-	# cmdlineでの括弧
-	au vimrc ModeChanged *:c* ++once {
-		for pair in ['()', '{}', '""', "''", '``']
-			lexima#add_rule({ char: pair[0], input_after: pair[1], mode: 'c' })
-			lexima#add_rule({ char: pair[1], at: '\%#' .. pair[1], leave: 1, mode: 'c' })
-		endfor
-		# `I'm`を入力できるようにするルール
-		lexima#add_rule({ char: "'", at: '[a-zA-Z]\%#''\@!', mode: 'c' })
-	}
+	if mode() ==# 'c'
+		OnCmdline()
+	else
+		au vimrc ModeChanged *:c* ++once OnCmdline()
+	endif
 enddef
 

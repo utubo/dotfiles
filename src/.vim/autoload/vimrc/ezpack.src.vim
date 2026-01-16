@@ -12,7 +12,6 @@ Ezpack utubo/vim-anypanel
 
 # 遅延ロード
 EzpackLazyLoad
-Ezpack cohama/lexima.vim <post> call vimrc#lexima#LazyLoad()
 Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
 Ezpack LeafCage/vimhelpgenerator
@@ -39,6 +38,7 @@ Ezpack yuki-yano/dedent-yank.vim # yankするときにインデントを削除
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter # gitの差分を表示する
+Ezpack cohama/lexima.vim <on> ModeChanged *:[ic] <post> call vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich
