@@ -520,7 +520,7 @@ endif
 vimrc#diffinfo#EchoDiffInfo(a, b, c)
 return true
 enddef
-g:zenmode.override = get(g:, 'zenmode', {})
+g:zenmode = get(g:, 'zenmode', {})
 g:zenmode.override = CC
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
