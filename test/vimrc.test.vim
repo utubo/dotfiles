@@ -292,6 +292,7 @@ suite.TestWindowSizeChange = () => {
 
 # cmdlineの括弧 {{{
 suite.TestCmdlinePair = () => {
+	packadd lexima.vim
 	vimrc#lexima#LazyLoad()
 	feedkeys(":#\"({'`\<CR>", 'Lx!')
 	assert.equals(@:, '#"({''``''})"')
