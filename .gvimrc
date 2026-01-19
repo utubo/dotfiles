@@ -6,7 +6,7 @@ au!
 aug END
 set textwidth=0
 set renderoptions=type:directx,renmode:6
-set guifont=Cica:h13
+set guifont=Moralerspace_Neon_HWJPDOC:h14
 def A(d: number)
 var f = split(&guifont, ':h')
 &guifont = f[0] .. ':h' .. (str2nr(f[1]) + d)
