@@ -1,5 +1,9 @@
 vim9script
 g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
+jisyo: [
+'~/SKK-JISYO.L',
+'~/SKK-JISYO.emoji.utf8',
+],
 keymap: {
 commit: ["\<CR>", 'l'],
 cancel: ["\<C-g>", "\<C-e>"],
