@@ -20,6 +20,7 @@ git config --global core.excludesfile ~/.gitignore_global
 cd ~
 wget http://openlab.jp/skk/dic/SKK-JISYO.L.gz
 gunzip -f SKK-JISYO.L.gz
+wget https://raw.githubusercontent.com/uasi/skk-emoji-jisyo/refs/heads/master/SKK-JISYO.emoji.utf8
 
 # nodejs
 if command -v npm &> /dev/null; then

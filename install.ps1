@@ -15,11 +15,14 @@ ls ~/vimfiles/autoload
 
 git config --global core.excludesfile ~/.gitignore_global
 
-# choco
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# skk
+cd ~
+Invoke-WebRequest -Uri http://openlab.jp/skk/dic/SKK-JISYO.L.gz -OutFile SKK-JISYO.L.gz
+$in=[System.IO.File]::OpenRead('SKK-JISYO.L.gz');$out=[System.IO.File]::Create('SKK-JISYO.L');[System.IO.Compression.GzipStream]::new($in,[System.IO.Compression.CompressionMode]::Decompress).CopyTo($out);$in.Close();$out.Close()
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/uasi/skk-emoji-jisyo/refs/heads/master/SKK-JISYO.emoji.utf8 -OutFile SKK-JISYO.emoji.utf8
 
 # npm
-choco install -y --force nodejs-lts
+winget install -e --id OpenJS.NodeJS.LTS
 npm install -g npm
 $node_modules = (npm prefix) + "AppData\Roaming\npm"
 $systemPath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
