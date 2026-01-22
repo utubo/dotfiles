@@ -9,7 +9,7 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		commit: ["\<CR>", 'l'],
 		cancel: ["\<C-g>", "\<C-e>"],
 	},
-	mode_display: 'cursor',
+	mode_display: 'none',
 	keep_midasi_mode: true,
 	roman_abbrev: {
 		ds: 'です',
