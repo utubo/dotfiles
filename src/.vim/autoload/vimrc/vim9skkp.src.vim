@@ -16,6 +16,7 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		ms: 'ます',
 		sr: 'する',
 		st: 'して',
+		smt: 'しました',
 		ks: 'ください',
 		dg: 'ですが、',
 		mg: 'ますが、',
