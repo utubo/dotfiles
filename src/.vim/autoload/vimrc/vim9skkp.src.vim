@@ -10,7 +10,7 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		cancel: ["\<C-g>", "\<C-e>"],
 	},
 	mode_display: 'none',
-	keep_midasi_mode: true,
+	sticky_lock: true,
 	roman_abbrev: {
 		ds: 'です',
 		ms: 'ます',
