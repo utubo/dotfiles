@@ -57,7 +57,7 @@ Ezpack utubo/vim-skipslash
 Ezpack utubo/vim-vim9skkp
 EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
 EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
-EzpackPost au ModeChanged *:[ic] ++once {
+EzpackPost au ModeChanged *:[ict] ++once {
 EzpackPost call vimrc#vim9skkp#LazyLoad()
 EzpackPost packadd vim-vim9skkp
 EzpackPost }

@@ -87,7 +87,7 @@ Ezpack utubo/vim-vim9skkp         # vim9scriptで作ったskk
 # Note: Ezpackのオプションでも同じ事をできるけど見通し悪かった…
 EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
 EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
-EzpackPost au ModeChanged *:[ic] ++once {
+EzpackPost au ModeChanged *:[ict] ++once {
 EzpackPost    call vimrc#vim9skkp#LazyLoad()
 EzpackPost    packadd vim-vim9skkp
 EzpackPost }
