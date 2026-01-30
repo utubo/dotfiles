@@ -154,6 +154,9 @@ hi Comment gui=none cterm=none
 hi link luaParenError Error
 hi! link VertSplit TabLineFill
 hi! link ZenmodeHoriz TabLineFill
+const d = B('TabPanel').bg
+exe $'hi AnyPanelCalendarSun guifg={B('ErrorMsg').fg} guibg={d}'
+exe $'hi AnyPanelCalendarSat guifg={B('Directory').fg} guibg={d}'
 enddef
 au vimrc VimEnter,ColorScheme * C()
 def D()

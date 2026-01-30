@@ -198,6 +198,10 @@ def MyHighlight()
 	hi link luaParenError Error
 	hi! link VertSplit TabLineFill
 	hi! link ZenmodeHoriz TabLineFill
+
+	const tplBg = GetHl('TabPanel').bg
+	execute $'hi AnyPanelCalendarSun guifg={GetHl('ErrorMsg').fg} guibg={tplBg}'
+	execute $'hi AnyPanelCalendarSat guifg={GetHl('Directory').fg} guibg={tplBg}'
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
