@@ -25,6 +25,7 @@ Ezpack rhysd/vim-gfm-syntax
 Ezpack skanehira/gh.vim
 Ezpack thinca/vim-portal
 Ezpack thinca/vim-themis
+Ezpack tommcdo/vim-exchange
 Ezpack tpope/vim-fugitive
 Ezpack tyru/capture.vim
 Ezpack yuki-yano/dedent-yank.vim
