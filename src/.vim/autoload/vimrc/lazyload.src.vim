@@ -240,6 +240,13 @@ nmap <C-n> <Plug>(yankround-next)
 # nmap gP <ScriptCmd>vimrc#yankround#Paste('gP')<CR>
 # }}}
 
+# exchange {{{
+nnoremap <LocalLeader>x <Plug>(Exchange)
+xnoremap <LocalLeader>x <Plug>(Exchange)
+nnoremap <LocalLeader>xc <Plug>(ExchangeClear)
+nnoremap <LocalLeader>xx <Plug>(ExchangeLine)
+# }}}
+
 # 補完 {{{
 export def SkipParen(): string
 	const c = matchstr(getline('.'), '.', col('.') - 1)
@@ -360,8 +367,6 @@ inoremap <LocalLeader>(cancel) <Esc>`^
 # CTRLの代り
 nmap <LocalLeader>w <C-w>
 nnoremap <LocalLeader>v <C-v>
-nnoremap <LocalLeader>a <C-a>
-nnoremap <LocalLeader>x <C-a>
 # `;ttt...`、`;ddd...`でインデント調整
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>

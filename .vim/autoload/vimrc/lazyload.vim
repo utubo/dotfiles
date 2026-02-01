@@ -163,6 +163,10 @@ nm p <Plug>(yankround-p)
 xm p <Plug>(yankround-p)
 nm P <Plug>(yankround-P)
 nm <C-n> <Plug>(yankround-next)
+nn <LocalLeader>x <Plug>(Exchange)
+xn <LocalLeader>x <Plug>(Exchange)
+nn <LocalLeader>xc <Plug>(ExchangeClear)
+nn <LocalLeader>xx <Plug>(ExchangeLine)
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
@@ -239,8 +243,6 @@ no <LocalLeader>(cancel) <Esc>
 ino <LocalLeader>(cancel) <Esc>`^
 nm <LocalLeader>w <C-w>
 nn <LocalLeader>v <C-v>
-nn <LocalLeader>a <C-a>
-nn <LocalLeader>x <C-a>
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>
 SubMode indent nmap <LocalLeader> t >>
