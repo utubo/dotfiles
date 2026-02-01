@@ -88,22 +88,7 @@ g:textobj_multiblock_blocks = [
 call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
-com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
-com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
-com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
-com! -nargs=* GitPush vimrc#git#Push(<q-args>)
-com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
-nn <Space>ga <Cmd>GitAdd -A<CR>
-nn <Space>gs <Cmd>Git status -sb<CR>
-nn <Space>gv <Cmd>Gvdiffsplit<CR>
-nn <Space>gd <Cmd>Gdiffsplit<CR>
-nn <Space>gu <Cmd>Git pull<CR>
-nn <Space>gl <Cmd>Git log<CR>
-nm <Space>gp :<C-u>GitPush<End>
-nm <Space>gt :<C-u>GitTagPush<Space>
-nm <Space>gC :<C-u>Git checkout %
-nm <Space>gc :<C-u>GitCommit<Space><Tab>
-nm <Space>gA :<C-u><Cmd>call setcmdline($'GitAmend {vimrc#git#GetLastCommitMessage()}')<CR>
+nn <Space>g <ScriptCmd>vimrc#git#ShowMenu()<CR>
 def BA()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
@@ -117,7 +102,7 @@ enddef
 nn <Space>GU <ScriptCmd>BA()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>GH <Cmd>e gh://utubo/repos<CR>
-nn <Space>gi <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
+nn <Space>GI <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
 au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()

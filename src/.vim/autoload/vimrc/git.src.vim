@@ -99,9 +99,39 @@ export def TagPush(tagname: string)
 	})
 enddef
 
-# 以下はvimrcで定義する
-# command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
-# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
-# command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
-# command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
+def SetCmdlineForAmend()
+	au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
+enddef
+
+export def ShowMenu()
+	popselect#Popup([
+		{ shortcut: 'u', label: 'Git pull' },
+		{ shortcut: 'a', label: 'GitAdd -A' },
+		{ shortcut: 'c', label: 'GitCommit', cmdkeys: "GitCommit \<Tab>" },
+		{ shortcut: 'A', label: 'Amend', cmdkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
+		{ shortcut: 'p', label: 'GitPush', cmdkeys: 'GitPush' },
+		{ shortcut: 't', label: 'GitTagPush', cmdkeys: 'GitTagPush' },
+		{ shortcut: 'l', label: 'Git log' },
+		{ shortcut: 's', label: 'Git status Sb' },
+		{ shortcut: 'v', label: 'Gvdiffsplit' },
+		{ shortcut: 'd', label: 'Gdiffsplit' },
+	], {
+		oncomplete: (item) => {
+			if item->has_key('cmdkeys')
+				feedkeys($":\<C-u>{item.cmdkeys}")
+			else
+				feedkeys($":\<C-u>{item.label}\<CR>")
+			endif
+		},
+		filter_focused: false,
+		title: 'Git',
+	})
+enddef
+
+# NOTE: ここに定義するとこのファイルが読み込まれるまで有効にならないけどまぁいいか
+command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
+command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
+command! -nargs=1 GitPush vimrc#git#Push(<q-args>)
+command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 

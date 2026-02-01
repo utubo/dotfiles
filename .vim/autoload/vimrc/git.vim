@@ -85,3 +85,35 @@ D($'git tag {shellescape(a)}', (j, s) => {
 D($'git push origin {shellescape(a)}')
 })
 enddef
+def F()
+au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
+enddef
+export def ShowMenu()
+popselect#Popup([
+{ shortcut: 'u', label: 'Git pull' },
+{ shortcut: 'a', label: 'GitAdd -A' },
+{ shortcut: 'c', label: 'GitCommit', cmdkeys: "GitCommit \<Tab>" },
+{ shortcut: 'A', label: 'Amend', cmdkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
+{ shortcut: 'p', label: 'GitPush', cmdkeys: 'GitPush' },
+{ shortcut: 't', label: 'GitTagPush', cmdkeys: 'GitTagPush' },
+{ shortcut: 'l', label: 'Git log' },
+{ shortcut: 's', label: 'Git status Sb' },
+{ shortcut: 'v', label: 'Gvdiffsplit' },
+{ shortcut: 'd', label: 'Gdiffsplit' },
+], {
+oncomplete: (item) => {
+if item->has_key('cmdkeys')
+feedkeys($":\<C-u>{item.cmdkeys}")
+else
+feedkeys($":\<C-u>{item.label}\<CR>")
+endif
+},
+filter_focused: false,
+title: 'Git',
+})
+enddef
+com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
+com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
+com! -nargs=1 GitPush vimrc#git#Push(<q-args>)
+com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
