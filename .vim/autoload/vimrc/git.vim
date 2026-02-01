@@ -115,5 +115,5 @@ enddef
 com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
-com! -nargs=1 GitPush vimrc#git#Push(<q-args>)
+com! -nargs=* GitPush vimrc#git#Push(<q-args>)
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
