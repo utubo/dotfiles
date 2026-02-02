@@ -92,10 +92,10 @@ export def ShowMenu()
 popselect#Popup([
 { shortcut: 'u', label: 'Git pull' },
 { shortcut: 'a', label: 'GitAdd -A' },
-{ shortcut: 'c', label: 'GitCommit', cmdkeys: "GitCommit \<Tab>" },
-{ shortcut: 'A', label: 'Amend', cmdkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
-{ shortcut: 'p', label: 'GitPush', cmdkeys: 'GitPush' },
-{ shortcut: 't', label: 'GitTagPush', cmdkeys: 'GitTagPush' },
+{ shortcut: 'c', label: 'GitCommit', feedkeys: "GitCommit \<Tab>" },
+{ shortcut: 'A', label: 'Amend', feedkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
+{ shortcut: 'p', label: 'GitPush', feedkeys: 'GitPush' },
+{ shortcut: 't', label: 'GitTagPush', feedkeys: 'GitTagPush ' },
 { shortcut: 'l', label: 'Git log' },
 { shortcut: 's', label: 'Git status Sb' },
 { shortcut: 'v', label: 'Gvdiffsplit' },
@@ -103,8 +103,8 @@ popselect#Popup([
 { shortcut: 'C', label: 'Git checkout %' },
 ], {
 oncomplete: (item) => {
-if item->has_key('cmdkeys')
-feedkeys($":\<C-u>{item.cmdkeys}")
+if item->has_key('feedkeys')
+feedkeys($":\<C-u>{item.feedkeys}")
 else
 feedkeys($":\<C-u>{item.label}\<CR>")
 endif
