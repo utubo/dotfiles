@@ -99,10 +99,6 @@ export def TagPush(tagname: string)
 	})
 enddef
 
-def SetCmdlineForAmend()
-	au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
-enddef
-
 export def ShowMenu()
 	popselect#Popup([
 		{ shortcut: 'u', label: 'Git pull' },

@@ -85,9 +85,6 @@ D($'git tag {shellescape(a)}', (j, s) => {
 D($'git push origin {shellescape(a)}')
 })
 enddef
-def F()
-au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
-enddef
 export def ShowMenu()
 popselect#Popup([
 { shortcut: 'u', label: 'Git pull' },
