@@ -105,17 +105,21 @@ export def ShowMenu()
 		{ shortcut: 'a', label: 'GitAdd -A' },
 		{ shortcut: 'c', label: 'GitCommit', feedkeys: "GitCommit \<Tab>" },
 		{ shortcut: 'A', label: 'Amend', feedkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
-		{ shortcut: 'p', label: 'GitPush', feedkeys: 'GitPush' },
+		{ shortcut: 'p', label: 'GitPush', wantenter: true},
 		{ shortcut: 't', label: 'GitTagPush', feedkeys: 'GitTagPush ' },
 		{ shortcut: 'l', label: 'Git log' },
 		{ shortcut: 's', label: 'Git status Sb' },
 		{ shortcut: 'v', label: 'Gvdiffsplit' },
 		{ shortcut: 'd', label: 'Gdiffsplit' },
 		{ shortcut: 'C', label: 'Git checkout %' },
+		{ shortcut: 'r', label: 'Git reset --soft', wantenter: true},
+		{ shortcut: 'R', label: 'Git reset --hard', wantenter: true},
 	], {
 		oncomplete: (item) => {
 			if item->has_key('feedkeys')
 				feedkeys($":\<C-u>{item.feedkeys}")
+			elseif item->has_key('wantenter')
+				feedkeys($":\<C-u>{item.label}")
 			else
 				feedkeys($":\<C-u>{item.label}\<CR>")
 			endif
