@@ -24,7 +24,7 @@ enddef
 
 def SystemList(cmd: string): list<string>
 	var result = []
-	# NOTE: use job_start() instead system() for windows
+	# NOTE: use job_start() instead of system() for windows
 	var job = job_start(cmd, {
 		out_cb: (j, s) => {
 			result->add(s)
