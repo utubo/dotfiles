@@ -115,6 +115,7 @@ export def ShowMenu()
 		{ shortcut: 's', label: 'Git status Sb' },
 		{ shortcut: 'v', label: 'Gvdiffsplit' },
 		{ shortcut: 'd', label: 'Gdiffsplit' },
+		{ shortcut: 'C', label: 'Git checkout %' },
 	], {
 		oncomplete: (item) => {
 			if item->has_key('cmdkeys')
