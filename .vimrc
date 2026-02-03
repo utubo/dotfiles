@@ -157,6 +157,10 @@ hi! link ZenmodeHoriz TabLineFill
 const d = B('TabPanel').bg
 exe $'hi AnyPanelCalendarSun guifg={B('ErrorMsg').fg} guibg={d}'
 exe $'hi AnyPanelCalendarSat guifg={B('Directory').fg} guibg={d}'
+const e = hlget('CursorIM')->get(0, {})
+if get(e, 'linksto', '') ==# 'Cursor'
+hi! link CursorIM PMenuSel
+endif
 enddef
 au vimrc VimEnter,ColorScheme * C()
 def D()

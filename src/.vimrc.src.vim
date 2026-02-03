@@ -202,6 +202,11 @@ def MyHighlight()
 	const tplBg = GetHl('TabPanel').bg
 	execute $'hi AnyPanelCalendarSun guifg={GetHl('ErrorMsg').fg} guibg={tplBg}'
 	execute $'hi AnyPanelCalendarSat guifg={GetHl('Directory').fg} guibg={tplBg}'
+
+	const cur = hlget('CursorIM')->get(0, {})
+	if get(cur, 'linksto', '') ==# 'Cursor'
+		hi! link CursorIM PMenuSel
+	endif
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
