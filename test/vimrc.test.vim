@@ -186,6 +186,8 @@ suite.TestMapping = () => {
 		'n  gf', # vimgoto
 		'n  T', # f,F,t,T
 		'n  gy', # detent-yank
+		'n  X', # exchange
+		'n  X[XC]', # exchange
 	]->join('\|')
 
 	# ユーザー定義のマッピング
