@@ -350,9 +350,10 @@ noremap  <LocalLeader>(cancel) <Esc>
 inoremap <LocalLeader>(cancel) <Esc>`^
 # CTRLの代り
 nmap <LocalLeader>w <C-w>
-nmap <LocalLeader>a <C-a>
-nmap <LocalLeader>x <C-x>
 nnoremap <LocalLeader>v <C-v>
+# <C-a>と<C-x>
+SubMode incdec nmap <LocalLeader> a <C-a>
+SubMode incdec nmap <LocalLeader> x <C-x>
 # `;ttt...`、`;ddd...`でインデント調整
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>

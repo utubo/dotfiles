@@ -227,9 +227,9 @@ Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
 no <LocalLeader>(cancel) <Esc>
 ino <LocalLeader>(cancel) <Esc>`^
 nm <LocalLeader>w <C-w>
-nm <LocalLeader>a <C-a>
-nm <LocalLeader>x <C-x>
 nn <LocalLeader>v <C-v>
+SubMode incdec nmap <LocalLeader> a <C-a>
+SubMode incdec nmap <LocalLeader> x <C-x>
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>
 SubMode indent nmap <LocalLeader> t >>
