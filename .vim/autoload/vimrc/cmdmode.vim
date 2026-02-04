@@ -143,10 +143,10 @@ aug vimrc_cmdline_popup
 au!
 aug END
 if o.visual !=# 0
-matchdelete(o.visual)
+sil matchdelete(o.visual)
 endif
 if o.shade !=# 0
-matchdelete(o.shade)
+sil matchdelete(o.shade)
 endif
 BC()
 timer_stop(o.updatetimer)

@@ -184,10 +184,10 @@ def ClosePopup()
 		au!
 	augroup END
 	if popup.visual !=# 0
-		matchdelete(popup.visual)
+		silent matchdelete(popup.visual)
 	endif
 	if popup.shade !=# 0
-		matchdelete(popup.shade)
+		silent matchdelete(popup.shade)
 	endif
 	RestoreCursor()
 	timer_stop(popup.updatetimer)
