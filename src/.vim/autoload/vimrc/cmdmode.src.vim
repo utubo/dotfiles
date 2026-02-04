@@ -92,6 +92,7 @@ enddef
 
 export def Popup(timer: number = 0)
 	if popup.win !=# 0
+		ClosePopup()
 		echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 		return
 	endif
