@@ -78,7 +78,7 @@ enddef
 # SubMode winsize nmap W k <C-w>-
 # -> You can type Wjjjkkkkjj... to change the window size.
 def SubMode(name: string, mapcmd: string, switch: string, lhs: string, ...rhs: list<string>)
-	# <Space> prevents ghoast char.
+	# NOTE: <Space> prevents a ghost char.
 	const s = $'<SID>sub{name}<Space>'
 	const norcmd = mapcmd->substitute('map', 'noremap', '')
 	execute $'{mapcmd} <script> {s} <Nop>'
