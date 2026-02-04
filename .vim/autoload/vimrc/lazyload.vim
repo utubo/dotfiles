@@ -148,10 +148,10 @@ nm p <Plug>(yankround-p)
 xm p <Plug>(yankround-p)
 nm P <Plug>(yankround-P)
 nm <C-n> <Plug>(yankround-next)
-nn <LocalLeader>x <Plug>(Exchange)
-xn <LocalLeader>x <Plug>(Exchange)
-nn <LocalLeader>xc <Plug>(ExchangeClear)
-nn <LocalLeader>xx <Plug>(ExchangeLine)
+nn X <Plug>(Exchange)
+xn X <Plug>(Exchange)
+nn XC <Plug>(ExchangeClear)
+nn XX <Plug>(ExchangeLine)
 export def SkipParen(): string
 const c = matchstr(getline('.'), '.', col('.') - 1)
 if !c || stridx(')]}>\''`」', c) ==# -1
@@ -227,6 +227,8 @@ Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
 no <LocalLeader>(cancel) <Esc>
 ino <LocalLeader>(cancel) <Esc>`^
 nm <LocalLeader>w <C-w>
+nm <LocalLeader>a <C-a>
+nm <LocalLeader>x <C-x>
 nn <LocalLeader>v <C-v>
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>

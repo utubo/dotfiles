@@ -63,7 +63,7 @@ const vimrc_sid = scriptnames_output
 
 # ----------------------------------------------------------
 # 初期表示後の設定を実行
-doautocmd SafeStateAgain *
+silent doautocmd SafeStateAgain *
 
 # ----------------------------------------------------------
 # Lint
@@ -152,6 +152,8 @@ suite.TestMapping = () => {
 		'n  G[ai%]',
 		'n  <C-[ABFGINOPWX]>',
 		'n  <Esc>',
+		'n  X', # exchange
+		'n  X[XC]', # exchange
 		'v  [*/?:]',
 		'i  <C-U>',
 		'n  \\<C-I>', # BackAndForward
@@ -184,8 +186,6 @@ suite.TestMapping = () => {
 		'n  gf', # vimgoto
 		'n  T', # f,F,t,T
 		'n  gy', # detent-yank
-		'n  c', # exchange
-		'n  ;x.', # exchange
 	]->join('\|')
 
 	# ユーザー定義のマッピング
@@ -319,15 +319,15 @@ suite.TestEach = () => {
 	assert.equals(execute('vmap xxx'), "\n\nv  xxx           yyy_vmap")
 	nunmap xxx
 	vunmap xxx
-	Each {a},{b}=X,A,Y,B Each nmap,vmap {a} yyy_{b}
-	assert.equals(execute('nmap X'), "\n\nn  X             yyy_A")
-	assert.equals(execute('vmap X'), "\n\nv  X             yyy_A")
-	assert.equals(execute('nmap Y'), "\n\nn  Y             yyy_B")
-	assert.equals(execute('vmap Y'), "\n\nv  Y             yyy_B")
-	nunmap X
-	vunmap X
-	nunmap Y
-	vunmap Y
+	Each {a},{b}=_X,A,_Y,B Each nmap,vmap {a} yyy_{b}
+	assert.equals(execute('nmap _X'), "\n\nn  _X            yyy_A")
+	assert.equals(execute('vmap _X'), "\n\nv  _X            yyy_A")
+	assert.equals(execute('nmap _Y'), "\n\nn  _Y            yyy_B")
+	assert.equals(execute('vmap _Y'), "\n\nv  _Y            yyy_B")
+	nunmap _X
+	vunmap _X
+	nunmap _Y
+	vunmap _Y
 }
 
 suite.TestEnableDisable = () => {

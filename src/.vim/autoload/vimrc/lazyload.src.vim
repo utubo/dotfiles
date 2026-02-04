@@ -225,10 +225,10 @@ nmap <C-n> <Plug>(yankround-next)
 # }}}
 
 # exchange {{{
-nnoremap <LocalLeader>x <Plug>(Exchange)
-xnoremap <LocalLeader>x <Plug>(Exchange)
-nnoremap <LocalLeader>xc <Plug>(ExchangeClear)
-nnoremap <LocalLeader>xx <Plug>(ExchangeLine)
+nnoremap X <Plug>(Exchange)
+xnoremap X <Plug>(Exchange)
+nnoremap XC <Plug>(ExchangeClear)
+nnoremap XX <Plug>(ExchangeLine)
 # }}}
 
 # 補完 {{{
@@ -350,6 +350,8 @@ noremap  <LocalLeader>(cancel) <Esc>
 inoremap <LocalLeader>(cancel) <Esc>`^
 # CTRLの代り
 nmap <LocalLeader>w <C-w>
+nmap <LocalLeader>a <C-a>
+nmap <LocalLeader>x <C-x>
 nnoremap <LocalLeader>v <C-v>
 # `;ttt...`、`;ddd...`でインデント調整
 SubMode indent imap <LocalLeader> t <C-t>
