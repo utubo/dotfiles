@@ -71,7 +71,7 @@ Ezpack robenkleene/veep.vim <cmd> P # ビジュアルブロックに対してexc
 EzpackLazyLoad
 Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動
 Ezpack utubo/vim-hlpairs          # 括弧をハイライト強化版
-Ezpack utubo/vim-minviml          # vimscriptをminify
+Ezpack utubo/vim-minviml          # Vim scriptをminify
 Ezpack utubo/vim-registers-lite   # registers.nvimライクなプラグイン
 Ezpack utubo/vim-update           # gvim.exeの最新版をgithubから落とす
 Ezpack utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
@@ -82,7 +82,7 @@ Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
 Ezpack utubo/vim-previewcmd       # コマンド補完
 Ezpack utubo/vim-skipslash        # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-Ezpack utubo/vim-vim9skkp         # vim9scriptで作ったskk
+Ezpack utubo/vim-vim9skkp         # Vim9 scriptで作ったskk
 
 # 以下はautocmdでロードさせる
 # Note: Ezpackのオプションでも同じ事をできるけど見通し悪かった…
