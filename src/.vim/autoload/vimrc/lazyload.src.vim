@@ -353,10 +353,10 @@ inoremap <LocalLeader>(cancel) <Esc>`^
 nmap <LocalLeader>w <C-w>
 nnoremap <LocalLeader>v <C-v>
 # <C-a>と<C-x>
-noremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
-noremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
-SubMode incdec nmap <LocalLeader> a <C-a>
-SubMode incdec nmap <LocalLeader> x <C-x>
+nnoremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
+nnoremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
+SubMode incdec nmap <LocalLeader> a <Cmd>call reformatdate#inc(v:count)<CR>
+SubMode incdec nmap <LocalLeader> x <Cmd>call reformatdate#dec(v:count)<CR>
 # `;ttt...`、`;ddd...`でインデント調整
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>

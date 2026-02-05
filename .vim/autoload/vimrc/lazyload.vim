@@ -228,10 +228,10 @@ no <LocalLeader>(cancel) <Esc>
 ino <LocalLeader>(cancel) <Esc>`^
 nm <LocalLeader>w <C-w>
 nn <LocalLeader>v <C-v>
-no <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
-no <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
-SubMode incdec nmap <LocalLeader> a <C-a>
-SubMode incdec nmap <LocalLeader> x <C-x>
+nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
+nn <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
+SubMode incdec nmap <LocalLeader> a <Cmd>call reformatdate#inc(v:count)<CR>
+SubMode incdec nmap <LocalLeader> x <Cmd>call reformatdate#dec(v:count)<CR>
 SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>
 SubMode indent nmap <LocalLeader> t >>
