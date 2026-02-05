@@ -29,6 +29,7 @@ Ezpack tommcdo/vim-exchange
 Ezpack tpope/vim-fugitive
 Ezpack tyru/capture.vim
 Ezpack yuki-yano/dedent-yank.vim
+Ezpack wellle/targets.vim
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter
