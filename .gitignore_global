@@ -1,6 +1,10 @@
 # ln -s ~/dotfiles/.gitignore_global ~/
 # git config --global core.excludesfile ~/.gitignore_global
 
+# Vim
 *.sw?
+Untitled
+
+# Windows
 Thumbs.db
 
