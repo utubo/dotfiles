@@ -353,6 +353,8 @@ inoremap <LocalLeader>(cancel) <Esc>`^
 nmap <LocalLeader>w <C-w>
 nnoremap <LocalLeader>v <C-v>
 # <C-a>と<C-x>
+noremap <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
+noremap <C-x> <Cmd>call reformatdate#dec(v:count)<CR>
 SubMode incdec nmap <LocalLeader> a <C-a>
 SubMode incdec nmap <LocalLeader> x <C-x>
 # `;ttt...`、`;ddd...`でインデント調整

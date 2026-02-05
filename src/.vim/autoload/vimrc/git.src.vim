@@ -108,10 +108,11 @@ export def ShowMenu()
 		{ shortcut: 'p', label: 'GitPush', wantenter: true},
 		{ shortcut: 't', label: 'GitTagPush', feedkeys: 'GitTagPush ' },
 		{ shortcut: 'l', label: 'Git log' },
-		{ shortcut: 's', label: 'Git status Sb' },
+		{ shortcut: 's', label: 'Git status' },
 		{ shortcut: 'v', label: 'Gvdiffsplit' },
 		{ shortcut: 'd', label: 'Gdiffsplit' },
 		{ shortcut: 'C', label: 'Git checkout %' },
+		{ shortcut: 'S', label: 'Git restore -staged', feedkeys: 'Git restore -staged ' },
 		{ shortcut: 'r', label: 'Git reset --soft', wantenter: true},
 		{ shortcut: 'R', label: 'Git reset --hard', wantenter: true},
 	], {
