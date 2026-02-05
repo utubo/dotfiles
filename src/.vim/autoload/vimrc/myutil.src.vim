@@ -215,3 +215,41 @@ export def PopupVisualLength()
 	})
 enddef
 # }}}
+
+# ファイル名を勝手につけて保存 {{{
+export def Sav()
+	if !!bufname()
+		update
+		return
+	endif
+	const dt = strftime('%Y%m%d')
+	var title = getline(1)
+		->matchlist('^.\{0,10\}')[0]
+		->substitute("[ \t\n*?[{`$\\%#'\"|!<>]", '_', 'g')
+	var ext = &ft
+	if getline(1) =~# '^vim9script\>.*'
+		ext = 'vim'
+		title = ''
+	elseif &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+		title = getline(1)
+			->substitute('- \[.\]', '', 'g')
+			->substitute('^[ -#]*', '', 'g')
+		ext = 'md'
+	elseif &ft ==# 'javascript'
+		ext = 'js'
+	elseif &ft ==# 'python'
+		ext = 'py'
+	elseif &ft ==# 'ruby'
+		ext = 'rb'
+	elseif &ft ==# 'typescript'
+		ext = 'ts'
+	elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
+		ext = 'txt'
+	endif
+	const fname = $'{dt}{!title ? '' : '_'}{title}.{ext}'
+	const iname = input($"{getcwd()}\n:sav ", $'{fname}{repeat("\<Left>", len(ext) + 1)}')
+	if !!iname
+		execute 'sav' iname
+	endif
+enddef
+# }}}

@@ -177,3 +177,38 @@ moved: 'any',
 padding: [1, 1, 1, 1],
 })
 enddef
+export def Sav()
+if !!bufname()
+update
+return
+endif
+const a = strftime('%Y%m%d')
+var b = getline(1)
+->matchlist('^.\{0,10\}')[0]
+->substitute("[ \t\n*?[{`$\\%#'\"|!<>]", '_', 'g')
+var c = &ft
+if getline(1) =~# '^vim9script\>.*'
+c = 'vim'
+b = ''
+elseif &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
+b = getline(1)
+->substitute('- \[.\]', '', 'g')
+->substitute('^[ -#]*', '', 'g')
+c = 'md'
+elseif &ft ==# 'javascript'
+c = 'js'
+elseif &ft ==# 'python'
+c = 'py'
+elseif &ft ==# 'ruby'
+c = 'rb'
+elseif &ft ==# 'typescript'
+c = 'ts'
+elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
+c = 'txt'
+endif
+const d = $'{a}{!b ? '' : '_'}{b}.{c}'
+const e = input($"{getcwd()}\n:sav ", $'{d}{repeat("\<Left>", len(c) + 1)}')
+if !!e
+exe 'sav' e
+endif
+enddef

@@ -330,42 +330,7 @@ au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
 nn <script> <C-g> <ScriptCmd>vimrc#myutil#ShowBufInfo()<CR><ScriptCmd>vimrc#myutil#PopupCursorPos()<CR>
 xn <C-g> <ScriptCmd>vimrc#myutil#PopupVisualLength()<CR>
-def BG()
-if !!bufname()
-update
-return
-endif
-const a = strftime('%Y%m%d')
-var b = getline(1)
-->matchlist('^.\{0,10\}')[0]
-->substitute("[ \t\n*?[{`$\\%#'\"|!<>]", '_', 'g')
-var c = &ft
-if getline(1) =~# '^vim9script\>.*'
-c = 'vim'
-b = ''
-elseif &ft ==# 'markdown' || search('^ *- \[.\] ', 'cn')
-b = getline(1)
-->substitute('- \[.\]', '', 'g')
-->substitute('^[ -#]*', '', 'g')
-c = 'md'
-elseif &ft ==# 'javascript'
-c = 'js'
-elseif &ft ==# 'python'
-c = 'py'
-elseif &ft ==# 'ruby'
-c = 'rb'
-elseif &ft ==# 'typescript'
-c = 'ts'
-elseif &ft ==# 'text' || &ft ==# 'help' || !&ft
-c = 'txt'
-endif
-const d = $'{a}{!b ? '' : '_'}{b}.{c}'
-const e = input($"{getcwd()}\n:sav ", $'{d}{repeat("\<Left>", len(c) + 1)}')
-if !!e
-exe 'sav' e
-endif
-enddef
-com! Sav BG()
+com! Sav vimrc#myutil#Sav()
 def g:QuitWin(a: string)
 if winnr() ==# winnr(a)
 return
@@ -449,62 +414,62 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-def BH(c: string): string
-nn <nowait> <expr> ; BH(';')
-nn <nowait> <expr> , BH(',')
+def BG(c: string): string
+nn <nowait> <expr> ; BG(';')
+nn <nowait> <expr> , BG(',')
 aug unmap-semi
 au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ;|unm ,
 aug END
 return c
 enddef
-Each X=f,F,t,T nnoremap <expr> X BH('X')
+Each X=f,F,t,T nnoremap <expr> X BG('X')
 g:preOpCurpos = getcurpos()
-def BI(a: string)
+def BH(a: string)
 g:preOpCurpos = getcurpos()
 au vimrc SafeState * ++once setpos('.', g:preOpCurpos)
 feedkeys(a, 'n')
 enddef
-Each key=y,= nnoremap key <ScriptCmd>BI('key')<CR>
+Each key=y,= nnoremap key <ScriptCmd>BH('key')<CR>
 nn <Space>r :!<Up>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn ]t <C-]>
 nn [t <C-t>
-def BJ()
+def BI()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def CA(a: string, b: string)
+def BJ(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BJ()
+au vimrc Syntax * BI()
 au vimrc Syntax javascript {
-CA('SpellRare', '\s[=!]=\s')
+BJ('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-CA('SpellRare', '\s[=!]=\s')
-CA('SpellBad', '\s[=!]==\s')
-CA('SpellBad', '\s\~[=!][=#]\?\s')
-CA('SpellRare', '\<normal!\@!')
+BJ('SpellRare', '\s[=!]=\s')
+BJ('SpellBad', '\s[=!]==\s')
+BJ('SpellBad', '\s\~[=!][=#]\?\s')
+BJ('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 set scrolloff=99
-def CB(a: number = -1)
+def CA(a: number = -1)
 if a ==# -1 || 0 < &l:scrolloff && &l:scrolloff < 99
 &l:scrolloff += 1
-timer_start(10, CB)
+timer_start(10, CA)
 endif
 enddef
-nn zz <ScriptCmd>CB()<CR>
+nn zz <ScriptCmd>CA()<CR>
 au vimrc ModeChanged *:[vV\x16] setlocal scrolloff=0
 au vimrc User EasyMotionPromptPre setlocal scrolloff=1
-au vimrc User EasyMotionPromptEnd CB()
-def CC(a: number, b: number, c: number): bool
+au vimrc User EasyMotionPromptEnd CA()
+def CB(a: number, b: number, c: number): bool
 if !getwinvar(b, '&diff')
 return false
 endif
@@ -512,7 +477,7 @@ vimrc#diffinfo#EchoDiffInfo(a, b, c)
 return true
 enddef
 g:zenmode = get(g:, 'zenmode', {})
-g:zenmode.override = CC
+g:zenmode.override = CB
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
