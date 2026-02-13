@@ -451,6 +451,7 @@ set splitright
 set fillchars+=diff:\ # 削除行は空白文字で埋める
 # diffモードを自動でoff https://hail2u.net/blog/software/vim-turn-off-diff-mode-automatically.html
 au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff') | diffoff | endif
+noremap <Space>D <Cmd>execute &diff ? 'diffoff' : 'diffthis'<CR>
 # }}}
 
 # ------------------------------------------------------

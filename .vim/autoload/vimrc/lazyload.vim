@@ -1,5 +1,5 @@
 vim9script
-def D(a: string)
+def E(a: string)
 var [b, d] = a->split('^\S*\zs')
 if b->stridx('=') ==# -1
 for v in b->split(',')
@@ -20,7 +20,7 @@ endfor
 exe c
 endwhile
 enddef
-com! -nargs=* Each D(<q-args>)
+com! -nargs=* Each E(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
 def g:System(a: string): string
@@ -44,14 +44,14 @@ sleep 10m
 endwhile
 return b
 enddef
-def E(a: string)
+def H(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
 exe $'normal! {a}'
 c[2] += getline('.')->len() - b
 setpos('.', c)
 enddef
-def H(a: string, b: string, c: string, d: string, ...e: list<string>)
+def BA(a: string, b: string, c: string, d: string, ...e: list<string>)
 const s = $'<SID>sub{a}<Space>'
 const f = b->substitute('map', 'noremap', '')
 exe $'{b} <script> {s} <Nop>'
@@ -60,7 +60,7 @@ exe $'{b} <script> {s}<Esc> <Nop>'
 exe $'{f} <script> {s}{d} {e->join(' ')}{s}'
 exe $'{b} <script> {c}{d} {s}{d}'
 enddef
-com! -nargs=* SubMode H(<f-args>)
+com! -nargs=* SubMode BA(<f-args>)
 packadd vim-reformatdate
 packadd vim-textobj-user
 packadd vim-headtail
@@ -89,7 +89,7 @@ call textobj#user#plugin('nonwhitespace', {
 '-': { 'pattern': '\S\+', 'select': ['a<Space>', 'i<Space>'], }
 })
 nn <Space>g <ScriptCmd>vimrc#git#ShowMenu()<CR>
-def BA()
+def BB()
 const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
 const c = getcwd()
@@ -99,7 +99,7 @@ chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall
 enddef
-nn <Space>GU <ScriptCmd>BA()<CR>
+nn <Space>GU <ScriptCmd>BB()<CR>
 au CmdlineEnter * ++once silent! cunmap <C-r><C-g>
 nn <Space>GH <Cmd>e gh://utubo/repos<CR>
 nn <Space>GI <ScriptCmd>vimrc#gh#OpenCurrentIssues()<CR>
@@ -120,13 +120,13 @@ nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
 nn <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
-def BB()
+def BC()
 if !vimrc#tabpanel#IsVisible()
 popselect#tabpages#Popup()
 endif
 enddef
-Each X=t,T nnoremap gX gX<ScriptCmd>BB()<CR>
-def BC(a: string)
+Each X=t,T nnoremap gX gX<ScriptCmd>BC()<CR>
+def BD(a: string)
 const b = bufnr()
 while true
 exe $'b{a}'
@@ -138,7 +138,7 @@ if !vimrc#tabpanel#IsVisible()
 popselect#buffers#Popup()
 endif
 enddef
-Each X=n,p nnoremap gX <ScriptCmd>BC('X')<CR>
+Each X=n,p nnoremap gX <ScriptCmd>BD('X')<CR>
 nn gr <C-^>
 nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
@@ -204,13 +204,13 @@ nn <A-J> <Cmd>copy.<CR>
 nn <A-K> <Cmd>copy-1<CR>
 xn <A-J> :copy'<-1<CR>gv
 xn <A-K> :copy'>+0<CR>gv
-def BD(): string
+def BE(): string
 const a = getpos('.')[2]
 const b = getline('.')[0 : a - 1]
 const c = matchstr(b, '\v<(\k(<)@!)*$')
 return toupper(c)
 enddef
-ino <expr> ;l $"<C-w>{BD()}"
+ino <expr> ;l $"<C-w>{BE()}"
 au vimrc TextYankPost * execute $'au SafeState * ++once execute "normal! m{v:event.operator}"'
 au vimrc TextYankPost * {
 if !v:event.regname
@@ -264,8 +264,8 @@ nn <Space>l $
 nn <Space>y yiw
 xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>E('>gv')<CR>
-xn <S-Tab> <ScriptCmd>E('<gv')<CR>
+xn <Tab> <ScriptCmd>H('>gv')<CR>
+xn <S-Tab> <ScriptCmd>H('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
 Each nmap,xmap <LocalLeader>c :
@@ -290,6 +290,7 @@ au vimrc TerminalOpen * ++once vimrc#terminal#ApplySettings()
 set spr
 set fcs+=diff:\ 
 au vimrc WinEnter * if (winnr('$') ==# 1) && !!getbufvar(winbufnr(0), '&diff')|diffoff|endif
+no <Space>D <Cmd>execute &diff ? 'diffoff' : 'diffthis'<CR>
 g:reformatdate_extend_names = [{
 a: ['日', '月', '火', '水', '木', '金', '土'],
 A: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
@@ -302,7 +303,7 @@ nn <F5> <ScriptCmd>reformatdate#reformat(localtime())<CR>
 nn <C-a> <ScriptCmd>reformatdate#inc(v:count)<CR>
 nn <C-x> <ScriptCmd>reformatdate#dec(v:count)<CR>
 nn <Space><F5> /\d\{4\}\/\d\d\/\d\d<CR>
-def BE()
+def BF()
 setl sw=0
 setl st=0
 if &ft ==# 'help'
@@ -324,7 +325,7 @@ endif
 setpos('.', b)
 enddef
 def SetupTabstopLazy()
-au vimrc SafeState * ++once BE()
+au vimrc SafeState * ++once BF()
 enddef
 au vimrc BufReadPost * SetupTabstopLazy()
 SetupTabstopLazy()
@@ -414,62 +415,62 @@ ino （） ()<C-g>U<Left>
 nn ' "
 nn m '
 nn M m
-def BG(c: string): string
-nn <nowait> <expr> ; BG(';')
-nn <nowait> <expr> , BG(',')
+def BH(c: string): string
+nn <nowait> <expr> ; BH(';')
+nn <nowait> <expr> , BH(',')
 aug unmap-semi
 au! CursorMoved * ++once au unmap-semi CursorMoved * ++once unmap ;|unm ,
 aug END
 return c
 enddef
-Each X=f,F,t,T nnoremap <expr> X BG('X')
+Each X=f,F,t,T nnoremap <expr> X BH('X')
 g:preOpCurpos = getcurpos()
-def BH(a: string)
+def BI(a: string)
 g:preOpCurpos = getcurpos()
 au vimrc SafeState * ++once setpos('.', g:preOpCurpos)
 feedkeys(a, 'n')
 enddef
-Each key=y,= nnoremap key <ScriptCmd>BH('key')<CR>
+Each key=y,= nnoremap key <ScriptCmd>BI('key')<CR>
 nn <Space>r :!<Up>
 set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn ]t <C-]>
 nn [t <C-t>
-def BI()
+def BJ()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)
 endfor
 w:my_syntax = []
 enddef
-def BJ(a: string, b: string)
+def CA(a: string, b: string)
 w:my_syntax->add(matchadd(a, b))
 enddef
-au vimrc Syntax * BI()
+au vimrc Syntax * BJ()
 au vimrc Syntax javascript {
-BJ('SpellRare', '\s[=!]=\s')
+CA('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
-BJ('SpellRare', '\s[=!]=\s')
-BJ('SpellBad', '\s[=!]==\s')
-BJ('SpellBad', '\s\~[=!][=#]\?\s')
-BJ('SpellRare', '\<normal!\@!')
+CA('SpellRare', '\s[=!]=\s')
+CA('SpellBad', '\s[=!]==\s')
+CA('SpellBad', '\s\~[=!][=#]\?\s')
+CA('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
 xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 set scrolloff=99
-def CA(a: number = -1)
+def CB(a: number = -1)
 if a ==# -1 || 0 < &l:scrolloff && &l:scrolloff < 99
 &l:scrolloff += 1
-timer_start(10, CA)
+timer_start(10, CB)
 endif
 enddef
-nn zz <ScriptCmd>CA()<CR>
+nn zz <ScriptCmd>CB()<CR>
 au vimrc ModeChanged *:[vV\x16] setlocal scrolloff=0
 au vimrc User EasyMotionPromptPre setlocal scrolloff=1
-au vimrc User EasyMotionPromptEnd CA()
-def CB(a: number, b: number, c: number): bool
+au vimrc User EasyMotionPromptEnd CB()
+def CC(a: number, b: number, c: number): bool
 if !getwinvar(b, '&diff')
 return false
 endif
@@ -477,7 +478,7 @@ vimrc#diffinfo#EchoDiffInfo(a, b, c)
 return true
 enddef
 g:zenmode = get(g:, 'zenmode', {})
-g:zenmode.override = CB
+g:zenmode.override = CC
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d
