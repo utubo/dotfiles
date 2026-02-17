@@ -55,11 +55,13 @@ timer: 0,
 blink: false,
 blinktimer: 0,
 curpos: 0,
-gcr: '',
-hlback: {},
 offset: 0,
 visual: 0,
 shade: 0,
+backup: {
+gcr: '',
+hl: {},
+},
 }
 export def PopupMapping()
 Popup()
@@ -72,7 +74,7 @@ return
 endif
 o.owner = win_getid()
 for h in ['MsgArea', 'CursorLine', 'Folded']
-o.hlback[h] = h->hlget()
+o.backup.hl[h] = h->hlget()
 endfor
 o.shade = matchadd('NonText', '.')
 hi! link Folded NonText
@@ -90,8 +92,8 @@ o.win = popup_create('  ', { col: o.col, line: o.line, zindex: 2 })
 setbufvar(winbufnr(o.win), '&filetype', 'vim')
 win_execute(o.win, $'syntax match PMenuKind /^./')
 set t_ve=
-if !o.gcr
-o.gcr = &guicursor
+if !o.backup.gcr
+o.backup.gcr = &guicursor
 endif
 set guicursor=c:CursorTransparent
 ['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
@@ -155,7 +157,7 @@ popup_close(o.win)
 o.win = 0
 o.owner = 0
 BE()
-for h in o.hlback->values()
+for h in o.backup.hl->values()
 exe $'hi {h[0].name} None'
 h->hlset()
 endfor
@@ -227,9 +229,9 @@ endif
 o.blink = !o.blink
 enddef
 def BC()
-if !!o.gcr
-&guicursor = o.gcr
-o.gcr = ''
+if !!o.backup.gcr
+&guicursor = o.backup.gcr
+o.backup.gcr = ''
 endif
 set t_ve&
 enddef

@@ -80,11 +80,13 @@ var popup = {
 	blink: false,
 	blinktimer: 0,
 	curpos: 0,
-	gcr: '',
-	hlback: {},
 	offset: 0,
 	visual: 0,
 	shade: 0,
+	backup: {
+		gcr: '',
+		hl: {},
+	},
 }
 
 export def PopupMapping()
@@ -102,7 +104,7 @@ export def Popup(timer: number = 0)
 
 	# ハイライトをバックアップ
 	for h in ['MsgArea', 'CursorLine', 'Folded']
-		popup.hlback[h] = h->hlget()
+		popup.backup.hl[h] = h->hlget()
 	endfor
 
 	# ポップアップを強調
@@ -128,8 +130,8 @@ export def Popup(timer: number = 0)
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
 	# カーソル関係
 	set t_ve=
-	if !popup.gcr
-		popup.gcr = &guicursor
+	if !popup.backup.gcr
+		popup.backup.gcr = &guicursor
 	endif
 	set guicursor=c:CursorTransparent
 	['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
@@ -197,7 +199,7 @@ def ClosePopup()
 	popup.win = 0
 	popup.owner = 0
 	ClosePum()
-	for h in popup.hlback->values()
+	for h in popup.backup.hl->values()
 		execute $'hi {h[0].name} None'
 		h->hlset()
 	endfor
@@ -281,9 +283,9 @@ export def BlinkPopupCursor(timer: number)
 enddef
 
 def RestoreCursor()
-	if !!popup.gcr
-		&guicursor = popup.gcr
-		popup.gcr = ''
+	if !!popup.backup.gcr
+		&guicursor = popup.backup.gcr
+		popup.backup.gcr = ''
 	endif
 	set t_ve&
 enddef
