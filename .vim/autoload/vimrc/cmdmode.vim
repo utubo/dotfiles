@@ -49,6 +49,7 @@ $'\(.*\S\)\(\s*{a}\s*\)\(\S.*\)',
 enddef
 com! -range=% -nargs=? SwapExpr D(<f-args>)
 var o = {
+owner: 0,
 win: 0,
 timer: 0,
 blink: false,
@@ -69,6 +70,7 @@ G()
 echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 return
 endif
+o.owner = win_getid()
 for h in ['MsgArea', 'CursorLine', 'Folded']
 o.hlback[h] = h->hlget()
 endfor
@@ -142,12 +144,8 @@ def G()
 aug vimrc_cmdline_popup
 au!
 aug END
-if o.visual !=# 0
-sil! matchdelete(o.visual)
-endif
-if o.shade !=# 0
-sil! matchdelete(o.shade)
-endif
+sil! matchdelete(o.visual, o.owner)
+sil! matchdelete(o.shade, o.owner)
 BC()
 timer_stop(o.updatetimer)
 o.updatetimer = 0
@@ -155,6 +153,7 @@ timer_stop(o.blinktimer)
 o.blinktimer = 0
 popup_close(o.win)
 o.win = 0
+o.owner = 0
 BE()
 for h in o.hlback->values()
 exe $'hi {h[0].name} None'

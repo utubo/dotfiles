@@ -74,6 +74,7 @@ command! -range=% -nargs=? SwapExpr SwapExpr(<f-args>)
 #   - [x] ポップアップの状態を取得できる
 #     →cmdline#_get().idを見ればよさそう
 var popup = {
+	owner: 0,
 	win: 0,
 	timer: 0,
 	blink: false,
@@ -96,6 +97,8 @@ export def Popup(timer: number = 0)
 		echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 		return
 	endif
+
+	popup.owner = win_getid()
 
 	# ハイライトをバックアップ
 	for h in ['MsgArea', 'CursorLine', 'Folded']
@@ -183,12 +186,8 @@ def ClosePopup()
 	augroup vimrc_cmdline_popup
 		au!
 	augroup END
-	if popup.visual !=# 0
-		silent! matchdelete(popup.visual)
-	endif
-	if popup.shade !=# 0
-		silent! matchdelete(popup.shade)
-	endif
+	silent! matchdelete(popup.visual, popup.owner)
+	silent! matchdelete(popup.shade, popup.owner)
 	RestoreCursor()
 	timer_stop(popup.updatetimer)
 	popup.updatetimer = 0
@@ -196,6 +195,7 @@ def ClosePopup()
 	popup.blinktimer = 0
 	popup_close(popup.win)
 	popup.win = 0
+	popup.owner = 0
 	ClosePum()
 	for h in popup.hlback->values()
 		execute $'hi {h[0].name} None'
