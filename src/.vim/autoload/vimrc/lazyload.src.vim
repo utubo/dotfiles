@@ -166,6 +166,7 @@ g:popselect = {
 	# filterでも数字キーで開く
 	filter_focused: true,
 	want_number: false,
+	want_jk: false,
 	# 一時ファイルやヘルプファイルを除外
 	files_ignore_regexp: '^/var/tmp\|/vim/vim91/doc/',
 	# 視点移動を少なく

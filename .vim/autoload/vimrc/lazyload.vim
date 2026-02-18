@@ -110,6 +110,7 @@ g:popselect = {
 borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
 filter_focused: true,
 want_number: false,
+want_jk: false,
 files_ignore_regexp: '^/var/tmp\|/vim/vim91/doc/',
 pos: 'topleft',
 col: 'cursor',
