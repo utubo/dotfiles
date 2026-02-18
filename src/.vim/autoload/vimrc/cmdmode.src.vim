@@ -393,8 +393,8 @@ export def ApplySettings()
 	command! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 	# <LocalLeader>系
 	# Note: <Esc>だとコマンドが実行されちゃうし<C-c>は副作用が大きい
-	cnoremap <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
-	cnoremap <LocalLeader>(ok) <CR>
+	cnoremap <Plug>(vimrc-cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
+	cnoremap <Plug>(vimrc-ok) <CR>
 	SubMode cmdhistory cmap <LocalLeader> k <C-p>
 	SubMode cmdhistory cmap <LocalLeader> K <C-n>
 	cnoremap <LocalLeader>r <C-r>

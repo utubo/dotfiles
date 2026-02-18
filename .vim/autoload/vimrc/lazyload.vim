@@ -175,8 +175,8 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 vimrc#lsp#LazyLoad()
 packadd nohlsearch
 packadd hlyank
-nm <Space>c <Cmd>packadd comment<CR>gcc
-xm <Space>c <Cmd>packadd comment<CR>gc
+nm <LocalLeader>c <Cmd>packadd comment<CR>gcc
+xm <LocalLeader>c <Cmd>packadd comment<CR>gc
 nn <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
 g:helptoc = { popup_borderchars: [] }
 Enable g:rainbow_active
@@ -221,11 +221,11 @@ Each onoremap,xnoremap ae :<C-u>keepjumps normal! G$vgo<CR>
 g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
-Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
-Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
-Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
-no <LocalLeader>(cancel) <Esc>
-ino <LocalLeader>(cancel) <Esc>`^
+Each map,imap,cmap <LocalLeader>n <Plug>(vimrc-ok)
+Each map,imap,cmap <LocalLeader>m <Plug>(vimrc-cancel)
+Each nnoremap,inoremap <Plug>(vimrc-ok) <Esc><Cmd>Sav<CR>
+no <Plug>(vimrc-cancel) <Esc>
+ino <Plug>(vimrc-cancel) <Esc>`^
 nm <LocalLeader>w <C-w>
 nn <LocalLeader>v <C-v>
 nn <C-a> <Cmd>call reformatdate#inc(v:count)<CR>
@@ -268,7 +268,6 @@ xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
 const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
 xn <script> <expr> v vmode[vmode->index(mode()) + 1]
-Each nmap,xmap <LocalLeader>c :
 Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :

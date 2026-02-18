@@ -319,8 +319,8 @@ com! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 g:previewcmd = { enable: true }
 export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
-cno <LocalLeader>(cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
-cno <LocalLeader>(ok) <CR>
+cno <Plug>(vimrc-cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
+cno <Plug>(vimrc-ok) <CR>
 SubMode cmdhistory cmap <LocalLeader> k <C-p>
 SubMode cmdhistory cmap <LocalLeader> K <C-n>
 cno <LocalLeader>r <C-r>

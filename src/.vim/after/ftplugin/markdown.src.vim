@@ -33,9 +33,9 @@ def ToggleCheckBox(x: string)
 		endif
 	endfor
 enddef
-noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
-inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
-noremap  <buffer> <LocalLeader>- <ScriptCmd>ToggleCheckBox('-')<CR>
+noremap  <buffer> <Space>c <ScriptCmd>ToggleCheckBox('x')<CR>
+inoremap <buffer> <Space>c <ScriptCmd>ToggleCheckBox('x')<CR>
+noremap  <buffer> <Space><Space>c <ScriptCmd>ToggleCheckBox('-')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

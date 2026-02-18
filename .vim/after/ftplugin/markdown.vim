@@ -27,9 +27,9 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
-ino <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
-no <buffer> <LocalLeader>- <ScriptCmd>B('-')<CR>
+no <buffer> <Space>c <ScriptCmd>B('x')<CR>
+ino <buffer> <Space>c <ScriptCmd>B('x')<CR>
+no <buffer> <Space><Space>c <ScriptCmd>B('-')<CR>
 def C()
 for l in A()
 const a = getline(l)
@@ -62,11 +62,11 @@ endif
 b = l
 endfor
 endif
-const d = 99 - 1
+const N = 99 - 1
 var e = ''
-if a + d < b
+if a + N < b
 e = '+'
-b = a + d
+b = a + N
 endif
 var f = 0
 var g = 0
@@ -95,7 +95,7 @@ w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
 endif
 enddef
-const k = 300
+const K = 300
 var m = 0
 var n = 0
 def CursorMovedDelayExec(a: any = 0)
@@ -112,7 +112,7 @@ return
 endif
 E()
 n = 0
-m = timer_start(k, CursorMovedDelayExec)
+m = timer_start(K, F)
 enddef
 au after_ftplugin_md CursorMoved <buffer> G()
 def H()

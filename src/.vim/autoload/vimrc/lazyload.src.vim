@@ -270,8 +270,8 @@ vimrc#lsp#LazyLoad()
 # built-in {{{
 packadd nohlsearch
 packadd hlyank
-nmap <Space>c <Cmd>packadd comment<CR>gcc
-xmap <Space>c <Cmd>packadd comment<CR>gc
+nmap <LocalLeader>c <Cmd>packadd comment<CR>gcc
+xmap <LocalLeader>c <Cmd>packadd comment<CR>gc
 nnoremap <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
 g:helptoc = { popup_borderchars: [] }
 # }}}
@@ -344,11 +344,12 @@ nnoremap <Space><LocalLeader> ;
 noremap  <Space><LocalLeader> ;
 # ;nで決定、;mでキャンセル
 # コマンドモードの定義はcmdmode.src.vim
-Each map,imap,cmap <LocalLeader>n <LocalLeader>(ok)
-Each map,imap,cmap <LocalLeader>m <LocalLeader>(cancel)
-Each nnoremap,inoremap <LocalLeader>(ok) <Esc><Cmd>Sav<CR>
-noremap  <LocalLeader>(cancel) <Esc>
-inoremap <LocalLeader>(cancel) <Esc>`^
+# NOTE: `<SID>...`にすると他のソースで使えないので`<Plug>...`にしておく
+Each map,imap,cmap <LocalLeader>n <Plug>(vimrc-ok)
+Each map,imap,cmap <LocalLeader>m <Plug>(vimrc-cancel)
+Each nnoremap,inoremap <Plug>(vimrc-ok) <Esc><Cmd>Sav<CR>
+noremap  <Plug>(vimrc-cancel) <Esc>
+inoremap <Plug>(vimrc-cancel) <Esc>`^
 # CTRLの代り
 nmap <LocalLeader>w <C-w>
 nnoremap <LocalLeader>v <C-v>
@@ -413,7 +414,6 @@ xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
 # ------------------------------------------------------
 # コマンドモードあれこれ {{{
 # 考え中
-Each nmap,xmap <LocalLeader>c :
 Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :
