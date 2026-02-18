@@ -154,4 +154,4 @@ xnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
 # その他定義 {{{
 g:vim_markdown_new_list_item_indent = 2
 #}}} -------------------------------------------------------
-
+# minviml:fixed=CursorMovedDelayExec

@@ -105,23 +105,23 @@ n = 0
 E()
 endif
 enddef
-def G()
+def F()
 if m !=# 0
 n += 1
 return
 endif
 E()
 n = 0
-m = timer_start(K, F)
+m = timer_start(K, CursorMovedDelayExec)
 enddef
-au after_ftplugin_md CursorMoved <buffer> G()
-def H()
+au after_ftplugin_md CursorMoved <buffer> F()
+def G()
 for l in A()
 const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
 setline(l, a)
 endfor
 enddef
-ino <buffer> <LocalLeader>r <CR><ScriptCmd>H()<CR>
-nn <buffer> <LocalLeader>r <ScriptCmd>H()<CR>
-xn <buffer> <LocalLeader>r <ScriptCmd>H()<CR>
+ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
+nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
+xn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
 g:vim_markdown_new_list_item_indent = 2
