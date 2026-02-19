@@ -95,13 +95,12 @@ xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
 g:anypanel_contents = [
-'strftime("  %Y-%m-%d %H:%M")',
 ['anypanel#TabBufs()'],
 'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 '%=',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
-'anypanel#Calendar()',
+'anypanel#Calendar({ label: strftime("         %m    %H:%M") })',
 'vimrc#ruler#MyRuler()',
 ]
 def RefreshMinute(_: number)
