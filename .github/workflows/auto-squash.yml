@@ -8,13 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: actions/checkout@v4  # ← ここ必須
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       - uses: utubo/actions-auto-squash-merge@main
         with:
           target-branch: 'master'
-          # source-branch: 'develop'  # default
-          # target-branch: 'main'     # default
+          source-branch: 'develop'
 
