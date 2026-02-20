@@ -1,0 +1,14 @@
+name: Auto Squash
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # 9AM Monday
+  workflow_dispatch:
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: utubo/auto-squash-merge-action@main
+        # source-branch: 'develop'  # default
+        # target-branch: 'main'     # default
+
