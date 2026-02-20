@@ -9,7 +9,8 @@ jobs:
     permissions: write-all
     steps:
       - uses: utubo/actions-auto-squash-merge@main
-        # source-branch: 'develop'  # default
-        # target-branch: 'main'     # default
-        target-branch: 'master'
+        with:
+          target-branch: 'master'
+          # source-branch: 'develop'  # default
+          # target-branch: 'main'     # default
 
