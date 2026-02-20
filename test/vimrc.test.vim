@@ -364,4 +364,3 @@ suite.TestIndent = () => {
 
 g:RunTests()
 
-# foo
