@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: utubo/auto-squash-merge-action@main
+      - uses: utubo/actions-auto-squash-merge@main
         # source-branch: 'develop'  # default
         # target-branch: 'main'     # default
+        target-branch: 'master'
 
