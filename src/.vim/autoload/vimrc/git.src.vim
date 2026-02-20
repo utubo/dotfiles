@@ -74,7 +74,7 @@ export def Add(args: string)
 enddef
 
 export def ConventionalCommits(a: any, l: string, p: number): list<string>
-	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔Broke:']
+	return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔broke:']
 enddef
 
 export def Commit(msg: string)
