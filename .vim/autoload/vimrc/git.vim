@@ -85,12 +85,15 @@ D($'git tag {shellescape(a)}', (j, s) => {
 D($'git push origin {shellescape(a)}')
 })
 enddef
+export def SetCmdlineForAmend()
+au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
+enddef
 export def ShowMenu()
 popselect#Popup([
 { shortcut: 'u', label: 'Git pull' },
 { shortcut: 'a', label: 'GitAdd -A' },
 { shortcut: 'c', label: 'GitCommit', feedkeys: "GitCommit \<Tab>" },
-{ shortcut: 'A', label: 'Amend', feedkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
+{ shortcut: 'A', label: 'Amend', feedkeys: "\<Cmd>call vimrc#git#SetCmdlineForAmend()\<CR>" },
 { shortcut: 'p', label: 'GitPush origin HEAD', wantenter: true},
 { shortcut: 't', label: 'GitTagPush', feedkeys: 'GitTagPush ' },
 { shortcut: 'l', label: 'Git log' },
