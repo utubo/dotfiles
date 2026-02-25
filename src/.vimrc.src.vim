@@ -128,7 +128,8 @@ g:anypanel_contents = [
 	'%=',
 	'anypanel#File("~/todolist.md")',
 	'anypanel#Padding(1)',
-	'anypanel#Calendar({ label: strftime("         %m    %H:%M") })',
+	'strftime("         %m    %H:%M")',
+	'anypanel#Calendar({ label: "" })',
 	'vimrc#ruler#MyRuler()',
 ]
 def RefreshMinute(_: number) # minviml:fixed=RefreshMinute
