@@ -42,9 +42,9 @@ const weather_marks = [
   '⛈️', '🌩️', '🌩️', '🌪️', '🌪️',
 ]
 
-# 3日分の天気を取得
+# 2日分の天気を取得
 export def UpdateWeather()
-  const url = 'https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139.6823&timezone=Asia%2FTokyo&forecast_days=3&daily=weather_code'
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139.6823&timezone=Asia%2FTokyo&forecast_days=2&daily=weather_code'
   job_start(['curl', '-s', url], { out_cb: OnResponseWeather, out_mode: 'nl' })
 enddef
 

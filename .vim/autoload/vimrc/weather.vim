@@ -24,7 +24,7 @@ const k = [
 '⛈️', '🌩️', '🌩️', '🌪️', '🌪️',
 ]
 export def UpdateWeather()
-const a = 'https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139.6823&timezone=Asia%2FTokyo&forecast_days=3&daily=weather_code'
+const a = 'https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139.6823&timezone=Asia%2FTokyo&forecast_days=2&daily=weather_code'
 job_start(['curl', '-s', a], { out_cb: A, out_mode: 'nl' })
 enddef
 def A(_: any, a: string)

@@ -100,7 +100,7 @@ g:anypanel_contents = [
 '%=',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
-'get(g:, "weather", "        ") .. strftime(" %m    %H:%M")',
+'get(g:, "weather", "     ") .. strftime("    %m    %H:%M")',
 'anypanel#Calendar({ label: "" })',
 'vimrc#ruler#MyRuler()',
 ]
