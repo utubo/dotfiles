@@ -132,13 +132,19 @@ g:anypanel_contents = [
 	'anypanel#Calendar({ label: "" })',
 	'vimrc#ruler#MyRuler()',
 ]
-def RefreshMinute(_: number) # minviml:fixed=RefreshMinute
+def RefreshAtMinute(_: number) # minviml:fixed=RefreshMinute
 	redrawtabpanel
-	timer_start(60 - localtime() % 60, RefreshMinute)
+	timer_start(60 - localtime() % 60, RefreshAtMinute)
 enddef
-au vimrc VimEnter * RefreshMinute(0)
+def RefreshAtDay(_: number) # minviml:fixed=RefreshMinute
+	vimrc#weather#UpdateWeather()
+	redrawtabpanel
+	const d = 60 * 60 * 24
+	timer_start(d - localtime() % d, RefreshAtDay)
+enddef
+au vimrc VimEnter * RefreshAtMinute(0)
 # 2日間の天気
-au vimrc VimEnter * vimrc#weather#UpdateWeather()
+au vimrc VimEnter * RefreshAtDay(0)
 # }}}
 
 # ------------------------------------------------------

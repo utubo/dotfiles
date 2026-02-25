@@ -104,12 +104,18 @@ g:anypanel_contents = [
 'anypanel#Calendar({ label: "" })',
 'vimrc#ruler#MyRuler()',
 ]
-def RefreshMinute(_: number)
+def A(_: number)
 redrawtabpanel
-timer_start(60 - localtime() % 60, RefreshMinute)
+timer_start(60 - localtime() % 60, A)
 enddef
-au vimrc VimEnter * RefreshMinute(0)
-au vimrc VimEnter * vimrc#weather#UpdateWeather()
+def B(_: number)
+vimrc#weather#UpdateWeather()
+redrawtabpanel
+const d = 60 * 60 * 24
+timer_start(d - localtime() % d, B)
+enddef
+au vimrc VimEnter * A(0)
+au vimrc VimEnter * B(0)
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
@@ -132,39 +138,39 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def A(a: number, b: string): string
+def C(a: number, b: string): string
 const v = synIDattr(a, b)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
 return !v ? 'NONE' : v
 enddef
-def B(a: string): any
+def D(a: string): any
 const b = hlID(a)->synIDtrans()
-return { fg: A(b, 'fg'), bg: A(b, 'bg') }
+return { fg: C(b, 'fg'), bg: C(b, 'bg') }
 enddef
-def C()
+def E()
 const x = &termguicolors ? 'gui' : 'cterm'
-const c = B('LineNr').bg
+const c = D('LineNr').bg
 for [a, b] in items({
 Error: 'ErrorMsg',
 Hint: 'Question',
 Info: 'MoreMsg',
 Warning: 'WarningMsg',
 })
-exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={B(b).fg}'
+exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={D(b).fg}'
 endfor
 hi Comment gui=none cterm=none
 hi link luaParenError Error
 hi! link VertSplit TabLineFill
 hi! link ZenmodeHoriz TabLineFill
-const d = B('TabPanel').bg
-exe $'hi AnyPanelCalendarSun guifg={B('ErrorMsg').fg} guibg={d}'
-exe $'hi AnyPanelCalendarSat guifg={B('Directory').fg} guibg={d}'
+const d = D('TabPanel').bg
+exe $'hi AnyPanelCalendarSun guifg={D('ErrorMsg').fg} guibg={d}'
+exe $'hi AnyPanelCalendarSat guifg={D('Directory').fg} guibg={d}'
 const e = hlget('CursorIM')->get(0, {})
 if get(e, 'linksto', '') ==# 'Cursor'
 hi! link CursorIM PMenuSel
 endif
 enddef
-au vimrc VimEnter,ColorScheme * C()
-def D()
+au vimrc VimEnter,ColorScheme * E()
+def F()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -180,8 +186,8 @@ matchadd('Error', 'ERROR')
 matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 enddef
-au vimrc VimEnter,WinEnter * D()
-def E()
+au vimrc VimEnter,WinEnter * F()
+def G()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -189,8 +195,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! E()
-au vimrc BufNew,BufReadPost * silent! E()
+au vimrc OptionSet list silent! G()
+au vimrc BufNew,BufReadPost * silent! G()
 sil! syntax enable
 set t_Co=256
 set termguicolors
@@ -212,7 +218,7 @@ anypanel#Init()
 if 60 < &columns
 vimrc#tabpanel#Toggle(2)
 endif
-def F()
+def H()
 if &ft ==# 'help' || &ft ==# 'gitrebase'
 return
 endif
@@ -225,7 +231,7 @@ return
 endif
 sil! normal! g`"zMzvzz
 enddef
-au vimrc BufRead * au vimrc SafeState * ++once F()
+au vimrc BufRead * au vimrc SafeState * ++once H()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
@@ -235,7 +241,7 @@ packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
 exe 'edit' k
-F()
+H()
 endif
 endif
 if empty(bufname())
