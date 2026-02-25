@@ -27,9 +27,9 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> <Space>c <ScriptCmd>B('x')<CR>
-ino <buffer> <Space>c <ScriptCmd>B('x')<CR>
-no <buffer> <Space><Space>c <ScriptCmd>B('-')<CR>
+no <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
+ino <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
+no <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>B('-')<CR>
 def C()
 for l in A()
 const a = getline(l)
@@ -45,9 +45,9 @@ setpos('.', c)
 endif
 endfor
 enddef
-nn <buffer> <Space>- <ScriptCmd>C()<CR>
+nn <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
 ino <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
-xn <buffer> <Space>- <ScriptCmd>C()<CR>
+xn <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
 def D(): string
 var [a, b] = [line('.'), line('v')]->sort('n')
 if mode() ==? 'V'
@@ -125,3 +125,4 @@ ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
 nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
 xn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
 g:vim_markdown_new_list_item_indent = 2
+set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%

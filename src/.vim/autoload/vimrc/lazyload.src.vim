@@ -610,7 +610,7 @@ Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.'))
 # カーソル位置以外を折り畳み
 nnoremap zV zMzvzz
 # 打ち易すぎるから別の機能にした方がいいかも…
-nmap <LocalLeader><LocalLeader> zV
+nmap <LocalLeader><Space> zV
 
 # `T`多少潰しても大丈夫だろう…
 nnoremap TE :<C-u>tabe<Space>

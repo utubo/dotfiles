@@ -34,7 +34,7 @@ Ezpack tommcdo/vim-exchange
 Ezpack tpope/vim-fugitive # `:Git`コマンド
 Ezpack tyru/capture.vim
 Ezpack yuki-yano/dedent-yank.vim # yankするときにインデントを削除
-Ezpack wellle/targets.vim
+Ezpack wellle/targets.vim # 引数とかのテキストオブジェクト
 
 # あとは全部opt行き
 EzpackInstallToOpt

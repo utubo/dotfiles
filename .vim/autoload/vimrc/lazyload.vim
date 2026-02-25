@@ -392,7 +392,7 @@ nn <Space>p $p
 nn <Space>P ^P
 Each A,B=j,+,k,- nnoremap <expr> A ((getline('.')->match('\S') + 1 ==# col('.')) ? 'B' : 'A')
 nn zV zMzvzz
-nm <LocalLeader><LocalLeader> zV
+nm <LocalLeader><Space> zV
 nn TE :<C-u>tabe<Space>
 nn TN <Cmd>tabnew<CR>
 nn TD <Cmd>tabe ./<CR>

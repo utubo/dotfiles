@@ -33,9 +33,9 @@ def ToggleCheckBox(x: string)
 		endif
 	endfor
 enddef
-noremap  <buffer> <Space>c <ScriptCmd>ToggleCheckBox('x')<CR>
-inoremap <buffer> <Space>c <ScriptCmd>ToggleCheckBox('x')<CR>
-noremap  <buffer> <Space><Space>c <ScriptCmd>ToggleCheckBox('-')<CR>
+noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
+inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
+noremap  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>ToggleCheckBox('-')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -55,9 +55,9 @@ def ToggleListMark()
 		endif
 	endfor
 enddef
-nnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
+nnoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
 inoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
-xnoremap <buffer> <Space>- <ScriptCmd>ToggleListMark()<CR>
+xnoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
@@ -155,3 +155,4 @@ xnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
 g:vim_markdown_new_list_item_indent = 2
 #}}} -------------------------------------------------------
 # minviml:fixed=CursorMovedDelayExec
+set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%

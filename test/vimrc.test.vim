@@ -167,6 +167,7 @@ suite.TestMapping = () => {
 		'x  S',
 		'x  [ai]c', # GitGutter
 		'o  [ai]c', # GitGutter
+		'[nox]  [ai]', # wellle/targets.vim
 		'i  <Esc>',
 		'i  [「（\[{;]', # vim-lexima
 		'   <SNR>\d\+_(save-cursor-pos)', # vim-textobj
