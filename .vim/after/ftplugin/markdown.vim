@@ -12,12 +12,13 @@ enddef
 def B(x: string)
 for l in A()
 const a = getline(l)
-var b = substitute(a, '^\(\s*\)- \[ \]', $'\1- [{x}]', '')
+const d = '^\(\s*\)\(- \)\?'
+var b = substitute(a, $'{d}\[[^{x}]\]', $'\1- [{x}]', '')
 if a ==# b
-b = substitute(a, '^\(\s*\)- \[[-x*]\]', '\1- [ ]', '')
+b = substitute(a, $'{d}\[{x}\]', '\1- [ ]', '')
 endif
 if a ==# b
-b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '')
+b = substitute(a, d, '\1- [ ] ', '')
 endif
 setline(l, b)
 if l ==# line('.')
@@ -124,5 +125,5 @@ enddef
 ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
 nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
 xn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
-g:vim_markdown_new_list_item_indent = 2
+g:vim_markdown_new_list_item_prefix = 2
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%

@@ -18,12 +18,13 @@ enddef
 def ToggleCheckBox(x: string)
 	for l in GetRange()
 		const a = getline(l)
-		var b = substitute(a, '^\(\s*\)- \[ \]', $'\1- [{x}]', '') # check on
+		const prefix = '^\(\s*\)\(- \)\?'
+		var b = substitute(a, $'{prefix}\[[^{x}]\]', $'\1- [{x}]', '') # check on
 		if a ==# b
-			b = substitute(a, '^\(\s*\)- \[[-x*]\]', '\1- [ ]', '') # check off
+			b = substitute(a, $'{prefix}\[{x}\]', '\1- [ ]', '') # check off
 		endif
 		if a ==# b
-			b = substitute(a, '^\(\s*\)\(- \)*', '\1- [ ] ', '') # a new check box
+			b = substitute(a, prefix, '\1- [ ] ', '') # a new check box
 		endif
 		setline(l, b)
 		if l ==# line('.')
@@ -152,7 +153,7 @@ xnoremap <buffer> <LocalLeader>r <ScriptCmd>ElaseListMark()<CR>
 
 # ----------------------------------------------------------
 # その他定義 {{{
-g:vim_markdown_new_list_item_indent = 2
+g:vim_markdown_new_list_item_prefix = 2
 #}}} -------------------------------------------------------
 # minviml:fixed=CursorMovedDelayExec
 set listchars=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
