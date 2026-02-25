@@ -91,7 +91,7 @@ popselect#Popup([
 { shortcut: 'a', label: 'GitAdd -A' },
 { shortcut: 'c', label: 'GitCommit', feedkeys: "GitCommit \<Tab>" },
 { shortcut: 'A', label: 'Amend', feedkeys: "call vimrc#git#SetCmdlineForAmend()\<CR>" },
-{ shortcut: 'p', label: 'GitPush', wantenter: true},
+{ shortcut: 'p', label: 'GitPush origin HEAD', wantenter: true},
 { shortcut: 't', label: 'GitTagPush', feedkeys: 'GitTagPush ' },
 { shortcut: 'l', label: 'Git log' },
 { shortcut: 's', label: 'Git status' },
