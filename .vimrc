@@ -100,7 +100,7 @@ g:anypanel_contents = [
 '%=',
 'anypanel#File("~/todolist.md")',
 'anypanel#Padding(1)',
-'strftime("         %m    %H:%M")',
+'get(g:, "weather", "        ") .. strftime(" %m    %H:%M")',
 'anypanel#Calendar({ label: "" })',
 'vimrc#ruler#MyRuler()',
 ]
@@ -109,6 +109,7 @@ redrawtabpanel
 timer_start(60 - localtime() % 60, RefreshMinute)
 enddef
 au vimrc VimEnter * RefreshMinute(0)
+au vimrc VimEnter * vimrc#weather#UpdateWeather()
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')

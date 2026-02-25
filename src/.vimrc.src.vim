@@ -128,7 +128,7 @@ g:anypanel_contents = [
 	'%=',
 	'anypanel#File("~/todolist.md")',
 	'anypanel#Padding(1)',
-	'strftime("         %m    %H:%M")',
+	'get(g:, "weather", "        ") .. strftime(" %m    %H:%M")',
 	'anypanel#Calendar({ label: "" })',
 	'vimrc#ruler#MyRuler()',
 ]
@@ -137,6 +137,8 @@ def RefreshMinute(_: number) # minviml:fixed=RefreshMinute
 	timer_start(60 - localtime() % 60, RefreshMinute)
 enddef
 au vimrc VimEnter * RefreshMinute(0)
+# 3日間の天気
+au vimrc VimEnter * vimrc#weather#UpdateWeather()
 # }}}
 
 # ------------------------------------------------------
