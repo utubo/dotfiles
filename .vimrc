@@ -200,10 +200,6 @@ au vimrc BufNew,BufReadPost * silent! G()
 sil! syntax enable
 set t_Co=256
 set termguicolors
-setcellwidths([
-[0x1F300, 0x1FADF, 2],
-[0x2600, 0x27BF, 2],
-])
 if '~/.vimrc_local'->expand()->filereadable()
 so ~/.vimrc_local
 endif
@@ -214,6 +210,10 @@ if has('vim_starting')
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 endif
+setcellwidths([
+[0x1F300, 0x1FADF, 2],
+[0x2600, 0x27BF, 2],
+])
 if !exists('g:colors_name')
 set bg=light
 sil! colorscheme girly
