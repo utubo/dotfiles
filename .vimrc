@@ -205,11 +205,9 @@ so ~/.vimrc_local
 endif
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
-if has('vim_starting')
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
-endif
 setcellwidths([
 [0x2600, 0x27BF, 2],
 [0x1F300, 0x1FADF, 2],
