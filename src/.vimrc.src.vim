@@ -274,11 +274,9 @@ g:loaded_matchparen = 1
 g:loaded_matchit = 1
 
 # カーソルの形
-# if has('vim_starting')
-	&t_SI = "\e[0 q"
-	&t_EI = "\e[2 q"
-	&t_SR = "\e[4 q"
-# endif
+&t_SI = "\e[0 q"
+&t_EI = "\e[2 q"
+&t_SR = "\e[4 q"
 
 # 絵文字は全て全角幅
 setcellwidths([
