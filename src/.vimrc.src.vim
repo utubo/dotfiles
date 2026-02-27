@@ -144,7 +144,7 @@ def RefreshAtDay(_: number) # minviml:fixed=RefreshMinute
 enddef
 au vimrc VimEnter * RefreshAtMinute(0)
 # 2日間の天気
-au vimrc VimEnter * RefreshAtDay(0)
+au vimrc VimEnter * silent! RefreshAtDay(0)
 # }}}
 
 # ------------------------------------------------------
