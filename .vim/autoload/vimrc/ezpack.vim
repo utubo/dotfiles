@@ -33,7 +33,7 @@ Ezpack wellle/targets.vim
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter
-Ezpack cohama/lexima.vim <on> ModeChanged *:[ic] <post> call vimrc#lexima#LazyLoad()
+Ezpack cohama/lexima.vim <mode> [ic] <post> call vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich
@@ -54,15 +54,9 @@ EzpackInstallToOpt
 Ezpack utubo/vim-ezpack
 Ezpack utubo/vim-popselect
 Ezpack utubo/vim-reformatdate
-Ezpack utubo/vim-previewcmd
-Ezpack utubo/vim-skipslash
-Ezpack utubo/vim-vim9skkp
-EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
-EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
-EzpackPost au ModeChanged *:[ict] ++once {
-EzpackPost call vimrc#vim9skkp#LazyLoad()
-EzpackPost packadd vim-vim9skkp
-EzpackPost }
+Ezpack utubo/vim-previewcmd <mode> c
+Ezpack utubo/vim-skipslash <mode> c
+Ezpack utubo/vim-vim9skkp <mode> [ict] <pre> vimrc#vim9skkp#LazyLoad()
 EzpackInstallToOpt
 Ezpack utubo/vim-ddgv <cmd> DDGV
 EzpackLazyLoad

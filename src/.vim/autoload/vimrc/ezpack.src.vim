@@ -40,7 +40,7 @@ Ezpack wellle/targets.vim # 引数とかのテキストオブジェクト
 EzpackInstallToOpt
 Ezpack MTDL9/vim-log-highlighting <on> Filetype log
 Ezpack airblade/vim-gitgutter # gitの差分を表示する
-Ezpack cohama/lexima.vim <on> ModeChanged *:[ic] <post> call vimrc#lexima#LazyLoad()
+Ezpack cohama/lexima.vim <mode> [ic] <post> call vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich
@@ -81,18 +81,9 @@ EzpackInstallToOpt
 Ezpack utubo/vim-ezpack           # 自作プラグインマネージャ
 Ezpack utubo/vim-popselect        # ポップアップで色々開くやつ
 Ezpack utubo/vim-reformatdate     # <C-a>で日付と曜日をインクリメントとか
-Ezpack utubo/vim-previewcmd       # コマンド補完
-Ezpack utubo/vim-skipslash        # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
-Ezpack utubo/vim-vim9skkp         # Vim9 scriptで作ったskk
-
-# 以下はautocmdでロードさせる
-# Note: Ezpackのオプションでも同じ事をできるけど見通し悪かった…
-EzpackPost au ModeChanged *:c ++once packadd vim-previewcmd
-EzpackPost au ModeChanged *:c ++once packadd vim-skipslash
-EzpackPost au ModeChanged *:[ict] ++once {
-EzpackPost    call vimrc#vim9skkp#LazyLoad()
-EzpackPost    packadd vim-vim9skkp
-EzpackPost }
+Ezpack utubo/vim-previewcmd <mode> c # コマンド補完
+Ezpack utubo/vim-skipslash  <mode> c # `:%s/foo/bar/`のとき<Tab>でfooからbarへ移動
+Ezpack utubo/vim-vim9skkp <mode> [ict] <pre> vimrc#vim9skkp#LazyLoad() # Vim9 scriptで作ったskk
 
 # 🐶💬🍚作ったけど使用頻度が低い
 EzpackInstallToOpt
