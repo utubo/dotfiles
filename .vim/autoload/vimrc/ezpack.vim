@@ -1,4 +1,5 @@
 vim9script
+system($'cd {g:ezpack_home} && git pull')
 packadd vim-ezpack
 EzpackInit
 Ezpack vim-jp/vital.vim
