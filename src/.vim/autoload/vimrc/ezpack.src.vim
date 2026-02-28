@@ -38,9 +38,9 @@ Ezpack wellle/targets.vim # 引数とかのテキストオブジェクト
 
 # あとは全部opt行き
 EzpackInstallToOpt
-Ezpack MTDL9/vim-log-highlighting <on> Filetype log
+Ezpack MTDL9/vim-log-highlighting <ft> log
 Ezpack airblade/vim-gitgutter # gitの差分を表示する
-Ezpack cohama/lexima.vim <mode> [ic] <post> call vimrc#lexima#LazyLoad()
+Ezpack cohama/lexima.vim <mode> [ic] <post> vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich

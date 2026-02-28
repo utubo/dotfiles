@@ -31,9 +31,9 @@ Ezpack tyru/capture.vim
 Ezpack yuki-yano/dedent-yank.vim
 Ezpack wellle/targets.vim
 EzpackInstallToOpt
-Ezpack MTDL9/vim-log-highlighting <on> Filetype log
+Ezpack MTDL9/vim-log-highlighting <ft> log
 Ezpack airblade/vim-gitgutter
-Ezpack cohama/lexima.vim <mode> [ic] <post> call vimrc#lexima#LazyLoad()
+Ezpack cohama/lexima.vim <mode> [ic] <post> vimrc#lexima#LazyLoad()
 Ezpack kana/vim-textobj-user
 Ezpack lambdalisue/nerdfont.vim
 Ezpack machakann/vim-sandwich
