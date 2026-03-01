@@ -28,10 +28,14 @@ const a = 'https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139
 job_start(['curl', '-s', a], { out_cb: A, out_mode: 'nl' })
 enddef
 def A(_: any, a: string)
+g:weather_response = a
+try
 const b = json_decode(a)
 var c = []
 for w in b.daily.weather_code
 c += [get(k, w, '❔')]
 endfor
 g:weather = c->join('>')
+catch
+endtry
 enddef

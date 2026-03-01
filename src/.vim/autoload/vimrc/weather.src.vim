@@ -49,11 +49,16 @@ export def UpdateWeather()
 enddef
 
 def OnResponseWeather(_: any, msg: string)
-  const data = json_decode(msg)
-  var list = []
-  for w in data.daily.weather_code
-    list += [get(weather_marks, w, '❔')]
-  endfor
-  g:weather = list->join('>')
+  g:weather_response = msg
+  try
+    const  data = json_decode(msg)
+    var list = []
+    for w in data.daily.weather_code
+      list += [get(weather_marks, w, '❔')]
+    endfor
+    g:weather = list->join('>')
+  catch
+    # ignore error response
+  endtry
 enddef
 
