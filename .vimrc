@@ -95,7 +95,7 @@ xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
 g:anypanel_contents = [
-['anypanel#TabBufs()'],
+'anypanel#TabList(anypanel#TabBufs)',
 'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 '%=',
 'anypanel#File("~/todolist.md")',

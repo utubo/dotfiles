@@ -123,7 +123,7 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 # ------------------------------------------------------
 # tabpanel {{{
 g:anypanel_contents = [
-	['anypanel#TabBufs()'],
+	'anypanel#TabList(anypanel#TabBufs)',
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	'%=',
 	'anypanel#File("~/todolist.md")',
