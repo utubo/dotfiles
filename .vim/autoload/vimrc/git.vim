@@ -88,6 +88,11 @@ enddef
 export def SetCmdlineForAmend()
 au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
 enddef
+export def Sync()
+D('git fetch origin', (j, s) => {
+D('git reset @{u} --hard')
+})
+enddef
 export def ShowMenu()
 popselect#Popup([
 { shortcut: 'u', label: 'Git pull' },
@@ -104,6 +109,7 @@ popselect#Popup([
 { shortcut: 'S', label: 'Git restore -staged', feedkeys: 'Git restore -staged ' },
 { shortcut: 'r', label: 'Git reset --soft', wantenter: true},
 { shortcut: 'R', label: 'Git reset --hard', wantenter: true},
+{ shortcut: 'y', label: 'Sync', feedkeys: "\<Cmd>call vimrc#git#Sync()\<CR>\<CR>" },
 ], {
 oncomplete: (item) => {
 if item->has_key('feedkeys')
