@@ -278,8 +278,11 @@ g:loaded_matchit = 1
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 
-# 絵文字は全て全角幅
+# 文字幅調整
 setcellwidths([
+	# 罫線
+	[0x2500, 0x2570, 1],
+	# 絵文字
 	[0x2600, 0x27BF, 2],
 	[0x1F300, 0x1FADF, 2],
 ])

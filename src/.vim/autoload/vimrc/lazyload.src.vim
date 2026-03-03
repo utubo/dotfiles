@@ -162,7 +162,7 @@ au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 # popselect {{{
 g:popselect = {
 	# 角が`+`だと圧が強いので…
-	borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
+	'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 	# filterでも数字キーで開く
 	filter_focused: true,
 	want_number: false,

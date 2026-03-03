@@ -107,7 +107,7 @@ au vimrc FileType gh-repos vimrc#gh#ReposKeymap()
 au vimrc FileType gh-issues vimrc#gh#IssuesKeymap()
 au vimrc FileType gh-issue-comments vimrc#gh#IssueCommentsKeymap()
 g:popselect = {
-borderchars: ['-', '|', '-', '|', '.', '.', "'", "'"],
+'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 filter_focused: true,
 want_number: false,
 want_jk: false,
