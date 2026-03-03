@@ -23,7 +23,7 @@ set noshowmode
 set wmnu
 set wildcharm=<Tab>
 set dy=lastline
-set ambw=double
+set ambw=single
 set bo=all
 set ttm=50
 set acd
@@ -209,9 +209,15 @@ g:loaded_matchit = 1
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"
 setcellwidths([
+[0x2010, 0x24ff, 2],
 [0x2500, 0x2570, 1],
+[0x2571, 0x2599, 2],
 [0x2600, 0x27BF, 2],
+[0x3000, 0x9faf, 2],
+[0xe000, 0xf8ff, 2],
+[0xff01, 0xffee, 2],
 [0x1F300, 0x1FADF, 2],
+[0xf0000, 0xfffff, 2],
 ])
 if !exists('g:colors_name')
 set bg=light
