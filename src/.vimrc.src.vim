@@ -151,7 +151,7 @@ au vimrc VimEnter * silent! RefreshAtDay(0)
 # 数字キー無しでバッファを操作 {{{
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(lines: string): string
-	return lines->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
+	return lines->substitute(' \(\d\+\):', (m) => $' {g:idxchars[str2nr(m[1])] ?? m[1]}:', 'g')
 enddef
 def! g:Getchar2idx(): number
 	echo 'Input bufnr: '

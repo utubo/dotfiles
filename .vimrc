@@ -118,7 +118,7 @@ au vimrc VimEnter * A(0)
 au vimrc VimEnter * silent! B(0)
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
-return a->substitute('\(\n \)\(\d\+\)', (m) => m[1] .. (g:idxchars[str2nr(m[2])] ?? m[2]), 'g')
+return a->substitute(' \(\d\+\):', (m) => $' {g:idxchars[str2nr(m[1])] ?? m[1]}:', 'g')
 enddef
 def! g:Getchar2idx(): number
 ec 'Input bufnr: '
