@@ -14,7 +14,7 @@ set nf=alpha,hex
 set ve=block
 set list
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
-set fcs=
+set fcs=vert:│
 set hidden
 set showtabline=0
 set cmdheight=1
@@ -159,8 +159,8 @@ exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={D(b).fg}'
 endfor
 hi Comment gui=none cterm=none
 hi link luaParenError Error
-hi! link VertSplit TabLineFill
-hi! link ZenmodeHoriz TabLineFill
+hi! link VertSplit NonText
+hi! link ZenmodeHoriz NonText
 const d = D('TabPanel').bg
 exe $'hi AnyPanelCalendarSun guifg={D('ErrorMsg').fg} guibg={d}'
 exe $'hi AnyPanelCalendarSat guifg={D('Directory').fg} guibg={d}'

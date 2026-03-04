@@ -66,6 +66,8 @@ packadd vim-textobj-user
 packadd vim-headtail
 packadd vim-popselect
 au vimrc User Vim9skkModeChanged zenmode#Invalidate()
+g:zenmode = get(g:, 'zenmode', {})
+g:zenmode.horiz = '─'
 ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
@@ -477,7 +479,6 @@ endif
 vimrc#diffinfo#EchoDiffInfo(a, b, c)
 return true
 enddef
-g:zenmode = get(g:, 'zenmode', {})
 g:zenmode.override = CC
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
