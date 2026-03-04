@@ -221,7 +221,7 @@ export def UpdatePopup(timer: number)
 		return
 	endif
 	const text = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
-	if GetCmdlineWidth() < strdisplaywidth(text)
+	if v:echospace < strdisplaywidth(text)
 		ClosePopup()
 	else
 		popup_settext(popup.win, text)
@@ -244,10 +244,6 @@ enddef
 
 def Getcmdscreenpos(): number
 	return getcmdscreenpos() - GetTabpanelWidth()
-enddef
-
-def GetCmdlineWidth(): number
-	return &columns - GetTabpanelWidth()
 enddef
 
 def GetTabpanelWidth(): number
@@ -375,7 +371,7 @@ g:vim9skkp.getcurpos = vimrc#cmdmode#ForVim9skk
 # cmdlineheightを自動調整してポップアップがずれないようにする
 au vimrc CmdlineChanged * {
 	const c = getcmdline()
-	const w = GetCmdlineWidth()
+	const w = v:echospace
 	const h = c->strdisplaywidth() / w + 1
 	&cmdheight = h
 }
