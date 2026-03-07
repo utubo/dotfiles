@@ -49,6 +49,16 @@ augroup END
 # }}}
 
 # ------------------------------------------------------
+# 端末のtitle {{{
+set titlestring=Vim\ -\ %t
+set title
+set titleold=
+if &term =~# 'xterm\|rxvt\|screen\|interix'
+  autocmd VimLeave * silent !echo -ne "\e[22;0t"
+endif
+# }}}
+
+# ------------------------------------------------------
 # 自作マネージャ {{{
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)

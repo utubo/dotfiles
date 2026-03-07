@@ -40,6 +40,12 @@ filetype plugin indent on
 aug vimrc
 au!
 aug END
+set titlestring=Vim\ -\ %t
+set title
+set titleold=
+if &term =~# 'xterm\|rxvt\|screen\|interix'
+au VimLeave * silent !echo -ne "\e[22;0t"
+endif
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
 system($'git clone https://github.com/utubo/vim-ezpack.git {g:ezpack_home}/opt/vim-ezpack')
