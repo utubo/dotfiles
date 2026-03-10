@@ -44,7 +44,7 @@ set titlestring=Vim\ -\ %t
 set title
 set titleold=
 if &term =~# 'xterm\|rxvt\|screen\|interix'
-au VimLeave * silent !echo -ne "\e[22;0t"
+au vimrc VimLeave * silent !echo -ne "\e[22;0t"
 endif
 g:ezpack_home = expand($'{&pp->split(',')[0]}/pack/ezpack')
 if !isdirectory(g:ezpack_home)
@@ -216,12 +216,10 @@ g:loaded_matchit = 1
 &t_SR = "\e[4 q"
 setcellwidths([
 [0x2010, 0x24ff, 2],
-[0x2500, 0x2570, 1],
 [0x2571, 0x27bf, 2],
 [0x3000, 0x9faf, 2],
 [0xe000, 0xf8ff, 2],
 [0xff01, 0xff60, 2],
-[0xff61, 0xff9f, 1],
 [0xffa0, 0xffee, 2],
 [0x1f300, 0x1fadf, 2],
 [0xf0000, 0xfffff, 2],

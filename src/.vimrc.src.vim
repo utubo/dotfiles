@@ -54,7 +54,7 @@ set titlestring=Vim\ -\ %t
 set title
 set titleold=
 if &term =~# 'xterm\|rxvt\|screen\|interix'
-  autocmd VimLeave * silent !echo -ne "\e[22;0t"
+  autocmd vimrc VimLeave * silent !echo -ne "\e[22;0t"
 endif
 # }}}
 
@@ -291,12 +291,12 @@ g:loaded_matchit = 1
 # 文字幅調整
 setcellwidths([
 	[0x2010, 0x24ff, 2], # 一般記号
-	[0x2500, 0x2570, 1], # 罫線
+	# [0x2500, 0x2570, 1], # 罫線(幅1はわざわざ指定しなくていいか…)
 	[0x2571, 0x27bf, 2], # 一般記号、絵文字
 	[0x3000, 0x9faf, 2], # 全角かな漢字
 	[0xe000, 0xf8ff, 2], # Nerd Fonts
 	[0xff01, 0xff60, 2], # 全角英数
-	[0xff61, 0xff9f, 1], # 半角ｶﾅ
+	# [0xff61, 0xff9f, 1], # 半角ｶﾅ
 	[0xffa0, 0xffee, 2], # 全角英数
 	[0x1f300, 0x1fadf, 2], # 絵文字(拡張)
 	[0xf0000, 0xfffff, 2], # Nerd Fonts(拡張)
