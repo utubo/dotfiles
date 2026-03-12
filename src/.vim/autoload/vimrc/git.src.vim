@@ -13,8 +13,8 @@ def EchoW(j: any, s: any)
 	echow s
 enddef
 
-def System(cmd: string, Cb: func = OK)
-	echow cmd
+def System(cmd: list<string>, Cb: func = OK)
+	echow cmd->join(' ')
 	job_start(cmd, {
 		out_cb: EchoW,
 		err_cb: EchoW,
@@ -22,7 +22,7 @@ def System(cmd: string, Cb: func = OK)
 	})
 enddef
 
-def SystemList(cmd: string): list<string>
+def SystemList(cmd: list<string>): list<string>
 	var result = []
 	# NOTE: use job_start() instead of system() for windows
 	var job = job_start(cmd, {
@@ -36,23 +36,24 @@ def SystemList(cmd: string): list<string>
 	return result
 enddef
 
-export def Add(args: string)
+export def Add(...args: list<string>)
 	const current_dir = getcwd()
 	try
 		chdir(expand('%:p:h'))
+		const dryrun = ['git', 'add', '--dry-run'] + args
 		echoh MoreMsg
-		echo 'git add --dry-run ' .. args
-		const list = SystemList('git add --dry-run ' .. args)
+		echo dryrun->join(' ')
+		const lines = SystemList(dryrun)
 		if !!v:shell_error
 			echoh ErrorMsg
-			echo list
+			echo lines
 			return
 		endif
-		if !list
+		if !lines
 			echo 'Nothing specified, nothing added.'
 			return
 		endif
-		for item in list
+		for item in lines
 			execute 'echoh' (item =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
 			echo item
 		endfor
@@ -60,7 +61,7 @@ export def Add(args: string)
 		const yn = input('execute ? (Y/n) > ', 'y')
 		if yn ==# 'y' || yn ==# "\r"
 			echoh Normal
-			System('git add ' .. args)
+			System(['git', 'add'] + args)
 			redraw
 		else
 			echoh Normal
@@ -78,24 +79,24 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	System($'git commit -m "{msg}"', RefreshSigns)
+	System(['git', 'commit', '-m', msg], RefreshSigns)
 enddef
 
 export def Amend(msg: string)
-	System($'git commit --amend -m "{msg}"')
+	System(['git', 'commit', '--amend', '-m', msg])
 enddef
 
 export def GetLastCommitMessage(): string
-	return SystemList($'git log -1 --pretty=%B')[0]
+	return SystemList(['git', 'log', '-1', '--pretty=%B'])[0]
 enddef
 
-export def Push(args: string)
-	System($'git push {args}', RefreshSigns)
+export def Push(...args: list<string>)
+	System(['git', 'push', args], RefreshSigns)
 enddef
 
 export def TagPush(tagname: string)
-	System($'git tag "{tagname}"', (j, s) => {
-		System($'git push origin "{tagname}"')
+	System(['git', 'tag', tagname], (j, s) => {
+		System(['git', 'push', 'origin', tagname])
 	})
 enddef
 
@@ -104,8 +105,8 @@ export def SetCmdlineForAmend()
 enddef
 
 export def Sync()
-	System('git fetch origin', (j, s) => {
-		System('git reset @{u} --hard')
+	System(['git', 'fetch', 'origin'], (j, s) => {
+		System(['git', 'reset', '@{u}', '--hard'])
 	})
 enddef
 
@@ -142,9 +143,9 @@ export def ShowMenu()
 enddef
 
 # NOTE: ここに定義するとこのファイルが読み込まれるまで有効にならないけどまぁいいか
-command! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+command! -nargs=* GitAdd vimrc#git#Add(<f-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 command! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
-command! -nargs=* GitPush vimrc#git#Push(<q-args>)
+command! -nargs=* GitPush vimrc#git#Push(<f-args>)
 command! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
 

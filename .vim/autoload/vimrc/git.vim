@@ -9,15 +9,15 @@ enddef
 def C(j: any, s: any)
 echow s
 enddef
-def D(a: string, L: func = A)
-echow a
+def D(a: list<string>, L: func = A)
+echow a->join(' ')
 job_start(a, {
 out_cb: C,
 err_cb: C,
 exit_cb: L,
 })
 enddef
-def E(a: string): list<string>
+def E(a: list<string>): list<string>
 var b = []
 var c = job_start(a, {
 out_cb: (j, s) => {
@@ -29,31 +29,32 @@ sleep 10m
 endwhile
 return b
 enddef
-export def Add(a: string)
+export def Add(...a: list<string>)
 const b = getcwd()
 try
 chdir(expand('%:p:h'))
+const c = ['git', 'add', '--dry-run'] + a
 echoh MoreMsg
-ec 'git add --dry-run ' .. a
-const c = E('git add --dry-run ' .. a)
+ec c->join(' ')
+const d = E(c)
 if !!v:shell_error
 echoh ErrorMsg
-ec c
+ec d
 return
 endif
-if !c
+if !d
 ec 'Nothing specified, nothing added.'
 return
 endif
-for d in c
-exe 'echoh' (d =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
-ec d
+for e in d
+exe 'echoh' (e =~# '^remove' ? 'DiffDelete' : 'DiffAdd')
+ec e
 endfor
 echoh Question
-const e = input('execute ? (Y/n) > ', 'y')
-if e ==# 'y' || e ==# "\r"
+const f = input('execute ? (Y/n) > ', 'y')
+if f ==# 'y' || f ==# "\r"
 echoh Normal
-D('git add ' .. a)
+D(['git', 'add'] + a)
 redraw
 else
 echoh Normal
@@ -69,28 +70,28 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔broke:']
 enddef
 export def Commit(a: string)
-D($'git commit -m "{a}"', B)
+D(['git', 'commit', '-m', a], B)
 enddef
 export def Amend(a: string)
-D($'git commit --amend -m "{a}"')
+D(['git', 'commit', '--amend', '-m', a])
 enddef
 export def GetLastCommitMessage(): string
-return E($'git log -1 --pretty=%B')[0]
+return E(['git', 'log', '-1', '--pretty=%B'])[0]
 enddef
-export def Push(a: string)
-D($'git push {a}', B)
+export def Push(...a: list<string>)
+D(['git', 'push', a], B)
 enddef
 export def TagPush(a: string)
-D($'git tag "{a}"', (j, s) => {
-D($'git push origin "{a}"')
+D(['git', 'tag', a], (j, s) => {
+D(['git', 'push', 'origin', a])
 })
 enddef
 export def SetCmdlineForAmend()
 au SafeState * ++once setcmdline($'GitAmend {GetLastCommitMessage()}')
 enddef
 export def Sync()
-D('git fetch origin', (j, s) => {
-D('git reset @{u} --hard')
+D(['git', 'fetch', 'origin'], (j, s) => {
+D(['git', 'reset', '@{u}', '--hard'])
 })
 enddef
 export def ShowMenu()
@@ -124,8 +125,8 @@ filter_focused: false,
 title: 'Git',
 })
 enddef
-com! -nargs=* GitAdd vimrc#git#Add(<q-args>)
+com! -nargs=* GitAdd vimrc#git#Add(<f-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitCommit vimrc#git#Commit(<q-args>)
 com! -nargs=1 -complete=customlist,vimrc#git#ConventionalCommits GitAmend vimrc#git#Amend(<q-args>)
-com! -nargs=* GitPush vimrc#git#Push(<q-args>)
+com! -nargs=* GitPush vimrc#git#Push(<f-args>)
 com! -nargs=1 GitTagPush vimrc#git#TagPush(<q-args>)
