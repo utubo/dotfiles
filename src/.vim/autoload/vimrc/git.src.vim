@@ -91,7 +91,7 @@ export def GetLastCommitMessage(): string
 enddef
 
 export def Push(...args: list<string>)
-	System(['git', 'push', args], RefreshSigns)
+	System(['git', 'push'] + args, RefreshSigns)
 enddef
 
 export def TagPush(tagname: string)

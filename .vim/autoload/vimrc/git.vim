@@ -79,7 +79,7 @@ export def GetLastCommitMessage(): string
 return E(['git', 'log', '-1', '--pretty=%B'])[0]
 enddef
 export def Push(...a: list<string>)
-D(['git', 'push', a], B)
+D(['git', 'push'] + a, B)
 enddef
 export def TagPush(a: string)
 D(['git', 'tag', a], (j, s) => {
