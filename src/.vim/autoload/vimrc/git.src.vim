@@ -26,8 +26,8 @@ def SystemList(cmd: list<string>): list<string>
 	var result = []
 	# NOTE: use job_start() instead of system() for windows
 	var job = job_start(cmd, {
-		out_cb: (j, s) => {
-			result->add(s)
+		out_cb: (ch, msg) => {
+			result->add(msg)
 		}
 	})
 	while job_status(job) ==# 'run'

@@ -20,8 +20,8 @@ enddef
 def E(a: list<string>): list<string>
 var b = []
 var c = job_start(a, {
-out_cb: (j, s) => {
-b->add(s)
+out_cb: (ch, msg) => {
+b->add(msg)
 }
 })
 while job_status(c) ==# 'run'
