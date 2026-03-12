@@ -9,8 +9,8 @@ def RefreshSigns(j: any, s: any)
 	echow 'OK.'
 enddef
 
-def EchoW(j: any, s: any)
-	echow s
+def EchoW(ch: any, msg: any)
+	echow msg
 enddef
 
 def System(cmd: list<string>, Cb: func = OK)

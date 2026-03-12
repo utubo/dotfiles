@@ -6,8 +6,8 @@ def B(j: any, s: any)
 sil! GitGutter
 echow 'OK.'
 enddef
-def C(j: any, s: any)
-echow s
+def C(a: any, b: any)
+echow b
 enddef
 def D(a: list<string>, L: func = A)
 echow a->join(' ')
