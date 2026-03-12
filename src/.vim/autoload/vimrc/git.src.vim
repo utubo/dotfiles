@@ -94,8 +94,8 @@ export def Push(args: string)
 enddef
 
 export def TagPush(tagname: string)
-	System($'git tag {shellescape(tagname)}', (j, s) => {
-		System($'git push origin {shellescape(tagname)}')
+	System($'git tag "{tagname}"', (j, s) => {
+		System($'git push origin "{tagname}"')
 	})
 enddef
 

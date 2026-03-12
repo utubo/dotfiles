@@ -81,8 +81,8 @@ export def Push(a: string)
 D($'git push {a}', B)
 enddef
 export def TagPush(a: string)
-D($'git tag {shellescape(a)}', (j, s) => {
-D($'git push origin {shellescape(a)}')
+D($'git tag "{a}"', (j, s) => {
+D($'git push origin "{a}"')
 })
 enddef
 export def SetCmdlineForAmend()
