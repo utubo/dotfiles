@@ -67,7 +67,7 @@ chdir(b)
 endtry
 enddef
 export def ConventionalCommits(a: any, l: string, p: number): list<string>
-return ['✨feat:', '🐞fix:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔broke:']
+return ['✨feat:', '🐞fix:', '✏️typo:', '📝docs:', '🔨refactor:', '🎨style:', '✅test:', '⏪revert:', '🔀merge', '🔧chore:', '🎉release:', '💔broke:']
 enddef
 export def Commit(a: string)
 D(['git', 'commit', '-m', a], B)
