@@ -132,6 +132,8 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 
 # ------------------------------------------------------
 # tabpanel {{{
+packadd vim-treepanel
+packadd vim-anypanel
 g:treepanel_maxheight = 8
 g:anypanel_contents = [
 	'treepanel#Tree()',

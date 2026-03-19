@@ -100,6 +100,8 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
+packadd vim-treepanel
+packadd vim-anypanel
 g:treepanel_maxheight = 8
 g:anypanel_contents = [
 'treepanel#Tree()',

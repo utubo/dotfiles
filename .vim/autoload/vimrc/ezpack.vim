@@ -6,7 +6,6 @@ Ezpack vim-jp/vital.vim
 Ezpack utubo/vim-colorscheme-girly
 Ezpack utubo/vim-colorscheme-softgreen
 Ezpack utubo/vim-zenmode
-Ezpack utubo/vim-anypanel
 EzpackLazyLoad
 Ezpack Bakudankun/BackAndForward.vim
 Ezpack LeafCage/yankround.vim
@@ -45,6 +44,7 @@ Ezpack sheerun/vim-polyglot
 EzpackInstallToOpt
 Ezpack robenkleene/veep.vim <cmd> P
 EzpackLazyLoad
+Ezpack utubo/vim-anypanel
 Ezpack utubo/vim-headtail
 Ezpack utubo/vim-hlpairs
 Ezpack utubo/vim-minviml
