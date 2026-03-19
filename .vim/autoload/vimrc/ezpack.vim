@@ -49,6 +49,7 @@ Ezpack utubo/vim-headtail
 Ezpack utubo/vim-hlpairs
 Ezpack utubo/vim-minviml
 Ezpack utubo/vim-registers-lite
+Ezpack utubo/vim-treepanel
 Ezpack utubo/vim-update
 Ezpack utubo/vim-yomigana
 EzpackInstallToOpt

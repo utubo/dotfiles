@@ -100,14 +100,18 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
+g:treepanel_maxheight = 8
 g:anypanel_contents = [
+'treepanel#Tree()',
+'repeat("─", 20)',
 'anypanel#TabList(anypanel#TabBufs)',
 'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 '%=',
 'anypanel#File("~/todolist.md")',
-'anypanel#Padding(1)',
+'repeat("─", 20)',
 'get(g:, "weather", "     ") .. strftime("    %m    %H:%M")',
 'anypanel#Calendar({ label: "" })',
+'repeat("─", 20)',
 'vimrc#ruler#MyRuler()',
 ]
 def A(_: number)
