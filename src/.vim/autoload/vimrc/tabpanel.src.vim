@@ -7,3 +7,22 @@ enddef
 export def IsVisible(): bool
 	return &showtabpanel ==# 2 || &showtabpanel ==# 1 && 1 < tabpagenr('$')
 enddef
+
+export def ProjectName()
+	const rootmakers = ['.git', 'package.json', '.svn', 'go.mod', 'Cargo.toml']
+	const dir = getcwd()
+	var icon = "\ueb46"
+	var root = ''
+	for m in rootmakers
+		root = finddir(m, dir .. ';')
+		if !!root
+			root = root->fnamemodify(':h')
+			break
+		endif
+	endfor
+	if empty(root)
+		icon = "\uea83"
+		root = dir->substitute('\([/\\]\).*', '\1', '')
+	endif
+	g:tabpanel_projectname = icon .. fnamemodify(root, ':t')
+enddef

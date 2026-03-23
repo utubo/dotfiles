@@ -100,24 +100,16 @@ nn Zy <Cmd>set foldmethod=syntax<CR>
 xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
-packadd vim-treepanel
-nn <F1> <ScriptCmd>treepanel#Focus()<CR>
-g:treepanel = {
-maxheight: 8,
-key_blur: ["\<F1>"]
-}
 packadd vim-anypanel
+g:tabpanel_projectname = ''
 g:anypanel_contents = [
-'treepanel#Tree()',
-'repeat("─", 20)',
 'anypanel#TabList(anypanel#TabBufs)',
 'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 '%=',
 'anypanel#File("~/todolist.md")',
-'repeat("─", 20)',
 'get(g:, "weather", "     ") .. strftime("    %m    %H:%M")',
 'anypanel#Calendar({ label: "" })',
-'repeat("─", 20)',
+'"%#TabPanelFill#" .. anypanel#align#Center(g:tabpanel_projectname)',
 'vimrc#ruler#MyRuler()',
 ]
 def A(_: number)
@@ -132,6 +124,7 @@ timer_start(d - localtime() % d, B)
 enddef
 au vimrc VimEnter * A(0)
 au vimrc VimEnter * silent! B(0)
+au vimrc WinEnter,BufReadPost * vimrc#tabpanel#ProjectName()
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute(' \(\d\+\):', (m) => $' {g:idxchars[str2nr(m[1])] ?? m[1]}:', 'g')

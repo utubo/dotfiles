@@ -132,24 +132,16 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 
 # ------------------------------------------------------
 # tabpanel {{{
-packadd vim-treepanel
-nnoremap <F1> <ScriptCmd>treepanel#Focus()<CR>
-g:treepanel = {
-	maxheight:  8,
-	key_blur: ["\<F1>"]
-}
 packadd vim-anypanel
+g:tabpanel_projectname = ''
 g:anypanel_contents = [
-	'treepanel#Tree()',
-	'repeat("─", 20)',
 	'anypanel#TabList(anypanel#TabBufs)',
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	'%=',
 	'anypanel#File("~/todolist.md")',
-	'repeat("─", 20)',
 	'get(g:, "weather", "     ") .. strftime("    %m    %H:%M")',
 	'anypanel#Calendar({ label: "" })',
-	'repeat("─", 20)',
+	'"%#TabPanelFill#" .. anypanel#align#Center(g:tabpanel_projectname)',
 	'vimrc#ruler#MyRuler()',
 ]
 def RefreshAtMinute(_: number) # minviml:fixed=RefreshMinute
@@ -165,6 +157,8 @@ enddef
 au vimrc VimEnter * RefreshAtMinute(0)
 # 2日間の天気
 au vimrc VimEnter * silent! RefreshAtDay(0)
+# プロジェクト名
+au vimrc WinEnter,BufReadPost * vimrc#tabpanel#ProjectName()
 # }}}
 
 # ------------------------------------------------------

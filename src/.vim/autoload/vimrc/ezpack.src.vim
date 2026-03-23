@@ -76,7 +76,6 @@ Ezpack utubo/vim-headtail         # Textobjの先頭や末尾に移動
 Ezpack utubo/vim-hlpairs          # 括弧をハイライト強化版
 Ezpack utubo/vim-minviml          # Vim scriptをminify
 Ezpack utubo/vim-registers-lite   # registers.nvimライクなプラグイン
-Ezpack utubo/vim-treepanel        # tabpanelにディレクトリtツリーを表示
 Ezpack utubo/vim-update           # gvim.exeの最新版をgithubから落とす
 Ezpack utubo/vim-yomigana         # 漢字やひらがなをカタカナに変換したり
 # 以下はoptに入れておけばOK
