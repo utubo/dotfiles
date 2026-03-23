@@ -124,7 +124,7 @@ timer_start(d - localtime() % d, B)
 enddef
 au vimrc VimEnter * A(0)
 au vimrc VimEnter * silent! B(0)
-au vimrc WinEnter,BufReadPost * vimrc#tabpanel#ProjectName()
+au vimrc WinEnter,BufEnter * vimrc#tabpanel#ProjectName()
 g:idxchars = '%jklhdsanmvcgqwertyuiopzxb'
 def! g:TabpanelIdx2Chars(a: string): string
 return a->substitute(' \(\d\+\):', (m) => $' {g:idxchars[str2nr(m[1])] ?? m[1]}:', 'g')

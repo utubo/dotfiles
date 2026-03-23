@@ -158,7 +158,7 @@ au vimrc VimEnter * RefreshAtMinute(0)
 # 2日間の天気
 au vimrc VimEnter * silent! RefreshAtDay(0)
 # プロジェクト名
-au vimrc WinEnter,BufReadPost * vimrc#tabpanel#ProjectName()
+au vimrc WinEnter,BufEnter * vimrc#tabpanel#ProjectName()
 # }}}
 
 # ------------------------------------------------------
