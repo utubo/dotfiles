@@ -22,7 +22,7 @@ export def ProjectName()
 	endfor
 	if empty(root)
 		icon = "\uea83"
-		root = dir->substitute('\([/\\]\).*', '\1', '')
+		root = dir
 	endif
 	g:tabpanel_projectname = icon .. fnamemodify(root, ':t')
 enddef

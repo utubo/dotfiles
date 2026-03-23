@@ -19,7 +19,7 @@ endif
 endfor
 if empty(d)
 c = "\uea83"
-d = b->substitute('\([/\\]\).*', '\1', '')
+d = b
 endif
 g:tabpanel_projectname = c .. fnamemodify(d, ':t')
 enddef
