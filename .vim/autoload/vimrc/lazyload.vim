@@ -118,10 +118,10 @@ pos: 'topleft',
 col: 'cursor',
 line: 'cursor+1',
 }
-nn <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nn <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nn <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
+nn <F6> <ScriptCmd>popselect#dir#Popup()<CR>
 nn <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
 def BC()
 if !vimrc#tabpanel#IsVisible()

@@ -101,8 +101,12 @@ xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
 packadd vim-treepanel
+nn <F1> <ScriptCmd>treepanel#Focus()<CR>
+g:treepanel = {
+maxheight: 8,
+key_blur: ["\<F1>"]
+}
 packadd vim-anypanel
-g:treepanel_maxheight = 8
 g:anypanel_contents = [
 'treepanel#Tree()',
 'repeat("─", 20)',
