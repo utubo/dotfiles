@@ -14,6 +14,10 @@ export def ProjectName()
 	var icon = "\ueb46"
 	var root = ''
 	for m in rootmakers
+		if isdirectory(m)
+			root = dir
+			break
+		endif
 		root = finddir(m, dir .. ';')
 		if !!root
 			root = root->fnamemodify(':h')

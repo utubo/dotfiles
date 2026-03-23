@@ -176,10 +176,10 @@ g:popselect = {
 	col: 'cursor',
 	line: 'cursor+1',
 }
+nnoremap <F1> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <F2> <ScriptCmd>popselect#mru#Popup()<CR>
 nnoremap <F3> <ScriptCmd>popselect#buffers#Popup()<CR>
 nnoremap <F4> <ScriptCmd>popselect#tabpages#Popup()<CR>
-nnoremap <F6> <ScriptCmd>popselect#dir#Popup()<CR>
 nnoremap <expr> <C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "\<ScriptCmd>popselect#projectfiles#PopupWithMRU({ filter_focused: true })\<CR>"
 
 # タブ移動したときもポップアップする

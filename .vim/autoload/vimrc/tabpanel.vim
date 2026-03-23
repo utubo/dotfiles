@@ -11,6 +11,10 @@ const b = getcwd()
 var c = "\ueb46"
 var d = ''
 for m in a
+if isdirectory(m)
+d = b
+break
+endif
 d = finddir(m, b .. ';')
 if !!d
 d = d->fnamemodify(':h')
