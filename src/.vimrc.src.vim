@@ -191,42 +191,26 @@ au vimrc ColorSchemePre * {
 	]
 }
 
-def GetAttr(id: number, name: string): string
-	const v = synIDattr(id, name)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
-	return !v ? 'NONE' : v
-enddef
-
-def GetHl(name: string): any
-	const id = hlID(name)->synIDtrans()
-	return { fg: GetAttr(id, 'fg'), bg: GetAttr(id, 'bg') }
-enddef
-
 def MyHighlight()
-	const x = &termguicolors ? 'gui' : 'cterm'
-	const signBg = GetHl('LineNr').bg
-	# lspのsign
-	for [a, b] in items({
-		Error: 'ErrorMsg',
-		Hint: 'Question',
-		Info: 'MoreMsg',
-		Warning: 'WarningMsg',
-	})
-		execute $'hi LspDiagSign{a}Text {x}bg={signBg} {x}fg={GetHl(b).fg}'
-	endfor
-	# Commentが斜体になってるcolorshemeが多い…
-	hi Comment gui=none cterm=none
-	# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
-	# E28: No such highlight group name: luaParenError " See issue #11277
-	hi link luaParenError Error
-	hi! link VertSplit NonText
-	hi! link ZenmodeHoriz NonText
+	const signBg = hlget('SignColumn', true)[0].guibg
+	const tplBg = hlget('TabPanel', true)[0].guibg
+	hlset([
+		{ name: 'VertSplit', linksto: 'NoneText' },
+		{ name: 'ZenmodeHoriz', linksto: 'NoneText' },
+		{ name: 'LspDiagSignErrorText', guibg: signBg, buifg: hlget('ErrorMsg')[0].guifg },
+		{ name: 'LspDiagSignHintText', guibg: signBg, buifg: hlget('Question')[0].guifg },
+		{ name: 'LspDiagSignInfoText', guibg: signBg, buifg: hlget('MoreMsg')[0].guifg },
+		{ name: 'LspDiagSignWarningText', guibg: signBg, buifg: hlget('WarningMsg')[0].guifg },
+		{ name: 'AnyPanelCalendarSun', guibg: tplBg, guifg: hlget('ErrorMsg')[0].guifg },
+		{ name: 'AnyPanelCalendarSat', guibg: tplBg, guifg: hlget('Directory')[0].guifg },
+		# Commentが斜体になってるcolorshemeが多い…
+		{ name: 'Cooment', gui: { italic: false }, term: { italic: false } },
+		# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
+		# E28: No such highlight group name: luaParenError " See issue #11277
+		{ name: 'luaParenError', linksto: 'Error' },
+	])
 
-	const tplBg = GetHl('TabPanel').bg
-	execute $'hi AnyPanelCalendarSun guifg={GetHl('ErrorMsg').fg} guibg={tplBg}'
-	execute $'hi AnyPanelCalendarSat guifg={GetHl('Directory').fg} guibg={tplBg}'
-
-	const cur = hlget('CursorIM')->get(0, {})
-	if get(cur, 'linksto', '') ==# 'Cursor'
+	if hlget('CursorIM')->get(0, {})->get('linksto', '') ==# 'Cursor'
 		hi! link CursorIM PMenuSel
 	endif
 enddef

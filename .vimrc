@@ -147,39 +147,27 @@ g:rcsv_colorpairs = [
 ['228', '#eeee99'], ['212', '#ee99cc'], ['177', '#cc99ee']
 ]
 }
-def C(a: number, b: string): string
-const v = synIDattr(a, b)->matchstr(&termguicolors ? '.*[^0-9].*' : '^[0-9]\+$')
-return !v ? 'NONE' : v
-enddef
-def D(a: string): any
-const b = hlID(a)->synIDtrans()
-return { fg: C(b, 'fg'), bg: C(b, 'bg') }
-enddef
-def E()
-const x = &termguicolors ? 'gui' : 'cterm'
-const c = D('LineNr').bg
-for [a, b] in items({
-Error: 'ErrorMsg',
-Hint: 'Question',
-Info: 'MoreMsg',
-Warning: 'WarningMsg',
-})
-exe $'hi LspDiagSign{a}Text {x}bg={c} {x}fg={D(b).fg}'
-endfor
-hi Comment gui=none cterm=none
-hi link luaParenError Error
-hi! link VertSplit NonText
-hi! link ZenmodeHoriz NonText
-const d = D('TabPanel').bg
-exe $'hi AnyPanelCalendarSun guifg={D('ErrorMsg').fg} guibg={d}'
-exe $'hi AnyPanelCalendarSat guifg={D('Directory').fg} guibg={d}'
-const e = hlget('CursorIM')->get(0, {})
-if get(e, 'linksto', '') ==# 'Cursor'
+def C()
+const a = hlget('SignColumn', true)[0].guibg
+const b = hlget('TabPanel', true)[0].guibg
+hlset([
+{ name: 'VertSplit', linksto: 'NoneText' },
+{ name: 'ZenmodeHoriz', linksto: 'NoneText' },
+{ name: 'LspDiagSignErrorText', guibg: a, buifg: hlget('ErrorMsg')[0].guifg },
+{ name: 'LspDiagSignHintText', guibg: a, buifg: hlget('Question')[0].guifg },
+{ name: 'LspDiagSignInfoText', guibg: a, buifg: hlget('MoreMsg')[0].guifg },
+{ name: 'LspDiagSignWarningText', guibg: a, buifg: hlget('WarningMsg')[0].guifg },
+{ name: 'AnyPanelCalendarSun', guibg: b, guifg: hlget('ErrorMsg')[0].guifg },
+{ name: 'AnyPanelCalendarSat', guibg: b, guifg: hlget('Directory')[0].guifg },
+{ name: 'Cooment', gui: { italic: false }, term: { italic: false } },
+{ name: 'luaParenError', linksto: 'Error' },
+])
+if hlget('CursorIM')->get(0, {})->get('linksto', '') ==# 'Cursor'
 hi! link CursorIM PMenuSel
 endif
 enddef
-au vimrc VimEnter,ColorScheme * E()
-def F()
+au vimrc VimEnter,ColorScheme * C()
+def D()
 if exists('w:my_matches') && !empty(getmatches())
 return
 endif
@@ -195,8 +183,8 @@ matchadd('Error', 'ERROR')
 matchadd('SpellRare', '[ａ-ｚＡ-Ｚ０-９（）｛｝]')
 matchadd('SpellBad', '[　¥]')
 enddef
-au vimrc VimEnter,WinEnter * F()
-def G()
+au vimrc VimEnter,WinEnter * D()
+def E()
 if &list && !exists('w:hi_tail')
 w:hi_tail = matchadd('SpellBad', '\s\+$')
 elseif !&list && exists('w:hi_tail')
@@ -204,8 +192,8 @@ matchdelete(w:hi_tail)
 unlet w:hi_tail
 endif
 enddef
-au vimrc OptionSet list silent! G()
-au vimrc BufNew,BufReadPost * silent! G()
+au vimrc OptionSet list silent! E()
+au vimrc BufNew,BufReadPost * silent! E()
 sil! syntax enable
 set t_Co=256
 set termguicolors
@@ -235,7 +223,7 @@ anypanel#Init()
 if 60 < &columns
 vimrc#tabpanel#Toggle(2)
 endif
-def H()
+def F()
 if &ft ==# 'help' || &ft ==# 'gitrebase'
 return
 endif
@@ -248,7 +236,7 @@ return
 endif
 sil! normal! g`"zMzvzz
 enddef
-au vimrc BufRead * au vimrc SafeState * ++once H()
+au vimrc BufRead * au vimrc SafeState * ++once F()
 au vimrc VimEnter * ++nested {
 if empty(bufname())
 const k = get(v:oldfiles, 0, '')->expand()
@@ -258,7 +246,7 @@ packadd vim-log-highlighting
 packadd vim-polyglot
 vimrc#lsp#LazyLoad()
 exe 'edit' k
-H()
+F()
 endif
 endif
 if empty(bufname())
