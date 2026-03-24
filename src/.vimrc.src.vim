@@ -196,6 +196,7 @@ def MyHighlight()
 	const tplBg = hlget('TabPanel', true)[0].guibg
 	const errMsgFg = hlget('ErrorMsg', true)[0].guifg
 	hlset([
+		{ name: 'MessageWindow', linksto: 'MoreMsg' },
 		{ name: 'VertSplit', linksto: 'NoneText' },
 		{ name: 'ZenmodeHoriz', linksto: 'NoneText' },
 		{ name: 'LspDiagSignHintText', guibg: signBg, buifg: hlget('Question')[0].guifg },

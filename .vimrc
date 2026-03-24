@@ -152,6 +152,7 @@ const a = hlget('SignColumn', true)[0].guibg
 const b = hlget('TabPanel', true)[0].guibg
 const c = hlget('ErrorMsg', true)[0].guifg
 hlset([
+{ name: 'MessageWindow', linksto: 'MoreMsg' },
 { name: 'VertSplit', linksto: 'NoneText' },
 { name: 'ZenmodeHoriz', linksto: 'NoneText' },
 { name: 'LspDiagSignHintText', guibg: a, buifg: hlget('Question')[0].guifg },
