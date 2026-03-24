@@ -194,14 +194,15 @@ au vimrc ColorSchemePre * {
 def MyHighlight()
 	const signBg = hlget('SignColumn', true)[0].guibg
 	const tplBg = hlget('TabPanel', true)[0].guibg
+	const errMsgFg = hlget('ErrorMsg', true)[0].guifg
 	hlset([
 		{ name: 'VertSplit', linksto: 'NoneText' },
 		{ name: 'ZenmodeHoriz', linksto: 'NoneText' },
-		{ name: 'LspDiagSignErrorText', guibg: signBg, buifg: hlget('ErrorMsg')[0].guifg },
 		{ name: 'LspDiagSignHintText', guibg: signBg, buifg: hlget('Question')[0].guifg },
 		{ name: 'LspDiagSignInfoText', guibg: signBg, buifg: hlget('MoreMsg')[0].guifg },
+		{ name: 'LspDiagSignErrorText', guibg: signBg, buifg: errMsgFg },
 		{ name: 'LspDiagSignWarningText', guibg: signBg, buifg: hlget('WarningMsg')[0].guifg },
-		{ name: 'AnyPanelCalendarSun', guibg: tplBg, guifg: hlget('ErrorMsg')[0].guifg },
+		{ name: 'AnyPanelCalendarSun', guibg: tplBg, guifg: errMsgFg },
 		{ name: 'AnyPanelCalendarSat', guibg: tplBg, guifg: hlget('Directory')[0].guifg },
 		# Commentが斜体になってるcolorshemeが多い…
 		{ name: 'Cooment', gui: { italic: false }, term: { italic: false } },

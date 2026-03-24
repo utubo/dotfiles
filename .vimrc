@@ -150,14 +150,15 @@ g:rcsv_colorpairs = [
 def C()
 const a = hlget('SignColumn', true)[0].guibg
 const b = hlget('TabPanel', true)[0].guibg
+const c = hlget('ErrorMsg', true)[0].guifg
 hlset([
 { name: 'VertSplit', linksto: 'NoneText' },
 { name: 'ZenmodeHoriz', linksto: 'NoneText' },
-{ name: 'LspDiagSignErrorText', guibg: a, buifg: hlget('ErrorMsg')[0].guifg },
 { name: 'LspDiagSignHintText', guibg: a, buifg: hlget('Question')[0].guifg },
 { name: 'LspDiagSignInfoText', guibg: a, buifg: hlget('MoreMsg')[0].guifg },
+{ name: 'LspDiagSignErrorText', guibg: a, buifg: c },
 { name: 'LspDiagSignWarningText', guibg: a, buifg: hlget('WarningMsg')[0].guifg },
-{ name: 'AnyPanelCalendarSun', guibg: b, guifg: hlget('ErrorMsg')[0].guifg },
+{ name: 'AnyPanelCalendarSun', guibg: b, guifg: c },
 { name: 'AnyPanelCalendarSat', guibg: b, guifg: hlget('Directory')[0].guifg },
 { name: 'Cooment', gui: { italic: false }, term: { italic: false } },
 { name: 'luaParenError', linksto: 'Error' },
