@@ -191,30 +191,42 @@ au vimrc ColorSchemePre * {
 	]
 }
 
+var hiNormal = {}
+
+def Bg(name: string): any
+	return hlget(name, true)[0]->get('guibg', hiNormal.guibg)
+enddef
+
+def Fg(name: string): any
+	return hlget(name, true)[0]->get('guifg', hiNormal.guifg)
+enddef
+
 def MyHighlight()
-	const signBg = hlget('SignColumn', true)[0].guibg
-	const tplBg = hlget('TabPanel', true)[0].guibg
-	const errMsgFg = hlget('ErrorMsg', true)[0].guifg
+	hiNormal = hlget('Normal')[0]
+	const signBg = Bg('SignColumn')
+	const tplBg = Bg('TabPanel')
+	const errMsgFg = Fg('ErrorMsg')
+	var im = hlget('CursorIM')->get(0, {})
+	if !im || im->get('linksto', '') ==# 'Cursor'
+		im = { name: 'CursorIM', linksto: 'PMenuSel' }
+	endif
 	hlset([
 		{ name: 'MessageWindow', linksto: 'MoreMsg' },
 		{ name: 'VertSplit', linksto: 'NoneText' },
 		{ name: 'ZenmodeHoriz', linksto: 'NoneText' },
-		{ name: 'LspDiagSignHintText', guibg: signBg, buifg: hlget('Question')[0].guifg },
-		{ name: 'LspDiagSignInfoText', guibg: signBg, buifg: hlget('MoreMsg')[0].guifg },
+		{ name: 'LspDiagSignHintText', guibg: signBg, buifg: Fg('Question') },
+		{ name: 'LspDiagSignInfoText', guibg: signBg, buifg: Fg('MoreMsg') },
 		{ name: 'LspDiagSignErrorText', guibg: signBg, buifg: errMsgFg },
-		{ name: 'LspDiagSignWarningText', guibg: signBg, buifg: hlget('WarningMsg')[0].guifg },
+		{ name: 'LspDiagSignWarningText', guibg: signBg, buifg: Fg('WarningMsg') },
 		{ name: 'AnyPanelCalendarSun', guibg: tplBg, guifg: errMsgFg },
-		{ name: 'AnyPanelCalendarSat', guibg: tplBg, guifg: hlget('Directory')[0].guifg },
+		{ name: 'AnyPanelCalendarSat', guibg: tplBg, guifg: Fg('Directory') },
 		# Commentが斜体になってるcolorshemeが多い…
 		{ name: 'Cooment', gui: { italic: false }, term: { italic: false } },
 		# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 		# E28: No such highlight group name: luaParenError " See issue #11277
 		{ name: 'luaParenError', linksto: 'Error' },
+		im
 	])
-
-	if hlget('CursorIM')->get(0, {})->get('linksto', '') ==# 'Cursor'
-		hi! link CursorIM PMenuSel
-	endif
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()
 
