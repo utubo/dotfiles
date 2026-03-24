@@ -7,7 +7,7 @@ return &showtabpanel ==# 2 || &showtabpanel ==# 1 && 1 < tabpagenr('$')
 enddef
 export def ProjectName()
 const a = ['.git', 'package.json', '.svn', 'go.mod', 'Cargo.toml']
-const b = getcwd()
+const b = expand('%:p:h') ?? getcwd()
 var c = "\ueb46"
 var d = ''
 for m in a

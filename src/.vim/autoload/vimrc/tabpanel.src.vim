@@ -10,7 +10,7 @@ enddef
 
 export def ProjectName()
 	const rootmakers = ['.git', 'package.json', '.svn', 'go.mod', 'Cargo.toml']
-	const dir = getcwd()
+	const dir = expand('%:p:h') ?? getcwd()
 	var icon = "\ueb46"
 	var root = ''
 	for m in rootmakers
