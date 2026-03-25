@@ -135,7 +135,7 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 packadd vim-anypanel
 g:tabpanel_projectname = ''
 g:anypanel_contents = [
-	'"%#TabpanelSel#" .. anypanel#align#Left(g:tabpanel_projectname)',
+	'"%#TabPanelSel#" .. anypanel#align#Center(g:tabpanel_projectname)',
 	'anypanel#TabList(anypanel#TabBufs)',
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	'%=',
