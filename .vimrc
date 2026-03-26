@@ -173,7 +173,7 @@ hlset([
 { name: 'LspDiagSignWarningText', guibg: a, buifg: D('WarningMsg') },
 { name: 'AnyPanelCalendarSun', guibg: b, guifg: c },
 { name: 'AnyPanelCalendarSat', guibg: b, guifg: D('Directory') },
-{ name: 'Comment', gui: { italic: false }, term: { italic: false } },
+{ name: 'Comment', gui: {}, term: {} },
 { name: 'luaParenError', linksto: 'Error' },
 d
 ])

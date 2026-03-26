@@ -221,7 +221,7 @@ def MyHighlight()
 		{ name: 'AnyPanelCalendarSun', guibg: tplBg, guifg: errMsgFg },
 		{ name: 'AnyPanelCalendarSat', guibg: tplBg, guifg: Fg('Directory') },
 		# Commentが斜体になってるcolorshemeが多い…
-		{ name: 'Comment', gui: { italic: false }, term: { italic: false } },
+		{ name: 'Comment', gui: {}, term: {} },
 		# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 		# E28: No such highlight group name: luaParenError " See issue #11277
 		{ name: 'luaParenError', linksto: 'Error' },
