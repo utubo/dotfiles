@@ -438,6 +438,11 @@ set spell spelllang=en_us,cjk
 nn <F8> <Cmd>set spell! spell?<CR>
 nn ]t <C-]>
 nn [t <C-t>
+nm <Space><Space>a <F1>
+nm <Space><Space>s <F2>
+nm <Space><Space>d <F3>
+nm <Space><Space>f <F4>
+nm <Space><Space>p <C-p>
 def BJ()
 for a in get(w:, 'my_syntax', [])
 sil! matchdelete(a)

@@ -681,6 +681,15 @@ nnoremap [t <C-t>
 
 # ------------------------------------------------------
 # 様子見中 {{{
+# ホームポジションでファンクションキー {{{
+nmap <Space><Space>a <F1>
+nmap <Space><Space>s <F2>
+nmap <Space><Space>d <F3>
+nmap <Space><Space>f <F4>
+# ついで
+nmap <Space><Space>p <C-p>
+# }}}
+
 # syntax固有の追加強調 {{{
 def ClearMySyntax()
 	for id in get(w:, 'my_syntax', [])
