@@ -206,9 +206,9 @@ def MyHighlight()
 	const signBg = Bg('SignColumn')
 	const tplBg = Bg('TabPanel')
 	const errMsgFg = Fg('ErrorMsg')
-	var im = hlget('CursorIM')->get(0, {})
-	if !im || im->get('linksto', '') ==# 'Cursor'
-		im = { name: 'CursorIM', linksto: 'PMenuSel' }
+	var cursorim = hlget('CursorIM')->get(0, {})
+	if !cursorim || cursorim->get('linksto', '') ==# 'Cursor'
+		cursorim = { name: 'CursorIM', linksto: 'PMenuSel' }
 	endif
 	hlset([
 		{ name: 'MessageWindow', linksto: 'MoreMsg' },
@@ -225,7 +225,7 @@ def MyHighlight()
 		# luaParenErrorを定義しておかないと以下のエラーになることがある(最小構成は不明)
 		# E28: No such highlight group name: luaParenError " See issue #11277
 		{ name: 'luaParenError', linksto: 'Error' },
-		im
+		cursorim
 	])
 enddef
 au vimrc VimEnter,ColorScheme * MyHighlight()

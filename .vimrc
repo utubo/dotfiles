@@ -161,7 +161,7 @@ const b = C('TabPanel')
 const c = D('ErrorMsg')
 var d = hlget('CursorIM')->get(0, {})
 if !d || d->get('linksto', '') ==# 'Cursor'
-im = { name: 'CursorIM', linksto: 'PMenuSel' }
+d = { name: 'CursorIM', linksto: 'PMenuSel' }
 endif
 hlset([
 { name: 'MessageWindow', linksto: 'MoreMsg' },
