@@ -457,10 +457,10 @@ au vimrc Syntax javascript {
 CA('SpellRare', '\s[=!]=\s')
 }
 au vimrc Syntax vim {
+CA('SpellRare', '\<normal!\@!')
 CA('SpellRare', '\s[=!]=\s')
 CA('SpellBad', '\s[=!]==\s')
 CA('SpellBad', '\s\~[=!][=#]\?\s')
-CA('SpellRare', '\<normal!\@!')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
