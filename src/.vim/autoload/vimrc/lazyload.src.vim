@@ -592,6 +592,9 @@ endif
 
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 
+# うっかりOSのIMEを起動すると迷子になるからこれでいいや
+au vimrc ModeChanged * set iminsert=0
+
 nnoremap <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nnoremap <F11> <Cmd>set number!<CR>
 nnoremap <F12> <Cmd>set wrap!<CR>

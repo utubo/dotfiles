@@ -379,6 +379,7 @@ au vimrc FocusGained * @" = @+
 au vimrc FocusLost * @+ = @"
 endif
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
+au vimrc ModeChanged * set iminsert=0
 nn <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nn <F11> <Cmd>set number!<CR>
 nn <F12> <Cmd>set wrap!<CR>
