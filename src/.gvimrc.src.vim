@@ -8,7 +8,7 @@ augroup END
 # 表示設定 {{{
 set textwidth=0
 set renderoptions=type:directx,renmode:6
-set guifont=Moralerspace_Neon_HWJPDOC:h14
+silent! set guifont=Moralerspace_Neon_HWJPDOC:h14
 # この絵文字がちゃんと表示されればOK→ 🐞_🐝_
 # }}}
 
