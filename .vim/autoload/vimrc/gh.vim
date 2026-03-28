@@ -29,7 +29,7 @@ gh#map#add('gh-buffer-repo-list', 'nnoremap', '<C-l>', '<ScriptCmd>call g:GhRepo
 enddef
 export def OpenCurrentIssues()
 try
-const a = g:System('git remote get-url origin')
+const a = system(['git', 'remote', 'get-url', 'origin'])
 const b = matchlist(a, '^https://github.com/\(.*\)\.git')[1]
 if !!b
 exe $'new gh://{b}/issues'

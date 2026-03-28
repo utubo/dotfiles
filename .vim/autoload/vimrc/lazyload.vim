@@ -23,27 +23,6 @@ enddef
 com! -nargs=* Each E(<q-args>)
 com! -nargs=1 -complete=var Enable <args> = 1
 com! -nargs=1 -complete=var Disable <args> = 0
-def g:System(a: string): string
-if !has('win32')
-return system(a)
-endif
-return g:SystemList(a)->join("\n")
-enddef
-def g:SystemList(a: string): list<string>
-if !has('win32')
-return systemlist(a)
-endif
-var b = []
-var c = job_start(a, {
-out_cb: (j, s) => {
-b->add(s)
-}
-})
-while job_status(c) ==# 'run'
-sleep 10m
-endwhile
-return b
-enddef
 def H(a: string)
 const b = getline('.')->len()
 var c = getcurpos()
@@ -96,7 +75,7 @@ const a = has('win32') ? '~/_vimrc' : '~/.vimrc'
 const b = a->expand()->resolve()->fnamemodify(':h')
 const c = getcwd()
 chdir(b)
-ec g:System($'git pull')
+ec system([$'git', 'pull'])
 chdir(c)
 exe $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 EzpackInstall

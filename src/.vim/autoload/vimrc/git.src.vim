@@ -4,36 +4,17 @@ def OK(j: any, s: any)
 	echow 'OK.'
 enddef
 
-def RefreshSigns(j: any, s: any)
+def RefreshSigns()
 	silent! GitGutter
 	echow 'OK.'
 enddef
 
-def EchoW(ch: any, msg: any)
-	echow msg
-enddef
-
-def System(cmd: list<string>, Cb: func = OK)
+# system with echo
+def System(cmd: list<string>)
 	echow cmd->join(' ')
-	job_start(cmd, {
-		out_cb: EchoW,
-		err_cb: EchoW,
-		exit_cb: Cb,
-	})
-enddef
-
-def SystemList(cmd: list<string>): list<string>
-	var result = []
-	# NOTE: use job_start() instead of system() for windows
-	var job = job_start(cmd, {
-		out_cb: (ch, msg) => {
-			result->add(msg)
-		}
-	})
-	while job_status(job) ==# 'run'
-		sleep 10m
-	endwhile
-	return result
+	for result in systemlist(cmd)
+		echow result
+	endfor
 enddef
 
 export def Add(...args: list<string>)
@@ -43,7 +24,7 @@ export def Add(...args: list<string>)
 		const dryrun = ['git', 'add', '--dry-run'] + args
 		echoh MoreMsg
 		echo dryrun->join(' ')
-		const lines = SystemList(dryrun)
+		const lines = systemlist(dryrun)
 		if !!v:shell_error
 			echoh ErrorMsg
 			echo lines
@@ -79,7 +60,8 @@ export def ConventionalCommits(a: any, l: string, p: number): list<string>
 enddef
 
 export def Commit(msg: string)
-	System(['git', 'commit', '-m', msg], RefreshSigns)
+	System(['git', 'commit', '-m', msg])
+	RefreshSigns()
 enddef
 
 export def Amend(msg: string)
@@ -87,17 +69,17 @@ export def Amend(msg: string)
 enddef
 
 export def GetLastCommitMessage(): string
-	return SystemList(['git', 'log', '-1', '--pretty=%B'])[0]
+	return systemlist(['git', 'log', '-1', '--pretty=%B'])[0]
 enddef
 
 export def Push(...args: list<string>)
-	System(['git', 'push'] + args, RefreshSigns)
+	System(['git', 'push'] + args)
+	RefreshSigns()
 enddef
 
 export def TagPush(tagname: string)
-	System(['git', 'tag', tagname], (j, s) => {
-		System(['git', 'push', 'origin', tagname])
-	})
+	System(['git', 'tag', tagname])
+	System(['git', 'push', 'origin', tagname])
 enddef
 
 export def SetCmdlineForAmend()
@@ -105,9 +87,8 @@ export def SetCmdlineForAmend()
 enddef
 
 export def Sync()
-	System(['git', 'fetch', 'origin'], (j, s) => {
-		System(['git', 'reset', '@{u}', '--hard'])
-	})
+	System(['git', 'fetch', 'origin'])
+	System(['git', 'reset', '@{u}', '--hard'])
 enddef
 
 export def ShowMenu()

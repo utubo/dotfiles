@@ -36,7 +36,7 @@ enddef
 # issues {{{
 export def OpenCurrentIssues()
 	try
-		const url = g:System('git remote get-url origin')
+		const url = system(['git', 'remote', 'get-url', 'origin'])
 		const ownerAndRepo = matchlist(url, '^https://github.com/\(.*\)\.git')[1]
 		if !!ownerAndRepo
 			execute $'new gh://{ownerAndRepo}/issues'

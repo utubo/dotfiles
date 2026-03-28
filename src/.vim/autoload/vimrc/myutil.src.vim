@@ -138,7 +138,7 @@ export def ShowBufInfo(event: string = '')
 	add(msg, ['Normal', ' '])
 	add(msg, ['MoreMsg', &ft])
 	add(msg, ['Normal', ' '])
-	const branch = g:System('git branch')->trim()->matchstr('\w\+$')
+	const branch = system(['git', 'branch'])->trim()->matchstr('\w\+$')
 	add(msg, ['WarningMsg', branch])
 	var msglen = 0
 	const maxlen = &columns - len(ruler) - GetTabpanelWidth() - 2

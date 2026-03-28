@@ -111,16 +111,16 @@ add(e, [f ==# 'utf-8' ? 'MoreMsg' : 'WarningMsg', f])
 add(e, ['Normal', ' '])
 add(e, ['MoreMsg', &ft])
 add(e, ['Normal', ' '])
-const h = g:System('git branch')->trim()->matchstr('\w\+$')
-add(e, ['WarningMsg', h])
-var j = 0
-const k = &columns - len(c) - A() - 2
+const g = system(['git', 'branch'])->trim()->matchstr('\w\+$')
+add(e, ['WarningMsg', g])
+var h = 0
+const j = &columns - len(c) - A() - 2
 for i in reverse(range(0, len(e) - 1))
 var s = e[i][1]
 var d = strdisplaywidth(s)
-j += d
-if k < j
-const l = k - j + d
+h += d
+if j < h
+const l = j - h + d
 while !empty(s) && l < strdisplaywidth(s)
 s = s[1 :]
 endwhile
@@ -131,7 +131,7 @@ break
 endif
 endfor
 if !&ru
-add(e, ['Normal', repeat(' ', k - j) .. c])
+add(e, ['Normal', repeat(' ', j - h) .. c])
 endif
 redraw
 ec ''

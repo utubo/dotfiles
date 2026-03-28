@@ -39,30 +39,6 @@ command! -nargs=* Each Each(<q-args>)
 command! -nargs=1 -complete=var Enable  <args> = 1
 command! -nargs=1 -complete=var Disable <args> = 0
 
-# Windowsで窓を表示させないsystem()
-def g:System(cmd: string): string
-	if !has('win32')
-		return system(cmd)
-	endif
-	return g:SystemList(cmd)->join("\n")
-enddef
-
-def g:SystemList(cmd: string): list<string>
-	if !has('win32')
-		return systemlist(cmd)
-	endif
-	var result = []
-	var job = job_start(cmd, {
-		out_cb: (j, s) => {
-			result->add(s)
-		}
-	})
-	while job_status(job) ==# 'run'
-		sleep 10m
-	endwhile
-	return result
-enddef
-
 # >>とかしたときにカーソル位置をキープ
 def KeepCurpos(expr: string)
 	const len = getline('.')->len()
@@ -144,7 +120,7 @@ def PullDotfiles()
 	const dotfilespath = vimrcpath->expand()->resolve()->fnamemodify(':h')
 	const cwd = getcwd()
 	chdir(dotfilespath)
-	echo g:System($'git pull')
+	echo system([$'git', 'pull'])
 	chdir(cwd)
 	execute $'source {has('win32') ? '~/vimfiles' : '~/.vim'}/autoload/vimrc/ezpack.vim'
 	EzpackInstall
