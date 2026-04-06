@@ -101,7 +101,7 @@ o.curpos = 0
 BA()
 aug vimrc_cmdline_popup
 au!
-au ModeChanged c:[^c] G()
+au ModeChanged c:[^c] au SafeState * ++once G()
 au VimLeavePre * BB()
 aug END
 o.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })

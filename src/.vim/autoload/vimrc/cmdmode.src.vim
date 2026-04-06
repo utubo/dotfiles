@@ -140,7 +140,7 @@ export def Popup(timer: number = 0)
 	# イベント等
 	augroup vimrc_cmdline_popup
 		au!
-		au ModeChanged c:[^c] ClosePopup()
+		au ModeChanged c:[^c] au SafeState * ++once ClosePopup()
 		au VimLeavePre * RestoreCursor()
 	augroup END
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
