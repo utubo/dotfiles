@@ -125,7 +125,12 @@ export def Popup(timer: number = 0)
 	})
 	[msghl]->hlset()
 	# cmdline
-	popup.win = popup_create('  ', { col: popup.col, line: popup.line, zindex: 2 })
+	popup.win = popup_create('  ', {
+		col: popup.col,
+		line: popup.line,
+		zindex: 2,
+		filter: Filter,
+	})
 	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
 	# カーソル関係
@@ -182,6 +187,16 @@ def GetVisualMatchPos(): list<any>
 		pos += [[s[1], s[2], b]]
 	endfor
 	return pos
+enddef
+
+def Filter(_: number, key: string): bool
+	if key ==# "\<CR>"
+		ClosePopup()
+		feedkeys("\<CR>")
+		return true
+	else
+		return false
+	endif
 enddef
 
 def ClosePopup()

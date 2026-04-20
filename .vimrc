@@ -102,6 +102,9 @@ xn zf <ScriptCmd>vimrc#myutil#Zf()<CR>
 nn zd <ScriptCmd>vimrc#myutil#Zd()<CR>
 nn g; <ScriptCmd>silent! normal! g;zv<CR>
 packadd vim-anypanel
+packadd vim-treepanel
+g:treepanel = { maxheight: 10 }
+nn <Space><F1> <ScriptCmd>treepanel#Focus()<CR>
 g:tabpanel_projectname = ''
 g:anypanel_contents = [
 '"%#TabPanelSel#" .. anypanel#align#Center(g:tabpanel_projectname)',

@@ -68,7 +68,7 @@ Popup()
 enddef
 export def Popup(a: number = 0)
 if o.win !=# 0
-G()
+H()
 echow 'cmdlineのポップアップが変なタイミングで実行された多分設定がおかしい'
 return
 endif
@@ -88,7 +88,12 @@ guifg: get(d, 'guibg', get(b, 'guibg', 'NONE')),
 cleared: false,
 })
 [d]->hlset()
-o.win = popup_create('  ', { col: o.col, line: o.line, zindex: 2 })
+o.win = popup_create('  ', {
+col: o.col,
+line: o.line,
+zindex: 2,
+filter: G,
+})
 setbufvar(winbufnr(o.win), '&filetype', 'vim')
 win_execute(o.win, $'syntax match PMenuKind /^./')
 set t_ve=
@@ -98,14 +103,14 @@ endif
 set guicursor=c:CursorTransparent
 ['Cursor'->hlget()[0]->copy()->extend({ name: 'vimrcCmdlineCursor' })]->hlset()
 o.curpos = 0
-BA()
+BB()
 aug vimrc_cmdline_popup
 au!
-au ModeChanged c:[^c] au SafeState * ++once G()
-au VimLeavePre * BB()
+au ModeChanged c:[^c] au SafeState * ++once H()
+au VimLeavePre * BC()
 aug END
 o.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
-BC()
+BD()
 g:previewcmd.popup_args = { col: o.col, line: o.line - 1 }
 enddef
 def E()
@@ -142,13 +147,22 @@ a += [[s[1], s[2], b]]
 endfor
 return a
 enddef
-def G()
+def G(_: number, a: string): bool
+if a ==# "\<CR>"
+H()
+feedkeys("\<CR>")
+return true
+else
+return false
+endif
+enddef
+def H()
 aug vimrc_cmdline_popup
 au!
 aug END
 sil! matchdelete(o.visual, o.owner)
 sil! matchdelete(o.shade, o.owner)
-BB()
+BC()
 timer_stop(o.updatetimer)
 o.updatetimer = 0
 timer_stop(o.blinktimer)
@@ -156,7 +170,7 @@ o.blinktimer = 0
 popup_close(o.win)
 o.win = 0
 o.owner = 0
-BD()
+BE()
 for h in o.backup.hl->values()
 exe $'hi {h[0].name} None'
 h->hlset()
@@ -167,7 +181,7 @@ redraw
 enddef
 export def UpdatePopup(a: number)
 if o.win ==# 0 || mode() !=# 'c' || popup_list()->index(o.win) ==# -1
-G()
+H()
 if mode() ==# 'c'
 feedkeys("\<Esc>", 'nt')
 endif
@@ -175,15 +189,15 @@ return
 endif
 const b = getcmdtype() .. getcmdprompt() .. getcmdline() .. ' '
 if v:echospace < strdisplaywidth(b)
-G()
+H()
 else
 popup_settext(o.win, b)
-H()
+I()
 endif
 redraw
 enddef
-def H()
-var c = I()
+def I()
+var c = J()
 if c ==# o.curpos
 return
 endif
@@ -191,12 +205,12 @@ o.curpos = c
 win_execute(o.win, 'call clearmatches()')
 win_execute(o.win, $'call matchadd("vimrcCmdlineCursor", "\\%1l\\%{c}v.")')
 o.blink = false
-BA()
-enddef
-def I(): number
-return getcmdscreenpos() - J()
+BB()
 enddef
 def J(): number
+return getcmdscreenpos() - BA()
+enddef
+def BA(): number
 if !&showtabpanel
 return 0
 endif
@@ -209,7 +223,7 @@ endif
 const c = &tabpanelopt->matchstr('\(columns:\)\@<=\d\+')->str2nr() ?? 20
 return &columns < c ? 0 : c
 enddef
-def BA()
+def BB()
 if !!o.blinktimer
 timer_stop(o.blinktimer)
 endif
@@ -225,7 +239,7 @@ hi! link vimrcCmdlineCursor None
 endif
 o.blink = !o.blink
 enddef
-def BB()
+def BC()
 if !!o.backup.gcr
 &guicursor = o.backup.gcr
 o.backup.gcr = ''
@@ -234,7 +248,7 @@ set t_ve&
 enddef
 var q = 0
 var lk = ''
-def BC()
+def BD()
 cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
 enddef
 export def PumKeyDown(a: number, k: string): bool
@@ -246,8 +260,8 @@ noautocmd win_execute(q, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(q, $'normal! { l <= 1 ? 'G' : 'k' }')
 else
+BE()
 BD()
-BC()
 return false
 endif
 setcmdline(lk .. i.bufnr->getbufline(getcurpos(q)[1])[0])
@@ -256,7 +270,7 @@ return true
 enddef
 export def PopupPum()
 cu <Tab>
-BD()
+BE()
 const a = getcmdline()
 const c = getcompletion(a, 'cmdline')
 if !c
@@ -289,7 +303,7 @@ pos: d,
 setcmdline(lk .. getbufline(winbufnr(q), 1)[0])
 g:previewcmd.enable = false
 enddef
-def BD()
+def BE()
 if !!q
 popup_close(q)
 q = 0
@@ -299,7 +313,7 @@ enddef
 export def ForVim9skk(a: any): any
 if o.win !=# 0
 var c = popup_getpos(o.win)
-a.col = c.col + I() - 1
+a.col = c.col + J() - 1
 a.line = c.line
 endif
 return a

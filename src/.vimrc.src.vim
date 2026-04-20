@@ -135,9 +135,13 @@ nnoremap g; <ScriptCmd>silent! normal! g;zv<CR>
 # ------------------------------------------------------
 # tabpanel {{{
 packadd vim-anypanel
+packadd vim-treepanel
+g:treepanel = { maxheight: 10 }
+nnoremap <Space><F1> <ScriptCmd>treepanel#Focus()<CR>
 g:tabpanel_projectname = ''
 g:anypanel_contents = [
 	'"%#TabPanelSel#" .. anypanel#align#Center(g:tabpanel_projectname)',
+	#'treepanel#Tree()',
 	'anypanel#TabList(anypanel#TabBufs)',
 	'anypanel#HiddenBufs()->g:TabpanelIdx2Chars()',
 	'%=',
