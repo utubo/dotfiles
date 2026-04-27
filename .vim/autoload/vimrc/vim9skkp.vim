@@ -7,6 +7,10 @@ prev: ["\<S-Tab>"],
 },
 mode_display: 'none',
 sticky_lock: true,
+cands_popup_options: {
+borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+border: [1, 1, 1, 1],
+},
 roman_abbrev: {
 ds: 'です',
 ms: 'ます',
