@@ -62,6 +62,7 @@ backup: {
 gcr: '',
 hl: {},
 },
+border: [1, 1, 1, 1],
 }
 export def PopupMapping()
 Popup()
@@ -93,6 +94,8 @@ col: o.col,
 line: o.line,
 zindex: 2,
 filter: G,
+border: o.border,
+borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 })
 setbufvar(winbufnr(o.win), '&filetype', 'vim')
 win_execute(o.win, $'syntax match PMenuKind /^./')
@@ -288,6 +291,7 @@ p.row
 b = p.row
 d = 'botleft'
 endif
+p.col += o.border[0]
 q = popup_create(c, {
 zindex: 3,
 wrap: 0,
@@ -295,7 +299,7 @@ cursorline: 1,
 padding: [0, 1, 0, 1],
 mapping: 1,
 filter: 'vimrc#cmdmode#PumKeyDown',
-col: max([2, p.col]) + strdisplaywidth(lk) - 1,
+col: max([2, p.col]) + strdisplaywidth(lk),
 line: p.row,
 maxheight: b,
 pos: d,
@@ -313,8 +317,8 @@ enddef
 export def ForVim9skk(a: any): any
 if o.win !=# 0
 var c = popup_getpos(o.win)
-a.col = c.col + J() - 1
-a.line = c.line
+a.col = c.col + J() - 1 + o.border[0]
+a.line = c.line + o.border[0]
 endif
 return a
 enddef

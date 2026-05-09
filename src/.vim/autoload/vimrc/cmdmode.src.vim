@@ -87,6 +87,7 @@ var popup = {
 		gcr: '',
 		hl: {},
 	},
+	border: [1, 1, 1, 1],
 }
 
 export def PopupMapping()
@@ -130,6 +131,8 @@ export def Popup(timer: number = 0)
 		line: popup.line,
 		zindex: 2,
 		filter: Filter,
+		border: popup.border,
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 	})
 	setbufvar(winbufnr(popup.win), '&filetype', 'vim')
 	win_execute(popup.win, $'syntax match PMenuKind /^./')
@@ -346,6 +349,7 @@ export def PopupPum()
 		maxheight = p.row
 		pos = 'botleft'
 	endif
+	p.col += popup.border[0]
 	pumid = popup_create(c, {
 		zindex: 3,
 		wrap: 0,
@@ -353,7 +357,7 @@ export def PopupPum()
 		padding: [0, 1, 0, 1],
 		mapping: 1,
 		filter: 'vimrc#cmdmode#PumKeyDown',
-		col: max([2, p.col]) + strdisplaywidth(pumpat) - 1,
+		col: max([2, p.col]) + strdisplaywidth(pumpat),
 		line: p.row,
 		maxheight: maxheight,
 		pos: pos,
@@ -375,8 +379,8 @@ enddef
 export def ForVim9skk(popup_pos: any): any
 	if popup.win !=# 0
 		var c = popup_getpos(popup.win)
-		popup_pos.col = c.col + Getcmdscreenpos() - 1
-		popup_pos.line = c.line
+		popup_pos.col = c.col + Getcmdscreenpos() - 1 + popup.border[0]
+		popup_pos.line = c.line + popup.border[0]
 	endif
 	return popup_pos
 enddef
