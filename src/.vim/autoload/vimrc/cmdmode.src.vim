@@ -153,7 +153,7 @@ export def Popup(timer: number = 0)
 	augroup END
 	popup.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 	MapTabToPum()
-	g:previewcmd.popup_args = { col: popup.col, line: popup.line - 1 }
+	SetPreviewCmd()
 enddef
 
 def HighlightVisual()
@@ -339,6 +339,8 @@ export def PopupPum()
 	endif
 	pumpat = cl->substitute('[^ =]*$', '', '')
 	var p = screenpos(0, line('.'), col('.'))
+	p.col += popup.border[3]
+	p.row += popup.border[0]
 	var maxheight = &lines
 	var pos = 'topleft'
 	if p.row < &lines / 2
@@ -349,7 +351,6 @@ export def PopupPum()
 		maxheight = p.row
 		pos = 'botleft'
 	endif
-	p.col += popup.border[0]
 	pumid = popup_create(c, {
 		zindex: 3,
 		wrap: 0,
@@ -357,10 +358,12 @@ export def PopupPum()
 		padding: [0, 1, 0, 1],
 		mapping: 1,
 		filter: 'vimrc#cmdmode#PumKeyDown',
-		col: max([2, p.col]) + strdisplaywidth(pumpat),
+		col: max([2, p.col]) + strdisplaywidth(pumpat) - 1,
 		line: p.row,
 		maxheight: maxheight,
 		pos: pos,
+		border: [1, 1, 1, 1],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 	})
 	setcmdline(pumpat .. getbufline(winbufnr(pumid), 1)[0])
 	g:previewcmd.enable = false
@@ -401,6 +404,14 @@ command! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 
 # pewviewcmdとの連携 {{{
 g:previewcmd = { enable: true }
+def SetPreviewCmd()
+	g:previewcmd.popup_args = {
+		col: popup.col,
+		line: popup.line,
+		border: [1, 1, 1, 1],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+	}
+enddef
 # }}}
 
 # コマンドモードのマッピングとか {{{

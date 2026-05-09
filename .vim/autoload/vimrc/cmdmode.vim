@@ -114,7 +114,7 @@ au VimLeavePre * BC()
 aug END
 o.updatetimer = timer_start(16, vimrc#cmdmode#UpdatePopup, { repeat: -1 })
 BD()
-g:previewcmd.popup_args = { col: o.col, line: o.line - 1 }
+BF()
 enddef
 def E()
 const m = mode()
@@ -281,6 +281,8 @@ return
 endif
 lk = a->substitute('[^ =]*$', '', '')
 var p = screenpos(0, line('.'), col('.'))
+p.col += o.border[3]
+p.row += o.border[0]
 var b = &lines
 var d = 'topleft'
 if p.row < &lines / 2
@@ -291,7 +293,6 @@ p.row
 b = p.row
 d = 'botleft'
 endif
-p.col += o.border[0]
 q = popup_create(c, {
 zindex: 3,
 wrap: 0,
@@ -299,10 +300,12 @@ cursorline: 1,
 padding: [0, 1, 0, 1],
 mapping: 1,
 filter: 'vimrc#cmdmode#PumKeyDown',
-col: max([2, p.col]) + strdisplaywidth(lk),
+col: max([2, p.col]) + strdisplaywidth(lk) - 1,
 line: p.row,
 maxheight: b,
 pos: d,
+border: [1, 1, 1, 1],
+borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 })
 setcmdline(lk .. getbufline(winbufnr(q), 1)[0])
 g:previewcmd.enable = false
@@ -332,6 +335,14 @@ const h = c->strdisplaywidth() / w + 1
 }
 com! -nargs=+ Echo au SafeStateAgain * ++once echo <args>
 g:previewcmd = { enable: true }
+def BF()
+g:previewcmd.popup_args = {
+col: o.col,
+line: o.line,
+border: [1, 1, 1, 1],
+borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+}
+enddef
 export def ApplySettings()
 com! -nargs=1 -complete=dir PopSelectDir expand(<f-args>)->fnamemodify(':p')->popselect#dir#Popup()
 cno <Plug>(vimrc-cancel) <Cmd>call feedkeys("\e", 'nt')<CR>
