@@ -35,7 +35,7 @@ set is
 set hls
 set shortmess+=FI
 set noru
-set nomodeline
+set modeline
 g:maplocalleader = ';'
 filetype plugin indent on
 aug vimrc

@@ -38,8 +38,7 @@ set incsearch
 set hlsearch
 set shortmess+=FI # 後で:introする
 set noruler
-# TODO: 一旦ね…
-set nomodeline
+set modeline
 g:maplocalleader = ';'
 
 filetype plugin indent on
