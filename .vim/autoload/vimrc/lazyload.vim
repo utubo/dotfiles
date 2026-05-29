@@ -157,8 +157,8 @@ Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>k
 vimrc#lsp#LazyLoad()
 packadd nohlsearch
 packadd hlyank
-nm <LocalLeader>c <Cmd>packadd comment<CR>gcc
-xm <LocalLeader>c <Cmd>packadd comment<CR>gc
+nm <Space>c <Cmd>packadd comment<CR>gcc
+xm <Space>c <Cmd>packadd comment<CR>gc
 nn <LocalLeader>h <Cmd>packadd helptoc<CR><Cmd>HelpToc<CR>
 g:helptoc = { popup_borderchars: [] }
 Enable g:rainbow_active
