@@ -243,6 +243,7 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nmap s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 vimrc#lsp#LazyLoad()
+vimrc#textobj#LazyLoad()
 # }}}
 
 # built-in {{{

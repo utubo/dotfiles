@@ -155,6 +155,7 @@ Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
 vimrc#lsp#LazyLoad()
+vimrc#textobj#LazyLoad()
 packadd nohlsearch
 packadd hlyank
 nm <Space>c <Cmd>packadd comment<CR>gcc
