@@ -43,8 +43,8 @@ def! g:ToggleCheckBoxSuspend(type: any)
 	ToggleCheckBox('-')
 enddef
 
-map  <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@0
-map  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@0
+map  <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@l
+map  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@l
 xnoremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
 inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
 #}}} -------------------------------------------------------
@@ -66,7 +66,7 @@ def! g:ToggleListMark(...type: list<any>)
 		endif
 	endfor
 enddef
-nmap <buffer> <LocalLeader>- <ScriptCmd>set opfunc=ToggleListMark<CR>g@0
+nmap <buffer> <LocalLeader>- <ScriptCmd>set opfunc=ToggleListMark<CR>g@l
 inoremap <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
 xnoremap <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
 #}}} -------------------------------------------------------
