@@ -43,15 +43,15 @@ def! g:ToggleCheckBoxSuspend(type: any)
 	ToggleCheckBox('-')
 enddef
 
-map  <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@il
-map  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@il
+map  <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@0
+map  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@0
 xnoremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
 inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
 # リストオンオフ {{{
-def ToggleListMark()
+def! g:ToggleListMark(...type: list<any>)
 	for l in GetRange()
 		const a = getline(l)
 		var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '') # remove list-mark
@@ -66,9 +66,9 @@ def ToggleListMark()
 		endif
 	endfor
 enddef
-nnoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
-inoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
-xnoremap <buffer> <LocalLeader>- <ScriptCmd>ToggleListMark()<CR>
+nmap <buffer> <LocalLeader>- <ScriptCmd>set opfunc=ToggleListMark<CR>g@0
+inoremap <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
+xnoremap <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------

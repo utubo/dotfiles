@@ -34,11 +34,11 @@ enddef
 def! g:ToggleCheckBoxSuspend(a: any)
 B('-')
 enddef
-map <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@il
-map <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@il
+map <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@0
+map <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@0
 xn <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
 ino <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
-def C()
+def! g:ToggleListMark(...d: list<any>)
 for l in A()
 const a = getline(l)
 var b = substitute(a, '^\(\s*\)-\( \[[x ]\]\)\? ', '\1', '')
@@ -53,10 +53,10 @@ setpos('.', c)
 endif
 endfor
 enddef
-nn <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
-ino <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
-xn <buffer> <LocalLeader>- <ScriptCmd>C()<CR>
-def D(): string
+nm <buffer> <LocalLeader>- <ScriptCmd>set opfunc=ToggleListMark<CR>g@0
+ino <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
+xn <buffer> <LocalLeader>- <ScriptCmd>g:ToggleListMark()<CR>
+def C(): string
 var [a, b] = [line('.'), line('v')]->sort('n')
 if mode() ==? 'V'
 elseif &ft !=# 'markdown'
@@ -93,11 +93,11 @@ var h = g ==# 0 ? 'ChkCountIconOk' : 'ChkCountIcon'
 return $'%#{h}#✅%*{f}/{f + g}{e}'
 endif
 enddef
-def E()
+def D()
 if mode()[0] !=# 'n'
 return
 endif
-const a = D()
+const a = C()
 if a !=# get(w:, 'ruler_mdcb', '')
 w:ruler_mdcb = a
 sil! cmdheight0#Invalidate()
@@ -110,27 +110,27 @@ def CursorMovedDelayExec(a: any = 0)
 m = 0
 if n !=# 0
 n = 0
-E()
+D()
 endif
 enddef
-def F()
+def E()
 if m !=# 0
 n += 1
 return
 endif
-E()
+D()
 n = 0
 m = timer_start(K, CursorMovedDelayExec)
 enddef
-au after_ftplugin_md CursorMoved <buffer> F()
-def G()
+au after_ftplugin_md CursorMoved <buffer> E()
+def F()
 for l in A()
 const a = substitute(getline(l), '^\(\s*\)-\( \[[x ]\]\)\? ', '\1' .. repeat(' ', len('\2')), '')
 setline(l, a)
 endfor
 enddef
-ino <buffer> <LocalLeader>r <CR><ScriptCmd>G()<CR>
-nn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
-xn <buffer> <LocalLeader>r <ScriptCmd>G()<CR>
+ino <buffer> <LocalLeader>r <CR><ScriptCmd>F()<CR>
+nn <buffer> <LocalLeader>r <ScriptCmd>F()<CR>
+xn <buffer> <LocalLeader>r <ScriptCmd>F()<CR>
 g:vim_markdown_new_list_item_prefix = 2
 set lcs=tab:\|\ ,trail:-,extends:>,precedes:<,nbsp:%
