@@ -28,9 +28,16 @@ setpos('.', c)
 endif
 endfor
 enddef
-no <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
+def! g:ToggleCheckBoxX(a: any)
+B('x')
+enddef
+def! g:ToggleCheckBoxSuspend(a: any)
+B('-')
+enddef
+map <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@il
+map <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@il
+xn <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
 ino <buffer> <LocalLeader>o <ScriptCmd>B('x')<CR>
-no <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>B('-')<CR>
 def C()
 for l in A()
 const a = getline(l)

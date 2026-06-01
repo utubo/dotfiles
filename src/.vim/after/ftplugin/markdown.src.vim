@@ -34,9 +34,19 @@ def ToggleCheckBox(x: string)
 		endif
 	endfor
 enddef
-noremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
+
+def! g:ToggleCheckBoxX(type: any)
+	ToggleCheckBox('x')
+enddef
+
+def! g:ToggleCheckBoxSuspend(type: any)
+	ToggleCheckBox('-')
+enddef
+
+map  <buffer> <LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxX<CR>g@il
+map  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>set opfunc=ToggleCheckBoxSuspend<CR>g@il
+xnoremap  <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
 inoremap <buffer> <LocalLeader>o <ScriptCmd>ToggleCheckBox('x')<CR>
-noremap  <buffer> <LocalLeader><LocalLeader>o <ScriptCmd>ToggleCheckBox('-')<CR>
 #}}} -------------------------------------------------------
 
 # ----------------------------------------------------------
