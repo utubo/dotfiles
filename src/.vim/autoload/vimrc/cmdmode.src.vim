@@ -222,6 +222,7 @@ def ClosePopup()
 		h->hlset()
 	endfor
 	silent! cunmap <Tab>
+	silent! cunmap <S-Tab>
 	g:previewcmd.popup_args = {}
 	redraw
 enddef
@@ -309,6 +310,7 @@ var pumpat = ''
 
 def MapTabToPum()
 	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
+	cnoremap <S-Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(true)<CR>
 enddef
 
 export def PumKeyDown(id: number, k: string): bool
@@ -329,8 +331,9 @@ export def PumKeyDown(id: number, k: string): bool
 	return true
 enddef
 
-export def PopupPum()
+export def PopupPum(bot: bool = false)
 	cunmap <Tab>
+	cunmap <S-Tab>
 	ClosePum()
 	const cl = getcmdline()
 	const c = getcompletion(cl, 'cmdline')
@@ -365,7 +368,10 @@ export def PopupPum()
 		border: [1, 1, 1, 1],
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 	})
-	setcmdline(pumpat .. getbufline(winbufnr(pumid), 1)[0])
+	setcmdline(pumpat .. getbufline(winbufnr(pumid), bot ? c->len() : 1)[0])
+	if bot
+		noautocmd win_execute(pumid, 'normal! G')
+	endif
 	g:previewcmd.enable = false
 enddef
 
