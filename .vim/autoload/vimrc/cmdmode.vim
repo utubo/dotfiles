@@ -264,6 +264,7 @@ const b = i.bufnr->getbufinfo()[0].linecount
 noautocmd win_execute(q, $'normal! { l < b ? 'j' : 'gg' }')
 elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 noautocmd win_execute(q, $'normal! { l <= 1 ? 'G' : 'k' }')
+elseif k ==# ''
 else
 BE()
 BD()
@@ -310,10 +311,7 @@ pos: e,
 border: [1, 1, 1, 1],
 borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 })
-setcmdline(lk .. getbufline(winbufnr(q), a ? c->len() : 1)[0])
-if a
-noautocmd win_execute(q, 'normal! G')
-endif
+PumKeyDown(q, a ? "\<S-Tab>" : '')
 g:previewcmd.enable = false
 enddef
 def BE()

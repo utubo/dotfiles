@@ -321,6 +321,8 @@ export def PumKeyDown(id: number, k: string): bool
 		noautocmd win_execute(pumid, $'normal! { l < lc ? 'j' : 'gg' }')
 	elseif k ==# "\<S-Tab>" || k ==# "\<C-p>"
 		noautocmd win_execute(pumid, $'normal! { l <= 1 ? 'G' : 'k' }')
+	elseif k ==# ''
+		# NOP
 	else
 		ClosePum()
 		MapTabToPum()
@@ -368,10 +370,7 @@ export def PopupPum(bot: bool = false)
 		border: [1, 1, 1, 1],
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 	})
-	setcmdline(pumpat .. getbufline(winbufnr(pumid), bot ? c->len() : 1)[0])
-	if bot
-		noautocmd win_execute(pumid, 'normal! G')
-	endif
+	PumKeyDown(pumid, bot ? "\<S-Tab>" : '')
 	g:previewcmd.enable = false
 enddef
 
