@@ -293,7 +293,6 @@ if p.row < &lines / 2
 p.row += 2
 d -= p.row
 else
-p.row
 d = p.row
 e = 'botleft'
 endif

@@ -352,7 +352,6 @@ export def PopupPum(bot: bool = false)
 		p.row += 2
 		maxheight -= p.row
 	else
-		p.row
 		maxheight = p.row
 		pos = 'botleft'
 	endif
