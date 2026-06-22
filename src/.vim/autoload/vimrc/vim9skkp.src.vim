@@ -4,8 +4,9 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 	keymap: {
 		# 候補を閉じるのはSKK的には<C-g>だが、Vim的には<C-e>
 		cancel: ["\<C-g>", "\<C-e>"],
-		# <CR>は遠いのでlで確定(;は<LocalLeader>に割り当て)
-		commit: ["\<CR>", 'l'],
+		# Vim的には<C-y>、
+		# 指が近いlでも確定(;は<LocalLeader>に割り当て済み)
+		commit: ["\<CR>", "\<C-y>", 'l'],
 		# SKK的にはxで前候補だが、xは小文字を入力したいので<S-Tab>だけにしておく
 	   prev: ["\<S-Tab>"],
 	},

@@ -2,7 +2,7 @@ vim9script
 g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 keymap: {
 cancel: ["\<C-g>", "\<C-e>"],
-commit: ["\<CR>", 'l'],
+commit: ["\<CR>", "\<C-y>", 'l'],
 prev: ["\<S-Tab>"],
 },
 mode_display: 'none',
