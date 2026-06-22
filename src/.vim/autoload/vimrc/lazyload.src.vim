@@ -268,6 +268,10 @@ nnoremap <C-o> :Back<CR>
 nnoremap <C-i> :Forward<CR>
 nnoremap <Leader><C-o> <C-o>
 nnoremap <Leader><C-i> <C-i>
+g:registerslite_popup_props = {
+	borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+	border: [1, 1, 1, 1],
+}
 # }}}
 
 # 開発用 {{{
