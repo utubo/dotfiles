@@ -21,8 +21,6 @@ exe c
 endwhile
 enddef
 com! -nargs=* Each E(<q-args>)
-com! -nargs=1 -complete=var Enable <args> = 1
-com! -nargs=1 -complete=var Disable <args> = 0
 def H(a: string)
 const b = getline('.')->len()
 var c = getcurpos()

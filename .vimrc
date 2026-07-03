@@ -216,6 +216,8 @@ so ~/.vimrc_local
 endif
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
+com! -nargs=1 -complete=var Enable <args> = 1
+com! -nargs=1 -complete=var Disable <args> = 0
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
 &t_SR = "\e[4 q"

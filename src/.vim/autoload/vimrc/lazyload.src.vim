@@ -35,10 +35,6 @@ def Each(qargs: string)
 enddef
 command! -nargs=* Each Each(<q-args>)
 
-# よくあるやつ
-command! -nargs=1 -complete=var Enable  <args> = 1
-command! -nargs=1 -complete=var Disable <args> = 0
-
 # >>とかしたときにカーソル位置をキープ
 def KeepCurpos(expr: string)
 	const len = getline('.')->len()

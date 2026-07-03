@@ -290,6 +290,10 @@ endif
 g:loaded_matchparen = 1
 g:loaded_matchit = 1
 
+# よくあるやつ
+command! -nargs=1 -complete=var Enable  <args> = 1
+command! -nargs=1 -complete=var Disable <args> = 0
+
 # カーソルの形
 &t_SI = "\e[0 q"
 &t_EI = "\e[2 q"
