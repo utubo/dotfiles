@@ -191,7 +191,7 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # yankround {{{
 nmap p <Plug>(yankround-p)
 xmap p <Plug>(yankround-p)
-nmap <Leader>P <Plug>(yankround-P)
+nmap P <Plug>(yankround-P)
 nmap <C-n> <Plug>(yankround-next)
 # gpは他のことに使いたい…
 # nmap gp <ScriptCmd>vimrc#yankround#Paste('gp')<CR>
@@ -230,11 +230,11 @@ g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 onoremap A <Plug>(textobj-twochars-a)
-onoremap I <Plug>(textobj-twochars-i)
+onoremap I <Plug(textobj-twochars-i)
 command! UpdateVim packadd vim-update|call vimupdate#Update()
 packadd vim-popclip
 popclip#Init({
-	key: 'P',
+	key: '<Space>p',
 	clip_and_move: true,
 })
 # }}}
@@ -614,7 +614,7 @@ xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xnoremap J j
 xnoremap K k
 xnoremap p P
-xnoremap <Leader>P p
+xnoremap P p
 
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<C-g>U<Left>

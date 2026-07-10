@@ -126,7 +126,7 @@ nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
 nm p <Plug>(yankround-p)
 xm p <Plug>(yankround-p)
-nm <Leader>P <Plug>(yankround-P)
+nm P <Plug>(yankround-P)
 nm <C-n> <Plug>(yankround-next)
 nn X <Plug>(Exchange)
 xn X <Plug>(Exchange)
@@ -147,11 +147,11 @@ g:registerslite_hide_dupricate = 0
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 ono A <Plug>(textobj-twochars-a)
-ono I <Plug>(textobj-twochars-i)
+ono I <Plug(textobj-twochars-i)
 com! UpdateVim packadd vim-update|call vimupdate#Update()
 packadd vim-popclip
 popclip#Init({
-key: 'P',
+key: '<Space>p',
 clip_and_move: true,
 })
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
@@ -395,7 +395,7 @@ xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
 xn p P
-xn <Leader>P p
+xn P p
 ino ｋｊ <Esc>`^
 ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
