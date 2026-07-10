@@ -157,6 +157,7 @@ suite.TestMapping = () => {
 		'v  [*/?:]',
 		'i  <C-U>',
 		'n  \\<C-I>', # BackAndForward
+		'n  C', # popclip
 	]->join('\|')
 
 	# わざと被らせてるやつ(`map`コマンドで取得できるやつ)
@@ -189,7 +190,7 @@ suite.TestMapping = () => {
 		'n  gy', # detent-yank
 		'n  X', # exchange
 		'n  X[XC]', # exchange
-		'n  P', # popclip
+		'n  C', # popclip
 	]->join('\|')
 
 	# ユーザー定義のマッピング

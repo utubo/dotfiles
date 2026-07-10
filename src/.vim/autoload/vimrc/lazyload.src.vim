@@ -234,7 +234,7 @@ onoremap I <Plug(textobj-twochars-i)
 command! UpdateVim packadd vim-update|call vimupdate#Update()
 packadd vim-popclip
 popclip#Init({
-	key: '<Space>p',
+	key: 'C',
 	clip_and_move: true,
 })
 # }}}

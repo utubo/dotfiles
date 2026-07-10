@@ -151,7 +151,7 @@ ono I <Plug(textobj-twochars-i)
 com! UpdateVim packadd vim-update|call vimupdate#Update()
 packadd vim-popclip
 popclip#Init({
-key: '<Space>p',
+key: 'C',
 clip_and_move: true,
 })
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
