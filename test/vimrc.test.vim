@@ -189,6 +189,7 @@ suite.TestMapping = () => {
 		'n  gy', # detent-yank
 		'n  X', # exchange
 		'n  X[XC]', # exchange
+		'n  P', # popclip
 	]->join('\|')
 
 	# ユーザー定義のマッピング
