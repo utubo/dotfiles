@@ -191,7 +191,7 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # yankround {{{
 nmap p <Plug>(yankround-p)
 xmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
+nmap <Leader>P <Plug>(yankround-P)
 nmap <C-n> <Plug>(yankround-next)
 # gpは他のことに使いたい…
 # nmap gp <ScriptCmd>vimrc#yankround#Paste('gp')<CR>
@@ -232,6 +232,11 @@ Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>
 onoremap A <Plug>(textobj-twochars-a)
 onoremap I <Plug>(textobj-twochars-i)
 command! UpdateVim packadd vim-update|call vimupdate#Update()
+packadd vim-popclip
+popclip#Init({
+	key: 'P',
+	clip_and_move: true,
+})
 # }}}
 
 # 遅延読み込みもの {{{
@@ -609,7 +614,7 @@ xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xnoremap J j
 xnoremap K k
 xnoremap p P
-xnoremap P p
+xnoremap <Leader>P p
 
 inoremap ｋｊ <Esc>`^
 inoremap 「 「」<C-g>U<Left>

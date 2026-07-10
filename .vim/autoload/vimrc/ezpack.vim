@@ -53,6 +53,7 @@ Ezpack utubo/vim-update
 Ezpack utubo/vim-yomigana
 EzpackInstallToOpt
 Ezpack utubo/vim-ezpack
+Ezpack utubo/vim-popclip
 Ezpack utubo/vim-popselect
 Ezpack utubo/vim-reformatdate
 Ezpack utubo/vim-previewcmd <mode> c

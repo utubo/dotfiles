@@ -126,7 +126,7 @@ nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
 nm p <Plug>(yankround-p)
 xm p <Plug>(yankround-p)
-nm P <Plug>(yankround-P)
+nm <Leader>P <Plug>(yankround-P)
 nm <C-n> <Plug>(yankround-next)
 nn X <Plug>(Exchange)
 xn X <Plug>(Exchange)
@@ -149,6 +149,11 @@ Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>
 ono A <Plug>(textobj-twochars-a)
 ono I <Plug>(textobj-twochars-i)
 com! UpdateVim packadd vim-update|call vimupdate#Update()
+packadd vim-popclip
+popclip#Init({
+key: 'P',
+clip_and_move: true,
+})
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
@@ -390,7 +395,7 @@ xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
 xn p P
-xn P p
+xn <Leader>P p
 ino ｋｊ <Esc>`^
 ino 「 「」<C-g>U<Left>
 ino 「」 「」<C-g>U<Left>
