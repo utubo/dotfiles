@@ -153,6 +153,7 @@ packadd vim-popclip
 popclip#Init({
 key: 'C',
 clip_and_move: true,
+move_label: "\Uf01be",
 })
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s

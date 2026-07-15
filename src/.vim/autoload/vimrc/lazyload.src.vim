@@ -236,6 +236,7 @@ packadd vim-popclip
 popclip#Init({
 	key: 'C',
 	clip_and_move: true,
+	move_label: "\Uf01be",
 })
 # }}}
 
