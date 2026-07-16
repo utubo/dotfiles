@@ -256,8 +256,6 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
-nn v V
-nn V v
 xn <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
 xn <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
 xn <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')

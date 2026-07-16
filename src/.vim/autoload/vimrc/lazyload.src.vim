@@ -392,8 +392,8 @@ xnoremap <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
 # なやみ中
-nnoremap v V
-nnoremap V v
+# nnoremap v V
+# nnoremap V v
 xnoremap <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
 xnoremap <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
 xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
