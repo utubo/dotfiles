@@ -253,7 +253,7 @@ nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
 xn u <ScriptCmd>undo\|normal! gv<CR>
-xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xn <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
 xn <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')

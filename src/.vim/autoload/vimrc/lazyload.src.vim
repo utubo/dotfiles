@@ -388,7 +388,7 @@ nnoremap <Space>y yiw
 # ------------------------------------------------------
 # ビジュアルモードあれこれ {{{
 xnoremap u <ScriptCmd>undo\|normal! gv<CR>
-xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
+xnoremap <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
 xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
