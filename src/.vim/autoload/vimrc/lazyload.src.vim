@@ -391,8 +391,7 @@ xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"] # minviml:fixed=vmode
-xnoremap <script> <expr> v vmode[vmode->index(mode()) + 1]
+xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
 # }}}
 
 # ------------------------------------------------------

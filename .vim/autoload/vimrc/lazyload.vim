@@ -256,8 +256,7 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-R> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
-const vmode = ['v', 'V', "\<C-v>", "\<ESC>"]
-xn <script> <expr> v vmode[vmode->index(mode()) + 1]
+xn <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
 Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :
