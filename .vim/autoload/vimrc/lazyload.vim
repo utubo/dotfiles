@@ -256,7 +256,13 @@ xn u <ScriptCmd>undo\|normal! gv<CR>
 xn <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
+nn v V
+nn V v
+xn <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
+xn <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
 xn <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
+xn I <C-v>I
+xn A <C-v>A
 Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :
@@ -390,8 +396,6 @@ nn TB <Cmd>tabnew %<CR>g;
 nn TQ :<C-u>tabc<Space>
 ono <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 ono <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
-xn <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
-xn <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xn J j
 xn K k
 xn p P

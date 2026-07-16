@@ -390,3 +390,9 @@ enddef
 noremap ZZ <ScriptCmd>ToggleZen()<CR>
 au vimrc WinResized * redrawstatus
 # }}}
+
+# ビジュアルモード {{{
+xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
+xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
+xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
+# }}}

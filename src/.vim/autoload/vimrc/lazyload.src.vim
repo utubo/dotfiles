@@ -391,7 +391,14 @@ xnoremap u <ScriptCmd>undo\|normal! gv<CR>
 xnoremap <C-r> <ScriptCmd>redo\|normal! gv<CR>
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
+# なやみ中
+nnoremap v V
+nnoremap V v
+xnoremap <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
+xnoremap <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
 xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
+xnoremap I <C-v>I
+xnoremap A <C-v>A
 # }}}
 
 # ------------------------------------------------------
@@ -609,8 +616,6 @@ nnoremap TQ :<C-u>tabc<Space>
 onoremap <expr> } $"\<Esc>m`0{v:count1}{v:operator}\}"
 onoremap <expr> { $"\<Esc>m`V{v:count1}\{{v:operator}"
 
-xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
-xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
 xnoremap J j
 xnoremap K k
 xnoremap p P
