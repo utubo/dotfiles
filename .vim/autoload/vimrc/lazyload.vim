@@ -252,15 +252,19 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-xn u <ScriptCmd>undo\|normal! gv<CR>
-xn <C-r> <ScriptCmd>redo\|normal! gv<CR>
-xn <Tab> <ScriptCmd>H('>gv')<CR>
-xn <S-Tab> <ScriptCmd>H('<gv')<CR>
-xn <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
-xn <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
-xn <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
+xn <expr> k $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}k'
+xn <expr> j $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}j'
+xn <expr> h $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}h'
+xn <expr> l $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}l'
 xn I <C-v>I
 xn A <C-v>A
+xn v <Esc>
+xn q <C-v>
+xn Q q
+xn <Tab> <ScriptCmd>H('>gv')<CR>
+xn <S-Tab> <ScriptCmd>H('<gv')<CR>
+xn u <ScriptCmd>undo\|normal! gv<CR>
+xn <C-r> <ScriptCmd>redo\|normal! gv<CR>
 Each nmap,xmap <LocalLeader>s /
 Each nmap,xmap + :
 Each nmap,xmap , :

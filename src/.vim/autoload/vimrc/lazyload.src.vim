@@ -387,18 +387,22 @@ nnoremap <Space>y yiw
 
 # ------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-xnoremap u <ScriptCmd>undo\|normal! gv<CR>
-xnoremap <C-r> <ScriptCmd>redo\|normal! gv<CR>
-xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
-xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
-# なやみ中
-# nnoremap v V
-# nnoremap V v
-xnoremap <expr> h mode() ==# 'V' ? '<C-v>h' : 'h'
-xnoremap <expr> l mode() ==# 'V' ? '<C-v>l' : 'l'
-xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
+xnoremap <expr> k $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}k'
+xnoremap <expr> j $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}j'
+xnoremap <expr> h $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}h'
+xnoremap <expr> l $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}l'
 xnoremap I <C-v>I
 xnoremap A <C-v>A
+# うーん
+#xnoremap <expr> v matchstr("vV\<C-v>\<ESC>", $'{mode()}\@<=.')
+xnoremap v <Esc>
+xnoremap q <C-v>
+xnoremap Q q
+# インデント
+xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
+xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
+xnoremap u <ScriptCmd>undo\|normal! gv<CR>
+xnoremap <C-r> <ScriptCmd>redo\|normal! gv<CR>
 # }}}
 
 # ------------------------------------------------------
