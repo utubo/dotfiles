@@ -410,7 +410,6 @@ xnoremap <expr> A mode() ==# "\<C-v>" ? 'A' : "<C-v>A"
 #xnoremap <expr> v matchstr("vV\<C-v>\<ESC>", $'{mode()}\@<=.')
 xnoremap v <Esc>
 xnoremap q <C-v>
-xnoremap Q q
 # インデント
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
@@ -536,6 +535,7 @@ enddef
 Each X=h,j,k,l nnoremap qX <ScriptCmd>g:QuitWin('X')<CR>
 nnoremap q <Nop>
 nnoremap Q q
+xnoremap Q q
 # 閉じる
 nnoremap <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
 # ウィンドウ

@@ -271,7 +271,6 @@ xn <expr> I mode() ==# "\<C-v>" ? 'I' : "<C-v>I"
 xn <expr> A mode() ==# "\<C-v>" ? 'A' : "<C-v>A"
 xn v <Esc>
 xn q <C-v>
-xn Q q
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
 xn u <ScriptCmd>undo\|normal! gv<CR>
@@ -353,6 +352,7 @@ enddef
 Each X=h,j,k,l nnoremap qX <ScriptCmd>g:QuitWin('X')<CR>
 nn q <Nop>
 nn Q q
+xn Q q
 nn <expr> qq $"\<Cmd>confirm {winnr('$') ==# 1 && execute('ls')->split("\n")->len() !=# 1 ? 'bd' : 'q'}\<CR>"
 nn qa <Cmd>confirm qa<CR>
 nn qOw <Cmd>confirm only<CR>
