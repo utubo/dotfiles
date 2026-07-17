@@ -191,6 +191,7 @@ suite.TestMapping = () => {
 		'n  X', # exchange
 		'n  X[XC]', # exchange
 		'n  C', # popclip
+		'x  G[ai%]',
 	]->join('\|')
 
 	# ユーザー定義のマッピング
