@@ -252,12 +252,23 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-xn <expr> k $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}k'
-xn <expr> j $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}{v:count1}j'
-xn <expr> h $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}h'
-xn <expr> l $'{mode() ==# 'V' ? "\<C-v>" : ''}{v:count1}l'
-xn I <C-v>I
-xn A <C-v>A
+xn <expr> <Plug>(auto-V) $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}'
+xn <expr> k $"\<Plug>(auto-V){v:count1}k"
+xn <expr> j $"\<Plug>(auto-V){v:count1}j"
+xn G <Plug>(auto-V)G
+xn <C-g> <Plug>(auto-V)<C-g>
+xn <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? "\<C-v>" : ''}'
+xn <expr> h $"\<Plug>(auto-c-v){v:count1}h"
+xn <expr> l $"\<Plug>(auto-c-v){v:count1}l"
+xn 0 <Plug>(auto-c-v)0
+xn ^ <Plug>(auto-c-v)^
+xn $ <Plug>(auto-c-v)$
+xn f <Plug>(auto-c-v)f
+xn F <Plug>(auto-c-v)F
+xn t <Plug>(auto-c-v)t
+xn T <Plug>(auto-c-v)T
+xn <expr> I mode() ==# "\<C-v>" ? 'I' : "<C-v>I"
+xn <expr> A mode() ==# "\<C-v>" ? 'A' : "<C-v>A"
 xn v <Esc>
 xn q <C-v>
 xn Q q
