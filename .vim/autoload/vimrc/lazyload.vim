@@ -255,8 +255,10 @@ nn <Space>y yiw
 xn <expr> <Plug>(auto-V) $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}'
 xn <expr> k $'<Plug>(auto-V){v:count1}k'
 xn <expr> j $'<Plug>(auto-V){v:count1}j'
+xn gg <Plug>(auto-V)gg
 xn G <Plug>(auto-V)G
-xn <C-g> <Plug>(auto-V)<C-g>
+xn { <Plug>(auto-V){
+xn } <Plug>(auto-V)}
 xn <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
 xn <expr> h $'<Plug>(auto-c-v){v:count1}h'
 xn <expr> l $'<Plug>(auto-c-v){v:count1}l'
@@ -269,7 +271,7 @@ xn t <Plug>(auto-c-v)t
 xn T <Plug>(auto-c-v)T
 xn <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xn <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
-xn <expr> v matchstr('vV<C-v><ESC>', $'{mode()}\@<=.')
+xn v <Esc>
 xn q <C-v>
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
