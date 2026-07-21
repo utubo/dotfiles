@@ -252,13 +252,15 @@ nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
 nn <Space>y yiw
-xn <expr> <Plug>(auto-V) $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}'
+xn <expr> <Plug>(auto-V) $'{mode() ==# 'v' ? getpos('.') ==# getpos('v') ? 'V' : '<C-v>' : ''}'
 xn <expr> k $'<Plug>(auto-V){v:count1}k'
 xn <expr> j $'<Plug>(auto-V){v:count1}j'
 xn gg <Plug>(auto-V)gg
 xn G <Plug>(auto-V)G
 xn { <Plug>(auto-V){
 xn } <Plug>(auto-V)}
+SubMode visual_g_move xmap g j gj
+SubMode visual_g_move xmap g k gk
 xn <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
 xn <expr> h $'<Plug>(auto-c-v){v:count1}h'
 xn <expr> l $'<Plug>(auto-c-v){v:count1}l'

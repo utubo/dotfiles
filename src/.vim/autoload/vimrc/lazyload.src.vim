@@ -387,13 +387,15 @@ nnoremap <Space>y yiw
 
 # ------------------------------------------------------
 # ビジュアルモードあれこれ {{{
-xnoremap <expr> <Plug>(auto-V) $'{mode() ==# 'v' && getpos('.') ==# getpos('v') ? 'V' : ''}'
+xnoremap <expr> <Plug>(auto-V) $'{mode() ==# 'v' ? getpos('.') ==# getpos('v') ? 'V' : '<C-v>' : ''}'
 xnoremap <expr> k $'<Plug>(auto-V){v:count1}k'
 xnoremap <expr> j $'<Plug>(auto-V){v:count1}j'
 xnoremap gg <Plug>(auto-V)gg
 xnoremap G <Plug>(auto-V)G
 xnoremap { <Plug>(auto-V){
 xnoremap } <Plug>(auto-V)}
+SubMode visual_g_move xmap g j gj
+SubMode visual_g_move xmap g k gk
 
 xnoremap <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
 xnoremap <expr> h $'<Plug>(auto-c-v){v:count1}h'
