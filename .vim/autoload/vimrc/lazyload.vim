@@ -271,6 +271,8 @@ xn f <Plug>(auto-c-v)f
 xn F <Plug>(auto-c-v)F
 xn t <Plug>(auto-c-v)t
 xn T <Plug>(auto-c-v)T
+xn w <Plug>(auto-c-v)w
+xn e <Plug>(auto-c-v)e
 xn <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xn <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
 xn v <Esc>

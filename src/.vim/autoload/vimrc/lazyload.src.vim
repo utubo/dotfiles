@@ -407,6 +407,8 @@ xnoremap f <Plug>(auto-c-v)f
 xnoremap F <Plug>(auto-c-v)F
 xnoremap t <Plug>(auto-c-v)t
 xnoremap T <Plug>(auto-c-v)T
+xnoremap w <Plug>(auto-c-v)w
+xnoremap e <Plug>(auto-c-v)e
 
 xnoremap <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xnoremap <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
