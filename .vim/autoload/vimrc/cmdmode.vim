@@ -253,8 +253,8 @@ enddef
 var q = 0
 var lk = ''
 def BD()
-cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
-cno <S-Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(true)<CR>
+cno <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(false, '<Tab>')<CR>
+cno <S-Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(true, 'S-Tab>')<CR>
 enddef
 export def PumKeyDown(a: number, k: string): bool
 const i = getwininfo(q)[0]
@@ -274,27 +274,31 @@ setcmdline(lk .. i.bufnr->getbufline(getcurpos(q)[1])[0])
 redraw
 return true
 enddef
-export def PopupPum(a: bool = false)
+export def PopupPum(a: bool = false, b: string = '')
 cu <Tab>
 cu <S-Tab>
 BE()
-const b = getcmdline()
-const c = getcompletion(b, 'cmdline')
+if !!get(g:, 'previewcmd_winid', 0)
+feedkeys(b)
+return
+endif
+const d = getcmdline()
+const c = getcompletion(d, 'cmdline')
 if !c
 return
 endif
-lk = b->substitute('[^ =]*$', '', '')
+lk = d->substitute('[^ =]*$', '', '')
 var p = screenpos(0, line('.'), col('.'))
 p.col += o.border[3]
 p.row += o.border[0]
-var d = &lines
-var e = 'topleft'
+var e = &lines
+var f = 'topleft'
 if p.row < &lines / 2
 p.row += 2
-d -= p.row
+e -= p.row
 else
-d = p.row
-e = 'botleft'
+e = p.row
+f = 'botleft'
 endif
 q = popup_create(c, {
 zindex: 3,
@@ -305,8 +309,8 @@ mapping: 1,
 filter: 'vimrc#cmdmode#PumKeyDown',
 col: max([2, p.col]) + strdisplaywidth(lk) - 1,
 line: p.row,
-maxheight: d,
-pos: e,
+maxheight: e,
+pos: f,
 border: [1, 1, 1, 1],
 borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 })

@@ -309,8 +309,8 @@ var pumid = 0
 var pumpat = ''
 
 def MapTabToPum()
-	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum()<CR>
-	cnoremap <S-Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(true)<CR>
+	cnoremap <Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(false, '<Tab>')<CR>
+	cnoremap <S-Tab> <ScriptCmd>vimrc#cmdmode#PopupPum(true, 'S-Tab>')<CR>
 enddef
 
 export def PumKeyDown(id: number, k: string): bool
@@ -333,10 +333,14 @@ export def PumKeyDown(id: number, k: string): bool
 	return true
 enddef
 
-export def PopupPum(bot: bool = false)
+export def PopupPum(bot: bool = false, key: string = '')
 	cunmap <Tab>
 	cunmap <S-Tab>
 	ClosePum()
+	if !!get(g:,  'previewcmd_winid', 0)
+		feedkeys(key)
+		return
+	endif
 	const cl = getcmdline()
 	const c = getcompletion(cl, 'cmdline')
 	if !c
