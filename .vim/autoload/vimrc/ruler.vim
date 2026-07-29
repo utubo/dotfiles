@@ -22,17 +22,16 @@ if o !=# 'utf-8'
 m ..= $' {o}'
 endif
 }
+g:vim9skkp_status = get(g:, 'vim9skkp_status', { mode_label: '_A' })
 export def MyRuler(): string
 if !v:vim_did_enter
 return ''
 endif
-const p = getcurpos(k)
 const b = getbufinfo(l)
-var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{m}'
-if exists('g:vim9skkp_status')
-a ..= $' {g:vim9skkp_status.mode_label}'
-else
-a ..= ' _A'
+if !b
+return ''
 endif
+const p = getcurpos(k)
+const a = $'{p[1]}/{b[0].linecount}:{p[2]}{m} {g:vim9skkp_status.mode_label}'
 return $'%#TabPanelFill#{anypanel#align#Center(a)}'
 enddef

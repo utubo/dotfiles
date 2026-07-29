@@ -29,17 +29,17 @@ au vimrc WinEnter,BufEnter * {
 	endif
 }
 
+g:vim9skkp_status = get(g:, 'vim9skkp_status', { mode_label: '_A' })
+
 export def MyRuler(): string
 	if !v:vim_did_enter
 		return ''
 	endif
-	const p = getcurpos(curwin)
 	const b = getbufinfo(curbuf)
-	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
-	if exists('g:vim9skkp_status')
-		text ..= $' {g:vim9skkp_status.mode_label}'
-	else
-		text ..= ' _A'
+	if !b
+		return ''
 	endif
+	const p = getcurpos(curwin)
+	const text = $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo} {g:vim9skkp_status.mode_label}'
 	return $'%#TabPanelFill#{anypanel#align#Center(text)}'
 enddef
