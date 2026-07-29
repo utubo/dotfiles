@@ -30,7 +30,7 @@ const p = getcurpos(k)
 const b = getbufinfo(l)
 var a = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{m}'
 if exists('g:vim9skkp_status')
-a ..= $' {g:vim9skkp_status.mode}'
+a ..= $' {g:vim9skkp_status.mode_label}'
 else
 a ..= ' _A'
 endif

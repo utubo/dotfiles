@@ -37,7 +37,7 @@ export def MyRuler(): string
 	const b = getbufinfo(curbuf)
 	var text = !b ? '' : $'{p[1]}/{b[0].linecount}:{p[2]}{rulerinfo}'
 	if exists('g:vim9skkp_status')
-		text ..= $' {g:vim9skkp_status.mode}'
+		text ..= $' {g:vim9skkp_status.mode_label}'
 	else
 		text ..= ' _A'
 	endif
