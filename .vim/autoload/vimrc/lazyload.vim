@@ -49,10 +49,11 @@ ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
 nn <LocalLeader>i i<Plug>(vim9skkp-enable)
-no <Leader>ga ga
-HeadTailMap g G
-Each nmap,xmap g% gi%
-Each nmap,xmap G% Gi%
+Each X=ga,gi,gI nnoremap <Leader>X X
+nm ga <Plug>(to-tail)a
+nm gi <Plug>(to-tail)i
+nm gA <Plug>(to-head)a
+nm gI <Plug>(to-head)i
 Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],

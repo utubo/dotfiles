@@ -147,9 +147,8 @@ suite.TestMapping = () => {
 	# i  <C-G> 色付きで表示
 	var default_ignore = '\C' .. [
 		'n  [abBefhijklmnopqstwAFMOPQSTY;''/?:%,+]',
-		'n  g[acdefsinmprtT;]',
+		'n  g[acdefsinmprtIT;]',
 		'n  \(zd\|zf\|zz\|ZZ\)',
-		'n  G[ai%]',
 		'n  <C-[ABFGINOPWX]>',
 		'n  <Esc>',
 		'n  X', # exchange
@@ -191,7 +190,6 @@ suite.TestMapping = () => {
 		'n  X', # exchange
 		'n  X[XC]', # exchange
 		'n  C', # popclip
-		'x  G[ai%]',
 	]->join('\|')
 
 	# ユーザー定義のマッピング
