@@ -214,7 +214,7 @@ g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
 Each map,imap,cmap <LocalLeader>n <Plug>(vimrc-ok)
-Each map,imap,cmap <LocalLeader>m <Plug>(vimrc-cancel)
+Each map,imap,cmap <LocalLeader>l <Plug>(vimrc-cancel)
 Each nnoremap,inoremap <Plug>(vimrc-ok) <Esc><Cmd>Sav<CR>
 no <Plug>(vimrc-cancel) <Esc>
 ino <Plug>(vimrc-cancel) <Esc>`^
@@ -236,8 +236,8 @@ ino <LocalLeader>u <Esc>u
 nn <LocalLeader>r "
 nn <LocalLeader>rr "0p
 SubMode bs map! <LocalLeader> b <BS>
-SubMode movecursor map! <LocalLeader> h <Left>
-SubMode movecursor map! <LocalLeader> l <Right>
+SubMode movecursor map! <LocalLeader><LocalLeader> h <Left>
+SubMode movecursor map! <LocalLeader><LocalLeader> l <Right>
 nn <Space>e G?\cErr\\|Exception<CR>
 nn <expr> <Space>f $'{(getreg('"') =~ '^\d\+$' ? ':' : '/')}{getreg('"')}<CR>'
 nm <Space>. :
