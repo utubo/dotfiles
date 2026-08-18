@@ -5,7 +5,7 @@ cancel: ["\<C-g>", "\<C-e>"],
 commit: ["\<CR>", "\<C-y>", 'l'],
 prev: ["\<S-Tab>"],
 },
-mode_display: 'cursor',
+mode_display: 'popup',
 sticky_lock: true,
 cands_popup_options: {
 borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],

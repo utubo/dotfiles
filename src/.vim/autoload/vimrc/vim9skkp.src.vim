@@ -10,7 +10,7 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		# SKK的にはxで前候補だが、xは小文字を入力したいので<S-Tab>だけにしておく
 	   prev: ["\<S-Tab>"],
 	},
-	mode_display: 'cursor',
+	mode_display: 'popup',
 	sticky_lock: true,
 	cands_popup_options: {
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
