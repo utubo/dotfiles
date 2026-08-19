@@ -260,22 +260,10 @@ xn gg <Plug>(auto-V)gg
 xn G <Plug>(auto-V)G
 xn { <Plug>(auto-V){
 xn } <Plug>(auto-V)}
-SubMode visual_g_move xmap g j gj
-SubMode visual_g_move xmap g k gk
-xn <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
-xn <expr> h $'<Plug>(auto-c-v){v:count1}h'
-xn <expr> l $'<Plug>(auto-c-v){v:count1}l'
-xn 0 <Plug>(auto-c-v)0
-xn ^ <Plug>(auto-c-v)^
-xn $ <Plug>(auto-c-v)$
-xn f <Plug>(auto-c-v)f
-xn F <Plug>(auto-c-v)F
-xn t <Plug>(auto-c-v)t
-xn T <Plug>(auto-c-v)T
-xn w <Plug>(auto-c-v)w
-xn e <Plug>(auto-c-v)e
 xn <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xn <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
+SubMode visual_g_move xmap g j gj
+SubMode visual_g_move xmap g k gk
 xn <script> <expr> v mode() ==# 'v' ? '<C-v>' : '<ESC>'
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>

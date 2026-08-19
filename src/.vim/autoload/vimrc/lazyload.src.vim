@@ -395,24 +395,10 @@ xnoremap gg <Plug>(auto-V)gg
 xnoremap G <Plug>(auto-V)G
 xnoremap { <Plug>(auto-V){
 xnoremap } <Plug>(auto-V)}
-SubMode visual_g_move xmap g j gj
-SubMode visual_g_move xmap g k gk
-
-xnoremap <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
-xnoremap <expr> h $'<Plug>(auto-c-v){v:count1}h'
-xnoremap <expr> l $'<Plug>(auto-c-v){v:count1}l'
-xnoremap 0 <Plug>(auto-c-v)0
-xnoremap ^ <Plug>(auto-c-v)^
-xnoremap $ <Plug>(auto-c-v)$
-xnoremap f <Plug>(auto-c-v)f
-xnoremap F <Plug>(auto-c-v)F
-xnoremap t <Plug>(auto-c-v)t
-xnoremap T <Plug>(auto-c-v)T
-xnoremap w <Plug>(auto-c-v)w
-xnoremap e <Plug>(auto-c-v)e
-
 xnoremap <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xnoremap <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
+SubMode visual_g_move xmap g j gj
+SubMode visual_g_move xmap g k gk
 # うーん
 # xnoremap <expr> v matchstr('vV<C-v><ESC>', $'{mode()}\@<=.')
 xnoremap <script> <expr> v mode() ==# 'v' ? '<C-v>' : '<ESC>'

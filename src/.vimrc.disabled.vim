@@ -395,4 +395,18 @@ au vimrc WinResized * redrawstatus
 xnoremap <script> <expr> v matchstr("vV\<C-v>\<ESC>", mode() .. '\@<=.')
 xnoremap <expr> h mode() ==# 'V' ? '<Esc>h' : 'h'
 xnoremap <expr> l mode() ==# 'V' ? '<Esc>l' : 'l'
+
+xnoremap <expr> <Plug>(auto-c-v) $'{mode() ==# 'V' ? '<C-v>' : ''}'
+xnoremap <expr> h $'<Plug>(auto-c-v){v:count1}h'
+xnoremap <expr> l $'<Plug>(auto-c-v){v:count1}l'
+xnoremap 0 <Plug>(auto-c-v)0
+xnoremap ^ <Plug>(auto-c-v)^
+xnoremap $ <Plug>(auto-c-v)$
+xnoremap f <Plug>(auto-c-v)f
+xnoremap F <Plug>(auto-c-v)F
+xnoremap t <Plug>(auto-c-v)t
+xnoremap T <Plug>(auto-c-v)T
+xnoremap w <Plug>(auto-c-v)w
+xnoremap e <Plug>(auto-c-v)e
+
 # }}}
