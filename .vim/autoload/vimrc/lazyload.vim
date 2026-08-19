@@ -214,7 +214,7 @@ g:maplocalleader = ';'
 nn <Space><LocalLeader> ;
 no <Space><LocalLeader> ;
 Each map,imap,cmap <LocalLeader>n <Plug>(vimrc-ok)
-Each map,imap,cmap <LocalLeader>l <Plug>(vimrc-cancel)
+Each map,imap,cmap <LocalLeader>m <Plug>(vimrc-cancel)
 Each nnoremap,inoremap <Plug>(vimrc-ok) <Esc><Cmd>Sav<CR>
 no <Plug>(vimrc-cancel) <Esc>
 ino <Plug>(vimrc-cancel) <Esc>`^
