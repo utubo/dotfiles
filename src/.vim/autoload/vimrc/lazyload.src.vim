@@ -328,7 +328,7 @@ Each onoremap,xnoremap ae :<C-u>keepjumps normal! G$vgo<CR>
 g:maplocalleader = ';'
 nnoremap <Space><LocalLeader> ;
 noremap  <Space><LocalLeader> ;
-# ;nで決定、;lでキャンセル(;mは押しにくいのでやめた)
+# ;nで決定、;mでキャンセル
 # コマンドモードの定義はcmdmode.src.vim
 # NOTE: `<SID>...`にすると他のソースで使えないので`<Plug>...`にしておく
 Each map,imap,cmap <LocalLeader>n <Plug>(vimrc-ok)
