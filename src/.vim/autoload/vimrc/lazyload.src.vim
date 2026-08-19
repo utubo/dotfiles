@@ -415,8 +415,9 @@ xnoremap <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xnoremap <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
 # うーん
 # xnoremap <expr> v matchstr('vV<C-v><ESC>', $'{mode()}\@<=.')
-xnoremap v <Esc>
-xnoremap q <C-v>
+xnoremap <script> <expr> v matchstr('v<C-v><ESC>V<ESC>', $'{mode()}\@<=.')
+# xnoremap v <Esc>
+# xnoremap q <C-v>
 # インデント
 xnoremap <Tab> <ScriptCmd>KeepCurpos('>gv')<CR>
 xnoremap <S-Tab> <ScriptCmd>KeepCurpos('<gv')<CR>
