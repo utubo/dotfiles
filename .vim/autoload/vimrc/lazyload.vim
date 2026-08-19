@@ -276,7 +276,7 @@ xn w <Plug>(auto-c-v)w
 xn e <Plug>(auto-c-v)e
 xn <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xn <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
-xn <script> <expr> v matchstr('v<C-v><ESC>V<ESC>', $'{mode()}\@<=.')
+xn <script> <expr> v mode() ==# 'v' ? '<C-v>' : '<ESC>'
 xn <Tab> <ScriptCmd>H('>gv')<CR>
 xn <S-Tab> <ScriptCmd>H('<gv')<CR>
 xn u <ScriptCmd>undo\|normal! gv<CR>
