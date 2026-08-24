@@ -125,9 +125,9 @@ nn <Leader>a <Cmd>PortalAim<CR>
 nn <Leader>b <Cmd>PortalAim blue<CR>
 nn <Leader>o <Cmd>PortalAim orange<CR>
 nn <Leader>r <Cmd>PortalReset<CR>
-nm p <Plug>(yankround-p)
-xm p <Plug>(yankround-p)
-nm P <Plug>(yankround-P)
+nn p mp<Plug>(yankround-p)
+xn p <Plug>(yankround-p)
+nn P mP<Plug>(yankround-P)
 nm <C-n> <Plug>(yankround-next)
 nn X <Plug>(Exchange)
 xn X <Plug>(Exchange)
@@ -189,7 +189,7 @@ g:vimhelpgenerator_uri = 'https://github.com/utubo/'
 au vimrc InsertLeave * set nopaste
 au vimrc FileReadPost *.log* normal! G
 set mps+=（:）,「:」,『:』,【:】,［:］,＜:＞
-Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
+Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'mXX' : 'mX"_cc'
 Each X=+,-,>,<lt> Each Y=nmap,tmap SubMode winsize Y <C-w> X <C-w>X
 Each X=+,-,>,<lt> Each Y=nmap,tmap SubMode winsize Y <C-w> X <C-w>X
 nn <A-J> <Cmd>copy.<CR>

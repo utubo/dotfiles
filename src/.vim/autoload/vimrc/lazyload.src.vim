@@ -190,9 +190,9 @@ nnoremap <Leader>r <Cmd>PortalReset<CR>
 # }}}
 
 # yankround {{{
-nmap p <Plug>(yankround-p)
-xmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
+nnoremap p mp<Plug>(yankround-p)
+xnoremap p <Plug>(yankround-p)
+nnoremap P mP<Plug>(yankround-P)
 nmap <C-n> <Plug>(yankround-next)
 # gpは他のことに使いたい…
 # nmap gp <ScriptCmd>vimrc#yankround#Paste('gp')<CR>
@@ -292,7 +292,7 @@ au vimrc FileReadPost *.log* normal! G
 # https://github.com/astrorobot110/myvimrc/blob/master/vimrc
 set matchpairs+=（:）,「:」,『:』,【:】,［:］,＜:＞
 # https://github.com/Omochice/dotfiles
-Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'X' : '"_cc'
+Each X=i,a,A nnoremap <expr> X !empty(getline('.')) ? 'mXX' : 'mX"_cc'
 # すごい
 # https://zenn.dev/mattn/articles/83c2d4c7645faa
 Each X=+,-,>,<lt> Each Y=nmap,tmap SubMode winsize Y <C-w> X <C-w>X
@@ -680,6 +680,7 @@ nnoremap [t <C-t>
 
 # ------------------------------------------------------
 # 様子見中 {{{
+
 # ホームポジションでファンクションキー {{{
 nmap <Space><Space>a <F1>
 nmap <Space><Space>s <F2>
