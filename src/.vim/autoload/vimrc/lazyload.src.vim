@@ -86,11 +86,10 @@ nnoremap <LocalLeader>i i<Plug>(vim9skkp-enable)
 # }}}
 
 # headtail {{{
-Each X=ga,gi,gI nnoremap <Leader>X X
-nmap ga <Plug>(to-tail)a
-nmap gi <Plug>(to-tail)i
-nmap gA <Plug>(to-head)a
-nmap gI <Plug>(to-head)i
+nmap [a <Plug>(to-head)a
+nmap ]a <Plug>(to-tail)a
+nmap [i <Plug>(to-head)i
+nmap ]i <Plug>(to-tail)i
 # }}}
 
 # textobj-user {{{
