@@ -85,10 +85,6 @@ nnoremap <LocalLeader>j a<Plug>(vim9skkp-enable)
 nnoremap <LocalLeader>i i<Plug>(vim9skkp-enable)
 # }}}
 
-# headtail {{{
-HeadTailMap [ ]
-# }}}
-
 # textobj-user {{{
 Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
@@ -224,6 +220,7 @@ Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : p
 # 🐶🍚 {{{
 g:registerslite_delay = 0.4
 g:registerslite_hide_dupricate = 0
+HeadTailMap [ ]
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 onoremap A <Plug>(textobj-twochars-a)

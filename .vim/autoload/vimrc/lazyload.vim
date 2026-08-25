@@ -49,7 +49,6 @@ ino <LocalLeader>j <Plug>(vim9skkp-toggle)
 cno <LocalLeader>j <Plug>(vim9skkp-toggle)
 nn <LocalLeader>j a<Plug>(vim9skkp-enable)
 nn <LocalLeader>i i<Plug>(vim9skkp-enable)
-HeadTailMap [ ]
 Each X=a,i Each onoremap,xnoremap Xb <Plug>(textobj-multiblock-X)
 g:textobj_multiblock_blocks = [
 [ "(", ")" ],
@@ -141,6 +140,7 @@ Each imap,smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : pumv
 Each imap,smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 g:registerslite_delay = 0.4
 g:registerslite_hide_dupricate = 0
+HeadTailMap [ ]
 Enable g:skipslash_autocomplete
 Each X=s,h Each nnoremap,tnoremap <silent> <C-w><C-X> <Plug>(shrink-height)<C-w>w
 ono A <Plug>(textobj-twochars-a)
