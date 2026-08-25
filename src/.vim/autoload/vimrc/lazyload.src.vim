@@ -86,10 +86,7 @@ nnoremap <LocalLeader>i i<Plug>(vim9skkp-enable)
 # }}}
 
 # headtail {{{
-nmap [a <Plug>(to-head)a
-nmap ]a <Plug>(to-tail)a
-nmap [i <Plug>(to-head)i
-nmap ]i <Plug>(to-tail)i
+HeadTailMap [ ]
 # }}}
 
 # textobj-user {{{
