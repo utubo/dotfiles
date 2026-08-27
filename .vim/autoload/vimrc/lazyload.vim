@@ -479,6 +479,14 @@ vimrc#diffinfo#EchoDiffInfo(a, b, c)
 return true
 enddef
 g:zenmode.override = CC
+au vimrc CursorMoved * {
+for lk in popup_list()
+if popup_getoptions(lk)->get('type', '') ==# 'notification'
+popup_close(lk)
+break
+endif
+endfor
+}
 nn <Space>w <C-w>w
 nn <Space>o <C-w>w
 nn <Space>d "_d

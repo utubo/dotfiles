@@ -742,6 +742,18 @@ def ZenModeOverride(winid: number, winnr: number, width: number): bool
 enddef
 g:zenmode.override = ZenModeOverride
 # }}}
+
+# カーソル移動でechowをクローズ {{{
+au vimrc CursorMoved * {
+	for id in popup_list()
+		if popup_getoptions(id)->get('type', '') ==# 'notification'
+			popup_close(id)
+			break
+		endif
+	endfor
+}
+# }}}
+
 # }}}
 
 # ------------------------------------------------------
