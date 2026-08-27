@@ -279,7 +279,7 @@ export def PopSelectOtherCommands()
 			endif
 		},
 		filter_focused: false,
-		title: 'Git',
+		title: 'Utils',
 	})
 enddef
 #}}}

@@ -236,6 +236,6 @@ feedkeys($":\<C-u>{item.label}\<CR>")
 endif
 },
 filter_focused: false,
-title: 'Git',
+title: 'Utils',
 })
 enddef
