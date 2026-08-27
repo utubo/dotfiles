@@ -258,8 +258,8 @@ enddef
 export def PopSelectOtherCommands()
 	popselect#Popup([
 		{ shortcut: 's', label:
-			$'set signcolumn={&signcolumn ==# 'auto' ? 'no' : 'auto'}|' ..
-			$'set showtabpanel={!&showtabpanel ? 2 : 0}'
+			$'set scl={&signcolumn ==# 'auto' ? 'no' : 'auto'} ' ..
+			$'stpl={!&showtabpanel ? 2 : 0}'
 		},
 		{ shortcut: 'n', label: 'set number!' },
 		{ shortcut: 'w', label: 'set warp!' },
