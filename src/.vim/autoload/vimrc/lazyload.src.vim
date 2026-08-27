@@ -416,9 +416,9 @@ Each nmap,xmap <Space><Space>, ,
 # その他の設定
 au vimrc CmdlineEnter * ++once vimrc#cmdmode#ApplySettings()
 # cmdlineをポップアップする
-Each :=:,/,? Each nnoremap,vnoremap <script>: <ScriptCmd>vimrc#cmdmode#PopupMapping()<CR>:
-# 念のため元の:をバックアップしておく
-Each :=:,/,? Each nnoremap,vnoremap <Leader>: :
+Each X=:,/,? Each nnoremap,vnoremap <script>X <ScriptCmd>vimrc#cmdmode#PopupMapping()<CR>X
+# 念のため元の`:`等をバックアップしておく
+Each X=:,/,? Each nnoremap,vnoremap <Leader>X X
 # }}}
 
 # ------------------------------------------------------
