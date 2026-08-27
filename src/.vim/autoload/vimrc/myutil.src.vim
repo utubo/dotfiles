@@ -253,3 +253,32 @@ export def Sav()
 	endif
 enddef
 # }}}
+
+# その他操作をvim-popselectで表示 {{{
+export def PopSelectOtherCommands()
+	popselect#Popup([
+		{ shortcut: 's', label:
+			$'set signcolumn={&signcolumn ==# 'auto' ? 'no' : 'auto'}|' ..
+			$'set showtabpanel={!&showtabpanel ? 2 : 0}'
+		},
+		{ shortcut: 'n', label: 'set number!' },
+		{ shortcut: 'w', label: 'set warp!' },
+		{ shortcut: 'c', label: 'CSVとかのヘッダを固定表示', feedkeys: "\<ESC>1\<C-w>s:1\<CR>\<C-w>w" },
+	], {
+		oncomplete: (item) => {
+			if item->has_key('oncomplete')
+				item.oncomplete()
+			elseif item->has_key('feedkeys')
+				feedkeys($":\<C-u>{item.feedkeys}")
+			elseif item->has_key('wantenter')
+				feedkeys($":\<C-u>{item.label}")
+			else
+				feedkeys($":\<C-u>{item.label}\<CR>")
+			endif
+		},
+		filter_focused: false,
+		title: 'Git',
+	})
+enddef
+#}}}
+

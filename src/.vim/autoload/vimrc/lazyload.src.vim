@@ -232,6 +232,8 @@ popclip#Init({
 	clip_and_move: true,
 	move_label: "\Uf01be",
 })
+# その他操作をvim-popselectで表示
+nnoremap <F10> <ScriptCmd>vimrc#myutil#PopSelectOtherCommands()<CR>
 # }}}
 
 # 遅延読み込みもの {{{
@@ -586,9 +588,7 @@ au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix' | q | endif
 # うっかりOSのIMEを起動すると迷子になるからこれでいいや
 au vimrc ModeChanged * set iminsert=0
 
-nnoremap <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
-nnoremap <F11> <Cmd>set number!<CR>
-nnoremap <F12> <Cmd>set wrap!<CR>
+nnoremap <F9> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 
 nmap gs :<C-u>%s///g<Left><Left><Left>
 nmap gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
@@ -711,10 +711,6 @@ au vimrc Syntax vim {
 command! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
 # }}}
 
-# CSVとかのヘッダを固定表示する。ファンクションキーじゃなくてコマンド定義すればいいかな…
-nnoremap <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
-xnoremap <F9> <ESC>1<C-w>s<C-w>w
-
 # README.mdを開く
 command! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 
@@ -787,9 +783,9 @@ endif
 # <F6>
 # <F7> ここまでよんだ
 # <F8> Spell check
-# <F9> ヘッダ行を表示(あんまり使わない)
-# <F10> タブパネル
-# <F11> 行番号表示切替
+# <F9> タブパネル
+# <F10> その他の操作
+# <F11>
 # <F12> 折り返し表示切替
 # }}}
 

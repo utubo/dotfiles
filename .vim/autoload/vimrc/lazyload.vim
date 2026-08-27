@@ -152,6 +152,7 @@ key: 'C',
 clip_and_move: true,
 move_label: "\Uf01be",
 })
+nn <F10> <ScriptCmd>vimrc#myutil#PopSelectOtherCommands()<CR>
 Each nmap,xmap S <ScriptCmd>vimrc#sandwich#LazyLoad()<CR>S
 nm s <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>s
 Each key=<Leader>j,<Leader>k map key <ScriptCmd>vimrc#easymotion#LazyLoad()<CR>key
@@ -375,9 +376,7 @@ au vimrc FocusLost * @+ = @"
 endif
 au vimrc WinEnter * if winnr('$') ==# 1 && &buftype ==# 'quickfix'|q|endif
 au vimrc ModeChanged * set iminsert=0
-nn <F10> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
-nn <F11> <Cmd>set number!<CR>
-nn <F12> <Cmd>set wrap!<CR>
+nn <F9> <ScriptCmd>vimrc#tabpanel#Toggle()<CR>
 nm gs :<C-u>%s///g<Left><Left><Left>
 nm gS :<C-u><Cmd>call setcmdline($'%s/{expand('<cword>')->escape('^$.*?/\[]')}//g')<CR><Left><Left>
 xm gs :s///g<Left><Left><Left>
@@ -457,8 +456,6 @@ CA('SpellBad', '\s[=!]==\s')
 CA('SpellBad', '\s\~[=!][=#]\?\s')
 }
 com! -nargs=1 Brep vimrc#myutil#Brep(<q-args>, <q-mods>)
-nn <silent> <F9> <ESC>1<C-w>s:1<CR><C-w>w
-xn <F9> <ESC>1<C-w>s<C-w>w
 com! -nargs=1 -complete=packadd HelpPlugins vimrc#myutil#HelpPlugins(<q-args>)
 set scrolloff=99
 def CB(a: number = -1)
