@@ -213,11 +213,13 @@ exe 'sav' e
 endif
 enddef
 export def PopSelectOtherCommands()
+const a = &scl !=# 'no'
 popselect#Popup([
 { shortcut: 's', label:
-$'set scl={&signcolumn ==# 'auto' ? 'no' : 'auto'} ' ..
-$'stpl={!&showtabpanel ? 2 : 0}'
+$'set scl={a ? 'no' : 'auto'} ' ..
+(&columns < 60 ? '' : $'stpl={a ? 0 : 2}')
 },
+{ shortcut: 't', label: $'set stpl={!&stpl ? 2 : 0}' },
 { shortcut: 'n', label: 'set number!' },
 { shortcut: 'w', label: 'set warp!' },
 { shortcut: 'c', label: 'CSVとかのヘッダを固定表示', feedkeys: "\<ESC>1\<C-w>s:1\<CR>\<C-w>w" },
