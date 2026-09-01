@@ -41,5 +41,19 @@ km: 'キーマッピング',
 vp: 'プラグイン',
 },
 })
+def A()
+if !!g:vim9skkp_status.midasi_text
+g:vim9skkp.keymap.sticky_shift = [';']
+g:vim9skkp.keymap.commit += [';']
+else
+g:vim9skkp.keymap.sticky_shift = []
+g:vim9skkp.keymap.commit = g:vim9skkp.keymap.commit->filter((_, v) => v !=# ';')
+endif
+enddef
+aug vimrc-vim9skkp
+au!
+au User Vim9skkpStatusChanged A()
+au User Vim9skkpMidasiTextChanged A()
+aug END
 export def LazyLoad()
 enddef

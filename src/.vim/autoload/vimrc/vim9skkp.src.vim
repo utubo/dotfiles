@@ -51,6 +51,22 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 	},
 })
 
+def OnVim9SkkpStatusChanged()
+	if !!g:vim9skkp_status.midasi_text
+		g:vim9skkp.keymap.sticky_shift = [';']
+		g:vim9skkp.keymap.commit += [';']
+	else
+		g:vim9skkp.keymap.sticky_shift = []
+		g:vim9skkp.keymap.commit = g:vim9skkp.keymap.commit->filter((_, v) => v !=# ';')
+	endif
+enddef
+
+augroup vimrc-vim9skkp
+	au!
+	au User Vim9skkpStatusChanged OnVim9SkkpStatusChanged()
+	au User Vim9skkpMidasiTextChanged OnVim9SkkpStatusChanged()
+augroup END
+
 export def LazyLoad()
 enddef
 
