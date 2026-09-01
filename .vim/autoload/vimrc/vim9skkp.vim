@@ -7,6 +7,7 @@ prev: ["\<S-Tab>"],
 },
 mode_display: 'popup',
 sticky_lock: true,
+predict: false,
 cands_popup_options: {
 borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 border: [1, 1, 1, 1],
