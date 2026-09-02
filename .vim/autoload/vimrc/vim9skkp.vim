@@ -3,7 +3,9 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 keymap: {
 cancel: ["\<C-g>", "\<C-e>"],
 commit: ["\<CR>", "\<C-y>", 'l'],
-prev: ["\<S-Tab>"],
+prev: ["\<S-Tab>", "\<C-p>"],
+next: ["\<Tab>", "\<C-n>"],
+predict: ["\<C-n>"],
 },
 mode_display: 'popup',
 sticky_lock: true,

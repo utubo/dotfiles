@@ -7,8 +7,10 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		# Vim的には<C-y>、
 		# 指が近いlでも確定(;は<LocalLeader>に割り当て済み)
 		commit: ["\<CR>", "\<C-y>", 'l'],
-		# SKK的にはxで前候補だが、xは小文字を入力したいので<S-Tab>だけにしておく
-	   prev: ["\<S-Tab>"],
+		# SKK的にはxで前候補だが、xは小文字を入力したい
+		prev: ["\<S-Tab>", "\<C-p>"],
+		next: ["\<Tab>", "\<C-n>"],
+		predict: ["\<C-n>"],
 	},
 	mode_display: 'popup',
 	sticky_lock: true,
