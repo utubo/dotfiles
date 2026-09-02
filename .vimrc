@@ -181,7 +181,7 @@ hlset([
 d
 ])
 enddef
-au vimrc VimEnter,ColorScheme * E()
+au vimrc VimEnter,ColorScheme * silent! E()
 def F()
 if exists('w:my_matches') && !empty(getmatches())
 return

@@ -234,7 +234,7 @@ def MyHighlight()
 		cursorim
 	])
 enddef
-au vimrc VimEnter,ColorScheme * MyHighlight()
+au vimrc VimEnter,ColorScheme * silent! MyHighlight()
 
 # 好みでハイライト
 # vimrc再読み込みでクリア&再設定されないけど面倒だからヨシ

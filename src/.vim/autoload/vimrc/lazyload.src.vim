@@ -344,8 +344,10 @@ SubMode indent imap <LocalLeader> t <C-t>
 SubMode indent imap <LocalLeader> d <C-d>
 SubMode indent nmap <LocalLeader> t >>
 SubMode indent nmap <LocalLeader> d <lt><lt>
-SubMode indent xmap <LocalLeader> t >gv
-SubMode indent xmap <LocalLeader> d <lt>gv
+xmap <LocalLeader>t ><Plug>(<SID>indent)
+xmap <LocalLeader>d <lt><Plug>(<SID>indent)
+nmap <Plug>(<SID>indent)t <Cmd>'<lt>,'>><CR><Plug>(<SID>indent)
+nmap <Plug>(<SID>indent)d <Cmd>'<lt>,'><lt><CR><Plug>(<SID>indent)
 # その他
 inoremap <LocalLeader>w <C-o>e<C-o>a
 inoremap <LocalLeader>k 「」<C-g>U<Left>
