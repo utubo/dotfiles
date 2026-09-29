@@ -12,6 +12,9 @@ silent! set guifont=Moralerspace_Neon_HWJPDOC:h14
 # この絵文字がちゃんと表示されればOK→ 🐞_🐝_
 # }}}
 
+# SKKプラグインがあるので
+set imdisable
+
 # フォントサイズ変更 {{{
 def IncFontSize(d: number)
 	var f = split(&guifont, ':h')

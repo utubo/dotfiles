@@ -782,12 +782,12 @@ endif
 # <F3> BufferList
 # <F4> TabList
 # <F5> 日付関係
-# <F6>
+# <F6> 未使用
 # <F7> ここまでよんだ
-# <F8> Spell check
-# <F9> タブパネル
+# <F8> Spell check表示切り替え
+# <F9> タブパネル表示切り替え
 # <F10> その他の操作
-# <F11>
+# <F11> (Windows Terminalの全画面切り替え)
 # <F12> 折り返し表示切替
 # }}}
 

@@ -222,6 +222,7 @@ $'set scl={a ? 'no' : 'auto'} ' ..
 { shortcut: 't', label: $'set stpl={!&stpl ? 2 : 0}' },
 { shortcut: 'n', label: 'set number!' },
 { shortcut: 'w', label: 'set warp!' },
+{ shortcut: 'i', label: 'set imdisable!' },
 { shortcut: 'c', label: 'CSVとかのヘッダを固定表示', feedkeys: "\<ESC>1\<C-w>s:1\<CR>\<C-w>w" },
 ], {
 oncomplete: (item) => {
