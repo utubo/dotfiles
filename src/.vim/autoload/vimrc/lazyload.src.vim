@@ -374,8 +374,6 @@ nmap g<Space> g;
 for i in range(1, 10)
 	execute $'nmap <Space>{i % 10} <F{i}>'
 endfor
-nmap <Space><Space>1 <F11>
-nmap <Space><Space>2 <F12>
 # その他
 nnoremap <Space>a A
 nnoremap <Space>h ^
@@ -788,7 +786,7 @@ endif
 # <F9> タブパネル表示切り替え
 # <F10> その他の操作
 # <F11> (Windows Terminalの全画面切り替え)
-# <F12> 折り返し表示切替
+# <F12> 未使用
 # }}}
 
 export def LazyLoad()

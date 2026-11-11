@@ -246,8 +246,6 @@ nm g<Space> g;
 for i in range(1, 10)
 exe $'nmap <Space>{i % 10} <F{i}>'
 endfor
-nm <Space><Space>1 <F11>
-nm <Space><Space>2 <F12>
 nn <Space>a A
 nn <Space>h ^
 nn <Space>l $
