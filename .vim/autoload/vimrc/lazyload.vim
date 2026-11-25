@@ -259,6 +259,8 @@ xn { <Plug>(auto-V){
 xn } <Plug>(auto-V)}
 xn <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xn <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
+xm <expr> i mode() ==# '<C-v>' ? 'I' : 'i'
+xm <expr> a mode() ==# '<C-v>' ? 'A' : 'a'
 SubMode visual_g_move xmap g j gj
 SubMode visual_g_move xmap g k gk
 xn <script> <expr> v mode() ==# 'v' ? '<C-v>' : '<ESC>'

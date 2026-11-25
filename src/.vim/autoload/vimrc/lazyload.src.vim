@@ -392,6 +392,8 @@ xnoremap { <Plug>(auto-V){
 xnoremap } <Plug>(auto-V)}
 xnoremap <expr> I mode() ==# '<C-v>' ? 'I' : '<C-v>I'
 xnoremap <expr> A mode() ==# '<C-v>' ? 'A' : '<C-v>A'
+xmap <expr> i mode() ==# '<C-v>' ? 'I' : 'i'
+xmap <expr> a mode() ==# '<C-v>' ? 'A' : 'a'
 SubMode visual_g_move xmap g j gj
 SubMode visual_g_move xmap g k gk
 # うーん
