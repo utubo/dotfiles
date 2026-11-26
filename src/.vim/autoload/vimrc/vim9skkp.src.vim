@@ -11,10 +11,12 @@ g:vim9skkp = get(g:, 'vim9skkp', {})->extend({
 		prev: ["\<S-Tab>", "\<C-p>"],
 		next: ["\<Tab>", "\<C-n>"],
 		predict: ["\<C-n>"],
+	   alphabet: "\<C-l>",
 	},
 	mode_display: 'popup',
 	sticky_lock: true,
 	predict: false,
+	abbr_with_shift: true,
 	cands_popup_options: {
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 		border: [1, 1, 1, 1],
